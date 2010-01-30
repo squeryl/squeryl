@@ -1,0 +1,142 @@
+
+package org.squeryl.tests
+
+import org.squeryl.{PrimitiveTypeMode, Query}
+import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
+import collection.mutable.ArrayBuffer
+import org.squeryl.dsl.{Agregate, Scalar}
+
+/**
+ *  Ideas to explore :
+ *
+ *  - Updatable Views ? Could it be used to model inheritance ?
+ *
+ *  - Dirty check on updates using either
+ *    i) intercepter cglib ? (easyer on memory harder on CPU)
+ *    ii) hash code + signature ? ()
+ *
+ *  - ConcreteFactory[D <: Driver]
+ *    this factory could GCLIb the driver.... what the ?@?#@? ... no need !
+ *
+ *  - SQL profiling with monitor :
+ *      i)   longest running query
+ *      ii)  most object producing query
+ *      iii) most often called query
+ *     all these could point to the code...
+ *
+ *  Inheritance : !!!!!!***************!*!!!!*
+ *    Table[T, S1<:T, S2<:T ...etc] 
+ */
+
+object Labo {
+
+  import PrimitiveTypeMode._
+
+  def vs[T](e: TypedExpressionNode[Scalar,T]) = {}
+  def va[T](e: TypedExpressionNode[Agregate,T]) = {}
+
+
+  val a = new ConstantExpressionNode(1) with AgregateIntOption
+  val s = new ConstantExpressionNode(1) with ScalarInt
+  val ss = new ConstantExpressionNode("a") with ScalarString
+
+
+
+  val s2:ScalarInt = s + 1
+//  GroupByz(s + s2)
+//  GroupByz(s + 1)
+//  GroupByz(2 + s + 1)
+  
+//  ~:Where(1 =? 2) Select(1); //GroupBy(s + s2)
+//  ~:Where(1 =? 2) Select(1) //.GroupBy(s + 1)
+//  ~:Where(1 =? 2).Select(1) //.GroupBy(2 + s + 1)
+//
+//  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy(ss)
+//
+//  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy("c")
+
+
+  vs(1)
+  vs(1 + s)
+  vs(s + 1)
+  vs(s + s + 1)
+
+  va(a + 1)
+  va(1 + a)
+  va(1 + s + 1 + a + 3)
+
+  va(Max(1 + s))
+  va(s + Max(1))
+  va(s + Max(s) + 1)
+  va(a + 1 + Min(2))
+  va(Min(1) + a)
+
+  va(1 * Avg(1))
+  va(Avg(1) * 1)
+
+  (4 in List(2,3,4) and ("a" in List("s","f"))) : ScalarLogicalBoolean
+  
+  (4 in List(2,3,4) and "a" =? "3") : ScalarLogicalBoolean
+
+
+  ("a" in List("s","f")) : ScalarLogicalBoolean
+
+  (Max(4) in List(2,3,4)) : AgregateLogicalBoolean
+
+  va[Option[String]](Min("a"))
+  (Min("a") in List("s","f")) : AgregateLogicalBoolean
+
+  ((Max(4) in List(2,3,4)) and (Min("a") in List("s","f"))) : AgregateLogicalBoolean
+  (1 =? Min(3)) : AgregateLogicalBoolean
+  ((Max(4) in List(2,3,4)) and 1 =? Min(3)) : AgregateLogicalBoolean
+
+  var x = new ArrayBuffer().appendAll(List(1,4,3,"2"))
+  var y = "allo"
+
+  implicit def t2inerpolater(t: (String,()=>Product)) = new Interpolater(t)
+
+  var r:()=>Product = null
+
+  class Interpolater(var t: (String,()=>Product)) {
+
+    r = t._2
+    
+    def interpolate = {
+      println(t._2())
+      val f = t._2.getClass.getFields
+      for(f0 <- f)
+        println("--->"+f0.getName)
+    }
+  }
+
+  def in(p: =>Product) = {
+    val z = p _
+     println(z)
+    z
+  }
+
+  def testI = {
+    val i = ("one is ${x} and allo is ${y}",in(x,y)).interpolate
+    println(i)
+  }
+
+
+
+trait B
+
+trait A {
+  self: B =>
+
+  def z(b: B)
+
+  def b: B = this   // the compiler allows this
+
+  z(this)  // but not this, wich is strange,
+
+  z(b) // since this it allowed
+}
+
+  //val a0:A = error("")
+  
+  //val b:B = a0
+}

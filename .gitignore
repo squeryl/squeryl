@@ -1,0 +1,9 @@
+target*
+project/boot*
+project/build/target*
+lib*
+.idea/ant.xml
+.idea/compiler.xml
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/uiDesigner.xml
