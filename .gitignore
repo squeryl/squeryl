@@ -7,3 +7,5 @@ lib*
 .idea/workspace.xml
 .idea/vcs.xml
 .idea/uiDesigner.xml
+.idea/dictionaries/*
+.idea/copyright/*
