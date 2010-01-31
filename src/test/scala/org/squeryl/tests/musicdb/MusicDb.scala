@@ -2,20 +2,18 @@ package org.squeryl.tests.musicdb
 
 import java.sql.SQLException
 import org.squeryl.tests.QueryTester
-import org.squeryl.dsl.{Measures, GroupWithMeasures}
-import org.squeryl.{Queryable, Schema}
+import org.squeryl._
+import dsl.{Measures, GroupWithMeasures}
 
-class KeyedEntity {
+class MusicDbObject extends KeyedEntity[Int] {
   var id: Int = 0
 }
 
-class Genre
+class Person(var firstName:String, var lastName: String) extends MusicDbObject
 
-class Person(var firstName:String, var lastName: String) extends KeyedEntity
+class Song(var title: String, var authorId: Int, var interpretId: Int, var cdId: Int) extends MusicDbObject
 
-class Song(var title: String, var authorId: Int, var interpretId: Int, var cdId: Int) extends KeyedEntity
-
-class Cd(var title: String, var mainArtist: Int, var year: Int) extends  KeyedEntity
+class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
 
 
 class MusicDb extends Schema with QueryTester {
@@ -180,6 +178,10 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testKeyedEntityImplicitDelete
+    
+    testKeyedEntityImplicitLookup
+    
     validateQuery('basicSelectUsingWhereOnQueryable, basicSelectUsingWhereOnQueryable, (a:Person)=>a.id, List(mongoSantaMaria.id))
 
     validateQuery('basicSelectUsingWhereOnQueryableNested, basicSelectUsingWhereOnQueryableNested, (a:Person)=>a.id, List(mongoSantaMaria.id))
@@ -264,4 +266,34 @@ class MusicDb extends Schema with QueryTester {
     assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
     println('testUpdate1 + " passed.")
   }
+
+  def testKeyedEntityImplicitLookup = {
+    import testInstance._
+
+//    val p:KeyedEntity[Int] = ponchoSanchez
+//    artists : Queryable[KeyedEntity[Int]]
+//    artists : Updatable[KeyedEntity[Int]]
+//    (artists : Queryable[KeyedEntity[Int]]) : KeyedEntityView[Int, Person]
+//    (artists : Updatable[KeyedEntity[Int]]) : KeyedEntityTable[Int, Person]
+//    val kev: KeyedEntityTable[Int, Person] = artists
+//    val ket: KeyedEntityTable[Int, Person] = artists
+
+    //view2KeyedEntityView(artists): KeyedEntityView[Int,Person]
+    
+    var ac = artists.lookup(alainCaron.id).get
+    assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
+    passed('testKeyedEntityImplicitLookup)
+  }
+
+  def testKeyedEntityImplicitDelete = {
+    import testInstance._
+
+    val artistForDelete = artists.insert(new Person("Delete", "Me"))
+
+    assert(artists.delete(artistForDelete.id), "delete returned false, expected true")
+
+    assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
+
+    passed('testKeyedEntityImplicitDelete)
+  }  
 }

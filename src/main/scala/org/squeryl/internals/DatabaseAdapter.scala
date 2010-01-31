@@ -305,6 +305,19 @@ class DatabaseAdapter {
     sw.write(pkMd.name, " = ", writeValue(o_, pkMd, sw))
   }
 
+  def writeDelete[T](t: Table[T], whereClause: Option[ExpressionNode], sw: StatementWriter) = {
+
+    sw.write("delete from ")
+    sw.write(t.name)
+    if(whereClause != None) {
+      sw.nextLine
+      sw.write("where")
+      sw.nextLine
+      sw.writeIndented {
+        whereClause.get.write(sw)
+      }
+    }
+  }
 
   /**
    * unused at the moment, since all jdbc drivers adhere to the standard that :
@@ -333,7 +346,6 @@ class DatabaseAdapter {
       sw.write(col.name)
       sw.write(" = ")
       val v = z.element
-      //v.isInstanceOf[ConstantExpressionNode[_]]
       v.write(sw)
       if(z.isNotLast) {
         sw.write(",")

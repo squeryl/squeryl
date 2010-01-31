@@ -1,9 +1,9 @@
 package org.squeryl;
 
-import dsl.ast.{UniqueIdInAliaseRequired, ViewExpressionNode, UpdateStatement}
+import dsl.ast._
 import internals.{FieldReferenceLinker, StatementWriter}
 import scala.reflect.Manifest
-import java.sql.{Statement, SQLException}
+import java.sql.{Statement}
 
 
 class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) {
@@ -61,8 +61,6 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
       error("failed to update")
   }
 
-  //def update[P <: Product](updateColsAndWhereClause: T => (P,TypedExpressionNode[Scalar, LogicalBoolean]))(values: P): Int = {0}
-
   def update(s: T =>UpdateStatement):Int = {
 
     val vxn = new ViewExpressionNode(this)
@@ -89,5 +87,18 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     dba.writeUpdate(this, us, sw)
     val res = dba.executeUpdate(Session.currentSession, sw)
     res._1    
+  }
+
+  def delete(q: Query[T]): Int = {
+
+    val queryAst = q.ast.asInstanceOf[QueryExpressionElements]
+    queryAst.inhibitAliasOnSelectElementReference = true
+
+    val sw = new StatementWriter(_dbAdapter)
+    _dbAdapter.writeDelete(this, queryAst.whereClause, sw)
+
+    val (cnt, s) = _dbAdapter.executeUpdate(Session.currentSession, sw)
+
+    cnt
   }
 }

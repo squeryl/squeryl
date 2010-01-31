@@ -622,5 +622,72 @@ trait QueryDsl
   }
   class ValuesClause2[A1,A2](cols: ExpressionNode*) {
     def Values(a1: TypedExpressionNode[Scalar,A1], a2: TypedExpressionNode[Scalar,A2]) = new UpdateStatement(cols.toList, a1, a2)
-  }  
+  }
+
+  //class UpdateAssignmentLeftSide
+
+  class UpdateAssignment[A](column: TypedExpressionNode[Scalar,A], var _value: Option[TypedExpressionNode[Scalar,A]] = None) {
+    
+    def <| (v: TypedExpressionNode[Scalar,A]) =
+      _value = Some(v)
+  }
+
+  implicit def tuple2UpdateAssignment[A, B <% TypedExpressionNode[Scalar,A]](t: (B,B)) =
+    new UpdateAssignment[A](t._1, Some(t._2))
+
+//  implicit def typedExpressionNode2UpdateAssignmentLeftSide[A, B <% TypedExpressionNode[Scalar,A]](left: B) =
+//    new UpdateAssignment[A](left)
+
+  // Views for supporting KeyedEntity :
+
+  private def _takeLastAccessedUntypedFieldReference: SelectElementReference =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case Some(n:SelectElement) =>
+        new SelectElementReference(n)
+      case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
+    }
+
+  class KeyedEntityView[K,A <: KeyedEntity[K]](v: Queryable[A]) {
+
+    def lookup(k: K): Option[A] = {
+      val q =
+        From(v)(a =>
+        ~:Where {
+            a.id
+            val keyFieldNode = _takeLastAccessedUntypedFieldReference
+            val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+            val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+            wc
+         } Select(a)
+        )
+
+      q.headOption
+    }
+  }
+
+  class KeyedEntityTable[K,A <: KeyedEntity[K]](t: Table[A]) {
+
+    def delete(k: K): Boolean  = {
+      val q =
+        From(t)(a =>
+        ~:Where {
+            a.id
+            val keyFieldNode = _takeLastAccessedUntypedFieldReference
+            val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+            val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+            wc
+         } Select(a)
+        )
+
+      val deleteCount = t.delete(q)
+      assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
+      deleteCount == 1
+    }
+  }
+
+  implicit def view2KeyedEntityView[K,A <: KeyedEntity[K]](v: Queryable[A]): KeyedEntityView[K,A] =
+    new KeyedEntityView[K,A](v)
+
+  implicit def table2KeyedEntityTable[K,A <: KeyedEntity[K]](t: Table[A]): KeyedEntityTable[K,A] =
+    new KeyedEntityTable[K,A](t)
 }

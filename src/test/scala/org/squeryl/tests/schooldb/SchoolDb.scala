@@ -566,5 +566,57 @@ class SchoolDb extends Schema with QueryTester {
     assert(b4 == afterReset, "expected " + afterReset + " got " + b4)
 
     passed('testPartialUpdate1)
+
+
+    (heatTransfer.meaninglessLong, 123L) : UpdateAssignment[Long]
+    (heatTransfer.meaninglessLongOption, Some(321L)) : UpdateAssignment[Option[Long]]
+
+    //List[UpdateAssignment[_]](
+//     upz((heatTransfer.meaninglessLong, 123L),
+//         (heatTransfer.meaninglessLongOption, Some(321L)))
+    
+//    (heatTransfer.meaninglessLong, "123L") : UpdateAssignment[_]
+//    (heatTransfer.meaninglessLongOption,  Some("123L")) : UpdateAssignment[_]
+
+    //new UpdatePair(heatTransfer.meaninglessLong, 123L)
+    //new UpdatePair(heatTransfer.meaninglessLongOption, Some(321L))
+
+    //val ua1 = typedExpressionNode2UpdateAssignmentLeftSide(heatTransfer.meaninglessLong) <| 123L
+    //val ua2 = heatTransfer.meaninglessLongOption <| Some(123L)
+
+    //val ua3 = typedExpressionNode2UpdateAssignmentLeftSide(heatTransfer.meaninglessLong) <| "123L"
+    //val ua4 = heatTransfer.meaninglessLongOption <| Some("123L")
   }
+
+  def upz[A1,A2](u1: UpdateAssignment[A1], u2: UpdateAssignment[A2]) = {}
+
+  //class TN[A](a: A)
+
+  implicit def int2TN(i: Int) = new TN(i)
+  implicit def string2TN(s: String) = new TN(s)
+
+  class UAssignment[A](left: TN[A], right: TN[A])
+
+  implicit def tuple2UAssignment[A, B <% TN[A]](t: (B,B)) =
+    new UAssignment[A](t._1, t._2)
+
+  (1 ,234) : UAssignment[Int]
+  ("1" ,"234") : UAssignment[String]
+
+//  ua(("1" ,"234"), (1 ,234))
+
+  def ua[A1,A2](u1: UAssignment[A1], u2: UAssignment[A2]) = {}
+
+
+  ua("1" ~~~ "234", 1 ~~~ 234)
+  //ua("1" ~~~ "234", "a" ~~~ 234)
+
+  List[UAssignment[_]]("1" ~~~ "234", 1 ~~~ 234)
+
+  //List[UAssignment[_]]("1" ~~~ "234", "q" ~~~ 234)
+
+  class TN[A](a: A) {
+    def ~~~[B <% TN[A]] (b: B) = new UAssignment[A](this, b : TN[A])
+  }
+
 }

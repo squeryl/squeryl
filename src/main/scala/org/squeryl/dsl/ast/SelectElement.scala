@@ -188,7 +188,8 @@ trait PathReferenceToSelectElement {
     if(origin.parent == None)
       return selectElement.alias
 
-    if(origin.parent.get.isInstanceOf[UpdateStatement])
+    if(origin.parent.get.isInstanceOf[UpdateStatement] ||
+       origin.parent.get.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference)
       return selectElement.asInstanceOf[FieldSelectElement].fieldMataData.name
 
     val us = _useSite

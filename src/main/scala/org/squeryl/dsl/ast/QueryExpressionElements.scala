@@ -2,6 +2,8 @@ package org.squeryl.dsl.ast
 
 trait QueryExpressionElements extends ExpressionNode {
 
+  var inhibitAliasOnSelectElementReference = false
+
   def isChild(q: QueryableExpressionNode): Boolean
 
   def alias: String
