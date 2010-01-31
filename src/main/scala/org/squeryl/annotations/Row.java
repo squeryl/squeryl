@@ -16,6 +16,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Row {
-  
+  String value() default "";
   FieldToColumnCorrespondanceMode fieldToColumnCorrespondanceMode() default FieldToColumnCorrespondanceMode.IMPLICIT;
 }

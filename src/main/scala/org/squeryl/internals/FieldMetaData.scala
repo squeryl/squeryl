@@ -16,9 +16,20 @@ class FieldMetaData(
         val isOption: Boolean,
         getter: Option[Method],
         setter: Option[Method],
-        field:  Option[Field]) {
+        field:  Option[Field],
+        columnAnnotation: Option[Column]) {
 
   def isCustomType = customTypeFactory != None
+
+  /**
+   * @return the length defined in org.squeryl.annotations.Column.length
+   * if it is defined, or the default length for Java primitive types,
+   * i.e. double,long -> 8, float,int -> 4, byte -> 1, boolean -> 1
+   * java.util.Date -> -1. 
+   */
+  def length: Int =
+    columnAnnotation.map(ca => ca.length).
+      getOrElse(FieldMetaData.defaultFieldLength(wrappedFieldType))
 
   val resultSetHandler =
     FieldMetaData.resultSetHandlerFor(wrappedFieldType)
@@ -30,6 +41,9 @@ class FieldMetaData(
 
   override def toString =
     parentMetaData.clasz.getSimpleName + "." + name + ":" + displayType
+
+  def isStringType =
+    wrappedFieldType.isAssignableFrom(classOf[String])  
 
   def displayType =
      (if(isOption)
@@ -44,7 +58,7 @@ class FieldMetaData(
   var isAutoIncremented = false
 
   /**
-   * get's the value of the field from the object.
+   * gets the value of the field from the object.
    * Note that it will unwrap Option[] and return null instead of None, i.e.
    * if converts None and Some to null and some.get respectively 
    * @arg o the object that owns the field
@@ -137,6 +151,8 @@ object FieldMetaData {
     val setter = property._3
     val annotations = property._4
 
+    val colAnnotation = annotations.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]) 
+
     var typeOfField =
       if(setter != None)
         setter.get.getParameterTypes.apply(0)
@@ -154,9 +170,12 @@ object FieldMetaData {
          else if(getter != None)
            getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
          else
-           createDefaultValue(parentMetaData.clasz, typeOfField, annotations)
+           createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
        }
        else null
+
+    if(v != null && v == None) // can't deduce the type from None in this case the Annotation
+      v = null         //needs to tell us the type, if it doesn't it will a few lines bellow
 
     var customTypeFactory: Option[AnyRef=>CustomType] = None
 
@@ -169,7 +188,12 @@ object FieldMetaData {
     }
 
     if(v == null)
-      v = createDefaultValue(parentMetaData.clasz, typeOfField, annotations)
+      v = try {
+        createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
+      }
+      catch {
+        case e:Exception => null 
+      }
 
     if(v == null)
       error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
@@ -202,7 +226,8 @@ object FieldMetaData {
       isOption,
       getter,
       setter,
-      field)
+      field,
+      colAnnotation)
   }
 
   /**
@@ -213,7 +238,7 @@ object FieldMetaData {
   private def _createCustomTypeFactory(ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>CustomType] = {
     for(c <- typeOfField.getConstructors if c.getParameterTypes.length == 1) {
       val pTypes = c.getParameterTypes
-      val dv = createDefaultValue(ownerClass, pTypes(0), Iterable.empty)
+      val dv = createDefaultValue(ownerClass, pTypes(0), None)
       if(dv != null)
         return  Some(
           (i:AnyRef)=> {
@@ -226,6 +251,21 @@ object FieldMetaData {
     }
 
     None
+  }
+
+  def defaultFieldLength(fieldType: Class[_]) =
+    _defaultFieldLengthAssigner.handleType(fieldType) 
+
+  private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
+
+    def handleIntType = 4
+    def handleStringType  = 128
+    def handleBooleanType = 1
+    def handleDoubleType = 8
+    def handleDateType = -1
+    def handleLongType = 8
+    def handleFloatType = 4
+    def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
   private val _defaultValueFactory = new FieldTypeHandler[AnyRef] {
@@ -272,25 +312,31 @@ object FieldMetaData {
   def resultSetHandlerFor(c: Class[_]) =
     _mapper.handleType(c)  
 
-  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Iterable[java.lang.annotation.Annotation]): Object = {
+//  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Array[Annotation]): Object =
+//    createDefaultValue(ownerCLass, p, optionFieldsInfo.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]))
+
+  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Option[Column]): Object = {
 
     if(p.isAssignableFrom(classOf[Option[Any]])) {
 
-      if(optionFieldsInfo == null)
-        error("Option[Option[]] fields in "+ownerCLass.getName+ " are not supported")
+//      if(optionFieldsInfo == None)
+//        error("Option[Option[]] fields in "+ownerCLass.getName+ " are not supported")
+//
+//      if(optionFieldsInfo.size == 0)
+//        return null
+//      val oc0 = optionFieldsInfo.find(a => a.isInstanceOf[Column])
+//      if(oc0 == None)
+//        return null
+//
+//      val oc = oc0.get.asInstanceOf[Column]
 
-      if(optionFieldsInfo.size == 0)
+      if(optionFieldsInfo == None)
         return null
 
-      val oc0 = optionFieldsInfo.find(a => a.isInstanceOf[Column])
-      if(oc0 == None)
-        return null
+      if(classOf[Object].isAssignableFrom(optionFieldsInfo.get.optionType))
+        error("cannot deduce type of Option[] in " + ownerCLass.getName)
 
-      val oc = oc0.get.asInstanceOf[Column]
-      if(oc.optionType == classOf[Column])
-        return null
-
-      Some(createDefaultValue(ownerCLass, oc.optionType, null))
+      Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, optionFieldsInfo))
     }
     else
       _defaultValueFactory.handleType(p)

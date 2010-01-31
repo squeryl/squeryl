@@ -2,24 +2,21 @@
 
 package org.squeryl.tests
 
-import customtypes.{TestCustomTypesMode, Age}
+import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
-import org.squeryl.internals.DatabaseAdapter
 import java.sql.DriverManager
 import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleAdapter}
 import schooldb.SchoolDb
 import org.squeryl.{Session}
-import org.squeryl.dsl.ast.{LogicalBoolean, TypedExpressionNode}
-import org.squeryl.dsl.Scalar
 object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
-
+    
     //ExpressionDsl2.countOperators
 
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
 
-    allTestsOnH2
+    //allTestsOnH2
   }
 
   def allTestsOnH2 = {
@@ -45,6 +42,10 @@ object Tests extends QueryTester {
 
   def allTests(s: =>Session) = {
 
+    // tests that need no Db Session :
+    //(new AnnotationTests).testMetaData
+
+    // tests that do :
     val session = s
     
     session.work {

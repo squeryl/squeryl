@@ -1,14 +1,15 @@
 package org.squeryl.adapters
 
 import org.squeryl.internals.{FieldMetaData, DatabaseAdapter}
+import org.squeryl.Schema
 
 class H2Adapter extends DatabaseAdapter {
 
   override def isFullOuterJoinSupported = false
 
-  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean): String = {
+  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    var res = "  " + fmd.name + " " + databaseTypeFor(fmd.wrappedFieldType)
+    var res = "  " + fmd.name + " " + schema._columnTypeFor(fmd, this)
     if(!fmd.isOption)
       res += " not null"
 

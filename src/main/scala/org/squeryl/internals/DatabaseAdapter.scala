@@ -1,8 +1,8 @@
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
-import org.squeryl.{CustomType, Session, Table}
 import java.sql.{ResultSet, SQLException, PreparedStatement, Connection}
+import org.squeryl.{Schema, CustomType, Session, Table}
 
 class DatabaseAdapter {
 
@@ -131,12 +131,14 @@ class DatabaseAdapter {
       error("don't know how to map field type " + c.getName)
   }
   
-  def databaseTypeFor(fieldType: Class[_]) =
-    _declarationHandler.handleType(fieldType)
+  def databaseTypeFor(fmd: FieldMetaData) =
+    _declarationHandler.handleType(fmd.wrappedFieldType)
 
-  def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean): String = {
+  def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    var res = "  " + fmd.name + " " + databaseTypeFor(fmd.wrappedFieldType)
+    val dbTypeDeclaration = schema._columnTypeFor(fmd, this)
+
+    var res = "  " + fmd.name + " " + dbTypeDeclaration
 
     if(isPrimaryKey)
       res += " primary key"
@@ -152,7 +154,7 @@ class DatabaseAdapter {
 
   def areAutoIncrementFieldsSupported:Boolean = true
 
-  def writeCreateTable[T](t: Table[T], sw: StatementWriter) = {
+  def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 
     sw.write("create table ")
     sw.write(t.name);
@@ -161,7 +163,7 @@ class DatabaseAdapter {
     sw.writeIndented {
       sw.writeLinesWithSeparator(
         t.posoMetaData.fieldsMetaData.map(
-          fmd => writeColumnDeclaration(fmd, pk != None && pk.get == fmd)
+          fmd => writeColumnDeclaration(fmd, pk != None && pk.get == fmd, schema)
         ),
         ","
       )

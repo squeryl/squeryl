@@ -1,7 +1,7 @@
 package org.squeryl
 
 
-import internals.StatementWriter
+import internals.{FieldMetaData, DatabaseAdapter, StatementWriter}
 import reflect.{Manifest}
 import scala.collection.mutable.ArrayBuffer
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ trait Schema {
 
     for(t <- _tables) {
       val sw = new StatementWriter(true, _dbAdapter)
-      _dbAdapter.writeCreateTable(t, sw)
+      _dbAdapter.writeCreateTable(t, sw, this)
       println(sw.statement)
     }
   }
@@ -44,7 +44,7 @@ trait Schema {
       var sw:StatementWriter = null
       try {
         sw = new StatementWriter(_dbAdapter)
-        _dbAdapter.writeCreateTable(t, sw)
+        _dbAdapter.writeCreateTable(t, sw, this)
         val s = Session.currentSession.connection.createStatement
         s.execute(sw.statement)
       }
@@ -59,6 +59,12 @@ trait Schema {
       }
     }
   }
+
+  protected def columnTypeFor(fieldMetaData: FieldMetaData, databaseAdapter: DatabaseAdapter): String =
+    databaseAdapter.databaseTypeFor(fieldMetaData)
+
+  private [squeryl] def _columnTypeFor(fmd: FieldMetaData, dba: DatabaseAdapter): String =
+    this.columnTypeFor(fmd, dba)
   
   protected def tableNameFromClass(c: Class[_]):String =     
     c.getSimpleName

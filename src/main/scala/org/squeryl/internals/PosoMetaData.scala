@@ -60,20 +60,19 @@ class PosoMetaData[T](val clasz: Class[T]) {
     r: ArrayBuffer[(Constructor[_],Array[Object])],
     c: Constructor[_]): Unit = {
 
-    val params: Array[Class[_]] = c.getParameterTypes       
-    val paramAnotations: Array[Array[java.lang.annotation.Annotation]] = c.getParameterAnnotations
+    val params: Array[Class[_]] = c.getParameterTypes
 
-    if(params.length == 1) {
+    if(params.length >= 1) {
       val cn = clasz.getName
       val test = params(0).getName + "$" + clasz.getSimpleName
       if(cn == test)
-        error("inner classes are not supported, except when outter class is a singleton (object) " + cn)
+        error("inner classes are not supported, except when outter class is a singleton (object)\ninner class is : " + cn)
     }
 
     var res = new Array[Object](params.size)
 
     for(i <- 0 to params.length -1) {
-      val v = FieldMetaData.createDefaultValue(clasz, params(i), paramAnotations(i))
+      val v = FieldMetaData.createDefaultValue(clasz, params(i), None)
       res(i) = v
     }
 
