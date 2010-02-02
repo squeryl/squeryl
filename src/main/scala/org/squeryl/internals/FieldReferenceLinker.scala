@@ -11,7 +11,7 @@ object FieldReferenceLinker {
 
     val yi = _yieldInspectionTL.get
     if(yi.isOn) {
-      yi.addSelectElement(new ValueSelectElement(yi.callWithoutReentrance(e), yi.resultSetMapper, sampleVal.asInstanceOf[AnyRef].getClass))
+      yi.addSelectElement(new ValueSelectElement(yi.callWithoutReentrance(e), yi.resultSetMapper, sampleVal.asInstanceOf[AnyRef].getClass, yi.queryExpressionNode))
       sampleVal
     }
     else {

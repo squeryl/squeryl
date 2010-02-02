@@ -12,8 +12,17 @@ trait ExpressionNode {
   var parent: Option[ExpressionNode] = None
 
   def id = Integer.toHexString(System.identityHashCode(this))
+
+  def inhibited = false
   
-  def write(sw: StatementWriter): Unit
+  def inhibitedFlagForAstDump =
+    if(inhibited) "!" else ""
+
+  def write(sw: StatementWriter) =
+    if(!inhibited)
+      doWrite(sw)
+
+  def doWrite(sw: StatementWriter): Unit
 
   def writeToString: String = {
     val sw = new StatementWriter(Session.currentSession.databaseAdapter)
@@ -84,14 +93,14 @@ trait LogicalBoolean
 trait TypedExpressionNode[K <: ExpressionKind,T] extends ExpressionNode
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {
-  def write(sw: StatementWriter) = sw.write(token)
+  def doWrite(sw: StatementWriter) = sw.write(token)
 }
 
 class ConstantExpressionNode[T](val value: T, needsQuote: Boolean) extends ExpressionNode {
 
   def this(v:T) = this(v, false)
 
-  def write(sw: StatementWriter) = {
+  def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {
       if(value == null)
         sw.write("null")
@@ -113,7 +122,7 @@ class ConstantExpressionNode[T](val value: T, needsQuote: Boolean) extends Expre
 
 class ConstantExpressionNodeList[T](val value: List[T]) extends ExpressionNode with ListExpressionNode {
   
-  def write(sw: StatementWriter) =
+  def doWrite(sw: StatementWriter) =
     if(quotesElement)
       sw.write(this.value.map(e=>"'" +e+"'").mkString("(",",",")"))
     else
@@ -124,7 +133,7 @@ class FunctionNode(val name: String, val args: Iterable[ExpressionNode]) extends
 
   def this(name: String, args: ExpressionNode*) = this(name, args)
   
-  def write(sw: StatementWriter) = {
+  def doWrite(sw: StatementWriter) = {
 
     sw.write(name)
     sw.write("(")
@@ -136,15 +145,18 @@ class FunctionNode(val name: String, val args: Iterable[ExpressionNode]) extends
 }
 
 class BinaryOperatorNode
- (val left: ExpressionNode, val right: ExpressionNode, val operatorToken: String, newLineAfterOperator: Boolean = false)
+ (val left: ExpressionNode, val right: ExpressionNode, val operatorToken: String, val newLineAfterOperator: Boolean = false)
   extends ExpressionNode {
 
   override def children = List(left, right)
 
+  override def inhibited =
+    left.inhibited || right.inhibited 
+
   override def toString =
-    'BinaryOperatorNode + ":" + operatorToken
+    'BinaryOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
   
-  def write(sw: StatementWriter) = {
+  def doWrite(sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
     sw.write(" ")
@@ -161,7 +173,7 @@ class LeftOuterJoinNode
  (left: ExpressionNode, right: ExpressionNode)
   extends BinaryOperatorNode(left,right, "left", false) {
 
-  override def write(sw: StatementWriter) = {}
+  override def doWrite(sw: StatementWriter) = {}
   
   override def toString = 'LeftOuterJoin + ""  
 }
@@ -175,6 +187,12 @@ trait UniqueIdInAliaseRequired  {
 }
 
 trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequired {
+
+  private var _inhibited = false
+
+  override def inhibited = _inhibited
+
+  def inhibited_=(b: Boolean) = _inhibited = b
 
   /**
    * outerJoinColumns is None if not an outer join, args are (left col : SelectElementReference, right col : SelectElementReference, outer Join kind: String ("left" or "full")) 

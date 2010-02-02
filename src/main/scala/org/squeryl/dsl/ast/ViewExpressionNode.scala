@@ -57,7 +57,7 @@ class ViewExpressionNode[U](val view: View[U])
 
   def sample = _sample.get
 
-  def write(sw: StatementWriter) =
+  def doWrite(sw: StatementWriter) =
     sw.write(view.name)
 
   override def toString = {

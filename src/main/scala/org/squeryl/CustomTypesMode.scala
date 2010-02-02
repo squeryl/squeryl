@@ -1,6 +1,7 @@
 package org.squeryl
 
 import dsl.ast.ConstantExpressionNode
+import dsl.QueryDsl
 
 
 trait CustomType {

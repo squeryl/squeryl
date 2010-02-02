@@ -541,7 +541,7 @@ class SchoolDb extends Schema with QueryTester {
     var nRows = courses.update(c =>
       Columns(c.meaninglessLong, c.meaninglessLongOption)
       Values(123L, c.meaninglessLongOption + 456L)
-              // when meaninglessLongOption is null,the SQL addition will have a null result 
+              // when meaninglessLongOption is null,the SQL addition will have a null result
       Where(c.id.~ > -1)
     )
 
@@ -608,15 +608,15 @@ class SchoolDb extends Schema with QueryTester {
   def ua[A1,A2](u1: UAssignment[A1], u2: UAssignment[A2]) = {}
 
 
-  ua("1" ~~~ "234", 1 ~~~ 234)
+  //ua("1" ~~~ "234", 1 ~~~ 234)
   //ua("1" ~~~ "234", "a" ~~~ 234)
 
-  List[UAssignment[_]]("1" ~~~ "234", 1 ~~~ 234)
+  List[UAssignment[_]]("1" := "234", 1 := 234)
 
   //List[UAssignment[_]]("1" ~~~ "234", "q" ~~~ 234)
 
   class TN[A](a: A) {
-    def ~~~[B <% TN[A]] (b: B) = new UAssignment[A](this, b : TN[A])
+    def :=[B <% TN[A]] (b: B) = new UAssignment[A](this, b : TN[A])
   }
 
 }

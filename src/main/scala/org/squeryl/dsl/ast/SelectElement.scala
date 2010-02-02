@@ -11,7 +11,7 @@ import org.squeryl.internals._
  *
  *  ExportSelectElement is a select element that refers to a SelectElement of an inner query.
  *
- * SelectElementReference are nodes in any clause other than select (where, having, composite expression, etc)
+ * SelectElementReference are nodes in any clause other than select (where, having, composite expression, order by, etc)
  *  that refer to a SelectElement  
  */
 trait SelectElement extends ExpressionNode {
@@ -28,7 +28,8 @@ trait SelectElement extends ExpressionNode {
 
   def prepareMapper: Unit
 
-  //def isNull(rs: ResultSet): Boolean
+  override def inhibited =
+    origin.inhibited
 
   def isActive = _isActive
 
@@ -43,7 +44,7 @@ trait SelectElement extends ExpressionNode {
 
   override def children = List(expression)
 
-  def write(sw: StatementWriter) = {
+  def doWrite(sw: StatementWriter) = {
     expression.write(sw)
     sw.write(" as ")
     sw.write(alias)
@@ -78,9 +79,6 @@ class TupleSelectElement
     if(columnToTupleMapper != None)
       columnToTupleMapper.get.activate(indexInTuple)
 
-  //def isNull(rs: ResultSet): Boolean = columnToTupleMapper.get.isNull(indexInTuple, rs)
-
-
   override def toString =
     'TupleSelectElement + ":" + indexInTuple + ":" + writeToString
 }
@@ -95,11 +93,9 @@ class FieldSelectElement
   
   val expression = new ExpressionNode {
     
-    def write(sw: StatementWriter) =
+    def doWrite(sw: StatementWriter) =
       sw.write(origin.alias + "." + fieldMataData.name)
   }
-
-  //def isNull(rs: ResultSet) = rs.getObject(columnMapper.get.index) == null
 
   def prepareColumnMapper(index: Int) =
     columnMapper = Some(new ColumnToFieldMapper(index, fieldMataData, this))
@@ -121,7 +117,7 @@ class FieldSelectElement
 }
 
 class ValueSelectElement
-  (val expression: ExpressionNode, val resultSetMapper: ResultSetMapper, expressionType: Class[_])
+  (val expression: ExpressionNode, val resultSetMapper: ResultSetMapper, expressionType: Class[_], val origin: QueryableExpressionNode)
      extends SelectElement with UniqueIdInAliaseRequired {
 
   def alias = "v" + uniqueId.get
@@ -131,11 +127,7 @@ class ValueSelectElement
   var yieldPusher: Option[YieldValuePusher] = None
 
   def prepareColumnMapper(index: Int) =
-    yieldPusher = Some(new YieldValuePusher(index, this, expressionType))
-  
-  def origin: QueryableExpressionNode = error("refactor me")
-
-  //def isNull(rs: ResultSet) = error("implement me")
+    yieldPusher = Some(new YieldValuePusher(index, this, expressionType))  
 
   def typeOfExpressionToString =
     if(yieldPusher == None)
@@ -160,7 +152,7 @@ trait PathReferenceToSelectElement {
 
   def selectElement: SelectElement
 
-  def write(sw: StatementWriter) = {
+  def doWrite(sw: StatementWriter) = {
 
     if(_useSite == selectElement.origin.parent.get)
       selectElement.expression.write(sw)
@@ -222,9 +214,12 @@ class SelectElementReference
     extends ExpressionNode with PathReferenceToSelectElement {
 
   override def toString =
-    'SelectElementReference + ":" + Utils.failSafeString(path) + ":" + selectElement.typeOfExpressionToString
+    'SelectElementReference + ":" + Utils.failSafeString(path) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 
-  override def write(sw: StatementWriter) =
+  override def inhibited =
+    selectElement.inhibited
+
+  override def doWrite(sw: StatementWriter) =
     sw.write(path)
 }
 
@@ -237,6 +232,9 @@ class ExportedSelectElement
     with PathReferenceToSelectElement {
 
   def resultSetMapper = selectElement.resultSetMapper
+
+  override def inhibited =
+    selectElement.inhibited
 
   override def prepareMapper =
     selectElement.prepareMapper
@@ -251,11 +249,9 @@ class ExportedSelectElement
 
   def aliasSuffix = selectElement.aliasSuffix
 
-  //def isNull(rs: ResultSet) = selectElement.isNull(rs)
-
   val expression = new ExpressionNode {
 
-    def write(sw: StatementWriter) = error("refactor me") //sw.write(path)
+    def doWrite(sw: StatementWriter) = error("refactor me")
   }
 
   def alias = error("refactor me")
@@ -263,7 +259,7 @@ class ExportedSelectElement
   override def toString =
     'ExportedSelectElement + ":" + path
 
-  override def write(sw: StatementWriter) = {
+  override def doWrite(sw: StatementWriter) = {
     val p = path
     sw.write(p)
     sw.write(" as ")

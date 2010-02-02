@@ -6,7 +6,9 @@ import java.sql.ResultSet
 trait Queryable[+T] {
   
   def name: String
-  
+
+  private[squeryl] var inhibited = false
+
   private[squeryl] def give(resultSetMapper: ResultSetMapper, rs: ResultSet) : T
 
   /**

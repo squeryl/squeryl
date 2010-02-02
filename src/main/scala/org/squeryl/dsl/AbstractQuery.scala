@@ -115,8 +115,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
   override def toString = dumpAst + "\n" + _genStatement(true)
 
-
-  def createSubQueryable[U](q: Queryable[U]) =
+  protected def createSubQueryable[U](q: Queryable[U]): SubQueryable[U] =
     if(q.isInstanceOf[View[_]]) {
       val v = q.asInstanceOf[View[U]]
       val vxn = new ViewExpressionNode(v)
@@ -125,13 +124,19 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       
       new SubQueryable(v, vxn.sample, vxn.resultSetMapper, false, vxn)
     }
+    else if(q.isInstanceOf[OptionalQueryable[U]]) {
+      val oqr = q.asInstanceOf[OptionalQueryable[U]]
+      val sq = createSubQueryable[U](oqr.queryable)
+      sq.node.inhibited = oqr.inhibited
+      new SubQueryable(q, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
+    }
     else {
       val qr = q.asInstanceOf[AbstractQuery[U]]
       val copy = qr.copy(false)
       new SubQueryable(copy, copy.ast.sample.asInstanceOf[U], copy.resultSetMapper, true, copy.ast)
     }
 
-  class SubQueryable[U]
+  protected class SubQueryable[U]
     (val queryable: Queryable[U],
      val sample: U,
      val resultSetMapper: ResultSetMapper,

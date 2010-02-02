@@ -110,8 +110,10 @@ trait DslFactory
     
 
   class OrderByArg(e: NonLogicalBoolean[Scalar,_]) extends ExpressionNode {
-    
-    def write(sw: StatementWriter) = {
+
+    override def inhibited = e.inhibited
+
+    def doWrite(sw: StatementWriter) = {
       e.write(sw)
       if(isAscending)
         sw.write(" Asc")

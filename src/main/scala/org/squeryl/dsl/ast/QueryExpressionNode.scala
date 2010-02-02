@@ -11,11 +11,11 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     with QueryableExpressionNode {
 
   def tableExpressions: Iterable[QueryableExpressionNode] = 
-    List(views.filter(v => v.outerJoinColumns == None),
+    List(views.filter(v => v.outerJoinColumns == None && ! v.inhibited),
          subQueries.filter(v => v.outerJoinColumns == None)).flatten
 
   def joinTableExpressions: Iterable[QueryableExpressionNode] =
-    List(views.filter(v => v.outerJoinColumns != None),
+    List(views.filter(v => v.outerJoinColumns != None && ! v.inhibited),
          subQueries.filter(v => v.outerJoinColumns != None)).flatten
   
   val (whereClause, havingClause, groupByClause, orderByClause) =
@@ -91,7 +91,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def selectList: Iterable[SelectElement] = _selectList
 
-  def write(sw: StatementWriter) = {
+  def doWrite(sw: StatementWriter) = {
     val isNotRoot = parent != None
 
     if(isNotRoot) {

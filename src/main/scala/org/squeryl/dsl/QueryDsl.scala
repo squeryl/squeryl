@@ -1,11 +1,10 @@
-package org.squeryl
+package org.squeryl.dsl
 
-import dsl._
 import ast._
 import boilerplate._
-import internals._
+import org.squeryl.internals._
 import java.sql.ResultSet
-
+import org.squeryl.{Query, Table, Queryable, KeyedEntity}
 
 trait QueryDsl
   extends DslFactory
@@ -690,4 +689,6 @@ trait QueryDsl
 
   implicit def table2KeyedEntityTable[K,A <: KeyedEntity[K]](t: Table[A]): KeyedEntityTable[K,A] =
     new KeyedEntityTable[K,A](t)
+
+  implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 }

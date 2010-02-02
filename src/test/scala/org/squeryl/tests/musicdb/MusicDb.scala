@@ -178,6 +178,10 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testDynamicQuery1
+    
+    testDynamicQuery2
+    
     testKeyedEntityImplicitDelete
     
     testKeyedEntityImplicitLookup
@@ -285,8 +289,9 @@ class MusicDb extends Schema with QueryTester {
     passed('testKeyedEntityImplicitLookup)
   }
 
-  def testKeyedEntityImplicitDelete = {
-    import testInstance._
+  import testInstance._
+
+  def testKeyedEntityImplicitDelete = {  
 
     val artistForDelete = artists.insert(new Person("Delete", "Me"))
 
@@ -295,5 +300,70 @@ class MusicDb extends Schema with QueryTester {
     assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
 
     passed('testKeyedEntityImplicitDelete)
-  }  
+  }
+
+  def inhibitedArtistsInQuery(inhibit: Boolean) =
+    From(songs, artists.inhibitWhen(inhibit))((s,a) =>
+    ~:Where(a.get.firstName =? "Poncho" and s.interpretId =? a.get.id)
+      Select(s)
+      OrderBy(s.title, a.get.id Desc)
+    )  
+
+  def testDynamicQuery1 = {
+
+    val allSongs =
+      From(songs)(s =>
+      ~:Select(s)
+        OrderBy(s.title)
+      ).toList.map(s => s.id)
+
+    val q = inhibitedArtistsInQuery(true)
+    //println(q.dumpAst)
+    val songsInhibited = q.toList.map(s => s.id)
+
+    assert(allSongs == songsInhibited, "query inhibition failed, expected "+allSongs+", got " + songsInhibited)
+
+    val songsNotInhibited = inhibitedArtistsInQuery(false)
+    
+    val ponchoSongs = List(besameMama.title, freedomSound.title, watermelonMan.title)
+
+    validateQuery('songsNotInhibited, songsNotInhibited, (s:Song)=>s.title,
+      ponchoSongs)
+ 
+    passed('testDynamicQuery1)
+  }
+
+  def inhibitedSongsInQuery(inhibit: Boolean) =
+    From(songs.inhibitWhen(inhibit), artists)((s,a) =>
+    ~:Where(a.firstName =? "Poncho" and s.get.interpretId =? a.id)
+      Select((s, a))
+      OrderBy(s.get.title, a.id Desc)
+    )
+
+  def testDynamicQuery2 = {
+
+    val q = inhibitedSongsInQuery(true)
+    println(q.dumpAst)
+    val t = q.single
+    val poncho = t._2
+
+    assert(ponchoSanchez.id == poncho.id, 'inhibitedSongsInQuery + " failed, expected " + ponchoSanchez.id + " got " + poncho.id)
+
+    assert(t._1 == None, "inhibited table in query should have returned None, returned " + t._1)
+
+    val songArtistsTuples = inhibitedSongsInQuery(false)
+
+    val expected =
+      From(songs, artists)((s,a) =>
+      ~:Where(a.firstName =? "Poncho" and s.interpretId =? a.id)
+        Select((s.id, a.id))
+        OrderBy(s.title, a.id Desc)
+      )
+    
+    validateQuery('inhibitedSongsInQuery, songArtistsTuples,  (t:(Option[Song],Person)) => (t._1.get.id, t._2.id),
+      expected.toList
+    )
+
+    passed('testDynamicQuery2)
+  }
 }

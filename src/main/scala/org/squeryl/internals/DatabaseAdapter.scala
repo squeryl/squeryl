@@ -32,7 +32,7 @@ class DatabaseAdapter {
     
     sw.nextLine
     sw.writeIndented {
-      sw.writeNodesWithSeparator(qen.selectList, ",", true)
+      sw.writeNodesWithSeparator(qen.selectList.filter(e => ! e.inhibited), ",", true)
     }
     sw.nextLine
     sw.write("From")
@@ -62,7 +62,7 @@ class DatabaseAdapter {
       }
     }
     
-    if(qen.whereClause != None) {
+    if(qen.whereClause != None && qen.whereClause.get.children.filter(c => !c.inhibited) != Nil) {
       sw.nextLine
       sw.write("Where")
       sw.nextLine
@@ -76,7 +76,7 @@ class DatabaseAdapter {
       sw.write("Group By")
       sw.nextLine
       sw.writeIndented {
-        sw.writeNodesWithSeparator(qen.groupByClause, ",", true)
+        sw.writeNodesWithSeparator(qen.groupByClause.filter(e => ! e.inhibited), ",", true)
       }
     }
     
@@ -85,7 +85,7 @@ class DatabaseAdapter {
       sw.write("Order By")
       sw.nextLine
       sw.writeIndented {
-        sw.writeNodesWithSeparator(qen.orderByClause, ",", true)
+        sw.writeNodesWithSeparator(qen.orderByClause.filter(e => ! e.inhibited), ",", true)
       }      
     }
 

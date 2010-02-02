@@ -83,8 +83,39 @@ trait ExpressionDsl {
   class BinaryOperatorNodeScalarDoubleOption(left: ExpressionNode, right: ExpressionNode, op: String) extends BinaryOperatorNode(left,right, op) with ScalarDoubleOption
   class BinaryOperatorNodeAgregateDouble(left: ExpressionNode, right: ExpressionNode, op: String) extends BinaryOperatorNode(left,right, op) with AgregateDouble
   class BinaryOperatorNodeAgregateDoubleOption(left: ExpressionNode, right: ExpressionNode, op: String) extends BinaryOperatorNode(left,right, op) with AgregateDoubleOption
-  class BinaryOperatorNodeScalarLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String) extends BinaryOperatorNode(left,right, op) with ScalarLogicalBoolean
-  class BinaryOperatorNodeAgregateLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String) extends BinaryOperatorNode(left,right, op) with AgregateLogicalBoolean
+
+  trait LogicalBooleanInhibiter {
+    self: BinaryOperatorNode =>
+
+    override def inhibited =
+      if(left.isInstanceOf[LogicalBooleanNode])
+        left.inhibited && right.inhibited
+      else
+        left.inhibited || right.inhibited
+
+    override def doWrite(sw: StatementWriter) = {
+      // since we are executing this method, we have at least one non inhibited children
+      val nonInh = children.filter(c => ! c.inhibited).iterator
+
+      sw.write("(")
+      nonInh.next.write(sw)
+      sw.write(" ")
+      if(nonInh.hasNext) {
+        sw.write(operatorToken)
+        if(newLineAfterOperator)
+          sw.nextLine
+        sw.write(" ")
+        nonInh.next.write(sw)
+      }
+      sw.write(")")
+    }
+  }
+
+  class BinaryOperatorNodeScalarLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
+    extends BinaryOperatorNode(left,right, op) with LogicalBooleanInhibiter with ScalarLogicalBoolean
+
+  class BinaryOperatorNodeAgregateLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
+    extends BinaryOperatorNode(left,right, op) with LogicalBooleanInhibiter with AgregateLogicalBoolean 
 
   trait OpArg  {
     
@@ -407,8 +438,10 @@ trait ExpressionDsl {
 
     def between(lower: ScalarNumerical, upper: ScalarNumerical): AgregateLogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with ScalarLogicalBoolean
   }
-  
-  trait ScalarLogicalBoolean extends OpArg with TypedExpressionNode[Scalar, LogicalBoolean] {
+
+  trait LogicalBooleanNode
+
+  trait ScalarLogicalBoolean extends OpArg with TypedExpressionNode[Scalar, LogicalBoolean] with LogicalBooleanNode {
     //self: ExpressionNode  =>
     def _t: ExpressionNode = this
     
@@ -416,7 +449,7 @@ trait ExpressionDsl {
     def or(b: ScalarLogicalBoolean) = new BinaryOperatorNodeScalarLogicalBoolean(this, b, _or)
   }
 
-  trait AgregateLogicalBoolean extends OpArg with ExpressionNode {
+  trait AgregateLogicalBoolean extends OpArg with ExpressionNode with LogicalBooleanNode {
     //self: ExpressionNode  =>
     def _t: ExpressionNode = this
 

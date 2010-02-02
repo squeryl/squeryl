@@ -8,7 +8,7 @@ class UpdateStatement(private val _cols: Iterable[ExpressionNode], private val _
 
   private var _whereClause: Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]] = None
 
-  def write(sw: StatementWriter) = {}
+  def doWrite(sw: StatementWriter) = {}
   
   def Where(clause: =>TypedExpressionNode[Scalar,LogicalBoolean]) = {
     _whereClause = Some(clause _)
