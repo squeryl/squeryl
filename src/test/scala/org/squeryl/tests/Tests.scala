@@ -43,7 +43,7 @@ object Tests extends QueryTester {
   def allTests(s: =>Session) = {
 
     // tests that need no Db Session :
-    //(new AnnotationTests).testMetaData
+    (new AnnotationTests).testMetaData
 
     // tests that do :
     val session = s

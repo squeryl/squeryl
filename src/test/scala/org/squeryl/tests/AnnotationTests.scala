@@ -9,8 +9,11 @@ class Toaster(
   @Column(optionType=classOf[Int])
   var yearOfManufacture: Option[Int],
 
-  @Column(optionType=classOf[String], length=25)
-  var countryOfOrigin: Option[String],
+//  @Column(optionType=classOf[String], length=25)
+//  var countryOfOrigin: Option[String],
+
+  @Column(length=25)
+  var countryOfOrigin: String,
 
   @Column(name="BRAND_NAME", length=32)
   var brandName: String) {
@@ -24,7 +27,7 @@ class AnnotationTests {
 
   class C(
     @Column(optionType=classOf[Long]) var j: Option[Long],
-    @Column(optionType=classOf[String]) var k: Option[String]) (
+    @Column(optionType=classOf[java.lang.String]) var k: Option[String]) (
   
     @Column(optionType=classOf[Int])
     var i:Option[Int]
