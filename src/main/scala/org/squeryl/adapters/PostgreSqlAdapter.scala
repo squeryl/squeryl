@@ -59,5 +59,5 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     sw.write(colVals.mkString("(",",",")"));
   }
 
-  override def areAutoIncrementFieldsSupported: Boolean = false
+  override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 }

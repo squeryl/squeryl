@@ -16,7 +16,7 @@ class H2Adapter extends DatabaseAdapter {
     if(isPrimaryKey)
       res += " primary key"
 
-    if(areAutoIncrementFieldsSupported && fmd.isAutoIncremented)
+    if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " auto_increment"
 
     res

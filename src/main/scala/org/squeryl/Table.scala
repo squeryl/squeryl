@@ -21,13 +21,15 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     _dbAdapter.writeInsert(t, this, sw)
 
     val st = 
-      if(_dbAdapter.areAutoIncrementFieldsSupported || posoMetaData.primaryKey == None)
+      if(_dbAdapter.supportsAutoIncrementInColumnDeclaration)
         Session.currentSession.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
-      else {
+      else if( posoMetaData.primaryKey != None) {
         val autoIncPk = new Array[String](1)
         autoIncPk(0) = posoMetaData.primaryKey.get.name
         Session.currentSession.connection.prepareStatement(sw.statement, autoIncPk)
       }
+      else
+        Session.currentSession.connection.prepareStatement(sw.statement)
 
     val (cnt, s) = _dbAdapter.executeUpdateForInsert(Session.currentSession, sw, st)
 
@@ -47,20 +49,20 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     t
   }
 
-  //TODO : def update(o: T) in KeyedTable and leave only update(o: T, T=>whereClause) in this table 
-  posoMetaData.primaryKey.getOrElse(error(name + " has no primaryKey, tables without primary keys are not yet supported"))
+  //def updateZ(implicit ev: T <: KeyedEntity[_]) = {}
 
   def update(o: T) = {
 
-    val sw = new StatementWriter(_dbAdapter)
-    _dbAdapter.writeUpdate(o, this, sw)
+    val dba = Session.currentSession.databaseAdapter
+    val sw = new StatementWriter(dba)
+    dba.writeUpdate(o, this, sw)
 
-    val (cnt, s) = _dbAdapter.executeUpdate(Session.currentSession, sw)
+    val (cnt, s) = dba.executeUpdate(Session.currentSession, sw)
 
     if(cnt != 1)
       error("failed to update")
   }
-
+  
   def update(s: T =>UpdateStatement):Int = {
 
     val vxn = new ViewExpressionNode(this)

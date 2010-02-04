@@ -4,7 +4,7 @@ import ast._
 import boilerplate._
 import org.squeryl.internals._
 import java.sql.ResultSet
-import org.squeryl.{Query, Table, Queryable, KeyedEntity}
+import org.squeryl._
 
 trait QueryDsl
   extends DslFactory
@@ -681,7 +681,7 @@ trait QueryDsl
       val deleteCount = t.delete(q)
       assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
       deleteCount == 1
-    }
+    }    
   }
 
   implicit def view2KeyedEntityView[K,A <: KeyedEntity[K]](v: Queryable[A]): KeyedEntityView[K,A] =
