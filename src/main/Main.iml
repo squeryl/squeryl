@@ -19,7 +19,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/cglib-nodep-2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1-RC8/compile/cglib-nodep-2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
