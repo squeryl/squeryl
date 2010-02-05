@@ -146,13 +146,13 @@ class DatabaseAdapter {
     if(!fmd.isOption)
       res += " not null"
     
-    if(areAutoIncrementFieldsSupported && fmd.isAutoIncremented)
+    if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " auto_increment"
 
     res
   }
 
-  def areAutoIncrementFieldsSupported:Boolean = true
+  def supportsAutoIncrementInColumnDeclaration:Boolean = true
 
   def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 

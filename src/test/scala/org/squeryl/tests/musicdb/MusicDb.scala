@@ -264,7 +264,7 @@ class MusicDb extends Schema with QueryTester {
     import testInstance._
 
     var ac = artists.where(a=> a.id =? alainCaron.id).single
-    ac.lastName = "Karon"
+    ac.lastName = "Karon" 
     artists.update(ac)
     ac = artists.where(a=> a.id =? alainCaron.id).single
     assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
@@ -274,17 +274,8 @@ class MusicDb extends Schema with QueryTester {
   def testKeyedEntityImplicitLookup = {
     import testInstance._
 
-//    val p:KeyedEntity[Int] = ponchoSanchez
-//    artists : Queryable[KeyedEntity[Int]]
-//    artists : Updatable[KeyedEntity[Int]]
-//    (artists : Queryable[KeyedEntity[Int]]) : KeyedEntityView[Int, Person]
-//    (artists : Updatable[KeyedEntity[Int]]) : KeyedEntityTable[Int, Person]
-//    val kev: KeyedEntityTable[Int, Person] = artists
-//    val ket: KeyedEntityTable[Int, Person] = artists
-
-    //view2KeyedEntityView(artists): KeyedEntityView[Int,Person]
-    
     var ac = artists.lookup(alainCaron.id).get
+    
     assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
     passed('testKeyedEntityImplicitLookup)
   }

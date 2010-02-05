@@ -1,11 +1,11 @@
 package org.squeryl;
 
 import dsl.ast._
-import internals.{FieldReferenceLinker, StatementWriter}
+import dsl.boilerplate.Query1
+import dsl.{QueryYield, QueryDsl}
+import internals.{ResultSetMapper, FieldReferenceLinker, StatementWriter}
+import java.sql.{ResultSet, Statement}
 import scala.reflect.Manifest
-import java.sql.{Statement}
-
-
 class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) {
 
   def this(n:String)(implicit manifestT: Manifest[T]) =
@@ -21,13 +21,15 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     _dbAdapter.writeInsert(t, this, sw)
 
     val st = 
-      if(_dbAdapter.areAutoIncrementFieldsSupported || posoMetaData.primaryKey == None)
+      if(_dbAdapter.supportsAutoIncrementInColumnDeclaration)
         Session.currentSession.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
-      else {
+      else if( posoMetaData.primaryKey != None) {
         val autoIncPk = new Array[String](1)
         autoIncPk(0) = posoMetaData.primaryKey.get.name
         Session.currentSession.connection.prepareStatement(sw.statement, autoIncPk)
       }
+      else
+        Session.currentSession.connection.prepareStatement(sw.statement)
 
     val (cnt, s) = _dbAdapter.executeUpdateForInsert(Session.currentSession, sw, st)
 
@@ -46,21 +48,19 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
     t
   }
+  
+  def update(o: T)(implicit ev: T <:< KeyedEntity[_]) = {
 
-  //TODO : def update(o: T) in KeyedTable and leave only update(o: T, T=>whereClause) in this table 
-  posoMetaData.primaryKey.getOrElse(error(name + " has no primaryKey, tables without primary keys are not yet supported"))
+    val dba = Session.currentSession.databaseAdapter
+    val sw = new StatementWriter(dba)
+    dba.writeUpdate(o, this, sw)
 
-  def update(o: T) = {
-
-    val sw = new StatementWriter(_dbAdapter)
-    _dbAdapter.writeUpdate(o, this, sw)
-
-    val (cnt, s) = _dbAdapter.executeUpdate(Session.currentSession, sw)
+    val (cnt, s) = dba.executeUpdate(Session.currentSession, sw)
 
     if(cnt != 1)
       error("failed to update")
   }
-
+  
   def update(s: T =>UpdateStatement):Int = {
 
     val vxn = new ViewExpressionNode(this)
@@ -100,5 +100,46 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     val (cnt, s) = _dbAdapter.executeUpdate(Session.currentSession, sw)
 
     cnt
+  }
+
+  private def _takeLastAccessedUntypedFieldReference: SelectElementReference =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case Some(n:SelectElement) =>
+        new SelectElementReference(n)
+      case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
+  }
+
+  def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
+
+    import dsl._
+    
+    val q = From(this)(a => ~:Where {
+        a.id
+        val keyFieldNode = _takeLastAccessedUntypedFieldReference
+        val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+        val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+        wc
+       } Select(a)
+      )
+    q.headOption
+
+  }
+
+  def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
+
+    import dsl._
+    
+    val q = From(this)(a => ~:Where {
+        a.id
+        val keyFieldNode = _takeLastAccessedUntypedFieldReference
+        val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+        val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+        wc
+       } Select(a)
+      )
+    
+    val deleteCount = this.delete(q)
+    assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
+    deleteCount == 1
   }
 }

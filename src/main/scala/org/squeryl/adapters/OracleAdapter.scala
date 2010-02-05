@@ -13,7 +13,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "number"
 
-  override def areAutoIncrementFieldsSupported: Boolean = false
+  override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
   override def postCreateTable(s: Session, t: Table[_]) = {
 

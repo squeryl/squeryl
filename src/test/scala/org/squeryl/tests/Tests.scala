@@ -49,8 +49,8 @@ object Tests extends QueryTester {
     val session = s
     
     session.work {
-      (new MusicDb).test1
       (new SchoolDb).test1
+      (new MusicDb).test1
       (new TestCustomTypesMode).testAll
     }
 
