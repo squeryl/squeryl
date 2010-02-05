@@ -178,10 +178,25 @@ class PosoMetaData[T](val clasz: Class[T]) {
         a = a.union(memberWithAnnotationTuple._2)
 
       val members = v.map(t => t._1)
-      
-      val field = members.find(m => m.isInstanceOf[Field]).map(m=> m.asInstanceOf[Field])
-      val getter = members.find(m => m.isInstanceOf[Method] && m.getName == name).map(m=> m.asInstanceOf[Method])
-      val setter = members.find(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).map(m=> m.asInstanceOf[Method])
+
+      // here we do a filter and not a find, because there can be more than one setter/getter/field
+      // with the same name, we want one that is not an erased type, excluding return and input type
+      // of java.lang.Object does it.
+
+      val o = classOf[java.lang.Object]
+
+      val field =
+        members.filter(m => m.isInstanceOf[Field]).
+           map(m=> m.asInstanceOf[Field]).filter(f=> f.getType != o).headOption
+
+      val getter =
+        members.filter(m => m.isInstanceOf[Method] && m.getName == name).
+          map(m=> m.asInstanceOf[Method]).filter(m=> m.getReturnType != o).headOption
+
+      val setter =
+        members.filter(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).
+          map(m=> m.asInstanceOf[Method]).filter(m=> m.getParameterTypes.apply(0) != o).headOption
+
 
       val property = (field, getter, setter, a)
 

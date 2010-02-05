@@ -3,47 +3,54 @@ package org.squeryl.tests.schooldb
 
 import java.sql.SQLException
 import org.squeryl.annotations.{Column}
-import org.squeryl.{Session, Schema}
 import org.squeryl.tests.QueryTester
 import java.util.Date
 import java.text.SimpleDateFormat
 import org.squeryl.dsl.{Agregate, Scalar, GroupWithMeasures}
 import org.squeryl.dsl.ast.{UpdateStatement, ExpressionNode, LogicalBoolean, TypedExpressionNode}
+import org.squeryl.{KeyedEntity, Session, Schema}
 
-class Student(var name: String, var lastName: String, var age: Option[Int], var gender: Int, var addressId: Option[Int], var isMultilingual: Option[Boolean]) {
+class SchoolDbObject extends KeyedEntity[Int] {
+  var id: Int = 0
+}
+
+class Student(var name: String, var lastName: String, var age: Option[Int], var gender: Int, var addressId: Option[Int], var isMultilingual: Option[Boolean])
+  extends SchoolDbObject {
 
   def this() = this(null,null,Some(0),0, Some(0), Some(false))
 
-  var id: Int = 0
   override def toString = "Student:" + id + ":" + name
 }
 
-class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], var confirmed: Boolean) {
-  var id: Int = 0
+class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], var confirmed: Boolean)
+  extends SchoolDbObject {
+
   def this() = this("", null, Some(new Date), 0, Some(0), false)
   override def toString = "Course:" + id + ":" + name
 }
 
-class CourseSubscription(var courseId: Int, var studentId: Int) {
-  var id: Int = 0
+class CourseSubscription(var courseId: Int, var studentId: Int)
+  extends SchoolDbObject {
+
   def this() = this(0,0)
   override def toString = "CourseSubscription:" + id
 }
 
-class CourseAssignment(var courseId: Int, var professorId: Long) {
-  var id: Int = 0
+class CourseAssignment(var courseId: Int, var professorId: Long)
+  extends SchoolDbObject {
+
   def this() = this(0,0)
   override def toString = "CourseAssignment:" + id
 }
 
-class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[String], var appNumber: Option[Int], var appNumberSuffix: Option[String]) {
+class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[String], var appNumber: Option[Int], var appNumberSuffix: Option[String])
+  extends SchoolDbObject {
 
   def this() = this(null,0, Some(""),Some(0), Some(""))
-
-  var id: Int = 0
 }
 
-class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float]) {
+class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float]) extends KeyedEntity[Long] {
+
   var id: Long = 0
   def this() = this("", 0.0F, Some(0.0F))
   override def toString = "Professor:" + id
@@ -53,6 +60,8 @@ class SchoolDb extends Schema with QueryTester {
 
   import org.squeryl.PrimitiveTypeMode._
 
+  val professors = table[Professor]
+  
   val students = table[Student]
   
   val addresses = table[Address]
@@ -60,8 +69,6 @@ class SchoolDb extends Schema with QueryTester {
   val courses = table[Course]
 
   val courseSubscriptions = table[CourseSubscription]
-
-  val professors = table[Professor]
 
   val courseAssigments = table[CourseAssignment]
   
@@ -146,6 +153,9 @@ class SchoolDb extends Schema with QueryTester {
     )
 
   def test1 = {
+
+    testMetaData
+    
     testInstance
     //logQueries = true
 
@@ -165,7 +175,6 @@ class SchoolDb extends Schema with QueryTester {
     testDateOptionMapping
     
     testScalarOptionQuery
-    testMetaData
     testOptionAndNonOptionMixInComputeTuple
     testConcatWithOptionalCols
     testLeftOuterJoin1
@@ -224,6 +233,7 @@ class SchoolDb extends Schema with QueryTester {
   
   def testMetaData = {
 
+    professors.posoMetaData.primaryKey
     
     val tst = new Student("Xiao", "Jimbao Gallois", Some(24), 2,Some(1), None)
     val fmd = addresses.posoMetaData.findFieldMetaDataForProperty("appNumberSuffix")

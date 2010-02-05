@@ -1,11 +1,11 @@
 package org.squeryl;
 
 import dsl.ast._
-import internals.{FieldReferenceLinker, StatementWriter}
+import dsl.boilerplate.Query1
+import dsl.{QueryYield, QueryDsl}
+import internals.{ResultSetMapper, FieldReferenceLinker, StatementWriter}
+import java.sql.{ResultSet, Statement}
 import scala.reflect.Manifest
-import java.sql.{Statement}
-
-
 class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) {
 
   def this(n:String)(implicit manifestT: Manifest[T]) =
@@ -48,10 +48,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
     t
   }
-
-  //def updateZ(implicit ev: T <: KeyedEntity[_]) = {}
-
-  def update(o: T) = {
+  
+  def update(o: T)(implicit ev: T <:< KeyedEntity[_]) = {
 
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
@@ -102,5 +100,46 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     val (cnt, s) = _dbAdapter.executeUpdate(Session.currentSession, sw)
 
     cnt
+  }
+
+  private def _takeLastAccessedUntypedFieldReference: SelectElementReference =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case Some(n:SelectElement) =>
+        new SelectElementReference(n)
+      case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
+  }
+
+  def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
+
+    import dsl._
+    
+    val q = From(this)(a => ~:Where {
+        a.id
+        val keyFieldNode = _takeLastAccessedUntypedFieldReference
+        val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+        val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+        wc
+       } Select(a)
+      )
+    q.headOption
+
+  }
+
+  def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
+
+    import dsl._
+    
+    val q = From(this)(a => ~:Where {
+        a.id
+        val keyFieldNode = _takeLastAccessedUntypedFieldReference
+        val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+        val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+        wc
+       } Select(a)
+      )
+    
+    val deleteCount = this.delete(q)
+    assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
+    deleteCount == 1
   }
 }

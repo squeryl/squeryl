@@ -105,27 +105,27 @@ class AnnotationTests {
 //  // *and* I need uOfZ2View to have 2 type params, because in my real scenario, the class UViewOnlyAvailableToZs[K,A]
 //  // needs 2 type params.
 
-  class Z[K](k:K)
+//  class Z[K](k:K)
+//
+//  class UViewOnlyAvailableToZs[K,A] {
+//    def tryMe(i:Int) = {}
+//  }
+//
+//  class U[A](a:A) {
+//    def tryMe(param2TrickTheTypeSystem: List[String])
+//  }
 
-  class UViewOnlyAvailableToZs[K,A] {
-    def tryMe(i:Int) = {}
-  }
+  //implicit def uOfZ2View[K, A <: Z[K]](u: U[A]) = new UViewOnlyAvailableToZs[K,A]
 
-  class U[A](a:A) {
-    def tryMe(param2TrickTheTypeSystem: List[String])
-  }
+  //val u = new U(new Z(0))
 
-  implicit def uOfZ2View[K, A <: Z[K]](u: U[A]) = new UViewOnlyAvailableToZs[K,A]
+  //u : U[Z[Int]] // sanity check
 
-  val u = new U(new Z(0))
-
-  u : U[Z[Int]] // sanity check
-
-  uOfZ2View[Int,Z[Int]]( u ).tryMe(1)  // this compiles
+  //uOfZ2View[Int,Z[Int]]( u ).tryMe(1)  // this compiles
 
   //uOfZ2View( u ).tryMe // <- this won't compile
 
-  u.tryMe(1) // <- my goal is to have this compile only when u is U[A] and A <: Z[K], but the line above needs to compile first
+  //u.tryMe(1) // <- my goal is to have this compile only when u is U[A] and A <: Z[K], but the line above needs to compile first
   // *and* I need uOfZ2View to have 2 type params, because in my real scenario, the class UViewOnlyAvailableToZs[K,A]
   // needs 2 type params.  
 }
