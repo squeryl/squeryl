@@ -90,7 +90,14 @@ trait ListString extends ListExpressionNode {
 
 trait LogicalBoolean
 
-trait TypedExpressionNode[K <: ExpressionKind,T] extends ExpressionNode
+//TODO: erase type A, it is unneeded, and use ExpressionNode instead of TypedExp...
+class UpdateAssignment(val left: TypedExpressionNode[_,_], val right: TypedExpressionNode[_,_])
+
+trait TypedExpressionNode[K <: ExpressionKind,T] extends ExpressionNode {
+  def :=[B <% TypedExpressionNode[K,T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[K,T])
+
+  //def <[B <% TypedExpressionNode[Scalar,T]] (b: B) = new ScalarBoolean...
+}
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {
   def doWrite(sw: StatementWriter) = sw.write(token)

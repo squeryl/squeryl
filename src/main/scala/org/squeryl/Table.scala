@@ -109,18 +109,27 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
       case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
   }
 
+//  private def _createWhereIdEqualsClause[K](k:K, a: KeyedEntity[K], dsl: QueryDsl) = {
+//    a.id
+//    val keyFieldNode = _takeLastAccessedUntypedFieldReference
+//    val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+//    val wc = new dsl.BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+//    wc
+//  }
+
   def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
 
+    //TODO: remove more boilerplate by putting dsl: QueryDsl in this classe's scope to allow _createWhereIdEqualsClause to function 
     import dsl._
     
+    //val q = From(this)(a => ~:Where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
     val q = From(this)(a => ~:Where {
-        a.id
-        val keyFieldNode = _takeLastAccessedUntypedFieldReference
-        val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-        val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
-        wc
-       } Select(a)
-      )
+      a.id
+      val keyFieldNode = _takeLastAccessedUntypedFieldReference
+      val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+      val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+      wc
+    } Select(a))
     q.headOption
 
   }
@@ -128,16 +137,15 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
   def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
 
     import dsl._
-    
+    //val q = From(this)(a => ~:Where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
     val q = From(this)(a => ~:Where {
-        a.id
-        val keyFieldNode = _takeLastAccessedUntypedFieldReference
-        val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-        val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
-        wc
-       } Select(a)
-      )
-    
+      a.id
+      val keyFieldNode = _takeLastAccessedUntypedFieldReference
+      val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
+      val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+      wc
+    } Select(a))
+
     val deleteCount = this.delete(q)
     assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
     deleteCount == 1

@@ -14,9 +14,9 @@ object Tests extends QueryTester {
     
     //ExpressionDsl2.countOperators
 
-    allTestsOnAllDatabases
+    //allTestsOnAllDatabases
 
-    //allTestsOnH2
+    allTestsOnH2
   }
 
   def allTestsOnH2 = {

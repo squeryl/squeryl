@@ -265,6 +265,9 @@ trait QueryDsl
 
     def Select[R](yieldClosure: =>R): SelectState[R] =
       new QueryYieldImpl[R](this, yieldClosure _)
+    
+    def Set(updateAssignments: UpdateAssignment*) =
+      new UpdateStatement(_whereClause, updateAssignments )
   }
 
   trait OrderBySignatures[R] {
@@ -604,6 +607,7 @@ trait QueryDsl
       q.invokeYield(rsm, rs).measures
   }
 
+  // TODO: put this in Queryable .... with implicit dsl...
   class QueryableView[T](q: Queryable[T]) {
     def where(whereClauseFunctor: T => ScalarLogicalBoolean): Query[T] =
       From(q)(q0 =>
@@ -613,31 +617,6 @@ trait QueryDsl
   }
 
   implicit def queryable2QueryableView[T](q: Queryable[T]) = new QueryableView[T](q)
-
-  def Columns[A1](a1: TypedExpressionNode[Scalar,A1]) = new ValuesClause1[A1](a1)
-
-  def Columns[A1,A2](a1: TypedExpressionNode[Scalar,A1], a2: TypedExpressionNode[Scalar,A2]) = new ValuesClause2[A1,A2](a1,a2)
-
-  class ValuesClause1[A1](cols: ExpressionNode*) {
-    def Values(a1: TypedExpressionNode[Scalar,A1]) = new UpdateStatement(cols.toList, a1)
-  }
-  class ValuesClause2[A1,A2](cols: ExpressionNode*) {
-    def Values(a1: TypedExpressionNode[Scalar,A1], a2: TypedExpressionNode[Scalar,A2]) = new UpdateStatement(cols.toList, a1, a2)
-  }
-
-  //class UpdateAssignmentLeftSide
-
-  class UpdateAssignment[A](column: TypedExpressionNode[Scalar,A], var _value: Option[TypedExpressionNode[Scalar,A]] = None) {
-    
-    def <| (v: TypedExpressionNode[Scalar,A]) =
-      _value = Some(v)
-  }
-
-  implicit def tuple2UpdateAssignment[A, B <% TypedExpressionNode[Scalar,A]](t: (B,B)) =
-    new UpdateAssignment[A](t._1, Some(t._2))
-
-//  implicit def typedExpressionNode2UpdateAssignmentLeftSide[A, B <% TypedExpressionNode[Scalar,A]](left: B) =
-//    new UpdateAssignment[A](left)
 
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 }

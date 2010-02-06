@@ -7,8 +7,8 @@ import org.squeryl.tests.QueryTester
 import java.util.Date
 import java.text.SimpleDateFormat
 import org.squeryl.dsl.{Agregate, Scalar, GroupWithMeasures}
-import org.squeryl.dsl.ast.{UpdateStatement, ExpressionNode, LogicalBoolean, TypedExpressionNode}
 import org.squeryl.{KeyedEntity, Session, Schema}
+import org.squeryl.dsl.ast._
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -547,12 +547,12 @@ class SchoolDb extends Schema with QueryTester {
       )
 
     val b4 = q.toList
-    
+
     var nRows = courses.update(c =>
-      Columns(c.meaninglessLong, c.meaninglessLongOption)
-      Values(123L, c.meaninglessLongOption + 456L)
+      ~:Where(c.id.~ > -1)
+       Set(c.meaninglessLong := 123L,
+           c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
               // when meaninglessLongOption is null,the SQL addition will have a null result
-      Where(c.id.~ > -1)
     )
 
     val expectedAfter = List((1,123,None), (2,123,Some(1690)), (3,123,None), (4,123,None))
@@ -562,9 +562,9 @@ class SchoolDb extends Schema with QueryTester {
     assert(expectedAfter == after, "expected " + expectedAfter + " got " + after)
 
     nRows = courses.update(c =>
-      Columns(c.meaninglessLong, c.meaninglessLongOption)
-      Values(0, c.meaninglessLongOption - 456L)
-      Where(c.id.~ > -1)
+      ~:Where(c.id.~ > -1)
+        Set(c.meaninglessLong := 0L,
+            c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
     )
 
     assert(nRows == 4)
@@ -576,57 +576,5 @@ class SchoolDb extends Schema with QueryTester {
     assert(b4 == afterReset, "expected " + afterReset + " got " + b4)
 
     passed('testPartialUpdate1)
-
-
-    (heatTransfer.meaninglessLong, 123L) : UpdateAssignment[Long]
-    (heatTransfer.meaninglessLongOption, Some(321L)) : UpdateAssignment[Option[Long]]
-
-    //List[UpdateAssignment[_]](
-//     upz((heatTransfer.meaninglessLong, 123L),
-//         (heatTransfer.meaninglessLongOption, Some(321L)))
-    
-//    (heatTransfer.meaninglessLong, "123L") : UpdateAssignment[_]
-//    (heatTransfer.meaninglessLongOption,  Some("123L")) : UpdateAssignment[_]
-
-    //new UpdatePair(heatTransfer.meaninglessLong, 123L)
-    //new UpdatePair(heatTransfer.meaninglessLongOption, Some(321L))
-
-    //val ua1 = typedExpressionNode2UpdateAssignmentLeftSide(heatTransfer.meaninglessLong) <| 123L
-    //val ua2 = heatTransfer.meaninglessLongOption <| Some(123L)
-
-    //val ua3 = typedExpressionNode2UpdateAssignmentLeftSide(heatTransfer.meaninglessLong) <| "123L"
-    //val ua4 = heatTransfer.meaninglessLongOption <| Some("123L")
   }
-
-  def upz[A1,A2](u1: UpdateAssignment[A1], u2: UpdateAssignment[A2]) = {}
-
-  //class TN[A](a: A)
-
-  implicit def int2TN(i: Int) = new TN(i)
-  implicit def string2TN(s: String) = new TN(s)
-
-  class UAssignment[A](left: TN[A], right: TN[A])
-
-  implicit def tuple2UAssignment[A, B <% TN[A]](t: (B,B)) =
-    new UAssignment[A](t._1, t._2)
-
-  (1 ,234) : UAssignment[Int]
-  ("1" ,"234") : UAssignment[String]
-
-//  ua(("1" ,"234"), (1 ,234))
-
-  def ua[A1,A2](u1: UAssignment[A1], u2: UAssignment[A2]) = {}
-
-
-  //ua("1" ~~~ "234", 1 ~~~ 234)
-  //ua("1" ~~~ "234", "a" ~~~ 234)
-
-  List[UAssignment[_]]("1" := "234", 1 := 234)
-
-  //List[UAssignment[_]]("1" ~~~ "234", "q" ~~~ 234)
-
-  class TN[A](a: A) {
-    def :=[B <% TN[A]] (b: B) = new UAssignment[A](this, b : TN[A])
-  }
-
 }
