@@ -549,7 +549,7 @@ class SchoolDb extends Schema with QueryTester {
     val b4 = q.toList
 
     var nRows = courses.update(c =>
-        Where(c.id.~ > -1)
+       Where(c.id.~ > -1)
        Set(c.meaninglessLong := 123L,
            c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
               // when meaninglessLongOption is null,the SQL addition will have a null result
@@ -561,11 +561,13 @@ class SchoolDb extends Schema with QueryTester {
     assert(nRows == 4)
     assert(expectedAfter == after, "expected " + expectedAfter + " got " + after)
 
-    nRows = courses.update(c =>
+    // alternative syntax :
+    nRows =
+      Update(courses)(c =>
         Where(c.id.~ > -1)
         Set(c.meaninglessLong := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
-    )
+      )
 
     assert(nRows == 4)
     

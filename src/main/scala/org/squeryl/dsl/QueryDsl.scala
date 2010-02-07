@@ -175,4 +175,7 @@ trait QueryDsl
   }
 
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
+
+  def Update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
+
 }
