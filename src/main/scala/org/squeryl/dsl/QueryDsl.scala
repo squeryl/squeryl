@@ -2,6 +2,7 @@ package org.squeryl.dsl
 
 import ast._
 import boilerplate._
+import fsm.{QueryElements, StartState, WhereState}
 import org.squeryl.internals._
 import java.sql.ResultSet
 import org.squeryl._
@@ -15,13 +16,13 @@ trait QueryDsl
   with FromSignatures {
 
   implicit def __thisDsl:QueryDsl = this  
-  
-  //def ~: : StartState = new QueryElements
 
-  override def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState = {
-    val qe = new QueryElementsImpl(b _)
-    qe
-  }
+  private class QueryElementsImpl(override val whereClause: Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]])
+    extends QueryElements
+
+  def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState =
+    new QueryElementsImpl(Some(b _))
+  
 
   implicit val _sampleScalarInt: ScalarInt = new ConstantExpressionNode(sampleInt) with ScalarInt
   implicit val _sampleScalarString: ScalarString = new ConstantExpressionNode(sampleString) with ScalarString
