@@ -10,7 +10,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
   var selectDistinct = false
   
-  var forUpdate = false
+  var isForUpdate = false
 
   val resultSetMapper = new ResultSetMapper
 
@@ -64,15 +64,15 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     sw.statement
   }
 
-  def Distinct = {
+  def distinct = {
     val c = copy(true)
     c.selectDistinct = true;
     c
   }
 
-  def ForUpdate = {
+  def forUpdate = {
     val c = copy(true)
-    c.forUpdate = true;
+    c.isForUpdate = true;
     c    
   }
 

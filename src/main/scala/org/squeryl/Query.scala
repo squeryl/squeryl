@@ -32,11 +32,11 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
   }
 
 
-  def Distinct: Query[R]
+  def distinct: Query[R]
 
-  def Union(q: Query[R]): Query[R] = error("not implemented")
+  def union(q: Query[R]): Query[R] = error("not implemented")
 
-  def Minus(q: Query[R]): Query[R] = error("not implemented")
+  def minus(q: Query[R]): Query[R] = error("not implemented")
 
-  def ForUpdate: Query[R]
+  def forUpdate: Query[R]
 }

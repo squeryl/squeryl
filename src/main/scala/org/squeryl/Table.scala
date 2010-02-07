@@ -123,13 +123,13 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     import dsl._
     
     //val q = From(this)(a => ~:Where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
-    val q = From(this)(a => Where {
+    val q = from(this)(a => dsl.where {
       a.id
       val keyFieldNode = _takeLastAccessedUntypedFieldReference
       val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
       val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
       wc
-    } Select(a))
+    } select(a))
     q.headOption
 
   }
@@ -138,13 +138,13 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
     import dsl._
     //val q = From(this)(a => ~:Where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
-    val q = From(this)(a => Where {
+    val q = from(this)(a => dsl.where {
       a.id
       val keyFieldNode = _takeLastAccessedUntypedFieldReference
       val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
       val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
       wc
-    } Select(a))
+    } select(a))
 
     val deleteCount = this.delete(q)
     assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)

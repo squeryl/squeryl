@@ -117,17 +117,17 @@ class SchoolDb extends Schema with QueryTester {
   }
 
   def avgStudentAge =
-    From(students)(s =>
-      Compute(Avg(s.age))
+    from(students)(s =>
+      compute(avg(s.age))
     )
 
   def avgStudentAgeFunky =
-    From(students)(s =>
-      Compute(Avg(s.age), Avg(s.age) + 3, Avg(s.age) / Count, Count + 6)
+    from(students)(s =>
+      compute(avg(s.age), avg(s.age) + 3, avg(s.age) / count, count + 6)
     )
 
   def addressesOfStudentsOlderThan24 =
-    From(students, addresses)((s,a) =>
+    from(students, addresses)((s,a) =>
 //      Where(
 //       ((s.age > 24) : ScalarLogicalBoolean) and
 //       ((24.~ < s.age) : ScalarLogicalBoolean) and
@@ -135,21 +135,21 @@ class SchoolDb extends Schema with QueryTester {
 //     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
          // trigger the implicit conversion if the constant is on the left side, strangely it will do it
          // for methods with non symbol name, like  lessThanz :
-      Where((24 : ScalarNumerical) < s.age and (24 lessThanz s.age))  
+      where((24 : ScalarNumerical) < s.age and (24 lessThanz s.age))
     //  Where((s.age < 24) and (s.addressId =? a.id))
-     Select(Value(Concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
+     select(Value(concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
     )
 
   def leftOuterJoinStudentAddresses =
-    From(students, addresses)((s,a) =>
-      Select((s,OuterJoin(a, s.addressId ~> a.id)))
-      OrderBy(s.id)
+    from(students, addresses)((s,a) =>
+      select((s,outerJoin(a, s.addressId ~> a.id)))
+      orderBy(s.id)
     )
 
   def fullOuterJoinStudentAddresses =
-    From(students, addresses)((s,a) =>
-      Select(OuterJoin(s, a, s.addressId <~> a.id))
-      OrderBy(s.id)
+    from(students, addresses)((s,a) =>
+      select(outerJoin(s, a, s.addressId <~> a.id))
+      orderBy(s.id)
     )
 
   def test1 = {
@@ -267,10 +267,10 @@ class SchoolDb extends Schema with QueryTester {
 
   def testLikeOperator = {
     val q =
-      From(students)(s=>
-        Where(s.name like "G%")
-        Select(s.id)
-        OrderBy(s.name)
+      from(students)(s=>
+        where(s.name like "G%")
+        select(s.id)
+        orderBy(s.name)
       )
 
     validateQuery('testLikeOperator, q, identity[Int], List(gaitan.id,georgi.id,gontran.id))
@@ -278,10 +278,10 @@ class SchoolDb extends Schema with QueryTester {
 
   def testNotOperator = {
     val q =
-      From(students)(s=>
-        Where(not(s.name like "G%"))
-        Select(s.id)
-        OrderBy(s.name Desc)
+      from(students)(s=>
+        where(not(s.name like "G%"))
+        select(s.id)
+        orderBy(s.name desc)
       )
 
     validateQuery('testNotOperator, q, identity[Int], List(xiao.id, pratap.id))
@@ -468,7 +468,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def testForUpdate = {
 
-    var t = professors.where(p => p.id =? tournesol.id).ForUpdate.single
+    var t = professors.where(p => p.id =? tournesol.id).forUpdate.single
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
@@ -479,16 +479,16 @@ class SchoolDb extends Schema with QueryTester {
   def exerciseTypeSystem1 = {
 
     val q =
-      From(professors, courseAssigments, students, courses, courseSubscriptions, addresses)(
+      from(professors, courseAssigments, students, courses, courseSubscriptions, addresses)(
        (p, ca, s, c, cs, a) =>
-        Where(
+        where(
          p.id =? ca.professorId and
          ca.courseId =? c.id and
          cs.studentId =? s.id and
          cs.courseId =? c.id and
          s.addressId =? a.id
         )
-        GroupBy(
+        groupBy(
           s.isMultilingual : TypedExpressionNode[Scalar,Option[Boolean]],
           p.yearlySalary : TypedExpressionNode[Scalar,Float],
           p.weight :  TypedExpressionNode[Scalar,Option[Float]],
@@ -498,14 +498,14 @@ class SchoolDb extends Schema with QueryTester {
           c.meaninglessLongOption : TypedExpressionNode[Scalar,Option[Long]],
           c.meaninglessLongOption / (s.addressId+1) : TypedExpressionNode[Scalar,Option[Double]] // TODO: fix NOT A GROUP BY exception ....
         )
-        Compute(
-          Min(p.id) : TypedExpressionNode[Agregate,Option[Long]],
-          Avg(ca.id) : TypedExpressionNode[Agregate,Option[Float]],
-          Avg(c.meaninglessLongOption) : TypedExpressionNode[Agregate,Option[Double]],
-          Max(c.finalExamDate) : TypedExpressionNode[Agregate,Option[Date]],
-          Min(a.numberSuffix) : TypedExpressionNode[Agregate,Option[String]],
-          Max(s.isMultilingual) : TypedExpressionNode[Agregate,Option[Boolean]],
-          Min(c.startDate)  : TypedExpressionNode[Agregate,Option[Date]]
+        compute(
+          min(p.id) : TypedExpressionNode[Agregate,Option[Long]],
+          avg(ca.id) : TypedExpressionNode[Agregate,Option[Float]],
+          avg(c.meaninglessLongOption) : TypedExpressionNode[Agregate,Option[Double]],
+          max(c.finalExamDate) : TypedExpressionNode[Agregate,Option[Date]],
+          min(a.numberSuffix) : TypedExpressionNode[Agregate,Option[String]],
+          max(s.isMultilingual) : TypedExpressionNode[Agregate,Option[Boolean]],
+          min(c.startDate)  : TypedExpressionNode[Agregate,Option[Date]]
         )
       )
 
@@ -541,16 +541,16 @@ class SchoolDb extends Schema with QueryTester {
 
 
     val q =
-      From(courses)(c =>
-        Select((c.id, c.meaninglessLong, c.meaninglessLongOption))
-        OrderBy(c.id)
+      from(courses)(c =>
+        select((c.id, c.meaninglessLong, c.meaninglessLongOption))
+        orderBy(c.id)
       )
 
     val b4 = q.toList
 
     var nRows = courses.update(c =>
-       Where(c.id.~ > -1)
-       Set(c.meaninglessLong := 123L,
+       where(c.id.~ > -1)
+       set(c.meaninglessLong := 123L,
            c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
               // when meaninglessLongOption is null,the SQL addition will have a null result
     )
@@ -563,9 +563,9 @@ class SchoolDb extends Schema with QueryTester {
 
     // alternative syntax :
     nRows =
-      Update(courses)(c =>
-        Where(c.id.~ > -1)
-        Set(c.meaninglessLong := 0L,
+      update(courses)(c =>
+        where(c.id.~ > -1)
+        set(c.meaninglessLong := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
       )
 

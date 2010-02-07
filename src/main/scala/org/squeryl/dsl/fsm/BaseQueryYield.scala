@@ -1,15 +1,10 @@
-package org.squeryl.dsl
+package org.squeryl.dsl.fsm
 
-import ast._
-import boilerplate._
-import fsm._
-import org.squeryl.internals._
+import org.squeryl.dsl.ast._
+import org.squeryl.dsl._
+import org.squeryl.dsl.boilerplate.{STuple1, STuple3, STuple6, OrderBySignatures}
+import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
-import org.squeryl._
-
-  
-class QueryDslElements
-
 
 
 class BaseQueryYield[G]
@@ -19,8 +14,6 @@ class BaseQueryYield[G]
     with QueryYield[G] {
 
   protected def _createColumnToTupleMapper(origin: QueryableExpressionNode, agregateArgs: List[AgregateArg], offsetInResultSet:Int, isForGroup:Boolean) = {
-    import boilerplate.STuple1
-    import boilerplate.STuple3
 
     var i = -1;
     val nodes = agregateArgs.map(e => { i += 1; new TupleSelectElement(origin, e.expression, i, isForGroup)})
@@ -43,11 +36,11 @@ class BaseQueryYield[G]
       n.columnToTupleMapper = Some(m)
     (m, nodes)
   }
-  
-  var _havingClause: Option[()=>TypedExpressionNode[Agregate,LogicalBoolean]] = None
+
+  protected var _havingClause: Option[()=>TypedExpressionNode[Agregate,LogicalBoolean]] = None
 
   //TODO: an array is probably more efficient, even if less 'lazy' :
-  var _orderByExpressions: () => List[()=>ExpressionNode] = null
+  protected var _orderByExpressions: () => List[()=>ExpressionNode] = null
 
   def whereClause: Option[ExpressionNode] =
     queryElementzz.whereClause.map(b=>b())
@@ -160,7 +153,7 @@ extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
           else m
       }
   }
-  
+
    override def queryElements =
     (whereClause, havingClause, _groupByClauseClosure().map(e => e.expression), orderByClause)
 

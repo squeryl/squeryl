@@ -65,14 +65,14 @@ object Labo {
   va(1 + a)
   va(1 + s + 1 + a + 3)
 
-  va(Max(1 + s))
-  va(s + Max(1))
-  va(s + Max(s) + 1)
-  va(a + 1 + Min(2))
-  va(Min(1) + a)
+  va(max(1 + s))
+  va(s + max(1))
+  va(s + max(s) + 1)
+  va(a + 1 + min(2))
+  va(min(1) + a)
 
-  va(1 * Avg(1))
-  va(Avg(1) * 1)
+  va(1 * avg(1))
+  va(avg(1) * 1)
 
   (4 in List(2,3,4) and ("a" in List("s","f"))) : ScalarLogicalBoolean
   
@@ -81,14 +81,14 @@ object Labo {
 
   ("a" in List("s","f")) : ScalarLogicalBoolean
 
-  (Max(4) in List(2,3,4)) : AgregateLogicalBoolean
+  (max(4) in List(2,3,4)) : AgregateLogicalBoolean
 
-  va[Option[String]](Min("a"))
-  (Min("a") in List("s","f")) : AgregateLogicalBoolean
+  va[Option[String]](min("a"))
+  (min("a") in List("s","f")) : AgregateLogicalBoolean
 
-  ((Max(4) in List(2,3,4)) and (Min("a") in List("s","f"))) : AgregateLogicalBoolean
-  (1 =? Min(3)) : AgregateLogicalBoolean
-  ((Max(4) in List(2,3,4)) and 1 =? Min(3)) : AgregateLogicalBoolean
+  ((max(4) in List(2,3,4)) and (min("a") in List("s","f"))) : AgregateLogicalBoolean
+  (1 =? min(3)) : AgregateLogicalBoolean
+  ((max(4) in List(2,3,4)) and 1 =? min(3)) : AgregateLogicalBoolean
 
   var x = new ArrayBuffer().appendAll(List(1,4,3,"2"))
   var y = "allo"

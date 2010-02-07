@@ -15,9 +15,9 @@ trait Queryable[T] {
 
   def where(whereClauseFunctor: T => TypedExpressionNode[Scalar, LogicalBoolean])(implicit dsl: QueryDsl): Query[T] = {
     import dsl._
-    From(this)(q0 =>
-      Where(whereClauseFunctor(q0))
-      Select(q0)
+    from(this)(q0 =>
+      dsl.where(whereClauseFunctor(q0))
+      select(q0)
     )
   }
 }

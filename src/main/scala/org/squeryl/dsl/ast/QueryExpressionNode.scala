@@ -59,7 +59,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def selectDistinct = _query.selectDistinct
 
-  def forUpdate = _query.forUpdate
+  def isForUpdate = _query.isForUpdate
 
   def alias = "q" + uniqueId.get
 

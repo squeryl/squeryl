@@ -20,15 +20,15 @@ object ASTTests {
   val vs = new Table[V]("V")
 
   val q0 =
-    From(us,ts)((u,t) =>
-      Where(t.x =? u.y)
-      Select((t,u))
+    from(us,ts)((u,t) =>
+      where(t.x =? u.y)
+      select((t,u))
     )
   
   val q1 =
-    From(vs, q0)((v,q) =>
-      Where(v.z =? q._1.x)
-      Select((v,q))
+    from(vs, q0)((v,q) =>
+      where(v.z =? q._1.x)
+      select((v,q))
     )
 
 

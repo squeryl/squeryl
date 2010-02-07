@@ -91,7 +91,7 @@ class DatabaseAdapter {
 
     sw.nextLine
 
-    if(qen.forUpdate) {
+    if(qen.isForUpdate) {
       sw.write("for update")
       sw.nextLine
     }    

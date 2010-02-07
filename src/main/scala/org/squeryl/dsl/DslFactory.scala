@@ -1,7 +1,7 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.internals.{StatementWriter, OutMapper}
+import org.squeryl.internals.{OutMapper}
 import java.sql.ResultSet
 import java.util.Date
 

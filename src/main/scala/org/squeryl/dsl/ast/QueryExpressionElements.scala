@@ -10,7 +10,7 @@ trait QueryExpressionElements extends ExpressionNode {
 
   def selectDistinct: Boolean
 
-  def forUpdate: Boolean
+  def isForUpdate: Boolean
 
   def views: Iterable[QueryableExpressionNode]
 

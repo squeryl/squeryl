@@ -10,7 +10,7 @@ trait StartState
   with ComputeMeasuresSignaturesFromStartOrWhereState {
   self: QueryElements =>
 
-  def Select[R](yieldClosure: =>R): SelectState[R]
+  def select[R](yieldClosure: =>R): SelectState[R]
 }
 
 trait QueryElements
@@ -35,10 +35,10 @@ trait ComputeStateStartOrWhereState[M]
 trait WhereState extends GroupBySignatures {
   self: QueryElements =>
 
-  def Select[R](yieldClosure: =>R): SelectState[R] =
+  def select[R](yieldClosure: =>R): SelectState[R] =
     new BaseQueryYield[R](this, yieldClosure _)
 
-  def Set(updateAssignments: UpdateAssignment*) =
+  def set(updateAssignments: UpdateAssignment*) =
     new UpdateStatement(whereClause, updateAssignments )
 }
 
@@ -59,8 +59,10 @@ trait GroupByState[K]
   with OrderBySignatures[Group[K]] {
   self: GroupQueryYield[K] =>
 
-  def Having(b: =>TypedExpressionNode[Agregate,LogicalBoolean]): HavingState[K] = {
+  def having(b: =>TypedExpressionNode[Agregate,LogicalBoolean]): HavingState[K] = {
     _havingClause = Some(b _)
     this
   }
 }
+
+

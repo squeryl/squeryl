@@ -276,12 +276,12 @@ class OrderByArg(e: TypedExpressionNode[Scalar,_]) extends ExpressionNode {
 
   private [squeryl] def isAscending = _ascending
 
-  def Asc = {
+  def asc = {
     _ascending = true
     this
   }
 
-  def Desc = {
+  def desc = {
     _ascending = false
     this
   }

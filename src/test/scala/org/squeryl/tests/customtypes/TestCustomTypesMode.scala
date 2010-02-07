@@ -24,9 +24,9 @@ class TestCustomTypesMode extends QueryTester {
   import MyCustomTypesMode._
 
   def simpleSelect =
-    From(patients)(p =>
-      Where(p.age > 70)
-      Select(p)
+    from(patients)(p =>
+      where(p.age > 70)
+      select(p)
     )
 
   def testAll = {

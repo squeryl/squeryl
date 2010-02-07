@@ -20,7 +20,7 @@ trait QueryDsl
   private class QueryElementsImpl(override val whereClause: Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]])
     extends QueryElements
 
-  def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState =
+  def where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState =
     new QueryElementsImpl(Some(b _))
   
 
@@ -45,7 +45,7 @@ trait QueryDsl
   def Value(i: =>ScalarFloat)(implicit si: ScalarFloat): FloatType =
     FieldReferenceLinker.pushExpressionOrCollectValue[FloatType](i _, sampleFloat)
 
-  def OuterJoin[A](a: A, j: =>LeftOuterJoinNode): Option[A] = {
+  def outerJoin[A](a: A, j: =>LeftOuterJoinNode): Option[A] = {
 
     val im = FieldReferenceLinker.isYieldInspectionMode
     
@@ -70,7 +70,7 @@ trait QueryDsl
       Some(a)  
   }
 
-  def OuterJoin[A,B](a: A, b: B, j: =>FullOuterJoinNode): (Option[A],Option[B]) = {
+  def outerJoin[A,B](a: A, b: B, j: =>FullOuterJoinNode): (Option[A],Option[B]) = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
     if(im) {
@@ -98,7 +98,7 @@ trait QueryDsl
     }
   }
 
-  private def _countFunc = Count
+  private def _countFunc = count
 
   trait SingleRowQuery[R] {
     self: Query[R] =>
@@ -116,8 +116,8 @@ trait QueryDsl
 
   class CountSubQueryableQuery(q: Queryable[_]) extends Query[LongType] with ScalarQuery[LongType] {
 
-    private val _inner:Query[Measures[LongType]] = From(q)(r =>
-      Compute(new ComputeArg[LongType](_countFunc, createOutMapperLongType)))
+    private val _inner:Query[Measures[LongType]] = from(q)(r =>
+      compute(new ComputeArg[LongType](_countFunc, createOutMapperLongType)))
 
     def iterator = _inner.map(m => m.measures).iterator
 
@@ -125,9 +125,9 @@ trait QueryDsl
 
     def statement: String = _inner.statement
 
-    def Distinct = this
+    def distinct = this
 
-    def ForUpdate = _inner.ForUpdate
+    def forUpdate = _inner.forUpdate
 
     def dumpAst = _inner.dumpAst
 
@@ -153,9 +153,9 @@ trait QueryDsl
 
     def iterator = q.map(m => m.measures).iterator
 
-    def Distinct = this
+    def distinct = this
 
-    def ForUpdate = q.ForUpdate
+    def forUpdate = q.forUpdate
     
     def dumpAst = q.dumpAst
 
@@ -176,6 +176,6 @@ trait QueryDsl
 
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 
-  def Update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
+  def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
 }
