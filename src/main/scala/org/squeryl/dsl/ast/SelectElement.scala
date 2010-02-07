@@ -87,14 +87,14 @@ class FieldSelectElement
 (val origin: QueryableExpressionNode, val fieldMataData: FieldMetaData, val resultSetMapper: ResultSetMapper)
   extends SelectElement {
 
-  def alias = origin.alias + "_" + fieldMataData.name
+  def alias = origin.alias + "_" + fieldMataData.columnName
 
-  def aliasSuffix = fieldMataData.name
+  def aliasSuffix = fieldMataData.columnName
   
   val expression = new ExpressionNode {
     
     def doWrite(sw: StatementWriter) =
-      sw.write(origin.alias + "." + fieldMataData.name)
+      sw.write(origin.alias + "." + fieldMataData.columnName)
   }
 
   def prepareColumnMapper(index: Int) =
@@ -182,7 +182,7 @@ trait PathReferenceToSelectElement {
 
     if(origin.parent.get.isInstanceOf[UpdateStatement] ||
        origin.parent.get.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference)
-      return selectElement.asInstanceOf[FieldSelectElement].fieldMataData.name
+      return selectElement.asInstanceOf[FieldSelectElement].fieldMataData.columnName
 
     val us = _useSite
 

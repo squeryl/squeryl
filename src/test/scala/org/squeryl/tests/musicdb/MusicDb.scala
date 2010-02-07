@@ -334,7 +334,7 @@ class MusicDb extends Schema with QueryTester {
   def testDynamicQuery2 = {
 
     val q = inhibitedSongsInQuery(true)
-    println(q.dumpAst)
+    //println(q.dumpAst)
     val t = q.single
     val poncho = t._2
 

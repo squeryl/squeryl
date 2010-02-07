@@ -9,8 +9,12 @@ class Toaster(
   @Column(optionType=classOf[Int])
   var yearOfManufacture: Option[Int],
 
+// TODO: uncomment when scalac bug #3003 is resolved
 //  @Column(optionType=classOf[String], length=25)
 //  var countryOfOrigin: Option[String],
+
+//  @Column(name="dateOfPurchase", optionType=classOf[java.util.Date])
+//  var dateOfPurchase: Option[java.util.Date]
 
   @Column(length=25)
   var countryOfOrigin: String,
@@ -51,9 +55,19 @@ class AnnotationTests {
 
     
     val brandNameMD = toasters.findFieldMetaDataForProperty("brandName").get
-    assert(brandNameMD.name == "BRAND_NAME")
-    assert(brandNameMD.length == 32)
+    assert(brandNameMD.columnName == "BRAND_NAME", "expected 'BRAND_NAME' got " + brandNameMD.columnName)
+    assert(brandNameMD.length == 32, "expected 32 got " + brandNameMD.length)
 
+    val yearOfManufacture = toasters.findFieldMetaDataForProperty("yearOfManufacture").get
+    assert(yearOfManufacture.columnName == "yearOfManufacture", "expected 'yearOfManufacture' got " + yearOfManufacture.columnName)
+    assert(yearOfManufacture.length == 4, "expected 4 got " + yearOfManufacture.length)
+
+// TODO: uncomment when scalac bug #3003 is resolved    
+//    val dateOfPurchase = toasters.findFieldMetaDataForProperty("dateOfPurchase").get
+//    assert(dateOfPurchase.columnName == "dateOfPurchase", "expected 'dateOfPurchase' got " + dateOfPurchase.columnName)
+//    assert(dateOfPurchase.length == -1, "expected -1 got " + dateOfPurchase.length)
+
+    println('testMetaData + " passed.")
   }
 
   /**
@@ -71,61 +85,5 @@ class AnnotationTests {
     assert(classOf[Int].isAssignableFrom(t1), "expected classOf[Int], got " + t1.getName)
     assert(classOf[Long].isAssignableFrom(t2), "expected classOf[Long], got " + t2.getName)
     assert(classOf[String].isAssignableFrom(t3), "expected classOf[String], got " + t3.getName)
-  }
-
-  class ToMapConverter[T,U](i: Iterable[(T,U)]) {
-
-    def toMap2: Map[T,U] = error("implementation is not relevant here...")
-  }
-
-  implicit def iterable2ToMapConverter[T,U](i: Iterable[(T,U)]) = new ToMapConverter[T,U](i)
-  
-  val candidateForConversion:Iterable[(String,Int)] = List(("a",1),("b",2))  
-  candidateForConversion.toMap2 
-
-//  class Z[K](k:K)
-//
-//  class UViewOnlyAvailableToZs[K,A] {
-//    def tryMe = {}
-//  }
-//
-//  class U[A](a:A)
-//
-//  implicit def uOfZ2View[K, A <: Z[K]](u: U[A]) = new UViewOnlyAvailableToZs[K,A]
-//
-//  val u = new U(new Z(0))
-//
-//  u : U[Z[Int]] // sanity check
-//
-//  uOfZ2View[Int,Z[Int]]( u ).tryMe  // this compiles
-//
-//  uOfZ2View( u ).tryMe // <- this won't compile
-//
-//  u.tryMe // <- my goal is to have this compile only when u is U[A] and A <: Z[K], but the line above needs to compile first
-//  // *and* I need uOfZ2View to have 2 type params, because in my real scenario, the class UViewOnlyAvailableToZs[K,A]
-//  // needs 2 type params.
-
-//  class Z[K](k:K)
-//
-//  class UViewOnlyAvailableToZs[K,A] {
-//    def tryMe(i:Int) = {}
-//  }
-//
-//  class U[A](a:A) {
-//    def tryMe(param2TrickTheTypeSystem: List[String])
-//  }
-
-  //implicit def uOfZ2View[K, A <: Z[K]](u: U[A]) = new UViewOnlyAvailableToZs[K,A]
-
-  //val u = new U(new Z(0))
-
-  //u : U[Z[Int]] // sanity check
-
-  //uOfZ2View[Int,Z[Int]]( u ).tryMe(1)  // this compiles
-
-  //uOfZ2View( u ).tryMe // <- this won't compile
-
-  //u.tryMe(1) // <- my goal is to have this compile only when u is U[A] and A <: Z[K], but the line above needs to compile first
-  // *and* I need uOfZ2View to have 2 type params, because in my real scenario, the class UViewOnlyAvailableToZs[K,A]
-  // needs 2 type params.  
+  }  
 }

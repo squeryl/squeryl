@@ -54,7 +54,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     sw.write("insert into ");
     sw.write(t.name);
     sw.write(" (");
-    sw.write(colNames.map(fmd => fmd.name).mkString(", "));
+    sw.write(colNames.map(fmd => fmd.columnName).mkString(", "));
     sw.write(") values ");
     sw.write(colVals.mkString("(",",",")"));
   }

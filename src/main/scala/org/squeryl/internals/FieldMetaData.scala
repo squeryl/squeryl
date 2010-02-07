@@ -8,7 +8,7 @@ import java.sql.ResultSet
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
-        val name:String,
+        val nameOfProperty:String,
         val fieldType: Class[_], // if isOption, this fieldType is the type param of Option, i.e. the T in Option[T]
         val wrappedFieldType: Class[_], //in primitive type mode fieldType == wrappedFieldType, in custom type mode wrappedFieldType is the 'real'
         // type, i.e. the (primitive) type that jdbc understands
@@ -23,24 +23,41 @@ class FieldMetaData(
 
   /**
    * @return the length defined in org.squeryl.annotations.Column.length
-   * if it is defined, or the default length for Java primitive types,
-   * i.e. double,long -> 8, float,int -> 4, byte -> 1, boolean -> 1
-   * java.util.Date -> -1. 
+   * if it is defined, or the default length for Java primitive types.
+   * The unit of the length is dependent on the type, the convention is
+   * that numeric types have a length in byte, boolean is bits
+   * date has -1, and for string the lenght is in chars.  
+   * double,long -> 8, float,int -> 4, byte -> 1, boolean -> 1
+   * java.util.Date -> -1.
+   *
+   * The use of this field is to help custom schema generators select
+   * the most appropriate column type  
    */
   def length: Int =
-    columnAnnotation.map(ca => ca.length).
-      getOrElse(FieldMetaData.defaultFieldLength(wrappedFieldType))
+    if(columnAnnotation == None || columnAnnotation.get.length == -1)
+      FieldMetaData.defaultFieldLength(wrappedFieldType)
+    else
+      columnAnnotation.get.length
 
+  /**
+   * The name of the database column
+   */
+  def columnName =
+    if(columnAnnotation == None || columnAnnotation.get.name == "")
+      nameOfProperty
+    else
+      columnAnnotation.get.name
+  
   val resultSetHandler =
     FieldMetaData.resultSetHandlerFor(wrappedFieldType)
-  
+
   if(!isCustomType)
     assert(fieldType == wrappedFieldType,
       "expected fieldType == wrappedFieldType in primitive type mode, got "+
       fieldType.getName + " != " + wrappedFieldType.getName)
 
   override def toString =
-    parentMetaData.clasz.getSimpleName + "." + name + ":" + displayType
+    parentMetaData.clasz.getSimpleName + "." + columnName + ":" + displayType
 
   def isStringType =
     wrappedFieldType.isAssignableFrom(classOf[String])  

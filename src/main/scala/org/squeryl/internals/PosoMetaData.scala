@@ -16,11 +16,11 @@ class PosoMetaData[T](val clasz: Class[T]) {
     'PosoMetaData + "[" + clasz.getSimpleName + "]" + fieldsMetaData.mkString("(",",",")")
 
   def findFieldMetaDataForProperty(name: String) =
-     fieldsMetaData.find(fmd => fmd.name == name)
+     fieldsMetaData.find(fmd => fmd.nameOfProperty == name)
 
   lazy val primaryKey: Option[FieldMetaData] = {
 
-    val k = fieldsMetaData.find(fmd => fmd.name == "id")
+    val k = fieldsMetaData.find(fmd => fmd.columnName == "id")
     // TODO:implement PK detection with KeydEntity
     if(k != None) //TODO: this is config by convention, implement override for exceptions
       k.get.isAutoIncremented = true

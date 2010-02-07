@@ -138,7 +138,7 @@ class DatabaseAdapter {
 
     val dbTypeDeclaration = schema._columnTypeFor(fmd, this)
 
-    var res = "  " + fmd.name + " " + dbTypeDeclaration
+    var res = "  " + fmd.columnName + " " + dbTypeDeclaration
 
     if(isPrimaryKey)
       res += " primary key"
@@ -229,7 +229,7 @@ class DatabaseAdapter {
     sw.write("insert into ");
     sw.write(t.name);
     sw.write(" (");
-    sw.write(f.map(fmd => fmd.name).mkString(", "));
+    sw.write(f.map(fmd => fmd.columnName).mkString(", "));
     sw.write(") values ");
     sw.write(
       f.map(fmd => writeValue(o_, fmd, sw)
@@ -295,14 +295,14 @@ class DatabaseAdapter {
     sw.writeLinesWithSeparator(
       t.posoMetaData.fieldsMetaData.
         filter(fmd=> fmd != pkMd).
-          map(fmd => fmd.name + " = " + writeValue(o_, fmd, sw)),
+          map(fmd => fmd.columnName + " = " + writeValue(o_, fmd, sw)),
       ","
     )
     sw.unindent
     sw.write("where")
     sw.nextLine
     sw.indent
-    sw.write(pkMd.name, " = ", writeValue(o_, pkMd, sw))
+    sw.write(pkMd.columnName, " = ", writeValue(o_, pkMd, sw))
   }
 
   def writeDelete[T](t: Table[T], whereClause: Option[ExpressionNode], sw: StatementWriter) = {
@@ -343,7 +343,7 @@ class DatabaseAdapter {
     sw.nextLine
     for(z <- us.values.zipi) {
       val col = colsToUpdate.next
-      sw.write(col.name)
+      sw.write(col.columnName)
       sw.write(" = ")
       val v = z.element
       v.write(sw)

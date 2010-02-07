@@ -25,7 +25,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
         Session.currentSession.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
       else if( posoMetaData.primaryKey != None) {
         val autoIncPk = new Array[String](1)
-        autoIncPk(0) = posoMetaData.primaryKey.get.name
+        autoIncPk(0) = posoMetaData.primaryKey.get.columnName
         Session.currentSession.connection.prepareStatement(sw.statement, autoIncPk)
       }
       else

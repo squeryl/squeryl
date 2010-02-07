@@ -9,7 +9,7 @@ class H2Adapter extends DatabaseAdapter {
 
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    var res = "  " + fmd.name + " " + schema._columnTypeFor(fmd, this)
+    var res = "  " + fmd.columnName + " " + schema._columnTypeFor(fmd, this)
     if(!fmd.isOption)
       res += " not null"
 
