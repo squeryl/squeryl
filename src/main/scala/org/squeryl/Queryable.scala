@@ -1,9 +1,11 @@
 package org.squeryl
 
+import dsl.ast.{LogicalBoolean, TypedExpressionNode}
+import dsl.{QueryDsl, Scalar}
 import internals.ResultSetMapper
 import java.sql.ResultSet
 
-trait Queryable[+T] {
+trait Queryable[T] {
   
   def name: String
 
@@ -11,14 +13,11 @@ trait Queryable[+T] {
 
   private[squeryl] def give(resultSetMapper: ResultSetMapper, rs: ResultSet) : T
 
-  /**
-   * This method will throw an exception, a bug in the implicit conversion resolution
-   *mechanism prevents the implicit def from being applied
-   * org.squeryl.dsl.QueryDsl
-   *  implicit def view2KeyedEntityView[K,A <: KeyedEntity[K]](v: Queryable[A]): KeyedEntityView[K,A] =
-   * new KeyedEntityView[K,A](v)
-   *
-   * when a method called lookup is implemented here, it works ....
-   */
-  def lookup(s: ResultSet): Option[T] = error("!!!!")
+  def where(whereClauseFunctor: T => TypedExpressionNode[Scalar, LogicalBoolean])(implicit dsl: QueryDsl): Query[T] = {
+    import dsl._
+    From(this)(q0 =>
+    ~:Where(whereClauseFunctor(q0))
+      Select(q0)
+    )
+  }
 }

@@ -98,46 +98,6 @@ trait DslFactory
   implicit def listOfDate2ListDate(l: List[DateType]) =
     new ConstantExpressionNodeList[DateType](l) with ListDate
 
-  trait AgregateArg {
-    def expression: ExpressionNode
-    def mapper: OutMapper[_]
-  }
-  
-  class GroupArg[T](val expression: TypedExpressionNode[Scalar,T], val mapper: OutMapper[T]) extends AgregateArg
-
-  //TODO: replace Scalar with Agregate when Scalac can handle disambiguation on context
-  class ComputeArg[T](val expression: TypedExpressionNode[Agregate,T], val mapper: OutMapper[T]) extends AgregateArg
-    
-
-  class OrderByArg(e: NonLogicalBoolean[Scalar,_]) extends ExpressionNode {
-
-    override def inhibited = e.inhibited
-
-    def doWrite(sw: StatementWriter) = {
-      e.write(sw)
-      if(isAscending)
-        sw.write(" Asc")
-      else
-        sw.write(" Desc")
-    }
-
-    override def children = List(e)
-    
-    private var _ascending = true
-
-    private [squeryl] def isAscending = _ascending
-
-    def Asc = {
-      _ascending = true
-      this
-    }
-
-    def Desc = {
-      _ascending = false
-      this
-    }
-  }
-
   implicit def nonBoolean2OrderByArg(e: NonLogicalBoolean[Scalar,_]) = new OrderByArg(e)
 
   implicit def string2OrderByArg(s: StringType) =
