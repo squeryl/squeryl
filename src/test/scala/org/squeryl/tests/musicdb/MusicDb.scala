@@ -62,30 +62,30 @@ class MusicDb extends Schema with QueryTester {
   
   lazy val poncho =
    From(artists)(a => 
-    ~:Where(a.firstName =? "Poncho") Select(a)
+      Where(a.firstName =? "Poncho") Select(a)
    )
 
   def selfJoinNested3Level = 
     From(
       From(
-        From(artists)(a => ~:Where(a.id =? testInstance.ponchoSanchez.id) Select(a))
-      )(a => ~:Select(a))
-    )(a => ~:Select(a))
+        From(artists)(a =>   Where(a.id =? testInstance.ponchoSanchez.id) Select(a))
+      )(a =>   Select(a))
+    )(a =>   Select(a))
 
   def selfJoinNested4LevelPartialSelect =
-    From(selfJoinNested3Level)(a => ~:Where(a.id.~ > -1) Select(a.lastName))
+    From(selfJoinNested3Level)(a =>   Where(a.id.~ > -1) Select(a.lastName))
 
   lazy val songsFeaturingPoncho =
     From(songs, artists)((s,a) =>
-    ~:Where(a.firstName =? "Poncho" and s.interpretId =? a.id)
+      Where(a.firstName =? "Poncho" and s.interpretId =? a.id)
       Select(s)
       OrderBy(s.title, a.id Desc)
     )
 
   lazy val songsFeaturingPonchoNestedInWhere =
     From(songs, artists)((s,a) =>
-    ~:Where(
-        s.interpretId in From(artists)(a => ~:Where(a.firstName =? "Poncho") Select(a.id))
+      Where(
+        s.interpretId in From(artists)(a =>   Where(a.firstName =? "Poncho") Select(a.id))
       )
       Select(s)
       OrderBy(s.title Asc)
@@ -93,76 +93,76 @@ class MusicDb extends Schema with QueryTester {
 
   lazy val yearOfCongaBluePlus1 =
     From(cds)(cd =>
-    ~:Where(cd.title =? testInstance.congaBlue.title)
+      Where(cd.title =? testInstance.congaBlue.title)
       Select(Value(cd.year.~ + 1))
     )
   
   def songCountPerAlbum(cds: Queryable[Cd]) =
     From(cds, songs)((cd, song) =>
-    ~:Where(song.cdId =? cd.id)
+      Where(song.cdId =? cd.id)
       GroupBy(cd.title) Compute(Count)
       OrderBy(cd.title)
     )
 
   lazy val songCountPerAlbumFeaturingPoncho = songCountPerAlbum(
       From(songs, artists, cds)((s, a, cd) =>
-      ~:Where(a.firstName =? "Poncho" and s.interpretId =? a.id and s.cdId =? cd.id)
+        Where(a.firstName =? "Poncho" and s.interpretId =? a.id and s.cdId =? cd.id)
         Select(cd)
       ).Distinct
     )
 
   lazy val songsFeaturingPonchoNestedInFrom =
     From(songs, poncho)((s,a) =>
-    ~:Where(s.interpretId =? a.id)
+      Where(s.interpretId =? a.id)
       Select((s,a.firstName))
       OrderBy(s.title)
     )
 
   def songCountPerAlbumId(cds: Queryable[Cd]) =
     From(cds, songs)((cd, song) =>
-    ~:Where(song.cdId =? cd.id)
+      Where(song.cdId =? cd.id)
       GroupBy(cd.id) Compute(Count)
     )
 
   lazy val songCountPerAlbumIdJoinedWithAlbum  =
     From(songCountPerAlbumId(cds), cds)((sc, cd) =>
-    ~:Where(sc.key =? cd.id)
+      Where(sc.key =? cd.id)
       Select((cd.title, sc.measures))
       OrderBy(cd.title)
     )
 
   def songCountPerAlbumIdJoinedWithAlbumNested =
     From(songCountPerAlbumIdJoinedWithAlbum)(q =>
-    ~:Select(q)
+      Select(q)
     )
 
   //TODO: list2Queryable conversion using 'select x0 as x from dual union ...'
   def artistsInvolvedInSongs(songIds: List[Int]) =
     From(
       From(songs)(s =>
-      ~:Where((s.authorId in songIds) or (s.interpretId in songIds))
+        Where((s.authorId in songIds) or (s.interpretId in songIds))
         Select(s)
       ),
       artists
     )((s,a) =>
-    ~:Where(s.authorId =? a.id or s.interpretId =? a.id)
+      Where(s.authorId =? a.id or s.interpretId =? a.id)
       Select(a)
       OrderBy(a.lastName Desc)
     ).Distinct
 
   def countCds(cds: Queryable[Cd]) =
-    From(cds)(c => ~:Compute(Count))
+    From(cds)(c =>   Compute(Count))
 
   def countCds2(cds: Queryable[Cd]) = cds.Count    
 
   def avgSongCountForAllArtists =
     From(
       From(artists, songs)((a,s) =>
-      ~:Where(s.authorId =? a.id)
+        Where(s.authorId =? a.id)
         GroupBy(a.id) Compute(Count)
       )
     )((sonCountPerArtist) =>
-      ~:Compute(Avg(sonCountPerArtist.measures))
+        Compute(Avg(sonCountPerArtist.measures))
     )
 
   def test1 = {
@@ -295,7 +295,7 @@ class MusicDb extends Schema with QueryTester {
 
   def inhibitedArtistsInQuery(inhibit: Boolean) =
     From(songs, artists.inhibitWhen(inhibit))((s,a) =>
-    ~:Where(a.get.firstName =? "Poncho" and s.interpretId =? a.get.id)
+      Where(a.get.firstName =? "Poncho" and s.interpretId =? a.get.id)
       Select(s)
       OrderBy(s.title, a.get.id Desc)
     )  
@@ -304,7 +304,7 @@ class MusicDb extends Schema with QueryTester {
 
     val allSongs =
       From(songs)(s =>
-      ~:Select(s)
+        Select(s)
         OrderBy(s.title)
       ).toList.map(s => s.id)
 
@@ -326,7 +326,7 @@ class MusicDb extends Schema with QueryTester {
 
   def inhibitedSongsInQuery(inhibit: Boolean) =
     From(songs.inhibitWhen(inhibit), artists)((s,a) =>
-    ~:Where(a.firstName =? "Poncho" and s.get.interpretId =? a.id)
+      Where(a.firstName =? "Poncho" and s.get.interpretId =? a.id)
       Select((s, a))
       OrderBy(s.get.title, a.id Desc)
     )
@@ -346,7 +346,7 @@ class MusicDb extends Schema with QueryTester {
 
     val expected =
       From(songs, artists)((s,a) =>
-      ~:Where(a.firstName =? "Poncho" and s.interpretId =? a.id)
+        Where(a.firstName =? "Poncho" and s.interpretId =? a.id)
         Select((s.id, a.id))
         OrderBy(s.title, a.id Desc)
       )

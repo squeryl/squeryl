@@ -118,37 +118,37 @@ class SchoolDb extends Schema with QueryTester {
 
   def avgStudentAge =
     From(students)(s =>
-    ~:Compute(Avg(s.age))
+      Compute(Avg(s.age))
     )
 
   def avgStudentAgeFunky =
     From(students)(s =>
-    ~:Compute(Avg(s.age), Avg(s.age) + 3, Avg(s.age) / Count, Count + 6)
+      Compute(Avg(s.age), Avg(s.age) + 3, Avg(s.age) / Count, Count + 6)
     )
 
   def addressesOfStudentsOlderThan24 =
     From(students, addresses)((s,a) =>
-//    ~:Where(
+//      Where(
 //       ((s.age > 24) : ScalarLogicalBoolean) and
 //       ((24.~ < s.age) : ScalarLogicalBoolean) and
 //       (s.addressId =? a.id)
 //     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
          // trigger the implicit conversion if the constant is on the left side, strangely it will do it
          // for methods with non symbol name, like  lessThanz :
-    ~:Where((24 : ScalarNumerical) < s.age and (24 lessThanz s.age))  
-    //~:Where((s.age < 24) and (s.addressId =? a.id))
+      Where((24 : ScalarNumerical) < s.age and (24 lessThanz s.age))  
+    //  Where((s.age < 24) and (s.addressId =? a.id))
      Select(Value(Concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
     )
 
   def leftOuterJoinStudentAddresses =
     From(students, addresses)((s,a) =>
-    ~:Select((s,OuterJoin(a, s.addressId ~> a.id)))
+      Select((s,OuterJoin(a, s.addressId ~> a.id)))
       OrderBy(s.id)
     )
 
   def fullOuterJoinStudentAddresses =
     From(students, addresses)((s,a) =>
-    ~:Select(OuterJoin(s, a, s.addressId <~> a.id))
+      Select(OuterJoin(s, a, s.addressId <~> a.id))
       OrderBy(s.id)
     )
 
@@ -268,7 +268,7 @@ class SchoolDb extends Schema with QueryTester {
   def testLikeOperator = {
     val q =
       From(students)(s=>
-      ~:Where(s.name like "G%")
+        Where(s.name like "G%")
         Select(s.id)
         OrderBy(s.name)
       )
@@ -279,7 +279,7 @@ class SchoolDb extends Schema with QueryTester {
   def testNotOperator = {
     val q =
       From(students)(s=>
-      ~:Where(not(s.name like "G%"))
+        Where(not(s.name like "G%"))
         Select(s.id)
         OrderBy(s.name Desc)
       )
@@ -481,7 +481,7 @@ class SchoolDb extends Schema with QueryTester {
     val q =
       From(professors, courseAssigments, students, courses, courseSubscriptions, addresses)(
        (p, ca, s, c, cs, a) =>
-      ~:Where(
+        Where(
          p.id =? ca.professorId and
          ca.courseId =? c.id and
          cs.studentId =? s.id and
@@ -542,14 +542,14 @@ class SchoolDb extends Schema with QueryTester {
 
     val q =
       From(courses)(c =>
-      ~:Select((c.id, c.meaninglessLong, c.meaninglessLongOption))
+        Select((c.id, c.meaninglessLong, c.meaninglessLongOption))
         OrderBy(c.id)
       )
 
     val b4 = q.toList
 
     var nRows = courses.update(c =>
-      ~:Where(c.id.~ > -1)
+        Where(c.id.~ > -1)
        Set(c.meaninglessLong := 123L,
            c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
               // when meaninglessLongOption is null,the SQL addition will have a null result
@@ -562,7 +562,7 @@ class SchoolDb extends Schema with QueryTester {
     assert(expectedAfter == after, "expected " + expectedAfter + " got " + after)
 
     nRows = courses.update(c =>
-      ~:Where(c.id.~ > -1)
+        Where(c.id.~ > -1)
         Set(c.meaninglessLong := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
     )

@@ -25,7 +25,7 @@ class TestCustomTypesMode extends QueryTester {
 
   def simpleSelect =
     From(patients)(p =>
-    ~:Where(p.age > 70)
+      Where(p.age > 70)
       Select(p)
     )
 

@@ -21,13 +21,13 @@ object ASTTests {
 
   val q0 =
     From(us,ts)((u,t) =>
-    ~:Where(t.x =? u.y)
+      Where(t.x =? u.y)
       Select((t,u))
     )
   
   val q1 =
     From(vs, q0)((v,q) =>
-    ~:Where(v.z =? q._1.x)
+      Where(v.z =? q._1.x)
       Select((v,q))
     )
 

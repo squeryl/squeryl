@@ -271,35 +271,20 @@ trait StartState
   def Select[R](yieldClosure: =>R): SelectState[R]
 }
 
-//class QueryElementsImpl(wc: ()=>TypedExpressionNode[Scalar,LogicalBoolean]) extends QueryElements {
-//
-//  override val _whereClause = Some(wc)
-//}
-//
-//trait QueryElements
-//  extends WhereState
-//    with ComputeMeasuresSignaturesFromStartOrWhereState
-//    with StartState {
-//
-//  def _whereClause:Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]] = None
-//}
+class QueryElementsImpl(wc: ()=>TypedExpressionNode[Scalar,LogicalBoolean]) extends QueryElements {
 
-//class QueryElementsImpl(wc: ()=>TypedExpressionNode[Scalar,LogicalBoolean]) extends QueryElements {
-//
-//  val _whereClause = Some(wc)
-//}
+  override val _whereClause = Some(wc)
 
-class QueryElements
+  override def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]) =
+    error("the type system should not allow this method to be invoked, it is a bug or instanceOf has been misused.") 
+}
+
+trait QueryElements
   extends WhereState
     with ComputeMeasuresSignaturesFromStartOrWhereState
     with StartState {
 
-  var _whereClause:Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]] = None
-
-  def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState = {
-    _whereClause = Some(b _)
-    this
-  }
+  def _whereClause:Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]] = None
 }
 
 

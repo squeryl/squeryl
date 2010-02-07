@@ -8,20 +8,20 @@ import org.squeryl._
 
 trait QueryDsl
   extends DslFactory
+  with WhereState
+  with ComputeMeasuresSignaturesFromStartOrWhereState
+  with StartState
+  with QueryElements
   with FromSignatures {
-  //with WhereState
-  //with ComputeMeasuresSignaturesFromStartOrWhereState
-  //with StartState
-  //with QueryElements
 
   implicit def __thisDsl:QueryDsl = this  
   
-  def ~: : StartState = new QueryElements
+  //def ~: : StartState = new QueryElements
 
-//  override def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState = {
-//    val qe = new QueryElementsImpl(b _)
-//    qe
-//  }
+  override def Where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState = {
+    val qe = new QueryElementsImpl(b _)
+    qe
+  }
 
   implicit val _sampleScalarInt: ScalarInt = new ConstantExpressionNode(sampleInt) with ScalarInt
   implicit val _sampleScalarString: ScalarString = new ConstantExpressionNode(sampleString) with ScalarString
@@ -116,7 +116,7 @@ trait QueryDsl
   class CountSubQueryableQuery(q: Queryable[_]) extends Query[LongType] with ScalarQuery[LongType] {
 
     private val _inner:Query[Measures[LongType]] = From(q)(r =>
-      ~:Compute(new ComputeArg[LongType](_countFunc, createOutMapperLongType)))
+      Compute(new ComputeArg[LongType](_countFunc, createOutMapperLongType)))
 
     def iterator = _inner.map(m => m.measures).iterator
 
