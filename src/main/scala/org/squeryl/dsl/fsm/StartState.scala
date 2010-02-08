@@ -32,7 +32,9 @@ trait ComputeStateStartOrWhereState[M]
   self: MeasuresQueryYield[M] =>
 }
 
-trait WhereState extends GroupBySignatures {
+trait WhereState
+  extends GroupBySignatures 
+  with ComputeMeasuresSignaturesFromStartOrWhereState {
   self: QueryElements =>
 
   def select[R](yieldClosure: =>R): SelectState[R] =
