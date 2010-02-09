@@ -154,6 +154,10 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
+    //testNVLFunction
+    testDateOptionComparisonInWhereClause
+    testDateComparisonInWhereClause
+
     testMetaData
     
     testInstance
@@ -173,7 +177,7 @@ class SchoolDb extends Schema with QueryTester {
     
     testDateTypeMapping
     testDateOptionMapping
-    
+
     testScalarOptionQuery
     testOptionAndNonOptionMixInComputeTuple
     testConcatWithOptionalCols
@@ -357,6 +361,105 @@ class SchoolDb extends Schema with QueryTester {
     println('testDateOptionMapping + " passed.")
   }
 
+  def testDateComparisonInWhereClause = {
+
+//    val feb2010 = dateFormat.parse("2010-02-01")
+// ...
+//    val groupTheory = courses.insert(new Course("Group Theory", jan2009, Some(may2009), 0, None, false))
+//    val heatTransfer = courses.insert(new Course("Heat Transfer", feb2009, None, 3, Some(1234), false))
+//    val counterpoint = courses.insert(new Course("Counterpoint", feb2010, None,0, None, true))
+//    val mandarin = courses.insert(new Course("Mandarin 101", feb2010, None, 0, None, true))
+
+    val jan2010 = dateFormat.parse("2010-01-01")
+    val mar2010 = dateFormat.parse("2010-03-01")
+
+    val mandarinAndCounterpointCourses =
+      from(courses)(c=>
+        where(c.startDate > jan2010 and c.startDate < mar2010)
+        select(c)
+        orderBy(c.startDate asc, c.id asc)
+      ).toList
+
+    val expected = List(counterpoint.id,  mandarin.id)
+    val result = mandarinAndCounterpointCourses.map(c=>c.id)
+
+    assert(expected == result,
+      'testDateComparisonInWhereClause + " expected " + expected + " got " + result)
+
+    println('testDateComparisonInWhereClause + " passed.")
+  }
+
+  def testDateOptionComparisonInWhereClause = {
+
+//    val jan2009 = dateFormat.parse("2009-01-01")
+//...
+//    val groupTheory = courses.insert(new Course("Group Theory", jan2009, Some(may2009), 0, None, false))
+//    val heatTransfer = courses.insert(new Course("Heat Transfer", feb2009, None, 3, Some(1234), false))
+//    val counterpoint = courses.insert(new Course("Counterpoint", feb2010, None,0, None, true))
+//    val mandarin = courses.insert(new Course("Mandarin 101", feb2010, None, 0, None, true))
+
+    val jan2008 = dateFormat.parse("2008-01-01")
+
+    //Session.currentSession.setLogger(s => println(s))
+
+    val result1 =
+      from(courses)(c=>
+        where(c.finalExamDate >= jan2008 and c.finalExamDate.isNotNull)
+        select(c)
+        orderBy(c.finalExamDate, c.id asc)
+      ).toList.map(c=>c.id)
+
+    val result2 =
+      from(courses)(c=>
+        where(c.finalExamDate <= jan2009)
+        select(c)
+        orderBy(c.finalExamDate, c.id asc)
+      ).toList.map(c=>c.id)
+
+    val result3 =
+      from(courses)(c=>
+        where(c.finalExamDate >= feb2009)
+        select(c)
+        orderBy(c.finalExamDate, c.id asc)
+      ).toList.map(c=>c.id)
+
+    val expected = List(groupTheory.id)
+
+    assert(expected == result1,
+      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result1)
+
+    assert(Nil == result2,
+      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result2)
+
+    assert(expected == result3,
+      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result3)
+
+    println('testDateOptionComparisonInWhereClause + " passed.")
+  }
+
+  def testNVLFunction = {
+
+//    val groupTheory = courses.insert(new Course("Group Theory", jan2009, Some(may2009), 0, None, false))
+//    val heatTransfer = courses.insert(new Course("Heat Transfer", feb2009, None, 3, Some(1234), false))
+//    val counterpoint = courses.insert(new Course("Counterpoint", feb2010, None,0, None, true))
+//    val mandarin = courses.insert(new Course("Mandarin 101", feb2010, None, 0, None, true))
+
+    //Session.currentSession.setLogger(s => println(s))
+
+    val result =
+      from(courses)(c=>
+        where(nvl(c.meaninglessLongOption, Some(3L)) <> 1234 and nvl(c.meaninglessLongOption, Some(3L)) =? 3)
+        select(Value(nvl(c.meaninglessLongOption, Some(5L))))
+      ).toList
+
+    val expected = List(5,5,5)
+
+    assert(expected == result,
+      'testNVLFunction + " expected " + expected + " got " + result)
+
+    println('testNVLFunction + " passed.")    
+  }
+  
   def testLongTypeMapping = {
 
     var ht = courses.where(c => c.id =? heatTransfer.id).single

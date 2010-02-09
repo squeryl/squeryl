@@ -93,6 +93,7 @@ trait LogicalBoolean
 class UpdateAssignment(val left: TypedExpressionNode[_,_], val right: TypedExpressionNode[_,_])
 
 trait TypedExpressionNode[K <: ExpressionKind,T] extends ExpressionNode {
+
   def :=[B <% TypedExpressionNode[K,T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[K,T])
 
   //def <[B <% TypedExpressionNode[Scalar,T]] (b: B) = new ScalarBoolean...
@@ -148,6 +149,17 @@ class FunctionNode(val name: String, val args: Iterable[ExpressionNode]) extends
   }
   
   override def children = args.toList
+}
+
+class PostfixOperatorNode(val token: String, val arg: ExpressionNode) extends ExpressionNode {
+
+  def doWrite(sw: StatementWriter) = {
+    arg.write(sw)
+    sw.write(" ")
+    sw.write(token)
+  }
+
+  override def children = List(arg)
 }
 
 class BinaryOperatorNode

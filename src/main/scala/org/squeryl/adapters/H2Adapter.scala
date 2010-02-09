@@ -1,7 +1,8 @@
 package org.squeryl.adapters
 
 import org.squeryl.internals.{FieldMetaData, DatabaseAdapter}
-import org.squeryl.Schema
+import java.sql.ResultSet
+import org.squeryl.{Session, Schema}
 
 class H2Adapter extends DatabaseAdapter {
 
@@ -22,4 +23,5 @@ class H2Adapter extends DatabaseAdapter {
     res
   }
 
+  override def logResultSetRow(s: Session, rs: ResultSet) = s.log(rs.toString)
 }

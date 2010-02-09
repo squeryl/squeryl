@@ -118,6 +118,7 @@ trait ExpressionDsl {
     extends BinaryOperatorNode(left,right, op) with LogicalBooleanInhibiter with AgregateLogicalBoolean 
 
   trait OpArg  {
+    self: ExpressionNode =>
     
     protected def plus = "+"
     protected def minus = "-"
@@ -130,6 +131,10 @@ trait ExpressionDsl {
     protected def in_ = "in"
     protected def _and = "and"
     protected def _or = "or"
+
+    def isNull = new PostfixOperatorNode("is null", this) with ScalarLogicalBoolean
+
+    def isNotNull = new PostfixOperatorNode("is not null", this) with ScalarLogicalBoolean
   }
 
 
@@ -417,6 +422,7 @@ trait ExpressionDsl {
     def <(e: ScalarNumerical): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, lt)
     def >(e: ScalarNumerical): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, gt)
     def =?(e: ScalarNumerical): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, eq)
+    def <>(e: ScalarNumerical): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, "<>")
     def in(e: ListNumerical): ScalarLogicalBoolean= new BinaryOperatorNodeScalarLogicalBoolean(this, e, in_)
     def between(lower: ScalarNumerical, upper: ScalarNumerical): ScalarLogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with ScalarLogicalBoolean
 
@@ -1609,6 +1615,8 @@ trait ExpressionDsl {
 
     def <(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, lt)
     def >(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, gt)
+    def <=(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, "<=")
+    def >=(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, ">=")    
     def =?(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, eq)
     def in[S <% BaseScalarDate](e: Query[S]): ScalarLogicalBoolean= new BinaryOperatorNodeScalarLogicalBoolean(this, e.ast, in_)
     def between(lower: BaseScalarDate, upper: BaseScalarDate): ScalarLogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with ScalarLogicalBoolean

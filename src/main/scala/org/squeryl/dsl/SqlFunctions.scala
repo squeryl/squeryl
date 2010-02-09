@@ -53,4 +53,29 @@ trait SqlFunctions  {
   // contrary to number operations, string concat has absorbance of non nulls 
   // for convenience, Concat returns an empty instead of null, so the return type is ScalarString, not ScalarStringOption  
   def concat(e: TypedExpressionNode[Scalar,_]*) = new ConcatFunction(e) with ScalarString
+
+  def nvl(e: ScalarInt, v: ScalarInt)      = new FunctionNode("nvl",e,v) with ScalarIntOption
+  def nvl(e: ScalarDouble, v: ScalarDouble)   = new FunctionNode("nvl",e,v) with ScalarDoubleOption
+  def nvl(e: ScalarFloat, v: ScalarFloat)    = new FunctionNode("nvl",e,v) with ScalarFloatOption
+  def nvl(e: ScalarLong, v: ScalarLong)     = new FunctionNode("nvl",e,v) with ScalarLongOption
+  def nvl(e: ScalarIntOption, v: ScalarIntOption)      = new FunctionNode("nvl",e,v) with ScalarIntOption
+  def nvl(e: ScalarDoubleOption, v: ScalarDoubleOption)   = new FunctionNode("nvl",e,v) with ScalarDoubleOption
+  def nvl(e: ScalarFloatOption, v: ScalarFloatOption)    = new FunctionNode("nvl",e,v) with ScalarFloatOption
+  def nvl(e: ScalarLongOption, v: ScalarLongOption)     = new FunctionNode("nvl",e,v) with ScalarLongOption
+
+//  def nvl(e: ScalarNumerical, v: ScalarInt)      = new FunctionNode("nvl",e,v) with ScalarIntOption
+//  def nvl(e: ScalarNumerical, v: ScalarDouble)   = new FunctionNode("nvl",e,v) with ScalarDoubleOption
+//  def nvl(e: ScalarNumerical, v: ScalarFloat)    = new FunctionNode("nvl",e,v) with ScalarFloatOption
+//  def nvl(e: ScalarNumerical, v: ScalarLong)     = new FunctionNode("nvl",e,v) with ScalarLongOption
+//  def nvl(e: ScalarNumerical, v: ScalarIntOption)      = new FunctionNode("nvl",e,v) with ScalarIntOption
+//  def nvl(e: ScalarNumerical, v: ScalarDoubleOption)   = new FunctionNode("nvl",e,v) with ScalarDoubleOption
+//  def nvl(e: ScalarNumerical, v: ScalarFloatOption)    = new FunctionNode("nvl",e,v) with ScalarFloatOption
+//  def nvl(e: ScalarNumerical, v: ScalarLongOption)     = new FunctionNode("nvl",e,v) with ScalarLongOption
+
+  //def nvl(e: ScalarNumerical, v: ScalarNumerical)     = new FunctionNode("nvl",e,v) with ScalarNumerical
+  def nvl(e: ScalarBoolean, v: ScalarBoolean)     = new FunctionNode("nvl",e,v) with ScalarBooleanOption
+  def nvl(e: ScalarBooleanOption, v: ScalarBooleanOption)     = new FunctionNode("nvl",e,v) with ScalarBooleanOption
+  def nvl(e: BaseScalarString, v: BaseScalarString)   = new FunctionNode("nvl",e,v) with ScalarStringOption
+  def nvl(e: ScalarStringOption, v: ScalarStringOption)   = new FunctionNode("nvl",e,v) with ScalarStringOption
+  def nvl(e: BaseScalarDate, v: BaseScalarDate)     = new FunctionNode("nvl",e,v) with ScalarDateOption
 }

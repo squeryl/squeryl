@@ -107,7 +107,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       _nextCalled = false
 
       if(s.isLoggingEnabled)
-        s.log(rs.toString)
+        _dbAdapter.logResultSetRow(s, rs)
 
       give(resultSetMapper, rs)
     }

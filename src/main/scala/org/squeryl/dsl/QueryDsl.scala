@@ -29,6 +29,7 @@ trait QueryDsl
   //implicit val _sampleScalarStringOption: ScalarStringOption = new ConstantExpressionNode(sampleString) with ScalarStringOption
   implicit val _sampleScalarDouble: ScalarDouble = new ConstantExpressionNode(sampleDouble) with ScalarDouble
   implicit val _sampleScalarFloat: ScalarFloat = new ConstantExpressionNode(sampleFloat) with ScalarFloat
+  implicit val _sampleLongOption: ScalarLongOption = new ConstantExpressionNode(Some(sampleLong)) with ScalarLongOption
 
   def Value(i: =>ScalarInt)(implicit si: ScalarInt): IntType =
     FieldReferenceLinker.pushExpressionOrCollectValue[IntType](i _, sampleInt)
@@ -44,6 +45,9 @@ trait QueryDsl
 
   def Value(i: =>ScalarFloat)(implicit si: ScalarFloat): FloatType =
     FieldReferenceLinker.pushExpressionOrCollectValue[FloatType](i _, sampleFloat)
+
+  def Value(i: =>ScalarLongOption)(implicit si: ScalarLongOption): Option[LongType] =
+    FieldReferenceLinker.pushExpressionOrCollectValue[Option[LongType]](i _, Some(sampleLong))
 
   def outerJoin[A](a: A, j: =>LeftOuterJoinNode): Option[A] = {
 

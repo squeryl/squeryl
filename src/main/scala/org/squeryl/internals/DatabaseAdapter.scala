@@ -364,4 +364,9 @@ class DatabaseAdapter {
       }
     }
   }
+
+  /**
+   * Currently only implemented by H2
+   */
+  def logResultSetRow(s: Session, rs: ResultSet) = {}
 }

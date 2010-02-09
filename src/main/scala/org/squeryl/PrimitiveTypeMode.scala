@@ -140,7 +140,7 @@ object PrimitiveTypeMode extends QueryDsl {
   def createLeafNodeOfScalarDateType(i: Date) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Date](i) with ScalarDate
+        new ConstantExpressionNode[Date](new java.sql.Date(i.getTime)) with ScalarDate
       case Some(n:SelectElement) =>
         new SelectElementReference(n) with  ScalarDate
     }

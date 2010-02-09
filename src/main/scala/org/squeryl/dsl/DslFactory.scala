@@ -98,7 +98,7 @@ trait DslFactory
   implicit def listOfDate2ListDate(l: List[DateType]) =
     new ConstantExpressionNodeList[DateType](l) with ListDate
 
-  implicit def nonBoolean2OrderByArg(e: NonLogicalBoolean[Scalar,_]) = new OrderByArg(e)
+  implicit def nonBoolean2OrderByArg[E <% NonLogicalBoolean[Scalar,_]](e: E) = new OrderByArg(e)
 
   implicit def string2OrderByArg(s: StringType) =
     new OrderByArg(createLeafNodeOfScalarStringType(s))
