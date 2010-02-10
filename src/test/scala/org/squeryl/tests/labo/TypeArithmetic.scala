@@ -10,238 +10,273 @@ object TypeArithmetic {
   type DoubleType = Double
 
 
-  class TypedExpression[A] {
+  class NumericalExpression[A] {
 
-    def +[B](b: TypedExpression[B]) = new BinAMSOp[A,B](this, b, "+")
-    def *[B](b: TypedExpression[B]) = new BinAMSOp[A,B](this, b, "+")
+    def +[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "+")
+    def *[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "+")
 
-    def /[B](b: TypedExpression[B]) = new BinDivOp[A,B](this, b, "/")
+    def /[B](b: NumericalExpression[B]) = new BinaryDivOp[A,B](this, b, "/")
 
-    def =?(s: TypedExpression[_]) = new LBool
+    def =?(s: NumericalExpression[_]) = new LBool
 
     def ~ = this
   }
 
-  class TypedExpressionWrapper[A](e: ExpressionN) extends TypedExpression[A]
-
   trait ExpressionN
-
-  class BinAMSOp[A1,A2](a1: TypedExpression[A1], a2: TypedExpression[A2], op: String) extends ExpressionN
-
-  class BinDivOp[A1,A2](a1: TypedExpression[A1], a2: TypedExpression[A2], op: String) extends ExpressionN
-
-  implicit def op2TypedExpression1(op: BinAMSOp[ByteType,ByteType]) = new TypedExpressionWrapper[ByteType](op)
-  implicit def op2TypedExpression2(op: BinAMSOp[ByteType,IntType]) = new TypedExpressionWrapper[IntType](op)
-  implicit def op2TypedExpression3(op: BinAMSOp[ByteType,LongType]) = new TypedExpressionWrapper[LongType](op)
-  implicit def op2TypedExpression4(op: BinAMSOp[ByteType,FloatType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression5(op: BinAMSOp[ByteType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression6(op: BinAMSOp[ByteType,Option[ByteType]]) = new TypedExpressionWrapper[Option[ByteType]](op)
-  implicit def op2TypedExpression7(op: BinAMSOp[ByteType,Option[IntType]]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression8(op: BinAMSOp[ByteType,Option[LongType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression9(op: BinAMSOp[ByteType,Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression10(op: BinAMSOp[ByteType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression11(op: BinAMSOp[IntType,ByteType]) = new TypedExpressionWrapper[IntType](op)
-  implicit def op2TypedExpression12(op: BinAMSOp[IntType,IntType]) = new TypedExpressionWrapper[IntType](op)
-  implicit def op2TypedExpression13(op: BinAMSOp[IntType,LongType]) = new TypedExpressionWrapper[LongType](op)
-  implicit def op2TypedExpression14(op: BinAMSOp[IntType,FloatType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression15(op: BinAMSOp[IntType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression16(op: BinAMSOp[IntType,Option[ByteType]]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression17(op: BinAMSOp[IntType,Option[IntType]]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression18(op: BinAMSOp[IntType,Option[LongType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression19(op: BinAMSOp[IntType,Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression20(op: BinAMSOp[IntType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression21(op: BinAMSOp[LongType,ByteType]) = new TypedExpressionWrapper[LongType](op)
-  implicit def op2TypedExpression22(op: BinAMSOp[LongType,IntType]) = new TypedExpressionWrapper[LongType](op)
-  implicit def op2TypedExpression23(op: BinAMSOp[LongType,LongType]) = new TypedExpressionWrapper[LongType](op)
-  implicit def op2TypedExpression24(op: BinAMSOp[LongType,FloatType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression25(op: BinAMSOp[LongType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression26(op: BinAMSOp[LongType,Option[ByteType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression27(op: BinAMSOp[LongType,Option[IntType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression28(op: BinAMSOp[LongType,Option[LongType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression29(op: BinAMSOp[LongType,Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression30(op: BinAMSOp[LongType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression31(op: BinAMSOp[FloatType,ByteType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression32(op: BinAMSOp[FloatType,IntType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression33(op: BinAMSOp[FloatType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression34(op: BinAMSOp[FloatType,FloatType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression35(op: BinAMSOp[FloatType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression36(op: BinAMSOp[FloatType,Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression37(op: BinAMSOp[FloatType,Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression38(op: BinAMSOp[FloatType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression39(op: BinAMSOp[FloatType,Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression40(op: BinAMSOp[FloatType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression41(op: BinAMSOp[DoubleType,ByteType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression42(op: BinAMSOp[DoubleType,IntType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression43(op: BinAMSOp[DoubleType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression44(op: BinAMSOp[DoubleType,FloatType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression45(op: BinAMSOp[DoubleType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression46(op: BinAMSOp[DoubleType,Option[ByteType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression47(op: BinAMSOp[DoubleType,Option[IntType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression48(op: BinAMSOp[DoubleType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression49(op: BinAMSOp[DoubleType,Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression50(op: BinAMSOp[DoubleType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression51(op: BinAMSOp[Option[ByteType],ByteType]) = new TypedExpressionWrapper[Option[ByteType]](op)
-  implicit def op2TypedExpression52(op: BinAMSOp[Option[ByteType],IntType]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression53(op: BinAMSOp[Option[ByteType],LongType]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression54(op: BinAMSOp[Option[ByteType],FloatType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression55(op: BinAMSOp[Option[ByteType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression56(op: BinAMSOp[Option[ByteType],Option[ByteType]]) = new TypedExpressionWrapper[Option[ByteType]](op)
-  implicit def op2TypedExpression57(op: BinAMSOp[Option[ByteType],Option[IntType]]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression58(op: BinAMSOp[Option[ByteType],Option[LongType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression59(op: BinAMSOp[Option[ByteType],Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression60(op: BinAMSOp[Option[ByteType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression61(op: BinAMSOp[Option[IntType],ByteType]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression62(op: BinAMSOp[Option[IntType],IntType]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression63(op: BinAMSOp[Option[IntType],LongType]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression64(op: BinAMSOp[Option[IntType],FloatType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression65(op: BinAMSOp[Option[IntType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression66(op: BinAMSOp[Option[IntType],Option[ByteType]]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression67(op: BinAMSOp[Option[IntType],Option[IntType]]) = new TypedExpressionWrapper[Option[IntType]](op)
-  implicit def op2TypedExpression68(op: BinAMSOp[Option[IntType],Option[LongType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression69(op: BinAMSOp[Option[IntType],Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression70(op: BinAMSOp[Option[IntType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression71(op: BinAMSOp[Option[LongType],ByteType]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression72(op: BinAMSOp[Option[LongType],IntType]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression73(op: BinAMSOp[Option[LongType],LongType]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression74(op: BinAMSOp[Option[LongType],FloatType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression75(op: BinAMSOp[Option[LongType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression76(op: BinAMSOp[Option[LongType],Option[ByteType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression77(op: BinAMSOp[Option[LongType],Option[IntType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression78(op: BinAMSOp[Option[LongType],Option[LongType]]) = new TypedExpressionWrapper[Option[LongType]](op)
-  implicit def op2TypedExpression79(op: BinAMSOp[Option[LongType],Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression80(op: BinAMSOp[Option[LongType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression81(op: BinAMSOp[Option[FloatType],ByteType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression82(op: BinAMSOp[Option[FloatType],IntType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression83(op: BinAMSOp[Option[FloatType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression84(op: BinAMSOp[Option[FloatType],FloatType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression85(op: BinAMSOp[Option[FloatType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression86(op: BinAMSOp[Option[FloatType],Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression87(op: BinAMSOp[Option[FloatType],Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression88(op: BinAMSOp[Option[FloatType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression89(op: BinAMSOp[Option[FloatType],Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression90(op: BinAMSOp[Option[FloatType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression91(op: BinAMSOp[Option[DoubleType],ByteType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression92(op: BinAMSOp[Option[DoubleType],IntType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression93(op: BinAMSOp[Option[DoubleType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression94(op: BinAMSOp[Option[DoubleType],FloatType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression95(op: BinAMSOp[Option[DoubleType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression96(op: BinAMSOp[Option[DoubleType],Option[ByteType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression97(op: BinAMSOp[Option[DoubleType],Option[IntType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression98(op: BinAMSOp[Option[DoubleType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression99(op: BinAMSOp[Option[DoubleType],Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression100(op: BinAMSOp[Option[DoubleType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-
-  implicit def op2TypedExpression1(op: BinDivOp[ByteType,ByteType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression2(op: BinDivOp[ByteType,IntType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression3(op: BinDivOp[ByteType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression4(op: BinDivOp[ByteType,FloatType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression5(op: BinDivOp[ByteType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression6(op: BinDivOp[ByteType,Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression7(op: BinDivOp[ByteType,Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression8(op: BinDivOp[ByteType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression9(op: BinDivOp[ByteType,Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression10(op: BinDivOp[ByteType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression11(op: BinDivOp[IntType,ByteType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression12(op: BinDivOp[IntType,IntType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression13(op: BinDivOp[IntType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression14(op: BinDivOp[IntType,FloatType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression15(op: BinDivOp[IntType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression16(op: BinDivOp[IntType,Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression17(op: BinDivOp[IntType,Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression18(op: BinDivOp[IntType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression19(op: BinDivOp[IntType,Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression20(op: BinDivOp[IntType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression21(op: BinDivOp[LongType,ByteType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression22(op: BinDivOp[LongType,IntType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression23(op: BinDivOp[LongType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression24(op: BinDivOp[LongType,FloatType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression25(op: BinDivOp[LongType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression26(op: BinDivOp[LongType,Option[ByteType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression27(op: BinDivOp[LongType,Option[IntType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression28(op: BinDivOp[LongType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression29(op: BinDivOp[LongType,Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression30(op: BinDivOp[LongType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression31(op: BinDivOp[FloatType,ByteType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression32(op: BinDivOp[FloatType,IntType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression33(op: BinDivOp[FloatType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression34(op: BinDivOp[FloatType,FloatType]) = new TypedExpressionWrapper[FloatType](op)
-  implicit def op2TypedExpression35(op: BinDivOp[FloatType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression36(op: BinDivOp[FloatType,Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression37(op: BinDivOp[FloatType,Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression38(op: BinDivOp[FloatType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression39(op: BinDivOp[FloatType,Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression40(op: BinDivOp[FloatType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression41(op: BinDivOp[DoubleType,ByteType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression42(op: BinDivOp[DoubleType,IntType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression43(op: BinDivOp[DoubleType,LongType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression44(op: BinDivOp[DoubleType,FloatType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression45(op: BinDivOp[DoubleType,DoubleType]) = new TypedExpressionWrapper[DoubleType](op)
-  implicit def op2TypedExpression46(op: BinDivOp[DoubleType,Option[ByteType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression47(op: BinDivOp[DoubleType,Option[IntType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression48(op: BinDivOp[DoubleType,Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression49(op: BinDivOp[DoubleType,Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression50(op: BinDivOp[DoubleType,Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression51(op: BinDivOp[Option[ByteType],ByteType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression52(op: BinDivOp[Option[ByteType],IntType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression53(op: BinDivOp[Option[ByteType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression54(op: BinDivOp[Option[ByteType],FloatType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression55(op: BinDivOp[Option[ByteType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression56(op: BinDivOp[Option[ByteType],Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression57(op: BinDivOp[Option[ByteType],Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression58(op: BinDivOp[Option[ByteType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression59(op: BinDivOp[Option[ByteType],Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression60(op: BinDivOp[Option[ByteType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression61(op: BinDivOp[Option[IntType],ByteType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression62(op: BinDivOp[Option[IntType],IntType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression63(op: BinDivOp[Option[IntType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression64(op: BinDivOp[Option[IntType],FloatType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression65(op: BinDivOp[Option[IntType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression66(op: BinDivOp[Option[IntType],Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression67(op: BinDivOp[Option[IntType],Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression68(op: BinDivOp[Option[IntType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression69(op: BinDivOp[Option[IntType],Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression70(op: BinDivOp[Option[IntType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression71(op: BinDivOp[Option[LongType],ByteType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression72(op: BinDivOp[Option[LongType],IntType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression73(op: BinDivOp[Option[LongType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression74(op: BinDivOp[Option[LongType],FloatType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression75(op: BinDivOp[Option[LongType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression76(op: BinDivOp[Option[LongType],Option[ByteType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression77(op: BinDivOp[Option[LongType],Option[IntType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression78(op: BinDivOp[Option[LongType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression79(op: BinDivOp[Option[LongType],Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression80(op: BinDivOp[Option[LongType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression81(op: BinDivOp[Option[FloatType],ByteType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression82(op: BinDivOp[Option[FloatType],IntType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression83(op: BinDivOp[Option[FloatType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression84(op: BinDivOp[Option[FloatType],FloatType]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression85(op: BinDivOp[Option[FloatType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression86(op: BinDivOp[Option[FloatType],Option[ByteType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression87(op: BinDivOp[Option[FloatType],Option[IntType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression88(op: BinDivOp[Option[FloatType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression89(op: BinDivOp[Option[FloatType],Option[FloatType]]) = new TypedExpressionWrapper[Option[FloatType]](op)
-  implicit def op2TypedExpression90(op: BinDivOp[Option[FloatType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression91(op: BinDivOp[Option[DoubleType],ByteType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression92(op: BinDivOp[Option[DoubleType],IntType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression93(op: BinDivOp[Option[DoubleType],LongType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression94(op: BinDivOp[Option[DoubleType],FloatType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression95(op: BinDivOp[Option[DoubleType],DoubleType]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression96(op: BinDivOp[Option[DoubleType],Option[ByteType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression97(op: BinDivOp[Option[DoubleType],Option[IntType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression98(op: BinDivOp[Option[DoubleType],Option[LongType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression99(op: BinDivOp[Option[DoubleType],Option[FloatType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
-  implicit def op2TypedExpression100(op: BinDivOp[Option[DoubleType],Option[DoubleType]]) = new TypedExpressionWrapper[Option[DoubleType]](op)
   
-//  implicit def op2TypedExpression1(e: BinDivOp[IntType,LongType]) = new TypedExpressionWrapper[Double](e)
-//  implicit def op2TypedExpression2(e: BinDivOp[LongType,IntType]) = new TypedExpressionWrapper[Double](e)
-//  implicit def op2TypedExpression3(e: BinDivOp[IntType,FloatType]) = new TypedExpressionWrapper[FloatType](e)
-//  implicit def op2TypedExpression4(e: BinDivOp[FloatType,IntType]) = new TypedExpressionWrapper[FloatType](e)
-//  implicit def op2TypedExpression5(e: BinDivOp[IntType,IntType]) = new TypedExpressionWrapper[FloatType](e)
-//  implicit def op2TypedExpression6(e: BinDivOp[LongType,LongType]) = new TypedExpressionWrapper[Double](e)
+  class NumericalTypeConvertion[A](e: ExpressionN) extends NumericalExpression[A]
+
+  class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends ExpressionN
+
+  class BinaryDivOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends ExpressionN
+
+  class UnaryFloatOp[A](a: NumericalExpression[A], op: String) extends ExpressionN
+
+  class UnaryAgregateFloatOp[A](a: NumericalExpression[A], op: String) extends ExpressionN
   
-  implicit def i2s(i:Int) = new TypedExpression[IntType]
-  implicit def f2s(i:Long) = new TypedExpression[LongType]
-  implicit def l2s(i:Float) = new TypedExpression[FloatType]
+  class UnaryAgregateLengthNeutralOp[A](a: NumericalExpression[A], op: String) extends ExpressionN
+
+
+
+  // conversions for binary ops like Addition subtraction, multiplication :
+  implicit def binaryOp2TE1(op: BinaryAMSOp[ByteType,ByteType]) = new NumericalTypeConvertion[ByteType](op)
+  implicit def binaryOp2TE2(op: BinaryAMSOp[ByteType,IntType]) = new NumericalTypeConvertion[IntType](op)
+  implicit def binaryOp2TE3(op: BinaryAMSOp[ByteType,LongType]) = new NumericalTypeConvertion[LongType](op)
+  implicit def binaryOp2TE4(op: BinaryAMSOp[ByteType,FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE5(op: BinaryAMSOp[ByteType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE6(op: BinaryAMSOp[ByteType,Option[ByteType]]) = new NumericalTypeConvertion[Option[ByteType]](op)
+  implicit def binaryOp2TE7(op: BinaryAMSOp[ByteType,Option[IntType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE8(op: BinaryAMSOp[ByteType,Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE9(op: BinaryAMSOp[ByteType,Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE10(op: BinaryAMSOp[ByteType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE11(op: BinaryAMSOp[IntType,ByteType]) = new NumericalTypeConvertion[IntType](op)
+  implicit def binaryOp2TE12(op: BinaryAMSOp[IntType,IntType]) = new NumericalTypeConvertion[IntType](op)
+  implicit def binaryOp2TE13(op: BinaryAMSOp[IntType,LongType]) = new NumericalTypeConvertion[LongType](op)
+  implicit def binaryOp2TE14(op: BinaryAMSOp[IntType,FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE15(op: BinaryAMSOp[IntType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE16(op: BinaryAMSOp[IntType,Option[ByteType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE17(op: BinaryAMSOp[IntType,Option[IntType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE18(op: BinaryAMSOp[IntType,Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE19(op: BinaryAMSOp[IntType,Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE20(op: BinaryAMSOp[IntType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE21(op: BinaryAMSOp[LongType,ByteType]) = new NumericalTypeConvertion[LongType](op)
+  implicit def binaryOp2TE22(op: BinaryAMSOp[LongType,IntType]) = new NumericalTypeConvertion[LongType](op)
+  implicit def binaryOp2TE23(op: BinaryAMSOp[LongType,LongType]) = new NumericalTypeConvertion[LongType](op)
+  implicit def binaryOp2TE24(op: BinaryAMSOp[LongType,FloatType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE25(op: BinaryAMSOp[LongType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE26(op: BinaryAMSOp[LongType,Option[ByteType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE27(op: BinaryAMSOp[LongType,Option[IntType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE28(op: BinaryAMSOp[LongType,Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE29(op: BinaryAMSOp[LongType,Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE30(op: BinaryAMSOp[LongType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE31(op: BinaryAMSOp[FloatType,ByteType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE32(op: BinaryAMSOp[FloatType,IntType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE33(op: BinaryAMSOp[FloatType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE34(op: BinaryAMSOp[FloatType,FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE35(op: BinaryAMSOp[FloatType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE36(op: BinaryAMSOp[FloatType,Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE37(op: BinaryAMSOp[FloatType,Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE38(op: BinaryAMSOp[FloatType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE39(op: BinaryAMSOp[FloatType,Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE40(op: BinaryAMSOp[FloatType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE41(op: BinaryAMSOp[DoubleType,ByteType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE42(op: BinaryAMSOp[DoubleType,IntType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE43(op: BinaryAMSOp[DoubleType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE44(op: BinaryAMSOp[DoubleType,FloatType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE45(op: BinaryAMSOp[DoubleType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE46(op: BinaryAMSOp[DoubleType,Option[ByteType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE47(op: BinaryAMSOp[DoubleType,Option[IntType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE48(op: BinaryAMSOp[DoubleType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE49(op: BinaryAMSOp[DoubleType,Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE50(op: BinaryAMSOp[DoubleType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE51(op: BinaryAMSOp[Option[ByteType],ByteType]) = new NumericalTypeConvertion[Option[ByteType]](op)
+  implicit def binaryOp2TE52(op: BinaryAMSOp[Option[ByteType],IntType]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE53(op: BinaryAMSOp[Option[ByteType],LongType]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE54(op: BinaryAMSOp[Option[ByteType],FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE55(op: BinaryAMSOp[Option[ByteType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE56(op: BinaryAMSOp[Option[ByteType],Option[ByteType]]) = new NumericalTypeConvertion[Option[ByteType]](op)
+  implicit def binaryOp2TE57(op: BinaryAMSOp[Option[ByteType],Option[IntType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE58(op: BinaryAMSOp[Option[ByteType],Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE59(op: BinaryAMSOp[Option[ByteType],Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE60(op: BinaryAMSOp[Option[ByteType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE61(op: BinaryAMSOp[Option[IntType],ByteType]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE62(op: BinaryAMSOp[Option[IntType],IntType]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE63(op: BinaryAMSOp[Option[IntType],LongType]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE64(op: BinaryAMSOp[Option[IntType],FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE65(op: BinaryAMSOp[Option[IntType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE66(op: BinaryAMSOp[Option[IntType],Option[ByteType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE67(op: BinaryAMSOp[Option[IntType],Option[IntType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def binaryOp2TE68(op: BinaryAMSOp[Option[IntType],Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE69(op: BinaryAMSOp[Option[IntType],Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE70(op: BinaryAMSOp[Option[IntType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE71(op: BinaryAMSOp[Option[LongType],ByteType]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE72(op: BinaryAMSOp[Option[LongType],IntType]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE73(op: BinaryAMSOp[Option[LongType],LongType]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE74(op: BinaryAMSOp[Option[LongType],FloatType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE75(op: BinaryAMSOp[Option[LongType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE76(op: BinaryAMSOp[Option[LongType],Option[ByteType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE77(op: BinaryAMSOp[Option[LongType],Option[IntType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE78(op: BinaryAMSOp[Option[LongType],Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def binaryOp2TE79(op: BinaryAMSOp[Option[LongType],Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE80(op: BinaryAMSOp[Option[LongType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE81(op: BinaryAMSOp[Option[FloatType],ByteType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE82(op: BinaryAMSOp[Option[FloatType],IntType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE83(op: BinaryAMSOp[Option[FloatType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE84(op: BinaryAMSOp[Option[FloatType],FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE85(op: BinaryAMSOp[Option[FloatType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE86(op: BinaryAMSOp[Option[FloatType],Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE87(op: BinaryAMSOp[Option[FloatType],Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE88(op: BinaryAMSOp[Option[FloatType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE89(op: BinaryAMSOp[Option[FloatType],Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE90(op: BinaryAMSOp[Option[FloatType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE91(op: BinaryAMSOp[Option[DoubleType],ByteType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE92(op: BinaryAMSOp[Option[DoubleType],IntType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE93(op: BinaryAMSOp[Option[DoubleType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE94(op: BinaryAMSOp[Option[DoubleType],FloatType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE95(op: BinaryAMSOp[Option[DoubleType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE96(op: BinaryAMSOp[Option[DoubleType],Option[ByteType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE97(op: BinaryAMSOp[Option[DoubleType],Option[IntType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE98(op: BinaryAMSOp[Option[DoubleType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE99(op: BinaryAMSOp[Option[DoubleType],Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE100(op: BinaryAMSOp[Option[DoubleType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  // conversions for binary ops like Division :
+  implicit def binaryOp2TE1(op: BinaryDivOp[ByteType,ByteType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE2(op: BinaryDivOp[ByteType,IntType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE3(op: BinaryDivOp[ByteType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE4(op: BinaryDivOp[ByteType,FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE5(op: BinaryDivOp[ByteType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE6(op: BinaryDivOp[ByteType,Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE7(op: BinaryDivOp[ByteType,Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE8(op: BinaryDivOp[ByteType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE9(op: BinaryDivOp[ByteType,Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE10(op: BinaryDivOp[ByteType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE11(op: BinaryDivOp[IntType,ByteType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE12(op: BinaryDivOp[IntType,IntType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE13(op: BinaryDivOp[IntType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE14(op: BinaryDivOp[IntType,FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE15(op: BinaryDivOp[IntType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE16(op: BinaryDivOp[IntType,Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE17(op: BinaryDivOp[IntType,Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE18(op: BinaryDivOp[IntType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE19(op: BinaryDivOp[IntType,Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE20(op: BinaryDivOp[IntType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE21(op: BinaryDivOp[LongType,ByteType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE22(op: BinaryDivOp[LongType,IntType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE23(op: BinaryDivOp[LongType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE24(op: BinaryDivOp[LongType,FloatType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE25(op: BinaryDivOp[LongType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE26(op: BinaryDivOp[LongType,Option[ByteType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE27(op: BinaryDivOp[LongType,Option[IntType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE28(op: BinaryDivOp[LongType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE29(op: BinaryDivOp[LongType,Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE30(op: BinaryDivOp[LongType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE31(op: BinaryDivOp[FloatType,ByteType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE32(op: BinaryDivOp[FloatType,IntType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE33(op: BinaryDivOp[FloatType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE34(op: BinaryDivOp[FloatType,FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def binaryOp2TE35(op: BinaryDivOp[FloatType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE36(op: BinaryDivOp[FloatType,Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE37(op: BinaryDivOp[FloatType,Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE38(op: BinaryDivOp[FloatType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE39(op: BinaryDivOp[FloatType,Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE40(op: BinaryDivOp[FloatType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE41(op: BinaryDivOp[DoubleType,ByteType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE42(op: BinaryDivOp[DoubleType,IntType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE43(op: BinaryDivOp[DoubleType,LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE44(op: BinaryDivOp[DoubleType,FloatType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE45(op: BinaryDivOp[DoubleType,DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def binaryOp2TE46(op: BinaryDivOp[DoubleType,Option[ByteType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE47(op: BinaryDivOp[DoubleType,Option[IntType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE48(op: BinaryDivOp[DoubleType,Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE49(op: BinaryDivOp[DoubleType,Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE50(op: BinaryDivOp[DoubleType,Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE51(op: BinaryDivOp[Option[ByteType],ByteType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE52(op: BinaryDivOp[Option[ByteType],IntType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE53(op: BinaryDivOp[Option[ByteType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE54(op: BinaryDivOp[Option[ByteType],FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE55(op: BinaryDivOp[Option[ByteType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE56(op: BinaryDivOp[Option[ByteType],Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE57(op: BinaryDivOp[Option[ByteType],Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE58(op: BinaryDivOp[Option[ByteType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE59(op: BinaryDivOp[Option[ByteType],Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE60(op: BinaryDivOp[Option[ByteType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE61(op: BinaryDivOp[Option[IntType],ByteType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE62(op: BinaryDivOp[Option[IntType],IntType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE63(op: BinaryDivOp[Option[IntType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE64(op: BinaryDivOp[Option[IntType],FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE65(op: BinaryDivOp[Option[IntType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE66(op: BinaryDivOp[Option[IntType],Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE67(op: BinaryDivOp[Option[IntType],Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE68(op: BinaryDivOp[Option[IntType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE69(op: BinaryDivOp[Option[IntType],Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE70(op: BinaryDivOp[Option[IntType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE71(op: BinaryDivOp[Option[LongType],ByteType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE72(op: BinaryDivOp[Option[LongType],IntType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE73(op: BinaryDivOp[Option[LongType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE74(op: BinaryDivOp[Option[LongType],FloatType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE75(op: BinaryDivOp[Option[LongType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE76(op: BinaryDivOp[Option[LongType],Option[ByteType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE77(op: BinaryDivOp[Option[LongType],Option[IntType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE78(op: BinaryDivOp[Option[LongType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE79(op: BinaryDivOp[Option[LongType],Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE80(op: BinaryDivOp[Option[LongType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE81(op: BinaryDivOp[Option[FloatType],ByteType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE82(op: BinaryDivOp[Option[FloatType],IntType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE83(op: BinaryDivOp[Option[FloatType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE84(op: BinaryDivOp[Option[FloatType],FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE85(op: BinaryDivOp[Option[FloatType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE86(op: BinaryDivOp[Option[FloatType],Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE87(op: BinaryDivOp[Option[FloatType],Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE88(op: BinaryDivOp[Option[FloatType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE89(op: BinaryDivOp[Option[FloatType],Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def binaryOp2TE90(op: BinaryDivOp[Option[FloatType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE91(op: BinaryDivOp[Option[DoubleType],ByteType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE92(op: BinaryDivOp[Option[DoubleType],IntType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE93(op: BinaryDivOp[Option[DoubleType],LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE94(op: BinaryDivOp[Option[DoubleType],FloatType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE95(op: BinaryDivOp[Option[DoubleType],DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE96(op: BinaryDivOp[Option[DoubleType],Option[ByteType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE97(op: BinaryDivOp[Option[DoubleType],Option[IntType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE98(op: BinaryDivOp[Option[DoubleType],Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE99(op: BinaryDivOp[Option[DoubleType],Option[FloatType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def binaryOp2TE100(op: BinaryDivOp[Option[DoubleType],Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  // conversions for unary ops like Sin, Log(n,X) :
+  implicit def unaryOp2TE1(op: UnaryFloatOp[ByteType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def unaryOp2TE2(op: UnaryFloatOp[IntType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def unaryOp2TE3(op: UnaryFloatOp[LongType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def unaryOp2TE4(op: UnaryFloatOp[FloatType]) = new NumericalTypeConvertion[FloatType](op)
+  implicit def unaryOp2TE5(op: UnaryFloatOp[DoubleType]) = new NumericalTypeConvertion[DoubleType](op)
+  implicit def unaryOp2TE6(op: UnaryFloatOp[Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE7(op: UnaryFloatOp[Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE8(op: UnaryFloatOp[Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def unaryOp2TE9(op: UnaryFloatOp[Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE10(op: UnaryFloatOp[Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  // conversions for unary ops like Avg, Stdev :
+  implicit def unaryOp2TE1(op: UnaryAgregateFloatOp[ByteType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE2(op: UnaryAgregateFloatOp[IntType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE3(op: UnaryAgregateFloatOp[LongType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def unaryOp2TE4(op: UnaryAgregateFloatOp[FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE5(op: UnaryAgregateFloatOp[DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def unaryOp2TE6(op: UnaryAgregateFloatOp[Option[ByteType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE7(op: UnaryAgregateFloatOp[Option[IntType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE8(op: UnaryAgregateFloatOp[Option[LongType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def unaryOp2TE9(op: UnaryAgregateFloatOp[Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE10(op: UnaryAgregateFloatOp[Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  // conversions for unary ops like Min, Max :
+  implicit def unaryOp2TE1(op: UnaryAgregateLengthNeutralOp[ByteType]) = new NumericalTypeConvertion[Option[ByteType]](op)
+  implicit def unaryOp2TE2(op: UnaryAgregateLengthNeutralOp[IntType]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def unaryOp2TE3(op: UnaryAgregateLengthNeutralOp[LongType]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def unaryOp2TE4(op: UnaryAgregateLengthNeutralOp[FloatType]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE5(op: UnaryAgregateLengthNeutralOp[DoubleType]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+  implicit def unaryOp2TE6(op: UnaryAgregateLengthNeutralOp[Option[ByteType]]) = new NumericalTypeConvertion[Option[ByteType]](op)
+  implicit def unaryOp2TE7(op: UnaryAgregateLengthNeutralOp[Option[IntType]]) = new NumericalTypeConvertion[Option[IntType]](op)
+  implicit def unaryOp2TE8(op: UnaryAgregateLengthNeutralOp[Option[LongType]]) = new NumericalTypeConvertion[Option[LongType]](op)
+  implicit def unaryOp2TE9(op: UnaryAgregateLengthNeutralOp[Option[FloatType]]) = new NumericalTypeConvertion[Option[FloatType]](op)
+  implicit def unaryOp2TE10(op: UnaryAgregateLengthNeutralOp[Option[DoubleType]]) = new NumericalTypeConvertion[Option[DoubleType]](op)
+
+  implicit def i2s(i:Int) = new NumericalExpression[IntType]
+  implicit def f2s(i:Long) = new NumericalExpression[LongType]
+  implicit def l2s(i:Float) = new NumericalExpression[FloatType]
 
   class LBool {
     def and(b: LBool) = new LBool
@@ -277,10 +312,19 @@ object TypeArithmetic {
     var i = 1
     for(t1 <- allNumericTypes;
         t2 <- allNumericTypes) {
-      val outputType = computeTypeASM(t1,t2)
-      println("  implicit def op2TypedExpression"+i+
+      println("  implicit def binaryOp2TE"+i+
               "(op: "+inputParamTypeName+"[" + t1 + "," + t2 +
-              "]) = new TypedExpressionWrapper["+outTypeFunc(t1,t2)+"](op)")
+              "]) = new NumericalTypeConvertion["+outTypeFunc(t1,t2)+"](op)")
+      i += 1
+    }
+  }
+
+  def printUnaryTypeConversions(inputParamTypeName : String, outTypeFunc: (TypeDescription) => TypeDescription) = {
+    var i = 1
+    for(t1 <- allNumericTypes) {
+      println("  implicit def unaryOp2TE"+i+
+              "(op: "+inputParamTypeName+"[" + t1 + 
+              "]) = new NumericalTypeConvertion["+outTypeFunc(t1)+"](op)")
       i += 1
     }
   }
@@ -323,23 +367,66 @@ object TypeArithmetic {
     }
   }
 
+  // for functions like Log(n,X), Sin(x), etc
+  val computeTypeFloatOp = (t1: TypeDescription) => {  
+
+    (t1.length, t1.isOption) match {
+      case (1, false) => tFloat
+      case (1, true) => tFloatO
+      case (4, false)  => tFloat
+      case (4, true)  => tFloatO
+      case (8, false)  => tDouble
+      case (8, true)  => tDoubleO
+    }
+  }
+
+  //for agregate functions like Avg, Stdev, etc...
+  val computeTypeAgregateFloatOp = (t1: TypeDescription) => {
+
+    t1.length match {
+      case 1 => tFloatO
+      case 4  => tFloatO
+      case 8  => tDoubleO
+    }
+  }
+
+  val computeTypeAgregateLengthNeutralOp = (t1: TypeDescription) => {
+
+    (t1.length, t1.isFloat) match {
+      case (1, false) => tByteO
+      case (1, true) => error("!!!")
+      case (4, false)  => tIntO
+      case (4, true)  => tFloatO
+      case (8, false)  => tLongO
+      case (8, true)  => tDoubleO
+    }
+  }
+  
   def invalidTypeCombination(t1: TypeDescription,t2: TypeDescription) =
     error("invalidTypeCombination(" + t1 + "," + t2)
   
   def main(args : Array[String]) : Unit = {
 
-    printBinaryTypeConversions("BinAMSOp", computeTypeASM)
-    printBinaryTypeConversions("BinDivOp", computeTypeDIV)
+    println("  // conversions for binary ops like Addition subtraction, multiplication :")
+    printBinaryTypeConversions("BinaryAMSOp", computeTypeASM)
+    println("  // conversions for binary ops like Division :")
+    printBinaryTypeConversions("BinaryDivOp", computeTypeDIV)
+    println("  // conversions for unary ops like Sin, Log(n,X) :")
+    printUnaryTypeConversions("UnaryFloatOp", computeTypeFloatOp)
+    println("  // conversions for unary ops like Avg, Stdev :")
+    printUnaryTypeConversions("UnaryAgregateFloatOp", computeTypeAgregateFloatOp)
+    println("  // conversions for unary ops like Min, Max :")
+    printUnaryTypeConversions("UnaryAgregateLengthNeutralOp", computeTypeAgregateLengthNeutralOp)
 
-    val v1 = (1 ~) + 1.5F : TypedExpression[FloatType]
+    val v1 = (1 ~) + 1.5F : NumericalExpression[FloatType]
     val v2 = (1 ~) + 10L;
-    v2 : TypedExpression[Long]
+    v2 : NumericalExpression[Long]
 
-    (1 ~) / 4L : TypedExpression[Double]
+    (1 ~) / 4L : NumericalExpression[Double]
 
-    (1 ~) / 4 : TypedExpression[Float]
+    (1 ~) / 4 : NumericalExpression[Float]
 
-    34 * (1 ~) / 4L : TypedExpression[Double]
+    34 * (1 ~) / 4L : NumericalExpression[Double]
 
     4 =? (1 ~) + 10L and (1 ~) / 4 =? (1 ~) + 10L :LBool
     println(v1)
