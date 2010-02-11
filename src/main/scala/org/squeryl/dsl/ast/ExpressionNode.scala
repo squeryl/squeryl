@@ -90,11 +90,11 @@ trait ListString extends ListExpressionNode {
 trait LogicalBoolean
 
 //TODO: erase type A, it is unneeded, and use ExpressionNode instead of TypedExp...
-class UpdateAssignment(val left: TypedExpressionNode[_,_], val right: TypedExpressionNode[_,_])
+class UpdateAssignment(val left: TypedExpressionNode[_], val right: TypedExpressionNode[_])
 
-trait TypedExpressionNode[K <: ExpressionKind,T] extends ExpressionNode {
+trait TypedExpressionNode[T] extends ExpressionNode {
 
-  def :=[B <% TypedExpressionNode[K,T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[K,T])
+  def :=[B <% TypedExpressionNode[T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[T])
 
   //def <[B <% TypedExpressionNode[Scalar,T]] (b: B) = new ScalarBoolean...
 }
@@ -264,13 +264,10 @@ trait AgregateArg {
   def mapper: OutMapper[_]
 }
 
-class GroupArg[T](val expression: TypedExpressionNode[Scalar,T], val mapper: OutMapper[T]) extends AgregateArg
-
-//TODO: replace Scalar with Agregate when Scalac can handle disambiguation on context
-class ComputeArg[T](val expression: TypedExpressionNode[Agregate,T], val mapper: OutMapper[T]) extends AgregateArg
+class GroupArg[T](val expression: TypedExpressionNode[T], val mapper: OutMapper[T]) extends AgregateArg
 
 
-class OrderByArg(e: TypedExpressionNode[Scalar,_]) extends ExpressionNode {
+class OrderByArg(e: TypedExpressionNode[_]) extends ExpressionNode {
 
   override def inhibited = e.inhibited
 

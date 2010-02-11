@@ -314,7 +314,7 @@ object TypeArithmetic {
         t2 <- allNumericTypes) {
       println("  implicit def binaryOp2TE"+i+
               "(op: "+inputParamTypeName+"[" + t1 + "," + t2 +
-              "]) = new NumericalTypeConvertion["+outTypeFunc(t1,t2)+"](op)")
+              "]) = new NumericalTypeConversion["+outTypeFunc(t1,t2)+"](op)")
       i += 1
     }
   }
@@ -324,7 +324,7 @@ object TypeArithmetic {
     for(t1 <- allNumericTypes) {
       println("  implicit def unaryOp2TE"+i+
               "(op: "+inputParamTypeName+"[" + t1 + 
-              "]) = new NumericalTypeConvertion["+outTypeFunc(t1)+"](op)")
+              "]) = new NumericalTypeConversion["+outTypeFunc(t1)+"](op)")
       i += 1
     }
   }

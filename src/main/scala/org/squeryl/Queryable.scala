@@ -13,7 +13,7 @@ trait Queryable[T] {
 
   private[squeryl] def give(resultSetMapper: ResultSetMapper, rs: ResultSet) : T
 
-  def where(whereClauseFunctor: T => TypedExpressionNode[Scalar, LogicalBoolean])(implicit dsl: QueryDsl): Query[T] = {
+  def where(whereClauseFunctor: T => TypedExpressionNode[LogicalBoolean])(implicit dsl: QueryDsl): Query[T] = {
     import dsl._
     from(this)(q0 =>
       dsl.where(whereClauseFunctor(q0))

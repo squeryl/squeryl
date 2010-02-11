@@ -1,6 +1,6 @@
 package org.squeryl
 
-import dsl.ast.ConstantExpressionNode
+import dsl.ast.{TypedExpressionNode, ConstantExpressionNode}
 import dsl.QueryDsl
 
 
@@ -11,22 +11,22 @@ trait CustomType {
 trait CustomTypesMode extends QueryDsl {
 
   implicit def createConstantNodeOfScalarIntType(i: Int) =
-    new ConstantExpressionNode[Int](i) with ScalarInt
+    new ConstantExpressionNode[Int](i) with TypedExpressionNode[Int]
 
   implicit def createConstantNodeOfScalarStringType(s: String) =
-    new ConstantExpressionNode[String](s, true) with ScalarString
+    new ConstantExpressionNode[String](s, true) with TypedExpressionNode[String]
 
   implicit def createConstantNodeOfScalarDoubleType(i: Double) =
-    new ConstantExpressionNode[Double](i) with ScalarDouble
+    new ConstantExpressionNode[Double](i) with TypedExpressionNode[Double]
 
   implicit def createConstantNodeOfScalarFloatType(i: Float) =
-    new ConstantExpressionNode[Float](i) with ScalarFloat
+    new ConstantExpressionNode[Float](i) with TypedExpressionNode[Float]
 
   implicit def createConstantNodeOfScalarLongType(i: Long) =
-    new ConstantExpressionNode[Long](i) with ScalarLong
+    new ConstantExpressionNode[Long](i) with TypedExpressionNode[Long]
 
   implicit def createConstantNodeOfScalarBooleanType(i: Boolean) =
-    new ConstantExpressionNode[Boolean](i) with ScalarBoolean
+    new ConstantExpressionNode[Boolean](i) with TypedExpressionNode[Boolean]
 
 
 // constant agregates are of rare (and questionnable) usefullness, but we support them in CustonTypesMode

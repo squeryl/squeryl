@@ -17,37 +17,37 @@ trait QueryDsl
 
   implicit def __thisDsl:QueryDsl = this  
 
-  private class QueryElementsImpl(override val whereClause: Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]])
+  private class QueryElementsImpl(override val whereClause: Option[()=>TypedExpressionNode[LogicalBoolean]])
     extends QueryElements
 
-  def where(b: =>TypedExpressionNode[Scalar,LogicalBoolean]): WhereState =
+  def where(b: =>TypedExpressionNode[LogicalBoolean]): WhereState =
     new QueryElementsImpl(Some(b _))
   
 
-  implicit val _sampleScalarInt: ScalarInt = new ConstantExpressionNode(sampleInt) with ScalarInt
-  implicit val _sampleScalarString: ScalarString = new ConstantExpressionNode(sampleString) with ScalarString
-  //implicit val _sampleScalarStringOption: ScalarStringOption = new ConstantExpressionNode(sampleString) with ScalarStringOption
-  implicit val _sampleScalarDouble: ScalarDouble = new ConstantExpressionNode(sampleDouble) with ScalarDouble
-  implicit val _sampleScalarFloat: ScalarFloat = new ConstantExpressionNode(sampleFloat) with ScalarFloat
-  implicit val _sampleLongOption: ScalarLongOption = new ConstantExpressionNode(Some(sampleLong)) with ScalarLongOption
+  implicit val _sampleScalarInt: TypedExpressionNode[Int]= new ConstantExpressionNode(sampleInt) with TypedExpressionNode[Int]
+//  implicit val _sampleScalarString: ScalarString = new ConstantExpressionNode(sampleString) with ScalarString
+//  //implicit val _sampleScalarStringOption: ScalarStringOption = new ConstantExpressionNode(sampleString) with ScalarStringOption
+//  implicit val _sampleScalarDouble: ScalarDouble = new ConstantExpressionNode(sampleDouble) with ScalarDouble
+//  implicit val _sampleScalarFloat: ScalarFloat = new ConstantExpressionNode(sampleFloat) with ScalarFloat
+//  implicit val _sampleLongOption: ScalarLongOption = new ConstantExpressionNode(Some(sampleLong)) with ScalarLongOption
 
-  def Value(i: =>ScalarInt)(implicit si: ScalarInt): IntType =
+  def &(i: =>TypedExpressionNode[Int])(implicit si: TypedExpressionNode[Int]): IntType =
     FieldReferenceLinker.pushExpressionOrCollectValue[IntType](i _, sampleInt)
 
-  def Value(i: =>ScalarString)(implicit si: ScalarString): StringType =
+  def &(i: =>ScalarString)(implicit si: ScalarString): StringType =
     FieldReferenceLinker.pushExpressionOrCollectValue[StringType](i _, sampleString)
 
 //  def Value(i: =>ScalarStringOption)(implicit si: ScalarStringOption): Option[StringType] =
 //    FieldReferenceLinker.pushExpressionOrCollectValue[Option[StringType]](i _, Some(sampleString))
 
-  def Value(i: =>ScalarDouble)(implicit si: ScalarDouble): DoubleType =
-    FieldReferenceLinker.pushExpressionOrCollectValue[DoubleType](i _, sampleDouble)
-
-  def Value(i: =>ScalarFloat)(implicit si: ScalarFloat): FloatType =
-    FieldReferenceLinker.pushExpressionOrCollectValue[FloatType](i _, sampleFloat)
-
-  def Value(i: =>ScalarLongOption)(implicit si: ScalarLongOption): Option[LongType] =
-    FieldReferenceLinker.pushExpressionOrCollectValue[Option[LongType]](i _, Some(sampleLong))
+//  def Value(i: =>ScalarDouble)(implicit si: ScalarDouble): DoubleType =
+//    FieldReferenceLinker.pushExpressionOrCollectValue[DoubleType](i _, sampleDouble)
+//
+//  def Value(i: =>ScalarFloat)(implicit si: ScalarFloat): FloatType =
+//    FieldReferenceLinker.pushExpressionOrCollectValue[FloatType](i _, sampleFloat)
+//
+//  def Value(i: =>ScalarLongOption)(implicit si: ScalarLongOption): Option[LongType] =
+//    FieldReferenceLinker.pushExpressionOrCollectValue[Option[LongType]](i _, Some(sampleLong))
 
   def outerJoin[A](a: A, j: =>LeftOuterJoinNode): Option[A] = {
 
@@ -121,7 +121,7 @@ trait QueryDsl
   class CountSubQueryableQuery(q: Queryable[_]) extends Query[LongType] with ScalarQuery[LongType] {
 
     private val _inner:Query[Measures[LongType]] = from(q)(r =>
-      compute(new ComputeArg[LongType](_countFunc, createOutMapperLongType)))
+      compute(new GroupArg[LongType](_countFunc, createOutMapperLongType)))
 
     def iterator = _inner.map(m => m.measures).iterator
 

@@ -18,7 +18,7 @@ trait QueryElements
     with ComputeMeasuresSignaturesFromStartOrWhereState
     with StartState {
 
-  private [squeryl] def whereClause:Option[()=>TypedExpressionNode[Scalar,LogicalBoolean]] = None
+  private [squeryl] def whereClause:Option[()=>TypedExpressionNode[LogicalBoolean]] = None
 }
 
 trait SelectState[R] extends QueryYield[R] with OrderBySignatures[R] {
@@ -61,7 +61,7 @@ trait GroupByState[K]
   with OrderBySignatures[Group[K]] {
   self: GroupQueryYield[K] =>
 
-  def having(b: =>TypedExpressionNode[Agregate,LogicalBoolean]): HavingState[K] = {
+  def having(b: =>TypedExpressionNode[LogicalBoolean]): HavingState[K] = {
     _havingClause = Some(b _)
     this
   }

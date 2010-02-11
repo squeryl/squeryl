@@ -135,7 +135,7 @@ class SchoolDb extends Schema with QueryTester {
 //     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
          // trigger the implicit conversion if the constant is on the left side, strangely it will do it
          // for methods with non symbol name, like  lessThanz :
-      where((24 : ScalarNumerical) < s.age and (24 lessThanz s.age))
+      where((24 : NumericalExpression[Int]) < s.age and (24 lessThanz s.age))
     //  Where((s.age < 24) and (s.addressId =? a.id))
      select(Value(concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
     )

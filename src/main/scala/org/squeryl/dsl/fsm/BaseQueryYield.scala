@@ -37,7 +37,7 @@ class BaseQueryYield[G]
     (m, nodes)
   }
 
-  protected var _havingClause: Option[()=>TypedExpressionNode[Agregate,LogicalBoolean]] = None
+  protected var _havingClause: Option[()=>TypedExpressionNode[LogicalBoolean]] = None
 
   //TODO: an array is probably more efficient, even if less 'lazy' :
   protected var _orderByExpressions: () => List[()=>ExpressionNode] = null
@@ -101,7 +101,7 @@ class GroupQueryYield[K] (
 
 class MeasuresQueryYield[M](
    _qe: QueryElements,
-   _computeByClauseClosure: ()=>List[ComputeArg[_]]
+   _computeByClauseClosure: ()=>List[GroupArg[_]]
   )
   extends BaseQueryYield[Measures[M]](_qe, null)
     with OrderBySignatures[Measures[M]]
@@ -126,7 +126,7 @@ class MeasuresQueryYield[M](
 class GroupWithMeasuresQueryYield[K,M] (
   _qe: QueryElements,
   _groupByClauseClosure: ()=>List[GroupArg[_]],
-  _computeClauseClosure: ()=>List[ComputeArg[_]]
+  _computeClauseClosure: ()=>List[GroupArg[_]]
 )
 extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
   with ComputeStateFromGroupByState[K,M]

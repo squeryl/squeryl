@@ -10,26 +10,26 @@ trait DslFactory
   extends ExpressionDsl
     with SqlFunctions {
 
-  protected def createLeafNodeOfScalarIntType(i: IntType): ScalarInt
-  protected def createLeafNodeOfScalarIntOptionType(i: Option[IntType]): ScalarIntOption
+  protected def createLeafNodeOfScalarIntType(i: IntType): NumericalExpression[IntType]
+  protected def createLeafNodeOfScalarIntOptionType(i: Option[IntType]): NumericalExpression[Option[IntType]]
 
-  protected def createLeafNodeOfScalarDoubleType(d: DoubleType): ScalarDouble
-  protected def createLeafNodeOfScalarDoubleOptionType(d: Option[DoubleType]): ScalarDoubleOption
+  protected def createLeafNodeOfScalarDoubleType(d: DoubleType): NumericalExpression[DoubleType]
+  protected def createLeafNodeOfScalarDoubleOptionType(d: Option[DoubleType]): NumericalExpression[Option[DoubleType]]
 
-  protected def createLeafNodeOfScalarFloatType(d: FloatType): ScalarFloat
-  protected def createLeafNodeOfScalarFloatOptionType(d: Option[FloatType]): ScalarFloatOption
+  protected def createLeafNodeOfScalarFloatType(d: FloatType): NumericalExpression[FloatType]
+  protected def createLeafNodeOfScalarFloatOptionType(d: Option[FloatType]): NumericalExpression[Option[FloatType]]
 
-  protected def createLeafNodeOfScalarStringType(s: StringType): ScalarString
-  protected def createLeafNodeOfScalarStringOptionType(s: Option[StringType]): ScalarStringOption
+  protected def createLeafNodeOfScalarStringType(s: StringType): TypedExpressionNode[StringType]
+  protected def createLeafNodeOfScalarStringOptionType(s: Option[StringType]): TypedExpressionNode[Option[StringType]]
 
-  protected def createLeafNodeOfScalarLongType(s: LongType): ScalarLong
-  protected def createLeafNodeOfScalarLongOptionType(s: Option[LongType]): ScalarLongOption
+  protected def createLeafNodeOfScalarLongType(s: LongType): NumericalExpression[LongType]
+  protected def createLeafNodeOfScalarLongOptionType(s: Option[LongType]): NumericalExpression[Option[LongType]]
 
-  protected def createLeafNodeOfScalarBooleanType(s: BooleanType): ScalarBoolean
-  protected def createLeafNodeOfScalarBooleanOptionType(s: Option[BooleanType]): ScalarBooleanOption
+  protected def createLeafNodeOfScalarBooleanType(s: BooleanType): TypedExpressionNode[BooleanType]
+  protected def createLeafNodeOfScalarBooleanOptionType(s: Option[BooleanType]): TypedExpressionNode[Option[BooleanType]]
 
-  protected def createLeafNodeOfScalarDateType(d: DateType): ScalarDate
-  protected def createLeafNodeOfScalarDateOptionType(d: Option[DateType]): ScalarDateOption
+  protected def createLeafNodeOfScalarDateType(d: DateType): TypedExpressionNode[DateType]
+  protected def createLeafNodeOfScalarDateOptionType(d: Option[DateType]): TypedExpressionNode[Option[DateType]]
 
 
 //  protected def createLeafNodeOfAgregateIntType(i: IntType): AgregateIntOption
@@ -98,7 +98,7 @@ trait DslFactory
   implicit def listOfDate2ListDate(l: List[DateType]) =
     new ConstantExpressionNodeList[DateType](l) with ListDate
 
-  implicit def nonBoolean2OrderByArg[E <% NonLogicalBoolean[Scalar,_]](e: E) = new OrderByArg(e)
+  implicit def nonBoolean2OrderByArg[E <% NonLogicalBoolean[_]](e: E) = new OrderByArg(e)
 
   implicit def string2OrderByArg(s: StringType) =
     new OrderByArg(createLeafNodeOfScalarStringType(s))
@@ -266,74 +266,74 @@ trait DslFactory
 
   // GroupArgs from expressions
 
-  implicit def expr2SclarIntGroupArg(e: TypedExpressionNode[Scalar,IntType]) =
+  implicit def expr2SclarIntGroupArg(e: TypedExpressionNode[IntType]) =
     new GroupArg[IntType](e, createOutMapperIntType)
-  implicit def expr2SclarIntOptionGroupArg(e: TypedExpressionNode[Scalar,Option[IntType]]) =
+  implicit def expr2SclarIntOptionGroupArg(e: TypedExpressionNode[Option[IntType]]) =
     new GroupArg[Option[IntType]](e, createOutMapperIntTypeOption)
 
-  implicit def expr2SclarStringGroupArg(e: TypedExpressionNode[Scalar,StringType]) =
+  implicit def expr2SclarStringGroupArg(e: TypedExpressionNode[StringType]) =
     new GroupArg[StringType](e, createOutMapperStringType)
-  implicit def expr2SclarStringOptionGroupArg(e: TypedExpressionNode[Scalar,Option[StringType]]) =
+  implicit def expr2SclarStringOptionGroupArg(e: TypedExpressionNode[Option[StringType]]) =
     new GroupArg[Option[StringType]](e, createOutMapperStringTypeOption)
 
 
-  implicit def expr2SclarDoubleGroupArg(e: TypedExpressionNode[Scalar,DoubleType]) =
+  implicit def expr2SclarDoubleGroupArg(e: TypedExpressionNode[DoubleType]) =
     new GroupArg[DoubleType](e, createOutMapperDoubleType)
-  implicit def expr2SclarDoubleOptionGroupArg(e: TypedExpressionNode[Scalar,Option[DoubleType]]) =
+  implicit def expr2SclarDoubleOptionGroupArg(e: TypedExpressionNode[Option[DoubleType]]) =
     new GroupArg[Option[DoubleType]](e, createOutMapperDoubleTypeOption)
 
-  implicit def expr2SclarFloatGroupArg(e: TypedExpressionNode[Scalar,FloatType]) =
+  implicit def expr2SclarFloatGroupArg(e: TypedExpressionNode[FloatType]) =
     new GroupArg[FloatType](e, createOutMapperFloatType)
 
-  implicit def expr2SclarFloatOptionGroupArg(e: TypedExpressionNode[Scalar,Option[FloatType]]) =
+  implicit def expr2SclarFloatOptionGroupArg(e: TypedExpressionNode[Option[FloatType]]) =
     new GroupArg[Option[FloatType]](e, createOutMapperFloatTypeOption)
 
-  implicit def expr2SclarLongGroupArg(e: TypedExpressionNode[Scalar,LongType]) =
+  implicit def expr2SclarLongGroupArg(e: TypedExpressionNode[LongType]) =
     new GroupArg[LongType](e, createOutMapperLongType)
-  implicit def expr2SclarLongOptionGroupArg(e: TypedExpressionNode[Scalar,Option[LongType]]) =
+  implicit def expr2SclarLongOptionGroupArg(e: TypedExpressionNode[Option[LongType]]) =
     new GroupArg[Option[LongType]](e, createOutMapperLongTypeOption)
 
-  implicit def expr2SclarBooleanGroupArg(e: TypedExpressionNode[Scalar,BooleanType]) =
+  implicit def expr2SclarBooleanGroupArg(e: TypedExpressionNode[BooleanType]) =
     new GroupArg[BooleanType](e, createOutMapperBooleanType)
-  implicit def expr2SclarBooleanOptionGroupArg(e: TypedExpressionNode[Scalar,Option[BooleanType]]) =
+  implicit def expr2SclarBooleanOptionGroupArg(e: TypedExpressionNode[Option[BooleanType]]) =
     new GroupArg[Option[BooleanType]](e, createOutMapperBooleanTypeOption)
 
-  implicit def expr2SclarDateGroupArg(e: TypedExpressionNode[Scalar,DateType]) =
+  implicit def expr2SclarDateGroupArg(e: TypedExpressionNode[DateType]) =
     new GroupArg[DateType](e, createOutMapperDateType)
-  implicit def expr2SclarDateOptionGroupArg(e: TypedExpressionNode[Scalar,Option[DateType]]) =
+  implicit def expr2SclarDateOptionGroupArg(e: TypedExpressionNode[Option[DateType]]) =
     new GroupArg[Option[DateType]](e, createOutMapperDateTypeOption)
 
   // ComputeArgs from agregate expressions:
   
-  implicit def agreateInt2ComputeArg(e: TypedExpressionNode[Agregate,IntType]) =
-    new ComputeArg[IntType](e, createOutMapperIntType)
-
-  implicit def agreateOptionInt2ComputeArg(e: TypedExpressionNode[Agregate,Option[IntType]]) =
-    new ComputeArg[Option[IntType]](e, createOutMapperIntTypeOption)
-  
-  implicit def agreateString2ComputeArg(e: TypedExpressionNode[Agregate,Option[StringType]]) =
-    new ComputeArg[Option[StringType]](e, createOutMapperStringTypeOption)
-
-  implicit def agreateDoubleOption2ComputeArg(e: TypedExpressionNode[Agregate,Option[DoubleType]]) =
-    new ComputeArg[Option[DoubleType]](e, createOutMapperDoubleTypeOption)
-
-  implicit def agreateDouble2ComputeArg(e: TypedExpressionNode[Agregate,DoubleType]) =
-    new ComputeArg[DoubleType](e, createOutMapperDoubleType)
-  
-  implicit def agreateFloat2ComputeArg(e: TypedExpressionNode[Agregate,Option[FloatType]]) =
-    new ComputeArg[Option[FloatType]](e, createOutMapperFloatTypeOption)
-
-  implicit def agreateLongOption2ComputeArg(e: TypedExpressionNode[Agregate,Option[LongType]]) =
-    new ComputeArg[Option[LongType]](e, createOutMapperLongTypeOption)
-
-  implicit def agreateLong2ComputeArg(e: TypedExpressionNode[Agregate,LongType]) =
-    new ComputeArg[LongType](e, createOutMapperLongType)
-  
-  implicit def agreateBoolean2ComputeArg(e: TypedExpressionNode[Agregate,Option[BooleanType]]) =
-    new ComputeArg[Option[BooleanType]](e, createOutMapperBooleanTypeOption)
-
-  implicit def agreateDate2ComputeArg(e: TypedExpressionNode[Agregate,Option[DateType]]) =
-    new ComputeArg[Option[DateType]](e, createOutMapperDateTypeOption)
+//  implicit def agreateInt2ComputeArg(e: TypedExpressionNode[Agregate,IntType]) =
+//    new GroupArg[IntType](e, createOutMapperIntType)
+//
+//  implicit def agreateOptionInt2ComputeArg(e: TypedExpressionNode[Agregate,Option[IntType]]) =
+//    new GroupArg[Option[IntType]](e, createOutMapperIntTypeOption)
+//
+//  implicit def agreateString2ComputeArg(e: TypedExpressionNode[Agregate,Option[StringType]]) =
+//    new GroupArg[Option[StringType]](e, createOutMapperStringTypeOption)
+//
+//  implicit def agreateDoubleOption2ComputeArg(e: TypedExpressionNode[Agregate,Option[DoubleType]]) =
+//    new GroupArg[Option[DoubleType]](e, createOutMapperDoubleTypeOption)
+//
+//  implicit def agreateDouble2ComputeArg(e: TypedExpressionNode[Agregate,DoubleType]) =
+//    new GroupArg[DoubleType](e, createOutMapperDoubleType)
+//
+//  implicit def agreateFloat2ComputeArg(e: TypedExpressionNode[Agregate,Option[FloatType]]) =
+//    new GroupArg[Option[FloatType]](e, createOutMapperFloatTypeOption)
+//
+//  implicit def agreateLongOption2ComputeArg(e: TypedExpressionNode[Agregate,Option[LongType]]) =
+//    new GroupArg[Option[LongType]](e, createOutMapperLongTypeOption)
+//
+//  implicit def agreateLong2ComputeArg(e: TypedExpressionNode[Agregate,LongType]) =
+//    new GroupArg[LongType](e, createOutMapperLongType)
+//
+//  implicit def agreateBoolean2ComputeArg(e: TypedExpressionNode[Agregate,Option[BooleanType]]) =
+//    new GroupArg[Option[BooleanType]](e, createOutMapperBooleanTypeOption)
+//
+//  implicit def agreateDate2ComputeArg(e: TypedExpressionNode[Agregate,Option[DateType]]) =
+//    new GroupArg[Option[DateType]](e, createOutMapperDateTypeOption)
 
   protected def sampleInt: IntType
   protected def sampleString: StringType
