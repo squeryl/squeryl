@@ -90,60 +90,43 @@ object MyCustomTypesMode extends CustomTypesMode {
   protected def sampleDate = new DateField(new Date)
 
   def createLeafNodeOfScalarIntType(i: IntField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with ScalarInt
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with NumericalExpression[IntType]
   def createLeafNodeOfScalarIntOptionType(i: Option[IntField]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with ScalarIntOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with NumericalExpression[Option[IntType]]
 
   def createLeafNodeOfScalarStringType(s: StringField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with ScalarString
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with StringExpression[StringType]
   def createLeafNodeOfScalarStringOptionType(s: Option[StringField]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with ScalarStringOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with StringExpression[Option[StringType]]
 
   def createLeafNodeOfScalarDoubleType(i: DoubleField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarDouble
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  NumericalExpression[DoubleType]
   def createLeafNodeOfScalarDoubleOptionType(i: Option[DoubleField]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarDoubleOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  NumericalExpression[Option[DoubleType]]
 
   def createLeafNodeOfScalarFloatType(i: FloatField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarFloat
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  NumericalExpression[FloatType]
   def createLeafNodeOfScalarFloatOptionType(i: Option[FloatField]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarFloatOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  NumericalExpression[Option[FloatType]]
 
   def createLeafNodeOfScalarLongType(i: LongField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarLong
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  NumericalExpression[LongType]
   def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarLongOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  NumericalExpression[Option[LongType]]
 
   def createLeafNodeOfScalarBooleanType(i: BooleanField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarBoolean
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  BooleanExpression[BooleanType]
 
   def createLeafNodeOfScalarBooleanOptionType(i: Option[BooleanField]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarBooleanOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  BooleanExpression[Option[BooleanType]]
 
 
   def createLeafNodeOfScalarDateType(i: DateField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarDate
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  DateExpression[DateType]
 
   def createLeafNodeOfScalarDateOptionType(i: Option[DateField]) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  ScalarDateOption
+    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with  DateExpression[Option[DateType]]
 
-  def createLeafNodeOfAgregateIntType(i: IntField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with AgregateIntOption
-
-  def createLeafNodeOfAgregateStringType(s: StringField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with AgregateStringOption
-
-  def createLeafNodeOfAgregateDoubleType(i: DoubleField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with AgregateDoubleOption
-
-  def createLeafNodeOfAgregateFloatType(i: FloatField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with AgregateFloatOption
-
-  def createLeafNodeOfAgregateLongType(i: LongField) =
-    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with AgregateLongOption
-
-//  def createLeafNodeOfAgregateBooleanType(i: BooleanField) =
-//    new SelectElementReference(FieldReferenceLinker.takeLastAccessedFieldReference.get) with AgregateBoolean
 }
 
 trait Domain[A] {

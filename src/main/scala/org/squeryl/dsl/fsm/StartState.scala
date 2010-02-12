@@ -18,7 +18,7 @@ trait QueryElements
     with ComputeMeasuresSignaturesFromStartOrWhereState
     with StartState {
 
-  private [squeryl] def whereClause:Option[()=>TypedExpressionNode[LogicalBoolean]] = None
+  private [squeryl] def whereClause:Option[()=>LogicalBoolean] = None
 }
 
 trait SelectState[R] extends QueryYield[R] with OrderBySignatures[R] {

@@ -17,44 +17,20 @@ trait QueryDsl
 
   implicit def __thisDsl:QueryDsl = this  
 
-  private class QueryElementsImpl(override val whereClause: Option[()=>TypedExpressionNode[LogicalBoolean]])
+  private class QueryElementsImpl(override val whereClause: Option[()=>LogicalBoolean])
     extends QueryElements
 
-  def where(b: =>TypedExpressionNode[LogicalBoolean]): WhereState =
+  def where(b: =>LogicalBoolean): WhereState =
     new QueryElementsImpl(Some(b _))
+
+  def &[A](i: =>TypedExpressionNode[A]): A =
+    FieldReferenceLinker.pushExpressionOrCollectValue[A](i _, error("implement me"))
   
-
-  implicit val _sampleScalarInt: TypedExpressionNode[Int]= new ConstantExpressionNode(sampleInt) with TypedExpressionNode[Int]
-//  implicit val _sampleScalarString: ScalarString = new ConstantExpressionNode(sampleString) with ScalarString
-//  //implicit val _sampleScalarStringOption: ScalarStringOption = new ConstantExpressionNode(sampleString) with ScalarStringOption
-//  implicit val _sampleScalarDouble: ScalarDouble = new ConstantExpressionNode(sampleDouble) with ScalarDouble
-//  implicit val _sampleScalarFloat: ScalarFloat = new ConstantExpressionNode(sampleFloat) with ScalarFloat
-//  implicit val _sampleLongOption: ScalarLongOption = new ConstantExpressionNode(Some(sampleLong)) with ScalarLongOption
-
-  def &(i: =>TypedExpressionNode[Int])(implicit si: TypedExpressionNode[Int]): IntType =
-    FieldReferenceLinker.pushExpressionOrCollectValue[IntType](i _, sampleInt)
-
-  def &(i: =>ScalarString)(implicit si: ScalarString): StringType =
-    FieldReferenceLinker.pushExpressionOrCollectValue[StringType](i _, sampleString)
-
-//  def Value(i: =>ScalarStringOption)(implicit si: ScalarStringOption): Option[StringType] =
-//    FieldReferenceLinker.pushExpressionOrCollectValue[Option[StringType]](i _, Some(sampleString))
-
-//  def Value(i: =>ScalarDouble)(implicit si: ScalarDouble): DoubleType =
-//    FieldReferenceLinker.pushExpressionOrCollectValue[DoubleType](i _, sampleDouble)
-//
-//  def Value(i: =>ScalarFloat)(implicit si: ScalarFloat): FloatType =
-//    FieldReferenceLinker.pushExpressionOrCollectValue[FloatType](i _, sampleFloat)
-//
-//  def Value(i: =>ScalarLongOption)(implicit si: ScalarLongOption): Option[LongType] =
-//    FieldReferenceLinker.pushExpressionOrCollectValue[Option[LongType]](i _, Some(sampleLong))
-
-  def outerJoin[A](a: A, j: =>LeftOuterJoinNode): Option[A] = {
-
+  def outerJoin[A](a: A, j1: =>ExpressionNode, j2: =>ExpressionNode): Option[A] = {
     val im = FieldReferenceLinker.isYieldInspectionMode
-    
+
     if(im) {
-      val on = j
+      val on = new LeftOuterJoinNode(j1,j2)
       val leftSelectElement = new SelectElementReference(
         on.left.asInstanceOf[SelectElementReference].selectElement)
       val rightSelectElement = new SelectElementReference(
@@ -74,11 +50,12 @@ trait QueryDsl
       Some(a)  
   }
 
-  def outerJoin[A,B](a: A, b: B, j: =>FullOuterJoinNode): (Option[A],Option[B]) = {
+  def fullOuterJoin[A,B](a: A, b: B, j1: =>ExpressionNode, j2: =>ExpressionNode): (Option[A],Option[B]) = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
+
     if(im) {
-      val loj = j
+      val loj = new FullOuterJoinNode(j1,j2)
       val leftSelectElement = new SelectElementReference(
         loj.left.asInstanceOf[SelectElementReference].selectElement)
       val rightSelectElement = new SelectElementReference(
@@ -120,8 +97,9 @@ trait QueryDsl
 
   class CountSubQueryableQuery(q: Queryable[_]) extends Query[LongType] with ScalarQuery[LongType] {
 
-    private val _inner:Query[Measures[LongType]] = from(q)(r =>
-      compute(new GroupArg[LongType](_countFunc, createOutMapperLongType)))
+    private val _inner:Query[Measures[LongType]] = error("implement me") 
+//    from(q)(r =>
+//      compute(new GroupArg[LongType](_countFunc, createOutMapperLongType)))
 
     def iterator = _inner.map(m => m.measures).iterator
 

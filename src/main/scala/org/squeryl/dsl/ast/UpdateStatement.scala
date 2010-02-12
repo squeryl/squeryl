@@ -1,9 +1,8 @@
 package org.squeryl.dsl.ast
 
-import org.squeryl.dsl.Scalar
 import org.squeryl.internals.StatementWriter
 
-class UpdateStatement(val whereClause: Option[()=>TypedExpressionNode[LogicalBoolean]], uas: Seq[UpdateAssignment])
+class UpdateStatement(val whereClause: Option[()=>LogicalBoolean], uas: Seq[UpdateAssignment])
    extends ExpressionNode {
 
   def doWrite(sw: StatementWriter) = {}

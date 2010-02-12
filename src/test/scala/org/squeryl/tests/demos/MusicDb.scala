@@ -64,6 +64,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
     val maxSongNumber: Option[Int] =
       from(playlistElements)(ple =>
         where(ple.playlistId =? id)
+        //compute(max(ple.songNumber) : NumericalTypeConversion[Option[IntType]])
         compute(max(ple.songNumber))
       )
 

@@ -3,8 +3,6 @@ package org.squeryl.tests
 
 import org.squeryl.{PrimitiveTypeMode, Query}
 import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
-import collection.mutable.ArrayBuffer
-import org.squeryl.dsl.{Agregate, Scalar}
 
 /**
  *  Ideas to explore :
@@ -30,113 +28,113 @@ import org.squeryl.dsl.{Agregate, Scalar}
 
 object Labo {
 
-  import PrimitiveTypeMode._
-
-  def vs[T](e: TypedExpressionNode[Scalar,T]) = {}
-  def va[T](e: TypedExpressionNode[Agregate,T]) = {}
-
-
-  val a = new ConstantExpressionNode(1) with AgregateIntOption
-  val s = new ConstantExpressionNode(1) with ScalarInt
-  val ss = new ConstantExpressionNode("a") with ScalarString
-
-
-
-  val s2:ScalarInt = s + 1
-//  GroupByz(s + s2)
-//  GroupByz(s + 1)
-//  GroupByz(2 + s + 1)
-  
-//  ~:Where(1 =? 2) Select(1); //GroupBy(s + s2)
-//  ~:Where(1 =? 2) Select(1) //.GroupBy(s + 1)
-//  ~:Where(1 =? 2).Select(1) //.GroupBy(2 + s + 1)
+//  import PrimitiveTypeMode._
 //
-//  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy(ss)
+//  def vs[T](e: TypedExpressionNode[Scalar,T]) = {}
+//  def va[T](e: TypedExpressionNode[Agregate,T]) = {}
 //
-//  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy("c")
-
-
-  vs(1)
-  vs(1 + s)
-  vs(s + 1)
-  vs(s + s + 1)
-
-  va(a + 1)
-  va(1 + a)
-  va(1 + s + 1 + a + 3)
-
-  va(max(1 + s))
-  va(s + max(1))
-  va(s + max(s) + 1)
-  va(a + 1 + min(2))
-  va(min(1) + a)
-
-  va(1 * avg(1))
-  va(avg(1) * 1)
-
-  (4 in List(2,3,4) and ("a" in List("s","f"))) : ScalarLogicalBoolean
-  
-  (4 in List(2,3,4) and "a" =? "3") : ScalarLogicalBoolean
-
-
-  ("a" in List("s","f")) : ScalarLogicalBoolean
-
-  (max(4) in List(2,3,4)) : AgregateLogicalBoolean
-
-  va[Option[String]](min("a"))
-  (min("a") in List("s","f")) : AgregateLogicalBoolean
-
-  ((max(4) in List(2,3,4)) and (min("a") in List("s","f"))) : AgregateLogicalBoolean
-  (1 =? min(3)) : AgregateLogicalBoolean
-  ((max(4) in List(2,3,4)) and 1 =? min(3)) : AgregateLogicalBoolean
-
-  var x = new ArrayBuffer().appendAll(List(1,4,3,"2"))
-  var y = "allo"
-
-  implicit def t2inerpolater(t: (String,()=>Product)) = new Interpolater(t)
-
-  var r:()=>Product = null
-
-  class Interpolater(var t: (String,()=>Product)) {
-
-    r = t._2
-    
-    def interpolate = {
-      println(t._2())
-      val f = t._2.getClass.getFields
-      for(f0 <- f)
-        println("--->"+f0.getName)
-    }
-  }
-
-  def in(p: =>Product) = {
-    val z = p _
-     println(z)
-    z
-  }
-
-  def testI = {
-    val i = ("one is ${x} and allo is ${y}",in(x,y)).interpolate
-    println(i)
-  }
-
-
-
-trait B
-
-trait A {
-  self: B =>
-
-  def z(b: B)
-
-  def b: B = this   // the compiler allows this
-
-  z(this)  // but not this, wich is strange,
-
-  z(b) // since this it allowed
-}
-
-  //val a0:A = error("")
-  
-  //val b:B = a0
+//
+//  val a = new ConstantExpressionNode(1) with AgregateIntOption
+//  val s = new ConstantExpressionNode(1) with ScalarInt
+//  val ss = new ConstantExpressionNode("a") with ScalarString
+//
+//
+//
+//  val s2:ScalarInt = s + 1
+////  GroupByz(s + s2)
+////  GroupByz(s + 1)
+////  GroupByz(2 + s + 1)
+//
+////  ~:Where(1 =? 2) Select(1); //GroupBy(s + s2)
+////  ~:Where(1 =? 2) Select(1) //.GroupBy(s + 1)
+////  ~:Where(1 =? 2).Select(1) //.GroupBy(2 + s + 1)
+////
+////  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy(ss)
+////
+////  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy("c")
+//
+//
+//  vs(1)
+//  vs(1 + s)
+//  vs(s + 1)
+//  vs(s + s + 1)
+//
+//  va(a + 1)
+//  va(1 + a)
+//  va(1 + s + 1 + a + 3)
+//
+//  va(max(1 + s))
+//  va(s + max(1))
+//  va(s + max(s) + 1)
+//  va(a + 1 + min(2))
+//  va(min(1) + a)
+//
+//  va(1 * avg(1))
+//  va(avg(1) * 1)
+//
+//  (4 in List(2,3,4) and ("a" in List("s","f"))) : LogicalBoolean
+//
+//  (4 in List(2,3,4) and "a" =? "3") : LogicalBoolean
+//
+//
+//  ("a" in List("s","f")) : LogicalBoolean
+//
+//  (max(4) in List(2,3,4)) : AgregateLogicalBoolean
+//
+//  va[Option[String]](min("a"))
+//  (min("a") in List("s","f")) : AgregateLogicalBoolean
+//
+//  ((max(4) in List(2,3,4)) and (min("a") in List("s","f"))) : AgregateLogicalBoolean
+//  (1 =? min(3)) : AgregateLogicalBoolean
+//  ((max(4) in List(2,3,4)) and 1 =? min(3)) : AgregateLogicalBoolean
+//
+//  var x = new ArrayBuffer().appendAll(List(1,4,3,"2"))
+//  var y = "allo"
+//
+//  implicit def t2inerpolater(t: (String,()=>Product)) = new Interpolater(t)
+//
+//  var r:()=>Product = null
+//
+//  class Interpolater(var t: (String,()=>Product)) {
+//
+//    r = t._2
+//
+//    def interpolate = {
+//      println(t._2())
+//      val f = t._2.getClass.getFields
+//      for(f0 <- f)
+//        println("--->"+f0.getName)
+//    }
+//  }
+//
+//  def in(p: =>Product) = {
+//    val z = p _
+//     println(z)
+//    z
+//  }
+//
+//  def testI = {
+//    val i = ("one is ${x} and allo is ${y}",in(x,y)).interpolate
+//    println(i)
+//  }
+//
+//
+//
+//trait B
+//
+//trait A {
+//  self: B =>
+//
+//  def z(b: B)
+//
+//  def b: B = this   // the compiler allows this
+//
+//  z(this)  // but not this, wich is strange,
+//
+//  z(b) // since this it allowed
+//}
+//
+//  //val a0:A = error("")
+//
+//  //val b:B = a0
 }

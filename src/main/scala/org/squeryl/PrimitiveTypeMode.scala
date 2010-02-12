@@ -57,18 +57,18 @@ object PrimitiveTypeMode extends QueryDsl {
   def createLeafNodeOfScalarStringType(s: String) = {
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[String](s, true) with TypedExpressionNode[String]
+        new ConstantExpressionNode[String](s, true) with StringExpression[String]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with TypedExpressionNode[String]
+        new SelectElementReference(n) with StringExpression[String]
     }
   }
 
   def createLeafNodeOfScalarStringOptionType(s: Option[StringType]) = {
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Option[String]](s, true) with TypedExpressionNode[Option[String]]
+        new ConstantExpressionNode[Option[String]](s, true) with StringExpression[Option[String]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with TypedExpressionNode[Option[String]]
+        new SelectElementReference(n) with StringExpression[Option[String]]
     }
   }
 
@@ -124,33 +124,33 @@ object PrimitiveTypeMode extends QueryDsl {
   def createLeafNodeOfScalarBooleanType(i: Boolean) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Boolean](i) with TypedExpressionNode[Boolean]
+        new ConstantExpressionNode[Boolean](i) with BooleanExpression[Boolean]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  TypedExpressionNode[Boolean]
+        new SelectElementReference(n) with  BooleanExpression[Boolean]
     }
 
   def createLeafNodeOfScalarBooleanOptionType(b: Option[BooleanType]) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Option[Boolean]](b) with TypedExpressionNode[Option[Boolean]]
+        new ConstantExpressionNode[Option[Boolean]](b) with BooleanExpression[Option[Boolean]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  TypedExpressionNode[Option[Boolean]]
+        new SelectElementReference(n) with  BooleanExpression[Option[Boolean]]
     }
 
   def createLeafNodeOfScalarDateType(i: Date) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Date](new java.sql.Date(i.getTime)) with TypedExpressionNode[Date]
+        new ConstantExpressionNode[Date](new java.sql.Date(i.getTime)) with DateExpression[Date]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  TypedExpressionNode[Date]
+        new SelectElementReference(n) with  DateExpression[Date]
     }
 
   def createLeafNodeOfScalarDateOptionType(b: Option[DateType]) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Option[Date]](b) with TypedExpressionNode[Option[Date]]
+        new ConstantExpressionNode[Option[Date]](b) with DateExpression[Option[Date]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  TypedExpressionNode[Option[Date]]
+        new SelectElementReference(n) with  DateExpression[Option[Date]]
     }
 
 

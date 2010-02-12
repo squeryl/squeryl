@@ -19,32 +19,17 @@ trait DslFactory
   protected def createLeafNodeOfScalarFloatType(d: FloatType): NumericalExpression[FloatType]
   protected def createLeafNodeOfScalarFloatOptionType(d: Option[FloatType]): NumericalExpression[Option[FloatType]]
 
-  protected def createLeafNodeOfScalarStringType(s: StringType): TypedExpressionNode[StringType]
-  protected def createLeafNodeOfScalarStringOptionType(s: Option[StringType]): TypedExpressionNode[Option[StringType]]
+  protected def createLeafNodeOfScalarStringType(s: StringType): StringExpression[StringType]
+  protected def createLeafNodeOfScalarStringOptionType(s: Option[StringType]): StringExpression[Option[StringType]]
 
   protected def createLeafNodeOfScalarLongType(s: LongType): NumericalExpression[LongType]
   protected def createLeafNodeOfScalarLongOptionType(s: Option[LongType]): NumericalExpression[Option[LongType]]
 
-  protected def createLeafNodeOfScalarBooleanType(s: BooleanType): TypedExpressionNode[BooleanType]
-  protected def createLeafNodeOfScalarBooleanOptionType(s: Option[BooleanType]): TypedExpressionNode[Option[BooleanType]]
+  protected def createLeafNodeOfScalarBooleanType(s: BooleanType): BooleanExpression[BooleanType]
+  protected def createLeafNodeOfScalarBooleanOptionType(s: Option[BooleanType]): BooleanExpression[Option[BooleanType]]
 
-  protected def createLeafNodeOfScalarDateType(d: DateType): TypedExpressionNode[DateType]
-  protected def createLeafNodeOfScalarDateOptionType(d: Option[DateType]): TypedExpressionNode[Option[DateType]]
-
-
-//  protected def createLeafNodeOfAgregateIntType(i: IntType): AgregateIntOption
-
-//  protected def createLeafNodeOfAgregateDoubleType(d: DoubleType): AgregateDoubleOption
-
-//  protected def createLeafNodeOfAgregateFloatType(d: FloatType): AgregateFloatOption
-
-//  protected def createLeafNodeOfAgregateStringType(s: StringType): AgregateStringOption
-
-//  protected def createLeafNodeOfAgregateLongType(s: LongType): AgregateLongOption
-
-//  protected def createLeafNodeOfAgregateBooleanType(s: BooleanType): AgregateBooleanOption
-
-//  protected def createLeafNodeOfAgregateDateType(d: DateType): AgregateDateOption
+  protected def createLeafNodeOfScalarDateType(d: DateType): DateExpression[DateType]
+  protected def createLeafNodeOfScalarDateOptionType(d: Option[DateType]): DateExpression[Option[DateType]]
 
   // expose Factory Methods implicit :
   // ScalarNode Types :
@@ -98,25 +83,29 @@ trait DslFactory
   implicit def listOfDate2ListDate(l: List[DateType]) =
     new ConstantExpressionNodeList[DateType](l) with ListDate
 
-  implicit def nonBoolean2OrderByArg[E <% NonLogicalBoolean[_]](e: E) = new OrderByArg(e)
+  implicit def typedExpression2OrderByArg[E <% TypedExpressionNode[_]](e: E) = new OrderByArg(e)
 
-  implicit def string2OrderByArg(s: StringType) =
-    new OrderByArg(createLeafNodeOfScalarStringType(s))
+  //implicit def typedExpression2OrderByArg(e: ExpressionNode) = new OrderByArg(e)
 
-  implicit def int2OrderByArg(i: IntType) =
-    new OrderByArg(createLeafNodeOfScalarIntType(i))
+  implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
 
-  implicit def double2OrderByArg(i: DoubleType) =
-    new OrderByArg(createLeafNodeOfScalarDoubleType(i))
-
-  implicit def float2OrderByArg(i: FloatType) =
-    new OrderByArg(createLeafNodeOfScalarFloatType(i))
-
-  implicit def long2OrderByArg(l: LongType) =
-    new OrderByArg(createLeafNodeOfScalarLongType(l))
-
-  implicit def date2OrderByArg(l: DateType) =
-    new OrderByArg(createLeafNodeOfScalarDateType(l))
+//  implicit def string2OrderByArg(s: StringType) =
+//    new OrderByArg(createLeafNodeOfScalarStringType(s))
+//
+//  implicit def int2OrderByArg(i: IntType) =
+//    new OrderByArg(createLeafNodeOfScalarIntType(i))
+//
+//  implicit def double2OrderByArg(i: DoubleType) =
+//    new OrderByArg(createLeafNodeOfScalarDoubleType(i))
+//
+//  implicit def float2OrderByArg(i: FloatType) =
+//    new OrderByArg(createLeafNodeOfScalarFloatType(i))
+//
+//  implicit def long2OrderByArg(l: LongType) =
+//    new OrderByArg(createLeafNodeOfScalarLongType(l))
+//
+//  implicit def date2OrderByArg(l: DateType) =
+//    new OrderByArg(createLeafNodeOfScalarDateType(l))
 
 //  implicit def bool2OrderByArg(b: BooleanType) =
 //    new OrderByArg(createLeafNodeOfScalarBooleanType(b))
@@ -243,97 +232,83 @@ trait DslFactory
   }
 
   // implicits for convering GroupArgs from fields:
-  implicit def string2GroupArg(s: StringType) =
-    new GroupArg[StringType](createLeafNodeOfScalarStringType(s), createOutMapperStringType)
-
-  implicit def int2GroupArg(i: IntType) =
-    new GroupArg[IntType](createLeafNodeOfScalarIntType(i), createOutMapperIntType)
-
-  implicit def double2GroupArg(i: DoubleType) =
-    new GroupArg[DoubleType](createLeafNodeOfScalarDoubleType(i), createOutMapperDoubleType)
-
-  implicit def float2GroupArg(i: FloatType) =
-    new GroupArg[FloatType](createLeafNodeOfScalarFloatType(i), createOutMapperFloatType)
-
-  implicit def long2GroupArg(i: LongType) =
-    new GroupArg[LongType](createLeafNodeOfScalarLongType(i), createOutMapperLongType)
-
-  implicit def boolean2GroupArg(i: BooleanType) =
-    new GroupArg[BooleanType](createLeafNodeOfScalarBooleanType(i), createOutMapperBooleanType)
-  
-  implicit def date2GroupArg(i: DateType) =
-    new GroupArg[DateType](createLeafNodeOfScalarDateType(i), createOutMapperDateType)
+//  implicit def string2GroupArg(s: StringType) =
+//    new GroupArg[StringType](createLeafNodeOfScalarStringType(s), createOutMapperStringType)
+//
+//  implicit def int2GroupArg(i: IntType) =
+//    new GroupArg[IntType](createLeafNodeOfScalarIntType(i), createOutMapperIntType)
+//
+//  implicit def double2GroupArg(i: DoubleType) =
+//    new GroupArg[DoubleType](createLeafNodeOfScalarDoubleType(i), createOutMapperDoubleType)
+//
+//  implicit def float2GroupArg(i: FloatType) =
+//    new GroupArg[FloatType](createLeafNodeOfScalarFloatType(i), createOutMapperFloatType)
+//
+//  implicit def long2GroupArg(i: LongType) =
+//    new GroupArg[LongType](createLeafNodeOfScalarLongType(i), createOutMapperLongType)
+//
+//  implicit def boolean2GroupArg(i: BooleanType) =
+//    new GroupArg[BooleanType](createLeafNodeOfScalarBooleanType(i), createOutMapperBooleanType)
+//
+//  implicit def date2GroupArg(i: DateType) =
+//    new GroupArg[DateType](createLeafNodeOfScalarDateType(i), createOutMapperDateType)
 
   // GroupArgs from expressions
 
-  implicit def expr2SclarIntGroupArg(e: TypedExpressionNode[IntType]) =
-    new GroupArg[IntType](e, createOutMapperIntType)
-  implicit def expr2SclarIntOptionGroupArg(e: TypedExpressionNode[Option[IntType]]) =
-    new GroupArg[Option[IntType]](e, createOutMapperIntTypeOption)
+//  implicit def typedExpression2GroupArg[A, B <% TypedExpressionNode[A]](e: B) =
+//    new GroupArg[A](e : TypedExpressionNode[A], null)
 
-  implicit def expr2SclarStringGroupArg(e: TypedExpressionNode[StringType]) =
-    new GroupArg[StringType](e, createOutMapperStringType)
-  implicit def expr2SclarStringOptionGroupArg(e: TypedExpressionNode[Option[StringType]]) =
-    new GroupArg[Option[StringType]](e, createOutMapperStringTypeOption)
-
-
-  implicit def expr2SclarDoubleGroupArg(e: TypedExpressionNode[DoubleType]) =
-    new GroupArg[DoubleType](e, createOutMapperDoubleType)
-  implicit def expr2SclarDoubleOptionGroupArg(e: TypedExpressionNode[Option[DoubleType]]) =
-    new GroupArg[Option[DoubleType]](e, createOutMapperDoubleTypeOption)
-
-  implicit def expr2SclarFloatGroupArg(e: TypedExpressionNode[FloatType]) =
-    new GroupArg[FloatType](e, createOutMapperFloatType)
-
-  implicit def expr2SclarFloatOptionGroupArg(e: TypedExpressionNode[Option[FloatType]]) =
-    new GroupArg[Option[FloatType]](e, createOutMapperFloatTypeOption)
-
-  implicit def expr2SclarLongGroupArg(e: TypedExpressionNode[LongType]) =
-    new GroupArg[LongType](e, createOutMapperLongType)
-  implicit def expr2SclarLongOptionGroupArg(e: TypedExpressionNode[Option[LongType]]) =
-    new GroupArg[Option[LongType]](e, createOutMapperLongTypeOption)
-
-  implicit def expr2SclarBooleanGroupArg(e: TypedExpressionNode[BooleanType]) =
-    new GroupArg[BooleanType](e, createOutMapperBooleanType)
-  implicit def expr2SclarBooleanOptionGroupArg(e: TypedExpressionNode[Option[BooleanType]]) =
-    new GroupArg[Option[BooleanType]](e, createOutMapperBooleanTypeOption)
-
-  implicit def expr2SclarDateGroupArg(e: TypedExpressionNode[DateType]) =
-    new GroupArg[DateType](e, createOutMapperDateType)
-  implicit def expr2SclarDateOptionGroupArg(e: TypedExpressionNode[Option[DateType]]) =
-    new GroupArg[Option[DateType]](e, createOutMapperDateTypeOption)
-
-  // ComputeArgs from agregate expressions:
-  
-//  implicit def agreateInt2ComputeArg(e: TypedExpressionNode[Agregate,IntType]) =
-//    new GroupArg[IntType](e, createOutMapperIntType)
+//  implicit def int2GroupArg[A <% TypedExpressionNode[IntType]](e: A) =
+//    new GroupArg[IntType](e : TypedExpressionNode[IntType], null)
 //
-//  implicit def agreateOptionInt2ComputeArg(e: TypedExpressionNode[Agregate,Option[IntType]]) =
+//  implicit def intOptionExpression2GroupArg[A <% TypedExpressionNode[Option[IntType]]](e: A) =
+//    new GroupArg[Option[IntType]](e : TypedExpressionNode[Option[IntType]], null)
+
+//  implicit def int2GroupArg(e: TypedExpressionNode[IntType]) =
+//    new GroupArg[IntType](e, null)
+//
+//  implicit def intOption2GroupArg(e: TypedExpressionNode[Option[IntType]]) =
+//    new GroupArg[Option[IntType]](e, null)
+
+
+
+//  implicit def expr2SclarIntGroupArg(e: TypedExpressionNode[IntType]) =
+//    new GroupArg[IntType](e, createOutMapperIntType)
+//  implicit def expr2SclarIntOptionGroupArg(e: TypedExpressionNode[Option[IntType]]) =
 //    new GroupArg[Option[IntType]](e, createOutMapperIntTypeOption)
 //
-//  implicit def agreateString2ComputeArg(e: TypedExpressionNode[Agregate,Option[StringType]]) =
+//  implicit def expr2SclarStringGroupArg(e: TypedExpressionNode[StringType]) =
+//    new GroupArg[StringType](e, createOutMapperStringType)
+//  implicit def expr2SclarStringOptionGroupArg(e: TypedExpressionNode[Option[StringType]]) =
 //    new GroupArg[Option[StringType]](e, createOutMapperStringTypeOption)
 //
-//  implicit def agreateDoubleOption2ComputeArg(e: TypedExpressionNode[Agregate,Option[DoubleType]]) =
+//
+//  implicit def expr2SclarDoubleGroupArg(e: TypedExpressionNode[DoubleType]) =
+//    new GroupArg[DoubleType](e, createOutMapperDoubleType)
+//  implicit def expr2SclarDoubleOptionGroupArg(e: TypedExpressionNode[Option[DoubleType]]) =
 //    new GroupArg[Option[DoubleType]](e, createOutMapperDoubleTypeOption)
 //
-//  implicit def agreateDouble2ComputeArg(e: TypedExpressionNode[Agregate,DoubleType]) =
-//    new GroupArg[DoubleType](e, createOutMapperDoubleType)
+//  implicit def expr2SclarFloatGroupArg(e: TypedExpressionNode[FloatType]) =
+//    new GroupArg[FloatType](e, createOutMapperFloatType)
 //
-//  implicit def agreateFloat2ComputeArg(e: TypedExpressionNode[Agregate,Option[FloatType]]) =
+//  implicit def expr2SclarFloatOptionGroupArg(e: TypedExpressionNode[Option[FloatType]]) =
 //    new GroupArg[Option[FloatType]](e, createOutMapperFloatTypeOption)
 //
-//  implicit def agreateLongOption2ComputeArg(e: TypedExpressionNode[Agregate,Option[LongType]]) =
+//  implicit def expr2SclarLongGroupArg(e: TypedExpressionNode[LongType]) =
+//    new GroupArg[LongType](e, createOutMapperLongType)
+//  implicit def expr2SclarLongOptionGroupArg(e: TypedExpressionNode[Option[LongType]]) =
 //    new GroupArg[Option[LongType]](e, createOutMapperLongTypeOption)
 //
-//  implicit def agreateLong2ComputeArg(e: TypedExpressionNode[Agregate,LongType]) =
-//    new GroupArg[LongType](e, createOutMapperLongType)
-//
-//  implicit def agreateBoolean2ComputeArg(e: TypedExpressionNode[Agregate,Option[BooleanType]]) =
+//  implicit def expr2SclarBooleanGroupArg(e: TypedExpressionNode[BooleanType]) =
+//    new GroupArg[BooleanType](e, createOutMapperBooleanType)
+//  implicit def expr2SclarBooleanOptionGroupArg(e: TypedExpressionNode[Option[BooleanType]]) =
 //    new GroupArg[Option[BooleanType]](e, createOutMapperBooleanTypeOption)
 //
-//  implicit def agreateDate2ComputeArg(e: TypedExpressionNode[Agregate,Option[DateType]]) =
+//  implicit def expr2SclarDateGroupArg(e: TypedExpressionNode[DateType]) =
+//    new GroupArg[DateType](e, createOutMapperDateType)
+//  implicit def expr2SclarDateOptionGroupArg(e: TypedExpressionNode[Option[DateType]]) =
 //    new GroupArg[Option[DateType]](e, createOutMapperDateTypeOption)
+
 
   protected def sampleInt: IntType
   protected def sampleString: StringType

@@ -113,7 +113,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 //    a.id
 //    val keyFieldNode = _takeLastAccessedUntypedFieldReference
 //    val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-//    val wc = new dsl.BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+//    val wc = new dsl.BinaryOperatorNodeLogicalBoolean(keyFieldNode, c, "=")
 //    wc
 //  }
 
@@ -127,7 +127,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
       a.id
       val keyFieldNode = _takeLastAccessedUntypedFieldReference
       val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-      val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+      val wc = new BinaryOperatorNodeLogicalBoolean(keyFieldNode, c, "=")
       wc
     } select(a))
     q.headOption
@@ -142,7 +142,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
       a.id
       val keyFieldNode = _takeLastAccessedUntypedFieldReference
       val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-      val wc = new BinaryOperatorNodeScalarLogicalBoolean(keyFieldNode, c, "=")
+      val wc = new BinaryOperatorNodeLogicalBoolean(keyFieldNode, c, "=")
       wc
     } select(a))
 

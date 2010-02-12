@@ -94,7 +94,7 @@ class MusicDb extends Schema with QueryTester {
   lazy val yearOfCongaBluePlus1 =
     from(cds)(cd =>
       where(cd.title =? testInstance.congaBlue.title)
-      select(Value(cd.year.~ + 1))
+      select(&(cd.year.~ + 1))
     )
   
   def songCountPerAlbum(cds: Queryable[Cd]) =

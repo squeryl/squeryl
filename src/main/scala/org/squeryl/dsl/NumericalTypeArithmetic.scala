@@ -7,6 +7,7 @@ import fsm.{QueryElements, StartState, WhereState}
 import org.squeryl.internals._
 import java.sql.ResultSet
 import org.squeryl._
+import java.util.Date
 
 trait NumericalTypeArithmetic {
 
@@ -33,21 +34,90 @@ trait NumericalTypeArithmetic {
     def -[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "-")
     def /[B](b: NumericalExpression[B]) = new BinaryDivOp[A,B](this, b, "/")
 
-    def =?[B](b: NumericalExpression[B]) = new BinaryOperatorNodeScalarLogicalBoolean(this, b, "=")
+    def =?[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "=")
+    def <>[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
+    def > [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+    def >=[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+    def < [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+    def <=[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
+
+    def ||[B](e: TypedExpressionNode[B]) = new ConcatFunction(List(this,e)) with StringExpression[B]
+
+    def isNull = new PostfixOperatorNode("is null", this) with LogicalBoolean
+
+    def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
+
+    def in[B <% NumericalExpression[_]](e: Query[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
+
+    def in(l: ListNumerical) = new BinaryOperatorNodeLogicalBoolean(this, l, "in")
+    
+    def ~ = this
+  }
+
+  trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
+
+    def =?[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "=")
+    def <>[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
+    def > [A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+    def >=[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+    def < [A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+    def <=[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
+
+    def ||[B](e: TypedExpressionNode[B]) = new ConcatFunction(List(this,e)) with StringExpression[B]
+    
+    def isNull = new PostfixOperatorNode("is null", this) with LogicalBoolean
+
+    def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
+    
+    def in[A](e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
+  }
+
+  trait BooleanExpression[A] extends NonNumericalExpression[A] {
+    def ~ = this
+  }
+
+  trait StringExpression[A] extends NonNumericalExpression[A] {
+
+    def in(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "in")
+
+    //def between(lower: BaseScalarString, upper: BaseScalarString): LogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with LogicalBoolean
+    def like(e: StringExpression[_])  = new BinaryOperatorNodeLogicalBoolean(this, e, "like")
 
     def ~ = this
   }
-  
-  class NumericalTypeConversion[A](e: ExpressionNode) extends NumericalExpression[A] {
 
-    override def inhibited = e.inhibited
-
-    override def doWrite(sw: StatementWriter)= e.doWrite((sw))
-
-    override def children = e.children
+  trait DateExpression[A] extends NonNumericalExpression[A] {
+    def ~ = this
   }
 
+  class NumericalTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with NumericalExpression[A]
+
+  class DateTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with DateExpression[A]
+
+  class StringTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with StringExpression[A]
+
+  class BooleanTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with BooleanExpression[A]
+
   class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
+
+  trait NvlNode {
+    self: BinaryOperatorNode =>
+    
+    override def doWrite(sw: StatementWriter) = {
+      sw.write("nvl")
+      sw.write("(")
+      left.write(sw)
+      sw.write(",")
+      right.write(sw)
+      sw.write(")")
+    }    
+  }
+
+  class NvlFunctionNonNumerical[A1,A2](a1: NonNumericalExpression[A1], a2: NonNumericalExpression[A2])
+    extends BinaryOperatorNode(a1,a2, "nvl") with NvlNode
+
+  class NvlFunctionNumerical[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2])
+    extends BinaryAMSOp(a1,a2, "nvl")  with NvlNode
 
   class BinaryDivOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
@@ -55,50 +125,7 @@ trait NumericalTypeArithmetic {
 
   class UnaryAgregateFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
 
-  class UnaryAgregateLengthNeutralOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
-
-
-
-  trait LogicalBooleanNode
-
-  trait ScalarLogicalBoolean extends OpArg with TypedExpressionNode[LogicalBoolean] with LogicalBooleanNode {
-    //self: ExpressionNode  =>
-    def _t: ExpressionNode = this
-
-    def and(b: ScalarLogicalBoolean) = new BinaryOperatorNodeScalarLogicalBoolean(this, b, _and)
-    def or(b: ScalarLogicalBoolean) = new BinaryOperatorNodeScalarLogicalBoolean(this, b, _or)
-  }
-
-
-  trait LogicalBooleanInhibiter {
-    self: BinaryOperatorNode =>
-
-    override def inhibited =
-      if(left.isInstanceOf[LogicalBooleanNode])
-        left.inhibited && right.inhibited
-      else
-        left.inhibited || right.inhibited
-
-    override def doWrite(sw: StatementWriter) = {
-      // since we are executing this method, we have at least one non inhibited children
-      val nonInh = children.filter(c => ! c.inhibited).iterator
-
-      sw.write("(")
-      nonInh.next.write(sw)
-      sw.write(" ")
-      if(nonInh.hasNext) {
-        sw.write(operatorToken)
-        if(newLineAfterOperator)
-          sw.nextLine
-        sw.write(" ")
-        nonInh.next.write(sw)
-      }
-      sw.write(")")
-    }
-  }
-
-  class BinaryOperatorNodeScalarLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
-    extends BinaryOperatorNode(left,right, op) with LogicalBooleanInhibiter with ScalarLogicalBoolean
+  class UnaryAgregateLengthNeutralOp[A](val a: TypedExpressionNode[A], op: String) extends FunctionNode(op, a)
 
   trait OpArg  {
     self: ExpressionNode =>
@@ -114,74 +141,9 @@ trait NumericalTypeArithmetic {
     protected def in_ = "in"
     protected def _and = "and"
     protected def _or = "or"
-
-    def isNull = new PostfixOperatorNode("is null", this) with ScalarLogicalBoolean
-
-    def isNotNull = new PostfixOperatorNode("is not null", this) with ScalarLogicalBoolean
   }
 
-
-
-//  trait AgregateBooleanOperators extends ExpressionNode {
-//    //self: ExpressionNode =>
-//
-//    //def and (right: AgregateBoolean) = new BinaryOperatorNode(this, right,"and",true) with AgregateBoolean
-//    //def or  (right: AgregateBoolean) = new BinaryOperatorNode(this, right,"or")  with AgregateBoolean
-//  }
-
-  //trait AgregateBoolean extends TypedExpressionNode[Agregate,BooleanType]
-
-  trait ScalarBoolean extends TypedExpressionNode[BooleanType]
-
-  trait ScalarBooleanOption extends TypedExpressionNode[Option[BooleanType]]
-
-  trait NonLogicalBoolean[T] extends TypedExpressionNode[T]
-
-
-  
-  trait BaseScalarString extends ExpressionNode with OpArg {
-
-    def <(e: BaseScalarString): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, lt)
-    def >(e: BaseScalarString): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, gt)
-    def =?(e: BaseScalarString): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, eq)
-    def in(e: ListString): ScalarLogicalBoolean= new BinaryOperatorNodeScalarLogicalBoolean(this, e, in_)
-    def in[S <% BaseScalarString](e: Query[S]): ScalarLogicalBoolean= new BinaryOperatorNodeScalarLogicalBoolean(this, e.ast, in_)
-    def between(lower: BaseScalarString, upper: BaseScalarString): ScalarLogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with ScalarLogicalBoolean
-    def like(e: ScalarString): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, "like")
-
-    def ||(e: ScalarStringOption) = new ConcatFunction(List(this,e)) with ScalarStringOption
-  }
-
-  trait ScalarString extends BaseScalarString with NonLogicalBoolean[StringType] {
-    def ~ = this
-    def ||(e: ScalarString)  = new ConcatFunction(List(this,e)) with ScalarString
-  }
-
-  trait ScalarStringOption extends BaseScalarString with NonLogicalBoolean[Option[StringType]] {
-    def ~ = this
-    def ||(e: ScalarString)  = new ConcatFunction(List(this,e)) with ScalarStringOption
-  }
-
-  trait BaseScalarDate extends ExpressionNode with OpArg {
-
-    def <(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, lt)
-    def >(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, gt)
-    def <=(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, "<=")
-    def >=(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, ">=")
-    def =?(e: BaseScalarDate): ScalarLogicalBoolean = new BinaryOperatorNodeScalarLogicalBoolean(this, e, eq)
-    def in[S <% BaseScalarDate](e: Query[S]): ScalarLogicalBoolean= new BinaryOperatorNodeScalarLogicalBoolean(this, e.ast, in_)
-    def between(lower: BaseScalarDate, upper: BaseScalarDate): ScalarLogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with ScalarLogicalBoolean
-  }
-
-  trait ScalarDate extends BaseScalarDate with NonLogicalBoolean[DateType] {
-    def ~ = this
-  }
-
-  trait ScalarDateOption extends BaseScalarDate with NonLogicalBoolean[Option[DateType]] {
-    def ~ = this
-  }
-  
-  def not(b: ScalarLogicalBoolean) = new FunctionNode("not", b) with ScalarLogicalBoolean
+  def not(b: LogicalBoolean) = new FunctionNode("not", b) with LogicalBoolean
 
   class ConcatFunction(e: Iterable[ExpressionNode]) extends FunctionNode("concat",e) {
     override def write(sw: StatementWriter) = {
@@ -425,5 +387,16 @@ trait NumericalTypeArithmetic {
   implicit def unaryOpConv8(op: UnaryAgregateLengthNeutralOp[Option[LongType]]) = new NumericalTypeConversion[Option[LongType]](op)
   implicit def unaryOpConv9(op: UnaryAgregateLengthNeutralOp[Option[FloatType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv10(op: UnaryAgregateLengthNeutralOp[Option[DoubleType]]) = new NumericalTypeConversion[Option[DoubleType]](op)
-  
+
+
+  implicit def unaryOpConv11(op: UnaryAgregateLengthNeutralOp[DateType]) = new DateTypeConversion[Option[DateType]](op)
+  implicit def unaryOpConv12(op: UnaryAgregateLengthNeutralOp[Option[DateType]]) = new DateTypeConversion[Option[DateType]](op)
+  implicit def unaryOpConv13(op: UnaryAgregateLengthNeutralOp[StringType]) = new DateTypeConversion[Option[StringType]](op)
+  implicit def unaryOpConv14(op: UnaryAgregateLengthNeutralOp[Option[StringType]]) = new DateTypeConversion[Option[StringType]](op)
+  implicit def unaryOpConv15(op: UnaryAgregateLengthNeutralOp[BooleanType]) = new BooleanTypeConversion[Option[BooleanType]](op)
+  implicit def unaryOpConv16(op: UnaryAgregateLengthNeutralOp[Option[BooleanType]]) = new BooleanTypeConversion[Option[BooleanType]](op)
+
+  implicit def nvl1(e: NvlFunctionNonNumerical[Option[DateType],DateType]) = new DateTypeConversion[DateType](e)
+  implicit def nvl2(e: NvlFunctionNonNumerical[Option[StringType],StringType]) = new StringTypeConversion[StringType](e)
+  implicit def nvl2(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
 }

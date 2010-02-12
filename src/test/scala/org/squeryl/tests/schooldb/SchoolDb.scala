@@ -6,7 +6,7 @@ import org.squeryl.annotations.{Column}
 import org.squeryl.tests.QueryTester
 import java.util.Date
 import java.text.SimpleDateFormat
-import org.squeryl.dsl.{Agregate, Scalar, GroupWithMeasures}
+import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.{KeyedEntity, Session, Schema}
 import org.squeryl.dsl.ast._
 
@@ -129,26 +129,27 @@ class SchoolDb extends Schema with QueryTester {
   def addressesOfStudentsOlderThan24 =
     from(students, addresses)((s,a) =>
 //      Where(
-//       ((s.age > 24) : ScalarLogicalBoolean) and
-//       ((24.~ < s.age) : ScalarLogicalBoolean) and
+//       ((s.age > 24) : LogicalBoolean) and
+//       ((24.~ < s.age) : LogicalBoolean) and
 //       (s.addressId =? a.id)
 //     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
          // trigger the implicit conversion if the constant is on the left side, strangely it will do it
          // for methods with non symbol name, like  lessThanz :
-      where((24 : NumericalExpression[Int]) < s.age and (24 lessThanz s.age))
+      where((24 : NumericalExpression[Int]) < s.age and (24 ~) < s.age)
     //  Where((s.age < 24) and (s.addressId =? a.id))
-     select(Value(concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
+     //select(&(concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
+      select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
     )
 
   def leftOuterJoinStudentAddresses =
     from(students, addresses)((s,a) =>
-      select((s,outerJoin(a, s.addressId ~> a.id)))
+      select((s,outerJoin(a, s.addressId, a.id)))
       orderBy(s.id)
     )
 
   def fullOuterJoinStudentAddresses =
     from(students, addresses)((s,a) =>
-      select(outerJoin(s, a, s.addressId <~> a.id))
+      select(fullOuterJoin(s, a, s.addressId, a.id))
       orderBy(s.id)
     )
 
@@ -449,7 +450,7 @@ class SchoolDb extends Schema with QueryTester {
     val result =
       from(courses)(c=>
         where(nvl(c.meaninglessLongOption, Some(3L)) <> 1234 and nvl(c.meaninglessLongOption, Some(3L)) =? 3)
-        select(Value(nvl(c.meaninglessLongOption, Some(5L))))
+        select(&(nvl(c.meaninglessLongOption, Some(5L))))
       ).toList
 
     val expected = List(5,5,5)
@@ -592,23 +593,23 @@ class SchoolDb extends Schema with QueryTester {
          s.addressId =? a.id
         )
         groupBy(
-          s.isMultilingual : TypedExpressionNode[Scalar,Option[Boolean]],
-          p.yearlySalary : TypedExpressionNode[Scalar,Float],
-          p.weight :  TypedExpressionNode[Scalar,Option[Float]],
-          a.appNumberSuffix : TypedExpressionNode[Scalar,Option[String]],
-          c.finalExamDate : TypedExpressionNode[Scalar,Option[Date]],
-          a.appNumber : TypedExpressionNode[Scalar,Option[Int]],
-          c.meaninglessLongOption : TypedExpressionNode[Scalar,Option[Long]],
-          c.meaninglessLongOption / (s.addressId+1) : TypedExpressionNode[Scalar,Option[Double]] // TODO: fix NOT A GROUP BY exception ....
+          s.isMultilingual : TypedExpressionNode[Option[Boolean]],
+          p.yearlySalary : TypedExpressionNode[Float],
+          p.weight :  TypedExpressionNode[Option[Float]],
+          a.appNumberSuffix : TypedExpressionNode[Option[String]],
+          c.finalExamDate : TypedExpressionNode[Option[Date]],
+          a.appNumber : TypedExpressionNode[Option[Int]],
+          c.meaninglessLongOption : TypedExpressionNode[Option[Long]],
+          c.meaninglessLongOption / (s.addressId+1) : TypedExpressionNode[Option[Double]] // TODO: fix NOT A GROUP BY exception ....
         )
         compute(
-          min(p.id) : TypedExpressionNode[Agregate,Option[Long]],
-          avg(ca.id) : TypedExpressionNode[Agregate,Option[Float]],
-          avg(c.meaninglessLongOption) : TypedExpressionNode[Agregate,Option[Double]],
-          max(c.finalExamDate) : TypedExpressionNode[Agregate,Option[Date]],
-          min(a.numberSuffix) : TypedExpressionNode[Agregate,Option[String]],
-          max(s.isMultilingual) : TypedExpressionNode[Agregate,Option[Boolean]],
-          min(c.startDate)  : TypedExpressionNode[Agregate,Option[Date]]
+          min(p.id) : TypedExpressionNode[Option[Long]],
+          avg(ca.id) : TypedExpressionNode[Option[Float]],
+          avg(c.meaninglessLongOption) : TypedExpressionNode[Option[Double]],
+          max(c.finalExamDate) : TypedExpressionNode[Option[Date]],
+          min(a.numberSuffix) : TypedExpressionNode[Option[String]],
+          max(s.isMultilingual) : TypedExpressionNode[Option[Boolean]],
+          min(c.startDate)  : TypedExpressionNode[Option[Date]]
         )
       )
 

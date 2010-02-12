@@ -13,10 +13,10 @@ class BaseQueryYield[G]
     with OrderBySignatures[G]
     with QueryYield[G] {
 
-  protected def _createColumnToTupleMapper(origin: QueryableExpressionNode, agregateArgs: List[AgregateArg], offsetInResultSet:Int, isForGroup:Boolean) = {
+  protected def _createColumnToTupleMapper(origin: QueryableExpressionNode, agregateArgs: List[TypedExpressionNode[_]], offsetInResultSet:Int, isForGroup:Boolean) = {
 
     var i = -1;
-    val nodes = agregateArgs.map(e => { i += 1; new TupleSelectElement(origin, e.expression, i, isForGroup)})
+    val nodes = agregateArgs.map(e => { i += 1; new TupleSelectElement(origin, e, i, isForGroup)})
 
     var o = offsetInResultSet
 
@@ -72,7 +72,7 @@ class BaseQueryYield[G]
 
 class GroupQueryYield[K] (
    _qe: QueryElements,
-   val groupByClauseClosure: ()=>List[GroupArg[_]]
+   val groupByClauseClosure: ()=>List[TypedExpressionNode[_]]
   )
   extends BaseQueryYield[Group[K]](_qe, null)
     with GroupByState[K]
@@ -82,7 +82,7 @@ class GroupQueryYield[K] (
 {
 
   override def groupByClause: List[ExpressionNode] =
-    groupByClauseClosure().map(e => e.expression)
+    groupByClauseClosure().map(e => e)
 
   override def invokeYield(rsm: ResultSetMapper, rs: ResultSet): Group[K] =
     new Group(rsm.groupKeysMapper.get.mapToTuple(rs))
@@ -101,7 +101,7 @@ class GroupQueryYield[K] (
 
 class MeasuresQueryYield[M](
    _qe: QueryElements,
-   _computeByClauseClosure: ()=>List[GroupArg[_]]
+   _computeByClauseClosure: ()=>List[TypedExpressionNode[_]]
   )
   extends BaseQueryYield[Measures[M]](_qe, null)
     with OrderBySignatures[Measures[M]]
@@ -125,8 +125,8 @@ class MeasuresQueryYield[M](
 
 class GroupWithMeasuresQueryYield[K,M] (
   _qe: QueryElements,
-  _groupByClauseClosure: ()=>List[GroupArg[_]],
-  _computeClauseClosure: ()=>List[GroupArg[_]]
+  _groupByClauseClosure: ()=>List[TypedExpressionNode[_]],
+  _computeClauseClosure: ()=>List[TypedExpressionNode[_]]
 )
 extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
   with ComputeStateFromGroupByState[K,M]
@@ -155,7 +155,7 @@ extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
   }
 
    override def queryElements =
-    (whereClause, havingClause, _groupByClauseClosure().map(e => e.expression), orderByClause)
+    (whereClause, havingClause, _groupByClauseClosure().map(e => e), orderByClause)
 
   override def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
     new GroupWithMeasures(rsm.groupKeysMapper.get.mapToTuple(rs), rsm.groupMeasuresMapper.get.mapToTuple(rs))

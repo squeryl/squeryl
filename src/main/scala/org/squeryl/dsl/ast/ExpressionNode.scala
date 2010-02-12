@@ -4,7 +4,6 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.Session
-import org.squeryl.dsl.{Agregate, Scalar, ExpressionKind}
 
 trait ExpressionNode {
 
@@ -87,16 +86,48 @@ trait ListString extends ListExpressionNode {
   override def quotesElement = true
 }
 
-trait LogicalBoolean
+class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
+  extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
+
+  override def inhibited =
+    if(left.isInstanceOf[LogicalBoolean])
+      left.inhibited && right.inhibited
+    else
+      left.inhibited || right.inhibited
+
+  override def doWrite(sw: StatementWriter) = {
+    // since we are executing this method, we have at least one non inhibited children
+    val nonInh = children.filter(c => ! c.inhibited).iterator
+
+    sw.write("(")
+    nonInh.next.write(sw)
+    sw.write(" ")
+    if(nonInh.hasNext) {
+      sw.write(operatorToken)
+      if(newLineAfterOperator)
+        sw.nextLine
+      sw.write(" ")
+      nonInh.next.write(sw)
+    }
+    sw.write(")")
+  }
+}
+
+trait LogicalBoolean extends ExpressionNode  {
+
+  def and(b: LogicalBoolean) = new BinaryOperatorNodeLogicalBoolean(this, b, "and")
+  def or(b: LogicalBoolean) = new BinaryOperatorNodeLogicalBoolean(this, b, "or")
+}
+
 
 //TODO: erase type A, it is unneeded, and use ExpressionNode instead of TypedExp...
 class UpdateAssignment(val left: TypedExpressionNode[_], val right: TypedExpressionNode[_])
 
 trait TypedExpressionNode[T] extends ExpressionNode {
+  
+  def mapper: OutMapper[_] = error("implement me !")
 
   def :=[B <% TypedExpressionNode[T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[T])
-
-  //def <[B <% TypedExpressionNode[Scalar,T]] (b: B) = new ScalarBoolean...
 }
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {
@@ -160,6 +191,16 @@ class PostfixOperatorNode(val token: String, val arg: ExpressionNode) extends Ex
   }
 
   override def children = List(arg)
+}
+
+class TypeConversion(e: ExpressionNode) extends ExpressionNode {
+  //self: ExpressionNode =>
+
+  override def inhibited = e.inhibited
+
+  override def doWrite(sw: StatementWriter)= e.doWrite((sw))
+
+  override def children = e.children
 }
 
 class BinaryOperatorNode
@@ -259,27 +300,7 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
   }  
 }
 
-trait AgregateArg {
-  def expression: ExpressionNode
-  def mapper: OutMapper[_]
-}
-
-class GroupArg[T](val expression: TypedExpressionNode[T], val mapper: OutMapper[T]) extends AgregateArg
-
-
-class OrderByArg(e: TypedExpressionNode[_]) extends ExpressionNode {
-
-  override def inhibited = e.inhibited
-
-  def doWrite(sw: StatementWriter) = {
-    e.write(sw)
-    if(isAscending)
-      sw.write(" Asc")
-    else
-      sw.write(" Desc")
-  }
-
-  override def children = List(e)
+class OrderByArg(val e: ExpressionNode) {
 
   private var _ascending = true
 
@@ -293,5 +314,23 @@ class OrderByArg(e: TypedExpressionNode[_]) extends ExpressionNode {
   def desc = {
     _ascending = false
     this
+  }  
+}
+
+class OrderByExpression(a: OrderByArg) extends ExpressionNode { //with TypedExpressionNode[_] {
+
+  private def e = a.e
+  
+  override def inhibited = e.inhibited
+
+  def doWrite(sw: StatementWriter) = {
+    e.write(sw)
+    if(a.isAscending)
+      sw.write(" Asc")
+    else
+      sw.write(" Desc")
   }
+
+  override def children = List(e)
+  
 }
