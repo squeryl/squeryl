@@ -7,7 +7,7 @@ import java.util.Date
 
 
 trait DslFactory
-  extends ExpressionDsl
+  extends TypeArithmetic
     with SqlFunctions {
 
   protected def createLeafNodeOfScalarIntType(i: IntType): NumericalExpression[IntType]

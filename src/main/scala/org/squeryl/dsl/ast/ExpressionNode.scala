@@ -124,8 +124,12 @@ trait LogicalBoolean extends ExpressionNode  {
 class UpdateAssignment(val left: TypedExpressionNode[_], val right: TypedExpressionNode[_])
 
 trait TypedExpressionNode[T] extends ExpressionNode {
-  
-  def mapper: OutMapper[_] = error("implement me !")
+
+  //def sample: T
+
+  def mapper: OutMapper[_] = {
+    error("implement me")
+  }
 
   def :=[B <% TypedExpressionNode[T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[T])
 }
