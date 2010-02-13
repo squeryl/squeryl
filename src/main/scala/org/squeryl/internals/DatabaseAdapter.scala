@@ -369,4 +369,16 @@ class DatabaseAdapter {
    * Currently only implemented by H2
    */
   def logResultSetRow(s: Session, rs: ResultSet) = {}
+
+
+  def nvlToken = "coalesce"
+
+  def writeNvlCall(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
+    sw.write(nvlToken)
+    sw.write("(")
+    left.write(sw)
+    sw.write(",")
+    right.write(sw)
+    sw.write(")")
+  }
 }

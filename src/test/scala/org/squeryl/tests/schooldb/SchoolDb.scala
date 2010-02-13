@@ -156,7 +156,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
-    //testNVLFunction
+    testNVLFunction
     testDateOptionComparisonInWhereClause
     testDateComparisonInWhereClause
 
@@ -450,9 +450,9 @@ class SchoolDb extends Schema with QueryTester {
 
     val result =
       from(courses)(c=>
-        where(nvl(c.meaninglessLongOption, Some(3L)) <> 1234 and nvl(c.meaninglessLongOption, Some(3L)) =? 3)
-        select(&(nvl(c.meaninglessLongOption, Some(5L))))
-      ).toList
+        where(nvl(c.meaninglessLongOption, 3) <> 1234 and nvl(c.meaninglessLongOption, 3) =? 3)
+        select(&(nvl(c.meaninglessLongOption, 5)))
+      ).toList : List[Long]
 
     val expected = List(5,5,5)
 

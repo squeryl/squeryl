@@ -1,8 +1,7 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.internals.OutMapper
-
+import org.squeryl.internals.{NoOpOutMapper, OutMapper}
 /*
 
 

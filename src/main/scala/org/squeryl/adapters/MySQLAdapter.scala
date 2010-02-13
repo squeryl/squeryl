@@ -7,5 +7,7 @@ class MySQLAdapter extends DatabaseAdapter {
 
   override def isFullOuterJoinSupported = false
 
-  override def floatTypeDeclaration = "float"  
+  override def floatTypeDeclaration = "float"
+
+  //override def nvlToken = "ifnull"
 }

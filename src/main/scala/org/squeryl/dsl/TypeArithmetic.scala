@@ -16,28 +16,22 @@ trait TypeArithmetic extends FieldTypes {
 
   class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with BooleanExpression[A]
 
-  class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
+  class BinaryAMSOp[A1,A2](a1: NumericalExpression[_], a2: NumericalExpression[_], op: String) extends BinaryOperatorNode(a1,a2, op)
 
   class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||")
   
   trait NvlNode {
     self: BinaryOperatorNode =>
 
-    override def doWrite(sw: StatementWriter) = {
-      sw.write("nvl")
-      sw.write("(")
-      left.write(sw)
-      sw.write(",")
-      right.write(sw)
-      sw.write(")")
-    }
+    override def doWrite(sw: StatementWriter) =
+      sw.databaseAdapter.writeNvlCall(left, right, sw)
   }
 
   class NvlFunctionNonNumerical[A1,A2](a1: NonNumericalExpression[A1], a2: NonNumericalExpression[A2])
     extends BinaryOperatorNode(a1,a2, "nvl") with NvlNode
 
-  class NvlFunctionNumerical[A1,A2](a1: NumericalExpression[Option[A1]], a2: NumericalExpression[A2])
-    extends BinaryAMSOp(a1,a2, "nvl")  with NvlNode
+  class NvlFunctionNumerical[A1,A2](a1: NumericalExpression[_], a2: NumericalExpression[_])
+    extends BinaryAMSOp[A1,A2](a1,a2, "nvl")  with NvlNode
 
   class BinaryDivOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 

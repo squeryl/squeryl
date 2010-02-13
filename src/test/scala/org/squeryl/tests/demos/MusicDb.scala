@@ -54,22 +54,15 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
 
   def addSong(s: Song) = {
 
-    // Note how this query can be implicitly converted to Option[Int] since it returns
+    // Note how this query can be implicitly converted to an Int since it returns
     // at most one row, this applies to all single column aggregate queries with no groupBy clause.
-    // The conversion to Int is not allowed since aggregates can return null
-    // (the 'count' aggregate function is the only exception).
-    // The 'compute' list contains the element of the select clause that contain
-    // aggregate functions. This is slightly different than in sql, but it allows further
-    // compile time validation.
-    val maxSongNumber: Option[Int] =
+    // The nvl function in this example changed the return type to Int, from
+    // Option[Int], since the 'max' function (like all aggregates, 'count' being the only exception).
+    val nextSongNumber: Int =
       from(playlistElements)(ple =>
         where(ple.playlistId =? id)
-        //compute(max(ple.songNumber) : NumericalTypeConversion[Option[IntType]])
-        compute(max(ple.songNumber))
-      )
-
-    //if maxSongNumber is None, we start at 1 :
-    val nextSongNumber = maxSongNumber.getOrElse(0) + 1
+        compute(nvl(max(ple.songNumber), 0))
+      )    
     
     playlistElements.insert(new PlaylistElement(nextSongNumber, id, s.id))
   }
