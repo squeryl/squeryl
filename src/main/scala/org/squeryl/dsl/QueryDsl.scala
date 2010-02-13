@@ -24,7 +24,7 @@ trait QueryDsl
     new QueryElementsImpl(Some(b _))
 
   def &[A](i: =>TypedExpressionNode[A]): A =
-    FieldReferenceLinker.pushExpressionOrCollectValue[A](i _, error("implement me"))
+    FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
   
   def outerJoin[A](a: A, j1: =>ExpressionNode, j2: =>ExpressionNode): Option[A] = {
     val im = FieldReferenceLinker.isYieldInspectionMode
@@ -33,10 +33,10 @@ trait QueryDsl
       val on = new LeftOuterJoinNode(j1,j2)
 
       val leftSelectElement = new SelectElementReference(
-        on.left.asInstanceOf[SelectElementReference[_]].selectElement)(null)
+        on.left.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
 
       val rightSelectElement = new SelectElementReference(
-        on.right.asInstanceOf[SelectElementReference[_]].selectElement)(null)
+        on.right.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
 
       on.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
         Some((leftSelectElement,rightSelectElement,"left"))
@@ -59,23 +59,23 @@ trait QueryDsl
     if(im) {
       val loj = new FullOuterJoinNode(j1,j2)
 
-//      val leftSelectElement = new SelectElementReference[_](
-//        loj.left.asInstanceOf[SelectElementReference[_]].selectElement, null)
-//
-//      val rightSelectElement = new SelectElementReference[_](
-//        loj.right.asInstanceOf[SelectElementReference[_]].selectElement, null)
-//
-//      loj.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
-//        Some((rightSelectElement, leftSelectElement,"full"))
-//
-//      loj.left.asInstanceOf[SelectElementReference[_]].selectElement.origin.fullOuterJoinMatchColumn =
-//        Some(rightSelectElement)
-//
-//      val qen = FieldReferenceLinker.inspectedQueryExpressionNode
-//      leftSelectElement.parent = Some(qen)
-//      rightSelectElement.parent = Some(qen)
-//      (Some(a), Some(b))
-      error("refactor...")
+      val leftSelectElement = new SelectElementReference(
+        loj.left.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
+
+      val rightSelectElement = new SelectElementReference(
+        loj.right.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
+
+      loj.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
+        Some((rightSelectElement, leftSelectElement,"full"))
+
+      loj.left.asInstanceOf[SelectElementReference[_]].selectElement.origin.fullOuterJoinMatchColumn =
+        Some(rightSelectElement)
+
+      val qen = FieldReferenceLinker.inspectedQueryExpressionNode
+      leftSelectElement.parent = Some(qen)
+      rightSelectElement.parent = Some(qen)
+      (Some(a), Some(b))
+//      error("refactor...")
     }
     else {
       val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
@@ -83,8 +83,6 @@ trait QueryDsl
       (rA,rB)
     }
   }
-
-  private def _countFunc = count
 
   trait SingleRowQuery[R] {
     self: Query[R] =>
@@ -100,11 +98,12 @@ trait QueryDsl
 
   implicit def countQueryableToIntTypeQuery[R](q: Queryable[R]) = new CountSubQueryableQuery(q)
 
+  private def _countFunc = count
+  
   class CountSubQueryableQuery(q: Queryable[_]) extends Query[LongType] with ScalarQuery[LongType] {
 
-    private val _inner:Query[Measures[LongType]] = error("implement me") 
-//    from(q)(r =>
-//      compute(new GroupArg[LongType](_countFunc, createOutMapperLongType)))
+    private val _inner:Query[Measures[LongType]] =
+      from(q)(r => compute(_countFunc))
 
     def iterator = _inner.map(m => m.measures).iterator
 

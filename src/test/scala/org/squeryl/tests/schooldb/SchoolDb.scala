@@ -126,21 +126,21 @@ class SchoolDb extends Schema with QueryTester {
       compute(avg(s.age), avg(s.age) + 3, avg(s.age) / count, count + 6)
     )
 
-  def addressesOfStudentsOlderThan24 = error("!!!!")
-//    from(students, addresses)((s,a) =>
-////      Where(
-////       ((s.age > 24) : LogicalBoolean) and
-////       ((24.~ < s.age) : LogicalBoolean) and
-////       (s.addressId =? a.id)
-////     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
-//         // trigger the implicit conversion if the constant is on the left side, strangely it will do it
-//         // for methods with non symbol name, like  lessThanz :
-//      where((24 : NumericalExpression[Int]) < s.age and (24 ~) < s.age)
-//    //  Where((s.age < 24) and (s.addressId =? a.id))
-//     //select(&(concat(a.numberz, " ", a.streetName, " ", a.appNumber)))
-//      //select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
-//      select(error("implement me"))
-//    )
+  def addressesOfStudentsOlderThan24 = 
+    from(students, addresses)((s,a) =>
+//      Where(
+//       ((s.age > 24) : LogicalBoolean) and
+//       ((24.~ < s.age) : LogicalBoolean) and
+//       (s.addressId =? a.id)
+//     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
+         // trigger the implicit conversion if the constant is on the left side, strangely it will do it
+         // for methods with non symbol name, like  lessThanz :
+      where((24 : NumericalExpression[Int]) < s.age and (24 ~) < s.age)
+    //  Where((s.age < 24) and (s.addressId =? a.id))
+
+      //select(&(a.numberz || " "))
+      select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
+    )
 
   def leftOuterJoinStudentAddresses =
     from(students, addresses)((s,a) =>
@@ -257,13 +257,11 @@ class SchoolDb extends Schema with QueryTester {
   }
 
   def testConcatWithOptionalCols = {
-    //println(addressesOfStudentsOlderThan24)
 
-    addressesOfStudentsOlderThan24
+    //Session.currentSession.setLogger(m => println(m))
 
-//    (for(r <- addressesOfStudentsOlderThan24)
-//      yield r).toList
-
+    val res = addressesOfStudentsOlderThan24.toList
+    
     println('testConcatWithOptionalCols + " passed.")
   }
 

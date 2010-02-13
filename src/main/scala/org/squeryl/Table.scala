@@ -3,7 +3,7 @@ package org.squeryl;
 import dsl.ast._
 import dsl.boilerplate.Query1
 import dsl.{QueryYield, QueryDsl}
-import internals.{ResultSetMapper, FieldReferenceLinker, StatementWriter}
+import internals.{NoOpOutMapper, ResultSetMapper, FieldReferenceLinker, StatementWriter}
 import java.sql.{ResultSet, Statement}
 import scala.reflect.Manifest
 class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) {
@@ -104,7 +104,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
   private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
-      //case Some(n:SelectElement) => new SelectElementReference[_](n, null)
+      case Some(n:SelectElement) => new SelectElementReference(n)(NoOpOutMapper)
       case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
   }
 

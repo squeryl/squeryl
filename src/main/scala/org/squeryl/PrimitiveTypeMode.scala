@@ -45,7 +45,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Int](i) with NumericalExpression[IntType]
       case Some(n:SelectElement) =>
-        new SelectElementReference[IntType](n)(sampleInt) with NumericalExpression[IntType]
+        new SelectElementReference[IntType](n) with NumericalExpression[IntType]
     }
 
   def createLeafNodeOfScalarIntOptionType(i: Option[IntType]) =
@@ -156,7 +156,7 @@ object PrimitiveTypeMode extends QueryDsl {
     }
 
 
-
+  protected def mapByte2ByteType(i: Byte) = i
   protected def mapInt2IntType(i: Int) = i
   protected def mapString2StringType(s: String) = s
   protected def mapDouble2DoubleType(d: Double) = d

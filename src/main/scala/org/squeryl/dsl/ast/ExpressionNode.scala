@@ -123,32 +123,11 @@ trait LogicalBoolean extends ExpressionNode  {
 //TODO: erase type A, it is unneeded, and use ExpressionNode instead of TypedExp...
 class UpdateAssignment(val left: TypedExpressionNode[_], val right: TypedExpressionNode[_])
 
-
-//object OutMapperFactory {
-//
-//  private val _nonOptionMapper = new FieldTypeHandler[OutMapper[_]] {
-//
-//    def handleIntType = cre
-//    def handleStringType  = 128
-//    def handleBooleanType = 1
-//    def handleDoubleType = 8
-//    def handleDateType = -1
-//    def handleLongType = 8
-//    def handleFloatType = 4
-//    def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
-//  }
-//
-//}
-
 trait TypedExpressionNode[T] extends ExpressionNode {
 
-  def sample: T
+  def sample:T = mapper.sample
 
-
-  def mapper: OutMapper[_] = {
-
-    error("implement me")
-  }
+  def mapper: OutMapper[T]
 
   def :=[B <% TypedExpressionNode[T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[T])
 }
@@ -159,9 +138,9 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 
 class ConstantExpressionNode[T](val value: T, needsQuote: Boolean) extends ExpressionNode {
 
-  def sample = value
-
   def this(v:T) = this(v, false)
+
+  def mapper: OutMapper[T] = error("outMapper should not be used on " + 'ConstantExpressionNode)
 
   def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {
@@ -192,10 +171,12 @@ class ConstantExpressionNodeList[T](val value: List[T]) extends ExpressionNode w
       sw.write(this.value.mkString("(",",",")"))
 }
 
-class FunctionNode[A](val name: String, val sample: A, val args: Iterable[ExpressionNode]) extends ExpressionNode {
+class FunctionNode[A](val name: String, _mapper : Option[OutMapper[A]], val args: Iterable[ExpressionNode]) extends ExpressionNode {
 
-  def this(name: String, sample: A, args: ExpressionNode*) = this(name, sample, args)
-  
+  def this(name: String, args: ExpressionNode*) = this(name, None, args)
+
+  def mapper: OutMapper[A] = _mapper.getOrElse(error("no mapper available"))
+
   def doWrite(sw: StatementWriter) = {
 
     sw.write(name)

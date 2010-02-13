@@ -117,7 +117,7 @@ class FieldSelectElement
 }
 
 class ValueSelectElement
-  (val expression: ExpressionNode, val resultSetMapper: ResultSetMapper, expressionType: Class[_], val origin: QueryableExpressionNode)
+  (val expression: ExpressionNode, val resultSetMapper: ResultSetMapper, mapper: OutMapper[_], val origin: QueryableExpressionNode)
      extends SelectElement with UniqueIdInAliaseRequired {
 
   def alias = "v" + uniqueId.get
@@ -127,7 +127,7 @@ class ValueSelectElement
   var yieldPusher: Option[YieldValuePusher] = None
 
   def prepareColumnMapper(index: Int) =
-    yieldPusher = Some(new YieldValuePusher(index, this, expressionType))  
+    yieldPusher = Some(new YieldValuePusher(index, this, mapper))  
 
   def typeOfExpressionToString =
     if(yieldPusher == None)
@@ -210,7 +210,7 @@ trait PathReferenceToSelectElement {
  * these are ExportedSelectElement
  */
 class SelectElementReference[A]
-  (val selectElement: SelectElement)(implicit val sample: A)
+  (val selectElement: SelectElement)(implicit val mapper: OutMapper[A])
     extends TypedExpressionNode[A] with PathReferenceToSelectElement {
 
   override def toString =

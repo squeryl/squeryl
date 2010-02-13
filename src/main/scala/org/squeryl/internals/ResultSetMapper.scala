@@ -28,8 +28,17 @@ trait OutMapper[T] {
   def sample: T
 
   def typeOfExpressionToString = sample.asInstanceOf[Object].getClass.getName
+
 }
 
+object NoOpOutMapper extends OutMapper[Any] {
+
+  def doMap(rs: ResultSet) = sample
+
+  def sample = error(" cannot use NoOpOutMapper")
+
+  override def typeOfExpressionToString = "NoOpOutMapper"  
+}
 
 class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, selectElement: SelectElement)  {
 
@@ -152,19 +161,21 @@ class ResultSetMapper {
   }
 }
 
-class YieldValuePusher(val index: Int, val selectElement: SelectElement, expressionType: Class[_])  {
+class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper: OutMapper[_])  {
 
-  val resultSetHandler =
-    FieldMetaData.resultSetHandlerFor(expressionType)
+
+  mapper.index = index
+  mapper.isActive = true
 
   def push(rs: ResultSet) = {
 
     if(selectElement.isActive) {
-      val v = resultSetHandler(rs,index)
-      FieldReferenceLinker.pushYieldValue(v)
+      val v = mapper.map(rs)
+      FieldReferenceLinker.pushYieldValue(v.asInstanceOf[AnyRef])
     }
   }
 
+
   override def toString =
-    "$(" + index + "->Value("+selectElement.writeToString+")"
+    "$(" + index + "->&("+selectElement.writeToString+")"
 }

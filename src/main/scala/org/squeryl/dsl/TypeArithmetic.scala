@@ -2,17 +2,19 @@ package org.squeryl.dsl
 
 import ast._
 import org.squeryl.internals._
+import java.util.Date
+import java.sql.ResultSet
 
 
 trait TypeArithmetic extends FieldTypes {
 
-  class NumericalTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with NumericalExpression[A]
+  class NumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NumericalExpression[A]
 
-  class DateTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with DateExpression[A]
+  class DateTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with DateExpression[A]
 
-  class StringTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with StringExpression[A]
+  class StringTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with StringExpression[A]
 
-  class BooleanTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with BooleanExpression[A]
+  class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with BooleanExpression[A]
 
   class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
@@ -40,7 +42,7 @@ trait TypeArithmetic extends FieldTypes {
   class BinaryDivOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
   class UnaryFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
-
+  
   class UnaryAgregateFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
 
   class UnaryAgregateLengthNeutralOp[A](val a: TypedExpressionNode[A], op: String) extends FunctionNode(op, a)
@@ -293,8 +295,147 @@ trait TypeArithmetic extends FieldTypes {
   implicit def nvl2(e: NvlFunctionNonNumerical[Option[StringType],StringType]) = new StringTypeConversion[StringType](e)
   implicit def nvl2(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
 
-  implicit def e2concat1[A1,A2](e: ConcatOp[NumericalExpression[A1],NumericalExpression[A2]]) = new StringTypeConversion[StringType](e)
-  implicit def e2concat2[A1,A2](e: ConcatOp[NumericalExpression[A1],NumericalExpression[Option[A2]]]) = new StringTypeConversion[Option[StringType]](e)
-  implicit def e2concat3[A1,A2](e: ConcatOp[NumericalExpression[Option[A1]],NumericalExpression[A2]]) = new StringTypeConversion[Option[StringType]](e)
-  implicit def e2concat4[A1,A2](e: ConcatOp[NumericalExpression[Option[A1]],NumericalExpression[Option[A2]]]) = new StringTypeConversion[Option[StringType]](e)
+  implicit def e2concat1[A1,A2](e: ConcatOp[A1,A2]) = new StringTypeConversion[StringType](e)(createOutMapperStringType)
+  implicit def e2concat2[A1,A2](e: ConcatOp[A1,Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
+  implicit def e2concat3[A1,A2](e: ConcatOp[Option[A1],A2]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
+  implicit def e2concat4[A1,A2](e: ConcatOp[Option[A1],Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
+  
+  protected def mapByte2ByteType(b:Byte): ByteType
+  protected def mapInt2IntType(i: Int): IntType
+  protected def mapString2StringType(s: String): StringType
+  protected def mapDouble2DoubleType(d: Double): DoubleType
+  protected def mapFloat2FloatType(d: Float): FloatType
+  protected def mapLong2LongType(l: Long): LongType
+  protected def mapBoolean2BooleanType(b: Boolean): BooleanType
+  protected def mapDate2DateType(b: Date): DateType
+
+  //TODO: make these methods protected :
+
+  implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
+    def doMap(rs: ResultSet) = mapByte2ByteType(rs.getByte(index))
+    def sample = sampleByte
+  }
+  
+  implicit def createOutMapperIntType: OutMapper[IntType] = new OutMapper[IntType] {
+    def doMap(rs: ResultSet) = mapInt2IntType(rs.getInt(index))
+    def sample = sampleInt
+  }
+
+  implicit def createOutMapperStringType: OutMapper[StringType] = new OutMapper[StringType] {
+    def doMap(rs: ResultSet) = mapString2StringType(rs.getString(index))
+    def sample = sampleString
+  }
+
+  implicit def createOutMapperDoubleType: OutMapper[DoubleType] = new OutMapper[DoubleType] {
+    def doMap(rs: ResultSet) = mapDouble2DoubleType(rs.getDouble(index))
+    def sample = sampleDouble
+  }
+
+  implicit def createOutMapperFloatType: OutMapper[FloatType] = new OutMapper[FloatType] {
+    def doMap(rs: ResultSet) = mapFloat2FloatType(rs.getFloat(index))
+    def sample = sampleFloat
+  }
+
+  implicit def createOutMapperLongType: OutMapper[LongType] = new OutMapper[LongType] {
+    def doMap(rs: ResultSet) = mapLong2LongType(rs.getLong(index))
+    def sample = sampleLong
+  }
+
+  implicit def createOutMapperBooleanType: OutMapper[BooleanType] = new OutMapper[BooleanType] {
+    def doMap(rs: ResultSet) = mapBoolean2BooleanType(rs.getBoolean(index))
+    def sample = sampleBoolean
+  }
+
+  implicit def createOutMapperDateType: OutMapper[DateType] = new OutMapper[DateType] {
+    def doMap(rs: ResultSet) = mapDate2DateType(rs.getDate(index))
+    def sample = sampleDate
+  }
+
+  implicit def createOutMapperByteTypeOption: OutMapper[Option[ByteType]] = new OutMapper[Option[ByteType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapByte2ByteType(rs.getByte(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleByte)
+  }
+
+  implicit def createOutMapperIntTypeOption: OutMapper[Option[IntType]] = new OutMapper[Option[IntType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapInt2IntType(rs.getInt(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleInt)
+  }
+
+  implicit def createOutMapperDoubleTypeOption: OutMapper[Option[DoubleType]] = new OutMapper[Option[DoubleType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapDouble2DoubleType(rs.getDouble(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleDouble)
+  }
+
+  implicit def createOutMapperFloatTypeOption: OutMapper[Option[FloatType]] = new OutMapper[Option[FloatType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapFloat2FloatType(rs.getFloat(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleFloat)
+  }
+
+  implicit def createOutMapperStringTypeOption: OutMapper[Option[StringType]] = new OutMapper[Option[StringType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapString2StringType(rs.getString(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleString)
+  }
+
+  implicit def createOutMapperLongTypeOption: OutMapper[Option[LongType]] = new OutMapper[Option[LongType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapLong2LongType(rs.getLong(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleLong)
+  }
+
+  implicit def createOutMapperBooleanTypeOption: OutMapper[Option[BooleanType]] = new OutMapper[Option[BooleanType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapBoolean2BooleanType(rs.getBoolean(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleBoolean)
+  }
+
+  implicit def createOutMapperDateTypeOption: OutMapper[Option[DateType]] = new OutMapper[Option[DateType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapDate2DateType(rs.getDate(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleDate)
+  }  
 }

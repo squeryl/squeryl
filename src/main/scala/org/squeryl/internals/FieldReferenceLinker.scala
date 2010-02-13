@@ -7,15 +7,18 @@ import org.squeryl.dsl.ast._
 
 object FieldReferenceLinker {
 
-  def pushExpressionOrCollectValue[T](e: ()=>ExpressionNode, sampleVal: T): T = {
+  def pushExpressionOrCollectValue[T](e: ()=>TypedExpressionNode[T]): T = {
 
     val yi = _yieldInspectionTL.get
     if(yi.isOn) {
-      yi.addSelectElement(new ValueSelectElement(yi.callWithoutReentrance(e), yi.resultSetMapper, sampleVal.asInstanceOf[AnyRef].getClass, yi.queryExpressionNode))
-      sampleVal
+      val expr = yi.callWithoutReentrance(e)
+      yi.addSelectElement(new ValueSelectElement(expr, yi.resultSetMapper, expr.mapper, yi.queryExpressionNode))
+      val r = expr.sample
+      r
     }
     else {
-      _yieldValues.get.remove(0).asInstanceOf[T]
+      val r = _yieldValues.get.remove(0).asInstanceOf[T]
+      r
     }
   }
 

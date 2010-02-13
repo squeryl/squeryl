@@ -75,6 +75,7 @@ object MyCustomTypesMode extends CustomTypesMode {
 
   type DateType = DateField
 
+  protected def mapByte2ByteType(i: Byte) = new ByteField(i)
   protected def mapInt2IntType(i: Int) = new IntField(i)
   protected def mapString2StringType(s: String) = new StringField(s)
   protected def mapDouble2DoubleType(d: Double) = new DoubleField(d)
@@ -93,41 +94,41 @@ object MyCustomTypesMode extends CustomTypesMode {
   protected implicit val sampleDate = new DateField(new Date)
   //TODO Scala bug report, implicit params should work here , but they don't ...
   def createLeafNodeOfScalarIntType(i: IntField) =
-    new SelectElementReference[IntType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleInt) with NumericalExpression[IntType]
+    new SelectElementReference[IntType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntType) with NumericalExpression[IntType]
   def createLeafNodeOfScalarIntOptionType(i: Option[IntField]) =
-    new SelectElementReference[Option[IntType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleIntO) with NumericalExpression[Option[IntType]]
+    new SelectElementReference[Option[IntType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntTypeOption) with NumericalExpression[Option[IntType]]
 
   def createLeafNodeOfScalarStringType(s: StringField) =
-    new SelectElementReference[StringType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleString) with StringExpression[StringType]
+    new SelectElementReference[StringType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringType) with StringExpression[StringType]
   def createLeafNodeOfScalarStringOptionType(s: Option[StringField]) =
-    new SelectElementReference[Option[StringType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleStringO) with StringExpression[Option[StringType]]
+    new SelectElementReference[Option[StringType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringTypeOption) with StringExpression[Option[StringType]]
 
   def createLeafNodeOfScalarDoubleType(i: DoubleField) =
-    new SelectElementReference[DoubleType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleDouble) with  NumericalExpression[DoubleType]
+    new SelectElementReference[DoubleType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleType) with  NumericalExpression[DoubleType]
   def createLeafNodeOfScalarDoubleOptionType(i: Option[DoubleField]) =
-    new SelectElementReference[Option[DoubleType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleDoubleO) with  NumericalExpression[Option[DoubleType]]
+    new SelectElementReference[Option[DoubleType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleTypeOption) with  NumericalExpression[Option[DoubleType]]
 
   def createLeafNodeOfScalarFloatType(i: FloatField) =
-    new SelectElementReference[FloatType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleFloat) with  NumericalExpression[FloatType]
+    new SelectElementReference[FloatType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatType) with  NumericalExpression[FloatType]
   def createLeafNodeOfScalarFloatOptionType(i: Option[FloatField]) =
-    new SelectElementReference[Option[FloatType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleFloatO) with  NumericalExpression[Option[FloatType]]
+    new SelectElementReference[Option[FloatType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatTypeOption) with  NumericalExpression[Option[FloatType]]
 
   def createLeafNodeOfScalarLongType(i: LongField) =
-    new SelectElementReference[LongType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleLong) with  NumericalExpression[LongType]
+    new SelectElementReference[LongType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongType) with  NumericalExpression[LongType]
   def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
-    new SelectElementReference[Option[LongType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleLongO) with  NumericalExpression[Option[LongType]]
+    new SelectElementReference[Option[LongType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongTypeOption) with  NumericalExpression[Option[LongType]]
 
   def createLeafNodeOfScalarBooleanType(i: BooleanField) =
-    new SelectElementReference[BooleanType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleBoolean) with  BooleanExpression[BooleanType]
+    new SelectElementReference[BooleanType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanType) with  BooleanExpression[BooleanType]
 
   def createLeafNodeOfScalarBooleanOptionType(i: Option[BooleanField]) =
-    new SelectElementReference[Option[BooleanType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleBooleanO) with  BooleanExpression[Option[BooleanType]]
+    new SelectElementReference[Option[BooleanType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanTypeOption) with  BooleanExpression[Option[BooleanType]]
 
   def createLeafNodeOfScalarDateType(i: DateField) =
-    new SelectElementReference[DateType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleDate) with  DateExpression[DateType]
+    new SelectElementReference[DateType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateType) with  DateExpression[DateType]
 
   def createLeafNodeOfScalarDateOptionType(i: Option[DateField]) =
-    new SelectElementReference[Option[DateType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(sampleDateO) with  DateExpression[Option[DateType]]
+    new SelectElementReference[Option[DateType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateTypeOption) with  DateExpression[Option[DateType]]
 
 }
 

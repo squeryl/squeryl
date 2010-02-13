@@ -1,8 +1,7 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.internals.StatementWriter
-import org.squeryl.{Session, Query}
+import org.squeryl.{Query}
 
 trait FieldTypes {
   self: TypeArithmetic =>
@@ -87,14 +86,8 @@ trait FieldTypes {
     def ~ = this
   }
 
-  //TODO: replace with concat operator OR flatten the trees of nested Concat
-  private class ConcatFunction(e: Iterable[ExpressionNode]) extends FunctionNode("concat",sampleString, e) {
-    override def write(sw: StatementWriter) = {
-      val s = Session.currentSession
-      s.databaseAdapter.writeConcatFunctionCall(this, sw)
-    }
-  }
 
+  
   protected implicit def sampleByte: ByteType
   protected implicit def sampleInt: IntType
   protected implicit def sampleString: StringType

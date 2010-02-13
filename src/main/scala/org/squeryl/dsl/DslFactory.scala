@@ -64,10 +64,11 @@ trait DslFactory
   
   // List Conversion implicits don't vary with the choice of
   // column/field types, so they don't need to be overridable factory methods :
+
+  //TODO: replace lists with NonNumerical and Numerical for type inference that is more SQL like  
   implicit def listOfInt2ListInt(l: List[IntType]) =
     new ConstantExpressionNodeList[IntType](l) with ListInt
 
-  //TODO: relax type equivalence using Numerical, since databases allow things like 1 in (0.4,0.4, ...)
   implicit def listOfDouble2ListDouble(l: List[DoubleType]) =
     new ConstantExpressionNodeList[DoubleType](l) with ListDouble
 
@@ -87,124 +88,4 @@ trait DslFactory
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
 
-  protected def mapInt2IntType(i: Int): IntType
-  protected def mapString2StringType(s: String): StringType
-  protected def mapDouble2DoubleType(d: Double): DoubleType
-  protected def mapFloat2FloatType(d: Float): FloatType
-  protected def mapLong2LongType(l: Long): LongType
-  protected def mapBoolean2BooleanType(b: Boolean): BooleanType
-  protected def mapDate2DateType(b: Date): DateType
-  
-  //TODO: make these methods protected when COMPILER won't crash !!!
-  def createOutMapperIntType: OutMapper[IntType] = new OutMapper[IntType] {
-    def doMap(rs: ResultSet) = mapInt2IntType(rs.getInt(index))
-    def sample = sampleInt
-  }
-  
-  def createOutMapperStringType: OutMapper[StringType] = new OutMapper[StringType] {
-    def doMap(rs: ResultSet) = mapString2StringType(rs.getString(index))
-    def sample = sampleString
-  }
-
-  def createOutMapperDoubleType: OutMapper[DoubleType] = new OutMapper[DoubleType] {
-    def doMap(rs: ResultSet) = mapDouble2DoubleType(rs.getDouble(index))
-    def sample = sampleDouble
-  }
-
-  def createOutMapperFloatType: OutMapper[FloatType] = new OutMapper[FloatType] {
-    def doMap(rs: ResultSet) = mapFloat2FloatType(rs.getFloat(index))
-    def sample = sampleFloat
-  }
-
-  def createOutMapperLongType: OutMapper[LongType] = new OutMapper[LongType] {
-    def doMap(rs: ResultSet) = mapLong2LongType(rs.getLong(index))
-    def sample = sampleLong
-  }
-
-  def createOutMapperBooleanType: OutMapper[BooleanType] = new OutMapper[BooleanType] {
-    def doMap(rs: ResultSet) = mapBoolean2BooleanType(rs.getBoolean(index))
-    def sample = sampleBoolean
-  }
-
-  def createOutMapperDateType: OutMapper[DateType] = new OutMapper[DateType] {
-    def doMap(rs: ResultSet) = mapDate2DateType(rs.getDate(index))
-    def sample = sampleDate
-  }
-
-  def createOutMapperIntTypeOption: OutMapper[Option[IntType]] = new OutMapper[Option[IntType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapInt2IntType(rs.getInt(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleInt)
-  }
-
-  def createOutMapperDoubleTypeOption: OutMapper[Option[DoubleType]] = new OutMapper[Option[DoubleType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapDouble2DoubleType(rs.getDouble(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleDouble)
-  }
-
-  def createOutMapperFloatTypeOption: OutMapper[Option[FloatType]] = new OutMapper[Option[FloatType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapFloat2FloatType(rs.getFloat(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleFloat)
-  }
-
-  def createOutMapperStringTypeOption: OutMapper[Option[StringType]] = new OutMapper[Option[StringType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapString2StringType(rs.getString(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleString)
-  }
-
-  def createOutMapperLongTypeOption: OutMapper[Option[LongType]] = new OutMapper[Option[LongType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapLong2LongType(rs.getLong(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleLong)
-  }
-
-  def createOutMapperBooleanTypeOption: OutMapper[Option[BooleanType]] = new OutMapper[Option[BooleanType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapBoolean2BooleanType(rs.getBoolean(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleBoolean)
-  }
-
-  def createOutMapperDateTypeOption: OutMapper[Option[DateType]] = new OutMapper[Option[DateType]] {
-    def doMap(rs: ResultSet) = {
-      val v = mapDate2DateType(rs.getDate(index))
-      if(rs.wasNull)
-        None
-      else
-        Some(v)
-    }
-    def sample = Some(sampleDate)
-  }
 }
