@@ -16,7 +16,7 @@ trait SqlFunctions  {
   def max[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
   def min[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")
 
-  def count                  = new FunctionNode("count", new TokenExpressionNode("*")) with NumericalExpression[LongType]
+  def count = new FunctionNode[LongType]("count", sampleLong, new TokenExpressionNode("*")) with NumericalExpression[LongType]
 
   def nvl[A,B](a: NumericalExpression[Option[A]], b: NumericalExpression[B]) = new NvlFunctionNumerical[A,B](a,b)
 

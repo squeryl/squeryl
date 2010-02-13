@@ -102,10 +102,9 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     cnt
   }
 
-  private def _takeLastAccessedUntypedFieldReference: SelectElementReference =
+  private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case Some(n:SelectElement) =>
-        new SelectElementReference(n)
+      //case Some(n:SelectElement) => new SelectElementReference[_](n, null)
       case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
   }
 

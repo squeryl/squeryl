@@ -123,11 +123,30 @@ trait LogicalBoolean extends ExpressionNode  {
 //TODO: erase type A, it is unneeded, and use ExpressionNode instead of TypedExp...
 class UpdateAssignment(val left: TypedExpressionNode[_], val right: TypedExpressionNode[_])
 
+
+//object OutMapperFactory {
+//
+//  private val _nonOptionMapper = new FieldTypeHandler[OutMapper[_]] {
+//
+//    def handleIntType = cre
+//    def handleStringType  = 128
+//    def handleBooleanType = 1
+//    def handleDoubleType = 8
+//    def handleDateType = -1
+//    def handleLongType = 8
+//    def handleFloatType = 4
+//    def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
+//  }
+//
+//}
+
 trait TypedExpressionNode[T] extends ExpressionNode {
 
-  //def sample: T
+  def sample: T
+
 
   def mapper: OutMapper[_] = {
+
     error("implement me")
   }
 
@@ -139,6 +158,8 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 }
 
 class ConstantExpressionNode[T](val value: T, needsQuote: Boolean) extends ExpressionNode {
+
+  def sample = value
 
   def this(v:T) = this(v, false)
 
@@ -171,9 +192,9 @@ class ConstantExpressionNodeList[T](val value: List[T]) extends ExpressionNode w
       sw.write(this.value.mkString("(",",",")"))
 }
 
-class FunctionNode(val name: String, val args: Iterable[ExpressionNode]) extends ExpressionNode {
+class FunctionNode[A](val name: String, val sample: A, val args: Iterable[ExpressionNode]) extends ExpressionNode {
 
-  def this(name: String, args: ExpressionNode*) = this(name, args)
+  def this(name: String, sample: A, args: ExpressionNode*) = this(name, sample, args)
   
   def doWrite(sw: StatementWriter) = {
 
@@ -260,9 +281,9 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
   /**
    * outerJoinColumns is None if not an outer join, args are (left col : SelectElementReference, right col : SelectElementReference, outer Join kind: String ("left" or "full")) 
    */
-  var outerJoinColumns: Option[(SelectElementReference,SelectElementReference, String)] = None
+  var outerJoinColumns: Option[(SelectElementReference[_],SelectElementReference[_], String)] = None
 
-  var fullOuterJoinMatchColumn: Option[SelectElementReference] = None
+  var fullOuterJoinMatchColumn: Option[SelectElementReference[_]] = None
 
   def isOptionalInOuterJoin =
     outerJoinColumns != None || fullOuterJoinMatchColumn != None

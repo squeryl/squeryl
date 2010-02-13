@@ -38,7 +38,7 @@ trait FieldTypes {
     def < [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
     def <=[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
 
-    def ||[B](e: TypedExpressionNode[B]):StringExpression[B] = new ConcatFunction(List(this,e)) with StringExpression[B]
+    def ||[B](e: TypedExpressionNode[B]) = new ConcatOp(this,e)
 
     def isNull = new PostfixOperatorNode("is null", this) with LogicalBoolean
 
@@ -60,7 +60,7 @@ trait FieldTypes {
     def < [A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
     def <=[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
 
-    def ||[B](e: TypedExpressionNode[B]):StringExpression[B] = new ConcatFunction(List(this,e)) with StringExpression[B]
+    def ||[B](e: TypedExpressionNode[B]) = new ConcatOp(this,e)
 
     def isNull = new PostfixOperatorNode("is null", this) with LogicalBoolean
 
@@ -87,11 +87,29 @@ trait FieldTypes {
     def ~ = this
   }
 
-  private class ConcatFunction(e: Iterable[ExpressionNode]) extends FunctionNode("concat",e) {
+  //TODO: replace with concat operator OR flatten the trees of nested Concat
+  private class ConcatFunction(e: Iterable[ExpressionNode]) extends FunctionNode("concat",sampleString, e) {
     override def write(sw: StatementWriter) = {
       val s = Session.currentSession
       s.databaseAdapter.writeConcatFunctionCall(this, sw)
     }
   }
-  
+
+  protected implicit def sampleByte: ByteType
+  protected implicit def sampleInt: IntType
+  protected implicit def sampleString: StringType
+  protected implicit def sampleDouble: DoubleType
+  protected implicit def sampleFloat: FloatType
+  protected implicit def sampleLong: LongType
+  protected implicit def sampleBoolean: BooleanType
+  protected implicit def sampleDate: DateType
+
+  protected implicit val sampleByteO = Some(sampleByte)
+  protected implicit val sampleIntO = Some(sampleInt)
+  protected implicit val sampleStringO = Some(sampleString)
+  protected implicit val sampleDoubleO = Some(sampleDouble)
+  protected implicit val sampleFloatO = Some(sampleFloat)
+  protected implicit val sampleLongO = Some(sampleLong)
+  protected implicit val sampleBooleanO = Some(sampleBoolean)
+  protected implicit val sampleDateO = Some(sampleDate)  
 }

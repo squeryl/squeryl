@@ -97,7 +97,7 @@ class DatabaseAdapter {
     }    
   }
 
-  def writeOuterJoin(qen: QueryableExpressionNode, sw: StatementWriter, left: SelectElementReference, right: SelectElementReference, outerJoinKind: String) = {
+  def writeOuterJoin(qen: QueryableExpressionNode, sw: StatementWriter, left: SelectElementReference[_], right: SelectElementReference[_], outerJoinKind: String) = {
     sw.write(outerJoinKind)
     sw.write(" outer join ")
     qen.write(sw)
@@ -275,7 +275,7 @@ class DatabaseAdapter {
   
   def postDropTable(t: Table[_]) = {}
 
-  def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) = {
+  def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) = {
     sw.write(fn.name)
     sw.write("(")
     sw.writeNodesWithSeparator(fn.args, ",", false)

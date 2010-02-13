@@ -32,7 +32,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
 
   def sequenceName(t: Table[_]) = "seq_" + t.name
 
-  override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
+  override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
   
   override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {

@@ -284,24 +284,31 @@ object TypeArithmetic {
 
 
   class TypeDescription(val token: String, val length:Int, val isFloat: Boolean, val isOption: Boolean) {
+
     override def toString =
       if(isOption)
-        "Option[" + token + "]"
+        "Option[" + token + "Type]"
       else
         token
+
+    def sample =
+      if(isOption)
+        "Some(sample" + token + ")"
+      else
+        "sample" + token
   }
 
-  val tByte    = new TypeDescription("ByteType", 1, false, false)
-  val tInt     = new TypeDescription("IntType", 4, false, false)
-  val tLong    = new TypeDescription("LongType", 8, false, false)
-  val tFloat   = new TypeDescription("FloatType", 4, true, false)
-  val tDouble  = new TypeDescription("DoubleType", 8, true, false)
+  val tByte    = new TypeDescription("Byte", 1, false, false)
+  val tInt     = new TypeDescription("Int", 4, false, false)
+  val tLong    = new TypeDescription("Long", 8, false, false)
+  val tFloat   = new TypeDescription("Float", 4, true, false)
+  val tDouble  = new TypeDescription("Double", 8, true, false)
   
-  val tByteO   = new TypeDescription("ByteType", 1, false, true)
-  val tIntO    = new TypeDescription("IntType", 4, false, true)
-  val tLongO   = new TypeDescription("LongType", 8, false, true)
-  val tFloatO  = new TypeDescription("FloatType", 4, true, true)
-  val tDoubleO = new TypeDescription("DoubleType", 8, true, true)
+  val tByteO   = new TypeDescription("Byte", 1, false, true)
+  val tIntO    = new TypeDescription("Int", 4, false, true)
+  val tLongO   = new TypeDescription("Long", 8, false, true)
+  val tFloatO  = new TypeDescription("Float", 4, true, true)
+  val tDoubleO = new TypeDescription("Double", 8, true, true)
 
 
   def allNumericTypes =
@@ -312,9 +319,10 @@ object TypeArithmetic {
     var i = 1
     for(t1 <- allNumericTypes;
         t2 <- allNumericTypes) {
+      val outType = outTypeFunc(t1,t2)
       println("  implicit def binaryOp2TE"+i+
               "(op: "+inputParamTypeName+"[" + t1 + "," + t2 +
-              "]) = new NumericalTypeConversion["+outTypeFunc(t1,t2)+"](op)")
+              "]) = new NumericalTypeConversion["+outType+"](op," + outType.sample + ")")
       i += 1
     }
   }
@@ -322,9 +330,10 @@ object TypeArithmetic {
   def printUnaryTypeConversions(inputParamTypeName : String, outTypeFunc: (TypeDescription) => TypeDescription) = {
     var i = 1
     for(t1 <- allNumericTypes) {
+      val outType = outTypeFunc(t1) 
       println("  implicit def unaryOp2TE"+i+
               "(op: "+inputParamTypeName+"[" + t1 + 
-              "]) = new NumericalTypeConversion["+outTypeFunc(t1)+"](op)")
+              "]) = new NumericalTypeConversion["+outType+"](op)," + outType.sample + ")")
       i += 1
     }
   }

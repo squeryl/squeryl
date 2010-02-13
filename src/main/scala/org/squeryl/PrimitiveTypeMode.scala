@@ -21,7 +21,9 @@ import java.util.Date
  * one with a CustomType 
  */
 object PrimitiveTypeMode extends QueryDsl {
-  
+
+  type ByteType = Byte
+
   type IntType = Int
 
   type StringType = String
@@ -37,13 +39,13 @@ object PrimitiveTypeMode extends QueryDsl {
   type DateType = Date
 
   //TODO: consider spliting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
-
+  
   def createLeafNodeOfScalarIntType(i: IntType) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
         new ConstantExpressionNode[Int](i) with NumericalExpression[IntType]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with NumericalExpression[IntType]
+        new SelectElementReference[IntType](n)(sampleInt) with NumericalExpression[IntType]
     }
 
   def createLeafNodeOfScalarIntOptionType(i: Option[IntType]) =
@@ -51,7 +53,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Int]](i) with NumericalExpression[Option[IntType]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with NumericalExpression[Option[Int]]
+        new SelectElementReference[Option[Int]](n) with NumericalExpression[Option[Int]]
     }
 
   def createLeafNodeOfScalarStringType(s: String) = {
@@ -59,7 +61,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[String](s, true) with StringExpression[String]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with StringExpression[String]
+        new SelectElementReference[String](n) with StringExpression[String]
     }
   }
 
@@ -68,7 +70,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[String]](s, true) with StringExpression[Option[String]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with StringExpression[Option[String]]
+        new SelectElementReference[Option[String]](n) with StringExpression[Option[String]]
     }
   }
 
@@ -77,7 +79,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Double](i) with NumericalExpression[Double]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  NumericalExpression[Double]
+        new SelectElementReference[Double](n) with  NumericalExpression[Double]
     }
 
   def createLeafNodeOfScalarDoubleOptionType(i: Option[Double]) =
@@ -85,7 +87,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Double]](i) with NumericalExpression[Option[Double]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  NumericalExpression[Option[Double]]
+        new SelectElementReference[Option[Double]](n) with NumericalExpression[Option[Double]]
     }
 
 
@@ -94,7 +96,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Float](i) with NumericalExpression[Float]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  NumericalExpression[Float]
+        new SelectElementReference[Float](n) with  NumericalExpression[Float]
     }
 
   def createLeafNodeOfScalarFloatOptionType(i: Option[Float]) =
@@ -102,7 +104,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Float]](i) with NumericalExpression[Option[Float]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  NumericalExpression[Option[Float]]
+        new SelectElementReference[Option[Float]](n) with  NumericalExpression[Option[Float]]
     }
 
   def createLeafNodeOfScalarLongType(i: Long) =
@@ -110,7 +112,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Long](i) with NumericalExpression[Long]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  NumericalExpression[Long]
+        new SelectElementReference[Long](n) with  NumericalExpression[Long]
     }
 
   def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
@@ -118,7 +120,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Long]](l) with NumericalExpression[Option[Long]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with NumericalExpression[Option[Long]]
+        new SelectElementReference[Option[Long]](n) with NumericalExpression[Option[Long]]
     }
 
   def createLeafNodeOfScalarBooleanType(i: Boolean) =
@@ -126,7 +128,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Boolean](i) with BooleanExpression[Boolean]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  BooleanExpression[Boolean]
+        new SelectElementReference[Boolean](n) with  BooleanExpression[Boolean]
     }
 
   def createLeafNodeOfScalarBooleanOptionType(b: Option[BooleanType]) =
@@ -134,7 +136,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Boolean]](b) with BooleanExpression[Option[Boolean]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  BooleanExpression[Option[Boolean]]
+        new SelectElementReference[Option[Boolean]](n) with BooleanExpression[Option[Boolean]]
     }
 
   def createLeafNodeOfScalarDateType(i: Date) =
@@ -142,7 +144,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Date](new java.sql.Date(i.getTime)) with DateExpression[Date]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  DateExpression[Date]
+        new SelectElementReference[Date](n) with DateExpression[Date]
     }
 
   def createLeafNodeOfScalarDateOptionType(b: Option[DateType]) =
@@ -150,7 +152,7 @@ object PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Date]](b) with DateExpression[Option[Date]]
       case Some(n:SelectElement) =>
-        new SelectElementReference(n) with  DateExpression[Option[Date]]
+        new SelectElementReference[Option[Date]](n) with  DateExpression[Option[Date]]
     }
 
 
@@ -163,11 +165,12 @@ object PrimitiveTypeMode extends QueryDsl {
   protected def mapBoolean2BooleanType(b: Boolean) = b
   protected def mapDate2DateType(b: Date) = b
 
-  protected val sampleInt: IntType = 0
-  protected val sampleString: StringType = ""
-  protected val sampleDouble: DoubleType = 0.0
-  protected val sampleFloat: FloatType = 0.0F
-  protected val sampleLong: LongType = 0
-  protected val sampleBoolean: BooleanType = false
-  protected val sampleDate: DateType = new Date
+  protected implicit val sampleByte: ByteType = 0xF.byteValue
+  protected implicit val sampleInt: IntType = 0
+  protected implicit val sampleString: StringType = ""
+  protected implicit val sampleDouble: DoubleType = 0.0
+  protected implicit val sampleFloat: FloatType = 0.0F
+  protected implicit val sampleLong: LongType = 0
+  protected implicit val sampleBoolean: BooleanType = false
+  protected implicit val sampleDate: DateType = new Date
 }

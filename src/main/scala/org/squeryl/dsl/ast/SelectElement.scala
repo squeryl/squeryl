@@ -209,9 +209,9 @@ trait PathReferenceToSelectElement {
  * with the exception of SelectElement that refer to an inner query's SelectElement,
  * these are ExportedSelectElement
  */
-class SelectElementReference
-  (val selectElement: SelectElement)
-    extends ExpressionNode with PathReferenceToSelectElement {
+class SelectElementReference[A]
+  (val selectElement: SelectElement)(implicit val sample: A)
+    extends TypedExpressionNode[A] with PathReferenceToSelectElement {
 
   override def toString =
     'SelectElementReference + ":" + Utils.failSafeString(path) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump

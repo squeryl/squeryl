@@ -6,16 +6,18 @@ import org.squeryl.internals._
 
 trait TypeArithmetic extends FieldTypes {
 
-  class NumericalTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with NumericalExpression[A]
+  class NumericalTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with NumericalExpression[A]
 
-  class DateTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with DateExpression[A]
+  class DateTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with DateExpression[A]
 
-  class StringTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with StringExpression[A]
+  class StringTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with StringExpression[A]
 
-  class BooleanTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with BooleanExpression[A]
+  class BooleanTypeConversion[A](e: ExpressionNode)(implicit val sample: A) extends TypeConversion(e) with BooleanExpression[A]
 
   class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
+  class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||")
+  
   trait NvlNode {
     self: BinaryOperatorNode =>
 
@@ -289,5 +291,10 @@ trait TypeArithmetic extends FieldTypes {
 
   implicit def nvl1(e: NvlFunctionNonNumerical[Option[DateType],DateType]) = new DateTypeConversion[DateType](e)
   implicit def nvl2(e: NvlFunctionNonNumerical[Option[StringType],StringType]) = new StringTypeConversion[StringType](e)
-  implicit def nvl2(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)  
+  implicit def nvl2(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
+
+  implicit def e2concat1[A1,A2](e: ConcatOp[NumericalExpression[A1],NumericalExpression[A2]]) = new StringTypeConversion[StringType](e)
+  implicit def e2concat2[A1,A2](e: ConcatOp[NumericalExpression[A1],NumericalExpression[Option[A2]]]) = new StringTypeConversion[Option[StringType]](e)
+  implicit def e2concat3[A1,A2](e: ConcatOp[NumericalExpression[Option[A1]],NumericalExpression[A2]]) = new StringTypeConversion[Option[StringType]](e)
+  implicit def e2concat4[A1,A2](e: ConcatOp[NumericalExpression[Option[A1]],NumericalExpression[Option[A2]]]) = new StringTypeConversion[Option[StringType]](e)
 }

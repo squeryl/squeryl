@@ -31,12 +31,14 @@ trait QueryDsl
 
     if(im) {
       val on = new LeftOuterJoinNode(j1,j2)
-      val leftSelectElement = new SelectElementReference(
-        on.left.asInstanceOf[SelectElementReference].selectElement)
-      val rightSelectElement = new SelectElementReference(
-        on.right.asInstanceOf[SelectElementReference].selectElement)
 
-      on.right.asInstanceOf[SelectElementReference].selectElement.origin.outerJoinColumns =
+      val leftSelectElement = new SelectElementReference(
+        on.left.asInstanceOf[SelectElementReference[_]].selectElement)(null)
+
+      val rightSelectElement = new SelectElementReference(
+        on.right.asInstanceOf[SelectElementReference[_]].selectElement)(null)
+
+      on.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
         Some((leftSelectElement,rightSelectElement,"left"))
 
       val qen = FieldReferenceLinker.inspectedQueryExpressionNode
@@ -56,21 +58,24 @@ trait QueryDsl
 
     if(im) {
       val loj = new FullOuterJoinNode(j1,j2)
-      val leftSelectElement = new SelectElementReference(
-        loj.left.asInstanceOf[SelectElementReference].selectElement)
-      val rightSelectElement = new SelectElementReference(
-        loj.right.asInstanceOf[SelectElementReference].selectElement)
 
-      loj.right.asInstanceOf[SelectElementReference].selectElement.origin.outerJoinColumns =
-        Some((rightSelectElement, leftSelectElement,"full"))
-
-      loj.left.asInstanceOf[SelectElementReference].selectElement.origin.fullOuterJoinMatchColumn =
-        Some(rightSelectElement)
-
-      val qen = FieldReferenceLinker.inspectedQueryExpressionNode
-      leftSelectElement.parent = Some(qen)
-      rightSelectElement.parent = Some(qen)
-      (Some(a), Some(b))
+//      val leftSelectElement = new SelectElementReference[_](
+//        loj.left.asInstanceOf[SelectElementReference[_]].selectElement, null)
+//
+//      val rightSelectElement = new SelectElementReference[_](
+//        loj.right.asInstanceOf[SelectElementReference[_]].selectElement, null)
+//
+//      loj.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
+//        Some((rightSelectElement, leftSelectElement,"full"))
+//
+//      loj.left.asInstanceOf[SelectElementReference[_]].selectElement.origin.fullOuterJoinMatchColumn =
+//        Some(rightSelectElement)
+//
+//      val qen = FieldReferenceLinker.inspectedQueryExpressionNode
+//      leftSelectElement.parent = Some(qen)
+//      rightSelectElement.parent = Some(qen)
+//      (Some(a), Some(b))
+      error("refactor...")
     }
     else {
       val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
