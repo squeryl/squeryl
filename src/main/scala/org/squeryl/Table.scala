@@ -118,10 +118,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
   def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
 
-    //TODO: remove more boilerplate by putting dsl: QueryDsl in this classe's scope to allow _createWhereIdEqualsClause to function 
+    //TODO: find out why scalac won't let dsl be passed to another method   
     import dsl._
     
-    //val q = From(this)(a => ~:Where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
+    //val q = From(this)(a => where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
     val q = from(this)(a => dsl.where {
       a.id
       val keyFieldNode = _takeLastAccessedUntypedFieldReference
@@ -136,7 +136,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
   def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
 
     import dsl._
-    //val q = From(this)(a => ~:Where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
+    //val q = From(this)(a => where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
     val q = from(this)(a => dsl.where {
       a.id
       val keyFieldNode = _takeLastAccessedUntypedFieldReference

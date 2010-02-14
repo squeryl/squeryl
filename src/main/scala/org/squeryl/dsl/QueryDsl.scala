@@ -130,7 +130,6 @@ trait QueryDsl
       q.invokeYield(rsm, rs)
   }
 
-  //TODO: implement math operators for TypedExpressionNodes (mass * speed ^ 2)
   implicit def singleColComputeQuery2ScalarQuery[T](cq: Query[Measures[T]]): ScalarQuery[T] = new ScalarMeasureQuery[T](cq)
   
   implicit def singleColComputeQuery2Scalar[T](cq: Query[Measures[T]]) = new ScalarMeasureQuery[T](cq).head

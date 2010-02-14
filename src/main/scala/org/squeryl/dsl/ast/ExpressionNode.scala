@@ -120,8 +120,7 @@ trait LogicalBoolean extends ExpressionNode  {
 }
 
 
-//TODO: erase type A, it is unneeded, and use ExpressionNode instead of TypedExp...
-class UpdateAssignment(val left: TypedExpressionNode[_], val right: TypedExpressionNode[_])
+class UpdateAssignment(val left: ExpressionNode, val right: ExpressionNode)
 
 trait TypedExpressionNode[T] extends ExpressionNode {
 

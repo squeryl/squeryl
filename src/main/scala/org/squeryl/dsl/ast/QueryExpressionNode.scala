@@ -27,7 +27,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def sample:AnyRef = _sample.get
 
-  def owns(aSample: AnyRef) = // TODO: see why this gets called b4 _sample gets initialized 
+  def owns(aSample: AnyRef) = 
     _sample != None && _sample.get.eq(aSample)
   
   def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) = error("implement me")

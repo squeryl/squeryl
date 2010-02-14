@@ -17,7 +17,7 @@ trait QueryExpressionElements extends ExpressionNode {
   def joinTableExpressions: Iterable[QueryableExpressionNode]
 
   def subQueries: Iterable[QueryableExpressionNode]
-  //TODO: rename fromList ?
+
   def tableExpressions: Iterable[QueryableExpressionNode]
 
   def selectList: Iterable[SelectElement]

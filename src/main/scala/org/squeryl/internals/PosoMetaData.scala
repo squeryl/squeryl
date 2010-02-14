@@ -28,12 +28,6 @@ class PosoMetaData[T](val clasz: Class[T]) {
     k
   }
 
-  //TODO: implement a "0 param constructor emulator" or "sample param list builder"
-  // and use this reflected param list for logging (instead of requiring a toString 
-//  val constructor =
-//    (for(ct <- clasz.getConstructors() if ct.getParameterTypes.size == 0)
-//      yield ct).headOption.orElse(error(clasz.getName + " must have a 0 param constructor")).get
-
   val constructor =
     _const.headOption.orElse(error(clasz.getName +
             " must have a 0 param constructor or a constructor with only primitive types")).get
@@ -121,11 +115,6 @@ class PosoMetaData[T](val clasz: Class[T]) {
     val isImplicitMode = _isImplicitMode
 
     val setters = new ArrayBuffer[Method]
-
-//    // find setters
-//    for(m <- clasz.getMethods if(m.getName.endsWith("_$eq")))
-         //s <-setters if(s.getName.startsWith(g.getName)))    
-//      setters.append(m);
 
     //TODO: inspect superclasses
 

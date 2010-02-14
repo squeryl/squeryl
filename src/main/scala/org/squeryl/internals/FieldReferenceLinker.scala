@@ -134,10 +134,6 @@ object FieldReferenceLinker {
       if(res0 == null)
         error("query " + q + " yielded null")
 
-//TODO:  optimization, reduce _utilizedFields when result is AnyVal   
-//      if(res0.isInstanceOf[AnyVal])
-//        yi._utilizedFields.remove(e => ! e.isInstanceOf[ValueSelectElement])
-
       _populateSelectColsRecurse(new HashSet[AnyRef], yi, q, res0)
 
       result = (yi.turnOffAndCollectOutExpressions, res0)
