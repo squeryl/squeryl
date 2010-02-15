@@ -26,24 +26,13 @@ trait QueryDsl
   def &[A](i: =>TypedExpressionNode[A]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
   
-  def outerJoin[A](a: A, j1: =>ExpressionNode, j2: =>ExpressionNode): Option[A] = {
+  def leftOuterJoin[A](a: A, matchClause: =>ExpressionNode): Option[A] = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
     if(im) {
-      val on = new LeftOuterJoinNode(j1,j2)
-
-      val leftSelectElement = new SelectElementReference(
-        on.left.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
-
-      val rightSelectElement = new SelectElementReference(
-        on.right.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
-
-      on.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
-        Some((leftSelectElement,rightSelectElement,"left"))
-
-      val qen = FieldReferenceLinker.inspectedQueryExpressionNode
-      leftSelectElement.parent = Some(qen)
-      rightSelectElement.parent = Some(qen)
+      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
+      val oje = new OuterJoinExpression(joinedTableOrSubquery,"left", matchClause)
+      joinedTableOrSubquery.outerJoinExpression = Some(oje)
       Some(a)
     }
     else if(a.isInstanceOf[net.sf.cglib.proxy.Factory])
@@ -52,30 +41,31 @@ trait QueryDsl
       Some(a)  
   }
 
-  def fullOuterJoin[A,B](a: A, b: B, j1: =>ExpressionNode, j2: =>ExpressionNode): (Option[A],Option[B]) = {
+  def rightOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],B) = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
+    if(im) {
+      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
+      val oje = new OuterJoinExpression(joinedTableOrSubquery,"right", matchClause)
+      joinedTableOrSubquery.outerJoinExpression = Some(oje)
+      (Some(a), b)
+    }
+    else {
+      val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
+      (rA,b)
+    }
+  }
+
+  def fullOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],Option[B]) = {
+    val im = FieldReferenceLinker.isYieldInspectionMode
 
     if(im) {
-      val loj = new FullOuterJoinNode(j1,j2)
-
-      val leftSelectElement = new SelectElementReference(
-        loj.left.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
-
-      val rightSelectElement = new SelectElementReference(
-        loj.right.asInstanceOf[SelectElementReference[_]].selectElement)(NoOpOutMapper)
-
-      loj.right.asInstanceOf[SelectElementReference[_]].selectElement.origin.outerJoinColumns =
-        Some((rightSelectElement, leftSelectElement,"full"))
-
-      loj.left.asInstanceOf[SelectElementReference[_]].selectElement.origin.fullOuterJoinMatchColumn =
-        Some(rightSelectElement)
-
-      val qen = FieldReferenceLinker.inspectedQueryExpressionNode
-      leftSelectElement.parent = Some(qen)
-      rightSelectElement.parent = Some(qen)
+      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
+      val oje = new OuterJoinExpression(joinedTableOrSubquery,"full", matchClause)
+      joinedTableOrSubquery.outerJoinExpression = Some(oje)
+      val parentQuery = FieldReferenceLinker.inspectedQueryExpressionNode
+      parentQuery.tableExpressions.head.isRightJoined = true
       (Some(a), Some(b))
-//      error("refactor...")
     }
     else {
       val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
@@ -83,7 +73,7 @@ trait QueryDsl
       (rA,rB)
     }
   }
-
+  
   trait SingleRowQuery[R] {
     self: Query[R] =>
   }

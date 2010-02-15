@@ -170,6 +170,13 @@ object FieldReferenceLinker {
       yi.addSelectElement(e)
   }
 
+  def findOwnerOfSample(s: Any): Option[QueryableExpressionNode] =
+// TODO: could we enforce that Query[AnyVal] are not nested in some other way ?   
+//    if(s.isInstanceOf[AnyVal])
+//      error("A query that returns a AnyVal cannot be nested " + Utils.failSafeString(FieldReferenceLinker.inspectedQueryExpressionNode.toString))
+//    else
+     _findQENThatOwns(s.asInstanceOf[AnyRef], FieldReferenceLinker.inspectedQueryExpressionNode)
+
   private def _findQENThatOwns(sample: AnyRef, q: QueryExpressionElements): Option[QueryableExpressionNode] = {
 
     for(d <- q.filterDescendantsOfType[QueryableExpressionNode])

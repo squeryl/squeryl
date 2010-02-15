@@ -53,12 +53,10 @@ class DatabaseAdapter {
     if(fromListSize > 0 && qen.whereClause == None)
       sw.nextLine
 
-    for(z <- qen.joinTableExpressions.zipi) {
-      val outerJoinSpecTuple = z.element.outerJoinColumns.get
-      writeOuterJoin(z.element, sw, outerJoinSpecTuple._1, outerJoinSpecTuple._2, outerJoinSpecTuple._3)
-      if(z.isNotLast) {
-        sw.write(",")
-        sw.nextLine
+    if(qen.outerJoinExpressions != Nil) sw.writeIndented {
+      for(oje <- qen.outerJoinExpressions.zipi) {
+        writeOuterJoin(oje.element, sw)
+        if(oje.isNotLast) sw.nextLine
       }
     }
     
@@ -97,16 +95,14 @@ class DatabaseAdapter {
     }    
   }
 
-  def writeOuterJoin(qen: QueryableExpressionNode, sw: StatementWriter, left: SelectElementReference[_], right: SelectElementReference[_], outerJoinKind: String) = {
-    sw.write(outerJoinKind)
+  def writeOuterJoin(oje: OuterJoinExpression, sw: StatementWriter) = {
+    sw.write(oje.leftRightOrFull)
     sw.write(" outer join ")
-    qen.write(sw)
+    oje.queryableExpressionNode.write(sw)
     sw.write(" as ")
-    sw.write(qen.alias)
+    sw.write(oje.queryableExpressionNode.alias)
     sw.write(" on ")
-    left.write(sw)
-    sw.write(" = ")
-    right.write(sw)
+    oje.matchExpression.write(sw)
   }
 
   def intTypeDeclaration = "int"

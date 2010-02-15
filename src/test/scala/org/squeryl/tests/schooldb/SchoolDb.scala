@@ -116,6 +116,9 @@ class SchoolDb extends Schema with QueryTester {
     val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F)))
   }
 
+  def loggerOn =
+    Session.currentSession.setLogger((s:String) => println(s))
+
   def avgStudentAge =
     from(students)(s =>
       compute(avg(s.age))
@@ -142,15 +145,9 @@ class SchoolDb extends Schema with QueryTester {
       select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
     )
 
-  def leftOuterJoinStudentAddresses =
-    from(students, addresses)((s,a) =>
-      select((s,outerJoin(a, s.addressId, a.id)))
-      orderBy(s.id)
-    )
-
   def fullOuterJoinStudentAddresses =
     from(students, addresses)((s,a) =>
-      select(fullOuterJoin(s, a, s.addressId, a.id))
+      select(fullOuterJoin(s, a, s.addressId =? a.id))
       orderBy(s.id)
     )
 
@@ -164,8 +161,6 @@ class SchoolDb extends Schema with QueryTester {
     
     testInstance
     //logQueries = true
-
-    //Session.currentSession.setLogger((s:String) => println(s))
 
     testPartialUpdate1
     
@@ -195,10 +190,18 @@ class SchoolDb extends Schema with QueryTester {
   def testLeftOuterJoin1 {
     import testInstance._ 
 
-    val res =
-      for(t <- leftOuterJoinStudentAddresses)
-      yield (t._1.id, t._2.map(a=>a.id))
+    //loggerOn
+    
+    val leftOuterJoinStudentAddresses =
+      from(students, addresses)((s,a) =>
+        select((s,leftOuterJoin(a, s.addressId =? a.id)))
+        orderBy(s.id)
+      )
 
+    val res =
+      (for(t <- leftOuterJoinStudentAddresses)
+       yield (t._1.id, t._2.map(a=>a.id))).toList
+    
     val expected = List(
       (xiao.id,Some(oneHutchissonStreet.id)),
       (georgi.id,Some(oneHutchissonStreet.id)),
@@ -206,7 +209,7 @@ class SchoolDb extends Schema with QueryTester {
       (gontran.id,Some(oneHutchissonStreet.id)),
       (gaitan.id,None))
     
-    assert(expected == res.toList, "expected :\n " + expected + "\ngot : \n " + res)
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
     
     println('testOuterJoin1 + " passed.")
   }
@@ -258,7 +261,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def testConcatWithOptionalCols = {
 
-    //Session.currentSession.setLogger(m => println(m))
+    //loggerOn
 
     val res = addressesOfStudentsOlderThan24.toList
     

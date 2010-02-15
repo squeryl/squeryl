@@ -2,7 +2,7 @@ package org.squeryl.adapters
 
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
 import org.squeryl.{Session, Table}
-import org.squeryl.dsl.ast.{QueryExpressionElements, SelectElementReference, QueryableExpressionNode, FunctionNode}
+import org.squeryl.dsl.ast._
 
 class OracleAdapter extends DatabaseAdapter {
 
@@ -60,16 +60,14 @@ class OracleAdapter extends DatabaseAdapter {
   override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
 
-  override def writeOuterJoin(qen: QueryableExpressionNode, sw: StatementWriter, left: SelectElementReference[_], right: SelectElementReference[_], outerJoinKind: String) = {
-    sw.write(outerJoinKind)
+  override def writeOuterJoin(oje: OuterJoinExpression, sw: StatementWriter) = {
+    sw.write(oje.leftRightOrFull)
     sw.write(" outer join ")
-    qen.write(sw)
+    oje.queryableExpressionNode.write(sw)
     sw.write(" ")
-    sw.write(qen.alias)
+    sw.write(oje.queryableExpressionNode.alias)
     sw.write(" on ")
-    left.write(sw)
-    sw.write(" = ")
-    right.write(sw)
+    oje.matchExpression.write(sw)
   }
 
 }

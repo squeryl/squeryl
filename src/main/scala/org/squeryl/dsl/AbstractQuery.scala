@@ -144,7 +144,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
      val node: QueryableExpressionNode) {
 
     def give(rs: ResultSet): U = 
-      if(node.isOptionalInOuterJoin && resultSetMapper.isNoneInOuterJoin(rs))
+      if((node.isRightJoined || node.isOuterJoined) && resultSetMapper.isNoneInOuterJoin(rs))
         sample
       else
         queryable.give(resultSetMapper, rs)

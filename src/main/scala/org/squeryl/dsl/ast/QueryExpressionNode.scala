@@ -11,12 +11,13 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     with QueryableExpressionNode {
 
   def tableExpressions: Iterable[QueryableExpressionNode] = 
-    List(views.filter(v => v.outerJoinColumns == None && ! v.inhibited),
-         subQueries.filter(v => v.outerJoinColumns == None)).flatten
+    List(views.filter(v => ! v.isOuterJoined && ! v.inhibited),
+         subQueries.filter(v => ! v.isOuterJoined && ! v.inhibited)).flatten
 
-  def joinTableExpressions: Iterable[QueryableExpressionNode] =
-    List(views.filter(v => v.outerJoinColumns != None && ! v.inhibited),
-         subQueries.filter(v => v.outerJoinColumns != None)).flatten
+  def outerJoinExpressions: Iterable[OuterJoinExpression] =
+    List(views.filter(v => v.isOuterJoined && ! v.inhibited),
+         subQueries.filter(v => v.isOuterJoined && ! v.inhibited))
+            .flatten.map(v => v.outerJoinExpression.get)
   
   val (whereClause, havingClause, groupByClause, orderByClause) =
      _queryYield.queryElements
@@ -49,9 +50,10 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       selectList.toList,
       views.toList,
       subQueries.toList,
+      outerJoinExpressions.map(oje => oje.matchExpression),
       whereClause.toList,
       groupByClause.toList,
-      orderByClause.toList
+      orderByClause.toList      
     ).flatten
 
   def isChild(q: QueryableExpressionNode):Boolean =
@@ -63,7 +65,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def alias = "q" + uniqueId.get
 
-  def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] ={
+  def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] = {
     _selectList.map(se => new ExportedSelectElement(se))
   }
 

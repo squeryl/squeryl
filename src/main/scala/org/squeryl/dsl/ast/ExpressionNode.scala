@@ -199,7 +199,6 @@ class PostfixOperatorNode(val token: String, val arg: ExpressionNode) extends Ex
 }
 
 class TypeConversion(e: ExpressionNode) extends ExpressionNode {
-  //self: ExpressionNode =>
 
   override def inhibited = e.inhibited
 
@@ -258,30 +257,13 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
 
   def inhibited_=(b: Boolean) = _inhibited = b
 
-  /**
-   * outerJoinColumns is None if not an outer join, args are (left col : SelectElementReference, right col : SelectElementReference, outer Join kind: String ("left" or "full")) 
-   */
-  var outerJoinColumns: Option[(SelectElementReference[_],SelectElementReference[_], String)] = None
+  var outerJoinExpression: Option[OuterJoinExpression] = None
 
-  var fullOuterJoinMatchColumn: Option[SelectElementReference[_]] = None
+  def isOuterJoined = outerJoinExpression != None
 
-  def isOptionalInOuterJoin =
-    outerJoinColumns != None || fullOuterJoinMatchColumn != None
+  var isRightJoined = false
   
-  def dumpOuterJoinInfoForAst(sb: StringBuffer) = {
-    if(outerJoinColumns != None) {
-      sb.append("OuterJoin(")
-      sb.append(outerJoinColumns.get._1)
-      sb.append(" ~> ")
-      sb.append(outerJoinColumns.get._2)
-      sb.append(")")
-    }
-    if(fullOuterJoinMatchColumn != None) {
-      sb.append("FullOuterJoin(")
-      sb.append(fullOuterJoinMatchColumn.get)
-      sb.append(")")
-    }
-  }
+  def dumpOuterJoinInfoForAst(sb: StringBuffer) = error("implement me")
   
   def isChild(q: QueryableExpressionNode): Boolean  
 
