@@ -12,7 +12,7 @@ class MusicDbObject extends KeyedEntity[Long] {
 class Artist(var name:String) extends MusicDbObject {
 
   // this returns a Query[Song] which is also an Iterable[Song] :
-  def songs = from(MusicDb.songs)(s => where(s.artistId =? id) select(s))
+  def songs = from(MusicDb.songs)(s => where(s.artistId === id) select(s))
 
   def newSong(title: String, filePath: Option[String]) =
     MusicDb.songs.insert(new Song(title, id, filePath))
@@ -32,7 +32,7 @@ class Song(var title: String, var artistId: Long, var filePath: Option[String]) 
   import MusicDb._
   
   // An alternative (shorter) syntax for single table queries :
-  def artist = artists.where(a => a.id =? artistId).single
+  def artist = artists.where(a => a.id === artistId).single
 
   // Another alternative for lookup by primary key, since Artist is a
   // KeyedEntity[Long], it's table has a lookup[Long](k: Long)
@@ -47,7 +47,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
   // a two table join : 
   def songsInPlaylistOrder =
     from(playlistElements, songs)((ple, s) =>
-      where(ple.playlistId =? id and ple.songId =? s.id)
+      where(ple.playlistId === id and ple.songId === s.id)
       select(s)
       orderBy(ple.songNumber asc)
     )
@@ -60,7 +60,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
     // Option[Int], since the 'max' function (like all aggregates, 'count' being the only exception).
     val nextSongNumber: Int =
       from(playlistElements)(ple =>
-        where(ple.playlistId =? id)
+        where(ple.playlistId === id)
         compute(nvl(max(ple.songNumber), 0))
       )    
     
@@ -72,7 +72,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
   // respectively.
   private def _songCountByArtistId =
     from(artists, songs)((a,s) =>
-      where(a.id =? s.artistId)
+      where(a.id === s.artistId)
       groupBy(a.id)
       compute(count)
     )
@@ -80,7 +80,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
   // Queries are nestable just as they would in SQL
   def songCountForAllArtists  =
     from(_songCountByArtistId, artists)((sca,a) =>
-      where(sca.key =? a.id)
+      where(sca.key === a.id)
       select((a, sca.measures))
     )
 
@@ -95,7 +95,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
 
   def songsOf(artistId: Long) =
     from(playlistElements, songs)((ple,s) =>
-      where(id =? ple.playlistId and ple.songId =? s.id and s.artistId =? artistId)
+      where(id === ple.playlistId and ple.songId === s.id and s.artistId === artistId)
       select(s)
     )
 }

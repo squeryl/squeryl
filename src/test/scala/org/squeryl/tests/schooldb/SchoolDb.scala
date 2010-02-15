@@ -134,12 +134,12 @@ class SchoolDb extends Schema with QueryTester {
 //      Where(
 //       ((s.age > 24) : LogicalBoolean) and
 //       ((24.~ < s.age) : LogicalBoolean) and
-//       (s.addressId =? a.id)
+//       (s.addressId === a.id)
 //     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
          // trigger the implicit conversion if the constant is on the left side, strangely it will do it
          // for methods with non symbol name, like  lessThanz :
       where((24 : NumericalExpression[Int]) < s.age and (24 ~) < s.age)
-    //  Where((s.age < 24) and (s.addressId =? a.id))
+    //  Where((s.age < 24) and (s.addressId === a.id))
 
       //select(&(a.numberz || " "))
       select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
@@ -147,7 +147,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def fullOuterJoinStudentAddresses =
     from(students, addresses)((s,a) =>
-      select(fullOuterJoin(s, a, s.addressId =? a.id))
+      select(fullOuterJoin(s, a, s.addressId === a.id))
       orderBy(s.id)
     )
 
@@ -194,7 +194,7 @@ class SchoolDb extends Schema with QueryTester {
     
     val leftOuterJoinStudentAddresses =
       from(students, addresses)((s,a) =>
-        select((s,leftOuterJoin(a, s.addressId =? a.id)))
+        select((s,leftOuterJoin(a, s.addressId === a.id)))
         orderBy(s.id)
       )
 
@@ -299,7 +299,7 @@ class SchoolDb extends Schema with QueryTester {
   def testDateTypeMapping = {
 
     val mandarinCourse =
-      courses.where(c => c.id =? mandarin.id).single
+      courses.where(c => c.id === mandarin.id).single
 
     assert(mandarinCourse.startDate == feb2010,
       'testDateTypeMapping + " failed, expected " + feb2010 + " got " + mandarinCourse.startDate)
@@ -309,7 +309,7 @@ class SchoolDb extends Schema with QueryTester {
     courses.update(mandarinCourse)
 
     val mandarinCourse2011 =
-      courses.where(c => c.id =? mandarin.id).single
+      courses.where(c => c.id === mandarin.id).single
 
     assert(mandarinCourse.startDate == feb2011,
       'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse.startDate)
@@ -320,7 +320,7 @@ class SchoolDb extends Schema with QueryTester {
   def testDateOptionMapping = {
 
     var groupTh =
-      courses.where(c => c.id =? groupTheory.id).single
+      courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == Some(may2009),
       'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
@@ -332,7 +332,7 @@ class SchoolDb extends Schema with QueryTester {
     courses.update(groupTh)
 
     groupTh =
-      courses.where(c => c.id =? groupTheory.id).single
+      courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == Some(feb2011),
       'testDateOptionMapping + " failed, expected " + Some(feb2011) + " got " + groupTh.finalExamDate)
@@ -345,7 +345,7 @@ class SchoolDb extends Schema with QueryTester {
     courses.update(groupTh)
 
     groupTh =
-      courses.where(c => c.id =? groupTheory.id).single
+      courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == None,
       'testDateOptionMapping + " failed, expected " + None + " got " + groupTh.finalExamDate)
@@ -358,7 +358,7 @@ class SchoolDb extends Schema with QueryTester {
     courses.update(groupTh)
 
     groupTh =
-      courses.where(c => c.id =? groupTheory.id).single
+      courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == Some(may2009),
       'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
@@ -453,7 +453,7 @@ class SchoolDb extends Schema with QueryTester {
 
     val result =
       from(courses)(c=>
-        where(nvl(c.meaninglessLongOption, 3) <> 1234 and nvl(c.meaninglessLongOption, 3) =? 3)
+        where(nvl(c.meaninglessLongOption, 3) <> 1234 and nvl(c.meaninglessLongOption, 3) === 3)
         select(&(nvl(c.meaninglessLongOption, 5)))
       ).toList : List[Long]
 
@@ -467,7 +467,7 @@ class SchoolDb extends Schema with QueryTester {
   
   def testLongTypeMapping = {
 
-    var ht = courses.where(c => c.id =? heatTransfer.id).single
+    var ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(ht.meaninglessLong == 3, "expected 3, got " + ht.meaninglessLong)
     assert(ht.meaninglessLongOption == Some(1234), "expected Some(1234), got " + ht.meaninglessLongOption)
@@ -477,7 +477,7 @@ class SchoolDb extends Schema with QueryTester {
 
     courses.update(ht)
 
-    ht = courses.where(c => c.id =? heatTransfer.id).single
+    ht = courses.where(c => c.id === heatTransfer.id).single
     
     assert(ht.meaninglessLong == -3, "expected -3, got " + ht.meaninglessLong)
     assert(ht.meaninglessLongOption == None, "expected None, got " + ht.meaninglessLongOption)
@@ -486,7 +486,7 @@ class SchoolDb extends Schema with QueryTester {
 
     courses.update(ht)
 
-    ht = courses.where(c => c.id =? heatTransfer.id).single
+    ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(ht.meaninglessLongOption == Some(4321), "expected Some(4321), got " + ht.meaninglessLongOption)
 
@@ -501,18 +501,18 @@ class SchoolDb extends Schema with QueryTester {
 
   def testBooleanTypeMapping = {
 
-    var ht = courses.where(c => c.id =? heatTransfer.id).single
+    var ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(! ht.confirmed, "expected false, got " + ht.confirmed)
 
     ht.confirmed = true
     courses.update(ht)
-    ht = courses.where(c => c.id =? heatTransfer.id).single
+    ht = courses.where(c => c.id === heatTransfer.id).single
     assert(ht.confirmed, "expected true, got " + ht.confirmed)
 
     ht.confirmed = false
     courses.update(ht)
-    ht = courses.where(c => c.id =? heatTransfer.id).single
+    ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(! ht.confirmed, "expected false, got " + ht.confirmed)
     
@@ -521,25 +521,25 @@ class SchoolDb extends Schema with QueryTester {
 
   def testBooleanOptionMapping = {
 
-    //println(students.where(s => s.id =? gontran.id).dumpAst)
+    //println(students.where(s => s.id === gontran.id).dumpAst)
 
-    var g = students.where(s => s.id =? gontran.id).single
+    var g = students.where(s => s.id === gontran.id).single
 
     assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
 
     g.isMultilingual = None
     students.update(g)
-    g = students.where(s => s.id =? gontran.id).single
+    g = students.where(s => s.id === gontran.id).single
     assert(g.isMultilingual == None, "expected None, got " + g.isMultilingual)
 
     g.isMultilingual = Some(false)
     students.update(g)
-    g = students.where(s => s.id =? gontran.id).single
+    g = students.where(s => s.id === gontran.id).single
     assert(! g.isMultilingual.get, "expected Some(false), got " + g.isMultilingual)
 
     g.isMultilingual = Some(true)
     students.update(g)
-    g = students.where(s => s.id =? gontran.id).single
+    g = students.where(s => s.id === gontran.id).single
     assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
     
     passed('testBooleanOptionMapping)
@@ -547,7 +547,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def testFloatType = {
 
-    var t = professors.where(p => p.id =? tournesol.id).single
+    var t = professors.where(p => p.id === tournesol.id).single
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
@@ -555,19 +555,19 @@ class SchoolDb extends Schema with QueryTester {
     t.yearlySalary = 90.5F
     t.weight = Some(75.7F)
     professors.update(t)
-    t = professors.where(p => p.id =? tournesol.id).single
+    t = professors.where(p => p.id === tournesol.id).single
     assert(t.yearlySalary == 90.5, "expected 90.5, got " + t.yearlySalary)
     assert(t.weight == Some(75.7F), "expected Some(75.7), got " + t.weight)
 
     t.weight = None
     professors.update(t)
-    t = professors.where(p => p.id =? tournesol.id).single
+    t = professors.where(p => p.id === tournesol.id).single
     assert(t.weight == None, "expected None, got " + t.weight)
 
     t.yearlySalary = 80.0F
     t.weight = Some(70.5F)
     professors.update(t)
-    t = professors.where(p => p.id =? tournesol.id).single
+    t = professors.where(p => p.id === tournesol.id).single
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
 
@@ -576,7 +576,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def testForUpdate = {
 
-    var t = professors.where(p => p.id =? tournesol.id).forUpdate.single
+    var t = professors.where(p => p.id === tournesol.id).forUpdate.single
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
@@ -590,11 +590,11 @@ class SchoolDb extends Schema with QueryTester {
       from(professors, courseAssigments, students, courses, courseSubscriptions, addresses)(
        (p, ca, s, c, cs, a) =>
         where(
-         p.id =? ca.professorId and
-         ca.courseId =? c.id and
-         cs.studentId =? s.id and
-         cs.courseId =? c.id and
-         s.addressId =? a.id
+         p.id === ca.professorId and
+         ca.courseId === c.id and
+         cs.studentId === s.id and
+         cs.courseId === c.id and
+         s.addressId === a.id
         )
         groupBy(
           s.isMultilingual : TypedExpressionNode[Option[Boolean]],

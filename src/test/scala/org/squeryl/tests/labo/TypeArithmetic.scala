@@ -17,7 +17,7 @@ object TypeArithmetic {
 
     def /[B](b: NumericalExpression[B]) = new BinaryDivOp[A,B](this, b, "/")
 
-    def =?(s: NumericalExpression[_]) = new LBool
+    def ===(s: NumericalExpression[_]) = new LBool
 
     def ~ = this
   }
@@ -437,7 +437,7 @@ object TypeArithmetic {
 
     34 * (1 ~) / 4L : NumericalExpression[Double]
 
-    4 =? (1 ~) + 10L and (1 ~) / 4 =? (1 ~) + 10L :LBool
+    4 === (1 ~) + 10L and (1 ~) / 4 === (1 ~) + 10L :LBool
     println(v1)
   }  
 }

@@ -45,13 +45,13 @@ object Labo {
 ////  GroupByz(s + 1)
 ////  GroupByz(2 + s + 1)
 //
-////  ~:Where(1 =? 2) Select(1); //GroupBy(s + s2)
-////  ~:Where(1 =? 2) Select(1) //.GroupBy(s + 1)
-////  ~:Where(1 =? 2).Select(1) //.GroupBy(2 + s + 1)
+////  ~:Where(1 === 2) Select(1); //GroupBy(s + s2)
+////  ~:Where(1 === 2) Select(1) //.GroupBy(s + 1)
+////  ~:Where(1 === 2).Select(1) //.GroupBy(2 + s + 1)
 ////
-////  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy(ss)
+////  ~:Where("a" + "q" === "z").Select(1) //.GroupBy(ss)
 ////
-////  ~:Where("a" + "q" =? "z").Select(1) //.GroupBy("c")
+////  ~:Where("a" + "q" === "z").Select(1) //.GroupBy("c")
 //
 //
 //  vs(1)
@@ -74,7 +74,7 @@ object Labo {
 //
 //  (4 in List(2,3,4) and ("a" in List("s","f"))) : LogicalBoolean
 //
-//  (4 in List(2,3,4) and "a" =? "3") : LogicalBoolean
+//  (4 in List(2,3,4) and "a" === "3") : LogicalBoolean
 //
 //
 //  ("a" in List("s","f")) : LogicalBoolean
@@ -85,8 +85,8 @@ object Labo {
 //  (min("a") in List("s","f")) : AgregateLogicalBoolean
 //
 //  ((max(4) in List(2,3,4)) and (min("a") in List("s","f"))) : AgregateLogicalBoolean
-//  (1 =? min(3)) : AgregateLogicalBoolean
-//  ((max(4) in List(2,3,4)) and 1 =? min(3)) : AgregateLogicalBoolean
+//  (1 === min(3)) : AgregateLogicalBoolean
+//  ((max(4) in List(2,3,4)) and 1 === min(3)) : AgregateLogicalBoolean
 //
 //  var x = new ArrayBuffer().appendAll(List(1,4,3,"2"))
 //  var y = "allo"

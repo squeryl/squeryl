@@ -21,13 +21,13 @@ object ASTTests {
 
   val q0 =
     from(us,ts)((u,t) =>
-      where(t.x =? u.y)
+      where(t.x === u.y)
       select((t,u))
     )
   
   val q1 =
     from(vs, q0)((v,q) =>
-      where(v.z =? q._1.x)
+      where(v.z === q._1.x)
       select((v,q))
     )
 
@@ -60,8 +60,8 @@ object ASTTests {
 //
 //    val q1 =
 //      From(ts,Sub(us))((t,u) =>
-//        WhereSub(u, u.y =? t.x)
-//        Where(t.x =? u.y)
+//        WhereSub(u, u.y === t.x)
+//        Where(t.x === u.y)
 //        Select((t,u))
 //      )
 //  }
@@ -82,8 +82,8 @@ object ASTTests {
 //
 //    val q1 =
 //      From(ts,Subz(us))((t,subU) =>
-//        subU.Where(u => u.y =? t.x)
-//        Where(t.x =? u.cols.y)
+//        subU.Where(u => u.y === t.x)
+//        Where(t.x === u.cols.y)
 //        Select((t,u))
 //      )
 //  }
@@ -92,7 +92,7 @@ object ASTTests {
 //    From(ts)(t=>
 //     ~:Where(
 //         t.x in From(us)(u =>
-//                  ~:Where(u.y =? t.x) Select(u.y)
+//                  ~:Where(u.y === t.x) Select(u.y)
 //                )
 //       )
 //      Select(t)
