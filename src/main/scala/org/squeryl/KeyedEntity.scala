@@ -1,5 +1,7 @@
 package org.squeryl
 
+import annotations.Transient
+
 
 /**
  *  For use with View[A] or Table[A], when A extends KeyedEntity[K],
@@ -26,4 +28,19 @@ trait KeyedEntity[K] {
   def id: K
 }
 
+
 trait CompositeKeyedEntity[K <: Product] extends KeyedEntity[K]
+
+
+trait Optimistic {
+  self: KeyedEntity[_] =>
+  
+  private var _occVersionNumber: Int = -1
+
+  protected def occVersionNumber = _occVersionNumber
+}
+
+trait EntityMember {
+
+  def entityRoot[B]: Query[B]
+}
