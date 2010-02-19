@@ -1,0 +1,43 @@
+---
+layout: default
+title: Select
+---
+
+All select statements return an immutable Query[T] that
+is itself queryable and Iterable[T].
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+ 
+class Artist(var id: Long, var name:String)  {
+   
+  def songs = 
+    from(MusicDb.songs)(s => where(s.artistId === id) select(s))
+
+}
+]]></script>
+
+
+The next example shows two other ways to select that are useable when 
+selecting a 'row' object from a Queryable[T].
+
+Note that the .lookup[K](k: K) (lookup by key) method on a queryable is only 
+available for queryables that are of the form : Queryable[KeyedEntity[K]]
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+class Song(var title: String, var artistId: Long) extends KeyedEntity {
+ 
+  // the schema can be imported in the scope, to lighten the syntax :
+  import MusicDb._
+  
+  // A shorter syntax for single table queries :
+  def artist = artists.where(a => a.id === artistId).single
+ 
+  // lookup by key is available because Artist extends 
+  // KeyedEntity[Long] : 
+  def lookupArtist = artists.lookup(artistId)
+}
+]]></script>
+
+The classes Artist and Song in this example are part of a one to many relation
+that can be accessed via the methods

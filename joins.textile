@@ -1,0 +1,24 @@
+---
+layout: default
+title: Joins
+---
+
+A two table join :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+class Playlist(var id: Long, var name: String, var path: String) extends KeyedEntity[Long] {
+ 
+  import MusicDb._
+ 
+  // a two table join :
+  def songsInPlaylistOrder =
+    from(playlistElements, songs)((ple, s) =>
+      where(ple.playlistId === id and ple.songId === s.id)
+      select(s)
+      orderBy(ple.songNumber asc)
+    )
+}
+]]></script>
+
+The select clause can return anything that is in the scope, for example it
+could return both joined objects with : select((s, ple))

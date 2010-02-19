@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
+    <title>Squeryl &mdash; {{ page.title }}</title>
+    <style type='text/css'>
+      @import 'styles/default.css';
+      @import 'styles/syntax.css';
+    </style>
+    <style media='print' type='text/css'>
+      @import 'styles/print.css';
+    </style>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="src/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushJava.js"></script>
+	<script type="text/javascript" src="src/shBrushScala.js"></script>
+	<script type="text/javascript" src="scripts/shBrushSql.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCore.css"/>
+	<link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css"/>
+	<script type="text/javascript">
+		SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
+		SyntaxHighlighter.all();
+	</script>
+
+	
+  </head>
+  <body>
+    
+    <div id='wrap'>
+      <div id='header'>
+		<div>A functionnal bridge between your database and your code</div>		
+      </div>
+      <div id='pages'>
+        <ol class='toc'>
+          <li>Start Here
+            <ol class="toc">
+              <a href='index.html'>Home</a>
+              <li><a href='http://github.com/max-l/Squeryl/downloads'>download</a></li>
+              <li><a href='http://wiki.github.com/max-l/Squeryl/'>Wiki</a></li>
+			  <li><a href='http://groups.google.com/group/squeryl'>User support and discussion</a></li>			  
+            </ol>
+          </li>
+          <li>User guide
+            <ol class="toc">			
+              <li><a href='selects.html'>Selects</a></li>
+              <li><a href='joins.html'>Joins</a></li>			  
+              <li><a href='inserts-updates.html'>Inserting and Updating</a></li>
+			  <li><a href='groups-agregates.html'>Group and Agregate queries</a></li>
+			  <li><a href='complete-example.html'>Example</a></li>
+            </ol>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+	  <!--
+        <h1 id='{{ page.title | downcase | replace(' ', '_') }}'>{{ page.title }}</h1>        
+		-->
+		<h1 align='right'>{{ page.title }}</h1><br/>
+        {{ content }}
+      </div>
+    </div>
+  </body>
+</html>
