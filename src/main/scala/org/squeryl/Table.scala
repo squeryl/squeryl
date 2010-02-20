@@ -1,11 +1,12 @@
 package org.squeryl;
 
 import dsl.ast._
-import dsl.boilerplate.Query1
-import dsl.{QueryYield, QueryDsl}
-import internals.{NoOpOutMapper, ResultSetMapper, FieldReferenceLinker, StatementWriter}
-import java.sql.{ResultSet, Statement}
+import dsl.{QueryDsl}
+import internals.{NoOpOutMapper, FieldReferenceLinker, StatementWriter}
+import java.sql.{Statement}
 import scala.reflect.Manifest
+
+
 class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) {
 
   def this(n:String)(implicit manifestT: Manifest[T]) =
@@ -101,6 +102,9 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
     cnt
   }
+
+  def deleteWere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =
+    delete(dsl.from(this)(t => dsl.where(whereClause(t)).select(t)))      
 
   private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {

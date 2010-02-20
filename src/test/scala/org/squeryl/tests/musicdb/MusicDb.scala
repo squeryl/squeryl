@@ -182,7 +182,7 @@ class MusicDb extends Schema with QueryTester {
     
     testDynamicQuery2
     
-    testKeyedEntityImplicitDelete
+    testDeleteVariations
     
     testKeyedEntityImplicitLookup
     
@@ -282,15 +282,23 @@ class MusicDb extends Schema with QueryTester {
 
   import testInstance._
 
-  def testKeyedEntityImplicitDelete = {  
+  def testDeleteVariations = {
 
-    val artistForDelete = artists.insert(new Person("Delete", "Me"))
+    var artistForDelete = artists.insert(new Person("Delete", "Me"))
 
     assert(artists.delete(artistForDelete.id), "delete returned false, expected true")
 
     assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
 
-    passed('testKeyedEntityImplicitDelete)
+    artistForDelete = artists.insert(new Person("Delete", "Me"))
+
+    var c = artists.deleteWere(a => a.id === artistForDelete.id)
+    
+    assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
+
+    assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
+
+    passed('testDeleteVariations)
   }
 
   def inhibitedArtistsInQuery(inhibit: Boolean) =

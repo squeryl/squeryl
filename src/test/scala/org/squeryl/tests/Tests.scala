@@ -12,11 +12,12 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
     
-    //ExpressionDsl2.countOperators
 
-    allTestsOnAllDatabases
+    //org.squeryl.demos.KickTheTires.test
+    
+    //allTestsOnAllDatabases
 
-    //allTestsOnH2
+    allTestsOnH2
   }
 
   def allTestsOnH2 = {
