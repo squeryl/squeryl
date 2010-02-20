@@ -1,0 +1,18 @@
+---
+layout: default
+title: Supported Databases
+---
+
+
+
+* Postgres
+
+* Oracle
+
+* MySql
+
+* H2
+
+
+Supporting an additional database is pretty easy, having
+a glance at the package : <notextile><a target = 'none' href='http://github.com/max-l/Squeryl/tree/master/src/main/scala/org/squeryl/adapters/'>org.squeryl.adapters</a></notextile>

@@ -1,0 +1,154 @@
+---
+layout: default
+title: Mapping Scala types to Sql
+---
+
+Squeryl supports Scala primitive types (AnyVals plus java.util.Date and String)
+and custom types for wrapping Jdbc types via *org.squeryl.CustomType*
+
+
+Numeric types (Byte, Int, Long, Float, Double) have a default mapping
+to the sql type that matches or exceed the bit length of the Scala/Java
+representation.
+
+String types map by default to varchar(128), this can be overriden
+by the length property of the *org.squeryl.Column* annotation.
+
++Mixing primitive types and custom types in a class is *not* a good idea+,
+you get the worst of both worlds.
+
+h2. Primitive types
+
+The main motivation for using primitive types is for performance and symplicity.
+If a query returns N rows of objects with M fields primitive types
+will cause the the garbage collector to handle of N objects, while 
+for custom types it will be N * M.
+
+To use primitive types, simply import org.squeryl.PrimitiveTypeMode._ 
+in the scope where database objects and queries are defined :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  import org.squeryl.PrimitiveTypeMode._
+  
+  class Song(var id: Long, 
+             var title: String, 
+			 var artistId: Long, 
+             var filePath: Option[String], 
+			 var year: Int)
+  
+  from(songs)(s => where(s.title like "%funk%") select(s))  
+]]></script>
+
+that's all there is to it.
+
+
+h2. Custom types
+
+One motivation for using custom wrapper types is to allow fields
+to carry meta data, for example :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+class Age(v: Int) extends IntField(v) with Domain[Int] {
+  def validate(a: Int) = assert(a > 0, "age must be positive, got " + a)
+  def label = "age"
+}
+
+class FirstName(v: String) extends StringField(v) with Domain[String] {
+  def validate(s: String) = assert(s.length <= 50, "first name is waaaay to long : " + s)
+  def label = "first name"
+}
+
+class WeightInKilograms(v: Double) extends DoubleField(v) with Domain[Double] {
+  def validate(d:Double) = assert(d > 0, "weight must be positive, got " + d) 
+  def label = "weight (in kilograms)"
+}
+
+class ReasonOfVisit(v: String) extends StringField(v) with Domain[String] {
+  def validate(s:String) = assert(s.length > 1, "invalid visit reason : " + s)
+  def label = "reason of visit"
+}
+]]></script>
+
+
+Custom types involve a but more work, 
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+object MyCustomTypesMode extends CustomTypesMode {
+
+  type ByteType = ByteField
+
+  type IntType = IntField
+
+  type StringType = StringField
+
+  type DoubleType = DoubleField
+
+  type FloatType = FloatField
+
+  type LongType = LongField
+
+  type BooleanType = BooleanField
+
+  type DateType = DateField
+
+  protected def mapByte2ByteType(i: Byte) = new ByteField(i)
+  protected def mapInt2IntType(i: Int) = new IntField(i)
+  protected def mapString2StringType(s: String) = new StringField(s)
+  protected def mapDouble2DoubleType(d: Double) = new DoubleField(d)
+  protected def mapFloat2FloatType(d: Float) = new FloatField(d)
+  protected def mapLong2LongType(l: Long) = new LongField(l)
+  protected def mapBoolean2BooleanType(b: Boolean) = new BooleanField(b)
+  protected def mapDate2DateType(b: Date) = new DateField(b)
+
+  protected implicit val sampleByte: ByteType = new ByteField(0)
+  protected implicit val sampleInt = new IntField(0)
+  protected implicit val sampleString: StringType = new StringField("")
+  protected implicit val sampleDouble: DoubleType = new DoubleField(0.0)
+  protected implicit val sampleFloat: FloatType = new FloatField(0.0F)
+  protected implicit val sampleLong = new LongField(1)
+  protected implicit val sampleBoolean = new BooleanField(false)
+  protected implicit val sampleDate = new DateField(new Date)
+  
+  //TODO Scala bug report, implicit params should work here , but they don't ...
+  def createLeafNodeOfScalarIntType(i: IntField) =
+    new SelectElementReference[IntType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntType) with NumericalExpression[IntType]
+  def createLeafNodeOfScalarIntOptionType(i: Option[IntField]) =
+    new SelectElementReference[Option[IntType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntTypeOption) with NumericalExpression[Option[IntType]]
+
+  def createLeafNodeOfScalarStringType(s: StringField) =
+    new SelectElementReference[StringType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringType) with StringExpression[StringType]
+  def createLeafNodeOfScalarStringOptionType(s: Option[StringField]) =
+    new SelectElementReference[Option[StringType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringTypeOption) with StringExpression[Option[StringType]]
+
+  def createLeafNodeOfScalarDoubleType(i: DoubleField) =
+    new SelectElementReference[DoubleType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleType) with  NumericalExpression[DoubleType]
+  def createLeafNodeOfScalarDoubleOptionType(i: Option[DoubleField]) =
+    new SelectElementReference[Option[DoubleType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleTypeOption) with  NumericalExpression[Option[DoubleType]]
+
+  def createLeafNodeOfScalarFloatType(i: FloatField) =
+    new SelectElementReference[FloatType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatType) with  NumericalExpression[FloatType]
+  def createLeafNodeOfScalarFloatOptionType(i: Option[FloatField]) =
+    new SelectElementReference[Option[FloatType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatTypeOption) with  NumericalExpression[Option[FloatType]]
+
+  def createLeafNodeOfScalarLongType(i: LongField) =
+    new SelectElementReference[LongType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongType) with  NumericalExpression[LongType]
+  def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
+    new SelectElementReference[Option[LongType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongTypeOption) with  NumericalExpression[Option[LongType]]
+
+  def createLeafNodeOfScalarBooleanType(i: BooleanField) =
+    new SelectElementReference[BooleanType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanType) with  BooleanExpression[BooleanType]
+
+  def createLeafNodeOfScalarBooleanOptionType(i: Option[BooleanField]) =
+    new SelectElementReference[Option[BooleanType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanTypeOption) with  BooleanExpression[Option[BooleanType]]
+
+  def createLeafNodeOfScalarDateType(i: DateField) =
+    new SelectElementReference[DateType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateType) with  DateExpression[DateType]
+
+  def createLeafNodeOfScalarDateOptionType(i: Option[DateField]) =
+    new SelectElementReference[Option[DateType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateTypeOption) with  DateExpression[Option[DateType]]
+}
+
+]]></script>
