@@ -2,18 +2,19 @@
   <head>
     <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
     <title>Squeryl &mdash; {{ page.title }}</title>
-	<!--
-    <style type='text/css'>
-      @import 'styles/default.css';
-      @import 'styles/syntax.css';
-    </style>
-    <style media='print' type='text/css'>
-      @import 'styles/print.css';
-    </style>
 	-->
-	
+
+<link rel="stylesheet" href="css/blueprint/reset.css" type="text/css">
 <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
 <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">	
+
+<link rel="stylesheet" href="css/blueprint/typography.css" type="text/css" media="screen, projection">
+
+<!--
+<link rel="stylesheet" href="css/blueprint/plugins/fancy-type/screen.css" type="text/css">
+<link rel="stylesheet" href="css/liquid.css__z" type="text/css">
+-->
+
 <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -32,30 +33,28 @@
   </head>
   <body>
     
-    <div class='container'>
-      <div  class='span-24 last'> <!-- header-->
-		<div>A functionnal bridge between your database and your code</div>		
+    <div class='container'> <!--<div class='container showgrid'>-->
+      <div  class='span-24 last' id='header'> <!-- header-->
+	    <h1>Squeryl</h1>
+		<h3 class='alt' align='center'>A functionnal bridge between your database and your code</h3>		
+      </div>
+	  <h3>User Guide</h3>
+      <div  class="span-4"> <!-- left side bar -->
+	    <ul class='box'>
+           <li><a href='selects.html'>Selects</a></li>
+           <li><a href='joins.html'>Joins</a></li>
+           <li><a href='inserts-updates-delete.html'>Insert, Update, Delete</a></li>
+		   <li><a href='groups-agregates.html'>Group and Agregates</a></li>
+		   <li><a href='http://github.com/max-l/Squeryl/blob/master/src/test/scala/org/squeryl/tests/demos/MusicDb.scala'>Compilable examples</a></li>
+	    </ul>
       </div>
 	  
-      <div  class="span-6"> <!-- left side bar -->
-        <ol>
-          <li>User guide
-            <ol>			
-              <li><a href='selects.html'>Selects</a></li>
-              <li><a href='joins.html'>Joins</a></li>			  
-              <li><a href='inserts-updates-delete.html'>Insert, Updating and Delete</a></li>
-			  <li><a href='groups-agregates.html'>Group and Agregate queries</a></li>
-			  <li><a href='http://github.com/max-l/Squeryl/blob/master/src/test/scala/org/squeryl/tests/demos/MusicDb.scala'>All the example in a single file</a></li>
-            </ol>
-          </li>
-        </ol>
-      </div>
-      <div class='span-14'>
-		<h1 align='right'>{{ page.title }}</h1><br/>
+      <div class='span-19 last'> <!-- ; overflow: scroll; height: 200px;' -->
+		<h2 align='center'>{{ page.title }}</h2>
         {{ content }}
       </div>
-	  
-      <div  class="span-4 last"> <!-- right side bar -->
+<!--	  
+      <div  class="span-4 last"> <!-- right side bar --
 	    <ol>
           <li>
             <ol>
@@ -67,6 +66,7 @@
           </li>	  
 		</ol>
       </div>	  
+-->	  
     </div>
   </body>
 </html>
