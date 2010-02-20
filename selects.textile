@@ -3,7 +3,8 @@ layout: default
 title: Select
 ---
 
-All select statements return an immutable Query[T] that
+
+Select statements return an immutable Query[T] that
 is itself a Queryable[T] and a lazy Iterable[T].
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[

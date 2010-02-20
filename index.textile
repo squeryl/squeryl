@@ -4,11 +4,11 @@ title: Squeryl
 ---
 
 
-Squeryl is a DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language. 
+bq. Squeryl is a DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language. 
 
-It does not try to hide relational database concepts from the developer, on the contrary it exposes them as first class citizens so they can be easily leveraged from within the Scala language. 
+bq. It does not try to hide relational database concepts from the developer, on the contrary it exposes them as first class citizens so they can be easily leveraged from within the Scala language. 
 
-Squeryl statements benefit from static (compile time) validation and can be reused within other statements, which can greatly increase the robustness and the amount of reuse in a persistence layer.
+bq. Squeryl statements benefit from static (compile time) validation and can be reused within other statements, which can greatly increase the robustness and the amount of reuse in a persistence layer.
 
 h3. What Squeryl is
 
