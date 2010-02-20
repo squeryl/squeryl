@@ -1,53 +1,56 @@
 <html>
   <head>
-    <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
     <title>Squeryl &mdash; {{ page.title }}</title>
-	-->
-
-<link rel="stylesheet" href="css/blueprint/reset.css" type="text/css">
-<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
-<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">	
-
-<link rel="stylesheet" href="css/blueprint/typography.css" type="text/css" media="screen, projection">
-
-
-<!--
-
-<link rel="stylesheet" href="css/liquid.css__z" type="text/css">
--->
-
-<!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
 	
+    <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="css/blueprint/reset.css" type="text/css">
+    <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">	
+    <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->		
+    <link rel="stylesheet" href="css/blueprint/typography.css" type="text/css" media="screen, projection">
+    
+	<link   type="text/css" rel="stylesheet" href="styles/shCore.css"/>
+	<link   type="text/css" rel="stylesheet" href="styles/shThemeDefault.css"/>
+
 	<script type="text/javascript" src="src/shCore.js"></script>
 	<script type="text/javascript" src="src/shBrushJava.js"></script>
 	<script type="text/javascript" src="src/shBrushScala.js"></script>
-	<script type="text/javascript" src="src/shBrushSql.js"></script>
-	<link type="text/css" rel="stylesheet" href="styles/shCore.css"/>
-	<link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css"/>
+	<script type="text/javascript" src="src/shBrushSql.js"></script>	
 	<script type="text/javascript">
 		SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
 		SyntaxHighlighter.all();
 	</script>
-
 	
+	<style type="text/css">
+	  div.ligne {border:1px solid; color:F6F4DA; border-bottom-style:solid;}
+	</style>	
   </head>
   <body>
-    
-    <div class='container'> <!--<div class='container showgrid'>-->
-      <div  class='span-24 last' id='header'> <!-- header-->
+    <div  class='container'> <!--<div class='container showgrid'>-->
+      <div  class='span-24 last' style="background: "> <!-- header-->
 	    <h1 align='center'>Squeryl</h1>
-		<h3 align='center'><i>Functionnaly bridging persisted and live Scala objects with a strongly typed DSL</i></h3>		
+		<h3 align='center'><i>Functionnaly bridging persisted and live Scala objects with a strongly typed DSL</i></h3>
+		<h2 align='center'>{{ page.title }}</h2>
       </div>
-	  
-      <div  class="span-4"> <!-- left side bar -->
+	  			
+      <div class="span-4"> <!-- left side bar -->
+	    <h3><a href='index.html'>Home</a></h3>		
+		
+        <ul>
+          <li><a target='none' href='http://github.com/max-l/Squeryl/downloads'>download</a></li>
+          <li><a target='none' href='http://wiki.github.com/max-l/Squeryl/'>Wiki</a></li>
+          <li><a target='none' href='http://groups.google.com/group/squeryl'>User support and discussion</a></li>			  
+        </ul>		
+		  
 	    <h3>User Guide</h3>
 	    <ul>
            <li><a href='selects.html'>Selects</a></li>
            <li><a href='joins.html'>Joins</a></li>
            <li><a href='inserts-updates-delete.html'>Insert, Update, Delete</a></li>
 		   <li><a href='groups-agregates.html'>Group and Agregates</a></li>
-		   <li><a href='http://github.com/max-l/Squeryl/blob/master/src/test/scala/org/squeryl/tests/demos/MusicDb.scala'>Compilable examples</a></li>		   	  
+		   <li><a target='none' href='http://github.com/max-l/Squeryl/blob/master/src/test/scala/org/squeryl/tests/demos/MusicDb.scala'>Compilable examples</a></li>		   	  
 	    </ul>
 		
 	    <ul>
@@ -57,24 +60,11 @@
       </div>
 	  
 	  
-      <div class='span-19 last'> <!-- ; overflow: scroll; height: 200px;' -->
-		<h2 align='center'>{{ page.title }}</h2>
+      <div class='span-19 last'> <!-- ; overflow: scroll; height: 200px;' -->		
+		<div class='ligne'></div>
+		<br/>
         {{ content }}
       </div>
-<!--	  
-      <div  class="span-4 last"> <!-- right side bar --
-	    <ol>
-          <li>
-            <ol>
-              <a href='index.html'>Home</a>
-              <li><a href='http://github.com/max-l/Squeryl/downloads'>download</a></li>
-              <li><a href='http://wiki.github.com/max-l/Squeryl/'>Wiki</a></li>
-			  <li><a href='http://groups.google.com/group/squeryl'>User support and discussion</a></li>			  
-            </ol>
-          </li>	  
-		</ol>
-      </div>	  
--->	  
     </div>
   </body>
 </html>
