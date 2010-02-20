@@ -4,7 +4,7 @@ title: Select
 ---
 
 All select statements return an immutable Query[T] that
-is itself queryable and Iterable[T].
+is itself a Queryable[T] and a lazy Iterable[T].
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
  
@@ -16,12 +16,12 @@ class Artist(var id: Long, var name:String)  {
 }
 ]]></script>
 
+The lazyness here means that the query is sent to the database only
+when starting iteration, or in other words, when Iterable.iterator is called.
 
-The next example shows two other ways to select that are useable when 
-selecting a 'row' object from a Queryable[T].
 
-Note that the .lookup[K](k: K) (lookup by key) method on a queryable is only 
-available for queryables that are of the form : Queryable[KeyedEntity[K]]
+Now an alternative (shorter but less generic) syntax,
+and a lookup by key mechanism :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
@@ -39,5 +39,89 @@ class Song(var title: String, var artistId: Long) extends KeyedEntity {
 }
 ]]></script>
 
+Note that the .lookup[K](k: K) i.e. lookup by key method on a Table[T] is only 
+available for Table[T] that are of the form : Table[KeyedEntity[K]]
+
 The classes Artist and Song in this example are part of a one to many relation
-that can be accessed via the methods
+that can be accessed via the methods.
+
+h2. Nesting
+
+For the next examples, the following query will nested as an inner query 
+into other queries :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  def songsInPlaylistOrder =
+    from(playlistElements, songs)((ple, s) =>
+      where(ple.playlistId === id and ple.songId === s.id)
+      select(s)
+      orderBy(ple.songNumber asc)
+    )
+]]></script>
+
+h3. Nesting in the From clause :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
+      from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
+        where(s.id === 123)
+        select(s)
+      )
+]]></script>
+
+h3. Nesting in the Where clause :
+
+Joins can also be nested in the where clause just like in SQL :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    val songsFromThe60sInFunkAndLatinJazzPlaylist =
+      from(songs)(s=>
+        where(s.id in 
+		  from(funkAndLatinJazz.songsInPlaylistOrder)
+          (s2 => select(s2.id))
+		)
+        select(s)
+      )
+
+    for(s <- songsFromThe60sInFunkAndLatinJazzPlaylist)
+      println(s.title + " : " + s.year)
+]]></script>
+
+ The Sql generated for the above statement is :
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+Select
+  Song1.year as Song1_year,
+  Song1.title as Song1_title,
+  Song1.filePath as Song1_filePath,
+  Song1.artistId as Song1_artistId,
+  Song1.id as Song1_id
+From
+  Song Song1
+Where
+ (Song1.id in 
+  (Select
+     q3.Song5_id as q3_Song5_id
+   From
+     (Select
+        Song5.year as Song5_year,
+        Song5.title as Song5_title,
+        Song5.filePath as Song5_filePath,
+        Song5.artistId as Song5_artistId,
+        Song5.id as Song5_id
+      From
+        PlaylistElement PlaylistElement4,
+        Song Song5
+      Where
+        ((PlaylistElement4.playlistId = ?) and (PlaylistElement4.songId = Song5.id))
+      Order By
+        PlaylistElement4.songNumber Asc
+      )  q3   
+  ))
+
+]]></script>
+
+Doing a 3 level nested join is by no means necessary and serves
+no other purposes than demonstration.
+

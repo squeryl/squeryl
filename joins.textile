@@ -20,5 +20,52 @@ class Playlist(var id: Long, var name: String, var path: String) extends KeyedEn
 }
 ]]></script>
 
-The select clause can return anything that is in the scope, for example it
-could return both joined objects with : select((s, ple))
+  The select clause can return anything that is in the scope, for example it
+  could return both joined objects with a Tuple2 : select((s, ple))
+
+A Left Outer Join is done by calling leftOuterJoin within the select clause,
+where the fist parameter is the row object variable, and the second a boolean clause.
+
+This query returns the joined objects in a tuple, leftOuterJoin causes the second tuple 
+member to be an Option[Rating]
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    var ratingsForAllSongs =
+      from(songs, ratings)((s,r) =>
+          select((s, leftOuterJoin(r, s.id === r.songId)))
+      )
+
+    for(sr <- ratingsForAllSongs)
+      println(sr._1.title + " rating is " + 
+	  sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
+	  
+]]></script>
+
+The signatures of (left, right and full) outer joins ensure that the null part of the 
+outer join returns an Option[] 
+
+leftOuterJoin[A](a: A, b: =>LogicalBoolean): Option[A]
+
+rightOuterJoin[A,B](a: A, b: B, c: =>LogicalBoolean): (Option[A], B)
+
+fullOuterJoin[A,B](a: A, b:B, c: =>LogicalBoolean): (Option[A], Option[B])
+
+The SQL of the previous query is : 
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+Select
+  Song1.id as Song1_id,
+  Rating2.songId as Rating2_songId,
+  Rating2.songId as Rating2_songId,
+  Rating2.appreciationScore as Rating2_appreciationScore,
+  Rating2.userId as Rating2_userId,
+  Song1.year as Song1_year,
+  Song1.title as Song1_title,
+  Song1.filePath as Song1_filePath,
+  Song1.artistId as Song1_artistId,
+  Song1.id as Song1_id
+From
+  Song Song1
+  left outer join Rating as Rating2 on (Song1.id = Rating2.songId)
+]]></script>

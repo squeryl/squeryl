@@ -1,0 +1,63 @@
+---
+layout: default
+title: Insert, Update and Delete
+---
+
+h2. Insert 
+
+The insert mechanism is the least suprising of all : 
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    val herbyHancock = 
+	  artists.insert(new Artist("Herby Hancock"))
+	  
+    val ponchoSanchez = 
+	  artists.insert(new Artist("Poncho Sanchez"))
+	  
+    val theMeters = 
+	  artists.insert(new Artist("The Meters"))	
+]]></script>
+
+h2. Update 
+
+There are two forms of updates :
+
+1. Full
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  watermelonMan.title = "The Watermelon Man"
+  watermelonMan.year = watermelonMan.year + 1  
+  songs.update(watermelonMan)
+]]></script>
+
+
+2. Partial :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    update(songs)(s =>
+      where(s.title === "Watermelon Man")
+      set(s.title := "The Watermelon Man",
+          s.year  := s.year.~ + 1)
+    )	
+]]></script>
+
+(The explanation for the '~' in s.year.~ is here)
+
+The sql will be : 
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+  update Song set
+    title = ?,
+    year = (year + ?)
+  Where
+    (title = ?)
+]]></script>
+
+
+h2. Delete
+
+Delete is done by Key (when objects extend KeyedEntity[K]) or
+with a 
