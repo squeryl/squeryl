@@ -2,7 +2,8 @@ package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
 import java.sql.{ResultSet, SQLException, PreparedStatement, Connection}
-import org.squeryl.{Schema, CustomType, Session, Table}
+import org.squeryl.{Schema, Session, Table}
+import org.squeryl.customtypes.CustomType
 
 class DatabaseAdapter {
 

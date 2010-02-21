@@ -2,9 +2,9 @@ package org.squeryl.internals
 
 import org.squeryl.annotations.Column
 import java.lang.annotation.Annotation
-import org.squeryl.CustomType
-import java.lang.reflect.{Constructor, Field, Member, Method}
+import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
+import org.squeryl.customtypes.CustomType
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
