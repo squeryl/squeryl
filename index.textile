@@ -10,7 +10,7 @@ h4. It does not try to hide relational database concepts from the developer, on 
 
 <div class='ligne'></div><br/>
 
-h3. The main motivations for Squeryl are
+h3. Motivation
 
 * _*Static validation of database code*_ : 
 If your Squeryl statements compile, chances are pretty good that they won't fail at runtime.

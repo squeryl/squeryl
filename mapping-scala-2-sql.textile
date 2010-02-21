@@ -8,22 +8,6 @@ h2. Nullity in Squeryl
 
 The Squeryl counterpart to Null Sql values or column types is *Option[]*
 
-<!--
-|_. SQL      |_. Squeryl |_. Default constraint |
-| 1 byte     | Byte      | not null             |
-| 4 byte     | Int       | not null |
-| 4 byte     | Float     | not null |
-| 8 bytes    | Long      | not null |
-| 8 bytes    | Double    | not null |
-| 128 chars  | String    | not null |
-| 1 byte     | Option[Byte]      | null |
-| 4 byte     | Option[Int]       | null |
-| 8 byte     | Option[Long]      | null |
-| 4 byte     | Option[Float]     | null |
-| 8 byte     | Option[Double]    | null |
-| 128 chars  | Option[String]    | null |
--->
-
 Squeryl supports Scala primitive types (all AnyVal), java.util.Date and String.
 
 Numeric types (Byte, Int, Long, Float, Double) have a default mapping
