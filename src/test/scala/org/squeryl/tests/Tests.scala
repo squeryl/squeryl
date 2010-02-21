@@ -8,14 +8,15 @@ import java.sql.DriverManager
 import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleAdapter}
 import schooldb.SchoolDb
 import org.squeryl.{Session}
+
+
 object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
-    
 
-    //org.squeryl.demos.KickTheTires.test
-    
     //allTestsOnAllDatabases
+    
+    //org.squeryl.demos.KickTheTires.testWithH2
 
     allTestsOnH2
   }
@@ -54,6 +55,8 @@ object Tests extends QueryTester {
       (new MusicDb).test1
       (new TestCustomTypesMode).testAll
     }
+
+    org.squeryl.demos.KickTheTires.test(session)
 
     if(!session.connection.getAutoCommit)
       session.connection.commit

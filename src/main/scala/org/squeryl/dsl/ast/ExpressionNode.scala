@@ -263,7 +263,14 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
 
   var isRightJoined = false
   
-  def dumpOuterJoinInfoForAst(sb: StringBuffer) = error("implement me")
+  def dumpOuterJoinInfoForAst(sb: StringBuffer) =
+    if(isOuterJoined) {
+      val oje = outerJoinExpression.get
+      sb.append(oje.leftRightOrFull)
+      sb.append("OuterJoin(")
+      sb.append(oje.matchExpression.writeToString)
+      sb.append(")")
+    }
   
   def isChild(q: QueryableExpressionNode): Boolean  
 

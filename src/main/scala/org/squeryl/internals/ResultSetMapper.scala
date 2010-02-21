@@ -5,10 +5,40 @@ import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.SelectElement
 
 
-trait OutMapper[T] {
+
+trait ResultSetUtils {
+
+  def dumpRow(rs:ResultSet) = {
+    val md = rs.getMetaData
+   (for(i <- 1 to md.getColumnCount)
+      yield ""+rs.getObject(i)+":"+_simpleClassName(md.getColumnClassName(i)))
+    .mkString("ResultSetRow:[",",","]")
+  }
+
+  private def _simpleClassName(className: String) = {
+    val idx = className.lastIndexOf(".")
+    if(idx < 0)
+      className
+    else
+      className.substring(idx + 1, className.length)
+  }
+
+  def dumpRowValues(rs:ResultSet) = {
+    val md = rs.getMetaData
+   (for(i <- 1 to md.getColumnCount)
+      yield ""+rs.getObject(i)).mkString("[",",","]")
+  }  
+}
+
+object ResultSetUtils extends ResultSetUtils
+
+
+trait OutMapper[T] extends ResultSetUtils {
 
   override def toString =
-    "$OM(" + index + "," + sample.asInstanceOf[AnyRef].getClass.getSimpleName + ")"
+    "$OM(" + index + "," +
+    sample.asInstanceOf[AnyRef].getClass.getSimpleName + ")" +
+    (if(isActive) "*" else "")
 
   var index: Int = -1
 
@@ -16,7 +46,13 @@ trait OutMapper[T] {
   
   def map(rs: ResultSet): T =
     if(isActive)
-      doMap(rs)
+      try {
+        doMap(rs)
+      }
+      catch {
+        case e:Exception => throw new RuntimeException(
+          "Exception while mapping column with OutMapper:\n" + this + "\nand resultSet :\n" + dumpRow(rs))
+      }
     else
       sample
 
@@ -62,7 +98,11 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
 
   def typeOfExpressionToString(idx: Int) = outMappers.apply(idx).typeOfExpressionToString
 
-  def activate(i: Int) = outMappers.apply(i).isActive = true
+  def activate(i: Int, jdbcIndex: Int) = {
+    val m = outMappers.apply(i)
+    m.isActive = true
+    m.index = jdbcIndex
+  }
 
   def isActive(i: Int) = outMappers.apply(i).isActive
 
@@ -87,7 +127,7 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
   }
 }
 
-class ResultSetMapper {  
+class ResultSetMapper extends ResultSetUtils {  
 
   private val _yieldValuePushers = new ArrayBuffer[YieldValuePusher]
 
@@ -107,7 +147,8 @@ class ResultSetMapper {
     'ResultSetMapper + ":" + Integer.toHexString(System.identityHashCode(this)) +
      _fieldMapper.mkString("(",",",")") +
     "-" + groupKeysMapper.getOrElse("") +
-    "-" + groupMeasuresMapper.getOrElse("")
+    "-" + groupMeasuresMapper.getOrElse("") +
+    (if(isActive) "*" else "")
 
 
   def addColumnMapper(cm: ColumnToFieldMapper) =
@@ -147,18 +188,6 @@ class ResultSetMapper {
       }
     }
   }
-
-  def dumpRow(rs:ResultSet) = {
-    val md = rs.getMetaData
-   (for(i <- 1 to md.getColumnCount)
-      yield ""+rs.getObject(i)+":"+md.getColumnClassName(i)).mkString("[",",","]")
-  }
-
-  def dumpRowValues(rs:ResultSet) = {
-    val md = rs.getMetaData
-   (for(i <- 1 to md.getColumnCount)
-      yield ""+rs.getObject(i)).mkString("[",",","]")
-  }
 }
 
 class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper: OutMapper[_])  {
@@ -177,5 +206,6 @@ class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper:
 
 
   override def toString =
-    "$(" + index + "->&("+selectElement.writeToString+")"
+    "$(" + index + "->&("+selectElement.writeToString+")" +
+    (if(mapper.isActive) "*" else "")
 }

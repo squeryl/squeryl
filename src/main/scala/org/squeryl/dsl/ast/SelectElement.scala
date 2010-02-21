@@ -26,7 +26,7 @@ trait SelectElement extends ExpressionNode {
 
   def prepareColumnMapper(index: Int): Unit
 
-  def prepareMapper: Unit
+  def prepareMapper(jdbcIndex: Int): Unit
 
   override def inhibited =
     origin.inhibited
@@ -75,9 +75,9 @@ class TupleSelectElement
     else
       columnToTupleMapper.get.typeOfExpressionToString(indexInTuple)
 
-  override def prepareMapper =
+  override def prepareMapper(jdbcIndex: Int) =
     if(columnToTupleMapper != None)
-      columnToTupleMapper.get.activate(indexInTuple)
+      columnToTupleMapper.get.activate(indexInTuple, jdbcIndex)
 
   override def toString =
     'TupleSelectElement + ":" + indexInTuple + ":" + writeToString
@@ -102,7 +102,7 @@ class FieldSelectElement
 
   private var columnMapper: Option[ColumnToFieldMapper] = None
 
-  def prepareMapper =
+  def prepareMapper(jdbcIndex: Int) =
     if(columnMapper != None) {
       resultSetMapper.addColumnMapper(columnMapper.get)
       resultSetMapper.isActive = true
@@ -135,7 +135,7 @@ class ValueSelectElement
     else
       yieldPusher.get.selectElement.typeOfExpressionToString
   
-  override def prepareMapper =
+  override def prepareMapper(jdbcIndex: Int) =
     if(yieldPusher != None) {
       resultSetMapper.addYieldValuePusher(yieldPusher.get)
       resultSetMapper.isActive = true
@@ -236,8 +236,8 @@ class ExportedSelectElement
   override def inhibited =
     selectElement.inhibited
 
-  override def prepareMapper =
-    selectElement.prepareMapper
+  override def prepareMapper(jdbcIndex: Int) =
+    selectElement.prepareMapper(jdbcIndex)
 
   def prepareColumnMapper(index: Int) =
     selectElement.prepareColumnMapper(index)

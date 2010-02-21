@@ -75,8 +75,11 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
     if(_query.isRoot) {
 
-      for(oen <- selectList)
-        oen.prepareMapper
+      var jdbcIndex = 1
+      for(oen <- selectList) {
+        oen.prepareMapper(jdbcIndex)
+        jdbcIndex += 1
+      }
 
       var idGen = 0
       visitDescendants((node,parent,i) => {

@@ -45,7 +45,10 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
   def addParam(p: AnyRef) = _paramList.append(p)
 
   override def toString =
-    _paramList.mkString(statement+"\n ^[",",","]")
+    if(_paramList.size == 0)
+      statement
+    else
+      _paramList.mkString(statement+"\njdbcParams:[",",","]")
   
   private val INDENT_INCREMENT = 2
   

@@ -22,6 +22,4 @@ class H2Adapter extends DatabaseAdapter {
 
     res
   }
-
-  override def logResultSetRow(s: Session, rs: ResultSet) = s.log(rs.toString)
 }

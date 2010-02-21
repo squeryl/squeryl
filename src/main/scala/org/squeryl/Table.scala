@@ -37,9 +37,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     if(cnt != 1)
       error("failed to insert")
 
-    val rs = s.getGeneratedKeys
-
-    if(posoMetaData.primaryKey != None && posoMetaData.primaryKey.get.isAutoIncremented) {
+    if(posoMetaData.primaryKey != None && posoMetaData.primaryKey.get.isAutoIncremented) {      
+      val rs = s.getGeneratedKeys
       assert(rs.next,
         "getGeneratedKeys returned no rows for the auto incremented\n"+
         " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+

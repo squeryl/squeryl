@@ -4,6 +4,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.adapters.H2Adapter
 import org.squeryl.{Query, Session, KeyedEntity, Schema}
 import java.sql.SQLException
+import org.squeryl.dsl.GroupWithMeasures
 // The root object of the schema. Inheriting KeyedEntity[T] is not mandatory
 // it just makes primary key methods available (delete and lookup) on tables.
 class MusicDbObject extends KeyedEntity[Long] {
@@ -80,7 +81,7 @@ class Playlist(var name: String, var path: String) extends MusicDbObject {
   // New concept : a group query with aggregate functions return GroupWithMeasures[K,M]
   // where K and M are tuples whose members correspond to the group by list and compute list
   // respectively.
-  private def _songCountByArtistId =
+  def _songCountByArtistId: Query[GroupWithMeasures[Long,Long]] =
     from(artists, songs)((a,s) =>
       where(a.id === s.artistId)
       groupBy(a.id)
@@ -133,14 +134,6 @@ object MusicDb extends Schema {
 
 object KickTheTires {
 
-  //A Squeryl session is a thin wrapper over a JDBC connection :
-  Class.forName("org.h2.Driver");
-  val session = Session.create(
-    java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
-    //Currently there are adapters for Oracle, Postgres, MySql and H2 :
-    new H2Adapter
-  )
-  
   import MusicDb._
 
   def initSchema = {
@@ -148,13 +141,25 @@ object KickTheTires {
       MusicDb.drop // we normally *NEVER* do this !!
     }
     catch {
-      case e:SQLException => println(" schema does not yet exist :" + e.getMessage)
+      case e:SQLException => println(" schema does not yet exist, it will be created.")
     }
 
     MusicDb.create
+    println("schema created.")
   }
 
-  def test = session.work {
+  def testWithH2 = {
+    //A Squeryl session is a thin wrapper over a JDBC connection :
+    Class.forName("org.h2.Driver");
+    val session = Session.create(
+      java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
+      //Currently there are adapters for Oracle, Postgres, MySql and H2 :
+      new H2Adapter
+    )
+    test(session)
+  }
+
+  def test(session: Session) = session.work {
 
     initSchema
     
@@ -181,7 +186,7 @@ object KickTheTires {
     decadeOf1960.addSong(funkifyYouLife)
     decadeOf1960.addSong(goodOldFunkyMusic)
 
-    Session.currentSession.setLogger(m => println(m))
+    //Session.currentSession.setLogger(m => println(m))
 
     // Nesting a query in a where clause : 
     val songsFromThe60sInFunkAndLatinJazzPlaylist =
@@ -190,8 +195,8 @@ object KickTheTires {
         select(s)
       )
 
-    for(s <- songsFromThe60sInFunkAndLatinJazzPlaylist)
-      println(s.title + " : " + s.year)
+//    for(s <- songsFromThe60sInFunkAndLatinJazzPlaylist)
+//      println(s.title + " : " + s.year)
 
     // Nesting in From clause :
     val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
@@ -206,9 +211,8 @@ object KickTheTires {
           select((s, leftOuterJoin(r, s.id === r.songId)))
       )
 
-    for(sr <- ratingsForAllSongs)
-      println(sr._1.title + " rating is " + sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
-      //println(sr.song + " rating is " + sr.rating.map(r => r.appreciationScore.toString).getOrElse("not rated"))
+//    for(sr <- ratingsForAllSongs)
+//      println(sr._1.title + " rating is " + sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
 
 
     update(songs)(s =>
@@ -223,5 +227,15 @@ object KickTheTires {
     val c = funkAndLatinJazz.removeSongOfArtist(herbyHancock)
 
     assert(c == 1, "expected 1, got " + c + "playList.id:" + funkAndLatinJazz.id + ", artist.id:" + herbyHancock.id)
+
+
+    funkAndLatinJazz._songCountByArtistId.toList
+
+    
+    val q = funkAndLatinJazz.songCountForAllArtists
+
+    //println(q.dumpAst)
+    
+    q.toList
   }
 }
