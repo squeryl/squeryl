@@ -4,28 +4,31 @@ title: Introduction
 ---
 
 
-h4. Squeryl is a DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language.
+h4. Squeryl is a strongly typed DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language.
 
 h4. It does not try to hide relational database concepts from the developer, on the contrary it exposes them as first class citizens so they can be easily leveraged from within the Scala language. 
-
-h4. Squeryl statements benefit from static (compile time) validation and can be reused within other statements, which can greatly increase the robustness and the amount of reuse in a persistence layer.
 
 <div class='ligne'></div><br/>
 
 h3. The main motivations for Squeryl are
 
 * _*Static validation of database code*_ : 
-If you code compiles, chances are pretty good that it will not fail at runtime.
-	
-* _*Minimalism*_ : 
-A persistence layer is just one aspect of an application, simplicity in this aspect helps
-maintaining the overall complexity of an application.
-	
+If your Squeryl statements compile, chances are pretty good that they won't fail at runtime.
+
+* _*Minimalism*_ :
+When complexity in an application exceeds a certain treshold, it's evolution and maintenance become an increasingly difficult, costly, and unpleasant burden.
+A persistence layer is just one aspect among many in an application and should leave as much _conceptual room_ as possible to the other aspects.
+
+<!--
+One of the design goals of Squeryl was that a Squeryl statement should not be more complex than it's Sql counterpart, 
+the complexity of a Squeryl expression adds a bit of complexity because it it strongly typed.
+-->
+
 * _*Reuse*_ : 
 Squeryl expressions are composable, like their Sql counterpart, a given query can be defined 
 once (and only once) and embeded in other queries, making it easy to write DRY(Don't Repeat Yourself) code.
 	
-h3. What it is not 
+h3. Squeryl is not 
 
 * A Database abstraction layer
 

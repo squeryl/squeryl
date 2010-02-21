@@ -27,6 +27,7 @@ a[href$=".rdf"], a[href^="aim:"] {
 /* External links */
 a[href^="http:"]          { background-image: url(icons/external.png); }
 a[href^="mailto:"]        { background-image: url(icons/email.png); }
+
 a[href^="http:"]:visited  { background-image: url(icons/visited.png); }
 
 /* Files */

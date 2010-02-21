@@ -3,6 +3,8 @@ layout: default
 title: Joins
 ---
 
+h2. Inner Joins 
+
 A two table join :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
@@ -23,6 +25,9 @@ class Playlist(var id: Long, var name: String, var path: String) extends KeyedEn
   The select clause can return anything that is in the scope, for example it
   could return both joined objects with a Tuple2 : select((s, ple))
 
+  
+h2. Outer Joins 
+  
 A Left Outer Join is done by calling leftOuterJoin within the select clause,
 where the fist parameter is the row object variable, and the second a boolean clause.
 

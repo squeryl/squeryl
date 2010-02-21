@@ -1,0 +1,67 @@
+---
+layout: default
+title: Group and Agregate Queries
+---
+
+Group and Agregate queries, unlike Select queries do not return
+arbitrary types, but the types Group, Measures and GroupWithMeasures
+that are merely hold tuples. All queries in the following examples
+have type declaration to illustrate the rule governing group query types.
+
+
+|_. Agregate Query Declaration                                                        |_. Query Type                                       |
+|  from(aTable)(t=> groupBy(t.aString,t.anInt))                                       |  Query[ *Group*[(String,Int)]]                     |
+|  from(aTable)(t=> groupBy(t.aString,t.anIntOption))                                 |  Query[ *Group*[(String,Option[Int])]]             |
+|  from(aTable)(t=> compute(avg(t.aString),max(t.anInt)))                             |  Query[ *Measures*[(Option[String],Option[Int])]]  |
+|  from(aTable)(t=> groupBy(t.aString,t.anInt) compute(max(t.aString),avg(t.anInt)))  |  Query[ *GroupWithMeasures*[(String,Int),(Option[String],Option[Float])]] |
+
+
+groupBy and compute clauses are mutually exclusive with the select clause in a query,
+in other words a query uses either select _or_ a combination of groupBy and compute.
+
+Note how avg(t.anInt) transforms the return type into an Option[Float].
+The type conversion rule is that all agregate functions except count results in
+an Option[]. Expressions involving numeric types result in an equal or greater
+bit length number representation, and conversion to floating point is done
+according to the expression tree. Here are some examples :
+
+|_. Expression          |_. Result Type   |
+|  avg(aByte) + aLong   | Option[Double]  |
+|  max(aByte) + aLong   | Option[Long]    |
+|  count + aByte        | Long            |
+
+ 
+The groupBy argument list is replicated in the Sql statement's group by clause
+and in the select, the compute argument list is appended to the select list
+in the generated Sql.
+
+Here is an example, the following Squeryl statement :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  def songCountByArtistId: Query[GroupWithMeasures[Long,Long]] =
+    from(artists, songs)((a,s) =>
+      where(a.id === s.artistId)
+      groupBy(a.id)
+      compute(count)
+    )
+]]></script>
+
+Translates into this Sql statement :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  Select
+    Artist1.id as g0,
+    count(*) as c0
+  From
+    Artist Artist1,
+    Song Song2
+  Where
+    (Artist1.id = Song2.artistId)
+  Group By
+    Artist1.id
+]]></script>
+
+Notice how the groupBy(a.id) causes Artist1.id to be in the 
+select list _*and*_ in the group by clause, while compute(count)
+puts the agregate function 'count' in the select list.
+

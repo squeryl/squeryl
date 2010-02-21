@@ -3,19 +3,41 @@ layout: default
 title: Mapping Scala types to Sql
 ---
 
-Squeryl supports Scala primitive types (AnyVals plus java.util.Date and String)
-and custom types for wrapping Jdbc types via *org.squeryl.CustomType*
 
+h2. Nullity in Squeryl
+
+The Squeryl counterpart to Null Sql values or column types is *Option[]*
+
+<!--
+|_. SQL      |_. Squeryl |_. Default constraint |
+| 1 byte     | Byte      | not null             |
+| 4 byte     | Int       | not null |
+| 4 byte     | Float     | not null |
+| 8 bytes    | Long      | not null |
+| 8 bytes    | Double    | not null |
+| 128 chars  | String    | not null |
+| 1 byte     | Option[Byte]      | null |
+| 4 byte     | Option[Int]       | null |
+| 8 byte     | Option[Long]      | null |
+| 4 byte     | Option[Float]     | null |
+| 8 byte     | Option[Double]    | null |
+| 128 chars  | Option[String]    | null |
+-->
+
+Squeryl supports Scala primitive types (all AnyVal), java.util.Date and String.
 
 Numeric types (Byte, Int, Long, Float, Double) have a default mapping
 to the sql type that matches or exceed the bit length of the Scala/Java
 representation.
 
-String types map by default to varchar(128), this can be overriden
+String fields map by default to varchar(128), this can be overriden
 by the length property of the *org.squeryl.Column* annotation.
 
-+Mixing primitive types and custom types in a class is *not* a good idea+,
-you get the worst of both worlds.
+
+Custom types for wrapping Jdbc types via *org.squeryl.CustomType* are also supported.
+
++Mixing primitive types and custom types in a same class or same query 
+is probably not a good idea+, it should work in theory but is untested.
 
 h2. Primitive types
 
@@ -46,9 +68,27 @@ that's all there is to it.
 h2. Custom types
 
 One motivation for using custom wrapper types is to allow fields
-to carry meta data, for example :
+to carry meta data along with validation, as in the next example.
+
+Custom field types must inherit one of the subtypes of CustomType in the package
+org.squeryl.customtypes, and import the org.squeryl.customtypes.CustomTypesMode._
+into the scope where statements are defined.
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+/**
+ * An example of trait that can be mixed into CustomType,
+ * to add meta data and validation 
+ */
+trait Domain[A] {
+  self: CustomType =>
+
+  def label: String
+  def validate(a: A): Unit
+  def value: A
+
+  validate(value)
+}
 
 class Age(v: Int) extends IntField(v) with Domain[Int] {
   def validate(a: Int) = assert(a > 0, "age must be positive, got " + a)
@@ -69,86 +109,4 @@ class ReasonOfVisit(v: String) extends StringField(v) with Domain[String] {
   def validate(s:String) = assert(s.length > 1, "invalid visit reason : " + s)
   def label = "reason of visit"
 }
-]]></script>
-
-
-Custom types involve a but more work, 
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
-object MyCustomTypesMode extends CustomTypesMode {
-
-  type ByteType = ByteField
-
-  type IntType = IntField
-
-  type StringType = StringField
-
-  type DoubleType = DoubleField
-
-  type FloatType = FloatField
-
-  type LongType = LongField
-
-  type BooleanType = BooleanField
-
-  type DateType = DateField
-
-  protected def mapByte2ByteType(i: Byte) = new ByteField(i)
-  protected def mapInt2IntType(i: Int) = new IntField(i)
-  protected def mapString2StringType(s: String) = new StringField(s)
-  protected def mapDouble2DoubleType(d: Double) = new DoubleField(d)
-  protected def mapFloat2FloatType(d: Float) = new FloatField(d)
-  protected def mapLong2LongType(l: Long) = new LongField(l)
-  protected def mapBoolean2BooleanType(b: Boolean) = new BooleanField(b)
-  protected def mapDate2DateType(b: Date) = new DateField(b)
-
-  protected implicit val sampleByte: ByteType = new ByteField(0)
-  protected implicit val sampleInt = new IntField(0)
-  protected implicit val sampleString: StringType = new StringField("")
-  protected implicit val sampleDouble: DoubleType = new DoubleField(0.0)
-  protected implicit val sampleFloat: FloatType = new FloatField(0.0F)
-  protected implicit val sampleLong = new LongField(1)
-  protected implicit val sampleBoolean = new BooleanField(false)
-  protected implicit val sampleDate = new DateField(new Date)
-  
-  //TODO Scala bug report, implicit params should work here , but they don't ...
-  def createLeafNodeOfScalarIntType(i: IntField) =
-    new SelectElementReference[IntType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntType) with NumericalExpression[IntType]
-  def createLeafNodeOfScalarIntOptionType(i: Option[IntField]) =
-    new SelectElementReference[Option[IntType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntTypeOption) with NumericalExpression[Option[IntType]]
-
-  def createLeafNodeOfScalarStringType(s: StringField) =
-    new SelectElementReference[StringType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringType) with StringExpression[StringType]
-  def createLeafNodeOfScalarStringOptionType(s: Option[StringField]) =
-    new SelectElementReference[Option[StringType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringTypeOption) with StringExpression[Option[StringType]]
-
-  def createLeafNodeOfScalarDoubleType(i: DoubleField) =
-    new SelectElementReference[DoubleType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleType) with  NumericalExpression[DoubleType]
-  def createLeafNodeOfScalarDoubleOptionType(i: Option[DoubleField]) =
-    new SelectElementReference[Option[DoubleType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleTypeOption) with  NumericalExpression[Option[DoubleType]]
-
-  def createLeafNodeOfScalarFloatType(i: FloatField) =
-    new SelectElementReference[FloatType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatType) with  NumericalExpression[FloatType]
-  def createLeafNodeOfScalarFloatOptionType(i: Option[FloatField]) =
-    new SelectElementReference[Option[FloatType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatTypeOption) with  NumericalExpression[Option[FloatType]]
-
-  def createLeafNodeOfScalarLongType(i: LongField) =
-    new SelectElementReference[LongType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongType) with  NumericalExpression[LongType]
-  def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
-    new SelectElementReference[Option[LongType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongTypeOption) with  NumericalExpression[Option[LongType]]
-
-  def createLeafNodeOfScalarBooleanType(i: BooleanField) =
-    new SelectElementReference[BooleanType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanType) with  BooleanExpression[BooleanType]
-
-  def createLeafNodeOfScalarBooleanOptionType(i: Option[BooleanField]) =
-    new SelectElementReference[Option[BooleanType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanTypeOption) with  BooleanExpression[Option[BooleanType]]
-
-  def createLeafNodeOfScalarDateType(i: DateField) =
-    new SelectElementReference[DateType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateType) with  DateExpression[DateType]
-
-  def createLeafNodeOfScalarDateOptionType(i: Option[DateField]) =
-    new SelectElementReference[Option[DateType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateTypeOption) with  DateExpression[Option[DateType]]
-}
-
 ]]></script>

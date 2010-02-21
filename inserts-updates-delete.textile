@@ -19,6 +19,10 @@ The insert mechanism is the least suprising of all :
 	  artists.insert(new Artist("The Meters"))	
 ]]></script>
 
+Objects that extend KeyedEntity[K] where K is a numeric type
+will have their id field assigned their newly created primary key
+value (the mechanism for generating keys is specific to each DatabaseAdaptor).
+
 h2. Update 
 
 There are two forms of updates :
@@ -59,5 +63,19 @@ The sql will be :
 
 h2. Delete
 
-Delete is done by Key (when objects extend KeyedEntity[K]) or
-with a 
+Delete is done either by key (when objects extend KeyedEntity[K]), or
+with a boolean clause via the table's deleteWhere method, 
+example of Table[PlaylistElement].deleteWhere usage :
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+
+  def removeSong(song: Song) =
+    playlistElements.deleteWere(ple => ple.songId === song.id)
+
+  def removeSongOfArtist(artist: Artist) =
+    playlistElements.deleteWere(ple =>
+      (ple.playlistId === id) and
+      (ple.songId in from(songsOf(artist.id))(s => select(s.id)))
+    )
+
+]]></script>

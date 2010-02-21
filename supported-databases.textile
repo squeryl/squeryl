@@ -3,7 +3,7 @@ layout: default
 title: Supported Databases
 ---
 
-
+The databases currently supported are :
 
 * Postgres
 
