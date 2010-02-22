@@ -3,6 +3,15 @@ layout: default
 title: Getting Started
 ---
 
+h2. Requirements 
+
+You will need 
+
+* The Squeryl jar found "here":http://github.com/max-l/Squeryl/downloads
+* The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
+* A JDBC driver for your database, see "supported databases":./supported-databases.html
+
+
 h2. Defining a Schema
 
 Scala classes are mapped to tables via instances of org.squeryl.Table[T],
@@ -33,24 +42,56 @@ that are grouped in a org.squeryl.Schema singleton.
   
 ]]></script>
 
+The org.squeryl.Schema trait can create the Schema or dump the definition to a file.
+
+h2. Connecting to a Database 
+
+All database interaction is done via a Squeryl session (org.squeryl.Session),
+which is just a wrapper over a Jdbc connection, that provides the means
+to bind itself to the thread local storage.
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  import org.squeryl.PrimitiveTypeMode._
+
+    Class.forName("org.postgresql.Driver");
+
+    val session = 
+	  Session.create(
+        java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/squeryl", "squeryl", "squeryl"),
+        new PostgreSqlAdapter
+      )
+
+	//Squeryl database interaction must be done with a using block : 
+	using(session) {       
+	
+	   books.insert(new Author(1, "Michel","Folco"))	   	   
+	   val a = from(authors)(a=> where(a.lastName === "Folco") select(a))
+	}	    	
+]]></script>
+
+The 'using' function binds the session to the current thread for the duration
+of the block, so any method called directly or undirectly from the block
+will be _in the context_ of the session's connection (and transaction).
+
+
 h2. Mapping fields to Columns
 
-Squeryl applies the principle of _Convention over Configuration_ for the 
-correspondance of tables and columns names. 
-By default classes and fields map respectively to tables and columns
-having the same name. This can be overriden by the annotations 
-org.squeryl.annotations.Row and org.squeryl.annotations.Column.
+Squeryl applies the principle of _Convention over Configuration_ :
+The class to table and field to column correspondance is determined
+by name equivalence. It is possible to override a correspondance 
+with the org.squeryl.annotations.Row and org.squeryl.annotations.Column
+annotations.
 
 The Column annotation can also be used to redefine default length
-for String (and also for other types although it should rarely be
-necessary).
+for String/varchar columns (and also for other types although it 
+should rarely be necessary).
 
 h2. Primitive types
 
-The main motivation for using primitive types is for performance and symplicity.
+The main motivations for using primitive types are for performance and symplicity.
 If a query returns N rows of objects with M fields primitive types
-will cause the the garbage collector to handle of N objects, while 
-for custom types it will be N * M.
+will cause the the garbage collector to handle of N objects, while same 
+query using custom types will cause the creation of N * M objects.
 
 To use primitive types, simply import org.squeryl.PrimitiveTypeMode._ 
 in the scope where database objects and queries are defined :
@@ -82,6 +123,9 @@ into the scope where statements are defined.
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
+import org.squeryl.customtypes.CustomTypesMode._
+import org.squeryl.customtypes._
+
 /**
  * An example of trait that can be mixed into CustomType,
  * to add meta data and validation 
@@ -111,8 +155,8 @@ class WeightInKilograms(v: Double) extends DoubleField(v) with Domain[Double] {
   def label = "weight (in kilograms)"
 }
 
-class ReasonOfVisit(v: String) extends StringField(v) with Domain[String] {
-  def validate(s:String) = assert(s.length > 1, "invalid visit reason : " + s)
-  def label = "reason of visit"
-}
+class Patient(firstName: FirstName, age: Age, weight: WeightInKilograms)
+
+val heavyWeights = from(patients)(p => where(p.weight > 250) select(p))
+
 ]]></script>
