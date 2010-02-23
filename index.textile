@@ -3,7 +3,6 @@ layout: default
 title: Introduction
 ---
 
-
 h4. Squeryl is a strongly typed DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language.
 
 h4. It does not try to hide relational database concepts from the developer, on the contrary it exposes them as first class citizens so they can be easily leveraged from within the Scala language. 
@@ -25,9 +24,10 @@ the complexity of a Squeryl expression adds a bit of complexity because it it st
 -->
 
 * _*Reuse*_ : 
-Squeryl expressions are composable, like their Sql counterpart, a given query can be defined 
-once (and only once) and embeded in other queries, making it easy to write DRY(Don't Repeat Yourself) code.
-	
+Squeryl expressions are composable just like their Sql counterpart. A given query can be defined 
+once (and only once) and reused within other queries, making it easy to write DRY(Don't Repeat Yourself) code.
+
+
 h3. Squeryl is not 
 
 * A Database abstraction layer

@@ -3,16 +3,22 @@ layout: default
 title: Group and Agregate Queries
 ---
 
-Group and Agregate queries, unlike Select queries do not return
-arbitrary types, but the types Group, Measures and GroupWithMeasures
-that are merely hold tuples. All queries in the following examples
-have type declaration to illustrate the rule governing group query types.
+Group and Agregate queries, unlike Select queries do not return arbitrary types, but the types : 
+Group, Measures and GroupWithMeasures that merely hold tuples. 
 
+Squeryl diverges slightly from Sql in that agregate functions are *not* allowed within a select.
+They are instead declared in a 'compute' clause wich is in fact a select in disguise, since
+it's arguments end up in the generated Sql select clause. The motivation for this design
+choice is to make it a bit harder to write invalid Select statements, since the DSL forces
+a 'compute' clause to either replace a select or to follow a groupBy.
+
+As the following example illustrates, the types of the resulting tuples are determined by the 
+arguments of the groupBy and compute clause.
 
 |_. Agregate Query Declaration                                                        |_. Query Type                                       |
 |  from(aTable)(t=> groupBy(t.aString,t.anInt))                                       |  Query[ *Group*[(String,Int)]]                     |
 |  from(aTable)(t=> groupBy(t.aString,t.anIntOption))                                 |  Query[ *Group*[(String,Option[Int])]]             |
-|  from(aTable)(t=> compute(avg(t.aString),max(t.anInt)))                             |  Query[ *Measures*[(Option[String],Option[Int])]]  |
+|  from(aTable)(t=> compute(min(t.aString),max(t.anInt)))                             |  Query[ *Measures*[(Option[String],Option[Int])]]  |
 |  from(aTable)(t=> groupBy(t.aString,t.anInt) compute(max(t.aString),avg(t.anInt)))  |  Query[ *GroupWithMeasures*[(String,Int),(Option[String],Option[Float])]] |
 
 
@@ -20,15 +26,7 @@ groupBy and compute clauses are mutually exclusive with the select clause in a q
 in other words a query uses either select _or_ a combination of groupBy and compute.
 
 Note how avg(t.anInt) transforms the return type into an Option[Float].
-The type conversion rule is that all agregate functions except count results in
-an Option[]. Expressions involving numeric types result in an equal or greater
-bit length number representation, and conversion to floating point is done
-according to the expression tree. Here are some examples :
-
-|_. Expression          |_. Result Type   |
-|  avg(aByte) + aLong   | Option[Double]  |
-|  max(aByte) + aLong   | Option[Long]    |
-|  count + aByte        | Long            |
+Rules for type conversions are explained in the "Type Mapping":./type-mapping.html section.
 
  
 The groupBy argument list is replicated in the Sql statement's group by clause

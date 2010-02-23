@@ -131,23 +131,3 @@ Where
 
 Doing a 3 level nested join is by no means necessary and serves
 no other purposes than demonstration.
-
-
-h2. Evaluating select expressions on the database side
-
-The *&* function causes the evaluation of the inner expression to be evaluated
-on the database.
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-  
-    from(artists)(a => 
-      select((&(a.firstName || " " || a.lastName), &(a.id * 1000)))
-	)
-  
-]]></script>
-
-|_. Expression                                    |_. Result Type   |
-|  (aByte + aLong) / aInt                         | Double          |
-|  aByte + aLong + anFloatOption                  | Option[Long]    |
-|  Option[String] &#124;&#124; String             | Option[String]  |
-|  String &#124;&#124; aInt &#124;&#124; String   | String          |

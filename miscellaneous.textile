@@ -1,0 +1,70 @@
+---
+layout: default
+title: <br/>
+---
+
+h2. Type conversions in Sql expressions
+
+The return type of a Squeryl expressions is governed by the followinf rules 
+
+* The bit length of a numeric expressions is equal to the bit length of the longest argument
+
+* An expression results in an Option[] if at least one of it's argument is of type Option[]
+
+* The result of a numerical expression is floating point if it has least one floating point operation or argument
+
+* All agregate functions (avg, min, max, etc...) with the exception of count result in an Option[]
+
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  val q1 = 
+    from(aTable)(t => select( &(t.aLong * t.aFloat) )) : Query[Double]
+
+  val q2 = 
+    from(aTable)(t => compute( avg(t.aByte / t.anInt) )) : Query[Option[Float]]
+	
+  val q3 = 
+    from(aTable)(t => compute( t.aByte + count )) : Query[Long]	
+    
+  val q4 =  // || is the concatenation operator :
+    from(aTable)(t => 
+	  select( &(t.aString || t.aLong || " " || a.IntOption) )) : Query[Option[String]]
+  
+  
+]]></script>
+
+Note how in query *q4* the presence of a single causes the result to becomes an Option[],
+this is consistent with the sql92 standard.
+
+If you are wondering what *&* does, read on :
+
+
+h2. Evaluating expressions on the database side
+
+The expression within the select clause is a closure that evaluate on the client side.
+Sometimes it is usefull to have expressions evaluates on the database side,
+this is what the *&* function does.
+
+The difference between the following statements is that the first evaluates (a.id * 1000) 
+on the client (in the JVM) while for the second, the evaluation is done by the database.
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  	
+    from(artists)(a => 
+      select(a.id * 1000)
+	)  	
+	
+    from(artists)(a => 
+      select(&(a.id * 1000))
+	)  	
+]]></script>
+
+A select can have more than one invocation of *&* :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  		
+    from(artists)(a => 
+      select((&(a.id * 1000), &(a.firstName || a.lastName))
+	)  	
+]]></script>
