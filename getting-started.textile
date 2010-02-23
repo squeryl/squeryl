@@ -35,7 +35,8 @@ that are grouped in a org.squeryl.Schema singleton.
   
   object Library extends Schema {
   
-    val authors = table[Author]
+    //When the table name doesn't match the class name, it is specified here :
+    val authors = table[Author]("AUTHORS")
 	
 	val books = table[Book]
   }
@@ -43,6 +44,20 @@ that are grouped in a org.squeryl.Schema singleton.
 ]]></script>
 
 The org.squeryl.Schema trait can create the Schema or dump the definition to a file.
+
+h2. Mapping fields to Columns
+
+Squeryl applies the principle of _Convention over Configuration_ :
+The class to table and field to column correspondance is determined
+by name equivalence. It is possible to override a field's column name 
+with the org.squeryl.annotations.Column annotations and the class's 
+table name table with the org.squeryl.Schema.table[T](tableName:String) 
+method. as illustrated in the previous example.
+
+The Column annotation can also be used to redefine default length
+for String/varchar columns (and also for other types although it 
+should rarely be necessary).
+
 
 h2. Connecting to a Database 
 
@@ -72,19 +87,6 @@ to bind itself to the thread local storage.
 The 'using' function binds the session to the current thread for the duration
 of the block, so any method called directly or undirectly from the block
 will be _in the context_ of the session's connection (and transaction).
-
-
-h2. Mapping fields to Columns
-
-Squeryl applies the principle of _Convention over Configuration_ :
-The class to table and field to column correspondance is determined
-by name equivalence. It is possible to override a correspondance 
-with the org.squeryl.annotations.Row and org.squeryl.annotations.Column
-annotations.
-
-The Column annotation can also be used to redefine default length
-for String/varchar columns (and also for other types although it 
-should rarely be necessary).
 
 h2. Primitive types
 
