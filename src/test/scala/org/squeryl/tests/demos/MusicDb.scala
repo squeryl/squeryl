@@ -159,7 +159,7 @@ object KickTheTires {
     test(session)
   }
 
-  def test(session: Session) = session.work {
+  def test(session: Session) = using(session) {
 
     initSchema
     

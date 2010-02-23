@@ -22,13 +22,6 @@ trait Session {
   def isLoggingEnabled = _logger != null
 
   def log(s:String) = if(isLoggingEnabled) _logger(s)
-
-  def work[A](a: =>A): A = {
-    bindToCurrentThread
-    val r = a
-    unbindFromCurrentThread
-    r
-  }
 }
 
 object Session {

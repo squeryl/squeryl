@@ -49,8 +49,10 @@ object Tests extends QueryTester {
 
     // tests that do :
     val session = s
+
+    import org.squeryl.PrimitiveTypeMode._
     
-    session.work {
+    using(session) {
       (new SchoolDb).test1
       (new MusicDb).test1
       (new TestCustomTypesMode).testAll

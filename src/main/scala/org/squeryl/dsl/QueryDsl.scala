@@ -15,6 +15,13 @@ trait QueryDsl
   with QueryElements
   with FromSignatures {
 
+  def using[A](session: Session)(a: =>A): A = {
+    session.bindToCurrentThread
+    val r = a
+    session.unbindFromCurrentThread
+    r
+  }
+  
   implicit def __thisDsl:QueryDsl = this  
 
   private class QueryElementsImpl(override val whereClause: Option[()=>LogicalBoolean])
