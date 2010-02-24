@@ -48,7 +48,7 @@ There are two forms of updates :
     )	
 ]]></script>
 
-(The explanation for the '~' in s.year.~ is here)
+(The explanation for the '~' in s.year.~ is "here":./getting-started.html#disambiguate)
 
 The sql will be : 
 

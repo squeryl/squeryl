@@ -58,7 +58,23 @@ The Column annotation can also be used to redefine default length
 for String/varchar columns (and also for other types although it 
 should rarely be necessary).
 
+h2. Nullable columns are mapped with Option[] fields
 
+The default (and strongly recommended) way of mapping nullable columns
+to fields is with the Option[] type. If you use Squeryl to create
+(or generate) your schema, all fields have a not null constraint,
+and Option[] fields are nullable.
+
+* *Important* : If a class has an Option[] field, it becomes *mandatory*
+  to implement a zero argument constructor that initializes Option[] fields
+  with Some() instances (like the Book class in the example above).
+  Failing to do so will cause an exception to be thrown
+  when the table will be instantiated. The reason for this is that type erasures 
+  imposed by the JVM prevents from reflecting on the Option[] type parameter.
+  This constraint could be relaxed in a future version by a compiler plugin
+  that would _tell_ Squeryl the erased type information.
+  
+  
 h2. Connecting to a Database 
 
 All database interaction is done via a Squeryl session (org.squeryl.Session),
@@ -112,6 +128,39 @@ in the scope where database objects and queries are defined :
 ]]></script>
 
 that's all there is to it.
+
+<a name='disambiguate'></a>
+
+* *important* : in PrimitiveTypes mode there can be ambiguities between numeric operators
+
+When using org.squeryl.PrimitiveTypeMode, the compiler will treat an expression like the 
+one in the next example as a Boolean. The .~ function is needed to tell the compiler that the 
+left side is a node of TypedExpressionNode[Int] which will cause the whole expression to be a
+LogicalBoolean which is what the where clause takes :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    from(songs)(s =>
+       where(s.year.~ > 1965)
+       select(s)
+    )  		
+]]></script>		
+
+It is also needed in the following case :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    from(songs)(s =>
+      where(s.year.~ + 10 === 1965)
+      select(s)
+    )
+]]></script>
+
+ This is only required when using PrimitiveType mode, with custom types 
+there is no ambiguity, since custom types are not (AnyVal) numerics.
+
+A compiler plugin could eventually place .~ in all expression nodes.
+An alternative could also be to use other symbols than the 
+standard math operators to avoid the ambiguity altogether.
+Opinions on this choice/tradeoff would be appreciated.
 
 
 h2. Custom types

@@ -5,7 +5,7 @@ title: Introduction
 
 h4. Squeryl is a strongly typed DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language.
 
-h4. It does not try to hide relational database concepts from the developer, on the contrary it exposes them as first class citizens so they can be easily leveraged from within the Scala language. 
+h4. It does not try to hide relational database concepts from the developer, on the contrary it exposes them as first class citizens so they can be leveraged from within the Scala language. 
 
 <div class='ligne'></div><br/>
 
@@ -16,16 +16,11 @@ If your Squeryl statements compile, chances are pretty good that they won't fail
 
 * _*Minimalism*_ :
 When complexity in an application exceeds a certain treshold, it's evolution and maintenance become an increasingly difficult, costly, and unpleasant burden.
-A persistence layer is just one aspect among many in an application and should leave as much _conceptual room_ as possible to the other aspects.
-
-<!--
-One of the design goals of Squeryl was that a Squeryl statement should not be more complex than it's Sql counterpart, 
-the complexity of a Squeryl expression adds a bit of complexity because it it strongly typed.
--->
+A persistence layer addresses only one aspect among many in an application and should leave as much _conceptual room_ as possible for the other aspects.
 
 * _*Reuse*_ : 
 Squeryl expressions are composable just like their Sql counterpart. A given query can be defined 
-once (and only once) and reused within other queries, making it easy to write DRY(Don't Repeat Yourself) code.
+once (and only once) and reused within other queries, can help to write DRY(Don't Repeat Yourself) code.
 
 
 h3. Squeryl is not 

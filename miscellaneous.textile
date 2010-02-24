@@ -5,7 +5,7 @@ title: <br/>
 
 h2. Type conversions in Sql expressions
 
-The return type of a Squeryl expressions is governed by the followinf rules 
+The return type of a Squeryl expressions is governed by the following rules 
 
 * The bit length of a numeric expressions is equal to the bit length of the longest argument
 
