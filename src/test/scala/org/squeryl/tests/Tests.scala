@@ -14,11 +14,11 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
     
-    //org.squeryl.demos.KickTheTires.testWithH2
+    org.squeryl.demos.KickTheTires.testWithH2
 
-    allTestsOnH2
+    //allTestsOnH2
   }
 
   def allTestsOnH2 = {

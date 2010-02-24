@@ -11,7 +11,7 @@ class MusicDbObject extends KeyedEntity[Long] {
   var id: Long = 0
 }
 
-class Artist(var name:String) extends MusicDbObject {
+case class Artist(var name:String) extends MusicDbObject {
 
   // this returns a Query[Song] which is also an Iterable[Song] :
   def songs = from(MusicDb.songs)(s => where(s.artistId === id) select(s))
@@ -120,8 +120,8 @@ class Rating(var userId: Long, var appreciationScore: Int, var songId: Int)
 
 object MusicDb extends Schema {
 
-  val songs = table[Song]
   val artists = table[Artist]
+  val songs = table[Song]
   val playlists = table[Playlist]
   val playlistElements = table[PlaylistElement]
   val ratings = table[Rating]

@@ -22,7 +22,7 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
   override def toString = "Student:" + id + ":" + name
 }
 
-class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], var confirmed: Boolean)
+case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], var confirmed: Boolean)
   extends SchoolDbObject {
 
   def this() = this("", null, Some(new Date), 0, Some(0), false)

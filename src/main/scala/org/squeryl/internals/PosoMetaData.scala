@@ -218,9 +218,6 @@ class PosoMetaData[T](val clasz: Class[T]) {
     
     val memberTypes = new ArrayBuffer[Class[_]]
 
-
-    val getterIsNotVoid = ! classOf[java.lang.Void].isAssignableFrom(property._2.get.getReturnType)
-
     if(hasAField)
       memberTypes.append(property._1.get.getType)
     if(hasGetter)
