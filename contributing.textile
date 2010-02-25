@@ -5,7 +5,7 @@ title: Submiting bugs and Contributing
 
 h2. A snipet of code to reproduce the bug is ideal.
 
-* The bug will get solve quicker
+* The bug will get solved quicker
 
 * It will help to grow the test suite and make 
   it harder for Squeryl to regress !
@@ -44,6 +44,7 @@ Info on building is found "here":http://github.com/max-l/Squeryl/blob/master/rea
 At the moment the test mechanism is to call test code from the org.squeryl.tests.allTestsOnH2
 this runs the tests within "H2":http://www.h2database.com/ as the name implies. 
 (Agreed... Squeryl should migrate to a real test framework, it will eventually happen !!!)
+
 Testing on H2 is really great because it doesn't require you to setup a database, if you build with 
 "SBT":http://code.google.com/p/simple-build-tool you will have an "H2":http://www.h2database.com/ database ready to run the tests, and if 
 the test succeds on H2, making it work on other DBs should be straight forward.
