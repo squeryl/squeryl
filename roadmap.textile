@@ -1,0 +1,23 @@
+---
+layout: default
+title: Roadmap
+---
+
+h2. Features Not yet implemented
+
+* A compiler plugin that provides a greater level of validation <br/><br/>
+Right now there are still ways that one can write an invalid query, 
+i.e. one for which the database will complain at runtime.
+For one can call an agregate function within a group by clause without 
+the compiler preventing it.<br/><br/>
+I have experimented with ways of enforcing this using the type system,
+but it adds complexity not only to the implementation but to the the DSL. <br/><br/>
+A plugin could also give more explanatory (sql specific) messages than the 
+ones given by the type system. <br/><br/>
+At the moment my only reluctance for such a plugin is the required 
+configuration that is required by user code (breaking the minimalism), 
+for this reason, the plugin should limit itself to validation.
+
+* batched updates
+
+Proposals for new features can be discussed on the "discussion group":http://groups.google.com/group/squeryl

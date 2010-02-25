@@ -208,7 +208,7 @@ class WeightInKilograms(v: Double) extends DoubleField(v) with Domain[Double] {
   def label = "weight (in kilograms)"
 }
 
-class Patient(firstName: FirstName, age: Age, weight: WeightInKilograms)
+class Patient(val firstName: FirstName, val age: Age, val weight: WeightInKilograms)
 
 val heavyWeights = from(patients)(p => where(p.weight > 250) select(p))
 
