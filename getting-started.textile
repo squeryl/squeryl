@@ -20,9 +20,11 @@ that are grouped in a org.squeryl.Schema singleton.
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   import org.squeryl.PrimitiveTypeMode._
 
-  class Author(var id: Long, 
-               var firstName: String, 
-			   var lastName: String)
+  class Author(val id: Long, 
+               val firstName: String, 
+			   val lastName: String)
+  
+  // fields can be mutable or immutable 
   
   class Book(var id: Long, 
              var title: String,

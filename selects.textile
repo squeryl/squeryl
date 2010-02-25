@@ -8,7 +8,7 @@ is itself a Queryable[T] and a lazy Iterable[T].
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
  
-class Artist(var id: Long, var name:String)  {
+class Artist(val id: Long, val name:String)  {
    
   def songs = 
     from(MusicDb.songs)(s => where(s.artistId === id) select(s))
