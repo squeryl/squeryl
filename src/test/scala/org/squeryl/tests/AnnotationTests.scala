@@ -1,5 +1,6 @@
 package org.squeryl.tests
 
+import org.squeryl.KeyedEntity
 import org.squeryl.annotations.{Row, Column}
 import org.squeryl.Schema
 
@@ -26,6 +27,20 @@ class Toaster(
   var weightInGrams: Option[String] = None
 }
 
+class NailCutter extends KeyedEntity[Long] {
+
+  val id: Long = 0
+}
+
+
+class KeyedObject extends KeyedEntity[Long] {
+  val id: Long = 0
+}
+
+class DescendantOfKeyedObject extends KeyedObject {
+  //val pouf = "pouf"
+}
+
 class AnnotationTests {
 
 
@@ -43,6 +58,10 @@ class AnnotationTests {
 
   class ToastersInc extends Schema {
 
+    val descendantOfKeyedObjects = table[DescendantOfKeyedObject]
+    
+    val nailCutters = table[NailCutter]
+
     val toasters = table[Toaster]
   }
 
@@ -53,6 +72,11 @@ class AnnotationTests {
     val ti = new ToastersInc
     import ti._
 
+    if(descendantOfKeyedObjects.findFieldMetaDataForProperty("id") == None)
+      error("PosoMetaData has failed to build immutable field 'id'.")
+
+    if(nailCutters.findFieldMetaDataForProperty("id") == None)
+      error("PosoMetaData has failed to build immutable field 'id'.")
     
     val brandNameMD = toasters.findFieldMetaDataForProperty("brandName").get
     assert(brandNameMD.columnName == "BRAND_NAME", "expected 'BRAND_NAME' got " + brandNameMD.columnName)

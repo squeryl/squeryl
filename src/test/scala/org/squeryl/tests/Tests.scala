@@ -16,7 +16,7 @@ object Tests extends QueryTester {
 
     //allTestsOnAllDatabases
     
-    org.squeryl.demos.KickTheTires.testWithH2
+    //org.squeryl.demos.KickTheTires.testWithH2
 
     allTestsOnH2
   }

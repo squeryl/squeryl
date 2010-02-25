@@ -131,20 +131,8 @@ class PosoMetaData[T](val clasz: Class[T]) {
 
     val members = new ArrayBuffer[(Member,HashSet[Annotation])]
 
-    for(m <-clasz.getMethods if(m.getDeclaringClass != classOf[Object])) {
-      m.setAccessible(true)
-      val t = (m, new HashSet[Annotation])
-      _addAnnotations(m, t._2)
-      members.append(t)
-    }
-
-    for(m <- clasz.getDeclaredFields) {
-      m.setAccessible(true)
-      val t = (m, new HashSet[Annotation])
-      _addAnnotations(m, t._2)      
-      members.append(t)
-    }
-
+    _fillWithMembers(clasz, members)
+    
     val name2MembersMap =
       members.groupBy(m => {
 
@@ -238,7 +226,7 @@ class PosoMetaData[T](val clasz: Class[T]) {
       case (true,  false, false) => true
       case (false, true,  true)  => true
       case (true,  true,  true)  => true
-      //case (true,  false, true)  => true
+      case (true,  true, false)  => true
       case a:Any => false
     }
   }
@@ -252,4 +240,28 @@ class PosoMetaData[T](val clasz: Class[T]) {
     for(a <- m.getAnnotations
       if a.isInstanceOf[Column] || a.isInstanceOf[OptionType])
         s.add(a)
+
+
+
+  private def _fillWithMembers(clasz: Class[_], members: ArrayBuffer[(Member,HashSet[Annotation])]) {
+
+    for(m <-clasz.getMethods if(m.getDeclaringClass != classOf[Object])) {
+      m.setAccessible(true)
+      val t = (m, new HashSet[Annotation])
+      _addAnnotations(m, t._2)
+      members.append(t)
+    }
+
+    for(m <- clasz.getDeclaredFields) {
+      m.setAccessible(true)
+      val t = (m, new HashSet[Annotation])
+      _addAnnotations(m, t._2)
+      members.append(t)
+    }
+
+    val c = clasz.getSuperclass
+
+    if(c != null)
+      _fillWithMembers(c, members)
+  }
 }

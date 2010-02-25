@@ -6,12 +6,12 @@ import org.squeryl._
 import dsl.{Measures, GroupWithMeasures}
 
 class MusicDbObject extends KeyedEntity[Int] {
-  var id: Int = 0
+  val id: Int = 0
 }
 
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
 
-class Song(var title: String, var authorId: Int, var interpretId: Int, var cdId: Int) extends MusicDbObject
+class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int) extends MusicDbObject
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
 

@@ -22,7 +22,7 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
   override def toString = "Student:" + id + ":" + name
 }
 
-case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], var confirmed: Boolean)
+case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], val confirmed: Boolean)
   extends SchoolDbObject {
 
   def this() = this("", null, Some(new Date), 0, Some(0), false)
@@ -505,13 +505,25 @@ class SchoolDb extends Schema with QueryTester {
 
     assert(! ht.confirmed, "expected false, got " + ht.confirmed)
 
-    ht.confirmed = true
-    courses.update(ht)
+//    ht.confirmed = true
+//    courses.update(ht)
+
+    update(courses)(c =>
+      where(c.id === heatTransfer.id)
+      set(ht.confirmed := true)
+    )
+
     ht = courses.where(c => c.id === heatTransfer.id).single
     assert(ht.confirmed, "expected true, got " + ht.confirmed)
 
-    ht.confirmed = false
-    courses.update(ht)
+//    ht.confirmed = false
+//    courses.update(ht)
+
+    update(courses)(c =>
+      where(c.id === heatTransfer.id)
+      set(ht.confirmed := false)
+    )
+
     ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(! ht.confirmed, "expected false, got " + ht.confirmed)

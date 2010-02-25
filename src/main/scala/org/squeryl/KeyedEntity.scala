@@ -24,8 +24,6 @@ package org.squeryl
 trait KeyedEntity[K] {
 
   def id: K
-
-  def id_=(k: K)
 }
 
 trait CompositeKeyedEntity[K <: Product] extends KeyedEntity[K]

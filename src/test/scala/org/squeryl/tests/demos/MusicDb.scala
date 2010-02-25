@@ -8,10 +8,10 @@ import org.squeryl.dsl.GroupWithMeasures
 // The root object of the schema. Inheriting KeyedEntity[T] is not mandatory
 // it just makes primary key methods available (delete and lookup) on tables.
 class MusicDbObject extends KeyedEntity[Long] {
-  var id: Long = 0
+  val id: Long = 0
 }
 
-case class Artist(var name:String) extends MusicDbObject {
+case class Artist(val name:String) extends MusicDbObject {
 
   // this returns a Query[Song] which is also an Iterable[Song] :
   def songs = from(MusicDb.songs)(s => where(s.artistId === id) select(s))
@@ -22,7 +22,7 @@ case class Artist(var name:String) extends MusicDbObject {
 
 // Option[] members are mapped to nullable database columns,
 // otherwise they have a NOT NULL constraint.
-class Song(var title: String, var artistId: Long, var filePath: Option[String], var year: Int) extends MusicDbObject {
+class Song(val title: String, val artistId: Long, val filePath: Option[String], val year: Int) extends MusicDbObject {
 
   // IMPORTANT : currently classes with Option[] members *must* provide a zero arg
   // constructor where every Option[T] member gets initialized with Some(t:T).
@@ -42,7 +42,7 @@ class Song(var title: String, var artistId: Long, var filePath: Option[String], 
   def lookupArtist = artists.lookup(artistId)
 }
 
-class Playlist(var name: String, var path: String) extends MusicDbObject {
+class Playlist(val name: String, val path: String) extends MusicDbObject {
 
   import MusicDb._
 

@@ -175,6 +175,15 @@ class DatabaseAdapter {
 
     var i = 1;
     for(p <- sw.params) {
+
+      if(p.isInstanceOf[Option[_]]) {
+        val o = p.asInstanceOf[Option[_]]
+        if(o == None)
+          s.setObject(i, null)
+        else
+          s.setObject(i, o.get)
+      }
+      else
         s.setObject(i, p)
       i += 1
     }

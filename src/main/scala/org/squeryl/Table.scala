@@ -108,7 +108,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
   private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case Some(n:SelectElement) => new SelectElementReference(n)(NoOpOutMapper)
-      case a:Any => error("Thread local does not have a last accessed field... this is a severe bug !")
+      case None => error("Thread local does not have a last accessed field... this is a severe bug !")
   }
 
 //  private def _createWhereIdEqualsClause[K](k:K, a: KeyedEntity[K], dsl: QueryDsl) = {
