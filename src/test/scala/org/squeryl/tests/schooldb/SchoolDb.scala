@@ -72,7 +72,7 @@ class SchoolDb extends Schema with QueryTester {
 
   val courseAssigments = table[CourseAssignment]
   
-  lazy val testInstance = new {
+  val testInstance = new {
 
     //printDml
 

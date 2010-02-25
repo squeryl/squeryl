@@ -28,15 +28,22 @@ trait Schema {
    * database instances, the method is protected in order to make it a little
    * less 'accessible'  
    */
-  protected def drop = {
+  protected def drop(failOnNonExistingTable: Boolean):Unit = {
 
     for(t <- _tables) {
 
       val s = Session.currentSession.connection.createStatement
-      s.execute("drop table " + t.name)
-      _dbAdapter.postDropTable(t)
+      try {
+        s.execute("drop table " + t.name)
+        _dbAdapter.postDropTable(t)
+      }
+      catch {
+        case e:SQLException => if(failOnNonExistingTable) throw e
+      }
     }
   }
+
+  protected def drop:Unit = drop(false)
 
   def create = {
 

@@ -51,19 +51,23 @@ object Tests extends QueryTester {
     val session = s
 
     import org.squeryl.PrimitiveTypeMode._
-    
-    using(session) {
-      (new SchoolDb).test1
-      (new MusicDb).test1
-      (new TestCustomTypesMode).testAll
+
+    try {
+      using(session) {
+        (new SchoolDb).test1
+        (new MusicDb).test1
+        (new TestCustomTypesMode).testAll
+      }
+
+      org.squeryl.demos.KickTheTires.test(session)
+
+      if(!session.connection.getAutoCommit)
+        session.connection.commit
     }
-
-    org.squeryl.demos.KickTheTires.test(session)
-
-    if(!session.connection.getAutoCommit)
-      session.connection.commit
-    
-    session.connection.close
+    finally {
+      session.connection.rollback
+      session.connection.close
+    }
   }
 
   def createH2TestConnection = {
