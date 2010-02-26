@@ -20,4 +20,6 @@ for this reason, the plugin should limit itself to validation.
 
 * batched updates
 
+* Paginated Queries
+
 Proposals for new features can be discussed on the "discussion group":http://groups.google.com/group/squeryl

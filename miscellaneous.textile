@@ -15,6 +15,11 @@ The return type of a Squeryl expressions is governed by the following rules
 
 * All agregate functions (avg, min, max, etc...) with the exception of count result in an Option[]
 
+In plain english these rule say that conversions are designed to not cause loss of numerical precision,
+that floating point absorb (or dominate) as they do in mathematics, and that the existence of an
+unknown (None) value in an expression, causes it's result to become unknown (None)
+
+Here are some examples : 
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
@@ -30,14 +35,36 @@ The return type of a Squeryl expressions is governed by the following rules
   val q4 =  // || is the concatenation operator :
     from(aTable)(t => 
 	  select( &(t.aString || t.aLong || " " || a.IntOption) )) : Query[Option[String]]
-  
-  
+    
 ]]></script>
 
 Note how in query *q4* the presence of a single causes the result to becomes an Option[],
-this is consistent with the sql92 standard.
+this is consistent with the sql92 standard. If you are wondering what *&* does read
+"Evaluating expressions on the database side" below.
 
-If you are wondering what *&* does, read on :
+h2. Implicit conversions for single row agregate queries
+
+In Sql, queries that consist of only agregate functions (without group by clause) 
+always return exactly one row. Squeryl allows you to implicitely convert them to tupes 
+or to a scalar, as following example illustrates :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    
+  val x:Float = from(aTable)(t=> compute(avg(t.anInt)))
+  
+  val t:(Float,String) = from(aTable)(t=> compute(avg(t.anInt), min(t.aString)))
+  
+]]></script>
+
+Instead of the (slightly) more verbose way :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    
+  val x:Float = from(aTable)(t=> compute(avg(t.anInt))).single._1
+  
+  val t:(Float,String) = from(aTable)(t=> compute(avg(t.anInt), min(t.aString))).single
+  
+]]></script>
 
 
 h2. Evaluating expressions on the database side

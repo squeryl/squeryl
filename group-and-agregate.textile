@@ -8,7 +8,7 @@ Group, Measures and GroupWithMeasures that merely hold tuples.
 
 Squeryl diverges slightly from Sql in that agregate functions are *not* allowed within a select.
 They are instead declared in a 'compute' clause wich is in fact a select in disguise, since
-it's arguments end up in the generated Sql select clause. The motivation for this design
+it's arguments end up in the generated Sql's select clause. The motivation for this design
 choice is to make it a bit harder to write invalid Select statements, since the DSL forces
 a 'compute' clause to either replace a select or to follow a groupBy.
 
@@ -26,7 +26,7 @@ groupBy and compute clauses are mutually exclusive with the select clause in a q
 in other words a query uses either select _or_ a combination of groupBy and compute.
 
 Note how avg(t.anInt) transforms the return type into an Option[Float].
-Rules for type conversions are explained in the "Type Mapping":./type-mapping.html section.
+Rules for type conversions are explained in the "Type Mapping":./miscellaneous.html section.
 
  
 The groupBy argument list is replicated in the Sql statement's group by clause
@@ -46,7 +46,7 @@ Here is an example, the following Squeryl statement :
 
 Translates into this Sql statement :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
   Select
     Artist1.id as g0,
     count(*) as c0
@@ -62,4 +62,3 @@ Translates into this Sql statement :
 Notice how the groupBy(a.id) causes Artist1.id to be in the 
 select list _*and*_ in the group by clause, while compute(count)
 puts the agregate function 'count' in the select list.
-
