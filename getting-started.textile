@@ -12,6 +12,8 @@ You will need
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
 
+If you prefer to build from source with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
+
 
 h2. Defining a Schema
 
