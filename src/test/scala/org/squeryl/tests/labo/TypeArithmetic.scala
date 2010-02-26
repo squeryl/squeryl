@@ -414,7 +414,7 @@ object TypeArithmetic {
   def invalidTypeCombination(t1: TypeDescription,t2: TypeDescription) =
     error("invalidTypeCombination(" + t1 + "," + t2)
   
-  def main(args : Array[String]) : Unit = {
+  def mainz(args : Array[String]) : Unit = {
 
     println("  // conversions for binary ops like Addition subtraction, multiplication :")
     printBinaryTypeConversions("BinaryAMSOp", computeTypeASM)
