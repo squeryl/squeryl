@@ -113,6 +113,25 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
   }
 }
 
+class BetweenExpression(first: ExpressionNode, second: ExpressionNode, third: ExpressionNode)
+  extends TernaryOperatorNode(first, second, third, "between") with LogicalBoolean {
+
+  override def doWrite(sw: StatementWriter) = {
+    first.write(sw)
+    sw.write(" between ")
+    second.write(sw)
+    sw.write(" and ")
+    third.write(sw)
+  }
+}
+
+class TernaryOperatorNode(val first: ExpressionNode, val second: ExpressionNode, val third: ExpressionNode, op: String)
+  extends FunctionNode(op, None, List(first, second, third)) with LogicalBoolean {
+
+  override def inhibited =
+    first.inhibited || second.inhibited || third.inhibited
+}
+
 trait LogicalBoolean extends ExpressionNode  {
 
   def and(b: LogicalBoolean) = new BinaryOperatorNodeLogicalBoolean(this, b, "and")

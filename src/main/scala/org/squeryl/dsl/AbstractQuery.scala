@@ -12,6 +12,9 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
   
   var isForUpdate = false
 
+  var page: Option[(Int,Int)] = None
+
+
   val resultSetMapper = new ResultSetMapper
 
   val name = "query"
@@ -68,6 +71,12 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val c = copy(true)
     c.selectDistinct = true;
     c
+  }
+
+  def page(offset: Int, pageLength: Int): Query[R] = {
+    val c = copy(true)
+    c.page = Some((offset, pageLength))
+    c    
   }
 
   def forUpdate = {

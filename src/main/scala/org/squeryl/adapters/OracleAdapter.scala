@@ -70,4 +70,38 @@ class OracleAdapter extends DatabaseAdapter {
     oje.matchExpression.write(sw)
   }
 
+  override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter) = {} 
+
+  override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
+    if(qen.page == None)
+      super.writeQuery(qen, sw)
+    else {        
+      sw.write("select sq____1.* from (")
+      sw.nextLine
+      sw.writeIndented {
+        sw.write("select sq____0.*, rownum as rn____")
+        sw.nextLine
+        sw.write("from")
+        sw.nextLine
+        sw.writeIndented {
+          sw.write("(")
+          super.writeQuery(qen, sw)
+          sw.write(") sq____0")
+        }
+      }
+      sw.nextLine
+      sw.write(") sq____1")
+      sw.nextLine
+      sw.write("where")
+      sw.nextLine
+      sw.writeIndented {
+        sw.write("rn____ between ")
+        val page = qen.page.get
+        val beginOffset = page._1 + 1
+        val endOffset = page._2 + beginOffset - 1
+        sw.write(beginOffset.toString)
+        sw.write(" and ")
+        sw.write(endOffset.toString)
+      }
+    }
 }

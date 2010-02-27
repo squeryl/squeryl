@@ -64,6 +64,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
   
   private def _append(s: String) = {
     //_dumpToConsole(s)
+    _flushPendingNextLine
     _stringBuilder.append(s)
   }
 
@@ -78,6 +79,19 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     _append("\n")
     _writeIndentSpaces
   }
+
+  private var _lazyPendingLine: Option[() => Unit] = None
+
+  def pushPendingNextLine =
+   _lazyPendingLine = Some(()=> nextLine)
+
+  private def _flushPendingNextLine =
+    if(_lazyPendingLine != None)  {
+      val pl = _lazyPendingLine
+      _lazyPendingLine = None
+      val lpl = pl.get
+      lpl()
+   }
   
   def writeLines(s: String*) = {
     val size = s.size

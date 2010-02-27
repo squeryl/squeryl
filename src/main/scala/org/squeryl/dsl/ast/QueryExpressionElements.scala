@@ -12,6 +12,8 @@ trait QueryExpressionElements extends ExpressionNode {
 
   def isForUpdate: Boolean
 
+  def page: Option[(Int,Int)]
+
   def views: Iterable[QueryableExpressionNode]
 
   def outerJoinExpressions: Iterable[OuterJoinExpression]

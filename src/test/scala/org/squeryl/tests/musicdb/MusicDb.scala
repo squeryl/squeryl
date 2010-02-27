@@ -175,9 +175,16 @@ class MusicDb extends Schema with QueryTester {
     working
   }
 
+  def assertionFailed(s: Symbol, actual: Any, expected: Any) =
+    assert(actual == expected, ""+s+" failed, got " + actual + " expected " + expected)
+  
   def working = {
     import testInstance._
 
+    testBetweenOperator
+    
+    testPaginatedQuery1
+    
     testDynamicQuery1
     
     testDynamicQuery2
@@ -364,5 +371,55 @@ class MusicDb extends Schema with QueryTester {
     )
 
     passed('testDynamicQuery2)
+  }
+
+  def testPaginatedQuery1 = {
+
+    val q = from(artists)(a =>
+        select(a)
+        orderBy(a.firstName asc)
+      )
+
+    val p1 = q.page(0, 2).map(a=>a.firstName).toList
+    val p2 = q.page(2, 2).map(a=>a.firstName).toList
+    val p3 = q.page(4, 2).map(a=>a.firstName).toList
+
+
+    val ep1 = List(alainCaron.firstName, herbyHancock.firstName)
+    val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
+    val ep3 = List(ponchoSanchez.firstName)
+
+    assertionFailed('testPaginatedQuery1, p1, ep1)
+    assertionFailed('testPaginatedQuery1, p2, ep2)
+    assertionFailed('testPaginatedQuery1, p3, ep3)
+
+    passed('testPaginatedQuery1)    
+  }
+
+  def testBetweenOperator = {
+
+    val q = from(artists)(a =>
+        select(a)
+        orderBy(a.firstName asc)
+      )
+
+    val p1 = q.where(a=>a.firstName between(alainCaron.firstName, herbyHancock.firstName))
+            .map(a=>a.firstName).toList
+
+    val p2 = q.where(a=>a.firstName between(hossamRamzy.firstName, mongoSantaMaria.firstName))
+            .map(a=>a.firstName).toList
+
+    val p3 = q.where(a=>a.firstName between(ponchoSanchez.firstName, "Zaza Napoli"))
+            .map(a=>a.firstName).toList
+
+    val ep1 = List(alainCaron.firstName, herbyHancock.firstName)
+    val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
+    val ep3 = List(ponchoSanchez.firstName)
+
+    assertionFailed('testPaginatedQuery1, p1, ep1)
+    assertionFailed('testPaginatedQuery1, p2, ep2)
+    assertionFailed('testPaginatedQuery1, p3, ep3)
+
+    passed('testBetweenOperator)
   }
 }

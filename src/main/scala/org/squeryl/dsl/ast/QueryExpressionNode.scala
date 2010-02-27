@@ -63,6 +63,8 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def isForUpdate = _query.isForUpdate
 
+  def page = _query.page
+
   def alias = "q" + uniqueId.get
 
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] = {

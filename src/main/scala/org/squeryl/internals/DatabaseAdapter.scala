@@ -51,51 +51,60 @@ class DatabaseAdapter {
         }
       }      
     }
-    if(fromListSize > 0 && qen.whereClause == None)
-      sw.nextLine
-
+    
+    sw.pushPendingNextLine
+    
     if(qen.outerJoinExpressions != Nil) sw.writeIndented {
       for(oje <- qen.outerJoinExpressions.zipi) {
         writeOuterJoin(oje.element, sw)
-        if(oje.isNotLast) sw.nextLine
+        sw.pushPendingNextLine
       }
     }
     
-    if(qen.whereClause != None && qen.whereClause.get.children.filter(c => !c.inhibited) != Nil) {
-      sw.nextLine
+    if(qen.whereClause != None && qen.whereClause.get.children.filter(c => !c.inhibited) != Nil) {      
       sw.write("Where")
       sw.nextLine
       sw.writeIndented {
         qen.whereClause.get.write(sw)
       }
+      sw.pushPendingNextLine
     }
 
-    if(! qen.groupByClause.isEmpty) {
-      sw.nextLine
+    if(! qen.groupByClause.isEmpty) {      
       sw.write("Group By")
       sw.nextLine
       sw.writeIndented {
         sw.writeNodesWithSeparator(qen.groupByClause.filter(e => ! e.inhibited), ",", true)
       }
+      sw.pushPendingNextLine
     }
     
     if(! qen.orderByClause.isEmpty) {
-      sw.nextLine
       sw.write("Order By")
       sw.nextLine
       sw.writeIndented {
         sw.writeNodesWithSeparator(qen.orderByClause.filter(e => ! e.inhibited), ",", true)
-      }      
+      }
+      sw.pushPendingNextLine
     }
-
-    sw.nextLine
 
     if(qen.isForUpdate) {
       sw.write("for update")
-      sw.nextLine
-    }    
+      sw.pushPendingNextLine
+    }
+
+    writePaginatedQueryDeclaration(qen, sw)
   }
 
+  def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = 
+    qen.page.foreach(p => {
+      sw.write("limit ")
+      sw.write(p._2.toString)
+      sw.write(" offset ")
+      sw.write(p._1.toString)
+    })
+
+  
   def writeOuterJoin(oje: OuterJoinExpression, sw: StatementWriter) = {
     sw.write(oje.leftRightOrFull)
     sw.write(" outer join ")

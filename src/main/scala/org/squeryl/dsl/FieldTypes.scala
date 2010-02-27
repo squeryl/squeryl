@@ -47,6 +47,8 @@ trait FieldTypes {
 
     def in(l: ListNumerical) = new BinaryOperatorNodeLogicalBoolean(this, l, "in")
 
+    def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
+
     def ~ = this
   }
 
@@ -66,6 +68,8 @@ trait FieldTypes {
     def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
     def in[A](e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
+
+    def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
   }
 
   trait BooleanExpression[A] extends NonNumericalExpression[A] {

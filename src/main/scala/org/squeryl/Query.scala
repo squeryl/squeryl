@@ -39,4 +39,6 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
   def minus(q: Query[R]): Query[R] = error("not implemented")
 
   def forUpdate: Query[R]
+
+  def page(offset: Int, pageLength: Int): Query[R]
 }

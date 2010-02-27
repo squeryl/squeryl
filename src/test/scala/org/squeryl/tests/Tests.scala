@@ -27,19 +27,18 @@ object Tests extends QueryTester {
   }
 
   def allTestsOnAllDatabases = {
-    
-    println("Tests with Oracle")
-    allTests(createOracleTestConnection)
 
     println("Tests with MySQL")
     allTests(createMySQLTestConnection)
 
-    println("Tests with H2")
-    allTests(createH2TestConnection)
-
     println("Tests with PosgreSQL")
     allTests(createPostgreSqlTestConnection)
     
+    println("Tests with Oracle")
+    allTests(createOracleTestConnection)
+
+    println("Tests with H2")
+    allTests(createH2TestConnection)    
   }
 
   def allTests(s: =>Session) = {
@@ -54,8 +53,8 @@ object Tests extends QueryTester {
 
     try {
       using(session) {
-        (new SchoolDb).test1
         (new MusicDb).test1
+        (new SchoolDb).test1
         (new TestCustomTypesMode).testAll
       }
 
@@ -65,7 +64,7 @@ object Tests extends QueryTester {
         session.connection.commit
     }
     finally {
-      session.connection.rollback
+      //session.connection.rollback
       session.connection.close
     }
   }
