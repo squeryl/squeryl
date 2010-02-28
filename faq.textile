@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Frequenrly Asked Questions
+title: Frequently Asked Questions
 ---
 
 * *Q: Is Squeryl an ORM or a DSL ?*
@@ -19,8 +19,8 @@ title: Frequenrly Asked Questions
 * *A*: Yes and no !
   There is no concept in Squeryl of relations, but implementing is 
   easily done by reusing the building blocks of the DSL, consider for
-  example a "one to many" relation :
-
+  example a "one to many" relation :<br/>
+  
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
     class Song(val id, val title: String, val artistId: Long, val year)  {
@@ -67,30 +67,55 @@ an area where Squeryl could be enhanced.
 
 * In this case, aSong.artist would be fetched lazily and only once. 
   
-* *Q: There's already a plethora of ORMs in Java, do we _really_ need one more ?*
+* *Q: There's already a plethora of Java ORMs, do we _really_ need one more ?*
 
-* *A:* Can you spot the typo in this JPA query ?
-<script type="syntaxhighlighter" class="brush: java"><![CDATA[  
+* *A:* Can you spot the typo in this JPA query ?<br/>
+
+<script type="syntaxhighlighter" class="brush: java"><![CDATA[
 Query query = 
- em.createQuery("SELECT p FROM Product p WHERE p.param2 < :threshold ORDER BY p.param1 ascending");
- query.setParameter("thresold", my_threshold);
- List results = query.getResultList();
+ em.createQuery( 
+   "select a,b,p from authors, books, publisher " +
+   "where b.subjectId = :idOfSubject and " +
+   "      a.id = b.authorId and " +
+   "      b.publiserId = p.id "
+ );  
+ 
+ query.setParameter("idOfSubject", idOfSubject);
 ]]></script>
-* let's hope that you can, *because the compiler won't tell you !*
 
-* Can you count the number of database calls resulting from this JPA query ?
+* let's hope that you can, *because the compiler won't tell you !*
+if you happen to rename a column, change it's type, remove it, etc.
+the compiler will be of no help.'<br/>
+If you use JPAs relation mechanism to _navigate_ through the object graph,
+like the following example illustrates, you will regain type safety, 
+but at the cost of horrible performance,
+*can you count the number of database calls resulting from this JPA query ?*
 
 <script type="syntaxhighlighter" class="brush: java"><![CDATA[  
 
-  Iterator<Course> coursesOfProffessorX = getProfessor(x).getCourses();
-  
-  while(coursesOfProffessorX.hasNext()) {
-    Course c = coursesOfProffessorX.next();
-	Iterator<Student> studentsOfCourseC = c.getStudents()
-	while(studentsOfCourseC.hasNext()) {
-	  Student s = studentsOfCourseC.next();
-	  System.out.println("proffesor X teaches to " + s.getFullName());
-	}
-  }
+Iterable<Book> books = bookEntityManager.findBySubjectId(idOfSubject);
+while(books.hasNext()) {
+  Book b = books.next();
+  Author a = b.getAuthor();
+  Publisher p = b.getPublisher();
+  System.out.println(b.getTitle() + " by " + a.getFullName() + " published by " + p.getName());
+}
 ]]></script>
 
+* The answer is : two database trips for every row returned by the 
+findBySubjectId query. <br/>
+Squeryl allows you to combine the advantages of the two previous
+approaches, *the query is done in a single database call, and you
+have type safety*.<br/>
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[  
+val q =
+  from(authors, books, publisher)((a,b,p) =>
+    where(b.subjectId === idOfSubject and
+          a.id === b.authorId and
+		  b.publisherId === p.id)
+    select((a,b,p))
+  )
+for(r <- q)
+  println(r._2.title + " by " + r._1.fullName + " published by " + p._3.name)
+]]></script>

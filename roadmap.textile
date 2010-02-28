@@ -6,17 +6,18 @@ title: Features and Roadmap
 h2. Features 
 
 * A DSL for manipulating database objects with Sql like expressions. Supported sql constructs are : <br/>
-Select, Update, Insert, Delete, SubQueries, Left Right and Full Outer Join, Standard agregage functions, Group By.
+Select, Update, Insert, Delete, SubQueries, Left Right and Full Outer Join, <br/>
+Standard agregage functions, Group By, Distinct, ForUpdate.
 
-* A simple (still rudimentary) mechanism to generate an Sql Schema based on class definitions
+* Sql Schema generation based on class definitions
 
-* Transparent management of auto incremented key
+* Transparent management of auto incremented keys
 
-* Type safety making SQL's conversion rules enforeable at compile time
+* Type safety making SQL's conversion rules enforceable at compile time
 
 * Dynamic queries
 
-* Paginated Queries
+* Query Pagination
 
 
 h2. Features Not yet implemented
