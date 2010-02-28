@@ -27,8 +27,15 @@
 	<style type="text/css">
 	  div.ligne {border:1px solid; color:ECE5B6; border-bottom-style:solid;}
 	  a.sansU {text-decoration : none}
-	  li a {text-decoration : none; color:646060}
+	  ul li a {text-decoration : none; color:646060}	  
 	  ul.nav li {list-style-type: none; margin-bottom: 4px;}
+	  bodyZ {
+	    background-color:black;
+	    background-image:url(images/image_de_fond.png);
+	  }	  
+	  div.containerZ {
+	  	background-color:white;
+	  }
 	</style>	
   </head>
   <body>
@@ -38,7 +45,7 @@
 	   <br/>
 	    <a href='index.html' class='sansU'>
 	      <h1 align='center'>Squeryl</h1>
-		  <h3 align='center'><i>A functional bridge between Scala objects and relational data</i></h3>
+		  <h3 align='center'><i>Functionally bridging the Object and Relational paradigms</i></h3>		  
 		</a>
 		<h2 align='center'>{{ page.title }}</h2>
       </div>
@@ -50,7 +57,8 @@
           <li><a href='downloads.html'>download</a></li>
           <li><a target='none' href='http://wiki.github.com/max-l/Squeryl/'>Wiki</a></li>
           <li><a target='none' href='http://groups.google.com/group/squeryl'>User support and discussion</a></li>
-		  <li><a href='roadmap.html'>Roadmap</a></li>
+		  <li><a href='roadmap.html'>Features and Roadmap</a></li>
+		  <li><a href='faq.html'>FAQ</a></li>		  
 		  <li><a href='contributing.html'>Reporting bugs and Contributing</a></li>
         </ul>
 		
@@ -78,15 +86,16 @@
       </div>	  
     </div>
 	
-  <script type="text/javascript">
-	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    <script type="text/javascript">
+	  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 	</script>
 	<script type="text/javascript">
-	try {
-	var pageTracker = _gat._getTracker("UA-13174234-1");
-	pageTracker._trackPageview();
-    } catch(err) {}
-  </script>	
+	  try {
+  	    var pageTracker = _gat._getTracker("UA-13174234-1");
+	    pageTracker._trackPageview();
+      } 
+	  catch(err) {}
+    </script>	
   </body>
 </html>

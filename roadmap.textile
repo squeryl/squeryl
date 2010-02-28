@@ -1,7 +1,23 @@
 ---
 layout: default
-title: Roadmap
+title: Features and Roadmap
 ---
+
+h2. Features 
+
+* A DSL for manipulating database objects with Sql like expressions. Supported sql constructs are : <br/>
+Select, Update, Insert, Delete, SubQueries, Left Right and Full Outer Join, Standard agregage functions, Group By.
+
+* A simple (still rudimentary) mechanism to generate an Sql Schema based on class definitions
+
+* Transparent management of auto incremented key
+
+* Type safety making SQL's conversion rules enforeable at compile time
+
+* Dynamic queries
+
+* Paginated Queries
+
 
 h2. Features Not yet implemented
 
@@ -18,8 +34,12 @@ At the moment my only reluctance for such a plugin is the required
 configuration that is required by user code (breaking the minimalism), 
 for this reason, the plugin should limit itself to validation.
 
-* batched updates
+* Batched updates
 
-* Paginated Queries
+* Support for mapping inheritance in the database other than the _map each concreate class to a table_ approach
+
+* Schema evolution (other than droping the whole database and recreating it)
+
+* Optimistic Concurrency Control
 
 Proposals for new features can be discussed on the "discussion group":http://groups.google.com/group/squeryl
