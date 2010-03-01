@@ -102,7 +102,7 @@ while(books.hasNext()) {
 }
 ]]></script>
 
-* The answer is : two database trips for every row returned by the 
+* The answer is : two database round trips for every row returned by the 
 findBySubjectId query. <br/>
 Squeryl allows you to combine the advantages of the two previous
 approaches, *the query is done in a single database call, and you

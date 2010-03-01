@@ -7,7 +7,7 @@ h2. Requirements
 
 You will need 
 
-* 2.8.0.Beta1-RC8
+* The Scala runtime jar, version 2.8.0.Beta1-RC8
 * The Squeryl jar found "here":http://github.com/max-l/Squeryl/downloads
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
@@ -29,7 +29,7 @@ that are grouped in a org.squeryl.Schema singleton.
   
   // fields can be mutable or immutable 
   
-  class Book(var id: Long, 
+  class Book(val id: Long, 
              var title: String,
 			 @Column("AUTHOR_ID") // the default 'exact match' policy can be overriden
 			 var authorId: Long,

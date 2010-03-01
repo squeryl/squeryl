@@ -3,9 +3,7 @@ layout: default
 title: Introduction
 ---
 
-h4. Squeryl is a strongly typed DSL (domain specific language) for SQL databases in which table rows are manipulated as Scala objects via an SQL like language.
-
-h4. Relational database concepts are not hidden to the developer, on the contrary they remain available so they can be leveraged from within the Scala language. 
+h4. Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating database objects from within the Scala language
 
 <div class='ligne'></div><br/>
 
@@ -18,12 +16,12 @@ If your Squeryl statements compile, chances are pretty good that they won't fail
 When complexity in an application exceeds a certain treshold, it's evolution and maintenance become an increasingly difficult, costly, and unpleasant burden. A persistence layer addresses only one aspect among many in an application and should leave as much _conceptual room_ as possible for the other aspects.
 
 * _*Declarativeness*_ : 
-Managing persistent information introduces complexities given database modifications have a _lasting_ effect : errors can be persisted causing problems far into the future.
+Managing persistent information introduces complexities given than database modifications have a _lasting_ effect : errors can be persisted, causing problems far into the future.
 One of the relationnal paradigm's answer for addressing these challenges (and arguably one of the reason they have become ubiquitous) is the *declarative* nature of SQL. 
-A key objective of Squeryl is to _*preserve*_ the declarativeness supported by databases.
+A key objective of Squeryl is to _*preserve*_ the declarativeness of Sql.
 
 * _*Reuse*_ : 
-Squeryl expressions are composable just like their Sql counterpart. A given query can be defined once (and only once) and reused within other queries, can help to write DRY(Don't Repeat Yourself) code.
+Squeryl expressions are composable just like their Sql counterpart, allowing queries to be reused within other queries, helping to apply the DRY(Don't Repeat Yourself) principle.
 
 * _*Three paradigms, One language*_ : 
 A lot has been said on the impedance mismatch between the Object and Relational paradigms, what the precursors of Squeryl ("HaskellDB":http://www.haskell.org/haskellDB and "LINQ":http://msdn.microsoft.com/en-us/library/bb425822.aspx) have demonstrated is that a functional language can reduce this mismatch to the point where it _emulates_ the relational paradigm.
