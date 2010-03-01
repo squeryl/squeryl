@@ -72,6 +72,7 @@ an area where Squeryl could be enhanced.
 * *A:* Can you spot the typo in this JPA query ?<br/>
 
 <script type="syntaxhighlighter" class="brush: java"><![CDATA[
+//JPA  :
 Query query = 
  em.createQuery( 
    "select a,b,p from authors, books, publisher " +
@@ -89,7 +90,7 @@ the compiler will be of no help.'<br/>
 If you use JPAs relation mechanism to _navigate_ through the object graph,
 like the following example illustrates, you will regain type safety, 
 but at the cost of horrible performance,
-*can you count the number of database calls resulting from this JPA query ?*
+* Can you count the number of database calls resulting from this JPA query ?
 
 <script type="syntaxhighlighter" class="brush: java"><![CDATA[  
 
@@ -102,11 +103,12 @@ while(books.hasNext()) {
 }
 ]]></script>
 
-* The answer is : two database round trips for every row returned by the 
-findBySubjectId query. <br/>
-Squeryl allows you to combine the advantages of the two previous
-approaches, *the query is done in a single database call, and you
-have type safety*.<br/>
+* The answer is : two database round trips for every row returned by the findBySubjectId query, 
+an N ary relation typically causes O(N-1) calls to the database, which can have disastrous 
+performance consequences.
+
+* Squeryl allows you to combine the advantages of the efficiency of the first
+approach (the query is done in a single database call), and the type safety of the second :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[  
 val q =
