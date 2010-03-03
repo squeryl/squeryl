@@ -3,6 +3,14 @@ layout: default
 title: <br/>
 ---
 
+h2. Seeing the generated Sql
+
+The org.squeryl.Query.statement method returns the statement with the jdbc's prepared
+statement parameters subsituted.
+
+To log all SQL activity of a sesson, use org.squeryl.Session.currentSession.setLogger(String => Unit)
+the closure receives all Sql statements and gets to do what it wants with it.
+
 h2. Type conversions in Sql expressions
 
 The return type of a Squeryl expressions is governed by the following rules 

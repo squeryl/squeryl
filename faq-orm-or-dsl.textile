@@ -1,0 +1,18 @@
+---
+layout: default
+title: Frequently Asked Questions
+---
+
+
+h3. Q: Is Squeryl an ORM or a DSL ?
+
+h3. A: It is both.
+
+However it makes most sense to call it a DSL
+that does 02R mapping. One could also say that it's an
+ORM that has a DSL component, but I prefer the former definition
+because the Sql like DSL aspect is where most of the value is
+added : mapping tables to object is the easy part of the problem,
+allowing application code to write as declaratively as Sql
+while staying within the (intellectual) comfort of the Scala language 
+is the most interesting part.

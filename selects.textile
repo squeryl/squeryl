@@ -26,16 +26,14 @@ type determins the generic parameter of the <notextile>Query[R]</notextile>
   def select[R](r: =>R): R
 ]]></script>
 
-The select expression is evaluated for each iteration.
+The select expression will be evaluated for row returned by the query.
 
-Alternative (shorter but less generic) select syntax :
+It is also possible to select with alternative (shorter but less generic) syntax :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
 class Song(var title: String, var artistId: Long) extends KeyedEntity {
- 
-  // the schema can be imported in the scope, to lighten the syntax :
-  import MusicDb._
+   
+  import MusicDb._ // the schema can be imported in the scope
   
   // A shorter syntax for single table queries :
   def artist = artists.where(a => a.id === artistId).single
@@ -131,6 +129,22 @@ Where
 
 Doing a 3 level nested join is by no means necessary and serves
 no other purposes than demonstration.
+
+h2. Select Distinct
+
+Calling the *.distinct* method on a Query[] creates a copy of it that has a 'distinct' select clause :
+ 
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  from(songs)(s => select(&(s.title))).distinct
+]]></script>
+
+h2. For Update
+
+Calling the *.forUpdate* method on a Query[] creates a copy of it that has a 'forUpdate' locking directive :
+ 
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  aTable.where(t => t.aField === aValue).forUpdate
+]]></script>
 
 h2. Dynamic Queries
 

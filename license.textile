@@ -1,0 +1,6 @@
+---
+layout: default
+title: License
+---
+
+Squeryl is available under the appache 2.0 license

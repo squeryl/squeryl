@@ -123,11 +123,11 @@ in the scope where database objects and queries are defined :
 
   import org.squeryl.PrimitiveTypeMode._
   
-  class Song(var id: Long, 
-             var title: String, 
-			 var artistId: Long, 
-             var filePath: Option[String], 
-			 var year: Int)
+  class Song(val id: Long, 
+             val title: String, 
+			 val artistId: Long, 
+             val filePath: Option[String], 
+			 val year: Int)
   
   from(songs)(s => where(s.title like "%funk%") select(s))  
 ]]></script>
