@@ -16,5 +16,5 @@ caching with lazy loading is possible :
   } 
 ]]></script>
 
-* In this case, aSong.artist would be fetched lazily and only once. 
+In this case, aSong.artist would be fetched lazily and only once. 
   

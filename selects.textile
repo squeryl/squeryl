@@ -146,6 +146,8 @@ Calling the *.forUpdate* method on a Query[] creates a copy of it that has a 'fo
   aTable.where(t => t.aField === aValue).forUpdate
 ]]></script>
 
+<a name='DynamicQuery'></a>
+
 h2. Dynamic Queries
 
  It is often necessary to create queries with a from clause that varies

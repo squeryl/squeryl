@@ -5,9 +5,13 @@ title: Download
 
 h2. Which version ?
 
+The recomended version is 0.9.2
 
-Gien that Squeryl is in it's infancy and that fixes are added frequently, the _nightly_ release is the preffered version :
+"squeryl_2.8.0.Beta1-RC8-0.9.2.jar":http://github.com/max-l/Squeryl/downloads/squeryl_2.8.0.Beta1-RC8-0.9.2.jar
 
-"squeryl_2.8.0.Beta1-RC8-0.9.1_latest-head.jar":http://github.com/max-l/Squeryl/downloads/squeryl_2.8.0.Beta1-RC8-0.9.1_latest-head.jar
+
+Gien that Squeryl is in it's infancy and that fixes are added frequently, 
+fixes can be found in the the _nightly_ release.
+
 
 The release process should become more formalized as Squeryl progresses towards maturity

@@ -5,7 +5,6 @@ title: Introduction
 
 h4. Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating database objects from within the Scala language
 
-<div class='ligne'></div><br/>
 
 h3. Motivation
 
