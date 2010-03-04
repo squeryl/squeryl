@@ -19,6 +19,7 @@ trait QueryDsl
     session.bindToCurrentThread
     val r = a
     session.unbindFromCurrentThread
+    session.cleanup
     r
   }
   

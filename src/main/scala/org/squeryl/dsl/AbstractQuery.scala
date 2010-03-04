@@ -99,6 +99,10 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
     def _next = {
       _hasNext = rs.next
+
+      if(!_hasNext) // close it ASAP
+        s._closeResultSet(rs)
+
       _nextCalled = true
     }
 

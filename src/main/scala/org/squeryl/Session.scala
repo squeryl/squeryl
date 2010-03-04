@@ -1,7 +1,9 @@
 package org.squeryl
 
-import org.squeryl.internals._;
-import java.sql.Connection;
+import org.squeryl.internals._
+import collection.mutable.ArrayBuffer
+import java.sql.{SQLException, ResultSet, Statement, Connection}
+
 
 trait Session {
   
@@ -22,6 +24,29 @@ trait Session {
   def isLoggingEnabled = _logger != null
 
   def log(s:String) = if(isLoggingEnabled) _logger(s)
+
+  private val _statements = new ArrayBuffer[Statement]
+
+  private val _resultSets = new ArrayBuffer[ResultSet]
+
+  private [squeryl] def _addStatement(s: Statement) = _statements.append(s)
+
+  private [squeryl] def _addResultSet(rs: ResultSet) = _resultSets.append(rs)
+
+  private def _closeStatement(s: Statement) =
+    try {s.close}
+    catch {case e:SQLException => {}}
+
+  private [squeryl] def _closeResultSet(rs: ResultSet) =
+    try {rs.close}
+    catch {case e:SQLException => {}}
+
+  def cleanup = {
+    _statements.foreach(s => _closeStatement(s))
+    _statements.clear
+    _resultSets.foreach(rs => _closeResultSet(rs))
+    _resultSets.clear
+  }
 }
 
 object Session {

@@ -177,10 +177,12 @@ class DatabaseAdapter {
     sw.write(")\n ")
   }
 
-  def prepareStatement(c: Connection, sw: StatementWriter): PreparedStatement =
-    prepareStatement(c, sw, c.prepareStatement(sw.statement))
+  def prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =
+    prepareStatement(c, sw, c.prepareStatement(sw.statement), session)
 
-  def prepareStatement(c: Connection, sw: StatementWriter, s: PreparedStatement): PreparedStatement = {
+  def prepareStatement(c: Connection, sw: StatementWriter, s: PreparedStatement, session: Session): PreparedStatement = {    
+
+    session._addStatement(s)
 
     var i = 1;
     for(p <- sw.params) {
@@ -204,7 +206,7 @@ class DatabaseAdapter {
     if(s.isLoggingEnabled)
       s.log(sw.toString)
 
-    val st = prepareStatement(s.connection, sw)
+    val st = prepareStatement(s.connection, sw, s)
     try {
       st.executeQuery
     }
@@ -218,7 +220,7 @@ class DatabaseAdapter {
     if(s.isLoggingEnabled)
       s.log(sw.toString)
 
-    val st = prepareStatement(s.connection, sw)
+    val st = prepareStatement(s.connection, sw, s)
     (st.executeUpdate, st)
   }
 
@@ -227,7 +229,7 @@ class DatabaseAdapter {
     if(s.isLoggingEnabled)
       s.log(sw.toString)
 
-    val st = prepareStatement(s.connection, sw, ps)
+    val st = prepareStatement(s.connection, sw, ps, s)
     try {
       (st.executeUpdate, st)
     }
