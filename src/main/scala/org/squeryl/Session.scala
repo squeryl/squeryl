@@ -49,7 +49,21 @@ trait Session {
   }
 }
 
+trait SessionFactory {
+  def newSession: Session
+}
+
+object SessionFactory {
+
+  var concreteFactory : Option[()=>Session] = None
+  
+  def newSession: Session =
+    concreteFactory.getOrElse(error("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a function for creating new org.squeryl.Session, before transaction can be used"))()
+}
+
 object Session {
+
+  
 
   private val _currentSessionThreadLocal = new ThreadLocal[Option[Session]] {
     override def initialValue = None

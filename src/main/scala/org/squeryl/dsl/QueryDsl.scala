@@ -4,8 +4,8 @@ import ast._
 import boilerplate._
 import fsm.{QueryElements, StartState, WhereState}
 import org.squeryl.internals._
-import java.sql.ResultSet
 import org.squeryl._
+import java.sql.{SQLException, ResultSet}
 
 trait QueryDsl
   extends DslFactory
@@ -15,12 +15,68 @@ trait QueryDsl
   with QueryElements
   with FromSignatures {
 
-  def using[A](session: Session)(a: =>A): A = {
-    session.bindToCurrentThread
-    val r = a
-    session.unbindFromCurrentThread
-    session.cleanup
-    r
+  def using[A](session: Session)(a: =>A): A =
+    _using(session, a _)
+
+  private def _using[A](session: Session, a: ()=>A): A =
+    try {
+      session.bindToCurrentThread
+      val r = a()
+      session.unbindFromCurrentThread
+      r
+    }
+    finally {
+      session.cleanup
+    }
+
+  def transaction[A](a: =>A): A =
+    _executeTransactionWithin(SessionFactory.newSession, a _)
+
+  def inTransaction[A](a: =>A): A =
+    if(! Session.hasCurrentSession)
+      _executeTransactionWithin(SessionFactory.newSession, a _)
+    else {
+      val s = Session.currentSession
+      try {
+        a
+      }
+      finally {
+        s.cleanup
+      }
+    }
+
+  private def _executeTransactionWithin[A](s: Session, a: ()=>A) = {
+
+    val c = s.connection
+
+    if(c.getAutoCommit)
+      c.setAutoCommit(false)
+
+    var txOk = false
+    try {
+      val res = _using(s, a)
+      txOk = true
+      res
+    }
+    finally {
+      try {
+        if(txOk)
+          c.commit
+        else
+          c.rollback
+      }
+      catch {
+        case e:SQLException => {
+          if(txOk) throw e // if an exception occured b4 the commit/rollback we don't want to obscure the original exception 
+        }
+      }
+      try{c.close}
+      catch {
+        case e:SQLException => {
+          if(txOk) throw e // if an exception occured b4 the close we don't want to obscure the original exception
+        }
+      }
+    }
   }
   
   implicit def __thisDsl:QueryDsl = this  

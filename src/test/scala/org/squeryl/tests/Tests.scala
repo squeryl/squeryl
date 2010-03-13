@@ -2,6 +2,7 @@
 
 package org.squeryl.tests
 
+import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
 import java.sql.DriverManager
@@ -51,10 +52,20 @@ object Tests extends QueryTester {
 
     import org.squeryl.PrimitiveTypeMode._
 
-    try {
-      using(session) {
+    SessionFactory.concreteFactory = Some(()=>s)
+    
+    transaction {
+      (new SchoolDb).test1
+    }
+
+    inTransaction {
+      inTransaction {
         (new MusicDb).test1
-        (new SchoolDb).test1
+      }
+    }
+
+    try {
+      using(session) {                
         (new TestCustomTypesMode).testAll
       }
 
