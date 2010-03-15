@@ -48,17 +48,31 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
     t
   }
+
+  def forceUpdate(o: T)(implicit ev: T <:< KeyedEntity[_]) =
+    _update(o, false)
   
-  def update(o: T)(implicit ev: T <:< KeyedEntity[_]) = {
+  def update(o: T)(implicit ev: T <:< KeyedEntity[_]):Unit =
+    _update(o, true)
+
+  private def _update(o: T, checkOCC: Boolean) = {
 
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
-    dba.writeUpdate(o, this, sw)
+    dba.writeUpdate(o, this, sw, checkOCC)
 
     val (cnt, s) = dba.executeUpdate(Session.currentSession, sw)
 
-    if(cnt != 1)
-      error("failed to update")
+    if(cnt != 1) {
+      if(checkOCC && posoMetaData.isOptimistic) {
+        val version = posoMetaData.optimisticCounter.get.get(o.asInstanceOf[AnyRef])
+        throw new StaleUpdateException(
+           "Object "+name + "(id=" + o.asInstanceOf[KeyedEntity[_]].id + ", occVersionNumber=" + version +
+           ") has become stale, it cannot be updated under optimistic concurrency control")
+      }
+      else
+        error("failed to update")
+    }
   }
   
   def update(s: T =>UpdateStatement):Int = {

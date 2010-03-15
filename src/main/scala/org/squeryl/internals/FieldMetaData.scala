@@ -17,7 +17,8 @@ class FieldMetaData(
         getter: Option[Method],
         setter: Option[Method],
         field:  Option[Field],
-        columnAnnotation: Option[Column]) {
+        columnAnnotation: Option[Column],
+        val isOptimisticCounter: Boolean) {
 
   def isCustomType = customTypeFactory != None
 
@@ -161,7 +162,7 @@ object FieldMetaData {
 
   private val _EMPTY_ARRAY = new Array[Object](0)
 
-  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef) = {
+  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 
     val field  = property._1
     val getter = property._2
@@ -244,7 +245,8 @@ object FieldMetaData {
       getter,
       setter,
       field,
-      colAnnotation)
+      colAnnotation,
+      isOptimisticCounter)
   }
 
   /**

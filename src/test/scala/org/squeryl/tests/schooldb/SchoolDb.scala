@@ -7,8 +7,8 @@ import org.squeryl.tests.QueryTester
 import java.util.Date
 import java.text.SimpleDateFormat
 import org.squeryl.dsl.{GroupWithMeasures}
-import org.squeryl.{KeyedEntity, Session, Schema}
 import org.squeryl.dsl.ast._
+import org.squeryl._
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -23,7 +23,9 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
 }
 
 case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], val confirmed: Boolean)
-  extends SchoolDbObject {
+  extends SchoolDbObject with Optimistic {
+
+  def occVersionNumberZ = occVersionNumber
 
   def this() = this("", null, Some(new Date), 0, Some(0), false)
   override def toString = "Course:" + id + ":" + name
@@ -74,8 +76,6 @@ class SchoolDb extends Schema with QueryTester {
   
   val testInstance = new {
 
-    //printDml
-
     try {
       drop // we normally *NEVER* do this !!
     }
@@ -114,6 +114,8 @@ class SchoolDb extends Schema with QueryTester {
     courseSubscriptions.insert(new CourseSubscription(mandarin.id, gaitan.id))
 
     val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F)))
+
+    Session.currentSession.connection.commit
   }
 
   def loggerOn =
@@ -153,6 +155,10 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
+    testPartialUpdate1
+    
+    testOptimisticCC1
+    
     testNVLFunction
     testDateOptionComparisonInWhereClause
     testDateComparisonInWhereClause
@@ -161,8 +167,6 @@ class SchoolDb extends Schema with QueryTester {
     
     testInstance
     //logQueries = true
-
-    testPartialUpdate1
     
     //exerciseTypeSystem1
     testForUpdate
@@ -510,7 +514,7 @@ class SchoolDb extends Schema with QueryTester {
 
     update(courses)(c =>
       where(c.id === heatTransfer.id)
-      set(ht.confirmed := true)
+      set(c.confirmed := true)
     )
 
     ht = courses.where(c => c.id === heatTransfer.id).single
@@ -521,7 +525,7 @@ class SchoolDb extends Schema with QueryTester {
 
     update(courses)(c =>
       where(c.id === heatTransfer.id)
-      set(ht.confirmed := false)
+      set(c.confirmed := false)
     )
 
     ht = courses.where(c => c.id === heatTransfer.id).single
@@ -659,6 +663,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def testPartialUpdate1 = {
 
+    val initialHT = courses.where(c => c.id === heatTransfer.id).single
 
     val q =
       from(courses)(c =>
@@ -680,7 +685,7 @@ class SchoolDb extends Schema with QueryTester {
 
     assert(nRows == 4)
     assert(expectedAfter == after, "expected " + expectedAfter + " got " + after)
-
+    
     // alternative syntax :
     nRows =
       update(courses)(c =>
@@ -691,12 +696,43 @@ class SchoolDb extends Schema with QueryTester {
 
     assert(nRows == 4)
     
-    courses.update(heatTransfer)
+    courses.forceUpdate(initialHT)
 
     val afterReset = q.toList
 
     assert(b4 == afterReset, "expected " + afterReset + " got " + b4)
 
     passed('testPartialUpdate1)
+  }
+
+  def testOptimisticCC1 = {    
+
+    Session.currentSession.connection.commit // we commit to release all locks
+
+    var ht = courses.where(c => c.id === heatTransfer.id).single
+    
+    transaction {
+      var ht2 = courses.where(c => c.id === heatTransfer.id).single
+      courses.update(ht2)
+    }
+    
+    var ex: Option[StaleUpdateException] = None
+    try {
+      courses.update(ht)
+    }
+    catch {
+      case e:StaleUpdateException => ex = Some(e)
+    }
+    
+    ex.getOrElse(error("StaleUpdateException should have get thrown on concurrent update test."))
+
+    val expectedVersionNumber = ht.occVersionNumberZ + 1
+
+    val actualVersionNumber =
+      from(courses)(c => where(c.id === heatTransfer.id) select(c)).single.occVersionNumberZ
+            
+    assertEquals(expectedVersionNumber, actualVersionNumber, "optimistic CC failed")
+
+    passed('testOptimisticCC1)
   }
 }

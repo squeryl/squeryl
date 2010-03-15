@@ -34,11 +34,11 @@ trait CompositeKeyedEntity[K <: Product] extends KeyedEntity[K]
 
 trait Optimistic {
   self: KeyedEntity[_] =>
-  
-  private var _occVersionNumber: Int = -1
 
-  protected def occVersionNumber = _occVersionNumber
+  protected val occVersionNumber = 0
 }
+
+class StaleUpdateException(message: String) extends RuntimeException(message)
 
 trait EntityMember {
 

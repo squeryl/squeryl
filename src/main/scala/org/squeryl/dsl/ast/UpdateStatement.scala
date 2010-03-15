@@ -8,7 +8,7 @@ class UpdateStatement(val whereClause: Option[()=>LogicalBoolean], uas: Seq[Upda
   def doWrite(sw: StatementWriter) = {}
 
   def columns =
-    uas.map(ua => ua.left.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
+    uas.map(ua => ua.left)
 
   def values =
     uas.map(ua => ua.right)

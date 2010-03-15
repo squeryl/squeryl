@@ -179,7 +179,7 @@ class DatabaseAdapter {
 
   def prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =
     prepareStatement(c, sw, c.prepareStatement(sw.statement), session)
-
+  
   def prepareStatement(c: Connection, sw: StatementWriter, s: PreparedStatement, session: Session): PreparedStatement = {    
 
     session._addStatement(s)
@@ -288,6 +288,18 @@ class DatabaseAdapter {
       "?"
     }
 
+//  protected def writeValue(sw: StatementWriter, v: AnyRef):String =
+//    if(sw.isForDisplay) {
+//      if(v != null)
+//        v.toString
+//      else
+//        "null"
+//    }
+//    else {
+//      sw.addParam(convertToJdbcValue(v))
+//      "?"
+//    }
+
   def postCreateTable(s: Session, t: Table[_]) = {}
   
   def postDropTable(t: Table[_]) = {}
@@ -301,7 +313,7 @@ class DatabaseAdapter {
 
   def isFullOuterJoinSupported = true
 
-  def writeUpdate[T](o: T, t: Table[T], sw: StatementWriter) = {
+  def writeUpdate[T](o: T, t: Table[T], sw: StatementWriter, checkOCC: Boolean) = {
 
     val o_ = o.asInstanceOf[AnyRef]
     val pkMd = t.posoMetaData.primaryKey.get
@@ -312,7 +324,12 @@ class DatabaseAdapter {
     sw.writeLinesWithSeparator(
       t.posoMetaData.fieldsMetaData.
         filter(fmd=> fmd != pkMd).
-          map(fmd => fmd.columnName + " = " + writeValue(o_, fmd, sw)),
+          map(fmd => {
+            if(fmd.isOptimisticCounter)
+              fmd.columnName + " = " + fmd.columnName + " + 1 "
+            else
+              fmd.columnName + " = " + writeValue(o_, fmd, sw)
+          }),
       ","
     )
     sw.unindent
@@ -320,6 +337,14 @@ class DatabaseAdapter {
     sw.nextLine
     sw.indent
     sw.write(pkMd.columnName, " = ", writeValue(o_, pkMd, sw))
+
+    if(checkOCC)
+      t.posoMetaData.optimisticCounter.foreach(occ => {
+         sw.write(" and ")
+         sw.write(occ.columnName)
+         sw.write(" = ")
+         sw.write(writeValue(o_, occ, sw))
+      })
   }
 
   def writeDelete[T](t: Table[T], whereClause: Option[ExpressionNode], sw: StatementWriter) = {
@@ -367,8 +392,18 @@ class DatabaseAdapter {
       if(z.isNotLast) {
         sw.write(",")
         sw.nextLine
-      }
+      }      
     }
+
+    if(t.posoMetaData.isOptimistic) {
+      sw.write(",")
+      sw.nextLine      
+      val occ = t.posoMetaData.optimisticCounter.get
+      sw.write(occ.columnName)
+      sw.write(" = ")
+      sw.write(occ.columnName + " + 1")
+    }
+    
     sw.unindent
 
     if(us.whereClause != None) {

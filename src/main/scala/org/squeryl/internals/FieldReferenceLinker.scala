@@ -38,7 +38,7 @@ object FieldReferenceLinker {
 
   class YieldInspection {
     
-    val _utilizedFields = new ArrayBuffer[SelectElement]
+    private val _utilizedFields = new ArrayBuffer[SelectElement]
     var _on = false
     var queryExpressionNode: QueryExpressionNode[_] = null
     var _resultSetMapper: ResultSetMapper = null
@@ -54,7 +54,7 @@ object FieldReferenceLinker {
     }
 
     def addSelectElement(e: SelectElement) = {
-      _utilizedFields.append(e)
+      _utilizedFields.append(e)            
       e.prepareColumnMapper(_utilizedFields.size)
     }
     
@@ -134,7 +134,10 @@ object FieldReferenceLinker {
       if(res0 == null)
         error("query " + q + " yielded null")
 
-      _populateSelectColsRecurse(new HashSet[AnyRef], yi, q, res0)
+      val visitedSet = new HashSet[Int]
+      //val visitedSet = new HashSet[AnyRef]
+      
+      _populateSelectColsRecurse(visitedSet, yi, q, res0)
 
       result = (yi.turnOffAndCollectOutExpressions, res0)
     }
@@ -145,12 +148,15 @@ object FieldReferenceLinker {
     result
   }
 
-  private def _populateSelectColsRecurse(visited: HashSet[AnyRef] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
+  private def _populateSelectColsRecurse(visited: HashSet[Int] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
 
-    if(o == null || o.getClass.getName.startsWith("java.") || visited.contains(o))
+    val idHashCode = System.identityHashCode(o)
+
+    if(o == null || o.getClass.getName.startsWith("java.") || visited.contains(idHashCode))
       return
 
-    visited.add(o)
+    //visited.add(o)
+    visited.add(idHashCode)
     
     _populateSelectCols(yi, q, o)
     for(f <-o.getClass.getDeclaredFields) {

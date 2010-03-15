@@ -30,10 +30,8 @@ trait QueryTester {
   }
 
   def assertEquals(expected:Any, actual:Any, msg:String) =
-    if(expected == actual)
-      println("OK")
-    else
-      println("expected " + expected + " got " + actual)
+    if(expected != actual)
+      error("expected " + expected + " got " + actual)
 
   def validateQuery[R,S](name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
     validateQuery[R,S](logQueries, name, q, mapFunc, expected)

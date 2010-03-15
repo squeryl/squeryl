@@ -7,6 +7,7 @@ import net.sf.cglib.proxy.{Factory, Callback, Enhancer}
 import java.lang.reflect.{Member, Constructor, Method, Field}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
+import org.squeryl.Optimistic
 
 
 class PosoMetaData[T](val clasz: Class[T]) {
@@ -17,6 +18,8 @@ class PosoMetaData[T](val clasz: Class[T]) {
 
   def findFieldMetaDataForProperty(name: String) =
      fieldsMetaData.find(fmd => fmd.nameOfProperty == name)
+
+  val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
 
   lazy val primaryKey: Option[FieldMetaData] = {
 
@@ -33,7 +36,13 @@ class PosoMetaData[T](val clasz: Class[T]) {
             " must have a 0 param constructor or a constructor with only primitive types")).get
 
   val fieldsMetaData = buildFieldMetaData
-  
+
+  def optimisticCounter =
+    fieldsMetaData.find(fmd => fmd.isOptimisticCounter)
+
+  if(isOptimistic)
+    assert(optimisticCounter != None)
+
   def _const = {
 
     val r = new ArrayBuffer[(Constructor[_],Array[Object])]
@@ -132,7 +141,7 @@ class PosoMetaData[T](val clasz: Class[T]) {
     val members = new ArrayBuffer[(Member,HashSet[Annotation])]
 
     _fillWithMembers(clasz, members)
-    
+
     val name2MembersMap =
       members.groupBy(m => {
 
@@ -174,11 +183,10 @@ class PosoMetaData[T](val clasz: Class[T]) {
         members.filter(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).
           map(m=> m.asInstanceOf[Method]).filter(m=> m.getParameterTypes.apply(0) != o).headOption
 
-
       val property = (field, getter, setter, a)
 
       if(isImplicitMode && _groupOfMembersIsProperty(property)) {
-        fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction))
+        fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
       }
 //      else {
 //        val colA = a.find(an => an.isInstanceOf[Column])

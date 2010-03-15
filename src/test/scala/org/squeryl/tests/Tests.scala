@@ -5,10 +5,10 @@ package org.squeryl.tests
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
-import java.sql.DriverManager
 import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleAdapter}
 import schooldb.SchoolDb
 import org.squeryl.{Session}
+import java.sql.{Connection, DriverManager}
 
 
 object Tests extends QueryTester {
@@ -23,36 +23,33 @@ object Tests extends QueryTester {
   }
 
   def allTestsOnH2 = {
-    println("Tests with H2")
-    allTests(createH2TestConnection)
+    allTests("H2", createH2TestConnection _)
   }
 
   def allTestsOnAllDatabases = {
 
-    println("Tests with MySQL")
-    allTests(createMySQLTestConnection)
 
-    println("Tests with PosgreSQL")
-    allTests(createPostgreSqlTestConnection)
-    
-    println("Tests with Oracle")
-    allTests(createOracleTestConnection)
+    allTests("Oracle", createOracleTestConnection _)
 
-    println("Tests with H2")
-    allTests(createH2TestConnection)    
+    allTests("PosgreSQL", createPostgreSqlTestConnection _)
+
+    allTests("H2", createH2TestConnection _)
+
+    allTests("MySQL", createMySQLTestConnection _)
   }
 
-  def allTests(s: =>Session) = {
+  def allTests(dbName: String, s: ()=>Session) = {
 
+    println("Will run test suite with " + dbName)
+    
     // tests that need no Db Session :
     (new AnnotationTests).testMetaData
 
     // tests that do :
-    val session = s
 
     import org.squeryl.PrimitiveTypeMode._
 
-    SessionFactory.concreteFactory = Some(()=>s)
+    SessionFactory.concreteFactory = Some(s)
     
     transaction {
       (new SchoolDb).test1
@@ -64,6 +61,7 @@ object Tests extends QueryTester {
       }
     }
 
+    val session = s()
     try {
       using(session) {                
         (new TestCustomTypesMode).testAll
@@ -110,10 +108,11 @@ object Tests extends QueryTester {
   def createMySQLTestConnection = {
     Class.forName("com.mysql.jdbc.Driver");
 
-    Session.create(
-      DriverManager.getConnection("jdbc:mysql://localhost/test?" +
-                                 "user=squeryl&password=squeryl"),
-      new MySQLAdapter
-    )
+    val c = DriverManager.getConnection("jdbc:mysql://localhost/test?user=squeryl&password=squeryl")
+
+    //com.mysql.jdbc.Driver defaults to TRANSACTION_REPEATABLE_READ
+    c.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED)
+    
+    Session.create(c,new MySQLAdapter)
   }
 }

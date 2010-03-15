@@ -139,7 +139,7 @@ trait LogicalBoolean extends ExpressionNode  {
 }
 
 
-class UpdateAssignment(val left: ExpressionNode, val right: ExpressionNode)
+class UpdateAssignment(val left: FieldMetaData, val right: ExpressionNode)
 
 trait TypedExpressionNode[T] extends ExpressionNode {
 
@@ -147,7 +147,30 @@ trait TypedExpressionNode[T] extends ExpressionNode {
 
   def mapper: OutMapper[T]
 
-  def :=[B <% TypedExpressionNode[T]] (b: B) = new UpdateAssignment(this, b : TypedExpressionNode[T])
+  def :=[B <% TypedExpressionNode[T]] (b: B) = {
+
+    val ser =
+      try {
+        this.asInstanceOf[SelectElementReference[_]]
+      }
+      catch { // TODO: validate this at compile time with a scalac plugin
+        case e:ClassCastException => {
+            throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure update statement uses *only* closure argument.", e)
+        }
+      }
+
+    val fmd =
+      try {
+        ser.selectElement.asInstanceOf[FieldSelectElement].fieldMataData
+      }
+      catch { // TODO: validate this at compile time with a scalac plugin
+        case e:ClassCastException => {
+          throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure update statement uses *only* closure argument.", e)
+        }
+      }
+
+    new UpdateAssignment(fmd, b : TypedExpressionNode[T])
+  }
 }
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {
