@@ -208,7 +208,7 @@ class DatabaseAdapter {
 
     val st = prepareStatement(s.connection, sw, s)
     try {
-      st.executeQuery
+      (st.executeQuery, st)
     }
     catch {
       case e: SQLException => throw new RuntimeException("query \n" + sw.statement + "\n failed.", e)

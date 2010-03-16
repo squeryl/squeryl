@@ -92,16 +92,18 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)
     val s = Session.currentSession
-    val rs = _dbAdapter.executeQuery(s, sw)
-
+    val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
+    
     var _nextCalled = false;
     var _hasNext = false;
 
     def _next = {
       _hasNext = rs.next
 
-      if(!_hasNext) // close it ASAP
+      if(!_hasNext) {// close it ASAP
         s._closeResultSet(rs)
+        stmt.close
+      }
 
       _nextCalled = true
     }

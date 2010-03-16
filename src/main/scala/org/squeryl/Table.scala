@@ -39,11 +39,16 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
     if(posoMetaData.primaryKey != None && posoMetaData.primaryKey.get.isAutoIncremented) {      
       val rs = s.getGeneratedKeys
-      assert(rs.next,
-        "getGeneratedKeys returned no rows for the auto incremented\n"+
-        " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
-        " column might not be defined as auto increment")
-      posoMetaData.primaryKey.get.setFromResultSet(o, rs, 1)
+      try {
+        assert(rs.next,
+          "getGeneratedKeys returned no rows for the auto incremented\n"+
+          " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
+          " column might not be defined as auto increment")
+        posoMetaData.primaryKey.get.setFromResultSet(o, rs, 1)
+      }
+      finally {
+        rs.close
+      }
     }
 
     t

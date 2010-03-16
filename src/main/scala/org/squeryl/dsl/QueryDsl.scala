@@ -29,6 +29,11 @@ trait QueryDsl
       session.cleanup
     }
 
+  /**
+   * 'transacton' causes a new transaction to begin and commit after the block exection, or rollback
+   * if an exception occurs. Invoking a transaction always cause a new one to
+   * be created, even if called in the context of an existing transaction.
+   */
   def transaction[A](a: =>A): A =
     if(! Session.hasCurrentSession)
       _executeTransactionWithin(SessionFactory.newSession, a _)
@@ -40,6 +45,12 @@ trait QueryDsl
       res
     }
 
+  /**
+   * 'inTransaction' will create a new transaction if none is in progress and commit it upon
+   * completion or rollback on exceptions. If a transaction already exists, it has no
+   * effect, the block will execute in the context of the existing transaction. The
+   * commit/rollback is handled in this case by the parent transaction block.
+   */
   def inTransaction[A](a: =>A): A =
     if(! Session.hasCurrentSession)
       _executeTransactionWithin(SessionFactory.newSession, a _)

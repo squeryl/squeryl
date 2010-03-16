@@ -15,11 +15,13 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
+
+    //dumpResourceClosingPolicyOfAllDrivers
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    allTestsOnH2
+    //allTestsOnH2
   }
 
   def allTestsOnH2 = {
@@ -36,6 +38,14 @@ object Tests extends QueryTester {
     allTests("H2", createH2TestConnection _)
 
     allTests("MySQL", createMySQLTestConnection _)
+  }
+
+  def dumpResourceClosingPolicyOfAllDrivers = {
+
+    //testConnectionClose(createOracleTestConnection)
+    testConnectionClose(createPostgreSqlTestConnection)
+    testConnectionClose(createMySQLTestConnection)
+    testConnectionClose(createH2TestConnection)
   }
 
   def allTests(dbName: String, s: ()=>Session) = {
@@ -77,6 +87,19 @@ object Tests extends QueryTester {
       session.connection.close
     }
   }
+
+  def testConnectionClose(session: Session) = {
+
+    val stmt = session.connection.prepareStatement("select * from course")
+    val rs = stmt.executeQuery
+
+    session.connection.close
+
+    println("When " + session.connection.getClass.getName + " closes :")
+    println("statement is closed ? --> " + stmt.isClosed)
+    println("resultSet is closed ? --> " + rs.isClosed)
+  }
+
 
   def createH2TestConnection = {
     Class.forName("org.h2.Driver");
