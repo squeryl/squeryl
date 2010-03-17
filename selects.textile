@@ -26,7 +26,7 @@ type determins the generic parameter of the <notextile>Query[R]</notextile>
   def select[R](r: =>R): R
 ]]></script>
 
-The select expression will be evaluated for row returned by the query.
+The select expression will be evaluated for every row returned by the query.
 
 It is also possible to select with alternative (shorter but less generic) syntax :
 
