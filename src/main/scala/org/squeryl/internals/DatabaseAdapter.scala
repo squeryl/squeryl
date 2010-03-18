@@ -201,41 +201,29 @@ class DatabaseAdapter {
     s
   }
 
-  def executeQuery(s: Session, sw: StatementWriter) = {
-
-    if(s.isLoggingEnabled)
-      s.log(sw.toString)
-
-    val st = prepareStatement(s.connection, sw, s)
+  private def _exec[A](s: Session, sw: StatementWriter)(block: =>A) =
     try {
-      (st.executeQuery, st)
+      if(s.isLoggingEnabled)
+        s.log(sw.toString)      
+      block
     }
     catch {
-      case e: SQLException => throw new RuntimeException("query \n" + sw.statement + "\n failed.", e)
+      case e: SQLException => throw new RuntimeException("Exception while executing statement :\n" + sw.statement, e)
     }
+
+  def executeQuery(s: Session, sw: StatementWriter) = _exec(s, sw) {
+    val st = prepareStatement(s.connection, sw, s)
+    (st.executeQuery, st)
   }
 
-  def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = {
-
-    if(s.isLoggingEnabled)
-      s.log(sw.toString)
-
+  def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = _exec(s, sw) {
     val st = prepareStatement(s.connection, sw, s)
     (st.executeUpdate, st)
   }
 
-  def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = {
-
-    if(s.isLoggingEnabled)
-      s.log(sw.toString)
-
+  def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = _exec(s, sw) {
     val st = prepareStatement(s.connection, sw, ps, s)
-    try {
-      (st.executeUpdate, st)
-    }
-    catch {
-      case sqlEx: SQLException => throw new RuntimeException("failed executing statement :\n"+sw.statement, sqlEx)
-    }
+    (st.executeUpdate, st)
   }
 
   def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
@@ -258,7 +246,7 @@ class DatabaseAdapter {
    * will not do conversion from None/Some, so @arg r should be a java primitive type or
    * a CustomType
    */
-  protected def convertToJdbcValue(r: AnyRef) : AnyRef = {
+  def convertToJdbcValue(r: AnyRef) : AnyRef = {
     var v = r
     if(v.isInstanceOf[CustomType])
        v = v.asInstanceOf[CustomType].wrappedValue.asInstanceOf[AnyRef]

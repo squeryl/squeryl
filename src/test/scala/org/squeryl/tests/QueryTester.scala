@@ -29,7 +29,7 @@ trait QueryTester {
       println("-->" + r)
   }
 
-  def assertEquals(expected:Any, actual:Any, msg:String) =
+  def assertEquals[E](expected:E, actual:E, msg:String) =
     if(expected != actual)
       error("expected " + expected + " got " + actual)
 

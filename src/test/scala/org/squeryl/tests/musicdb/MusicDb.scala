@@ -153,7 +153,7 @@ class MusicDb extends Schema with QueryTester {
   def countCds(cds: Queryable[Cd]) =
     from(cds)(c => compute(count))
 
-  def countCds2(cds: Queryable[Cd]) = cds.Count    
+  def countCds2(cds: Queryable[Cd]) = cds.Count
 
   def avgSongCountForAllArtists =
     from(

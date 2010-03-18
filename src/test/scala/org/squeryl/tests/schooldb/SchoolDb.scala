@@ -51,6 +51,8 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
   extends SchoolDbObject {
 
   def this() = this(null,0, Some(""),Some(0), Some(""))
+
+  override def toString = "rue " + streetName 
 }
 
 class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float]) extends KeyedEntity[Long] {
@@ -157,6 +159,10 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
+    testBatchUpdate1
+    
+    testBatchInserts1
+    
     testPartialUpdate1
     
     testOptimisticCC1
@@ -737,4 +743,60 @@ class SchoolDb extends Schema with QueryTester {
 
     passed('testOptimisticCC1)
   }
+
+  def testBatchInserts1 = {
+
+    addresses.insert(List(
+      new Address("St-Dominique",14, None,None,None),
+      new Address("St-Urbain",23, None,None,None),
+      new Address("Sherbrooke",1123, None,Some(454),Some("B"))
+    ))
+
+    addresses.insert(List(
+      new Address("Van Horne",14, None,None,None)
+    ))
+
+    val streetNames = List("Van Horne", "Sherbrooke", "St-Urbain", "St-Dominique")
+
+    val q = addresses.where(a => a.streetName in streetNames)
+    
+    assertEquals(4, q.Count : Long, "batched update test failed")
+
+    addresses.delete(q)
+
+    assertEquals(0, q.Count : Long, "batched update test failed")
+
+    passed('testBatchInserts1)
+  }
+
+  def testBatchUpdate1 = {
+
+    addresses.insert(List(
+      new Address("St-Dominique",14, None,None,None),
+      new Address("St-Urbain",23, None,None,None),
+      new Address("Sherbrooke",1123, None,Some(454),Some("B"))
+    ))
+
+    addresses.insert(List(
+      new Address("Van Horne",14, None,None,None)
+    ))
+
+    val streetNames = List("Van Horne", "Sherbrooke", "St-Urbain", "St-Dominique")
+
+    val q = addresses.where(a => a.streetName in streetNames)
+
+    addresses.update(q.map(a =>{a.streetName += "Z"; a}))
+
+    val updatedStreetNames = List("Van HorneZ", "SherbrookeZ", "St-UrbainZ", "St-DominiqueZ")
+
+    val updatedQ = addresses.where(a => a.streetName in updatedStreetNames)
+
+    assertEquals(4, updatedQ.Count : Long, "batched update test failed")
+
+    addresses.delete(updatedQ)
+
+    assertEquals(0, updatedQ.Count : Long, "batched update test failed")
+
+    passed('testBatchUpdate1)
+  }  
 }

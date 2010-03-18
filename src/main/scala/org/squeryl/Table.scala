@@ -2,7 +2,7 @@ package org.squeryl;
 
 import dsl.ast._
 import dsl.{QueryDsl}
-import internals.{NoOpOutMapper, FieldReferenceLinker, StatementWriter}
+import internals.{FieldMetaData, NoOpOutMapper, FieldReferenceLinker, StatementWriter}
 import java.sql.{Statement}
 import scala.reflect.Manifest
 
@@ -14,25 +14,25 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
-  def insert(t: T) = {
+  def insert(t: T): T = {
 
     val o = t.asInstanceOf[AnyRef]
-
+    val sess = Session.currentSession
     val sw = new StatementWriter(_dbAdapter)
     _dbAdapter.writeInsert(t, this, sw)
 
     val st = 
       if(_dbAdapter.supportsAutoIncrementInColumnDeclaration)
-        Session.currentSession.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
+        sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
       else if( posoMetaData.primaryKey != None) {
         val autoIncPk = new Array[String](1)
         autoIncPk(0) = posoMetaData.primaryKey.get.columnName
-        Session.currentSession.connection.prepareStatement(sw.statement, autoIncPk)
+        sess.connection.prepareStatement(sw.statement, autoIncPk)
       }
       else
-        Session.currentSession.connection.prepareStatement(sw.statement)
+        sess.connection.prepareStatement(sw.statement)
 
-    val (cnt, s) = _dbAdapter.executeUpdateForInsert(Session.currentSession, sw, st)
+    val (cnt, s) = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
     if(cnt != 1)
       error("failed to insert")
@@ -40,6 +40,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     if(posoMetaData.primaryKey != None && posoMetaData.primaryKey.get.isAutoIncremented) {      
       val rs = s.getGeneratedKeys
       try {
+        sess._addResultSet(rs)
         assert(rs.next,
           "getGeneratedKeys returned no rows for the auto incremented\n"+
           " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
@@ -54,11 +55,73 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     t
   }
 
+  def insert(t: Query[T]) = error("not implemented")
+
+  def insert(e: Iterable[T]):Unit =
+    _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented), true, false)
+
+  /**
+   * isInsert if statement is insert otherwise update
+   */
+  private def _batchedUpdateOrInsert(e: Iterable[T], fmds: Iterable[FieldMetaData], isInsert: Boolean, checkOCC: Boolean):Unit = {
+    
+    val it = e.iterator
+
+    if(it.hasNext) {
+
+      val e0 = it.next
+      val sess = Session.currentSession
+      val dba = _dbAdapter
+      val sw = new StatementWriter(dba)
+
+      if(isInsert)
+        dba.writeInsert(e0, this, sw)
+      else
+        dba.writeUpdate(e0, this, sw, checkOCC)
+      
+      val st = sess.connection.prepareStatement(sw.statement)
+      dba.prepareStatement(sess.connection, sw, st, sess)
+      st.addBatch
+
+      var updateCount = 1
+
+      while(it.hasNext) {
+        val eN = it.next.asInstanceOf[AnyRef]      
+        var idx = 1
+        val f = fmds.foreach(fmd => {
+          st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
+          idx += 1
+        })
+        st.addBatch
+        updateCount += 1
+      }
+
+      val execResults = st.executeBatch
+      
+      if(checkOCC)
+        for(b <- execResults)
+          if(b == 0) {
+            val updateOrInsert = if(isInsert) "insert" else "update"
+            throw new StaleUpdateException(
+              "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
+          }
+    }
+  }
+
+  /**
+   * Updates without any Optimistic Concurrency Control check 
+   */
   def forceUpdate(o: T)(implicit ev: T <:< KeyedEntity[_]) =
     _update(o, false)
   
   def update(o: T)(implicit ev: T <:< KeyedEntity[_]):Unit =
     _update(o, true)
+
+  def update(o: Iterable[T])(implicit ev: T <:< KeyedEntity[_]):Unit =
+    _update(o, true)
+
+  def forceUpdate(o: Iterable[T])(implicit ev: T <:< KeyedEntity[_]):Unit =
+    _update(o, false)
 
   private def _update(o: T, checkOCC: Boolean) = {
 
@@ -78,6 +141,19 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
       else
         error("failed to update")
     }
+  }
+
+  private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
+
+    val pkMd = posoMetaData.primaryKey.get
+
+    val fmds = List(
+      posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter).toList,            
+      List(pkMd),
+      posoMetaData.optimisticCounter.toList
+    ).flatten
+
+    _batchedUpdateOrInsert(e, fmds, false, checkOCC)
   }
   
   def update(s: T =>UpdateStatement):Int = {
@@ -107,7 +183,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T]) extends View[T](n, c) 
     val res = dba.executeUpdate(Session.currentSession, sw)
     res._1    
   }
-
+  
   def delete(q: Query[T]): Int = {
 
     val queryAst = q.ast.asInstanceOf[QueryExpressionElements]

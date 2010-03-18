@@ -30,14 +30,13 @@ object Tests extends QueryTester {
 
   def allTestsOnAllDatabases = {
 
+    allTests("MySQL", createMySQLTestConnection _)
 
     allTests("Oracle", createOracleTestConnection _)
 
     allTests("PosgreSQL", createPostgreSqlTestConnection _)
 
     allTests("H2", createH2TestConnection _)
-
-    allTests("MySQL", createMySQLTestConnection _)
   }
 
   def dumpResourceClosingPolicyOfAllDrivers = {
