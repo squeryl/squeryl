@@ -25,6 +25,10 @@ class Toaster(
 
   @Column(name="WEIGHT", optionType=classOf[Float])
   var weightInGrams: Option[String] = None
+
+  @Column("Zozo12")
+  var zozo: String = ""
+  
 }
 
 class NailCutter extends KeyedEntity[Long] {
@@ -85,6 +89,9 @@ class AnnotationTests {
     val yearOfManufacture = toasters.findFieldMetaDataForProperty("yearOfManufacture").get
     assert(yearOfManufacture.columnName == "yearOfManufacture", "expected 'yearOfManufacture' got " + yearOfManufacture.columnName)
     assert(yearOfManufacture.length == 4, "expected 4 got " + yearOfManufacture.length)
+
+    val zozo = toasters.findFieldMetaDataForProperty("zozo").get
+    assert(zozo.columnName == "Zozo12", "expected 'zozo' got " + zozo.columnName)
 
 // TODO: uncomment when scalac bug #3003 is resolved    
 //    val dateOfPurchase = toasters.findFieldMetaDataForProperty("dateOfPurchase").get

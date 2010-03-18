@@ -22,7 +22,9 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
   override def toString = "Student:" + id + ":" + name
 }
 
-case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date], var meaninglessLong: Long, var meaninglessLongOption: Option[Long], val confirmed: Boolean)
+case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date],
+  @Column("meaninglessLongZ")
+  var meaninglessLong: Long, var meaninglessLongOption: Option[Long], val confirmed: Boolean)
   extends SchoolDbObject with Optimistic {
 
   def occVersionNumberZ = occVersionNumber

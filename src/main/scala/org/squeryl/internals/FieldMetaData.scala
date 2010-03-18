@@ -44,10 +44,20 @@ class FieldMetaData(
    * The name of the database column
    */
   def columnName =
-    if(columnAnnotation == None || columnAnnotation.get.name == "")
+    if(columnAnnotation == None)
       nameOfProperty
-    else
-      columnAnnotation.get.name
+    else {
+      val ca = columnAnnotation.get
+      var res = ca.name
+
+      if(res == "")
+        res = ca.value
+
+      if(res == "")
+        nameOfProperty
+      else
+        res
+    }
   
   val resultSetHandler =
     FieldMetaData.resultSetHandlerFor(wrappedFieldType)
