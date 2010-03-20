@@ -7,10 +7,9 @@ import net.sf.cglib.proxy.{Factory, Callback, Enhancer}
 import java.lang.reflect.{Member, Constructor, Method, Field}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
-import org.squeryl.Optimistic
+import org.squeryl.{Schema, Optimistic}
 
-
-class PosoMetaData[T](val clasz: Class[T]) {
+class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
     
 
   override def toString =

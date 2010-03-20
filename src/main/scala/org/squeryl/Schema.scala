@@ -13,6 +13,16 @@ trait Schema {
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
+  object NamingConventionTransforms {
+    
+    def camelCase2underScore(name: String) =
+      name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
+  }
+
+  def columnNameFromPropertyName(propertyName: String) = propertyName
+
+  def tableNameFromClassName(tableName: String) = tableName
+
   def printDml = {
 
     for(t <- _tables) {
@@ -80,7 +90,7 @@ trait Schema {
     table(tableNameFromClass(manifestT.erasure))(manifestT)
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val t = new Table[T](name)(manifestT)
+    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this)
     _tables.append(t)
     t
   }
@@ -89,5 +99,5 @@ trait Schema {
     view(tableNameFromClass(manifestT.erasure))(manifestT)
 
   protected def view[T](name: String)(implicit manifestT: Manifest[T]): View[T] =
-    new View[T](name)(manifestT)  
+    new View[T](name)(manifestT)
 }

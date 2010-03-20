@@ -45,7 +45,7 @@ class FieldMetaData(
    */
   def columnName =
     if(columnAnnotation == None)
-      nameOfProperty
+      parentMetaData.schema.columnNameFromPropertyName(nameOfProperty)
     else {
       val ca = columnAnnotation.get
       var res = ca.name
@@ -54,7 +54,7 @@ class FieldMetaData(
         res = ca.value
 
       if(res == "")
-        nameOfProperty
+        parentMetaData.schema.columnNameFromPropertyName(nameOfProperty)
       else
         res
     }

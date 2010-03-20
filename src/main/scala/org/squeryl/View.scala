@@ -7,14 +7,16 @@ import java.sql.ResultSet
  * This class can be used for read only tables or (database) views
  * for an updatable view, or table use Table[T] 
  */
-class View[T] private [squeryl](val name: String, private[squeryl] val classOfT: Class[T]) extends Queryable[T] {
+class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema) extends Queryable[T] {
 
   def this(n:String)(implicit manifestT: Manifest[T]) =
-    this(n, manifestT.erasure.asInstanceOf[Class[T]])  
-  
+    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema)
+
+  def name = schema.tableNameFromClassName(_name)
+
   private [squeryl] def findFieldMetaDataForProperty(name: String) = posoMetaData.findFieldMetaDataForProperty(name)
 
-  private [squeryl] val posoMetaData = new PosoMetaData(classOfT)
+  private [squeryl] val posoMetaData = new PosoMetaData(classOfT, schema)
 
   private [squeryl] def allFieldsMetaData: Iterable[FieldMetaData] = posoMetaData.fieldsMetaData
 
