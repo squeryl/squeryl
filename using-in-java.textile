@@ -1,0 +1,19 @@
+---
+layout: manual
+title: Using in a Java project
+---
+
+h2. It just works ! 
+
+A key goal in the design of Scala was interoperability with Java, and Martin Odersky succeeded amazingly well in this regard.  
+ 
+One a build is setup for compiling Java and Scala sources, the rest is very straight forward.
+
+# Setup a build 
+
+# Define the Schema in scala, persistant classes should use @BeanInfo annotations, this will cause the compuler to generate setters and getters for every property 
+
+# Define DAO (query wrappers) in scala
+
+
+h3. That's it ! 

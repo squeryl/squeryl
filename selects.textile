@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: manual
 title: Select
 ---
 
@@ -64,8 +64,11 @@ into other queries :
     )
 ]]></script>
 
-h3. Nesting in the From clause :
+h3. Sub Queries in the From clause :
 
+The from clause takes Queryable[T]'s, a trait of Table[T] View[T] *and* Query[T].
+Notice the Query[Song] *funkAndLatinJazz.songsInPlaylistOrder* in the from clause :
+ 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
     val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
@@ -75,7 +78,7 @@ h3. Nesting in the From clause :
       )
 ]]></script>
 
-h3. Nesting in the Where clause :
+h3. Sub Queries in the Where clause :
 
 Joins can also be nested in the where clause just like in SQL :
 

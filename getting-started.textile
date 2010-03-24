@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: manual
 title: Getting Started
 ---
 
@@ -15,100 +15,8 @@ You will need
 If you prefer to build from source with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 
 
-h2. Defining a Schema
-
-Scala classes are mapped to tables via instances of org.squeryl.Table[T],
-that are grouped in a org.squeryl.Schema singleton.
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-  import org.squeryl.PrimitiveTypeMode._
-
-  class Author(val id: Long, 
-               val firstName: String, 
-			   val lastName: String)
-  
-  // fields can be mutable or immutable 
-  
-  class Book(val id: Long, 
-             var title: String,
-			 @Column("AUTHOR_ID") // the default 'exact match' policy can be overriden
-			 var authorId: Long,
-			 var coAuthorId: Option[Long]) {
-    
-	def this() = this(0,"",0,Some(0L))
-  }
-  
-  object Library extends Schema {
-  
-    //When the table name doesn't match the class name, it is specified here :
-    val authors = table[Author]("AUTHORS")
-	
-	val books = table[Book]
-  }
-  
-]]></script>
-
-The org.squeryl.Schema trait can create the Schema or dump the definition to a file.
-
-h2. Mapping fields to Columns
-
-Squeryl applies the principle of _Convention over Configuration_ :
-The class to table and field to column correspondance is determined
-by name equivalence. It is possible to override a field's column name 
-with the org.squeryl.annotations.Column annotations and the class's 
-table name table with the org.squeryl.Schema.table[T](tableName:String) 
-method. as illustrated in the previous example.
-
-The Column annotation can also be used to redefine default length
-for String/varchar columns (and also for other types although it 
-should rarely be necessary).
-
-h2. Nullable columns are mapped with Option[] fields
-
-The default (and strongly recommended) way of mapping nullable columns
-to fields is with the Option[] type. If you use Squeryl to create
-(or generate) your schema, all fields have a not null constraint,
-and Option[] fields are nullable.
-
-* *Important* : If a class has an Option[] field, it becomes *mandatory*
-  to implement a zero argument constructor that initializes Option[] fields
-  with Some() instances (like the Book class in the example above).
-  Failing to do so will cause an exception to be thrown
-  when the table will be instantiated. The reason for this is that type erasures 
-  imposed by the JVM prevents from reflecting on the Option[] type parameter.
-  This constraint could be relaxed in a future version by a compiler plugin
-  that would _tell_ Squeryl the erased type information.
   
   
-h2. Connecting to a Database 
-
-All database interaction is done via a Squeryl session (org.squeryl.Session),
-which is just a wrapper over a Jdbc connection, that provides the means
-to bind itself to the thread local storage.
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-  import org.squeryl.PrimitiveTypeMode._
-
-    Class.forName("org.postgresql.Driver");
-
-    val session = 
-	  Session.create(
-        java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/squeryl", "squeryl", "squeryl"),
-        new PostgreSqlAdapter
-      )
-
-	//Squeryl database interaction must be done with a using block : 
-	using(session) {       
-	
-	   books.insert(new Author(1, "Michel","Folco"))	   	   
-	   val a = from(authors)(a=> where(a.lastName === "Folco") select(a))
-	}	    	
-]]></script>
-
-The 'using' function binds the session to the current thread for the duration
-of the block, so any method called directly or undirectly from the block
-will be _in the context_ of the session's connection (and transaction).
-
 h2. Primitive types
 
 The main motivations for using primitive types are for performance and symplicity.

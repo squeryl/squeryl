@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: manual
 title: Insert, Update and Delete
 ---
 

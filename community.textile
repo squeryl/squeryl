@@ -1,0 +1,8 @@
+---
+layout: default
+title: Community
+---
+
+Come discuss with us on how to improve Squeryl, or get help by joining the group
+
+<a target='none' href='http://groups.google.com/group/squeryl'>User support and discussion</a>

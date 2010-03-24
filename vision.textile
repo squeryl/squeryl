@@ -1,0 +1,23 @@
+---
+layout: manual
+title: Vision
+---
+
+<p align='center'> 
+_It seems that perfection is reached not when there is nothing left to add, but when there is nothing left to remove._
+</p>
+
+<p align='right'> Antoine de Saint-Exupéry </p>
+
+<h3 align='center'> Design principles of Squeryl</h3>
+
+h3. Minimalism 
+
+* What is left out of a framework is as important as what is included. 
+The key measure is the _*feature conceptual density*_ defined by this ratio : functionality / (DSL _surface area_). Features that can be added without increasing the API size, are more compelling, than if it needs a new keyword, operator or API method. A good example of this is the composability of statements and type arithmetic : they cause *zero* increase of the API nor do they need to introduce special keywords, all the complexity is _hidden_ in the Squeryl's engine room. In contrast, the *forUpdate* method in Query[T] increases the _surface area_, but was deemed usefull enough to deserve its presence.
+
+* Avoid redundancy at all costs and at all levels especially in the exposed API, but also in the private code. 
+
+h3. Stay out of the way
+
+* A persistence layer addresses only one aspect among many in an application and should leave as much _conceptual room_ as possible for the other aspects.

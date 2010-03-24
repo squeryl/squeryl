@@ -1,0 +1,49 @@
+---
+layout: manual
+title: Sessions and Transactions
+---
+
+h2. Bootstrap with org.squeryl.SessionFactory
+
+The easyest way to use Squeryl is by first initializing SessionFactory.concreteFactory.
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  import org.squeryl.SessionFactory
+
+    Class.forName("org.postgresql.Driver");
+
+    SessionFactory.concreteFactory = Some(()=>
+	  Session.create(
+        java.sql.DriverManager.getConnection("..."),
+        new PostgreSqlAdapter))
+]]></script>
+
+Once the SessionFactory.concreteFactory is initialized, the *transaction* and *inTransaction* 
+block functions become available :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  import org.squeryl.PrimitiveTypeMode._
+  
+	//Squeryl database interaction must occur in a transaction block : 
+	transaction {
+	   books.insert(new Author(1, "Michel","Folco"))	   	   
+	   val a = from(authors)(a=> where(a.lastName === "Folco") select(a))
+	}
+	
+	inTransaction {
+	   authors.where(a=> a.lastName === "Pouchkine")
+	   
+	   //when in a transaction, the current session can be obtained with :
+	   val s = Squeryl.currentSession
+	}
+]]></script>
+
+The 'transaction' function binds the session to the current thread for the duration
+of the block, so any method called directly *and undirectly* from the block
+will be _in the context_ of the transaction.
+
+h2. transaction vs inTransaction
+
+* *'transacton'* causes a new transaction to begin and commit after the block's execution, or rollback if an exception occurs. Invoking a transaction always cause a new one to be created, even if called in the context of an existing transaction.
+
+* *'inTransaction'* will create a new transaction if none is in progress and commit it upon completion or rollback on exceptions. If a transaction already exists, it has no effect, the block will execute in the context of the existing transaction. The commit/rollback is handled in this case by the parent transaction block.

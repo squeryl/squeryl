@@ -1,0 +1,27 @@
+---
+layout: manual
+title: Introduction
+---
+
+h2. Why Squeryl ?
+
+There are many _many_ ORMs available on the Java VM, some of them are proven and very mature, isn't the problem solved ?
+
+JPA, JDO, Hybernate ORMs make ones life much easyer than dealing with raw JDBC, and writing database applications
+is certainly more pleasant than it was a decade ago, but the current generation of ORMs still leave room for 
+improvement. Current Java ORMs are probably the best that can be written in the Java language.
+
+h2. String based query languages are fragile
+
+refactoring is more difficult, agility is hindered
+
+h2. String and annotations based queries inhibits reusability by not being composable 
+
+h2. SQL is a high level declarative language, JPA/JDO is lower level and requires imperative 
+current generation ORMs encapsulate them as lo
+
+h2. select avg(p.age) from Person
+
+h2. Controling the fetch granularity is hard with current generation ORMs
+
+Optimizing the granularity of fetches is key step of performance tuning.
