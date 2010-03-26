@@ -1,36 +1,66 @@
 ---
 layout: default
-title: Introduction
+title: <i>Functionally bridging the Object and Relational paradigms <br/> on the Java VM</i>
 ---
 
-h4. Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating database objects from within the Scala language
+
+<h3 class='zquote' align='center'>"Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating 
+database objects from within the Scala language"</h3>
+
+<div class='span-12'>
+h3. Write compiler validated statements.
+
+Squeryl statements that pass compilation won't fail at runtime. Refactor your schema as often as is required, the Scala compiler and your IDE will tell you exactly which lines of code are affected.
+</div>
+
+<div class='span-12 last'>
+h3. Never repeat yourself
+
+The Composability of Squeryl statements allows you to define them *only once* and *reuse* them within other queries.
+</div>
+
+<div class='span-12'>
+h3. Write declaratively
+
+Write as declaratively as Sql, only with less boilerplate. Sql's declarativeness is _*preserved*_, not encapsulated in a lower level API that requires imperative and procedural code to get things done.
+</div>
+
+<div class='span-12 last'>
+h3. Control the granularity of data retrieval
+
+The composability of statements and their lazy evaluation allows obtaining precisely and explicitely the optimal level of granularity of database fetches to minimize database roundtrips.
+</div>
 
 
-h3. Motivation
+<div class='span-24 last'>
+  <div class='espace'></div>
+</div>
 
-* _*Static validation of database code*_ : 
-If your Squeryl statements compile, chances are pretty good that they won't fail at runtime.
 
-* _*Minimalism*_ :
-When complexity in an application exceeds a certain treshold, it's evolution and maintenance become an increasingly difficult, costly, and unpleasant burden. A persistence layer addresses only one aspect among many in an application and should leave as much _conceptual room_ as possible for the other aspects.
+<div class='span-24 last'>
+<div class='ligne'></div>
 
-* _*Declarativeness*_ : 
-Managing persistent information introduces complexities given than database modifications have a _lasting_ effect : errors can be persisted, causing problems far into the future.
-One of the relationnal paradigm's answer for addressing these challenges (and arguably one of the reason they have become ubiquitous) is the *declarative* nature of SQL. 
-A key objective of Squeryl is to _*preserve*_ the declarativeness of Sql.
+<div class='span-24 last'>
+  <div class='espace'></div>
+</div>
 
-* _*Reuse*_ : 
-Squeryl expressions are composable just like their Sql counterpart, allowing queries to be reused within other queries, helping to apply the DRY(Don't Repeat Yourself) principle.
 
-* _*Three paradigms, One language*_ : 
-A lot has been said on the impedance mismatch between the Object and Relational paradigms, what the precursors of Squeryl ("HaskellDB":http://www.haskell.org/haskellDB and "LINQ":http://msdn.microsoft.com/en-us/library/bb425822.aspx) have demonstrated is that a functional language can reduce this mismatch to the point where it _emulates_ the relational paradigm.
-Squeryl in this regard taps into the Object and Functional features of Scala to _emulate_ the relational paradigm.
+<div class='span-6'>
+h3. <a href='introduction.html'>Introduction</a>
+</div>
+<div class='span-6'>
+h3. <a href='getting-started.html'>Get started</a>
+</div>
+<div class='span-6'>
+h3. <a href='community.html'>Community</a>
+</div>
+<div class='span-6 last'>
+h3. <a href='vision.html'>Vision</a>
+</div>
 
-h3. Squeryl is not 
+</div>
+	       
 
-* A Database abstraction layer
-It is there to _help_ you to write an abstraction layer, it is not one by itself
 
-* A Façade that tries to turn a relational database into an OO database
-Systems built using this approach most often have disastrous performance problems.
-Squeryl instead aims at providing means to write a persistence layer that is _friendly_ to OO and/or functional code.
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>

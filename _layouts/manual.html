@@ -1,0 +1,31 @@
+<html>
+
+  {% include head.html %}
+  
+  <body>
+
+    <div id='pageContainer' class='container'>       
+
+      {% include top.html %}
+      
+      <div class="span-24 last">
+              
+	      <div class="span-6">	              
+	        {% include left-nav.html %}            
+	      </div>
+			   
+	      <div class='span-18 last'>
+	        {{ content }}
+	      </div>
+      
+	  </div>      
+	  
+      {% include bottom.html %}
+      	  
+    </div>      	  
+  
+  {% include bottom-script.html %}
+  	
+  </body>
+  
+</html>

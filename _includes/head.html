@@ -1,0 +1,131 @@
+  <head>
+    <title>Squeryl</title>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta content='text/html;charset=UTF-8' http-equiv='Content-Type'>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta name="description" content="Squeryl is a strongly typed, declarative and SQL like DSL for manipulating database objects from within the Scala language"/>
+	
+	<meta name="keywords" content="scala, squeryl,strongly typed, orm, scala, dsl, declarative, sql, database, object, java, linq"/>
+	
+    <link rel="stylesheet" href="css/blueprint/reset.css" type="text/css">
+    <link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">	    	
+    <link rel="stylesheet" href="css/blueprint/typography.css" type="text/css" media="screen, projection">
+
+<!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+
+<link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection">
+	
+	<link   type="text/css" rel="stylesheet" href="styles/shCore.css"/>
+	<link   type="text/css" rel="stylesheet" href="styles/shThemeDefault.css"/>
+
+	<script type="text/javascript" src="src/shCore.js"></script>
+	<script type="text/javascript" src="src/shBrushJava.js"></script>
+	<script type="text/javascript" src="src/shBrushScala.js"></script>
+	<script type="text/javascript" src="src/shBrushSql.js"></script>	
+	<script type="text/javascript">
+		SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
+		SyntaxHighlighter.all();
+	</script>
+
+	<script type="text/javascript">  
+	  function toggleGrid() {
+	    var toggle = document.getElementById('toggleGrid');
+	    var container;			
+	    if(toggle.innerHTML == 'Hide Grid') {
+	      toggle.innerHTML = 'Show Grid';
+	      ripClass('');
+	    } 
+	    else if(toggle.innerHTML == 'Show Grid') {
+	      toggle.innerHTML = 'Hide Grid';
+	      ripClass(' showgrid');
+	    }
+	  }
+	 
+	  function ripClass(c) {
+	    if(document.getElementsByClassName) {
+	      container = document.getElementsByClassName('container');
+	      for(var i=0; i < container.length; i++) {
+	        container[i].className = 'container' + c;
+	      }
+	    }
+	    else {
+	      container = document.getElementsByTagName('div');
+	      for(var i=0; i < container.length; i++) {
+	        if(container[i].className == 'container') {
+	          container[i].className = 'container' + c;
+	        }
+	        else if(container[i].className == 'container showgrid') {
+	          container[i].className = 'container';
+	        }
+	      }
+	    }
+	  }
+	  
+</script> 
+
+	<style type="text/css">
+
+      zzh2 {border-style:solid; border-width:5px; border-color:black}
+      	  
+	  div.ligne {border:1px; color:ECE5B6; border-bottom-style:solid;}	  	 
+	  
+	  *.nav a, h3 a  {
+	    text-decoration : none; 
+	    color:646060; 
+	    /*font-size:medium*/
+	  }
+	  ul li a {text-decoration : none; color:646060; font-size:medium-small}	  
+	  ul.nav li {list-style-type: none; margin-bottom: 4px;}
+	  
+	  #pageContainer {
+	    min-height:760px;
+	    padding:20px;
+		border-style:solid;border-width:5px;border-color:black			    	   
+	  }
+	  
+	  *.espace {
+	    min-height:20px;	    	   
+	  }
+	  
+	  *.zbande div {
+	    background-color:#990000;
+	    margin:0;
+	  }
+	  
+	  body {
+	    margin:0; 
+	    background-color:#444444;	    
+	    background-image:url(images/image_de_fond.png);	    
+	  }
+	  div.container {
+	  	background-color:white;
+	  }
+	  *.zquote {
+	    color:#999999;
+	    font-size:medium;
+	    font-weight:bold;
+	    font-style:italic;
+	    padding:13px;
+	  }
+	  
+	</style>
+	
+	<style type="text/css">
+		div#toggleGrid {
+		  color: #fff;
+		  cursor: pointer;
+		  background: #333;
+		  font-weight: bold;
+		  left: 0;
+		  position: fixed;	
+		  text-align: center;
+		  top: 0;
+		  width: 100px;		
+		}
+		div#toggleGrid:hover {
+		  color: #FF6F6F;
+		}		
+	</style>			
+  </head>

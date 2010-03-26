@@ -1,0 +1,98 @@
+---
+layout: manual
+title: Relations
+---
+
+h2. Relations as Queryable[A] objects
+
+Relations in a Squeryl object model are expressed as Query[A], 
+consider this simple schema with a one to many relation :    
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+  
+ class Book(val id: Long, publisherId: Long, val categoryId: Long) {
+   // a book has one publisher :
+   def publisher = publishers.lookup(publisherId)
+ }
+ 
+ class Publisher(val id: Long) {
+   // the publisher's many books :
+   def books: Query[Book] = books.where(b => b.publisherId === id)
+ }
+ 
+ object LibraryDb extends Schema {
+   
+   val books = table[Book]
+   
+   val publishers = table[Publisher]
+ }
+}
+]]></script>
+
+This way of defining relations is a bit more verbose than using annotations and
+collections, as in the approach taken be java ORMs. One could 
+argue that it _pollutes_ the object model by introducing the database related (Squeryl) Query[A] type
+in the object's interface.
+This is certainly true, however, by replacing a standard collection with Query[A] we gain quite a lot, 
+namely *the lazy queryability of relation members*. Lets illustrate this :
+ 
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  val p = publishers.lookup(idOfPublisherP)
+
+  val sciFiBooksOfPublisherP = p.books.where(b => b.categoryId === Categories.SciFi)
+  
+  val oldBooksOfPublisherP = p.books.where(b => b.date < year1920)
+  
+]]></script>
+
+
+With a JPA ORM, a relation is not queryable, it is just a plain old collection, in order to filter the
+relation on the database side, one has to define a separate query for each use case, the
+example above would translate in JPA into much more code : 
+
+h3. The same use case with JPA : 
+
+<script type="syntaxhighlighter" class="brush: java"><![CDATA[
+
+@Entity
+@NamedQuery(
+  name="books.byPublisherAndCategory", 
+  query="select b from Book b where b.publisherId = :publisherId "+
+        "and b.categoryId = :categoryId ")
+public class Publisher {
+
+    private long id;
+
+    @OneToMany(targetEntity=Publisher.class)
+    public Set getBooks() { return books; }
+    
+    public List getBooksByCategory(long categoryId) {
+    
+	  Query q = s.getNamedQuery("books.byPublisherAndCategory");
+	  
+      q.setLong("publisherId", id);
+      q.setLong("categoryId", categoryId);
+      return q.list();    
+    }
+
+    public List getBooksBeforeDate(Date date) {
+    
+	  Query q = s.createQuery(
+	    "select b from Book b where b.publisherId = :publisherId and b.date <= :date ");
+	    
+      q.setLong("publisherId", id);
+      q.setLong("date", date);
+      return q.list();    
+    }
+}
+
+Publisher p = publisher.find(idOfPublisherP);
+
+List<Book> sciFiBooksOfPublisherP = p.getBooksByCategory(Categories.SciFi);
+  
+List<Book> oldBooksOfPublisherP = p.books.getBooksBeforeDate(year1920);
+  
+]]></script>
+

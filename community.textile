@@ -1,43 +1,21 @@
 ---
 layout: default
-title: Submiting bugs and Contributing
+title: Community
 ---
 
-h2. Help us make Squeryl a world class game changing technology
+h2. Get help, share ideas  
 
-There are no shortage of interesting problems requiring elegant solutions, brilliant and talented minds are a welcome addition to Squeryl's DNA. 
+Come discuss with us on how to improve Squeryl, or get help by <u><a target='none' href='http://groups.google.com/group/squeryl'>joining the group</a></u>
 
-h2. A snipet of code to reproduce the bug is ideal.
-
-* The bug will get solved quicker
-
-* It will help to grow the test suite and make 
-  it harder for Squeryl to regress !
-
-When that is not possible, sending the AST of the query 
-(with Query[T].dumpAst) is also helpfull  :
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-  val q = 
-    from(artists, songs)((a,s) =>
-      where(a.id === s.artistId)
-      groupBy(a.id)
-      compute(count)
-    )
-	
-   println(q.dumpAst)
-	
-]]></script>
-
-
-h2. Submitting Ideas and Issues
+h2. Submitting Issues, bugs and feature requests
 
 The best place for submiting ideas is on the "discussion group":http://groups.google.com/group/squeryl
 
 For issues and bugs we will start by using "GitHub's issue tracker":http://github.com/max-l/Squeryl/issues
 
+h2. Help us make Squeryl a game changing technology
 
-h2. Contributing
+There are no shortage of interesting problems requiring elegant solutions Squeryl's DNA, could certainly be enhanced by capable and talented minds.
 
 Like they say on GitHub : Fork me !!!
 

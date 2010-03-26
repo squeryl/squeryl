@@ -1,7 +1,9 @@
 ---
-layout: default
+layout: manual
 title: Select
 ---
+
+h2. The variations on Select
 
 Select statements return an immutable Query[T] that
 is itself a Queryable[T] and a lazy Iterable[T].
@@ -64,8 +66,11 @@ into other queries :
     )
 ]]></script>
 
-h3. Nesting in the From clause :
+h3. Sub Queries in the From clause :
 
+The from clause takes Queryable[T]'s, a trait of Table[T] View[T] *and* Query[T].
+Notice the Query[Song] *funkAndLatinJazz.songsInPlaylistOrder* in the from clause :
+ 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
     val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
@@ -75,7 +80,7 @@ h3. Nesting in the From clause :
       )
 ]]></script>
 
-h3. Nesting in the Where clause :
+h3. Sub Queries in the Where clause :
 
 Joins can also be nested in the where clause just like in SQL :
 
@@ -145,77 +150,3 @@ Calling the *.forUpdate* method on a Query[] creates a copy of it that has a 'fo
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   aTable.where(t => t.aField === aValue).forUpdate
 ]]></script>
-
-<a name='DynamicQuery'></a>
-
-h2. Dynamic Queries
-
- It is often necessary to create queries with a from clause that varies
-with runtime values.
-
-The method *inhibitWhen(b: Boolean)* available on *org.squeryl.Queryable[A]* 
-is meant to be called in a from clause, it will turn a Table[A] or (sub) Query[A]
-into a Queryable[Option[A]] and remove the queryable from the query
-*and all expression containing this queryable.
-
-Example :
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
-    def searchForBooks(authorLastName: Option[String], bookTitle: String) =
-      from(authors.inhibitWhen(authorName == None), books)((a,b)=>
-        where(a.get.lastName like authorLastName.get and b.title like bookTitle and a.get.id === b.authorId)
-        select((b,a))
-      )
-
-	val result1:List[(Book,Option(Author))] = searchForBooks(None, "Un Loup est un loup").toList
-	
-	val result2:List[(Book,Option(Author))] = searchForBooks("Tolstoi", "War and Peace").toList
-]]></script>
-
-Notice the Option[] in the result type of the query, and how the Author
-table disapears from the generated SQL base on the input of *inhibitWhen* :
-
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
-
-  -- first query : searchForBooks(None, "Un Loup est un loup").toList
-  
-    Select * 
-	from 
-	  Book b 
-	where 
-	  b.title like ? -- 'Un Loup est un loup'
-
-  -- second query :	 searchForBooks("Tolstoi", "War and Peace").toList 
-  
-	Select * 
-	from 
-	  Author a,
-	  Book b
-	where 
-	  a.lastName like ? and   -- "Tolstoi"
-	  b.title like ? and      -- "War and Peace"
-	  a.id = b.authorId
-]]></script>
-
-h2. Paginated Queries
-
-Paginaged queries are supported via the *page(offset:Int, pageLength:Int)* method on all org.squeryl.Query[A]
-
-Example : 
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
-    def searchForBooks(title : String, offset: Int, pageLength: Int) =
-      from(books)(b =>
-	    where(b => b.title like title)
-		orderBy(b.title asc)
-	  ).page(offset, pageLength)
-      
-    val pageLength = 10
-	val page1 = searchForBooks("The Art of%", pageLength * 0, pageLength)
-	val page2 = searchForBooks("The Art of%", pageLength * 1, pageLength)
-	val page3 = searchForBooks("The Art of%", pageLength * 2, pageLength)
-]]></script>
-
-Squeryl uses the appropriate mechanism from the database to paginage efficiently.
