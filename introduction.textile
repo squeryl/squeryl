@@ -7,21 +7,27 @@ h2. Why Squeryl ?
 
 There are many _many_ ORMs available on the Java VM, some of them are proven and very mature, isn't the problem solved ?
 
-JPA, JDO, Hybernate ORMs make ones life much easyer than dealing with raw JDBC, and writing database applications
-is certainly more pleasant than it was a decade ago, but the current generation of ORMs still leave room for 
-improvement. Current Java ORMs are probably the best that can be written in the Java language.
+JPA, JDO, Hybernate and current generation Java ORMs make ones life much easyer than dealing with raw JDBC, and writing database applications is certainly more pleasant than it was a decade ago, but the current generation of ORMs leave important problems unsolved, that would require enhancement of the Java language to address elegantly, we will enumerate them next.   
 
-h2. String based query languages are fragile
+h3. HQL, JDOQL and JPA-QL queries are merely strings, and are therefore fragile
 
-refactoring is more difficult, agility is hindered
+When a project has tens of thousands of lines of code, making changes to the ORM's schema requires extensive impact analysis, one must browse through all string (whatever-QL) queries and verify that they are not affected, test them and fix them. With Squeryl statements, the compiler will list all breaking changes, IDEs even can help you with the refactoring.   
 
-h2. String and annotations based queries inhibits reusability by not being composable 
+h3. String/annotation based queries inhibit reusability by not being composable 
 
-h2. SQL is a high level declarative language, JPA/JDO is lower level and requires imperative 
-current generation ORMs encapsulate them as lo
+Reusability of code is a very desirable property, many design patterns are beneficial because they increase reuse. Testability of code is it's ability to execute out of its context. 
+The current generation of Java ORMs by using string expressions, annotations and XML don't support composition of queries. A Squeryl query on the other hand, can be
+queried against as if it was a view. 
 
-h2. select avg(p.age) from Person
+h3. Current Java ORMs wrap a high level language (SQL) into a lower level API 
 
-h2. Controling the fetch granularity is hard with current generation ORMs
+JPA style ORMs make the easy case easy, but are not of much help for complex queries, agregate and group queries need JPA-QL 
+Navigating through relations a la JPA in an imperative style is often more verbose than with a declarative query  
 
-Optimizing the granularity of fetches is key step of performance tuning.
+h3. Controling the fetch granularity is hard with current generation ORMs
+
+Optimizing the granularity of fetches from the database is key step of performance tuning, hybernate has extensive documentation on
+how to avoid the so called N+1 queries problem, the tuning is done mostly via configuration and is not explicit in the code.
+All Squeryl data retrieval revolve around the Queryable[A] trait, which by its lazy evaluation alows statements to be built
+with the desired granularity, and evaluated in a second step. This approach has the added benefit that by looking at the code
+one can make a reasonable guess as to how it will translate into database queries.

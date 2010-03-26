@@ -5,7 +5,7 @@ title: Sessions and Transactions
 
 h2. Bootstrap with org.squeryl.SessionFactory
 
-The easyest way to use Squeryl is by first initializing SessionFactory.concreteFactory.
+*SessionFactory.concreteFactory* must be initialized before Squeryl transactions can be invoked : 
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   import org.squeryl.SessionFactory
@@ -18,8 +18,7 @@ The easyest way to use Squeryl is by first initializing SessionFactory.concreteF
         new PostgreSqlAdapter))
 ]]></script>
 
-Once the SessionFactory.concreteFactory is initialized, the *transaction* and *inTransaction* 
-block functions become available :
+After the initialization of SessionFactory.concreteFactory, the *transaction* and *inTransaction* block functions (call by names) become available :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   import org.squeryl.PrimitiveTypeMode._
@@ -42,7 +41,7 @@ The 'transaction' function binds the session to the current thread for the durat
 of the block, so any method called directly *and undirectly* from the block
 will be _in the context_ of the transaction.
 
-h2. transaction vs inTransaction
+h3. Distinction between transaction and inTransaction
 
 * *'transacton'* causes a new transaction to begin and commit after the block's execution, or rollback if an exception occurs. Invoking a transaction always cause a new one to be created, even if called in the context of an existing transaction.
 

@@ -3,17 +3,14 @@ layout: manual
 title: Using in a Java project
 ---
 
-h2. It just works ! 
+h2. Defining "Java friendly DAOs" in Scala  
 
 A key goal in the design of Scala was interoperability with Java, and Martin Odersky succeeded amazingly well in this regard.  
  
-One a build is setup for compiling Java and Scala sources, the rest is very straight forward.
+Onece a build is setup for compiling Java and Scala sources, the rest is very straight forward.
 
 # Setup a build 
 
-# Define the Schema in scala, persistant classes should use @BeanInfo annotations, this will cause the compuler to generate setters and getters for every property 
+# Define the Schema classes in scala, persistant classes should use @BeanInfo annotations, this will cause the compiler to generate Java style getters and setters for every property, the class will then look exactly like POJOs in the Java code.  
 
-# Define DAO (query wrappers) in scala
-
-
-h3. That's it ! 
+# Define DAOs (query wrappers) in Scala, with methods that take "Java friendly" types, which means any scala types provided that thy don't involved to many fancy closures !   

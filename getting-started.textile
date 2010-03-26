@@ -12,115 +12,12 @@ You will need
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
 
+
+Squeryl is available on the Maven repo @ http://nexus.scala-tools.org/
+ 
+* groupId : *org.squeryl*
+* artifactId: *squeryl_2.8.0.Beta1-RC8*
+* version *0.9.2*
+
 If you prefer to build from source with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 
-
-  
-  
-h2. Primitive types
-
-The main motivations for using primitive types are for performance and symplicity.
-If a query returns N rows of objects with M fields primitive types
-will cause the the garbage collector to handle of N objects, while same 
-query using custom types will cause the creation of N * M objects.
-
-To use primitive types, simply import org.squeryl.PrimitiveTypeMode._ 
-in the scope where database objects and queries are defined :
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
-  import org.squeryl.PrimitiveTypeMode._
-  
-  class Song(val id: Long, 
-             val title: String, 
-			 val artistId: Long, 
-             val filePath: Option[String], 
-			 val year: Int)
-  
-  from(songs)(s => where(s.title like "%funk%") select(s))  
-]]></script>
-
-that's all there is to it.
-
-<a name='disambiguate'></a>
-
-* *important* : in PrimitiveTypes mode there can be ambiguities between numeric operators
-
-When using org.squeryl.PrimitiveTypeMode, the compiler will treat an expression like the 
-one in the next example as a Boolean. The .~ function is needed to tell the compiler that the 
-left side is a node of TypedExpressionNode[Int] which will cause the whole expression to be a
-LogicalBoolean which is what the where clause takes :
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-    from(songs)(s =>
-       where(s.year.~ > 1965)
-       select(s)
-    )  		
-]]></script>		
-
-It is also needed in the following case :
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-    from(songs)(s =>
-      where(s.year.~ + 10 === 1965)
-      select(s)
-    )
-]]></script>
-
- This is only required when using PrimitiveType mode, with custom types 
-there is no ambiguity, since custom types are not (AnyVal) numerics.
-
-A compiler plugin could eventually place .~ in all expression nodes.
-An alternative could also be to use other symbols than the 
-standard math operators to avoid the ambiguity altogether.
-Opinions on this choice/tradeoff would be appreciated.
-
-
-h2. Custom types
-
-One motivation for using custom wrapper types is to allow fields
-to carry meta data along with validation, as in the next example.
-
-Custom field types must inherit one of the subtypes of CustomType in the package
-org.squeryl.customtypes, and import the org.squeryl.customtypes.CustomTypesMode._
-into the scope where statements are defined.
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
-import org.squeryl.customtypes.CustomTypesMode._
-import org.squeryl.customtypes._
-
-/**
- * An example of trait that can be mixed into CustomType,
- * to add meta data and validation 
- */
-trait Domain[A] {
-  self: CustomType =>
-
-  def label: String
-  def validate(a: A): Unit
-  def value: A
-
-  validate(value)
-}
-
-class Age(v: Int) extends IntField(v) with Domain[Int] {
-  def validate(a: Int) = assert(a > 0, "age must be positive, got " + a)
-  def label = "age"
-}
-
-class FirstName(v: String) extends StringField(v) with Domain[String] {
-  def validate(s: String) = assert(s.length <= 50, "first name is waaaay to long : " + s)
-  def label = "first name"
-}
-
-class WeightInKilograms(v: Double) extends DoubleField(v) with Domain[Double] {
-  def validate(d:Double) = assert(d > 0, "weight must be positive, got " + d) 
-  def label = "weight (in kilograms)"
-}
-
-class Patient(val firstName: FirstName, val age: Age, val weight: WeightInKilograms)
-
-val heavyWeights = from(patients)(p => where(p.weight > 250) select(p))
-
-]]></script>

@@ -1,8 +1,9 @@
 <html>
   {% include head.html %}
   <body>
-    
-    <div class='container'>    
+  
+  
+    <div id='pageContainer' class='container'>       
       
       {% include top.html %}    
       
@@ -13,13 +14,12 @@
         {{ content }}
         
       </div>
-	  
-      <div class='span-24 last'>
-		<br/><br/><br/>
-      </div>
-      	  
-    </div>
-		
+
+	 
+    {% include bottom.html %}              	      
+    </div>    
+  
+                		
   {% include bottom-script.html %}
   </body>
 </html>

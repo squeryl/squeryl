@@ -1,23 +1,26 @@
 ---
 layout: manual
-title: Vision
+title: Design principles
 ---
 
-<p align='center'> 
-_It seems that perfection is reached not when there is nothing left to add, but when there is nothing left to remove._
-</p>
+<h3 class='zquote' align='left'> 
+"It seems that perfection is reached not when there is nothing left to add, but when there is nothing left to remove."
+</h3>
 
-<p align='right'> Antoine de Saint-Exupéry </p>
+<p align='right'> _Antoine de Saint-Exupéry_</p>
 
-<h3 align='center'> Design principles of Squeryl</h3>
+<!-- <h3 align='center'>Minimalism in all its forms</h3> --> 
 
-h3. Minimalism 
+h3. Minimalism in all its forms
 
-* What is left out of a framework is as important as what is included. 
-The key measure is the _*feature conceptual density*_ defined by this ratio : functionality / (DSL _surface area_). Features that can be added without increasing the API size, are more compelling, than if it needs a new keyword, operator or API method. A good example of this is the composability of statements and type arithmetic : they cause *zero* increase of the API nor do they need to introduce special keywords, all the complexity is _hidden_ in the Squeryl's engine room. In contrast, the *forUpdate* method in Query[T] increases the _surface area_, but was deemed usefull enough to deserve its presence.
+* What is left out of a framework is as important as what is included, It's easy to pile on features, removing them is _very_ hard and problematic.
 
-* Avoid redundancy at all costs and at all levels especially in the exposed API, but also in the private code. 
+* The functionality that is added should have the smallest _surface area_ as possible <br/>Lets define the _*feature conceptual density*_ by this ratio : functionality / (conceptual _surface area_). 
+The _surface area_ here means the complexity added to the API, DSL, or just the number of concepts that need to be introduced in order to use the functionality. Yes complexity is subjective, and this is not an exact science, but more of an art. 
 
-h3. Stay out of the way
+<!-- than if it needs a new keyword, operator or API method. A good example of this is the composability of statements and type arithmetic : they cause *zero* increase of the API nor do they need to introduce special keywords, all the complexity is _hidden_ in the Squeryl's engine room. In contrast, the *forUpdate* method in Query[T] increases the _surface area_, but was deemed usefull enough to deserve its presence. -->
 
-* A persistence layer addresses only one aspect among many in an application and should leave as much _conceptual room_ as possible for the other aspects.
+* Zero tolerance for redundancy : the worst form of redundancy is the one imposed by a framework or library on user code. EJB is probably the worst offender in this respect.
+
+
+* Keep in mid that a persistence layer addresses only one aspect among many in an application and should leave as much _conceptual room_ as possible for the other aspects.

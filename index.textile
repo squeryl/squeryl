@@ -3,10 +3,12 @@ layout: default
 title: <i>Functionally bridging the Object and Relational paradigms <br/> on the Java VM</i>
 ---
 
-<h3 align='center'>Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating database objects from within the Scala language</h3>
+
+<h3 class='zquote' align='center'>"Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating 
+database objects from within the Scala language"</h3>
 
 <div class='span-12'>
-h3. Write compiler validated statements
+h3. Write compiler validated statements.
 
 Squeryl statements that pass compilation won't fail at runtime. Refactor your schema as often as is required, the Scala compiler and your IDE will tell you exactly which lines of code are affected.
 </div>
@@ -24,7 +26,41 @@ Write as declaratively as Sql, only with less boilerplate. Sql's declarativeness
 </div>
 
 <div class='span-12 last'>
-h3. Control the granularity of database fetches
+h3. Control the granularity of data retrieval
 
-The composability of statements along with lazy evaluation allows defining precisely the optimal level of granularity of database fetches to minimize database roundtrips.
+The composability of statements and their lazy evaluation allows obtaining precisely and explicitely the optimal level of granularity of database fetches to minimize database roundtrips.
 </div>
+
+
+<div class='span-24 last'>
+  <div class='espace'></div>
+</div>
+
+
+<div class='span-24 last'>
+<div class='ligne'></div>
+
+<div class='span-24 last'>
+  <div class='espace'></div>
+</div>
+
+
+<div class='span-6'>
+h3. <a href='introduction.html'>Introduction</a>
+</div>
+<div class='span-6'>
+h3. <a href='getting-started.html'>Get started</a>
+</div>
+<div class='span-6'>
+h3. <a href='community.html'>Community</a>
+</div>
+<div class='span-6 last'>
+h3. <a href='vision.html'>Vision</a>
+</div>
+
+</div>
+	       
+
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>

@@ -1,63 +1,31 @@
 <html>
+
   {% include head.html %}
+  
   <body>
 
-  <div  class='container'">
+    <div id='pageContainer' class='container'>       
 
-      {% include top.html %}    
-
-      <div class="span-6" style="border-style:solid">
-
-	    <h4>The basics</h4>		
-	    <ul class='nav'>
-	       <li><a href='introduction.html'>Introduction</a></li>
-		   <li><a href='getting-started.html'>Getting Started</a></li>
-		   <li><a href='sessions-and-tx.html'>Sessions and Transactions</a></li>
-		   <li><a href='using-in-java.html'>Using in Java project</a></li>
-	    </ul>
-	    
-	    <h4>DML</h4>
-	    <ul class='nav'>
-           <li><a href='inserts-updates-delete.html'>Insert, Update, Delete</a></li>		   
-           <li><a href='miscellaneous.html'>Miscellaneous</a></li>
-		   <li><a href='supported-databases.html'>Supported databases</a></li>
-	    </ul>	    	    
-	    
-	    <h4>Querying</h4>
-	    <ul class='nav'>
-	       <li><a href='selects.html'>Selects</a></li>
-           <li><a href='joins.html'>Joins</a></li>
-		   <li><a href='group-and-agregate.html'>Group and Agregate Queries</a></li>		   
-           <li><a href='miscellaneous.html'>Pagination</a></li>
-		   <li><a href='supported-databases.html'>Supported databases</a></li>
-	    </ul>	    
-	    
-	    <h4>Advanced concepts</h4>
-	    <ul class='nav'>
-	       <li><a href='selects.html'>Selects</a></li>
-           <li><a href='joins.html'>Joins</a></li>
-           <li><a href='inserts-updates-delete.html'>Insert, Update, Delete</a></li>
-		   <li><a href='group-and-agregate.html'>Group and Agregates</a></li>
-		   <li><a href='relations.html'>Relations</a></li>		   
-           <li><a href='miscellaneous.html'>Miscellaneous</a></li>
-		   <li><a href='supported-databases.html'>Supported databases</a></li>
-		   <li><a target='none' href='http://github.com/max-l/Squeryl/blob/master/src/test/scala/org/squeryl/tests/demos/MusicDb.scala'>Compilable examples</a></li>
-	    </ul>	    
-      </div>
+      {% include top.html %}
       
-		   
-      <div class='span-18 last'>        		
-		<div class='ligne'></div>
-		<br/>
-        {{ content }}
-      </div>
+      <div class="span-24 last">
+              
+	      <div class="span-6">	              
+	        {% include left-nav.html %}            
+	      </div>
+			   
+	      <div class='span-18 last'>
+	        {{ content }}
+	      </div>
+      
+	  </div>      
 	  
-      <div class='span-24 last'>        
-		<br/><br/><br/>
-      </div>
+      {% include bottom.html %}
       	  
-  </div>
-
-  {% include bottom-script.html %}	
+    </div>      	  
+  
+  {% include bottom-script.html %}
+  	
   </body>
+  
 </html>

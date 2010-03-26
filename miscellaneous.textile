@@ -73,33 +73,3 @@ Instead of the (slightly) more verbose way :
   val t:(Float,String) = from(aTable)(t=> compute(avg(t.anInt), min(t.aString))).single
   
 ]]></script>
-
-
-h2. Evaluating expressions on the database side
-
-The expression within the select clause is a closure that evaluate on the client side.
-Sometimes it is usefull to have expressions evaluates on the database side,
-this is what the *&* function does.
-
-The difference between the following statements is that the first evaluates (a.id * 1000) 
-on the client (in the JVM) while for the second, the evaluation is done by the database.
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-  	
-    from(artists)(a => 
-      select(a.id * 1000)
-	)  	
-	
-    from(artists)(a => 
-      select(&(a.id * 1000))
-	)  	
-]]></script>
-
-A select can have more than one invocation of *&* :
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-  		
-    from(artists)(a => 
-      select((&(a.id * 1000), &(a.firstName || a.lastName))
-	)  	
-]]></script>

@@ -79,3 +79,40 @@ example of Table[PlaylistElement].deleteWhere usage :
     )
 
 ]]></script>
+
+
+h2. Batched updates and Inserts
+
+
+org.squeryl.Table[A] has insert and update methods that take an Iterable[A]. Invoking them does the update in a single roundtrip to the database via JDBC's batched update functionnality. 
+
+The advantage of this is obviously making 1 trip to the DB versus N trips (given an iterable with N elements).
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    addresses.insert(List(
+      new Address("St-Dominique",14, None,None,None),
+      new Address("St-Urbain",23, None,None,None),
+      new Address("Sherbrooke",1123, None,Some(454),Some("B"))
+    ))
+
+    addresses.insert(List(
+      new Address("Van Horne",14, None,None,None)
+    ))
+
+
+    val q = addresses.where(a => a.streetName in streetNames)
+
+    assertEquals(4, q.Count : Long, "batched update test failed")
+    
+    // The update here is one in a single DB trip :
+    
+    addresses.update(q.map(a =>{a.streetName += "Z"; a}))
+
+    val updatedStreetNames = List("Van HorneZ", "SherbrookeZ", "St-UrbainZ", "St-DominiqueZ")
+
+    val updatedQ = addresses.where(a => a.streetName in updatedStreetNames)
+
+ 
+]]></script>
+    
