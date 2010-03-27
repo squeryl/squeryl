@@ -70,10 +70,10 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   }
 
   def removeSong(song: Song) =
-    playlistElements.deleteWere(ple => ple.songId === song.id)
+    playlistElements.deleteWhere(ple => ple.songId === song.id)
 
   def removeSongOfArtist(artist: Artist) =
-    playlistElements.deleteWere(ple =>
+    playlistElements.deleteWhere(ple =>
       (ple.playlistId === id) and
       (ple.songId in from(songsOf(artist.id))(s => select(s.id)))
     )

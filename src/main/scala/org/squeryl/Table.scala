@@ -199,7 +199,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
     cnt
   }
 
-  def deleteWere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =
+  def deleteWhere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =
     delete(dsl.from(this)(t => dsl.where(whereClause(t)).select(t)))      
 
   private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =

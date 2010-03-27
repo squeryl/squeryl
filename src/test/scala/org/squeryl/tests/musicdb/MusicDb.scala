@@ -299,7 +299,7 @@ class MusicDb extends Schema with QueryTester {
 
     artistForDelete = artists.insert(new Person("Delete", "Me"))
 
-    var c = artists.deleteWere(a => a.id === artistForDelete.id)
+    var c = artists.deleteWhere(a => a.id === artistForDelete.id)
     
     assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
 
