@@ -3,7 +3,7 @@ layout: manual
 title: Relations
 ---
 
-h2. Relations as Queryable[A] objects
+h3. Relations as Queryable[A] objects
 
 Relations in a Squeryl object model are expressed as Query[A], 
 consider this simple schema with a one to many relation :    

@@ -1,0 +1,8 @@
+<h3> Explicitely control retrieval granularity and lazyness </h3>
+
+
+<!-- It is less _transparent_ but that also means less _magic_ behind the scenes and less _horror_ in the JDBC logs. -->
+
+<!-- explicitely define the right balance between lazyness -->
+
+A significant part of optimizing a database abstraction layer is to choose for every situation the right balance between fine and large grained retrieval, and the optimal mix of lazyness and eagerness. Data retrieval strategies are explicit in Squeryl rather than driven by configuration like current generation Java ORMs

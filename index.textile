@@ -8,15 +8,13 @@ title: <i>Functionally bridging the Object and Relational paradigms <br/> on the
 database objects from within the Scala language"</h3>
 
 <div class='span-12'>
-h3. Write compiler validated statements.
 
-Squeryl statements that pass compilation won't fail at runtime. Refactor your schema as often as is required, the Scala compiler and your IDE will tell you exactly which lines of code are affected.
+{% include squeryl-strong-typing-intro.html %}
 </div>
 
 <div class='span-12 last'>
-h3. Never repeat yourself
 
-The Composability of Squeryl statements allows you to define them *only once* and *reuse* them within other queries.
+{% include squeryl-composability.html %}
 </div>
 
 <div class='span-12'>
@@ -26,9 +24,8 @@ Write as declaratively as Sql, only with less boilerplate. Sql's declarativeness
 </div>
 
 <div class='span-12 last'>
-h3. Control the granularity of data retrieval
 
-The composability of statements and their lazy evaluation allows obtaining precisely and explicitely the optimal level of granularity of database fetches to minimize database roundtrips.
+{% include squeryl-control-granularity-intro.html %} "read more":introduction.html#squeryl-control-granularity-more
 </div>
 
 

@@ -11,44 +11,6 @@ statement parameters subsituted.
 To log all SQL activity of a sesson, use org.squeryl.Session.currentSession.setLogger(String => Unit)
 the closure receives all Sql statements and gets to do what it wants with it.
 
-h2. Type conversions in Sql expressions
-
-The return type of a Squeryl expressions is governed by the following rules 
-
-* The bit length of a numeric expressions is equal to the bit length of the longest argument
-
-* An expression results in an Option[] if at least one of it's argument is of type Option[]
-
-* The result of a numerical expression is floating point if it has least one floating point operation or argument
-
-* All agregate functions (avg, min, max, etc...) with the exception of count result in an Option[]
-
-In plain english these rule say that conversions are designed to not cause loss of numerical precision,
-that floating point absorb (or dominate) as they do in mathematics, and that the existence of an
-unknown (None) value in an expression, causes it's result to become unknown (None)
-
-Here are some examples : 
-
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-
-  val q1 = 
-    from(aTable)(t => select( &(t.aLong * t.aFloat) )) : Query[Double]
-
-  val q2 = 
-    from(aTable)(t => compute( avg(t.aByte / t.anInt) )) : Query[Option[Float]]
-	
-  val q3 = 
-    from(aTable)(t => compute( t.aByte + count )) : Query[Long]	
-    
-  val q4 =  // || is the concatenation operator :
-    from(aTable)(t => 
-	  select( &(t.aString || t.aLong || " " || a.IntOption) )) : Query[Option[String]]
-    
-]]></script>
-
-Note how in query *q4* the presence of a single causes the result to becomes an Option[],
-this is consistent with the sql92 standard. If you are wondering what *&* does read
-"Evaluating expressions on the database side" below.
 
 h2. Implicit conversions for single row agregate queries
 

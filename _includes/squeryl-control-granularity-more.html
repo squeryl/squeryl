@@ -1,0 +1,3 @@
+With Squeryl it is done explicitely, i.e. by reading a statement it is clear _how much_ data it will fetch, and _when_ it will occur.
+
+Hybernate has extensive documentation on how to avoid the so called N+1 queries problem, the tuning is done mostly via configuration and is not explicit in the code. All Squeryl data retrieval revolve around the Queryable[A] trait, which by its lazy evaluation alows statements to be built with the desired granularity, and evaluated in a second step. This approach also has the added benefit that by looking at the code one can make a reasonable guess as to how it will translate into database queries.

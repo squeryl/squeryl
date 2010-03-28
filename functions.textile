@@ -1,0 +1,28 @@
+---
+layout: manual
+title: Sql Functions
+---
+
+h2. Conversion Functions
+
+nvl(anOption, aNonOption)
+
+nvl takes a nullable (Option[]) as first parameter, and returns it when not null, otherwise it returns the second (non nullable) argument.
+
+h2. Operators
+
+h4. Boolean :
+
+not, isNull, isNotNull, between, ===, <, lt, >, gt, <=, lte, <=, gte, <>
+
+h4. Math :
+
+ plus, +, minus, -, times, *, div, /
+
+h4. String : 
+
+ || (concatenation)
+
+h2. Agregate Functions
+
+max, min, sum, avg, sDevPopulation, sDevSample, varPopulation, varSample, count
