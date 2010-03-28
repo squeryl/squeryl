@@ -148,17 +148,7 @@ class SchoolDb extends Schema with QueryTester {
 
   def addressesOfStudentsOlderThan24 = 
     from(students, addresses)((s,a) =>
-//      Where(
-//       ((s.age > 24) : LogicalBoolean) and
-//       ((24.~ < s.age) : LogicalBoolean) and
-//       (s.addressId === a.id)
-//     ) // TODO: fix... the problem is that operators like '<' that are defined in ScalarNumerical will not
-         // trigger the implicit conversion if the constant is on the left side, strangely it will do it
-         // for methods with non symbol name, like  lessThanz :
-      where((24 : NumericalExpression[Int]) < s.age and (24 ~) < s.age)
-    //  Where((s.age < 24) and (s.addressId === a.id))
-
-      //select(&(a.numberz || " "))
+      where((24 : NumericalExpression[Int]) < s.age and (24 lt s.age))
       select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
     )
 
@@ -693,7 +683,7 @@ class SchoolDb extends Schema with QueryTester {
     val b4 = q.toList
 
     var nRows = courses.update(c =>
-       where(c.id.~ > -1)
+       where(c.id gt -1)
        set(c.meaninglessLong := 123L,
            c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
               // when meaninglessLongOption is null,the SQL addition will have a null result
@@ -708,7 +698,7 @@ class SchoolDb extends Schema with QueryTester {
     // alternative syntax :
     nRows =
       update(courses)(c =>
-        where(c.id.~ > -1)
+        where(c.id gt -1)
         set(c.meaninglessLong := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
       )

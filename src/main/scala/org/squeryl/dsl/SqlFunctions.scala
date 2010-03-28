@@ -11,7 +11,14 @@ trait SqlFunctions  {
 
   def max[A](e: NumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
   def min[A](e: NumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")
+  def sum[A](e: NumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "sum")
   def avg[A](e: NumericalExpression[A])      = new  UnaryAgregateFloatOp[A](e, "avg")
+
+  def sDevPopulation[A](e: NumericalExpression[A])      = new  UnaryAgregateFloatOp[A](e, "stddev_pop")
+  def sDevSample[A](e: NumericalExpression[A])          = new  UnaryAgregateFloatOp[A](e, "stddev_samp")
+  def varPopulation[A](e: NumericalExpression[A])      = new  UnaryAgregateFloatOp[A](e, "var_pop")
+  def varSample[A](e: NumericalExpression[A])          = new  UnaryAgregateFloatOp[A](e, "var_samp")
+
 
   def max[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
   def min[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")

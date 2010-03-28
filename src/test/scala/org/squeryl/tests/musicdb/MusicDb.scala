@@ -73,7 +73,7 @@ class MusicDb extends Schema with QueryTester {
     )(a =>   select(a))
 
   def selfJoinNested4LevelPartialSelect =
-    from(selfJoinNested3Level)(a => where(a.id.~ > -1) select(a.lastName))
+    from(selfJoinNested3Level)(a => where(a.id gt -1) select(a.lastName))
 
   lazy val songsFeaturingPoncho =
     from(songs, artists)((s,a) =>
@@ -94,7 +94,7 @@ class MusicDb extends Schema with QueryTester {
   lazy val yearOfCongaBluePlus1 =
     from(cds)(cd =>
       where(cd.title === testInstance.congaBlue.title)
-      select(&(cd.year.~ + 1))
+      select(&(cd.year plus 1))
     )
   
   def songCountPerAlbum(cds: Queryable[Cd]) =

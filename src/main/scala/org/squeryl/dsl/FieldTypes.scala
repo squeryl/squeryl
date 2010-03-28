@@ -25,18 +25,29 @@ trait FieldTypes {
 
   trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
-    def +[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "+")
-    def *[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "*")
-    def -[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "-")
-    def /[B](b: NumericalExpression[B]) = new BinaryDivOp[A,B](this, b, "/")
-
     def ===[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "=")
     def <>[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
-    def > [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
-    def >=[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
-    def < [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
-    def <=[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
 
+    def > [B](b: NumericalExpression[B]) = gt(b)
+    def >=[B](b: NumericalExpression[B]) = gte(b)
+    def < [B](b: NumericalExpression[B]) = lt(b)
+    def <=[B](b: NumericalExpression[B]) = lte(b)
+
+    def +[B](b: NumericalExpression[B]) = plus(b)
+    def *[B](b: NumericalExpression[B]) = times(b)
+    def -[B](b: NumericalExpression[B]) = minus(b)
+    def /[B](b: NumericalExpression[B]) = div(b)
+
+    def gt [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+    def gte[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+    def lt [B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+    def lte[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
+    
+    def plus[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "+")
+    def times[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "*")
+    def minus[B](b: NumericalExpression[B]) = new BinaryAMSOp[A,B](this, b, "-")
+    def div[B](b: NumericalExpression[B]) = new BinaryDivOp[A,B](this, b, "/")
+    
     def ||[B](e: TypedExpressionNode[B]) = new ConcatOp(this,e)
 
     def isNull = new PostfixOperatorNode("is null", this) with LogicalBoolean
@@ -49,7 +60,7 @@ trait FieldTypes {
 
     def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
 
-    def ~ = this
+    //def ~ = this
   }
 
   trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
