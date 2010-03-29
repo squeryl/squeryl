@@ -24,9 +24,16 @@ import java.sql.SQLException;
 
 trait Schema {
 
+  protected implicit def thisSchema = this 
+
   private val _tables = new ArrayBuffer[Table[_]] 
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
+
+  def findTableFor[A](a: A): Option[Table[A]] = {
+    val c = a.asInstanceOf[AnyRef].getClass
+    _tables.find(_.posoMetaData.clasz == c).asInstanceOf[Option[Table[A]]]
+  }
 
   object NamingConventionTransforms {
     
@@ -77,8 +84,12 @@ trait Schema {
       try {
         sw = new StatementWriter(_dbAdapter)
         _dbAdapter.writeCreateTable(t, sw, this)
-        val s = Session.currentSession.connection.createStatement
-        s.execute(sw.statement)
+        val cs = Session.currentSession
+        val s = cs.connection.createStatement
+        val createS = sw.statement
+        if(cs.isLoggingEnabled)
+          cs.log(createS)
+        s.execute(createS)
       }
       catch {
         case e:SQLException => throw new RuntimeException("error creating table :\n" + sw.statement ,e)
@@ -98,7 +109,7 @@ trait Schema {
   private [squeryl] def _columnTypeFor(fmd: FieldMetaData, dba: DatabaseAdapter): String =
     this.columnTypeFor(fmd, dba)
   
-  protected def tableNameFromClass(c: Class[_]):String =     
+  def tableNameFromClass(c: Class[_]):String =     
     c.getSimpleName
 
   protected def table[T]()(implicit manifestT: Manifest[T]): Table[T] =
@@ -106,10 +117,13 @@ trait Schema {
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
     val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this)
-    _tables.append(t)
+    _addTable(t)
     t
   }
 
+  private [squeryl] def _addTable(t:Table[_]) =
+    _tables.append(t)
+  
   protected def view[T]()(implicit manifestT: Manifest[T]): View[T] =
     view(tableNameFromClass(manifestT.erasure))(manifestT)
 

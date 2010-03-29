@@ -40,7 +40,7 @@ trait FieldTypes {
 
   trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
-    def ===[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "=")
+    def ===[B](b: NumericalExpression[B]) = new EqualityExpression(this, b)
     def <>[B](b: NumericalExpression[B]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
 
     def > [B](b: NumericalExpression[B]) = gt(b)
@@ -80,7 +80,7 @@ trait FieldTypes {
 
   trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 
-    def ===[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "=")
+    def ===[A](b: NonNumericalExpression[A]) = new EqualityExpression(this, b)
     def <>[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
     def > [A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
     def >=[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")

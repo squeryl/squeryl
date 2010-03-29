@@ -29,7 +29,8 @@ trait QueryDsl
   with StartState
   with QueryElements
   with FromSignatures {
-
+  outerQueryDsl =>
+  
   def using[A](session: Session)(a: =>A): A =
     _using(session, a _)
 
@@ -257,4 +258,130 @@ trait QueryDsl
 
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
+
+
+  def manyToMany[L <: KeyedEntity[_],R <: KeyedEntity[_],A](l: Table[L], r: Table[R]) = new ManyToManyBuilder(l,r)
+
+
+  class ManyToManyBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R]) {
+
+    //TODO: remove constraint on ordering of eq expr. pair by detecting what is left and right...
+    def via[A](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
+      val m2m = new ManyToMany(l,r,manifestA.erasure.asInstanceOf[Class[A]],f,schema)
+      schema._addTable(m2m)
+      m2m
+    }
+  }
+
+  class ManyToMany[L <: KeyedEntity[_], R <: KeyedEntity[_], A](l: Table[L], r: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
+    extends Table[A](schema.tableNameFromClass(aClass), aClass, schema) {
+    thisTableOfA =>    
+
+    private val (_leftEqualityExpr, _rightEqualityExpr) = {
+
+      var e2: Option[Pair[EqualityExpression,EqualityExpression]] = None
+
+      from(l, r, thisTableOfA)((l,r,a) => {
+        e2 = Some(f(l,r,a))
+        select(None)
+      })
+
+      e2.get
+    }
+
+    /**
+     * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
+     * and where ._2 is the foreing key of the association object/table
+     */
+    private def _splitEquality(ee: EqualityExpression) =
+      if(ee.left._fieldMetaData.parentMetaData.clasz == aClass) {
+        assert(ee.right._fieldMetaData.isPrimaryKey)
+        (ee.right._fieldMetaData, ee.left._fieldMetaData)
+      }
+      else {
+        assert(ee.left._fieldMetaData.isPrimaryKey)
+        (ee.left._fieldMetaData, ee.right._fieldMetaData)
+      }
+
+    private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr)
+
+    private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr)
+    
+    def left(leftSideMember: L): Query[R] with ManyToManyMember[R,A] = {
+
+      val q =
+        from(thisTableOfA, r)((a,r) => {
+          val leftMatchClause = f(leftSideMember, r, a)._1
+          outerQueryDsl.where(leftMatchClause).select(r)
+        })
+
+      new DelegateQuery(q) with ManyToManyMember[R,A] {
+
+        private def _assignKeys(r: R, a: AnyRef): Unit = {
+          
+          val leftPk = leftPkFmd.get(leftSideMember.asInstanceOf[AnyRef])
+          val rightPk = rightPkFmd.get(r.asInstanceOf[AnyRef])
+
+          leftFkFmd.set(a, leftPk)
+          rightFkFmd.set(a, rightPk)
+        }
+
+        def associate(o: R, a: A): Unit = {
+          _assignKeys(o, a.asInstanceOf[AnyRef])
+          thisTableOfA.insert(a)
+        }
+
+        def associate(o: R): Unit = {
+
+          val aInstAny = thisTableOfA._createInstanceOfRowObject
+          val aInst = aInstAny.asInstanceOf[A]
+          _assignKeys(o, aInstAny)
+          thisTableOfA.insert(aInst)
+        }
+
+        def dissociateAll = {
+          val leftPk = leftPkFmd.get(leftSideMember.asInstanceOf[AnyRef])
+
+          val be =  _leftEqualityExpr.replaceConstant(leftFkFmd, leftPk)
+          
+          thisTableOfA.deleteWhere(a0 => be)
+        }
+      }
+    }
+
+    def right(rightSideMember: R): Query[L] = {
+      val q =
+        from(thisTableOfA, l)((a,l) => {
+           val rightMatchClause = f(l, rightSideMember, a)._2
+           outerQueryDsl.where(rightMatchClause).select(l)
+        })
+
+      new DelegateQuery(q) with ManyToManyMember[L,A] {
+
+        private def _assignKeys(l: L, a: AnyRef): Unit = {
+
+          val rightPk = rightPkFmd.get(rightSideMember.asInstanceOf[AnyRef])
+          val leftPk = leftPkFmd.get(l.asInstanceOf[AnyRef])
+
+          rightFkFmd.set(a, rightPk)
+          leftFkFmd.set(a, leftPk)
+        }
+
+        def associate(o: L, a: A): Unit = {
+          _assignKeys(o, a.asInstanceOf[AnyRef])
+          thisTableOfA.insert(a)
+        }
+
+        def associate(o: L): Unit = {
+
+          val aInstAny = thisTableOfA._createInstanceOfRowObject
+          val aInst = aInstAny.asInstanceOf[A]
+          _assignKeys(o, aInstAny)
+          thisTableOfA.insert(aInst)
+        }
+
+        def dissociateAll = error("implement me !")
+      }
+    }
+  }
 }

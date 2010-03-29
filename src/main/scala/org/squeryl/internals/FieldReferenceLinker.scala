@@ -235,4 +235,34 @@ object FieldReferenceLinker {
         res
       }          
     }
+
+
+//  def createCallBack(pmd1: PosoMetaData, pmd2: PosoMetaData, v: ArrayBuffer[String]): Callback =
+//    new SimplePosoPropertyAccessInterceptor(v)
+//
+//  class SimplePosoPropertyAccessInterceptor(v: ArrayBuffer[String]) extends MethodInterceptor {
+//
+//      def fmd4Method(m: Method) =
+//        pmd1.findFieldMetaDataForProperty(m.getName)
+//
+//      def intercept(o: Object, m: Method, args: Array[Object], proxy: MethodProxy): Object = {
+//
+//        lazy val fmd = fmd4Method(m)
+//        var res = proxy.invokeSuper(o, args);
+//
+//        if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
+//          res = "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
+//
+//        if(fmd != None) {
+//          val yi = _yieldInspectionTL.get
+//
+//          if(yi.isOn)
+//            yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
+//
+//          _lastAccessedFieldReference.set(Some(viewExpressionNode.getOrCreateSelectElement(fmd.get)));
+//        }
+//
+//        res
+//      }
+//    }
 }

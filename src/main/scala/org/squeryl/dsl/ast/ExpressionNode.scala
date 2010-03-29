@@ -101,6 +101,23 @@ trait ListString extends ListExpressionNode {
   override def quotesElement = true
 }
 
+class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=") {
+
+  /**
+   * created a copy of this EqualityExpression with the constant side replaced 
+   */
+  private [squeryl] def replaceConstant(fmd: FieldMetaData, c: AnyRef) = {
+
+    val (cen, fse) =
+      if(left.isInstanceOf[ConstantExpressionNode[_]])
+        (left.asInstanceOf[ConstantExpressionNode[AnyRef]], right)
+      else
+        (right.asInstanceOf[ConstantExpressionNode[AnyRef]], left)
+
+    new EqualityExpression(new ConstantExpressionNode(c, cen.needsQuote).asInstanceOf[TypedExpressionNode[_]], fse)
+  }
+}
+
 class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
 
@@ -163,14 +180,20 @@ trait TypedExpressionNode[T] extends ExpressionNode {
   def mapper: OutMapper[T]
 
   def :=[B <% TypedExpressionNode[T]] (b: B) = {
+    new UpdateAssignment(_fieldMetaData, b : TypedExpressionNode[T])
+  }
 
+  /**
+   * Not type safe ! a TypedExpressionNode[T] might not be a SelectElementReference[_] that refers to a FieldSelectElement...   
+   */
+  private [squeryl] def _fieldMetaData = {
     val ser =
       try {
         this.asInstanceOf[SelectElementReference[_]]
       }
       catch { // TODO: validate this at compile time with a scalac plugin
         case e:ClassCastException => {
-            throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure update statement uses *only* closure argument.", e)
+            throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
         }
       }
 
@@ -180,11 +203,10 @@ trait TypedExpressionNode[T] extends ExpressionNode {
       }
       catch { // TODO: validate this at compile time with a scalac plugin
         case e:ClassCastException => {
-          throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure update statement uses *only* closure argument.", e)
+          throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
         }
       }
-
-    new UpdateAssignment(fmd, b : TypedExpressionNode[T])
+    fmd
   }
 }
 
@@ -192,7 +214,7 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
   def doWrite(sw: StatementWriter) = sw.write(token)
 }
 
-class ConstantExpressionNode[T](val value: T, needsQuote: Boolean) extends ExpressionNode {
+class ConstantExpressionNode[T](val value: T, val needsQuote: Boolean) extends ExpressionNode {
 
   def this(v:T) = this(v, false)
 

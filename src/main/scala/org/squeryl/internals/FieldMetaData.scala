@@ -129,14 +129,14 @@ class FieldMetaData(
 
   def setFromResultSet(target: AnyRef, rs: ResultSet, index: Int) = {
     val v = resultSetHandler(rs, index)    
-    _set(target, v)
+    set(target, v)
   }
   
   /**
    * Sets the value 'v' to the object, the value will be converted to Some or None
    * if the field is an Option[], (if isOption).   
    */
-  private def _set(target: AnyRef, v: AnyRef) = {
+  def set(target: AnyRef, v: AnyRef) = {
     try {
       val v0:AnyRef =
         if(customTypeFactory == None)

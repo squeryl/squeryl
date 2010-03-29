@@ -37,11 +37,15 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
 
   private val _emptyArray = new Array[Object](0);
 
-  private [squeryl] def give(resultSetMapper: ResultSetMapper, resultSet: ResultSet) : T  = {
-    
+  private [squeryl] def _createInstanceOfRowObject = {
     val c = posoMetaData.constructor
+    c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
+  }
+  
+  private [squeryl] def give(resultSetMapper: ResultSetMapper, resultSet: ResultSet) : T  = {
 
-    val o = c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
+
+    val o = _createInstanceOfRowObject
     
     resultSetMapper.map(o, resultSet);
     o.asInstanceOf[T]

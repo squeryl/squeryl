@@ -412,7 +412,7 @@ class MusicDb extends Schema with QueryTester {
   }
 
 
-  private def _betweenArtists(s1: String, s2: String) = 
+  private def _betweenArtists(s1: String, s2: String) =
      from(artists)(a =>
        where(a.firstName between(s1, s2))
        select(a)
@@ -425,7 +425,7 @@ class MusicDb extends Schema with QueryTester {
     val p1 = _betweenArtists(alainCaron.firstName, herbyHancock.firstName)
     val p2 = _betweenArtists(hossamRamzy.firstName, mongoSantaMaria.firstName)
     val p3 = _betweenArtists(ponchoSanchez.firstName, "Zaza Napoli")
-    
+
     val ep1 = List(alainCaron.firstName, herbyHancock.firstName)
     val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
     val ep3 = List(ponchoSanchez.firstName)
@@ -435,5 +435,21 @@ class MusicDb extends Schema with QueryTester {
     assertionFailed('testBetweenOperator, p3, ep3)
 
     passed('testBetweenOperator)
+  }
+  
+  def leakTest = {
+
+    for(i <- 1 to 5000) {
+
+      new Thread(new Runnable {
+        def run = {
+          transaction {
+
+          //Session.currentSession.setLogger(println(_))
+          from(artists)(a => select(a)).toList
+        }
+        }
+      }).start
+    }
   }
 }

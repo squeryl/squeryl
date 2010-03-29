@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.squeryl.tests
 
+import _root_.org.squeryl.demos.MusicDb
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
@@ -22,6 +23,7 @@ import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleA
 import schooldb.SchoolDb
 import org.squeryl.{Session}
 import java.sql.{Connection, DriverManager}
+import schooldb2.SchoolDb2Tests
 
 
 object Tests extends QueryTester {
@@ -35,6 +37,21 @@ object Tests extends QueryTester {
     //org.squeryl.demos.KickTheTires.testWithH2
 
     allTestsOnH2
+
+    //leakTest
+  }
+
+  def leakTest = {
+
+    SessionFactory.concreteFactory = Some(()=>createPostgreSqlTestConnection)
+
+    import org.squeryl.PrimitiveTypeMode._
+    
+    val mdb = transaction {
+      new MusicDb
+    }
+
+    mdb.leakTest
   }
 
   def allTestsOnH2 = {
@@ -74,6 +91,9 @@ object Tests extends QueryTester {
     SessionFactory.concreteFactory = Some(s)
     
     transaction {
+
+      (new SchoolDb2Tests).testAll
+
       (new SchoolDb).test1
     }
 

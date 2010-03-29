@@ -77,7 +77,18 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
   var id: Long = 0
   def this() = this("", 0.0F, Some(0.0F))
   override def toString = "Professor:" + id
+
+  import org.squeryl.PrimitiveTypeMode._
+  
+  //def assignments =
+    //oneToMany(this, SDB.courseAssigments) ((p, ca) => p.id === ca.professorId)
+
+  //def assign = Relation(this, SDB.courseAssigments) {}
+//  def assignments =
+//    One(this) ToMany(SDB.courseAssigments) on(p=>p.id, ca => ca.professorId)
 }
+
+object SDB extends SchoolDb
 
 class SchoolDb extends Schema with QueryTester {
 
@@ -148,9 +159,6 @@ class SchoolDb extends Schema with QueryTester {
     Session.currentSession.connection.commit
   }
 
-  def loggerOn =
-    Session.currentSession.setLogger((s:String) => println(s))
-
   def avgStudentAge =
     from(students)(s =>
       compute(avg(s.age))
@@ -174,7 +182,7 @@ class SchoolDb extends Schema with QueryTester {
     )
 
   def test1 = {
-    
+
     testBatchUpdate1
     
     testBatchInserts1
@@ -213,8 +221,6 @@ class SchoolDb extends Schema with QueryTester {
 
     testLikeOperator
     testNotOperator
-
-    testSelectAll
   }
 
   def testLeftOuterJoin1 {
@@ -818,19 +824,11 @@ class SchoolDb extends Schema with QueryTester {
     passed('testBatchUpdate1)
   }
 
-  def testSelectAll =  {
+  def testOneToMany = {
+    //import testInstance._
 
-    //Session.currentSession.setLogger(println(_))
-    
-    val allStudents1 = from(students)(s => select(s)).page(0, 10).map(s => s.id).toList
-
-    assertEquals(5, allStudents1.size, 'testSelectAll + " failed")
-
-    val expected = List(xiao.id, georgi.id, pratap.id, gontran.id, gaitan.id).toSet
-
-    assertEquals(expected, allStudents1.toSet, 'testSelectAll + " failed")
-
-    passed('testSelectAll)    
+    addresses.where(a => 1 === 1)
+    //tournesol.assignments.add(groupTheory)
+    //tournesol.assignments.add(heatTransfer)
   }
-  
 }

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.squeryl.tests
 
+import _root_.org.squeryl.Session
 import org.squeryl.Query
 
 
@@ -34,6 +35,8 @@ trait QueryTester {
     validateFirstAndExit = 0
   }
 
+  def loggerOn =
+    Session.currentSession.setLogger((s:String) => println(s))
 
   def log(queryName: Symbol, query:Query[_]) = {
 
@@ -44,7 +47,10 @@ trait QueryTester {
       println("-->" + r)
   }
 
-  def assertEquals[E](expected:E, actual:E, msg:String) =
+  def assertEquals[E](expected:E, actual:E, s:Symbol): Unit =
+    assertEquals(expected, actual, s.toString)
+
+  def assertEquals[E](expected:E, actual:E, msg:String): Unit =
     if(expected != actual)
       error("expected " + expected + " got " + actual)
 

@@ -232,7 +232,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
 //  }
 
   def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
-
+    //TODO: move this method to View[T]
     //TODO: find out why scalac won't let dsl be passed to another method   
     import dsl._
     
