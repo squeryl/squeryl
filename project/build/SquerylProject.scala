@@ -1,9 +1,24 @@
 
 import sbt._
 
+
 class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   
+  override def managedStyle = ManagedStyle.Maven
   
+  val publishTo = "Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"
+
+  Credentials(Path.userHome / ".ivy2" / ".credentials", log)
+  
+  override def pomExtra =
+	<licenses>
+	  <license>
+		<name>Apache 2</name>
+		<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		<distribution>repo</distribution>
+	  </license>
+	</licenses>
+	
   /**
    * CGLIB is Squeryl's only dependency
    */
