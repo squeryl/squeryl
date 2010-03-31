@@ -17,7 +17,7 @@ Squeryl is available on the Maven repo @ http://nexus.scala-tools.org/
  
 * groupId : *org.squeryl*
 * artifactId: *squeryl_2.8.0.Beta1-RC8*
-* version *0.9.2*
+* version *0.9.3*
 
 If you prefer to build from source with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 
