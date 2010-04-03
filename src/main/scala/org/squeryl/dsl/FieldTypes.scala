@@ -60,7 +60,7 @@ trait FieldTypes {
 
     def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
 
-    //def ~ = this
+    def ~ = this
   }
 
   trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
