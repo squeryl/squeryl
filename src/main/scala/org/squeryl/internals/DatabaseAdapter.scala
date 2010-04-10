@@ -195,7 +195,7 @@ class DatabaseAdapter {
           s.setObject(i, o.get)
       }
       else
-        s.setObject(i, p)
+        s.setObject(i, convertToJdbcValue(p))
       i += 1
     }
     s

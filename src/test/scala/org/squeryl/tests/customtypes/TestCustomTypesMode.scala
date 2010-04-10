@@ -30,6 +30,7 @@ class TestCustomTypesMode extends QueryTester {
   def testAll = {
 
     validateQuery('simpleSelect, simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
+    validateQuery('simpleSelect1, patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
   }
 }
 
