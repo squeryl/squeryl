@@ -160,6 +160,8 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
+    testSelectAll
+    
     testBatchUpdate1
     
     testBatchInserts1
@@ -800,4 +802,16 @@ class SchoolDb extends Schema with QueryTester {
 
     passed('testBatchUpdate1)
   }
+
+  def testSelectAll =  {
+
+    val allStudents1 = from(students)(s => select(s)).map(s => s.id).toSet
+
+    val expected = List(xiao.id, georgi.id, pratap.id, gontran.id, gaitan.id).toSet
+
+    assertEquals(expected, allStudents1, 'testSelectAll + " failed")
+
+    passed('testSelectAll)    
+  }
+  
 }
