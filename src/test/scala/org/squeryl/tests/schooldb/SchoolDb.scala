@@ -159,8 +159,6 @@ class SchoolDb extends Schema with QueryTester {
     )
 
   def test1 = {
-
-    testSelectAll
     
     testBatchUpdate1
     
@@ -200,6 +198,8 @@ class SchoolDb extends Schema with QueryTester {
 
     testLikeOperator
     testNotOperator
+
+    testSelectAll
   }
 
   def testLeftOuterJoin1 {
@@ -805,11 +805,15 @@ class SchoolDb extends Schema with QueryTester {
 
   def testSelectAll =  {
 
-    val allStudents1 = from(students)(s => select(s)).map(s => s.id).toSet
+    Session.currentSession.setLogger(println(_))
+    
+    val allStudents1 = from(students)(s => select(s)).page(0, 10).map(s => s.id).toList
+
+    assertEquals(5, allStudents1.size, 'testSelectAll + " failed")
 
     val expected = List(xiao.id, georgi.id, pratap.id, gontran.id, gaitan.id).toSet
 
-    assertEquals(expected, allStudents1, 'testSelectAll + " failed")
+    assertEquals(expected, allStudents1.toSet, 'testSelectAll + " failed")
 
     passed('testSelectAll)    
   }
