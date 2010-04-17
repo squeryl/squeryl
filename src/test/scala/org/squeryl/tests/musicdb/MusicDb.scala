@@ -411,29 +411,28 @@ class MusicDb extends Schema with QueryTester {
     passed('testPaginatedQuery1)    
   }
 
+
+  private def _betweenArtists(s1: String, s2: String) = 
+     from(artists)(a =>
+       where(a.firstName between(s1, s2))
+       select(a)
+       orderBy(a.firstName asc)
+     ).map(a=>a.firstName).toList
+
+
   def testBetweenOperator = {
 
-    val q = from(artists)(a =>
-        select(a)
-        orderBy(a.firstName asc)
-      )
-
-    val p1 = q.where(a=>a.firstName between(alainCaron.firstName, herbyHancock.firstName))
-            .map(a=>a.firstName).toList
-
-    val p2 = q.where(a=>a.firstName between(hossamRamzy.firstName, mongoSantaMaria.firstName))
-            .map(a=>a.firstName).toList
-
-    val p3 = q.where(a=>a.firstName between(ponchoSanchez.firstName, "Zaza Napoli"))
-            .map(a=>a.firstName).toList
-
+    val p1 = _betweenArtists(alainCaron.firstName, herbyHancock.firstName)
+    val p2 = _betweenArtists(hossamRamzy.firstName, mongoSantaMaria.firstName)
+    val p3 = _betweenArtists(ponchoSanchez.firstName, "Zaza Napoli")
+    
     val ep1 = List(alainCaron.firstName, herbyHancock.firstName)
     val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
     val ep3 = List(ponchoSanchez.firstName)
 
-    assertionFailed('testPaginatedQuery1, p1, ep1)
-    assertionFailed('testPaginatedQuery1, p2, ep2)
-    assertionFailed('testPaginatedQuery1, p3, ep3)
+    assertionFailed('testBetweenOperator, p1, ep1)
+    assertionFailed('testBetweenOperator, p2, ep2)
+    assertionFailed('testBetweenOperator, p3, ep3)
 
     passed('testBetweenOperator)
   }
