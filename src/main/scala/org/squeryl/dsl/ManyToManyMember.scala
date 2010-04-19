@@ -12,12 +12,14 @@ import org.squeryl.Query
  */
 trait ManyToManyMember[O,A] extends Query[O] {
   
-  def associate(o: O, a: A): Unit
+  def associate(o: O, a: A): A
 
-  def associate(o: O): Unit
+  def associate(o: O): A
 
   /**
    * Deletes all "associations" relating this "side" to the other
    */
-  def dissociateAll: Unit
+  def dissociateAll: Int
+
+  def associations: Query[A]
 }

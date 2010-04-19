@@ -38,6 +38,9 @@ trait FieldTypes {
 
   type DateType
 
+  /**
+   *
+   */
   trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
     def ===[B](b: NumericalExpression[B]) = new EqualityExpression(this, b)
