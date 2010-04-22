@@ -22,7 +22,7 @@ import net.sf.cglib.proxy.{Factory, Callback, Enhancer}
 import java.lang.reflect.{Member, Constructor, Method, Field}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
-import org.squeryl.{Schema, Optimistic}
+import org.squeryl.{Query, Schema, Optimistic}
 
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
     
@@ -263,18 +263,19 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       if a.isInstanceOf[Column] || a.isInstanceOf[OptionType])
         s.add(a)
 
-
+  private def _includeFieldOrMethodType(c: Class[_]) =
+      ! classOf[Query[_]].isAssignableFrom(c)  
 
   private def _fillWithMembers(clasz: Class[_], members: ArrayBuffer[(Member,HashSet[Annotation])]) {
 
-    for(m <-clasz.getMethods if(m.getDeclaringClass != classOf[Object])) {
+    for(m <-clasz.getMethods if(m.getDeclaringClass != classOf[Object]) && _includeFieldOrMethodType(m.getReturnType)) {
       m.setAccessible(true)
       val t = (m, new HashSet[Annotation])
       _addAnnotations(m, t._2)
       members.append(t)
     }
 
-    for(m <- clasz.getDeclaredFields) {
+    for(m <- clasz.getDeclaredFields if (m.getName.indexOf("$") == -1) && _includeFieldOrMethodType(m.getType)) {
       m.setAccessible(true)
       val t = (m, new HashSet[Annotation])
       _addAnnotations(m, t._2)
