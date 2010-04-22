@@ -200,7 +200,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       val property = (field, getter, setter, a)
 
       if(isImplicitMode && _groupOfMembersIsProperty(property)) {
-        fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
+        fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
       }
 //      else {
 //        val colA = a.find(an => an.isInstanceOf[Column])
