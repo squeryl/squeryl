@@ -222,8 +222,11 @@ object FieldMetaData {
 
     var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
-    if(classOf[Product1[Any]].isAssignableFrom(typeOfField))
+    if(classOf[Product1[Any]].isAssignableFrom(typeOfField)) {
       customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfField)
+      if(customTypeFactory == None)
+        error("could not create a custom type factory for member field "+name+" of type " + typeOfField + " member of type " + parentMetaData.clasz)
+    }
 
     if(customTypeFactory != None) {
       val f = customTypeFactory.get
