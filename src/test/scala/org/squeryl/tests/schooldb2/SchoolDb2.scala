@@ -87,6 +87,7 @@ class SchoolDb2Tests extends QueryTester {
   val philosophy = subjects.insert(new Subject("Philosophy"))
   val chemistry = subjects.insert(new Subject("Chemistry"))
   val physics = subjects.insert(new Subject("Physic"))
+  val computationTheory = subjects.insert(new Subject("Computation Theory"))
 
 
   val chemistryCourse = courses.insert(new Course(chemistry.id))
@@ -178,7 +179,30 @@ class SchoolDb2Tests extends QueryTester {
       philosophyCourse2PMWednesday.subject.single.name,
       philosophy.name,
       'testOneToMany)
+
+    // verify that a reassociation doesn an update and not an insert :
+    val pk1 = philosophyCourse3PMFriday.id
     
+    computationTheory.courses.associate(philosophyCourse3PMFriday)
+
+    assertEquals(
+      pk1,
+      philosophyCourse3PMFriday.id,
+      'testOneToMany)
+
+    // verify that the reassociation worked, which means that
+    // 1) : the set of philosophy.courses was reduced properly
+    assertEquals(
+      philosophy.courses.map(_.id).toSet,
+      Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id),
+      'testOneToMany)
+
+    // 2) philosophyCourse3PMFriday.subject points to the proper subject 
+    assertEquals(
+      computationTheory.name,
+      philosophyCourse3PMFriday.subject.single.name,
+      'testOneToMany)
+
     passed('testOneToMany)
   }
 }
