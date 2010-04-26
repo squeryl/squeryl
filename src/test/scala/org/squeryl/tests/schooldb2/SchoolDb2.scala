@@ -97,6 +97,8 @@ class SchoolDb2Tests extends QueryTester {
     testMetaData
     testMany2ManyAssociationFromLeftSide
     testMany2ManyAssociationsFromRightSide
+
+    testOneToMany
     
     //many2ManyAssociateFromLeft
   }
@@ -166,6 +168,17 @@ class SchoolDb2Tests extends QueryTester {
     philosophy.courses.associate(philosophyCourse10AMWednesday)
     philosophy.courses.associate(philosophyCourse2PMWednesday)
     philosophy.courses.associate(philosophyCourse3PMFriday)
+
+    assertEquals(
+      philosophy.courses.map(_.id).toSet,
+      Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id, philosophyCourse3PMFriday.id),
+      'testOneToMany)
+
+    assertEquals(
+      philosophyCourse2PMWednesday.subject.single.name,
+      philosophy.name,
+      'testOneToMany)
     
+    passed('testOneToMany)
   }
 }

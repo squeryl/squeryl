@@ -483,7 +483,7 @@ trait QueryDsl
 
         def associate(m: M) = {
           assign(m)
-          mt.insert(m)
+          mt.insertOrUpdate(m)
         }
       }
     }

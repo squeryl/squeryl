@@ -30,7 +30,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
     this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema)  
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
-
+  
   def insert(t: T): T = {
 
     val o = t.asInstanceOf[AnyRef]
@@ -69,6 +69,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
       }
     }
 
+    _setPersisted(t)
+    
     t
   }
 
@@ -227,5 +229,13 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
     val deleteCount = this.delete(q)
     assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
     deleteCount == 1
+  }
+
+  def insertOrUpdate(o: T)(implicit ev: T <:< KeyedEntity[_]): T = {
+    if(o.isPersisted)
+      update(o)
+    else
+      insert(o)
+    o
   }
 }

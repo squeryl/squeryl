@@ -38,6 +38,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
 
   private val _emptyArray = new Array[Object](0);
 
+  protected val _setPersisted =
+    if(classOf[PersistenceStatus].isAssignableFrom(classOfT))
+      (t:T) => t.asInstanceOf[PersistenceStatus]._isPersisted = true
+    else
+      (t:T) => {}
+  
   private [squeryl] def _createInstanceOfRowObject = {
     val c = posoMetaData.constructor
     c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
@@ -45,11 +51,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   
   private [squeryl] def give(resultSetMapper: ResultSetMapper, resultSet: ResultSet) : T  = {
 
-
     val o = _createInstanceOfRowObject
     
     resultSetMapper.map(o, resultSet);
-    o.asInstanceOf[T]
+    val t = o.asInstanceOf[T]
+    _setPersisted(t)
+    t
   }
 
   def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
