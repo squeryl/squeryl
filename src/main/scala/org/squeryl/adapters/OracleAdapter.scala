@@ -33,7 +33,6 @@ class OracleAdapter extends DatabaseAdapter {
   override def postCreateTable(s: Session, t: Table[_]) = {
 
     val sw = new StatementWriter(false, this)
-    //TODO: set max value from t.posoMetaData.primaryKey
     sw.write("create sequence ", sequenceName(t), " start with 1 increment by 1 nomaxvalue")
     val st = s.connection.createStatement
     st.execute(sw.statement)

@@ -101,22 +101,7 @@ trait ListString extends ListExpressionNode {
   override def quotesElement = true
 }
 
-class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=") {
-
-  /**
-   * created a copy of this EqualityExpression with the constant side replaced 
-   */
-  private [squeryl] def replaceConstant(fmd: FieldMetaData, c: AnyRef) = {
-
-    val (cen, fse) =
-      if(left.isInstanceOf[ConstantExpressionNode[_]])
-        (left.asInstanceOf[ConstantExpressionNode[AnyRef]], right)
-      else
-        (right.asInstanceOf[ConstantExpressionNode[AnyRef]], left)
-
-    new EqualityExpression(new ConstantExpressionNode(c, cen.needsQuote).asInstanceOf[TypedExpressionNode[_]], fse)
-  }
-}
+class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=")
 
 class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {

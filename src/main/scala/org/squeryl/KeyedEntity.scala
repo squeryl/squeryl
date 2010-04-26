@@ -38,11 +38,18 @@ import annotations.Transient
  *
  */
 
-trait KeyedEntity[K] {
+trait KeyedEntity[K] extends PersistenceStatus {
 
   def id: K
 }
 
+trait PersistenceStatus {
+  
+  @Transient
+  private [squeryl] var _isPersisted = false
+
+  def isPersisted: Boolean = _isPersisted
+}
 
 trait CompositeKeyedEntity[K <: Product] extends KeyedEntity[K]
 

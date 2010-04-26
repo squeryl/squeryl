@@ -129,7 +129,22 @@ object FieldReferenceLinker {
     _lastAccessedFieldReference.set(None)
     res
   }
-    
+
+  private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case Some(n:SelectElement) => new SelectElementReference(n)(NoOpOutMapper)
+      case None => error("Thread local does not have a last accessed field... this is a severe bug !")
+  }
+
+  def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c: Any) = {
+    val fr = _takeLastAccessedUntypedFieldReference
+
+    new BinaryOperatorNodeLogicalBoolean(
+      fr,
+      new ConstantExpressionNode[Any](c, c.isInstanceOf[String]),
+      "=")
+  }
+  
   /**
    * It is assumed that yield invocation for inspection will never be nested, since
    * a query is completely built (and it's yield inspection is done) before it can

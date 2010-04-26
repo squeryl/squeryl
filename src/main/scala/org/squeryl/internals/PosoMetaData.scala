@@ -139,8 +139,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
 
     val setters = new ArrayBuffer[Method]
 
-    //TODO: inspect superclasses
-
     val sampleInstance4OptionTypeDeduction =
       try {
         constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];

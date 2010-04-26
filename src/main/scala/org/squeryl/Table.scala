@@ -217,47 +217,11 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
   def deleteWhere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =
     delete(dsl.from(this)(t => dsl.where(whereClause(t)).select(t)))      
 
-  private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case Some(n:SelectElement) => new SelectElementReference(n)(NoOpOutMapper)
-      case None => error("Thread local does not have a last accessed field... this is a severe bug !")
-  }
-
-//  private def _createWhereIdEqualsClause[K](k:K, a: KeyedEntity[K], dsl: QueryDsl) = {
-//    a.id
-//    val keyFieldNode = _takeLastAccessedUntypedFieldReference
-//    val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-//    val wc = new dsl.BinaryOperatorNodeLogicalBoolean(keyFieldNode, c, "=")
-//    wc
-//  }
-
-  def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
-    //TODO: move this method to View[T]
-    //TODO: find out why scalac won't let dsl be passed to another method   
-    import dsl._
-    
-    //val q = From(this)(a => where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
-    val q = from(this)(a => dsl.where {
-      a.id
-      val keyFieldNode = _takeLastAccessedUntypedFieldReference
-      val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-      val wc = new BinaryOperatorNodeLogicalBoolean(keyFieldNode, c, "=")
-      wc
-    } select(a))
-    q.headOption
-
-  }
-
   def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
-
     import dsl._
-    //val q = From(this)(a => where (_createWhereIdEqualsClause(k, a, dsl)) Select(a))
     val q = from(this)(a => dsl.where {
       a.id
-      val keyFieldNode = _takeLastAccessedUntypedFieldReference
-      val c = new ConstantExpressionNode[K](k, k != null && k.isInstanceOf[String])
-      val wc = new BinaryOperatorNodeLogicalBoolean(keyFieldNode, c, "=")
-      wc
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(k)
     } select(a))
 
     val deleteCount = this.delete(q)

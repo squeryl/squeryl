@@ -430,4 +430,10 @@ class DatabaseAdapter {
     right.write(sw)
     sw.write(")")
   }
+
+  /**
+   * Figures out from the SQLException (ex.: vendor specific error code) 
+   * if it's cause is a NOT NULL constraint violation
+   */
+  def isNotNullConstraintViolation(e: SQLException): Boolean = false    
 }

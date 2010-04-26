@@ -258,22 +258,18 @@ trait QueryDsl
 
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
+  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r)
 
+  class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R]) {
 
-  def manyToMany[L <: KeyedEntity[_],R <: KeyedEntity[_],A](l: Table[L], r: Table[R]) = new ManyToManyBuilder(l,r)
-
-
-  class ManyToManyBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R]) {
-
-    //TODO: remove constraint on ordering of eq expr. pair by detecting what is left and right...
     def via[A](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
-      val m2m = new ManyToMany(l,r,manifestA.erasure.asInstanceOf[Class[A]],f,schema)
+      val m2m = new ManyToManyRelation(l,r,manifestA.erasure.asInstanceOf[Class[A]],f,schema)
       schema._addTable(m2m)
       m2m
     }
   }
 
-  class ManyToMany[L <: KeyedEntity[_], R <: KeyedEntity[_], A](l: Table[L], r: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
+  class ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A](l: Table[L], r: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
     extends Table[A](schema.tableNameFromClass(aClass), aClass, schema) {
     thisTableOfA =>    
 
@@ -285,9 +281,25 @@ trait QueryDsl
         e2 = Some(f(l,r,a))
         select(None)
       })
+      
+      val e2_ = e2.get
 
-      e2.get
+      //invert Pair[EqualityExpression,EqualityExpression] if it has been declared in reverse :
+      if(_viewReferedInExpression(l, e2_._1)) {
+        assert(_viewReferedInExpression(r, e2_._2))
+        e2_
+      }
+      else {
+        assert(_viewReferedInExpression(l, e2_._2))
+        assert(_viewReferedInExpression(r, e2_._1))
+        (e2_._2, e2_._1)
+      }
     }
+
+    private def _viewReferedInExpression(v: View[_], ee: EqualityExpression) =
+      ee.filterDescendantsOfType[SelectElementReference[Any]].filter(
+        _.selectElement.origin.asInstanceOf[ViewExpressionNode[_]].view == v
+      ).headOption != None
 
     /**
      * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
@@ -306,16 +318,33 @@ trait QueryDsl
     private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr)
 
     private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr)
+
+    private def _associate[T](o: T, m2m: ManyToMany[T,A]): A = {
+      val aInst = m2m.assign(o)
+      try {
+        thisTableOfA.insert(aInst)
+      }
+      catch {
+        case e:SQLException =>
+          if(Session.currentSession.databaseAdapter.isNotNullConstraintViolation(e))
+            throw new RuntimeException(
+              "the " + 'associate + " method created and inserted association object of type " +
+              posoMetaData.clasz.getName + " that has NOT NULL colums, plase use the other signature of " + 'ManyToMany +
+              " that takes the association object as argument : associate(o,a)", e)
+          else
+            throw e
+      }
+    }
     
-    def left(leftSideMember: L): Query[R] with ManyToManyMember[R,A] = {
+    def left(leftSideMember: L): Query[R] with ManyToMany[R,A] = {
 
       val q =
         from(thisTableOfA, r)((a,r) => {
-          val leftMatchClause = f(leftSideMember, r, a)._1
-          outerQueryDsl.where(leftMatchClause).select(r)
+          val matchClause = f(leftSideMember, r, a)
+          outerQueryDsl.where(matchClause._1 and matchClause._2).select(r)
         })
 
-      new DelegateQuery(q) with ManyToManyMember[R,A] {
+      new DelegateQuery(q) with ManyToMany[R,A] {
 
         private def _assignKeys(r: R, a: AnyRef): Unit = {
           
@@ -326,37 +355,46 @@ trait QueryDsl
           rightFkFmd.set(a, rightPk)
         }
 
-        def associate(o: R, a: A): Unit = {
+        def assign(o: R, a: A) =
           _assignKeys(o, a.asInstanceOf[AnyRef])
+        
+        def associate(o: R, a: A): Unit  = {
+          assign(o, a)
           thisTableOfA.insert(a)
         }
 
-        def associate(o: R): Unit = {
-
+        def assign(o: R): A = {
           val aInstAny = thisTableOfA._createInstanceOfRowObject
           val aInst = aInstAny.asInstanceOf[A]
           _assignKeys(o, aInstAny)
-          thisTableOfA.insert(aInst)
+          aInst
         }
 
-        def dissociateAll = {
+        def associate(o: R): A =
+          _associate(o,this)
+
+        def _whereClauseForAssociations(a0: A) = {
           val leftPk = leftPkFmd.get(leftSideMember.asInstanceOf[AnyRef])
-
-          val be =  _leftEqualityExpr.replaceConstant(leftFkFmd, leftPk)
-          
-          thisTableOfA.deleteWhere(a0 => be)
+          leftFkFmd.get(a0.asInstanceOf[AnyRef])
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk)
         }
+        
+        def dissociateAll = 
+          thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0))
+
+        def associations =
+          thisTableOfA.where(a0 => _whereClauseForAssociations(a0))                  
       }
     }
 
-    def right(rightSideMember: R): Query[L] = {
+    def right(rightSideMember: R): Query[L] with ManyToMany[L,A] = {
       val q =
         from(thisTableOfA, l)((a,l) => {
-           val rightMatchClause = f(l, rightSideMember, a)._2
-           outerQueryDsl.where(rightMatchClause).select(l)
+           val matchClause = f(l, rightSideMember, a)
+           outerQueryDsl.where(matchClause._1 and matchClause._2).select(l)
         })
 
-      new DelegateQuery(q) with ManyToManyMember[L,A] {
+      new DelegateQuery(q) with ManyToMany[L,A] {
 
         private def _assignKeys(l: L, a: AnyRef): Unit = {
 
@@ -367,20 +405,105 @@ trait QueryDsl
           leftFkFmd.set(a, leftPk)
         }
 
-        def associate(o: L, a: A): Unit = {
+        def assign(o: L, a: A) =
           _assignKeys(o, a.asInstanceOf[AnyRef])
+        
+        def associate(o: L, a: A): Unit = {
+          assign(o, a)
           thisTableOfA.insert(a)
         }
 
-        def associate(o: L): Unit = {
-
+        def assign(o: L): A = {
           val aInstAny = thisTableOfA._createInstanceOfRowObject
           val aInst = aInstAny.asInstanceOf[A]
           _assignKeys(o, aInstAny)
-          thisTableOfA.insert(aInst)
+          aInst
         }
 
-        def dissociateAll = error("implement me !")
+        def associate(o: L): A =
+          _associate(o,this)
+
+        def _whereClauseForAssociations(a0: A) = {
+          val rightPk = rightPkFmd.get(rightSideMember.asInstanceOf[AnyRef])
+          rightFkFmd.get(a0.asInstanceOf[AnyRef])
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(rightPk)
+        }
+
+        def dissociateAll =
+          thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0))
+
+        def associations =
+          thisTableOfA.where(a0 => _whereClauseForAssociations(a0))      
+      }
+    }
+  }
+
+  def oneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]](ot: Table[O], mt: Table[M]) = new OneToManyRelationBuilder(ot,mt)
+
+  class OneToManyRelationBuilder[O <: KeyedEntity[_],M <: KeyedEntity[_]](ot: Table[O], mt: Table[M]) {
+    
+    def via(f: (O,M)=>EqualityExpression) =
+      new OneToManyRelation(ot,mt,f)
+
+  }
+
+  class OneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]](ot: Table[O], mt: Table[M], f: (O,M)=>EqualityExpression) {
+
+    private val (_leftPkFmd, _rightFkFmd) = {
+
+      var ee: Option[EqualityExpression] = None
+
+      from(ot,mt)((o,m) => {
+        ee = Some(f(o,m))
+        select(None)
+      })
+
+      val ee_ = ee.get
+      
+      (ee_.left.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData,
+       ee_.right.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
+    }
+    
+    def left(leftSide: O): OneToMany[M] = {
+          
+      val q = from(mt)(m => where(f(leftSide, m)) select(m))
+
+      new DelegateQuery(q) with OneToMany[M] {
+
+        def deleteAll =
+          mt.deleteWhere(m => f(leftSide, m))
+
+        def assign(m: M) = {
+          val m0 = m.asInstanceOf[AnyRef]
+          val l0 = leftSide.asInstanceOf[AnyRef]
+          
+          val v = _leftPkFmd.get(l0)
+          _rightFkFmd.set(m0, v)
+        }
+
+        def associate(m: M) = {
+          assign(m)
+          mt.insert(m)
+        }
+      }
+    }
+
+    def right(rightSide: M): ManyToOne[O] = {
+
+      val q = from(ot)(o => where(f(o,rightSide)) select(o))
+
+      new DelegateQuery(q) with ManyToOne[O] {
+
+        def assign(one: O) = {
+          val o = one.asInstanceOf[AnyRef]
+          val r = rightSide.asInstanceOf[AnyRef]
+
+          val v = _rightFkFmd.get(r)
+          _leftPkFmd.set(o, v)
+        }
+
+        def delete =
+          ot.deleteWhere(o => f(o, rightSide))        
       }
     }
   }

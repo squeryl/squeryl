@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.squeryl
 
+import dsl.QueryDsl
 import internals._
 import java.sql.ResultSet
 
@@ -49,5 +50,17 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     
     resultSetMapper.map(o, resultSet);
     o.asInstanceOf[T]
+  }
+
+  def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
+    //TODO: find out why scalac won't let dsl be passed to another method
+    import dsl._
+
+    val q = from(this)(a => dsl.where {
+      a.id
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(k)
+    } select(a))
+    q.headOption
+
   }  
 }
