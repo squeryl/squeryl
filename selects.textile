@@ -52,9 +52,9 @@ available for Table[T] that are of the form : Table[KeyedEntity[K]]
 The classes Artist and Song in this example are part of a one to many relation
 that can be accessed via the methods.
 
-h2. Nesting
+h2. Nesting Sub Queries
 
-For the next examples, the following query will nested as an inner query 
+For the next examples, the following query will be nested as an inner query 
 into other queries :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
