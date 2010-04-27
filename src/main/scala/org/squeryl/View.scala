@@ -64,8 +64,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     import dsl._
 
     val q = from(this)(a => dsl.where {
-      a.id
-      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(k)
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(a.id, k)
     } select(a))
     q.headOption
 

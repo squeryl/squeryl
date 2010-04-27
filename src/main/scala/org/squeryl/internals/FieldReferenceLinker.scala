@@ -19,6 +19,7 @@ import java.lang.reflect.Method
 import net.sf.cglib.proxy._
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast._
+import org.squeryl.dsl.CompositeKey
 
 object FieldReferenceLinker {
 
@@ -50,6 +51,14 @@ object FieldReferenceLinker {
   private val _lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]] {
     override def initialValue = None
   }
+
+  private val _compositeKeyMembers = new ThreadLocal[Option[ArrayBuffer[SelectElement]]] {
+    override def initialValue = None
+  }
+
+//  private [squeryl] val _compositeKey = new ThreadLocal[Option[Iterable[SelectElementReference[Any]]]] {
+//    override def initialValue = None
+//  }
 
   class YieldInspection {
     
@@ -136,12 +145,20 @@ object FieldReferenceLinker {
       case None => error("Thread local does not have a last accessed field... this is a severe bug !")
   }
 
-  def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c: Any) = {
+  def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(e: Any, c: Any): LogicalBoolean = {
+
+    if(e.isInstanceOf[CompositeKey])
+      e.asInstanceOf[CompositeKey].buildEquality(c.asInstanceOf[CompositeKey])
+    else
+      createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c)    
+  }
+
+  def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c: Any): LogicalBoolean = {
     val fr = _takeLastAccessedUntypedFieldReference
 
     new BinaryOperatorNodeLogicalBoolean(
       fr,
-      new ConstantExpressionNode[Any](c, c.isInstanceOf[String]),
+      new ConstantExpressionNode[Any](c),
       "=")
   }
   
@@ -225,7 +242,7 @@ object FieldReferenceLinker {
   def createCallBack(v: ViewExpressionNode[_]): Callback =
     new PosoPropertyAccessInterceptor(v)
   
-  class PosoPropertyAccessInterceptor(val viewExpressionNode: ViewExpressionNode[_]) extends MethodInterceptor {
+  private class PosoPropertyAccessInterceptor(val viewExpressionNode: ViewExpressionNode[_]) extends MethodInterceptor {
 
       def fmd4Method(m: Method) =
         viewExpressionNode.view.findFieldMetaDataForProperty(m.getName)
@@ -233,7 +250,20 @@ object FieldReferenceLinker {
       def intercept(o: Object, m: Method, args: Array[Object], proxy: MethodProxy): Object = {
 
         lazy val fmd = fmd4Method(m)
+
+        val isComposite =
+          classOf[CompositeKey].isAssignableFrom(m.getReturnType)
+
+        if(isComposite)
+          _compositeKeyMembers.set(Some(new ArrayBuffer[SelectElement]))
+
         var res = proxy.invokeSuper(o, args);
+
+        if(isComposite) {
+          res.asInstanceOf[CompositeKey]._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper)))
+          //_compositeKey.set(Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper))))
+          _compositeKeyMembers.set(None)
+        }
 
         if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
           res = "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
@@ -244,40 +274,13 @@ object FieldReferenceLinker {
           if(yi.isOn)
             yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
 
-          _lastAccessedFieldReference.set(Some(viewExpressionNode.getOrCreateSelectElement(fmd.get)));
+          if(_compositeKeyMembers.get == None)
+            _lastAccessedFieldReference.set(Some(viewExpressionNode.getOrCreateSelectElement(fmd.get)));
+          else
+            _compositeKeyMembers.get.get.append(viewExpressionNode.getOrCreateSelectElement(fmd.get))
         }
         
         res
       }          
-    }
-
-
-//  def createCallBack(pmd1: PosoMetaData, pmd2: PosoMetaData, v: ArrayBuffer[String]): Callback =
-//    new SimplePosoPropertyAccessInterceptor(v)
-//
-//  class SimplePosoPropertyAccessInterceptor(v: ArrayBuffer[String]) extends MethodInterceptor {
-//
-//      def fmd4Method(m: Method) =
-//        pmd1.findFieldMetaDataForProperty(m.getName)
-//
-//      def intercept(o: Object, m: Method, args: Array[Object], proxy: MethodProxy): Object = {
-//
-//        lazy val fmd = fmd4Method(m)
-//        var res = proxy.invokeSuper(o, args);
-//
-//        if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
-//          res = "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
-//
-//        if(fmd != None) {
-//          val yi = _yieldInspectionTL.get
-//
-//          if(yi.isOn)
-//            yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
-//
-//          _lastAccessedFieldReference.set(Some(viewExpressionNode.getOrCreateSelectElement(fmd.get)));
-//        }
-//
-//        res
-//      }
-//    }
+  }
 }

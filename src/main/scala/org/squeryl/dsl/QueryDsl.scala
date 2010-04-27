@@ -523,4 +523,21 @@ trait QueryDsl
       }
     }
   }
+
+
+  def compositeKey[A1,A2](a1: A1, a2: A2) =
+    new CompositeKey2(a1, a2)
+
+  def compositeKey[A1,A2,A3](a1: A1, a2: A2, a3: A3) =
+    new CompositeKey3(a1, a2, a3)
+
+  def compositeKey[A1,A2,A3,A4](a1: A1, a2: A2, a3: A3, a4: A4) =
+    new CompositeKey4(a1, a2, a3, a4)
+
+  implicit def t2te[A1,A2](t: (A1,A2)) = new CompositeKey2[A1,A2](t._1, t._2)
+
+  implicit def t3te[A1,A2,A3](t: (A1,A2,A3)) = new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
+
+  implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4)) = new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
+
 }

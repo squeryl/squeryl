@@ -199,9 +199,11 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
   def doWrite(sw: StatementWriter) = sw.write(token)
 }
 
-class ConstantExpressionNode[T](val value: T, val needsQuote: Boolean) extends ExpressionNode {
+class ConstantExpressionNode[T](val value: T) extends ExpressionNode {
 
-  def this(v:T) = this(v, false)
+  //def this(v:T) = this(v, false)
+
+  private def needsQuote = value.isInstanceOf[String]
 
   def mapper: OutMapper[T] = error("outMapper should not be used on " + 'ConstantExpressionNode)
 

@@ -222,8 +222,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extend
   def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
     import dsl._
     val q = from(this)(a => dsl.where {
-      a.id
-      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(k)
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(a.id, k)
     } select(a))
 
     val deleteCount = this.delete(q)

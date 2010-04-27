@@ -2,8 +2,9 @@ package org.squeryl.tests.schooldb2
 
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
-import java.sql.SQLException
-import org.squeryl.{Session, ForeingKeyDeclaration, Schema, KeyedEntity}
+import org.squeryl._
+import dsl.CompositeKey2
+
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -28,7 +29,7 @@ class Course(val subjectId: Long) extends SchoolDb2Object {
 
 class Student(val firstName: String, val lastName: String) extends SchoolDb2Object {
 
-  lazy val courses = SchoolDb2.courseSubscriptions.right(this)  
+  lazy val courses = SchoolDb2.courseSubscriptions.right(this)
 }
 
 class Subject(val name: String) extends SchoolDb2Object {
@@ -38,7 +39,10 @@ class Subject(val name: String) extends SchoolDb2Object {
 
 class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float)
 
-class CourseAssignment(val courseId: Long, val professorId: Long)
+class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedEntity[CompositeKey2[Long,Long]] {
+
+  def id = compositeKey(courseId, professorId)
+}
 
 
 object SchoolDb2 extends Schema {
@@ -49,7 +53,7 @@ object SchoolDb2 extends Schema {
 
   val courses = table[Course]
 
-  val subjects = table[Subject]  
+  val subjects = table[Subject]
 
   val courseAssignments =
     manyToManyRelation(professors, courses).
@@ -63,11 +67,11 @@ object SchoolDb2 extends Schema {
     oneToManyRelation(subjects, courses).
     via((s,c) => s.id === c.subjectId)
 
-  // the default constraint for all foreign keys in this schema :  
+  // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
     foreingKeyDeclaration.constrainReference
 
-  //now we will redefine some of the foreing key constraints :  
+  //now we will redefine some of the foreing key constraints :
   //if we delete a subject, we want all courses to be deleted
   subjectToCourses.foreingKeyDeclaration.constrainReference(onDelete cascade)
 
@@ -82,7 +86,7 @@ class SchoolDb2Tests extends QueryTester {
   SchoolDb2.drop
 
   //loggerOn
-  
+
   SchoolDb2.create
 
   import SchoolDb2._
@@ -102,6 +106,8 @@ class SchoolDb2Tests extends QueryTester {
 
   def testAll = {
 
+    testCompositeEquality
+
     testMany2ManyAssociationFromLeftSide
     testMany2ManyAssociationsFromRightSide
 
@@ -114,7 +120,7 @@ class SchoolDb2Tests extends QueryTester {
   def testMany2ManyAssociationFromLeftSide = {
 
     assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
-    
+
     professeurTournesol.courses.associate(physicsCourse)
 
     val c1 = professeurTournesol.courses.single : Course
@@ -130,7 +136,7 @@ class SchoolDb2Tests extends QueryTester {
     assertEquals(professeurTournesol.courses.dissociateAll, 0, 'testMany2ManyAssociationFromLeftSide)
 
     assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
-    
+
     passed('testMany2ManyAssociationFromLeftSide)
   }
 
@@ -147,16 +153,16 @@ class SchoolDb2Tests extends QueryTester {
     val ca = professeurTournesol.courses.associations.single : CourseAssignment
 
     assertEquals(ca.courseId,  physicsCourse.id, 'testMany2ManyAssociationsFromRightSide)
-    
+
     assertEquals(physicsCourse.professors.dissociateAll, 1, 'testMany2ManyAssociationsFromRightSide)
 
     assertEquals(physicsCourse.professors.dissociateAll, 0, 'testMany2ManyAssociationsFromRightSide)
 
     assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
-    
+
     passed('testMany2ManyAssociationsFromRightSide)
   }
-  
+
   def testOneToMany = {
 
     val philosophyCourse10AMWednesday = new Course
@@ -177,9 +183,9 @@ class SchoolDb2Tests extends QueryTester {
       philosophy.name,
       'testOneToMany)
 
-    // verify that a reassociation doesn an update and not an insert :
+    // verify that a reassociation does an update and not an insert :
     val pk1 = philosophyCourse3PMFriday.id
-    
+
     computationTheory.courses.associate(philosophyCourse3PMFriday)
 
     assertEquals(
@@ -194,12 +200,51 @@ class SchoolDb2Tests extends QueryTester {
       Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id),
       'testOneToMany)
 
-    // 2) philosophyCourse3PMFriday.subject points to the proper subject 
+    // 2) philosophyCourse3PMFriday.subject points to the proper subject
     assertEquals(
       computationTheory.name,
       philosophyCourse3PMFriday.subject.single.name,
       'testOneToMany)
 
     passed('testOneToMany)
+  }
+
+  def testCompositeEquality = {
+
+
+    val a = physicsCourse.professors.associate(professeurTournesol)
+
+    val qA = courseAssignments.lookup(compositeKey(a.courseId, a.professorId))
+
+    _existsAndEquals(qA, a)
+
+    val qA2 =
+      from(courseAssignments)(ca =>
+        where(ca.id ===(a.courseId, a.professorId))
+        select(ca)
+      )
+
+    _existsAndEquals(qA2.headOption, a)
+
+    println(qA2.statement)
+
+    val qA3 =
+      courseAssignments.where(_.id === a.id)
+
+    _existsAndEquals(qA3.headOption, a)
+
+    courseAssignments.delete(compositeKey(a.courseId, a.professorId))
+
+    assertEquals(0L, qA3.Count: Long, 'testCompositeEquality)
+
+    //println(ca2.statement)
+  }
+
+  private def _existsAndEquals(oca: Option[CourseAssignment], ca: CourseAssignment) = {
+
+    if(oca == None)
+      error("query returned no rows")
+
+    assertEquals(ca.id, oca.get.id, 'testCompositeEquality)
   }
 }

@@ -74,7 +74,7 @@ object PrimitiveTypeMode extends QueryDsl {
   def createLeafNodeOfScalarStringType(s: String) = {
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[String](s, true) with StringExpression[String]
+        new ConstantExpressionNode[String](s) with StringExpression[String]
       case Some(n:SelectElement) =>
         new SelectElementReference[String](n) with StringExpression[String]
     }
@@ -83,7 +83,7 @@ object PrimitiveTypeMode extends QueryDsl {
   def createLeafNodeOfScalarStringOptionType(s: Option[StringType]) = {
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Option[String]](s, true) with StringExpression[Option[String]]
+        new ConstantExpressionNode[Option[String]](s) with StringExpression[Option[String]]
       case Some(n:SelectElement) =>
         new SelectElementReference[Option[String]](n) with StringExpression[Option[String]]
     }

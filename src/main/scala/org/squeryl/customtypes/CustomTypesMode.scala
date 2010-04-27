@@ -32,7 +32,7 @@ trait CustomTypesMode extends QueryDsl {
     new ConstantExpressionNode[Int](i) with NumericalExpression[Int]
 
   implicit def createConstantNodeOfScalarStringType(s: String) =
-    new ConstantExpressionNode[String](s, true) with StringExpression[String]
+    new ConstantExpressionNode[String](s) with StringExpression[String]
 
   implicit def createConstantNodeOfScalarDoubleType(i: Double) =
     new ConstantExpressionNode[Double](i) with NumericalExpression[Double]

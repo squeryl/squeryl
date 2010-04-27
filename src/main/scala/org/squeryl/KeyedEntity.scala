@@ -15,7 +15,7 @@
  ******************************************************************************/
 package org.squeryl
 
-import annotations.{Column, Transient}
+import annotations.Transient
 
 /**
  *  For use with View[A] or Table[A], when A extends KeyedEntity[K],
@@ -56,9 +56,6 @@ trait IndirectKeyedEntity[K,T] extends KeyedEntity[K] {
   
   def idField: T
 }
-
-
-trait CompositeKeyedEntity[K <: Product] extends KeyedEntity[K]
 
 
 trait Optimistic {
