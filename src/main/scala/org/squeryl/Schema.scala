@@ -127,10 +127,10 @@ trait Schema {
          fkDecl._referentialAction2
       )
 
-      val cs = Session.currentSession
-      val s = cs.connection.createStatement
-
-      s.execute(fkStatement)
+//      val cs = Session.currentSession
+//      val s = cs.connection.createStatement
+//      s.execute(fkStatement)
+      println(fkStatement)
     }
 
 
