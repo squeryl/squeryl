@@ -261,13 +261,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       if a.isInstanceOf[Column] || a.isInstanceOf[OptionType])
         s.add(a)
 
-  private def _includeFieldOrMethodType(c: Class[_]) = {
-    //val r =
-      ! classOf[Query[_]].isAssignableFrom(c)
-//    if(r)
-//      println("INCLUDE:" + c.getName)
-    //r
-  }
+  private def _includeFieldOrMethodType(c: Class[_]) =
+      ! classOf[Query[_]].isAssignableFrom(c)  
 
   private def _fillWithMembers(clasz: Class[_], members: ArrayBuffer[(Member,HashSet[Annotation])]) {
 
@@ -278,7 +273,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       members.append(t)
     }
 
-    for(m <- clasz.getDeclaredFields if ! m.getName.startsWith("bitmap$") && _includeFieldOrMethodType(m.getType)) {
+    for(m <- clasz.getDeclaredFields if (m.getName.indexOf("$") == -1) && _includeFieldOrMethodType(m.getType)) {
       m.setAccessible(true)
       val t = (m, new HashSet[Annotation])
       _addAnnotations(m, t._2)

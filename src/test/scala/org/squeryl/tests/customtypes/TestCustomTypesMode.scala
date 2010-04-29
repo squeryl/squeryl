@@ -75,7 +75,7 @@ class Patient(var firstName: FirstName, var age: Option[Age], var weight: Option
  * to add meta data and validation 
  */
 trait Domain[A] {
-  self: CustomType =>
+  self: Product1[Any] =>
 
   def label: String
   def validate(a: A): Unit

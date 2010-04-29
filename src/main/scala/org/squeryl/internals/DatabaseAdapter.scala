@@ -17,8 +17,8 @@ package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
 import java.sql.{ResultSet, SQLException, PreparedStatement, Connection}
-import org.squeryl.customtypes.CustomType
 import org.squeryl._
+import org.squeryl.{Schema, Session, Table}
 
 class DatabaseAdapter {
 
@@ -263,8 +263,8 @@ class DatabaseAdapter {
    */
   def convertToJdbcValue(r: AnyRef) : AnyRef = {
     var v = r
-    if(v.isInstanceOf[CustomType])
-       v = v.asInstanceOf[CustomType].wrappedValue.asInstanceOf[AnyRef]
+    if(v.isInstanceOf[Product1[_]])
+       v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
     if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date])
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
 

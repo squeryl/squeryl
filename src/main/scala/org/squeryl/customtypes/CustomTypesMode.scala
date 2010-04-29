@@ -22,8 +22,8 @@ import org.squeryl.dsl.ast.{SelectElementReference, ConstantExpressionNode}
 import java.util.Date
 
 
-trait CustomType {
-  def wrappedValue: Any
+trait CustomType extends Product1[Any] {
+  def canEqual(a:Any) = false
 }
 
 trait CustomTypesMode extends QueryDsl {
@@ -123,33 +123,33 @@ object CustomTypesMode extends CustomTypesMode
 
 
 class ByteField(val value: Byte) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class IntField(val value: Int) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class StringField(val value: String) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class DoubleField(val value: Double) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class FloatField(val value: Float) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class LongField(val value: Long) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class BooleanField(val value: Boolean) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }
 
 class DateField(val value: Date) extends CustomType {
-  def wrappedValue: Any = value
+  def _1: Any = value
 }

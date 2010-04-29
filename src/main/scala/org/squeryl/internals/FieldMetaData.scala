@@ -19,7 +19,7 @@ import org.squeryl.annotations.Column
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
-import org.squeryl.customtypes.CustomType
+
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -27,7 +27,7 @@ class FieldMetaData(
         val fieldType: Class[_], // if isOption, this fieldType is the type param of Option, i.e. the T in Option[T]
         val wrappedFieldType: Class[_], //in primitive type mode fieldType == wrappedFieldType, in custom type mode wrappedFieldType is the 'real'
         // type, i.e. the (primitive) type that jdbc understands
-        val customTypeFactory: Option[AnyRef=>CustomType],
+        val customTypeFactory: Option[AnyRef=>Product1[Any]],
         val isOption: Boolean,
         getter: Option[Method],
         setter: Option[Method],
@@ -220,9 +220,9 @@ object FieldMetaData {
     if(v != null && v == None) // can't deduce the type from None in this case the Annotation
       v = null         //needs to tell us the type, if it doesn't it will a few lines bellow
 
-    var customTypeFactory: Option[AnyRef=>CustomType] = None
+    var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
-    if(classOf[CustomType].isAssignableFrom(typeOfField))
+    if(classOf[Product1[Any]].isAssignableFrom(typeOfField))
       customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfField)
 
     if(customTypeFactory != None) {
@@ -250,12 +250,12 @@ object FieldMetaData {
         v.asInstanceOf[Option[AnyRef]].get.getClass
 
     val primitiveFieldType =
-      if(v.isInstanceOf[CustomType])
-        v.asInstanceOf[CustomType].wrappedValue.asInstanceOf[AnyRef].getClass
-      else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[CustomType]) {
+      if(v.isInstanceOf[Product1[_]])
+        v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
+      else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[Product1[_]]) {
         //if we get here, customTypeFactory has not had a chance to get created 
         customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfFieldOrTypeOfOption)
-        v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[CustomType].wrappedValue.asInstanceOf[AnyRef].getClass
+        v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
       }
       else
         typeOfFieldOrTypeOfOption
@@ -279,7 +279,7 @@ object FieldMetaData {
    * that creates an instance of a custom type with it, the factory accepts null to create
    * default values for non nullable primitive types (int, long, etc...)
    */
-  private def _createCustomTypeFactory(ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>CustomType] = {
+  private def _createCustomTypeFactory(ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any]] = {
     for(c <- typeOfField.getConstructors if c.getParameterTypes.length == 1) {
       val pTypes = c.getParameterTypes
       val dv = createDefaultValue(ownerClass, pTypes(0), None)
@@ -287,9 +287,9 @@ object FieldMetaData {
         return  Some(
           (i:AnyRef)=> {
             if(i != null)
-              c.newInstance(i).asInstanceOf[CustomType]
+              c.newInstance(i).asInstanceOf[Product1[Any]]
             else
-              c.newInstance(dv).asInstanceOf[CustomType]
+              c.newInstance(dv).asInstanceOf[Product1[Any]]
           }
         )
     }
