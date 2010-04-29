@@ -1,0 +1,24 @@
+---
+layout: manual
+title: Performance Tuning
+---
+
+h2. Caching : Your Mileage _will_ vary
+
+Benefits from caching is, quite evidently, highly dependent on the data access patterns of an application.
+
+h3. 
+
+
+
+h2. Reducing Squeryl overhead
+
+Most of Squeryl's overhead over raw JDBC comes from AST construction.
+
+h2. Query[A] are immutable, and can be shared.
+
+Query AST construction is unlikely to be the first bottleneck in an application, but it can become one,
+the good news is that 
+
+
+h3. use MutableQuery[A] when
