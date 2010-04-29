@@ -15,7 +15,38 @@
  ******************************************************************************/
 package org.squeryl.dsl
 
-import org.squeryl.Query
+import org.squeryl.{ForeingKeyDeclaration, Table, Query, KeyedEntity}
+
+trait Relation[L <: KeyedEntity[_],R <: KeyedEntity[_]] {
+  
+  def leftTable: Table[L]
+
+  def rightTable: Table[R]
+}
+
+trait OneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]] extends Relation[O,M] {
+
+  def foreingKeyDeclaration: ForeingKeyDeclaration
+  
+  def left(leftSide: O): OneToMany[M]
+
+  def right(rightSide: M): ManyToOne[O]
+}
+
+trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A] extends Relation[L,R] {
+  self: Table[A] =>    
+
+  def thisTable: Table[A]
+
+  def leftForeingKeyDeclaration: ForeingKeyDeclaration
+
+  def rightForeingKeyDeclaration: ForeingKeyDeclaration
+
+  def left(leftSide: L): ManyToMany[R,A]
+  
+  def right(rightSide: R): ManyToMany[L,A]
+}
+
 
 /**
  * This trait is what is referred by both the left and right side of a manyToMany relation.
@@ -60,8 +91,7 @@ trait ManyToMany[O,A] extends Query[O] {
    *
    * Note that this method will fail if the association object has NOT NULL constraint fields appart from the
    * foreing keys in the relations
-   *
-   * TODO: protect this with contravariant implicit evidence ?  
+   *  
    */
   def associate(o: O): A
 

@@ -1,9 +1,9 @@
 package org.squeryl.tests.schooldb2
 
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.{Schema, KeyedEntity}
 import org.squeryl.tests.QueryTester
 import java.sql.SQLException
+import org.squeryl.{ForeingKeyDeclaration, Schema, KeyedEntity}
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -62,6 +62,17 @@ object SchoolDb2 extends Schema {
   val subjectToCourses =
     oneToManyRelation(subjects, courses).
     via((s,c) => s.id === c.subjectId)
+
+  // the default constraint for all relations in this schema :  
+  override def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
+    foreingKeyDeclaration.constrainReference
+
+  //now we will redefine some of the foreing key constraints :  
+  //if we delete a subject, we want all courses to be deleted
+  subjectToCourses.foreingKeyDeclaration.constrainReference(onDelete cascade)
+
+  //when a course is deleted, all of the subscriptions will get deleted :
+  courseSubscriptions.leftForeingKeyDeclaration.constrainReference(onDelete cascade)
 
   override def drop = super.drop
 }

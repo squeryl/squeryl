@@ -17,8 +17,8 @@ package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
 import java.sql.{ResultSet, SQLException, PreparedStatement, Connection}
-import org.squeryl.{Schema, Session, Table}
 import org.squeryl.customtypes.CustomType
+import org.squeryl._
 
 class DatabaseAdapter {
 
@@ -435,5 +435,36 @@ class DatabaseAdapter {
    * Figures out from the SQLException (ex.: vendor specific error code) 
    * if it's cause is a NOT NULL constraint violation
    */
-  def isNotNullConstraintViolation(e: SQLException): Boolean = false    
+  def isNotNullConstraintViolation(e: SQLException): Boolean = false
+
+  def writeForeingKeyDeclaration(
+    foreingKeyTable: Table[_], foreingKeyColumnName: String,
+    primaryKeyTable: Table[_], primaryKeyColumnName: String,
+    referentialAction1: Option[ReferentialAction],
+    referentialAction2: Option[ReferentialAction]) = {
+    
+    val sb = new StringBuilder(256)
+
+    sb.append("alter table ")
+    sb.append(foreingKeyTable.name)
+    sb.append(" add foreing key (")
+    sb.append(foreingKeyColumnName)
+    sb.append(") references ")
+    sb.append(primaryKeyTable.name)
+    sb.append("(")
+    sb.append(primaryKeyColumnName)
+    sb.append(")")
+
+    val f =  (ra:ReferentialAction) => {
+      sb.append(" on ")
+      sb.append(ra.event)
+      sb.append(" ")
+      sb.append(ra.action)
+    }
+
+    referentialAction1.foreach(f)
+    referentialAction2.foreach(f)
+
+    sb.toString
+  }
 }
