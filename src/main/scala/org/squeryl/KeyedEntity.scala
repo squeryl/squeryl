@@ -77,7 +77,7 @@ trait ReferentialAction {
  * ForeingKeyDeclaration are to be manipulated only during the Schema definition
  * (this is why all public methods have the implicit arg (implicit ev: Schema))
  */
-class ForeingKeyDeclaration(val foreingKeyColumnName: String, val referencedPrimaryKey: String) {
+class ForeingKeyDeclaration(val idWithinSchema: Int, val foreingKeyColumnName: String, val referencedPrimaryKey: String) {
 
   private var _referentialActions: Option[(Option[ReferentialAction],Option[ReferentialAction])] = None
 

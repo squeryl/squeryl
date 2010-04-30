@@ -221,6 +221,8 @@ class SchoolDb extends Schema with QueryTester {
 
     testLikeOperator
     testNotOperator
+
+    drop
   }
 
   def testLeftOuterJoin1 {

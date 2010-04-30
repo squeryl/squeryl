@@ -84,7 +84,6 @@ trait Schema {
     for(t <- _tables) {
       val sw = new StatementWriter(true, _dbAdapter)
       _dbAdapter.writeCreateTable(t, sw, this)
-      println(sw.statement)
     }
   }
 
@@ -94,12 +93,14 @@ trait Schema {
    * database instances, the method is protected in order to make it a little
    * less 'accessible'  
    */
-  protected def drop(failOnNonExistingTable: Boolean):Unit = {
+  protected def drop(failOnNonExistingTable: Boolean): Unit = {
 
+    _dropForeignKeyConstraints(failOnNonExistingTable)
+    
     for(t <- _tables) {
 
       val s = Session.currentSession.connection.createStatement
-      try {
+      try {        
         s.execute("drop table " + t.name)
         _dbAdapter.postDropTable(t)
       }
@@ -116,7 +117,20 @@ trait Schema {
     _declareForeingKeyConstraints
   }
 
-  private def _declareForeingKeyConstraints = 
+  private def _dropForeignKeyConstraints(failOnNonExistingTable: Boolean) =
+    for(fk <- _activeForeingKeySpecs) {
+      val cs = Session.currentSession
+      val s = cs.connection.createStatement
+      try {
+        val st = "alter table " + fk._1.name + " drop constraint " + cs.databaseAdapter.foreingKeyConstraintName(fk._1, fk._3.idWithinSchema)
+        s.execute(st)
+      }
+      catch {
+        case e: SQLException => if(failOnNonExistingTable) throw e        
+      }
+    }
+  
+  private def _declareForeingKeyConstraints =
     for(fk <- _activeForeingKeySpecs) {
       val fkDecl = fk._3
 
@@ -124,13 +138,18 @@ trait Schema {
          fk._1, fkDecl.foreingKeyColumnName,
          fk._2, fkDecl.referencedPrimaryKey,
          fkDecl._referentialAction1,
-         fkDecl._referentialAction2
+         fkDecl._referentialAction2,
+         fkDecl.idWithinSchema
       )
-
-//      val cs = Session.currentSession
-//      val s = cs.connection.createStatement
-//      s.execute(fkStatement)
-      println(fkStatement)
+            
+      val cs = Session.currentSession
+      val s = cs.connection.createStatement
+      try {
+        s.execute(fkStatement)
+      }
+      catch {
+        case e:SQLException => throw new RuntimeException("error executing " + fkStatement, e)
+      }
     }
 
 
@@ -155,6 +174,7 @@ trait Schema {
       }
       catch {
         case e:SQLException => throw new RuntimeException(e)
+        println(e)
       }
     }    
 
@@ -202,8 +222,11 @@ trait Schema {
 
   protected def onDelete = new ReferentialEvent("delete")
 
+  private var _fkIdGen = 1 
+
   private [squeryl] def _createForeingKeyDeclaration(fkColName: String, pkColName: String) = {
-    val fkd = new ForeingKeyDeclaration(fkColName, pkColName)
+    val fkd = new ForeingKeyDeclaration(_fkIdGen, fkColName, pkColName)
+    _fkIdGen += 1
     applyDefaultForeingKeyPolicy(fkd)
     fkd
   }

@@ -91,6 +91,12 @@ class AnnotationTests {
     val ti = new ToastersInc
     import ti._
 
+
+    val _isPersistedFmd = descendantOfKeyedObjects.posoMetaData.findFieldMetaDataForProperty("_isPersisted")
+
+    if(_isPersistedFmd != None)
+      error('testMetaData + " failed, @transient annotation of field _isPersisted was not effective.")
+    
     if(descendantOfKeyedObjects.findFieldMetaDataForProperty("id") == None)
       error("PosoMetaData has failed to build immutable field 'id'.")
 

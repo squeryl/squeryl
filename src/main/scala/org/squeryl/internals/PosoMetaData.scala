@@ -211,7 +211,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
   }
 
   private def _groupOfMembersIsProperty(property: (Option[Field], Option[Method], Option[Method], Set[Annotation])): Boolean  = {
-
+    
     if(property._4.find(an => an.isInstanceOf[Transient]) != None)
       return false    
 
@@ -251,15 +251,16 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
     }
   }
 
+  private def _includeAnnotation(a: Annotation) =
+   a.isInstanceOf[Column] || a.isInstanceOf[Transient] || a.isInstanceOf[OptionType]
+  
   private def _addAnnotations(m: Field, s: HashSet[Annotation]) =
-    for(a <- m.getAnnotations
-      if a.isInstanceOf[Column] || a.isInstanceOf[OptionType])
-        s.add(a)
+    for(a <- m.getAnnotations if _includeAnnotation(a))
+      s.add(a)
 
   private def _addAnnotations(m: Method, s: HashSet[Annotation]) =
-    for(a <- m.getAnnotations
-      if a.isInstanceOf[Column] || a.isInstanceOf[OptionType])
-        s.add(a)
+    for(a <- m.getAnnotations if _includeAnnotation(a))
+      s.add(a)
 
   private def _includeFieldOrMethodType(c: Class[_]) =
       ! classOf[Query[_]].isAssignableFrom(c)  

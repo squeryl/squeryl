@@ -46,6 +46,8 @@ class TestCustomTypesMode extends QueryTester {
 
     validateQuery('simpleSelect, simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
     validateQuery('simpleSelect1, patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
+
+    drop
   }
 }
 
@@ -61,6 +63,8 @@ class HospitalDb extends Schema {
   }
 
   create
+
+  override def drop = super.drop
 }
 
 class Patient(var firstName: FirstName, var age: Option[Age], var weight: Option[WeightInKilograms]) {

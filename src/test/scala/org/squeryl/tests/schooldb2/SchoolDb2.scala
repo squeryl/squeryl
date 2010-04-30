@@ -63,7 +63,7 @@ object SchoolDb2 extends Schema {
     oneToManyRelation(subjects, courses).
     via((s,c) => s.id === c.subjectId)
 
-  // the default constraint for all relations in this schema :  
+  // the default constraint for all foreign keys in this schema :  
   override def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
     foreingKeyDeclaration.constrainReference
 
@@ -106,24 +106,15 @@ class SchoolDb2Tests extends QueryTester {
 
 
   def testAll = {
-    testMetaData
+
     testMany2ManyAssociationFromLeftSide
     testMany2ManyAssociationsFromRightSide
 
     testOneToMany
-    
-    //many2ManyAssociateFromLeft
+
+    SchoolDb2.drop
   }
 
-
-  def testMetaData = {
-
-    val fmd = courseAssignments.posoMetaData
-    
-    val professorIdFmd = fmd.findFieldMetaDataForProperty("professorId").getOrElse(error("FieldMetaData for CourseAssignments.professorId not found"))
-
-    passed('testMetaData)
-  }
 
   def testMany2ManyAssociationFromLeftSide = {
 

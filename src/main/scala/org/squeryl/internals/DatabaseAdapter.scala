@@ -437,17 +437,23 @@ class DatabaseAdapter {
    */
   def isNotNullConstraintViolation(e: SQLException): Boolean = false
 
+  def foreingKeyConstraintName(foreingKeyTable: Table[_], idWithinSchema: Int) =
+    foreingKeyTable.name + "FK" + idWithinSchema
+
   def writeForeingKeyDeclaration(
     foreingKeyTable: Table[_], foreingKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
-    referentialAction2: Option[ReferentialAction]) = {
+    referentialAction2: Option[ReferentialAction],
+    fkId: Int) = {
     
     val sb = new StringBuilder(256)
 
     sb.append("alter table ")
     sb.append(foreingKeyTable.name)
-    sb.append(" add foreing key (")
+    sb.append(" add constraint ")
+    sb.append(foreingKeyConstraintName(foreingKeyTable, fkId))
+    sb.append(" foreign key (")
     sb.append(foreingKeyColumnName)
     sb.append(") references ")
     sb.append(primaryKeyTable.name)

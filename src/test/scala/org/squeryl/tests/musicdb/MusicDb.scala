@@ -188,6 +188,8 @@ class MusicDb extends Schema with QueryTester {
     //activateWorkbenchMode
 
     working
+
+    drop
   }
 
   def assertionFailed(s: Symbol, actual: Any, expected: Any) =
