@@ -54,14 +54,8 @@ class TestCustomTypesMode extends QueryTester {
 class HospitalDb extends Schema {
 
   val patients = table[Patient]
-
-  try {
-    drop // we normally *NEVER* do this !!
-  }
-  catch {
-    case e:SQLException => println(" schema does not yet exist :" + e.getMessage)
-  }
-
+  
+  drop
   create
 
   override def drop = super.drop

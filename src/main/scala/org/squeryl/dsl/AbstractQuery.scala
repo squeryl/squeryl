@@ -116,7 +116,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       _hasNext = rs.next
 
       if(!_hasNext) {// close it ASAP
-        s._closeResultSet(rs)
+        Utils.close(rs)
         stmt.close
       }
 

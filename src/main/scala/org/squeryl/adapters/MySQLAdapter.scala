@@ -15,8 +15,9 @@
  ******************************************************************************/
 package org.squeryl.adapters
 
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
-import org.squeryl.dsl.ast.QueryExpressionElements
+import org.squeryl.internals.{DatabaseAdapter}
+import org.squeryl.{ReferentialAction, Table}
+import java.sql.SQLException
 
 class MySQLAdapter extends DatabaseAdapter {
 
@@ -25,4 +26,46 @@ class MySQLAdapter extends DatabaseAdapter {
   override def floatTypeDeclaration = "float"
 
   //override def nvlToken = "ifnull"
+
+  override def writeForeingKeyDeclaration(
+    foreingKeyTable: Table[_], foreingKeyColumnName: String,
+    primaryKeyTable: Table[_], primaryKeyColumnName: String,
+    referentialAction1: Option[ReferentialAction],
+    referentialAction2: Option[ReferentialAction],
+    fkId: Int) = {
+
+    val sb = new StringBuilder(256)
+
+    sb.append("alter table ")
+    sb.append(foreingKeyTable.name)
+    sb.append(" add constraint ")
+    sb.append(foreingKeyConstraintName(foreingKeyTable, fkId))
+    sb.append(" foreign key (")
+    sb.append(foreingKeyColumnName)
+    sb.append(") references ")
+    sb.append(primaryKeyTable.name)
+    sb.append("(")
+    sb.append(primaryKeyColumnName)
+    sb.append(")")
+    
+    val f =  (ra:ReferentialAction) => {
+      sb.append(" on ")
+      sb.append(ra.event)
+      sb.append(" ")
+      sb.append(ra.action)
+    }
+
+    referentialAction1.foreach(f)
+    referentialAction2.foreach(f)
+
+    sb.toString
+  }
+
+  override def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
+    "alter table " + foreingKeyTable.name + " drop foreign key " + fkName
+
+  override def isTableDoesNotExistException(e: SQLException) =
+    e.getErrorCode == 1051 
+
+  override def supportsForeignKeyConstraints = false
 }

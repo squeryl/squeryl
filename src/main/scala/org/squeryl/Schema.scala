@@ -93,43 +93,37 @@ trait Schema {
    * database instances, the method is protected in order to make it a little
    * less 'accessible'  
    */
-  protected def drop(failOnNonExistingTable: Boolean): Unit = {
+  protected def drop: Unit = {
 
-    _dropForeignKeyConstraints(failOnNonExistingTable)
-    
+    if(_dbAdapter.supportsForeignKeyConstraints)
+      _dropForeignKeyConstraints
+
+    val s = Session.currentSession.connection.createStatement
+    val con = Session.currentSession.connection
+
     for(t <- _tables) {
-
-      val s = Session.currentSession.connection.createStatement
-      try {        
-        s.execute("drop table " + t.name)
-        _dbAdapter.postDropTable(t)
-      }
-      catch {
-        case e:SQLException => if(failOnNonExistingTable) throw e
-      }
+      _dbAdapter.dropTable(t)
+      _dbAdapter.postDropTable(t)
     }
-  }
-
-  protected def drop:Unit = drop(false)
+  }  
 
   def create = {
     _createTables
-    _declareForeingKeyConstraints
+    if(_dbAdapter.supportsForeignKeyConstraints)
+      _declareForeingKeyConstraints
   }
 
-  private def _dropForeignKeyConstraints(failOnNonExistingTable: Boolean) =
+  private def _dropForeignKeyConstraints = {
+
+    val cs = Session.currentSession
+    val dba = cs.databaseAdapter
+
     for(fk <- _activeForeingKeySpecs) {
-      val cs = Session.currentSession
       val s = cs.connection.createStatement
-      try {
-        val st = "alter table " + fk._1.name + " drop constraint " + cs.databaseAdapter.foreingKeyConstraintName(fk._1, fk._3.idWithinSchema)
-        s.execute(st)
-      }
-      catch {
-        case e: SQLException => if(failOnNonExistingTable) throw e        
-      }
+      dba.dropForeignKeyStatement(fk._1, dba.foreingKeyConstraintName(fk._1, fk._3.idWithinSchema), cs)
     }
-  
+  }
+
   private def _declareForeingKeyConstraints =
     for(fk <- _activeForeingKeySpecs) {
       val fkDecl = fk._3
@@ -148,7 +142,7 @@ trait Schema {
         s.execute(fkStatement)
       }
       catch {
-        case e:SQLException => throw new RuntimeException("error executing " + fkStatement, e)
+        case e:SQLException => throw new RuntimeException("error executing " + fkStatement + "\n" + e, e)
       }
     }
 
@@ -169,13 +163,8 @@ trait Schema {
       catch {
         case e:SQLException => throw new RuntimeException("error creating table :\n" + sw.statement ,e)
       }
-      try {
-        _dbAdapter.postCreateTable(Session.currentSession, t)
-      }
-      catch {
-        case e:SQLException => throw new RuntimeException(e)
-        println(e)
-      }
+
+      _dbAdapter.postCreateTable(Session.currentSession, t)
     }    
 
 

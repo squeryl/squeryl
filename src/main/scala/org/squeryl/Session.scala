@@ -48,19 +48,16 @@ trait Session {
 
   private [squeryl] def _addResultSet(rs: ResultSet) = _resultSets.append(rs)
 
-  private def _closeStatement(s: Statement) =
-    try {s.close}
-    catch {case e:SQLException => {}}
-
-  private [squeryl] def _closeResultSet(rs: ResultSet) =
-    try {rs.close}
-    catch {case e:SQLException => {}}
-
   def cleanup = {
-    _statements.foreach(s => _closeStatement(s))
+    _statements.foreach(s => Utils.close(s))
     _statements.clear
-    _resultSets.foreach(rs => _closeResultSet(rs))
+    _resultSets.foreach(rs => Utils.close(rs))
     _resultSets.clear
+  }
+
+  def close = {
+    cleanup
+    connection.close
   }
 }
 

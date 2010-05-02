@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.squeryl.internals
 
+import java.sql.{ResultSet, SQLException, Statement}
 
 object Utils {
 
@@ -31,4 +32,13 @@ object Utils {
     catch {
       case e:Exception => "cannot evaluate" 
     }
+
+  def close(s: Statement) =
+    try {s.close}
+    catch {case e:SQLException => {}}
+
+  def close(rs: ResultSet) =
+    try {rs.close}
+    catch {case e:SQLException => {}}
+  
 }

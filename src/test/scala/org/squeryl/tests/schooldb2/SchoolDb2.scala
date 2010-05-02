@@ -3,7 +3,7 @@ package org.squeryl.tests.schooldb2
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
 import java.sql.SQLException
-import org.squeryl.{ForeingKeyDeclaration, Schema, KeyedEntity}
+import org.squeryl.{Session, ForeingKeyDeclaration, Schema, KeyedEntity}
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -79,12 +79,7 @@ object SchoolDb2 extends Schema {
 
 class SchoolDb2Tests extends QueryTester {
 
-  try {
-    SchoolDb2.drop
-  }
-  catch {
-    case e:SQLException => {}
-  }
+  SchoolDb2.drop
 
   //loggerOn
   

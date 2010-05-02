@@ -16,8 +16,8 @@
 package org.squeryl.adapters
 
 import org.squeryl.internals.{FieldMetaData, DatabaseAdapter}
-import java.sql.ResultSet
 import org.squeryl.{Session, Schema}
+import java.sql.{SQLException, ResultSet}
 
 class H2Adapter extends DatabaseAdapter {
 
@@ -37,4 +37,7 @@ class H2Adapter extends DatabaseAdapter {
 
     res
   }
+
+  override def isTableDoesNotExistException(e: SQLException): Boolean =
+    e.getErrorCode == 42102
 }

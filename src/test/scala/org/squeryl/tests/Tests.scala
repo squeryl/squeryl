@@ -30,13 +30,13 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    allTestsOnAllDatabases
-
+    //allTestsOnAllDatabases
+    
     //dumpResourceClosingPolicyOfAllDrivers
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    //allTestsOnH2
+    allTestsOnH2
 
     //leakTest
   }
@@ -60,19 +60,19 @@ object Tests extends QueryTester {
 
   def allTestsOnAllDatabases = {
 
+    allTests("PosgreSQL", createPostgreSqlTestConnection _)
+    
     allTests("MySQL", createMySQLTestConnection _)
 
     allTests("Oracle", createOracleTestConnection _)
-
-    allTests("PosgreSQL", createPostgreSqlTestConnection _)
 
     allTests("H2", createH2TestConnection _)
   }
 
   def dumpResourceClosingPolicyOfAllDrivers = {
 
-    //testConnectionClose(createOracleTestConnection)
     testConnectionClose(createPostgreSqlTestConnection)
+    testConnectionClose(createOracleTestConnection)
     testConnectionClose(createMySQLTestConnection)
     testConnectionClose(createH2TestConnection)
   }
@@ -153,11 +153,9 @@ object Tests extends QueryTester {
 
   def createPostgreSqlTestConnection = {
     Class.forName("org.postgresql.Driver");
-
-    Session.create(
-      java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/squeryl", "squeryl", "squeryl"),
-      new PostgreSqlAdapter
-    )
+    val c = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/squeryl", "squeryl", "squeryl")
+    c.setAutoCommit(false)
+    Session.create(c, new PostgreSqlAdapter)
   }
 
   def createMySQLTestConnection = {

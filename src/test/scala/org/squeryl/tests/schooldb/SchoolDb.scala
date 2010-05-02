@@ -117,13 +117,7 @@ class SchoolDb extends Schema with QueryTester {
   
   val testInstance = new {
 
-    try {
-      drop // we normally *NEVER* do this !!
-    }
-    catch {
-      case e:SQLException => println(" schema does not yet exist :" + e.getMessage)
-    }
-
+    drop 
     create
 
     val oneHutchissonStreet = addresses.insert(new Address("Hutchisson",1, None,None,None))

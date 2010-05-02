@@ -216,27 +216,73 @@ class DatabaseAdapter {
     s
   }
 
-  private def _exec[A](s: Session, sw: StatementWriter)(block: =>A) =
+  private def _exec[A](s: Session, sw: StatementWriter, block: ()=>A): A =
     try {
       if(s.isLoggingEnabled)
         s.log(sw.toString)      
-      block
+      block()
     }
     catch {
-      case e: SQLException => throw new RuntimeException("Exception while executing statement :\n" + sw.statement, e)
-    }
+      case e: SQLException =>
+          throw new RuntimeException("Exception while executing statement :\n" + sw.statement, e)
+    }    
 
-  def executeQuery(s: Session, sw: StatementWriter) = _exec(s, sw) {
+  def needsSavepointForFailsafeExecution = false
+
+  /**
+   * Some methods like 'dropTable' issue their statement, and will silence the exception.
+   * For example dropTable will silence when isTableDoesNotExistException(theExceptionThrown).
+   * It must be used carefully, and an exception should not be silenced unless identified.
+   */
+  protected def execFailSafeExecute(sw: StatementWriter, silenceException: SQLException => Boolean): Unit = {
+    val s = Session.currentSession
+    val c = s.connection
+    val stat = c.createStatement
+    val sp =
+      if(needsSavepointForFailsafeExecution) Some(c.setSavepoint)
+      else None
+
+    try {
+      if(s.isLoggingEnabled)
+        s.log(sw.toString)
+      stat.execute(sw.statement)
+    }
+    catch {
+      case e: SQLException =>
+        if(silenceException(e))
+          sp.foreach(c.rollback(_))
+        else
+          throw new RuntimeException(
+            "Exception while executing statement,\n" +
+            "SQLState:" + e.getSQLState + ", ErrorCode:" + e.getErrorCode + "\n :" +
+            sw.statement, e)
+    }
+    finally {
+      sp.foreach(c.releaseSavepoint(_))
+      Utils.close(stat)
+    }
+  }
+  
+  implicit def string2StatementWriter(s: String) = {
+    val sw = new StatementWriter(this)
+    sw.write(s)
+    sw
+  }
+
+  protected def exec[A](s: Session, sw: StatementWriter)(block: =>A): A =
+    _exec[A](s, sw, block _)
+
+  def executeQuery(s: Session, sw: StatementWriter) = exec(s, sw) {
     val st = prepareStatement(s.connection, sw, s)
     (st.executeQuery, st)
   }
 
-  def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = _exec(s, sw) {
+  def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = exec(s, sw) {
     val st = prepareStatement(s.connection, sw, s)
     (st.executeUpdate, st)
   }
 
-  def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = _exec(s, sw) {
+  def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) {
     val st = prepareStatement(s.connection, sw, ps, s)
     (st.executeUpdate, st)
   }
@@ -435,7 +481,7 @@ class DatabaseAdapter {
    * Figures out from the SQLException (ex.: vendor specific error code) 
    * if it's cause is a NOT NULL constraint violation
    */
-  def isNotNullConstraintViolation(e: SQLException): Boolean = false
+  def isNotNullConstraintViolation(e: SQLException): Boolean = false  
 
   def foreingKeyConstraintName(foreingKeyTable: Table[_], idWithinSchema: Int) =
     foreingKeyTable.name + "FK" + idWithinSchema
@@ -473,4 +519,23 @@ class DatabaseAdapter {
 
     sb.toString
   }
+
+  protected def currenSession =
+    Session.currentSession
+
+  def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
+    "alter table " + foreingKeyTable.name + " drop constraint " + fkName
+
+  def dropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String, session: Session):Unit =
+    execFailSafeExecute(writeDropForeignKeyStatement(foreingKeyTable, fkName), e => true)
+
+  def isTableDoesNotExistException(e: SQLException): Boolean = error("implement me " + e.getErrorCode + " : "  + e + "==" + e.getSQLState)
+
+  def supportsForeignKeyConstraints = true
+
+  def writeDropTable(tableName: String) =
+    "drop table " + tableName
+
+  def dropTable(t: Table[_]) =
+    execFailSafeExecute(writeDropTable(t.name), e=> isTableDoesNotExistException(e))  
 }

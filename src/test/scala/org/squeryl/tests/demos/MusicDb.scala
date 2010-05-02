@@ -152,15 +152,9 @@ object KickTheTires {
   import MusicDb._
 
   def initSchema = {
-    try {
-      MusicDb.drop // we normally *NEVER* do this !!
-    }
-    catch {
-      case e:SQLException => println(" schema does not yet exist, it will be created.")
-    }
 
-    MusicDb.create
-    println("schema created.")
+    MusicDb.drop
+    MusicDb.create    
   }
 
   def testWithH2 = {

@@ -15,10 +15,10 @@
  ******************************************************************************/
 package org.squeryl.adapters
 
+import org.squeryl.dsl.ast.FunctionNode
+import java.sql.{SQLException}
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
 import org.squeryl.{Session, Table}
-import org.squeryl.dsl.ast.FunctionNode
-import java.sql.ResultSet
 
 class PostgreSqlAdapter extends DatabaseAdapter {
 
@@ -35,14 +35,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     sw.write("create sequence ", sequenceName(t))
     val st = s.connection.createStatement
     st.execute(sw.statement)
-  }
-
-  override def postDropTable(t: Table[_]) = {
-    val sw = new StatementWriter(false, this)
-    sw.write("drop sequence ", sequenceName(t))
-    val st = Session.currentSession.connection.createStatement
-    st.execute(sw.statement)
-  }
+  }                                               
 
   def sequenceName(t: Table[_]) = "seq_" + t.name
 
@@ -74,4 +67,15 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   }
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
+
+  override def isTableDoesNotExistException(e: SQLException) =
+   e.getSQLState.equals("42P01")
+
+  override def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
+    "alter table " + foreingKeyTable.name + " drop constraint " + fkName
+
+  override def needsSavepointForFailsafeExecution = true
+  
+  override def postDropTable(t: Table[_]) =
+    execFailSafeExecute("drop sequence " + sequenceName(t), e=>e.getSQLState.equals("42P01"))
 }
