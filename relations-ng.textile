@@ -3,9 +3,11 @@ layout: manual
 title: Relations
 ---
 
-Two types of relations are supported : OneToMany and ManyToMany, the are defined at they schema level. 
+*Note*: relations are a beta feature, supported only as of version 0.9.4beta
 
-<!-- We will refer to the _left_ and _right_ side as the -->  
+Relations allow a higher abstraction over persistent objects by making foreign key relationships appear as collection like objects. 
+There are two types of relations in Squeryl : OneToMany and ManyToMany
+ 
 
 h3. OneToMany
 

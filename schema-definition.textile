@@ -111,6 +111,11 @@ LogicalBoolean which is what the where clause takes :
        where(s.year.~ > 1965)
        select(s)
     )  		
+    // or use 'gt' instead of >  :
+    from(songs)(s =>
+       where(s.year gt 1965)
+       select(s)
+    )    
 ]]></script>		
 
 It is also needed in the following case :
@@ -120,6 +125,11 @@ It is also needed in the following case :
       where(s.year.~ + 10 === 1965)
       select(s)
     )
+    // or use 'plus'
+    from(songs)(s =>
+      where(s.year plus 10 === 1965)
+      select(s)
+    )    
 ]]></script>
 
  This is only required when using PrimitiveType mode, with custom types 
