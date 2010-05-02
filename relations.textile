@@ -210,7 +210,8 @@ trait ManyToMany[O,A] extends Query[O] {
 
 h3. Defining foreign key constraints with relations
 
-The org.squeryl.Schema.create method will create relations based on the declarations in the schema as the next example shows, note the different signatures of *constrainReference*. The applyDefaultForeingKeyPolicy method will determine how the relations are declared at the schema level, each relation can then redefine the default.   
+The org.squeryl.Schema.create method will create relations based on the declarations in the schema as the next example shows, note the different signatures of *constrainReference*. The applyDefaultForeingKeyPolicy method will determine how the relations are declared at the schema level, each relation can then redefine the default. 
+Calling unConstrainReference in applyDefaultForeingKeyPolicy will cause foreing key constraints to be inhibited.    
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
