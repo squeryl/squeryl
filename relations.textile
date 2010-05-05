@@ -6,23 +6,7 @@ title: Relations
 *Note*: relations are a beta feature, supported only as of version 0.9.4beta, that corresponds to the 'relations' branch in the Git repository.
 
 
-Relations allow a higher abstraction over persistent objects by making foreign key relationships appear as collection like objects. 
-There are two types of relations in Squeryl : OneToMany and ManyToMany
-
-h3. Performance considerations
-
-A significant part of optimizing a database abstraction layer is to choose for every situation the 
-right balance between fine and large grained retrieval, and the optimal mix of lazyness and eagerness.
-
-Relations are lazy, and are subject to the "N+1 problem":http://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem . If we have a _deep_ relation chain, it is often preferable to use a query, for example if we have an N level _relation chain_ : R1 x R2,..., Rn, looping through relations will cause : 
-
-  1* |R2| * |R3| * .... * |Rn-1| database trips  
-  
-  
-where  |Rk|  is the number of rows in the Rk part of the relation  
-
-In such a case, a single query is clearly preferable since it will fetch all objects in a single database round trip.  
-
+Relations allow foreign key relationships to appear as collection like objects. There are two types of relations in Squeryl : OneToMany and ManyToMany
 
 h3. OneToMany
 
@@ -247,3 +231,19 @@ object SchoolDb2 extends Schema {
 }
 
 ]]></script>
+
+
+h3. Performance considerations
+
+A significant part of optimizing a database abstraction layer is to choose for every situation the 
+right balance between fine and large grained retrieval, and the optimal mix of lazyness and eagerness.
+
+Relations are lazy, and are subject to the "N+1 problem":http://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem . If we have a _deep_ relation chain, it is often preferable to use a query, for example if we have an N level _relation chain_ : R1 x R2,..., Rn, looping through relations will cause : 
+
+  1* |R2| * |R3| * .... * |Rn-1| database trips  
+  
+  
+where  |Rk|  is the number of rows in the Rk part of the relation  
+
+In such a case, a single query is clearly preferable since it will fetch all objects in a single database round trip.  
+
