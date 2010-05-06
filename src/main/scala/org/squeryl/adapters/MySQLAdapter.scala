@@ -67,5 +67,29 @@ class MySQLAdapter extends DatabaseAdapter {
   override def isTableDoesNotExistException(e: SQLException) =
     e.getErrorCode == 1051 
 
+  /**
+   *
+   * Foreign key constraints are not supported,
+   *
+   *  MySQL has some pre requisites for creating a foreign key constraint
+   *  one of which is :
+   *
+   *  -> The foreign key can be self referential (referring to the same table). When you add a foreign key constraint to a table using ALTER TABLE, remember to create the required indexes first.
+   *
+   *  http://dev.mysql.com/doc/refman/5.1/en/innodb-foreign-key-constraints.html
+   *
+   *  Apparently there are other pre requisites, because creating foreing key constraints still gives :
+   *
+   * 		Time	Action	Response	Duration / Fetch
+   *  0	1	18:26:25	alter table CourseSubscription add constraint CourseSubscriptionFK3
+   *  foreign key (courseId) references Course(id)	Error Code: 1005
+   *  Can't create table 'test.#sql-57c_42' (errno: 150)
+   *
+   * 
+   *  http://bytes.com/topic/mysql/answers/865699-cant-create-table-errno-150-foreign-key-constraints
+   *
+   * 
+   */
+
   override def supportsForeignKeyConstraints = false
 }
