@@ -15,8 +15,7 @@
  ******************************************************************************/
 package org.squeryl
 
-import annotations.Transient
-
+import annotations.{Column, Transient}
 
 /**
  *  For use with View[A] or Table[A], when A extends KeyedEntity[K],
@@ -43,6 +42,7 @@ trait KeyedEntity[K] extends PersistenceStatus {
   def id: K
 }
 
+
 trait PersistenceStatus {
   
   @Transient
@@ -50,6 +50,13 @@ trait PersistenceStatus {
 
   def isPersisted: Boolean = _isPersisted
 }
+
+
+trait IndirectKeyedEntity[K,T] extends KeyedEntity[K] {
+  
+  def idField: T
+}
+
 
 trait CompositeKeyedEntity[K <: Product] extends KeyedEntity[K]
 

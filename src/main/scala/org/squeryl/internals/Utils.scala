@@ -26,11 +26,17 @@ object Utils {
    * Also used to allow dumping (ex. for logging) a Query AST *before* it is completely built.
    */
   def failSafeString(s: =>String) =
+    _failSafeString(s _, "cannot evaluate")
+
+  def failSafeString(s: =>String, valueOnFail: String) =
+    _failSafeString(s _, valueOnFail)
+
+  private def _failSafeString(s: ()=>String, valueOnFail: String) =
     try {
       s
     }
     catch {
-      case e:Exception => "cannot evaluate" 
+      case e:Exception => valueOnFail
     }
 
   def close(s: Statement) =

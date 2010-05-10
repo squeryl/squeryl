@@ -128,7 +128,8 @@ class FieldSelectElement
     fieldMataData.displayType
   
   override def toString =
-    'FieldSelectElement + ":" + alias  
+    'FieldSelectElement + ":" +
+       Utils.failSafeString(alias, fieldMataData.nameOfProperty)
 }
 
 class ValueSelectElement

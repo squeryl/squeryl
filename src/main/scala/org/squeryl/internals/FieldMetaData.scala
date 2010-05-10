@@ -183,95 +183,102 @@ class FieldMetaData(
     field.get.set(target, v)
 }
 
+trait FieldMetaDataFactory {
+
+  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
+}
+
 object FieldMetaData {
 
   private val _EMPTY_ARRAY = new Array[Object](0)
 
-  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
+  var factory = new FieldMetaDataFactory {
+    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 
-    val field  = property._1
-    val getter = property._2
-    val setter = property._3
-    val annotations = property._4
+      val field  = property._1
+      val getter = property._2
+      val setter = property._3
+      val annotations = property._4
 
-    val colAnnotation = annotations.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]) 
+      val colAnnotation = annotations.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column])
 
-    var typeOfField =
-      if(setter != None)
-        setter.get.getParameterTypes.apply(0)
-      else if(getter != None)
-        getter.get.getReturnType
-      else if(field != None)
-        field.get.getType
-      else
-        error("invalid field group")
+      var typeOfField =
+        if(setter != None)
+          setter.get.getParameterTypes.apply(0)
+        else if(getter != None)
+          getter.get.getReturnType
+        else if(field != None)
+          field.get.getType
+        else
+          error("invalid field group")
 
-    var v =
-       if(sampleInstance4OptionTypeDeduction != null) {
-         if(field != None)
-           field.get.get(sampleInstance4OptionTypeDeduction)
-         else if(getter != None)
-           getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
-         else
-           createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
-       }
-       else null
+      var v =
+         if(sampleInstance4OptionTypeDeduction != null) {
+           if(field != None)
+             field.get.get(sampleInstance4OptionTypeDeduction)
+           else if(getter != None)
+             getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
+           else
+             createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
+         }
+         else null
 
-    if(v != null && v == None) // can't deduce the type from None in this case the Annotation
-      v = null         //needs to tell us the type, if it doesn't it will a few lines bellow
+      if(v != null && v == None) // can't deduce the type from None in this case the Annotation
+        v = null         //needs to tell us the type, if it doesn't it will a few lines bellow
 
-    var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
+      var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
-    if(classOf[Product1[Any]].isAssignableFrom(typeOfField))
-      customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfField)
+      if(classOf[Product1[Any]].isAssignableFrom(typeOfField))
+        customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfField)
 
-    if(customTypeFactory != None) {
-      val f = customTypeFactory.get
-      v = f(null) // this creates a dummy (sample) field
+      if(customTypeFactory != None) {
+        val f = customTypeFactory.get
+        v = f(null) // this creates a dummy (sample) field
+      }
+
+      if(v == null)
+        v = try {
+          createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
+        }
+        catch {
+          case e:Exception => null
+        }
+
+      if(v == null)
+        error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
+
+      val isOption = v.isInstanceOf[Some[_]]
+
+      val typeOfFieldOrTypeOfOption =
+        if(!isOption)
+          v.getClass
+        else
+          v.asInstanceOf[Option[AnyRef]].get.getClass
+
+      val primitiveFieldType =
+        if(v.isInstanceOf[Product1[_]])
+          v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
+        else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[Product1[_]]) {
+          //if we get here, customTypeFactory has not had a chance to get created
+          customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfFieldOrTypeOfOption)
+          v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
+        }
+        else
+          typeOfFieldOrTypeOfOption
+
+      new FieldMetaData(
+        parentMetaData,
+        name,
+        typeOfFieldOrTypeOfOption,
+        primitiveFieldType,
+        customTypeFactory,
+        isOption,
+        getter,
+        setter,
+        field,
+        colAnnotation,
+        isOptimisticCounter)
     }
-
-    if(v == null)
-      v = try {
-        createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
-      }
-      catch {
-        case e:Exception => null 
-      }
-
-    if(v == null)
-      error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
-    
-    val isOption = v.isInstanceOf[Some[_]]
-
-    val typeOfFieldOrTypeOfOption =
-      if(!isOption)
-        v.getClass
-      else
-        v.asInstanceOf[Option[AnyRef]].get.getClass
-
-    val primitiveFieldType =
-      if(v.isInstanceOf[Product1[_]])
-        v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
-      else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[Product1[_]]) {
-        //if we get here, customTypeFactory has not had a chance to get created 
-        customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfFieldOrTypeOfOption)
-        v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
-      }
-      else
-        typeOfFieldOrTypeOfOption
-
-    new FieldMetaData(
-      parentMetaData,
-      name,
-      typeOfFieldOrTypeOfOption,
-      primitiveFieldType,
-      customTypeFactory,
-      isOption,
-      getter,
-      setter,
-      field,
-      colAnnotation,
-      isOptimisticCounter)
   }
 
   /**
@@ -298,7 +305,7 @@ object FieldMetaData {
   }
 
   def defaultFieldLength(fieldType: Class[_]) =
-    _defaultFieldLengthAssigner.handleType(fieldType) 
+    _defaultFieldLengthAssigner.handleType(fieldType)
 
   private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
 
@@ -348,13 +355,13 @@ object FieldMetaData {
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
-    
+
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")
   }
 
   def resultSetHandlerFor(c: Class[_]) =
-    _mapper.handleType(c)  
+    _mapper.handleType(c)
 
 //  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Array[Annotation]): Object =
 //    createDefaultValue(ownerCLass, p, optionFieldsInfo.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]))
@@ -385,4 +392,5 @@ object FieldMetaData {
     else
       _defaultValueFactory.handleType(p)
   }
+  
 }

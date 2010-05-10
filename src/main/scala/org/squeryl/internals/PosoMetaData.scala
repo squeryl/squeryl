@@ -22,7 +22,7 @@ import net.sf.cglib.proxy.{Factory, Callback, Enhancer}
 import java.lang.reflect.{Member, Constructor, Method, Field}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
-import org.squeryl.{Query, Schema, Optimistic}
+import org.squeryl._
 
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
     
@@ -37,14 +37,19 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
 
   lazy val primaryKey: Option[FieldMetaData] = {
 
-    val k = fieldsMetaData.find(fmd => fmd.columnName == "id")
-    // TODO:implement PK detection with KeydEntity
+    val isIndirectKeyedEntity = classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(clasz)
+    val isKeyedEntity = classOf[KeyedEntity[_]].isAssignableFrom(clasz)
+
+    val k = fieldsMetaData.find(fmd =>
+      (isIndirectKeyedEntity && fmd.nameOfProperty == "idField") ||
+      (isKeyedEntity && fmd.nameOfProperty == "id")
+    )
+
     if(k != None) //TODO: this is config by convention, implement override for exceptions
       k.get.isAutoIncremented = true
-    
     k
   }
-
+  
   val constructor =
     _const.headOption.orElse(error(clasz.getName +
             " must have a 0 param constructor or a constructor with only primitive types")).get
@@ -198,7 +203,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       val property = (field, getter, setter, a)
 
       if(isImplicitMode && _groupOfMembersIsProperty(property)) {
-        fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
+        fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
       }
 //      else {
 //        val colA = a.find(an => an.isInstanceOf[Column])
@@ -233,12 +238,14 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
     if(hasSetter)
       memberTypes.append(property._3.get.getParameterTypes.apply(0))    
 
+    //not a property if it has no getter, setter or field
     if(memberTypes.size == 0)
       return false
 
+    //verify that all types are compatible :
     val c = memberTypes.remove(0)
     for(c0 <- memberTypes) {
-      if(c0 != c)
+      if((!c0.isAssignableFrom(c)) && (!c.isAssignableFrom(c0)))
         return false
     }
 
