@@ -17,9 +17,9 @@ package org.squeryl.tests.customtypes
 
 
 import org.squeryl.tests.QueryTester
-import org.squeryl.{Schema}
 import java.sql.SQLException
 import org.squeryl.customtypes._
+import org.squeryl.{KeyedEntity, Schema}
 
 class TestCustomTypesMode extends QueryTester {
 
@@ -61,7 +61,7 @@ class HospitalDb extends Schema {
   override def drop = super.drop
 }
 
-class Patient(var firstName: FirstName, var age: Option[Age], var weight: Option[WeightInKilograms]) {
+class Patient(var firstName: FirstName, var age: Option[Age], var weight: Option[WeightInKilograms]) extends KeyedEntity[IntField] {
 
   def this() = this(null, Some(new Age(1)),Some(new WeightInKilograms(1)))
 
