@@ -33,8 +33,8 @@ trait OneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]] extends Relatio
   def right(rightSide: M): ManyToOne[O]
 }
 
-trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A] extends Relation[L,R] {
-  self: Table[A] =>    
+trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]] extends Relation[L,R] {
+  self: Table[A] =>
 
   def thisTable: Table[A]
 
@@ -61,7 +61,7 @@ trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A] extends Re
  * Note that this trait is used on both "left" and "right" sides of the relation,
  * but in a given relation  
  */
-trait ManyToMany[O,A] extends Query[O] {
+trait ManyToMany[O,A <: KeyedEntity[_]] extends Query[O] {
 
   /**
    * @param a: the association object

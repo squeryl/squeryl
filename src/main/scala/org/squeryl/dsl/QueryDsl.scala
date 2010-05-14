@@ -258,18 +258,18 @@ trait QueryDsl
 
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
-  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r)
+  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r)
 
   class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R]) {
 
-    def via[A](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
+    def via[A <: KeyedEntity[_]](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
       val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]],f,schema)
       schema._addTable(m2m)
       m2m
     }
   }
 
-  class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
+  class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
     extends Table[A](schema.tableNameFromClass(aClass), aClass, schema) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
 
@@ -332,7 +332,7 @@ trait QueryDsl
     private def _associate[T](o: T, m2m: ManyToMany[T,A]): A = {
       val aInst = m2m.assign(o)
       try {
-        thisTableOfA.insert(aInst)
+        thisTableOfA.insertOrUpdate(aInst)
       }
       catch {
         case e:SQLException =>
@@ -340,7 +340,7 @@ trait QueryDsl
             throw new RuntimeException(
               "the " + 'associate + " method created and inserted association object of type " +
               posoMetaData.clasz.getName + " that has NOT NULL colums, plase use the other signature of " + 'ManyToMany +
-              " that takes the association object as argument : associate(o,a)", e)
+              " that takes the association object as argument : associate(o,a) for association objects that have NOT NULL columns", e)
           else
             throw e
       }
@@ -370,7 +370,7 @@ trait QueryDsl
         
         def associate(o: R, a: A): Unit  = {
           assign(o, a)
-          thisTableOfA.insert(a)
+          thisTableOfA.insertOrUpdate(a)
         }
 
         def assign(o: R): A = {
@@ -420,7 +420,7 @@ trait QueryDsl
         
         def associate(o: L, a: A): Unit = {
           assign(o, a)
-          thisTableOfA.insert(a)
+          thisTableOfA.insertOrUpdate(a)
         }
 
         def assign(o: L): A = {

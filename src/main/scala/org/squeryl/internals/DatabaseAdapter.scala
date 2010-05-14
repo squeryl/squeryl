@@ -20,7 +20,7 @@ import java.sql.{ResultSet, SQLException, PreparedStatement, Connection}
 import org.squeryl._
 import org.squeryl.{Schema, Session, Table}
 
-class DatabaseAdapter {
+trait DatabaseAdapter {
 
   class Zip[T](val element: T, val isNotLast: Boolean)
   
@@ -529,7 +529,7 @@ class DatabaseAdapter {
   def dropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String, session: Session):Unit =
     execFailSafeExecute(writeDropForeignKeyStatement(foreingKeyTable, fkName), e => true)
 
-  def isTableDoesNotExistException(e: SQLException): Boolean = error("implement me " + e.getErrorCode + " : "  + e + "==" + e.getSQLState)
+  def isTableDoesNotExistException(e: SQLException): Boolean
 
   def supportsForeignKeyConstraints = true
 
