@@ -116,6 +116,9 @@ trait FieldTypes {
   }
 
   trait DateExpression[A] extends NonNumericalExpression[A] {
+
+    def in(e: ListDate) = new BinaryOperatorNodeLogicalBoolean(this, e, "in")
+    
     def ~ = this
   }
 

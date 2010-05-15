@@ -227,7 +227,7 @@ class ConstantExpressionNode[T](val value: T) extends ExpressionNode {
   override def toString = 'ConstantExpressionNode + ":" + value
 }
 
-class ConstantExpressionNodeList[T](val value: List[T]) extends ExpressionNode with ListExpressionNode {
+class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode with ListExpressionNode {
   
   def doWrite(sw: StatementWriter) =
     if(quotesElement)

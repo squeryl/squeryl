@@ -81,22 +81,22 @@ trait DslFactory
   // column/field types, so they don't need to be overridable factory methods :
 
   //TODO: replace lists with NonNumerical and Numerical for type inference that is more SQL like  
-  implicit def listOfInt2ListInt(l: List[IntType]) =
+  implicit def traversableOfInt2ListInt(l: Traversable[IntType]) =
     new ConstantExpressionNodeList[IntType](l) with ListInt
 
-  implicit def listOfDouble2ListDouble(l: List[DoubleType]) =
+  implicit def traversableOfDouble2ListDouble(l: Traversable[DoubleType]) =
     new ConstantExpressionNodeList[DoubleType](l) with ListDouble
 
-  implicit def listOfFloat2ListFloat(l: List[FloatType]) =
+  implicit def traversableOfFloat2ListFloat(l: Traversable[FloatType]) =
     new ConstantExpressionNodeList[FloatType](l) with ListFloat
 
-  implicit def listOfLong2ListLong(l: List[LongType]) =
+  implicit def traversableOfLong2ListLong(l: Traversable[LongType]) =
     new ConstantExpressionNodeList[LongType](l) with ListLong
 
-  implicit def listOfString2ListString(l: List[StringType]) =
+  implicit def traversableOfString2ListString(l: Traversable[StringType]) =
     new ConstantExpressionNodeList[StringType](l) with ListString
 
-  implicit def listOfDate2ListDate(l: List[DateType]) =
+  implicit def traversableOfDate2ListDate(l: Traversable[DateType]) =
     new ConstantExpressionNodeList[DateType](l) with ListDate
 
   implicit def typedExpression2OrderByArg[E <% TypedExpressionNode[_]](e: E) = new OrderByArg(e)
