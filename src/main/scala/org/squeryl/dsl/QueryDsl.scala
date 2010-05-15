@@ -71,13 +71,7 @@ trait QueryDsl
     if(! Session.hasCurrentSession)
       _executeTransactionWithin(SessionFactory.newSession, a _)
     else {
-      val s = Session.currentSession
-      try {
-        a
-      }
-      finally {
-        s.cleanup
-      }
+      a
     }
 
   private def _executeTransactionWithin[A](s: Session, a: ()=>A) = {
