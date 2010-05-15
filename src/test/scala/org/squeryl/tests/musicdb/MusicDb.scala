@@ -194,10 +194,23 @@ class MusicDb extends Schema with QueryTester {
 
   def assertionFailed(s: Symbol, actual: Any, expected: Any) =
     assert(actual == expected, ""+s+" failed, got " + actual + " expected " + expected)
-  
+
+
+  private def _innerTx(songId: Long) = inTransaction {
+
+    songs.where(_.id === songId).single
+  }
+
+  def testLoopInNestedInTransaction = inTransaction {
+
+    songsFeaturingPoncho.foreach(s => _innerTx(s.id))
+  }
+
   def working = {
     import testInstance._
 
+    testLoopInNestedInTransaction
+    
     testBetweenOperator
     
     testPaginatedQuery1
