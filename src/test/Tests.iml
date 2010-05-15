@@ -6,12 +6,12 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.Beta1-RC8/lib/scala-compiler.jar" />
+            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.Beta1/lib/scala-compiler.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.Beta1-RC8/lib/scala-library.jar" />
+            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.Beta1/lib/scala-library.jar" />
           </array>
         </option>
       </configuration>
@@ -28,20 +28,48 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1-RC8/compile" />
+          <root url="jar://$MODULE_DIR$/../../lib/ojdbc14.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1-RC8/compile" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/ojdbc14.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0.Beta1/lib/scala-library.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0.Beta1/lib/scala-compiler.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1/test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1/test" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1/provided" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.0.Beta1/provided" recursive="false" />
       </library>
     </orderEntry>
   </component>
