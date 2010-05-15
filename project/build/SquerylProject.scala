@@ -11,13 +11,13 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   Credentials(Path.userHome / ".ivy2" / ".credentials", log)
   
   override def pomExtra =
-	<licenses>
-	  <license>
-		<name>Apache 2</name>
-		<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		<distribution>repo</distribution>
-	  </license>
-	</licenses>
+    <licenses>
+      <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      </license>
+    </licenses>
 	
   /**
    * CGLIB is Squeryl's only dependency
@@ -29,12 +29,11 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
    * The following jars are for running the automated tests
    */
   
-  val h2 = "com.h2database" % "h2" % "1.2.127"  
+  val h2 = "com.h2database" % "h2" % "1.2.127" % "provided"
   
-  val mysqlDriver = "mysql" % "mysql-connector-java" % "5.1.10"
+  val mysqlDriver = "mysql" % "mysql-connector-java" % "5.1.10" % "provided"
 	
-  // Oracle jars cannot be distributed for "business" reasons ...
-  //val oracleDriver = "com.oracle" % "ojdbc14" % "10.2.0.3.0"
+  val posgresDriver = "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided"
 
-  val posgresDriver = "postgresql" % "postgresql" % "8.4-701.jdbc4"
+  val specs = "org.scala-tools.testing" % "specs_2.8.0.Beta1" % "1.6.4" % "test"
 }

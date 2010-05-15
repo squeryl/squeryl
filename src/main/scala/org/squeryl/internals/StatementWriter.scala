@@ -15,8 +15,8 @@
  ******************************************************************************/
 package org.squeryl.internals
 
-import collection.mutable.{HashMap, ArrayBuffer}
 import org.squeryl.dsl.ast.{ExpressionNode}
+import collection.mutable.{HashSet, HashMap, ArrayBuffer}
 
 /**
  * @arg isForDisplay: when true, users of StatementWriter should write
@@ -29,6 +29,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   def this(databaseAdapter: DatabaseAdapter) = this(false, databaseAdapter)
 
+  val scope = new HashSet[String]
 
   protected lazy val _paramList = {
     if(isForDisplay)

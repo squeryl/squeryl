@@ -19,8 +19,8 @@ package org.squeryl
 import dsl.{ManyToManyRelation, OneToManyRelation}
 import internals.{FieldMetaData, DatabaseAdapter, StatementWriter}
 import reflect.{Manifest}
-import scala.collection.mutable.ArrayBuffer
-import java.sql.SQLException;
+import java.sql.SQLException
+import collection.mutable.{HashSet, ArrayBuffer};
 
 
 trait Schema {
@@ -32,6 +32,8 @@ trait Schema {
   private val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
 
   private val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[_,_,_]]
+
+  private [squeryl] val _namingScope = new HashSet[String] 
 
   private [squeryl] def _addRelation(r: OneToManyRelation[_,_]) =
     _oneToManyRelations.append(r)

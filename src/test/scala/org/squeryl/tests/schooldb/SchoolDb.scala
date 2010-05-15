@@ -100,8 +100,8 @@ class SchoolDb extends Schema with QueryTester {
   /**
    * Let's illustrate the support for crappy table naming convention !
    */
-//  override def tableNameFromClassName(n:String) =
-//    "T_" + n
+  override def tableNameFromClassName(n:String) =
+    "T_" + n
 
   val professors = table[Professor]
   

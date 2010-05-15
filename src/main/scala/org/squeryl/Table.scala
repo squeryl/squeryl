@@ -24,7 +24,7 @@ import scala.reflect.Manifest
 
 private [squeryl] object DummySchema extends Schema
 
-class Table[T] private [squeryl] (n: String, c: Class[T], schema: Schema) extends View[T](n, c, schema) {
+class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema) extends View[T](n, c, schema) {
 
   def this(n:String)(implicit manifestT: Manifest[T]) =
     this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema)  

@@ -19,6 +19,9 @@ import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
 import org.squeryl.{Session, Table}
 import org.squeryl.dsl.ast._
 import java.sql.SQLException
+import collection.Set
+import collection.immutable.List
+import collection.mutable.HashSet
 
 class OracleAdapter extends DatabaseAdapter {
 
@@ -118,5 +121,73 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def isTableDoesNotExistException(e: SQLException) =
     e.getErrorCode == 942
+
+  def legalOracleSuffixChars =
+    OracleAdapter.legalOracleSuffixChars
+
+  def paddingPossibilities(start: String, padLength: Int): Iterable[String] =
+    if(padLength < 0)
+      error("padLength must be positive, was given : " + padLength)
+    else if(padLength == 0)
+      Seq(start)
+    else if(padLength == 1)
+      legalOracleSuffixChars.map(start + _)
+    else
+      for(end <- legalOracleSuffixChars;
+          pad <- paddingPossibilities(start, padLength - 1))
+      yield pad + end
+
+  class CouldNotShrinkIdentifierException extends RuntimeException
+
+  def makeUniqueInScope(s: String, scope: Set[String], padLength: Int): String = {
+
+    var prefix = s.substring(0, s.length - padLength)
+    val possibilities = paddingPossibilities(prefix, padLength)
+
+    for(p <- possibilities if !scope.contains(p))
+      return p
+
+    if(s.length == padLength) // at this point 's' is completely 'random like', not helpfull to add it in the error message
+      throw new CouldNotShrinkIdentifierException
+
+    makeUniqueInScope(s, scope, padLength + 1)
+  }
+
+  def makeUniqueInScope(s: String, scope: scala.collection.Set[String]): String =
+    try {
+      if(scope.contains(s))
+        makeUniqueInScope(s, scope, 1)
+      else
+        s
+    }
+    catch {
+      case e:CouldNotShrinkIdentifierException =>
+        error("could not make a unique identifier with '" + s + "'")
+    }
+
+  def shrinkTo30AndPreserveUniquenessInScope(identifier: String, scope: HashSet[String]) =
+    if(identifier.length <= 29)
+      identifier
+    else {
+      val res = makeUniqueInScope(identifier.substring(0, 30), scope)
+      scope.add(res)
+      //println(identifier + "----->" + res)
+      res
+    }  
+
+  override def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
+    sw.write(shrinkTo30AndPreserveUniquenessInScope(se.alias, sw.scope))
+
+  override def foreingKeyConstraintName(foreingKeyTable: Table[_], idWithinSchema: Int) = {
+    val name = super.foreingKeyConstraintName(foreingKeyTable, idWithinSchema)
+    val r = shrinkTo30AndPreserveUniquenessInScope(name, foreingKeyTable.schema._namingScope)
+    r
+  }
+}
+
+
+object OracleAdapter {
   
+  val legalOracleSuffixChars =
+     "ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789".toCharArray.toList
 }

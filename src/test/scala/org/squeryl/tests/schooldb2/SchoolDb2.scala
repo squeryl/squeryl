@@ -229,7 +229,7 @@ class SchoolDb2Tests extends QueryTester {
 
     _existsAndEquals(qA2.headOption, a)
 
-    println(qA2.statement)
+    //println(qA2.statement)
 
     val qA3 =
       courseAssignments.where(_.id === a.id)

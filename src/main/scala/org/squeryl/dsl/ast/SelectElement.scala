@@ -62,7 +62,7 @@ trait SelectElement extends ExpressionNode {
   def doWrite(sw: StatementWriter) = {
     expression.write(sw)
     sw.write(" as ")
-    sw.write(alias)
+    sw.databaseAdapter.writeSelectElementAlias(this, sw)
   }
 }
 

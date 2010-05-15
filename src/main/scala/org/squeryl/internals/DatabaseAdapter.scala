@@ -537,5 +537,8 @@ trait DatabaseAdapter {
     "drop table " + tableName
 
   def dropTable(t: Table[_]) =
-    execFailSafeExecute(writeDropTable(t.name), e=> isTableDoesNotExistException(e))  
+    execFailSafeExecute(writeDropTable(t.name), e=> isTableDoesNotExistException(e))
+
+  def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
+    sw.write(se.alias)
 }
