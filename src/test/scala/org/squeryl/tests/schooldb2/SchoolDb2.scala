@@ -4,7 +4,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import dsl.CompositeKey2
-
+import java.sql.{Savepoint, SQLException}
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -116,6 +116,8 @@ class SchoolDb2Tests extends QueryTester {
 
     testOneToMany
 
+    testUniquenessConstraint
+    
     SchoolDb2.drop
   }
 
@@ -249,5 +251,39 @@ class SchoolDb2Tests extends QueryTester {
       error("query returned no rows")
 
     assertEquals(ca.id, oca.get.id, 'testCompositeEquality)
+  }
+
+  def testUniquenessConstraint = {
+
+    assertEquals(0, courseAssignments.Count : Long, 'testUniquenessConstraint)
+
+    physicsCourse.professors.associate(professeurTournesol)
+
+    assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
+
+    var exceptionThrown = false
+
+    val s = Session.currentSession
+
+    val sp: Option[Savepoint] =
+      if(s.databaseAdapter.failureOfStatementRequiresRollback)
+        Some(s.connection.setSavepoint)
+      else
+        None
+    
+    try {
+      physicsCourse.professors.associate(professeurTournesol)
+    }
+    catch {
+      case e:RuntimeException => {
+        exceptionThrown = true
+        sp.foreach(s.connection.rollback(_))
+      }
+    }
+
+    if(! exceptionThrown)
+      error('testUniquenessConstraint + " failed, unique constraint violation occured")
+
+    assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
   }
 }

@@ -224,10 +224,13 @@ trait DatabaseAdapter {
     }
     catch {
       case e: SQLException =>
-          throw new RuntimeException("Exception while executing statement :\n" + sw.statement, e)
+          throw new RuntimeException(
+            "Exception while executing statement, errorCode: " +
+            e.getErrorCode + ", sqlState: " + e.getSQLState + "\n" +
+            sw.statement, e)
     }    
 
-  def needsSavepointForFailsafeExecution = false
+  def failureOfStatementRequiresRollback = false
 
   /**
    * Some methods like 'dropTable' issue their statement, and will silence the exception.
@@ -239,7 +242,7 @@ trait DatabaseAdapter {
     val c = s.connection
     val stat = c.createStatement
     val sp =
-      if(needsSavepointForFailsafeExecution) Some(c.setSavepoint)
+      if(failureOfStatementRequiresRollback) Some(c.setSavepoint)
       else None
 
     try {
@@ -541,4 +544,18 @@ trait DatabaseAdapter {
 
   def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
     sw.write(se.alias)
+
+  def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
+    //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)
+    val sb = new StringBuilder(256)
+    
+    sb.append("alter table ")
+    sb.append(t.name)
+    sb.append(" add constraint ")
+    sb.append(t.name + "CPK")
+    sb.append(" unique(")
+    sb.append(cols.map(_.columnName).mkString(","))
+    sb.append(")")
+    sb.toString
+  }
 }

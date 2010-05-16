@@ -17,10 +17,17 @@ package org.squeryl.dsl
 
 import ast._
 import collection.mutable.ArrayBuffer
+import org.squeryl.internals.FieldMetaData
 
 trait CompositeKey {
 
   private [squeryl] var _members: Option[Iterable[SelectElementReference[Any]]] = None
+
+  private [squeryl] def _fields: Iterable[FieldMetaData] =
+    if(_members == None)
+      List.empty
+    else
+      _members.get.map(_.selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
 
   protected def constantMembers: Iterable[ExpressionNode]
 

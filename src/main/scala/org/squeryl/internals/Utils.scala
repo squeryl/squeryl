@@ -16,6 +16,9 @@
 package org.squeryl.internals
 
 import java.sql.{ResultSet, SQLException, Statement}
+import org.squeryl.dsl.boilerplate.Query1
+import org.squeryl.Queryable
+import org.squeryl.dsl.fsm.QueryElements
 
 object Utils {
 
@@ -46,5 +49,29 @@ object Utils {
   def close(rs: ResultSet) =
     try {rs.close}
     catch {case e:SQLException => {}}
+
+
+  private class DummyQueryElements
+    extends QueryElements {
+    override val whereClause = None
+  }
   
+  private class DummyQuery[A,B](q: Queryable[A],f: A=>B, g: B=>Unit) extends Query1[A,Int](
+    q,
+    a => {
+      val res = f(a);
+      g(res)
+      (new DummyQueryElements).select(0)
+    },
+    true)
+
+  /**
+   * visitor will get applied on a proxied Sample object of the Queryable[A],
+   * this function is used for obtaining AST nodes or metadata of from A.  
+   */
+  def mapSampleObject[A,B](q: Queryable[A], visitor: A=>B): B = {
+    var b:Option[B] = None
+    new DummyQuery(q, visitor, (b0:B) =>b = Some(b0))
+    b.get
+  }
 }

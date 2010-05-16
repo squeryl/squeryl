@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
@@ -16,8 +16,11 @@
 package org.squeryl
 
 
-import dsl.{ManyToManyRelation, OneToManyRelation}
-import internals.{FieldMetaData, DatabaseAdapter, StatementWriter}
+import dsl.ast.FieldSelectElement
+import dsl.boilerplate.Query1
+import dsl.fsm.QueryElements
+import dsl.{CompositeKey, ManyToManyRelation, OneToManyRelation}
+import internals._
 import reflect.{Manifest}
 import java.sql.SQLException
 import collection.mutable.{HashSet, ArrayBuffer};
@@ -113,6 +116,8 @@ trait Schema {
     _createTables
     if(_dbAdapter.supportsForeignKeyConstraints)
       _declareForeingKeyConstraints
+
+    _createUniqueConstraints
   }
 
   private def _dropForeignKeyConstraints = {
@@ -146,6 +151,9 @@ trait Schema {
       catch {
         case e:SQLException => throw new RuntimeException("error executing " + fkStatement + "\n" + e, e)
       }
+      finally {
+        s.close
+      }
     }
 
 
@@ -169,6 +177,50 @@ trait Schema {
       _dbAdapter.postCreateTable(Session.currentSession, t)
     }    
 
+  private def _createUniqueConstraints = {
+
+    val cs = Session.currentSession
+
+    for(cpk <- _allCompositePrimaryKeys) {
+
+      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      val s = cs.connection.createStatement
+      try{
+        if(cs.isLoggingEnabled)
+          cs.log(createConstraintStmt)
+        s.execute(createConstraintStmt)
+      }
+      finally {
+        s.close
+      }
+    }
+  }
+
+  /**
+   * returns an Iterable of (Table[_],Iterable[FieldMetaData]), the list of
+   * all tables whose PK is a composite, with the columns that are part of the PK : Iterable[FieldMetaData] 
+   */
+  private def _allCompositePrimaryKeys = {
+    
+    val res = new ArrayBuffer[(Table[_],Iterable[FieldMetaData])]
+    
+    for(t <- _tables
+        if classOf[KeyedEntity[_]].isAssignableFrom(t.posoMetaData.clasz)) {
+
+      Utils.mapSampleObject(
+        t.asInstanceOf[Table[KeyedEntity[_]]],
+        (ke:KeyedEntity[_]) => {
+          val id = ke.id
+          if(id.isInstanceOf[CompositeKey]) {
+            val compositeCols = id.asInstanceOf[CompositeKey]._fields
+            res.append((t, compositeCols))
+          }
+        }
+      )
+    }
+
+    res
+  }
 
   protected def columnTypeFor(fieldMetaData: FieldMetaData, databaseAdapter: DatabaseAdapter): String =
     databaseAdapter.databaseTypeFor(fieldMetaData)

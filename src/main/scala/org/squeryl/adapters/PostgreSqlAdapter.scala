@@ -74,7 +74,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
     "alter table " + foreingKeyTable.name + " drop constraint " + fkName
 
-  override def needsSavepointForFailsafeExecution = true
+  override def failureOfStatementRequiresRollback = true
   
   override def postDropTable(t: Table[_]) =
     execFailSafeExecute("drop sequence " + sequenceName(t), e=>e.getSQLState.equals("42P01"))
