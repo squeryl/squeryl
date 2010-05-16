@@ -3,6 +3,9 @@ layout: default
 title: Community
 ---
 
+
+h2. Follow latest news on Twitter <a href="http://www.twitter.com/_squeryl"><img src="http://twitter-badges.s3.amazonaws.com/follow_bird-b.png" alt="Follow _squeryl on Twitter"/></a>
+
 h2. Get help, share ideas  
 
 Come discuss with us on how to improve Squeryl, or get help by <u><a target='none' href='http://groups.google.com/group/squeryl'>joining the group</a></u>

@@ -1,11 +1,14 @@
 ---
 layout: default
-title: <i>Functionally bridging the Object and Relational paradigms <br/> on the Java VM</i>
+title: <div class='zquote'>A Scala ORM and DSL for talking with Databases with minimum verbosity and maximum type safety</div>
 ---
 
 
+<!--
+title: <i>Functionally bridging the Object and Relational paradigms <br/> on the Java VM</i>
 <h3 class='zquote' align='center'>"Squeryl is a strongly typed and declarative DSL(Domain Specific Language) for manipulating 
 database objects from within the Scala language"</h3>
+-->
 
 <div class='span-12'>
 

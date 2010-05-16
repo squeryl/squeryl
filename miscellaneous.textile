@@ -3,7 +3,7 @@ layout: manual
 title: <br/>
 ---
 
-h2. Seeing the generated Sql
+h2. Logging the generated Sql
 
 The org.squeryl.Query.statement method returns the statement with the jdbc's prepared
 statement parameters subsituted.
@@ -35,3 +35,7 @@ Instead of the (slightly) more verbose way :
   val t:(Float,String) = from(aTable)(t=> compute(avg(t.anInt), min(t.aString))).single
   
 ]]></script>
+
+h2. Is an object persisted ?
+
+The trait : *org.squeryl.PersistenceStatus* when mixed in a class provides the *isPersisted* method, it is extended by KeyedEntity[K]. 
