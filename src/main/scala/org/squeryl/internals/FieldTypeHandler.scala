@@ -36,6 +36,8 @@ trait FieldTypeHandler[T] {
     else
       handleUnknownType(t)
 
+  def handleStringWithLength(length: Int): T
+
   protected def handleIntType : T
   protected def handleStringType : T
   protected def handleBooleanType : T

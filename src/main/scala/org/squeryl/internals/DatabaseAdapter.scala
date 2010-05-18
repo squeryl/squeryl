@@ -148,12 +148,19 @@ trait DatabaseAdapter {
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
+    def handleStringWithLength(length: Int) = stringTypeDeclaration(length)
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
   
-  def databaseTypeFor(fmd: FieldMetaData) =
-    _declarationHandler.handleType(fmd.wrappedFieldType)
+  def databaseTypeFor(fmd: FieldMetaData) = {
+    if (fmd.wrappedFieldType.isAssignableFrom(classOf[java.lang.String]) &&
+    fmd.length != -1) {
+      _declarationHandler.handleStringWithLength(fmd.length)
+    } else {
+      _declarationHandler.handleType(fmd.wrappedFieldType)
+    }
+  }
 
   def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 

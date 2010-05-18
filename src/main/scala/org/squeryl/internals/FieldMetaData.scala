@@ -310,12 +310,14 @@ object FieldMetaData {
   private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
 
     def handleIntType = 4
-    def handleStringType  = 128
+    def handleStringType  = 255
     def handleBooleanType = 1
     def handleDoubleType = 8
     def handleDateType = -1
     def handleLongType = 8
     def handleFloatType = 4
+    // Does not make sense to ask for default length if there is a specified length
+    def handleStringWithLength(length: Int) = throw new UnsupportedOperationException
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
@@ -328,6 +330,7 @@ object FieldMetaData {
     def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
+    def handleStringWithLength(length: Int) = handleStringType
     def handleUnknownType(c: Class[_]) = null
   }
 
@@ -355,6 +358,7 @@ object FieldMetaData {
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
+    def handleStringWithLength(length: Int) = handleStringType
 
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")
