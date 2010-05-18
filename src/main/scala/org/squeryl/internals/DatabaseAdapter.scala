@@ -170,6 +170,8 @@ trait DatabaseAdapter {
     if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " auto_increment"
 
+    if (fmd.isUnique)
+      res += " unique"
     res
   }
 
