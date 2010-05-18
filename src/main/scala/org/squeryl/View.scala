@@ -32,7 +32,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
 
   private [squeryl] def findFieldMetaDataForProperty(name: String) = posoMetaData.findFieldMetaDataForProperty(name)
 
-  private [squeryl] val posoMetaData = new PosoMetaData(classOfT, schema)
+  val posoMetaData = new PosoMetaData(classOfT, schema)
 
   private [squeryl] def allFieldsMetaData: Iterable[FieldMetaData] = posoMetaData.fieldsMetaData
 
