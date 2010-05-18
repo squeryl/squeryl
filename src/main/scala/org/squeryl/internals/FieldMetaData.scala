@@ -74,6 +74,8 @@ class FieldMetaData(
         res
     }
   
+  def isIndexed = columnAnnotation != None && columnAnnotation.get.indexed
+
   val resultSetHandler =
     FieldMetaData.resultSetHandlerFor(wrappedFieldType)
 

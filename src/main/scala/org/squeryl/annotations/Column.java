@@ -57,4 +57,6 @@ public @interface Column {
 
     Class<?> optionType() default Object.class;
 
+    /** Create an index on this column */
+    boolean indexed() default false;
 }
