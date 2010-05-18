@@ -316,6 +316,7 @@ object FieldMetaData {
     def handleDateType = -1
     def handleLongType = 8
     def handleFloatType = 4
+    def handleTimestampType = -1
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
@@ -328,6 +329,7 @@ object FieldMetaData {
     def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
+    def handleTimestampType = new java.sql.Timestamp(0)
     def handleUnknownType(c: Class[_]) = null
   }
 
@@ -347,6 +349,7 @@ object FieldMetaData {
     val _dateM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getDate(i))
     val _longM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getLong(i))
     val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
+    val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
 
     def handleIntType = _intM
     def handleStringType  = _stringM
@@ -355,6 +358,7 @@ object FieldMetaData {
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
+    def handleTimestampType = _timestampM
 
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")
