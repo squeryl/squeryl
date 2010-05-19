@@ -38,6 +38,8 @@ trait FieldTypes {
 
   type DateType
 
+  type BigDecimalType
+
   /**
    *
    */
@@ -132,6 +134,7 @@ trait FieldTypes {
   protected implicit def sampleLong: LongType
   protected implicit def sampleBoolean: BooleanType
   protected implicit def sampleDate: DateType
+  protected implicit def sampleBigDecimal: BigDecimalType
 
   protected implicit val sampleByteO = Some(sampleByte)
   protected implicit val sampleIntO = Some(sampleInt)
@@ -141,4 +144,5 @@ trait FieldTypes {
   protected implicit val sampleLongO = Some(sampleLong)
   protected implicit val sampleBooleanO = Some(sampleBoolean)
   protected implicit val sampleDateO = Some(sampleDate)  
+  protected implicit val sampleBigDecimalO = Some(sampleBigDecimal)  
 }

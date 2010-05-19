@@ -45,6 +45,8 @@ object PrimitiveTypeMode extends QueryDsl {
 
   type DoubleType = Double
 
+  type BigDecimalType = BigDecimal
+
   type FloatType = Float
 
   type LongType = Long
@@ -103,6 +105,23 @@ object PrimitiveTypeMode extends QueryDsl {
         new ConstantExpressionNode[Option[Double]](i) with NumericalExpression[Option[Double]]
       case Some(n:SelectElement) =>
         new SelectElementReference[Option[Double]](n) with NumericalExpression[Option[Double]]
+    }
+
+
+  def createLeafNodeOfScalarBigDecimalType(i: BigDecimal) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[BigDecimal](i) with NumericalExpression[BigDecimal]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[BigDecimal](n) with  NumericalExpression[BigDecimal]
+    }
+
+  def createLeafNodeOfScalarBigDecimalOptionType(i: Option[BigDecimal]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[BigDecimal]](i) with NumericalExpression[Option[BigDecimal]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[BigDecimal]](n) with NumericalExpression[Option[BigDecimal]]
     }
 
 
@@ -175,6 +194,7 @@ object PrimitiveTypeMode extends QueryDsl {
   protected def mapInt2IntType(i: Int) = i
   protected def mapString2StringType(s: String) = s
   protected def mapDouble2DoubleType(d: Double) = d
+  protected def mapBigDecimal2BigDecimalType(d: BigDecimal) = d
   protected def mapFloat2FloatType(d: Float) = d
   protected def mapLong2LongType(l: Long) = l
   protected def mapBoolean2BooleanType(b: Boolean) = b
@@ -184,6 +204,7 @@ object PrimitiveTypeMode extends QueryDsl {
   protected implicit val sampleInt: IntType = 0
   protected implicit val sampleString: StringType = ""
   protected implicit val sampleDouble: DoubleType = 0.0
+  protected implicit val sampleBigDecimal: BigDecimalType = 0.0
   protected implicit val sampleFloat: FloatType = 0.0F
   protected implicit val sampleLong: LongType = 0
   protected implicit val sampleBoolean: BooleanType = false

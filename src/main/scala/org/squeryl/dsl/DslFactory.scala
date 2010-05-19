@@ -31,6 +31,9 @@ trait DslFactory
   protected def createLeafNodeOfScalarDoubleType(d: DoubleType): NumericalExpression[DoubleType]
   protected def createLeafNodeOfScalarDoubleOptionType(d: Option[DoubleType]): NumericalExpression[Option[DoubleType]]
 
+  protected def createLeafNodeOfScalarBigDecimalType(d: BigDecimalType): NumericalExpression[BigDecimalType]
+  protected def createLeafNodeOfScalarBigDecimalOptionType(d: Option[BigDecimalType]): NumericalExpression[Option[BigDecimalType]]
+
   protected def createLeafNodeOfScalarFloatType(d: FloatType): NumericalExpression[FloatType]
   protected def createLeafNodeOfScalarFloatOptionType(d: Option[FloatType]): NumericalExpression[Option[FloatType]]
 
@@ -52,6 +55,8 @@ trait DslFactory
 
   implicit def double2ScalarDouble(d: DoubleType) = createLeafNodeOfScalarDoubleType(d)
 
+  implicit def bigDecimal2ScalarBigDecimal(b: BigDecimalType) = createLeafNodeOfScalarBigDecimalType(b)
+
   implicit def float2ScalarFloat(d: FloatType) = createLeafNodeOfScalarFloatType(d)
 
   implicit def string2ScalarString(s: StringType) = createLeafNodeOfScalarStringType(s)
@@ -70,6 +75,8 @@ trait DslFactory
 
   implicit def optionDouble2ScalarDouble(i: Option[DoubleType]) = createLeafNodeOfScalarDoubleOptionType(i)
 
+  implicit def optionBigDecimal2ScalarBigDecimal(i: Option[BigDecimalType]) = createLeafNodeOfScalarBigDecimalOptionType(i)
+
   implicit def optionFloat2ScalarFloat(i: Option[FloatType]) = createLeafNodeOfScalarFloatOptionType(i)
 
   implicit def optionBoolean2ScalarBoolean(i: Option[BooleanType]) = createLeafNodeOfScalarBooleanOptionType(i)
@@ -86,6 +93,9 @@ trait DslFactory
 
   implicit def traversableOfDouble2ListDouble(l: Traversable[DoubleType]) =
     new ConstantExpressionNodeList[DoubleType](l) with ListDouble
+
+  implicit def traversableOfBigDecimal2ListBigDecimal(l: Traversable[BigDecimalType]) =
+    new ConstantExpressionNodeList[BigDecimalType](l) with ListBigDecimal
 
   implicit def traversableOfFloat2ListFloat(l: Traversable[FloatType]) =
     new ConstantExpressionNodeList[FloatType](l) with ListFloat

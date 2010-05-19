@@ -37,6 +37,9 @@ trait CustomTypesMode extends QueryDsl {
   implicit def createConstantNodeOfScalarDoubleType(i: Double) =
     new ConstantExpressionNode[Double](i) with NumericalExpression[Double]
 
+  implicit def createConstantNodeOfScalarBigDecimalType(i: BigDecimal) =
+    new ConstantExpressionNode[BigDecimal](i) with NumericalExpression[BigDecimal]
+
   implicit def createConstantNodeOfScalarFloatType(i: Float) =
     new ConstantExpressionNode[Float](i) with NumericalExpression[Float]
 
@@ -54,6 +57,8 @@ trait CustomTypesMode extends QueryDsl {
 
   type DoubleType = DoubleField
 
+  type BigDecimalType = BigDecimalField
+
   type FloatType = FloatField
 
   type LongType = LongField
@@ -66,6 +71,7 @@ trait CustomTypesMode extends QueryDsl {
   protected def mapInt2IntType(i: Int) = new IntField(i)
   protected def mapString2StringType(s: String) = new StringField(s)
   protected def mapDouble2DoubleType(d: Double) = new DoubleField(d)
+  protected def mapBigDecimal2BigDecimalType(d: BigDecimal) = new BigDecimalField(d)
   protected def mapFloat2FloatType(d: Float) = new FloatField(d)
   protected def mapLong2LongType(l: Long) = new LongField(l)
   protected def mapBoolean2BooleanType(b: Boolean) = new BooleanField(b)
@@ -75,6 +81,7 @@ trait CustomTypesMode extends QueryDsl {
   protected implicit val sampleInt = new IntField(0)
   protected implicit val sampleString: StringType = new StringField("")
   protected implicit val sampleDouble: DoubleType = new DoubleField(0.0)
+  protected implicit val sampleBigDecimal: BigDecimalType = new BigDecimalField(BigDecimal(0))
   protected implicit val sampleFloat: FloatType = new FloatField(0.0F)
   protected implicit val sampleLong = new LongField(1)
   protected implicit val sampleBoolean = new BooleanField(false)
@@ -94,6 +101,11 @@ trait CustomTypesMode extends QueryDsl {
     new SelectElementReference[DoubleType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleType) with  NumericalExpression[DoubleType]
   def createLeafNodeOfScalarDoubleOptionType(i: Option[DoubleField]) =
     new SelectElementReference[Option[DoubleType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleTypeOption) with  NumericalExpression[Option[DoubleType]]
+
+  def createLeafNodeOfScalarBigDecimalType(i: BigDecimalField) =
+    new SelectElementReference[BigDecimalType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBigDecimalType) with  NumericalExpression[BigDecimalType]
+  def createLeafNodeOfScalarBigDecimalOptionType(i: Option[BigDecimalField]) =
+    new SelectElementReference[Option[BigDecimalType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBigDecimalTypeOption) with  NumericalExpression[Option[BigDecimalType]]
 
   def createLeafNodeOfScalarFloatType(i: FloatField) =
     new SelectElementReference[FloatType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatType) with  NumericalExpression[FloatType]
@@ -135,6 +147,10 @@ class StringField(val value: String) extends CustomType {
 }
 
 class DoubleField(val value: Double) extends CustomType {
+  def _1: Any = value
+}
+
+class BigDecimalField(val value: BigDecimal) extends CustomType {
   def _1: Any = value
 }
 
