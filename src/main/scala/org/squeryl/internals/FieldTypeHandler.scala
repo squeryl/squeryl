@@ -18,31 +18,55 @@ package org.squeryl.internals
 
 trait FieldTypeHandler[T] {
 
-  def handleType(t: Class[_]) =
-    if(t.isAssignableFrom(classOf[Int]) || t.isAssignableFrom(classOf[java.lang.Integer]))
-      handleIntType
-    else if(t.isAssignableFrom(classOf[Long]) || t.isAssignableFrom(classOf[java.lang.Long]))
-      handleLongType
-    else if(t.isAssignableFrom(classOf[java.lang.String]))
-      handleStringType
-    else if(t.isAssignableFrom(classOf[Boolean]) || t.isAssignableFrom(classOf[java.lang.Boolean]))
-      handleBooleanType
-    else if(t.isAssignableFrom(classOf[Double]) || t.isAssignableFrom(classOf[java.lang.Double]))
-      handleDoubleType
-    else if(t.isAssignableFrom(classOf[Float]) || t.isAssignableFrom(classOf[java.lang.Float]))  
-      handleFloatType
-    else if(classOf[java.util.Date].isAssignableFrom(t))
-      handleDateType
-    else
-      handleUnknownType(t)
+  private def isInt(t: Class[_]) = t.isAssignableFrom(classOf[Int]) || t.isAssignableFrom(classOf[java.lang.Integer])
+  private def isLong(t: Class[_]) = t.isAssignableFrom(classOf[Long]) || t.isAssignableFrom(classOf[java.lang.Long])
+  private def isString(t: Class[_]) = t.isAssignableFrom(classOf[java.lang.String])
+  private def isBoolean(t: Class[_]) = t.isAssignableFrom(classOf[Boolean]) || t.isAssignableFrom(classOf[java.lang.Boolean])
+  private def isDouble(t: Class[_]) = t.isAssignableFrom(classOf[Double]) || t.isAssignableFrom(classOf[java.lang.Double])
+  private def isFloat(t: Class[_]) = t.isAssignableFrom(classOf[Float]) || t.isAssignableFrom(classOf[java.lang.Float])
+  private def isDate(t: Class[_]) = classOf[java.util.Date].isAssignableFrom(t)
+  private def isBigDecimal(t: Class[_]) = t.isAssignableFrom(classOf[scala.math.BigDecimal]) || t.isAssignableFrom(classOf[java.math.BigDecimal])
+
+  def handleType(t: Class[_], fmd_? : Option[FieldMetaData]) = {
+    fmd_? flatMap { fmd =>
+        if(isBigDecimal(fmd.wrappedFieldType))
+          Some(handleBigDecimalType(fmd.length, fmd.scale))
+        else if(isString(fmd.wrappedFieldType))
+          Some(handleStringType(fmd.length))
+        else
+          None
+    } getOrElse {
+      if(isInt(t))
+        handleIntType
+      else if(isLong(t))
+        handleLongType
+      else if(isString(t))
+        handleStringType
+      else if(isBoolean(t))
+        handleBooleanType
+      else if(isDouble(t))
+        handleDoubleType
+      else if(isFloat(t))  
+        handleFloatType
+      else if(isDate(t))
+        handleDateType
+      else if(isBigDecimal(t))
+        handleBigDecimalType
+      else
+        handleUnknownType(t)
+    }
+  }
 
   protected def handleIntType : T
   protected def handleStringType : T
+  protected def handleStringType(length: Int) : T
   protected def handleBooleanType : T
   protected def handleDoubleType : T
   protected def handleDateType: T
   protected def handleLongType: T
   protected def handleFloatType: T
+  protected def handleBigDecimalType: T
+  protected def handleBigDecimalType(precision: Int, scale: Int): T
 
   protected def handleUnknownType(c: Class[_]) : T
 }

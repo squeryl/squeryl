@@ -19,6 +19,7 @@ import org.squeryl.annotations.Column
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
+import java.math.BigDecimal
 
 
 class FieldMetaData(
@@ -54,6 +55,12 @@ class FieldMetaData(
       FieldMetaData.defaultFieldLength(wrappedFieldType)
     else
       columnAnnotation.get.length
+
+  def scale: Int =
+    columnAnnotation flatMap { ca =>
+      if(ca.scale == -1) None
+      else Some(ca.scale)
+    } getOrElse FieldMetaData.defaultFieldScale(wrappedFieldType)
 
   /**
    * The name of the database column
@@ -305,29 +312,52 @@ object FieldMetaData {
   }
 
   def defaultFieldLength(fieldType: Class[_]) =
-    _defaultFieldLengthAssigner.handleType(fieldType)
+    _defaultFieldLengthAssigner.handleType(fieldType, None)
 
   private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
 
     def handleIntType = 4
-    def handleStringType  = 128
+    def handleStringType  = 255
+    def handleStringType(l:Int) = error("Trying to get default length for string whose length was specified.")
     def handleBooleanType = 1
     def handleDoubleType = 8
     def handleDateType = -1
     def handleLongType = 8
     def handleFloatType = 4
+    def handleBigDecimalType = 32
+    def handleBigDecimalType(p:Int,s:Int) = error("Trying to get default length for bigdecimal whose length was specified.")
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
+  }
+
+  def defaultFieldScale(fieldType: Class[_]) =
+      _defaultFieldScaleAssigner.handleType(fieldType, None)
+
+  private val _defaultFieldScaleAssigner = new FieldTypeHandler[Int] {
+    def handleIntType = -1
+    def handleStringType  = -1
+    def handleStringType(l:Int) = -1
+    def handleBooleanType = -1
+    def handleDoubleType = -1
+    def handleDateType = -1
+    def handleLongType = -1
+    def handleFloatType = -1
+    def handleBigDecimalType = 16
+    def handleBigDecimalType(p:Int,s:Int) = error("Trying to get default scale for bigdecimal whose scale was specified.")
+    def handleUnknownType(c: Class[_]) = error("Cannot assign field scale for " + c.getName)
   }
 
   private val _defaultValueFactory = new FieldTypeHandler[AnyRef] {
 
     def handleIntType = new java.lang.Integer(0)
     def handleStringType  = ""
+    def handleStringType(l:Int)  = ""
     def handleBooleanType = new java.lang.Boolean(false)
     def handleDoubleType = new java.lang.Double(0.0)
     def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
+    def handleBigDecimalType = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
+    def handleBigDecimalType(p:Int,s:Int) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleUnknownType(c: Class[_]) = null
   }
 
@@ -347,21 +377,25 @@ object FieldMetaData {
     val _dateM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getDate(i))
     val _longM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getLong(i))
     val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
+    val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
 
     def handleIntType = _intM
     def handleStringType  = _stringM
+    def handleStringType(l:Int)  = _stringM
     def handleBooleanType = _booleanM
     def handleDoubleType = _doubleM
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
+    def handleBigDecimalType = _bigDecM
+    def handleBigDecimalType(p:Int,s:Int) = _bigDecM
 
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")
   }
 
   def resultSetHandlerFor(c: Class[_]) =
-    _mapper.handleType(c)
+    _mapper.handleType(c, None)
 
 //  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Array[Annotation]): Object =
 //    createDefaultValue(ownerCLass, p, optionFieldsInfo.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]))
@@ -390,7 +424,7 @@ object FieldMetaData {
       Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, optionFieldsInfo))
     }
     else
-      _defaultValueFactory.handleType(p)
+      _defaultValueFactory.handleType(p, None)
   }
   
 }

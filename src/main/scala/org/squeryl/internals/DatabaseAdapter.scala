@@ -138,22 +138,27 @@ trait DatabaseAdapter {
   def dateTypeDeclaration = "date"
   def longTypeDeclaration = "bigint"
   def floatTypeDeclaration = "real"
+  def bigDecimalTypeDeclaration = "decimal"
+  def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
 
     def handleIntType = intTypeDeclaration
     def handleStringType  = stringTypeDeclaration
+    def handleStringType(len:Int) = stringTypeDeclaration(len)
     def handleBooleanType = booleanTypeDeclaration
     def handleDoubleType = doubleTypeDeclaration
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
+    def handleBigDecimalType = bigDecimalTypeDeclaration
+    def handleBigDecimalType(p:Int, s:Int) = bigDecimalTypeDeclaration(p, s)
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
   
   def databaseTypeFor(fmd: FieldMetaData) =
-    _declarationHandler.handleType(fmd.wrappedFieldType)
+    _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
 
   def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
@@ -316,6 +321,8 @@ trait DatabaseAdapter {
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
     if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date])
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
+    if(v.isInstanceOf[scala.math.BigDecimal])
+       v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
 
 //  see comment in def convertFromBooleanForJdbc    
 //    if(v.isInstanceOf[java.lang.Boolean])

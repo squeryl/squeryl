@@ -53,6 +53,11 @@ public @interface Column {
    */
     int length() default -1;
 
+  /**
+   * BigDecimal needs a second parameter in addition to field length.
+   */
+    int scale() default -1;
+
     String dbType() default "";
 
     Class<?> optionType() default Object.class;
