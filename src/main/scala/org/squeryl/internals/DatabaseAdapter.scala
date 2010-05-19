@@ -16,9 +16,9 @@
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
-import java.sql.{ResultSet, SQLException, PreparedStatement, Connection}
 import org.squeryl._
 import org.squeryl.{Schema, Session, Table}
+import java.sql._
 
 trait DatabaseAdapter {
 
@@ -138,6 +138,7 @@ trait DatabaseAdapter {
   def dateTypeDeclaration = "date"
   def longTypeDeclaration = "bigint"
   def floatTypeDeclaration = "real"
+  def timestampTypeDeclaration = "date"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
 
@@ -148,6 +149,7 @@ trait DatabaseAdapter {
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
+    def handleTimestampType = timestampTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
@@ -314,7 +316,7 @@ trait DatabaseAdapter {
     var v = r
     if(v.isInstanceOf[Product1[_]])
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
-    if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date])
+    if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date]  && ! v.isInstanceOf[Timestamp])
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
 
 //  see comment in def convertFromBooleanForJdbc    

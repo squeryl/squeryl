@@ -31,6 +31,8 @@ trait FieldTypeHandler[T] {
       handleDoubleType
     else if(t.isAssignableFrom(classOf[Float]) || t.isAssignableFrom(classOf[java.lang.Float]))  
       handleFloatType
+    else if(classOf[java.sql.Timestamp].isAssignableFrom(t))
+      handleTimestampType
     else if(classOf[java.util.Date].isAssignableFrom(t))
       handleDateType
     else
@@ -43,6 +45,7 @@ trait FieldTypeHandler[T] {
   protected def handleDateType: T
   protected def handleLongType: T
   protected def handleFloatType: T
+  protected def handleTimestampType: T
 
   protected def handleUnknownType(c: Class[_]) : T
 }
