@@ -28,21 +28,16 @@ trait FieldTypeHandler[T] {
   private def isBigDecimal(t: Class[_]) = t.isAssignableFrom(classOf[scala.math.BigDecimal]) || t.isAssignableFrom(classOf[java.math.BigDecimal])
   private def isTimestamp(t: Class[_]) = t.isAssignableFrom(classOf[java.sql.Timestamp])
 
-  def handleType(t: Class[_], fmd_? : Option[FieldMetaData]) = {
-    fmd_? flatMap { fmd =>
-        if(isBigDecimal(fmd.wrappedFieldType))
-          Some(handleBigDecimalType(fmd.length, fmd.scale))
-        else if(isString(fmd.wrappedFieldType))
-          Some(handleStringType(fmd.length))
-        else
-          None
-    } getOrElse {
-      if(isInt(t))
+  def handleType(t: Class[_], fmd: Option[FieldMetaData]) = {
+
+      if(isBigDecimal(t))
+        handleBigDecimalType(fmd)
+      else if(isInt(t))
         handleIntType
       else if(isLong(t))
         handleLongType
       else if(isString(t))
-        handleStringType
+        handleStringType(fmd)
       else if(isBoolean(t))
         handleBooleanType
       else if(isDouble(t))
@@ -51,25 +46,21 @@ trait FieldTypeHandler[T] {
         handleFloatType
       else if(isDate(t))
         handleDateType
-      else if(isBigDecimal(t))
-        handleBigDecimalType
       else if(isTimestamp(t))
         handleTimestampType
       else
         handleUnknownType(t)
-    }
   }
 
   protected def handleIntType : T
   protected def handleStringType : T
-  protected def handleStringType(length: Int) : T
+  protected def handleStringType(fmd: Option[FieldMetaData]) : T
   protected def handleBooleanType : T
   protected def handleDoubleType : T
   protected def handleDateType: T
   protected def handleLongType: T
   protected def handleFloatType: T
-  protected def handleBigDecimalType: T
-  protected def handleBigDecimalType(precision: Int, scale: Int): T
+  protected def handleBigDecimalType(fmd: Option[FieldMetaData]): T
   protected def handleTimestampType: T
 
   protected def handleUnknownType(c: Class[_]) : T

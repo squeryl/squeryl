@@ -52,15 +52,17 @@ class FieldMetaData(
    */
   def length: Int =
     if(columnAnnotation == None || columnAnnotation.get.length == -1)
-      FieldMetaData.defaultFieldLength(wrappedFieldType)
+      FieldMetaData.defaultFieldLength(wrappedFieldType, this)
     else
       columnAnnotation.get.length
 
   def scale: Int =
-    columnAnnotation flatMap { ca =>
-      if(ca.scale == -1) None
-      else Some(ca.scale)
-    } getOrElse FieldMetaData.defaultFieldScale(wrappedFieldType)
+    if(columnAnnotation == None || columnAnnotation.get.scale == -1)
+      schema.defaultSizeOfBigDecimal._2
+    else
+      columnAnnotation.get.scale   
+
+  def schema = parentMetaData.schema
 
   /**
    * The name of the database column
@@ -311,55 +313,35 @@ object FieldMetaData {
     None
   }
 
-  def defaultFieldLength(fieldType: Class[_]) =
-    _defaultFieldLengthAssigner.handleType(fieldType, None)
+  def defaultFieldLength(fieldType: Class[_], fmd: FieldMetaData) =
+    _defaultFieldLengthAssigner.handleType(fieldType, Some(fmd))
 
   private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
 
     def handleIntType = 4
     def handleStringType  = 255
-    def handleStringType(l:Int) = error("Trying to get default length for string whose length was specified.")
+    def handleStringType(fmd: Option[FieldMetaData]) = 128
     def handleBooleanType = 1
     def handleDoubleType = 8
     def handleDateType = -1
     def handleLongType = 8
     def handleFloatType = 4
-    def handleBigDecimalType = 32
-    def handleBigDecimalType(p:Int,s:Int) = error("Trying to get default length for bigdecimal whose length was specified.")
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultSizeOfBigDecimal._1
     def handleTimestampType = -1
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
-  }
-
-  def defaultFieldScale(fieldType: Class[_]) =
-      _defaultFieldScaleAssigner.handleType(fieldType, None)
-
-  private val _defaultFieldScaleAssigner = new FieldTypeHandler[Int] {
-    def handleIntType = -1
-    def handleStringType  = -1
-    def handleStringType(l:Int) = -1
-    def handleBooleanType = -1
-    def handleDoubleType = -1
-    def handleDateType = -1
-    def handleLongType = -1
-    def handleFloatType = -1
-    def handleBigDecimalType = 16
-    def handleBigDecimalType(p:Int,s:Int) = error("Trying to get default scale for bigdecimal whose scale was specified.")
-    def handleTimestampType = -1
-    def handleUnknownType(c: Class[_]) = error("Cannot assign field scale for " + c.getName)
   }
 
   private val _defaultValueFactory = new FieldTypeHandler[AnyRef] {
 
     def handleIntType = new java.lang.Integer(0)
     def handleStringType  = ""
-    def handleStringType(l:Int)  = ""
+    def handleStringType(fmd: Option[FieldMetaData])  = ""
     def handleBooleanType = new java.lang.Boolean(false)
     def handleDoubleType = new java.lang.Double(0.0)
     def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
-    def handleBigDecimalType = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
-    def handleBigDecimalType(p:Int,s:Int) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleTimestampType = new java.sql.Timestamp(0)
     def handleUnknownType(c: Class[_]) = null
   }
@@ -385,14 +367,14 @@ object FieldMetaData {
 
     def handleIntType = _intM
     def handleStringType  = _stringM
-    def handleStringType(l:Int)  = _stringM
+    def handleStringType(fmd: Option[FieldMetaData])  = _stringM
     def handleBooleanType = _booleanM
     def handleDoubleType = _doubleM
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
     def handleBigDecimalType = _bigDecM
-    def handleBigDecimalType(p:Int,s:Int) = _bigDecM
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = _bigDecM
     def handleTimestampType = _timestampM
 
     def handleUnknownType(c: Class[_]) =

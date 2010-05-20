@@ -146,14 +146,13 @@ trait DatabaseAdapter {
 
     def handleIntType = intTypeDeclaration
     def handleStringType  = stringTypeDeclaration
-    def handleStringType(len:Int) = stringTypeDeclaration(len)
+    def handleStringType(fmd: Option[FieldMetaData]) = stringTypeDeclaration(fmd.get.length)
     def handleBooleanType = booleanTypeDeclaration
     def handleDoubleType = doubleTypeDeclaration
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
-    def handleBigDecimalType = bigDecimalTypeDeclaration
-    def handleBigDecimalType(p:Int, s:Int) = bigDecimalTypeDeclaration(p, s)
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
     def handleTimestampType = timestampTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
@@ -214,7 +213,7 @@ trait DatabaseAdapter {
         if(o == None)
           s.setObject(i, null)
         else
-          s.setObject(i, o.get)
+          s.setObject(i, convertToJdbcValue(o.get.asInstanceOf[AnyRef]))
       }
       else
         s.setObject(i, convertToJdbcValue(p))
@@ -325,14 +324,13 @@ trait DatabaseAdapter {
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
     if(v.isInstanceOf[scala.math.BigDecimal])
        v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
-
-//  see comment in def convertFromBooleanForJdbc    
-//    if(v.isInstanceOf[java.lang.Boolean])
-//      v = convertFromBooleanForJdbc(v)
-    
     v
   }
 
+//  see comment in def convertFromBooleanForJdbc
+//    if(v.isInstanceOf[java.lang.Boolean])
+//      v = convertFromBooleanForJdbc(v)
+  
   // TODO: move to StatementWriter (since it encapsulates the 'magic' of swapping values for '?' when needed)
   //and consider delaying the ? to 'value' decision until execution, in order to make StatementWriter loggable
   //with values at any time (via : a kind of prettyStatement method)

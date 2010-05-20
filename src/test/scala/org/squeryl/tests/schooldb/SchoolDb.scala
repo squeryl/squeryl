@@ -72,10 +72,10 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
   override def toString = "rue " + streetName 
 }
 
-class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float]) extends KeyedEntity[Long] {
+class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float], var yearlySalaryBD: BigDecimal, var weightInBD: Option[BigDecimal]) extends KeyedEntity[Long] {
 
   var id: Long = 0
-  def this() = this("", 0.0F, Some(0.0F))
+  def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
   override def toString = "Professor:" + id
 
   import org.squeryl.PrimitiveTypeMode._
@@ -117,7 +117,8 @@ class SchoolDb extends Schema with QueryTester {
   
   val testInstance = new {
 
-    drop 
+    drop
+
     create
 
     val oneHutchissonStreet = addresses.insert(new Address("Hutchisson",1, None,None,None))
@@ -148,7 +149,7 @@ class SchoolDb extends Schema with QueryTester {
     courseSubscriptions.insert(new CourseSubscription(counterpoint.id, pratap.id))
     courseSubscriptions.insert(new CourseSubscription(mandarin.id, gaitan.id))
 
-    val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F)))
+    val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
 
     Session.currentSession.connection.commit
   }
@@ -177,6 +178,8 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
+    testBigDecimal
+    
     testBatchUpdate1
     
     testBatchInserts1
@@ -820,11 +823,35 @@ class SchoolDb extends Schema with QueryTester {
     passed('testBatchUpdate1)
   }
 
-  def testOneToMany = {
-    //import testInstance._
+  def testBigDecimal = {
 
-    addresses.where(a => 1 === 1)
-    //tournesol.assignments.add(groupTheory)
-    //tournesol.assignments.add(heatTransfer)
+    //loggerOn
+    
+    val pt = professors.where(_.yearlySalaryBD.between(75, 80))
+
+    assertEquals(1, pt.Count : Long, 'testBigDecimal)
+
+    assertEquals(tournesol.id, pt.single.id, 'testBigDecimal)
+
+
+    val babaZula = professors.insert(new Professor("Baba Zula", 80.0F, Some(70.5F), 80.0F, Some(260.1234567F : BigDecimal)))
+
+    update(professors)(p=>
+      where(p.id === babaZula.id)
+      set(p.weightInBD := Some(261.123456111 : BigDecimal))
+    )
+
+    val babaZula2 = professors.where(_.weightInBD === Some(261.123456111: BigDecimal))
+
+    assertEquals(261.123456111, babaZula2.single.weightInBD.get, 'testBigDecimal)
+
+    update(professors)(p=>
+      where(p.id === babaZula.id)
+      set(p.weightInBD := Some(261.1234561112 : BigDecimal))
+    )
+
+    val babaZula3 = professors.where(_.weightInBD === Some(261.1234561112: BigDecimal))
+
+    assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
   }
 }
