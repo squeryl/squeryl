@@ -323,7 +323,7 @@ trait QueryDsl
     val rightForeingKeyDeclaration =
       schema._createForeingKeyDeclaration(rightFkFmd.columnName, rightPkFmd.columnName)
     
-    private def _associate[T](o: T, m2m: ManyToMany[T,A]): A = {
+    private def _associate[T <: KeyedEntity[_]](o: T, m2m: ManyToMany[T,A]): A = {
       val aInst = m2m.assign(o)
       try {
         thisTableOfA.insertOrUpdate(aInst)

@@ -35,7 +35,10 @@ import java.util.Date
  * cannot distinguish at compile time, so this mode is less 'strict' than
  * one with a CustomType 
  */
-object PrimitiveTypeMode extends QueryDsl {
+
+object PrimitiveTypeMode extends PrimitiveTypeMode
+
+trait PrimitiveTypeMode extends QueryDsl {
 
   type ByteType = Byte
 

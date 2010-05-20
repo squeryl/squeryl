@@ -26,6 +26,7 @@ trait FieldTypeHandler[T] {
   private def isFloat(t: Class[_]) = t.isAssignableFrom(classOf[Float]) || t.isAssignableFrom(classOf[java.lang.Float])
   private def isDate(t: Class[_]) = classOf[java.util.Date].isAssignableFrom(t)
   private def isBigDecimal(t: Class[_]) = t.isAssignableFrom(classOf[scala.math.BigDecimal]) || t.isAssignableFrom(classOf[java.math.BigDecimal])
+  private def isTimestamp(t: Class[_]) = t.isAssignableFrom(classOf[java.sql.Timestamp])
 
   def handleType(t: Class[_], fmd_? : Option[FieldMetaData]) = {
     fmd_? flatMap { fmd =>
@@ -52,6 +53,8 @@ trait FieldTypeHandler[T] {
         handleDateType
       else if(isBigDecimal(t))
         handleBigDecimalType
+      else if(isTimestamp(t))
+        handleTimestampType
       else
         handleUnknownType(t)
     }
@@ -67,6 +70,7 @@ trait FieldTypeHandler[T] {
   protected def handleFloatType: T
   protected def handleBigDecimalType: T
   protected def handleBigDecimalType(precision: Int, scale: Int): T
+  protected def handleTimestampType: T
 
   protected def handleUnknownType(c: Class[_]) : T
 }

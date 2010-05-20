@@ -61,7 +61,7 @@ trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEnt
  * Note that this trait is used on both "left" and "right" sides of the relation,
  * but in a given relation  
  */
-trait ManyToMany[O,A <: KeyedEntity[_]] extends Query[O] {
+trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
 
   /**
    * @param a: the association object
@@ -125,7 +125,7 @@ trait OneToMany[M] extends Query[M] {
   def deleteAll: Int
 }
 
-trait ManyToOne[O] extends Query[O] {
+trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
 
   def assign(one: O): Unit
 

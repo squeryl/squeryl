@@ -326,6 +326,7 @@ object FieldMetaData {
     def handleFloatType = 4
     def handleBigDecimalType = 32
     def handleBigDecimalType(p:Int,s:Int) = error("Trying to get default length for bigdecimal whose length was specified.")
+    def handleTimestampType = -1
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
@@ -343,6 +344,7 @@ object FieldMetaData {
     def handleFloatType = -1
     def handleBigDecimalType = 16
     def handleBigDecimalType(p:Int,s:Int) = error("Trying to get default scale for bigdecimal whose scale was specified.")
+    def handleTimestampType = -1
     def handleUnknownType(c: Class[_]) = error("Cannot assign field scale for " + c.getName)
   }
 
@@ -358,6 +360,7 @@ object FieldMetaData {
     def handleFloatType = new java.lang.Float(0)
     def handleBigDecimalType = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleBigDecimalType(p:Int,s:Int) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
+    def handleTimestampType = new java.sql.Timestamp(0)
     def handleUnknownType(c: Class[_]) = null
   }
 
@@ -378,6 +381,7 @@ object FieldMetaData {
     val _longM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getLong(i))
     val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
     val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
+    val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
 
     def handleIntType = _intM
     def handleStringType  = _stringM
@@ -389,6 +393,7 @@ object FieldMetaData {
     def handleLongType = _longM
     def handleBigDecimalType = _bigDecM
     def handleBigDecimalType(p:Int,s:Int) = _bigDecM
+    def handleTimestampType = _timestampM
 
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")
