@@ -171,7 +171,10 @@ trait Schema {
         s.execute(createS)
       }
       catch {
-        case e:SQLException => throw new RuntimeException("error creating table :\n" + sw.statement ,e)
+        case e:SQLException => throw new RuntimeException(
+          "error creating table : " +
+          e.getMessage + "ErrorCode:" + e.getErrorCode + ", SQLState:" + e.getSQLState + "\n" + sw.statement, e
+        )
       }
 
       _dbAdapter.postCreateTable(Session.currentSession, t)
