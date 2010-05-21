@@ -320,7 +320,7 @@ object FieldMetaData {
 
     def handleIntType = 4
     def handleStringType  = 255
-    def handleStringType(fmd: Option[FieldMetaData]) = 128
+    def handleStringType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultLengthOfString
     def handleBooleanType = 1
     def handleDoubleType = 8
     def handleDateType = -1

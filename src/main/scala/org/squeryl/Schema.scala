@@ -280,7 +280,16 @@ trait Schema {
   /**
    * @return a Tuple2 with (LengthOfDecimal, Scale) that will determin the storage
    * length of the database type that map fields of type java.lang.BigDecimal
+   * Can be overriden by the Column Annotation, ex.: Column(length=22, scale=20)
+   * default is (20,16)
    */
   
   def defaultSizeOfBigDecimal = (20,16)
+
+  /**
+   * @return the default database storage (column) length for String columns for this Schema,
+   * Can be overriden by the Column Annotation ex.: Column(length=256)
+   * default is 128 
+   */
+  def defaultLengthOfString = 123
 }
