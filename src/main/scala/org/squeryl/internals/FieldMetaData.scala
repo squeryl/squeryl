@@ -19,6 +19,7 @@ import org.squeryl.annotations.Column
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
+import java.math.BigDecimal
 
 
 class FieldMetaData(
@@ -51,9 +52,17 @@ class FieldMetaData(
    */
   def length: Int =
     if(columnAnnotation == None || columnAnnotation.get.length == -1)
-      FieldMetaData.defaultFieldLength(wrappedFieldType)
+      FieldMetaData.defaultFieldLength(wrappedFieldType, this)
     else
       columnAnnotation.get.length
+
+  def scale: Int =
+    if(columnAnnotation == None || columnAnnotation.get.scale == -1)
+      schema.defaultSizeOfBigDecimal._2
+    else
+      columnAnnotation.get.scale   
+
+  def schema = parentMetaData.schema
 
   /**
    * The name of the database column
@@ -304,18 +313,20 @@ object FieldMetaData {
     None
   }
 
-  def defaultFieldLength(fieldType: Class[_]) =
-    _defaultFieldLengthAssigner.handleType(fieldType)
+  def defaultFieldLength(fieldType: Class[_], fmd: FieldMetaData) =
+    _defaultFieldLengthAssigner.handleType(fieldType, Some(fmd))
 
   private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
 
     def handleIntType = 4
-    def handleStringType  = 128
+    def handleStringType  = 255
+    def handleStringType(fmd: Option[FieldMetaData]) = 128
     def handleBooleanType = 1
     def handleDoubleType = 8
     def handleDateType = -1
     def handleLongType = 8
     def handleFloatType = 4
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultSizeOfBigDecimal._1
     def handleTimestampType = -1
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
@@ -324,11 +335,13 @@ object FieldMetaData {
 
     def handleIntType = new java.lang.Integer(0)
     def handleStringType  = ""
+    def handleStringType(fmd: Option[FieldMetaData])  = ""
     def handleBooleanType = new java.lang.Boolean(false)
     def handleDoubleType = new java.lang.Double(0.0)
     def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleTimestampType = new java.sql.Timestamp(0)
     def handleUnknownType(c: Class[_]) = null
   }
@@ -349,15 +362,19 @@ object FieldMetaData {
     val _dateM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getDate(i))
     val _longM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getLong(i))
     val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
+    val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
     val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
 
     def handleIntType = _intM
     def handleStringType  = _stringM
+    def handleStringType(fmd: Option[FieldMetaData])  = _stringM
     def handleBooleanType = _booleanM
     def handleDoubleType = _doubleM
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
+    def handleBigDecimalType = _bigDecM
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = _bigDecM
     def handleTimestampType = _timestampM
 
     def handleUnknownType(c: Class[_]) =
@@ -365,7 +382,7 @@ object FieldMetaData {
   }
 
   def resultSetHandlerFor(c: Class[_]) =
-    _mapper.handleType(c)
+    _mapper.handleType(c, None)
 
 //  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Array[Annotation]): Object =
 //    createDefaultValue(ownerCLass, p, optionFieldsInfo.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]))
@@ -394,7 +411,7 @@ object FieldMetaData {
       Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, optionFieldsInfo))
     }
     else
-      _defaultValueFactory.handleType(p)
+      _defaultValueFactory.handleType(p, None)
   }
   
 }

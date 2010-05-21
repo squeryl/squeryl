@@ -138,24 +138,28 @@ trait DatabaseAdapter {
   def dateTypeDeclaration = "date"
   def longTypeDeclaration = "bigint"
   def floatTypeDeclaration = "real"
+  def bigDecimalTypeDeclaration = "decimal"
+  def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   def timestampTypeDeclaration = "date"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
 
     def handleIntType = intTypeDeclaration
     def handleStringType  = stringTypeDeclaration
+    def handleStringType(fmd: Option[FieldMetaData]) = stringTypeDeclaration(fmd.get.length)
     def handleBooleanType = booleanTypeDeclaration
     def handleDoubleType = doubleTypeDeclaration
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
     def handleTimestampType = timestampTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
   
   def databaseTypeFor(fmd: FieldMetaData) =
-    _declarationHandler.handleType(fmd.wrappedFieldType)
+    _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
 
   def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
@@ -209,7 +213,7 @@ trait DatabaseAdapter {
         if(o == None)
           s.setObject(i, null)
         else
-          s.setObject(i, o.get)
+          s.setObject(i, convertToJdbcValue(o.get.asInstanceOf[AnyRef]))
       }
       else
         s.setObject(i, convertToJdbcValue(p))
@@ -318,14 +322,15 @@ trait DatabaseAdapter {
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
     if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date]  && ! v.isInstanceOf[Timestamp])
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
-
-//  see comment in def convertFromBooleanForJdbc    
-//    if(v.isInstanceOf[java.lang.Boolean])
-//      v = convertFromBooleanForJdbc(v)
-    
+    if(v.isInstanceOf[scala.math.BigDecimal])
+       v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
     v
   }
 
+//  see comment in def convertFromBooleanForJdbc
+//    if(v.isInstanceOf[java.lang.Boolean])
+//      v = convertFromBooleanForJdbc(v)
+  
   // TODO: move to StatementWriter (since it encapsulates the 'magic' of swapping values for '?' when needed)
   //and consider delaying the ? to 'value' decision until execution, in order to make StatementWriter loggable
   //with values at any time (via : a kind of prettyStatement method)

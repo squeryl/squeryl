@@ -16,9 +16,6 @@
 package org.squeryl
 
 
-import dsl.ast.FieldSelectElement
-import dsl.boilerplate.Query1
-import dsl.fsm.QueryElements
 import dsl.{CompositeKey, ManyToManyRelation, OneToManyRelation}
 import internals._
 import reflect.{Manifest}
@@ -279,4 +276,11 @@ trait Schema {
 
   def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
     foreingKeyDeclaration.constrainReference
+
+  /**
+   * @return a Tuple2 with (LengthOfDecimal, Scale) that will determin the storage
+   * length of the database type that map fields of type java.lang.BigDecimal
+   */
+  
+  def defaultSizeOfBigDecimal = (20,16)
 }

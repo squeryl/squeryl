@@ -92,6 +92,7 @@ trait ListNumerical extends ListExpressionNode
 
 
 trait ListDouble extends ListNumerical
+trait ListBigDecimal extends ListNumerical
 trait ListFloat  extends ListNumerical
 trait ListInt extends ListNumerical
 trait ListLong extends ListNumerical
