@@ -55,3 +55,13 @@ class ComponentTests extends Specification {
   }
 }
 
+class BasicORMTestsOnH2 extends Specification {
+
+  "the Basic ORM tests " should {
+
+    "not throw an exception " in {
+      org.squeryl.tests.Tests.allTestsOnH2
+      //"a" mustMatch "a"
+    }
+  }
+}
