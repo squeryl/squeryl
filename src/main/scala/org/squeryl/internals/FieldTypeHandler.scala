@@ -26,7 +26,7 @@ trait FieldTypeHandler[T] {
   private def isFloat(t: Class[_]) = t.isAssignableFrom(classOf[Float]) || t.isAssignableFrom(classOf[java.lang.Float])
   private def isDate(t: Class[_]) = classOf[java.util.Date].isAssignableFrom(t)
   private def isBigDecimal(t: Class[_]) = t.isAssignableFrom(classOf[scala.math.BigDecimal]) || t.isAssignableFrom(classOf[java.math.BigDecimal])
-  private def isTimestamp(t: Class[_]) = t.isAssignableFrom(classOf[java.sql.Timestamp])
+  private def isTimestamp(t: Class[_]) = classOf[java.sql.Timestamp].isAssignableFrom(t)
 
   def handleType(t: Class[_], fmd: Option[FieldMetaData]) = {
 
@@ -44,10 +44,10 @@ trait FieldTypeHandler[T] {
         handleDoubleType
       else if(isFloat(t))  
         handleFloatType
-      else if(isDate(t))
-        handleDateType
       else if(isTimestamp(t))
         handleTimestampType
+      else if(isDate(t))
+        handleDateType        
       else
         handleUnknownType(t)
   }
