@@ -149,6 +149,7 @@ class MusicDb extends Schema with QueryTester {
   def songCountPerAlbumIdJoinedWithAlbumNested =
     from(songCountPerAlbumIdJoinedWithAlbum)(q =>
       select(q)
+      orderBy(q._1)
     )
 
   //TODO: list2Queryable conversion using 'select x0 as x from dual union ...'
