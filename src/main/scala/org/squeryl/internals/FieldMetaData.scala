@@ -195,13 +195,35 @@ class FieldMetaData(
 trait FieldMetaDataFactory {
 
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
+
+  def isSupportedFieldType(c: Class[_]): Boolean =
+    FieldMetaData._isSupportedFieldType.handleType(c, None)      
 }
 
 object FieldMetaData {
 
   private val _EMPTY_ARRAY = new Array[Object](0)
 
-  var factory = new FieldMetaDataFactory {
+  private [squeryl] val _isSupportedFieldType = new FieldTypeHandler[Boolean] {
+
+    def handleIntType = true
+    def handleStringType  = true
+    def handleStringType(fmd: Option[FieldMetaData]) = true
+    def handleBooleanType = true
+    def handleDoubleType = true
+    def handleDateType = true
+    def handleLongType = true
+    def handleFloatType = true
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) = true
+    def handleTimestampType = true
+    def handleUnknownType(c: Class[_]) =
+      c.isAssignableFrom(classOf[Some[_]]) ||
+      classOf[Product1[Any]].isAssignableFrom(c)
+        //classOf[Some[_]].isAssignableFrom(c)
+  }
+  
+  var factory = new FieldMetaDataFactory {   
+    
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 
       val field  = property._1
@@ -413,5 +435,4 @@ object FieldMetaData {
     else
       _defaultValueFactory.handleType(p, None)
   }
-  
 }

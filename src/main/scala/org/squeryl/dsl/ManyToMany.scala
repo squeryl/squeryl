@@ -16,6 +16,7 @@
 package org.squeryl.dsl
 
 import org.squeryl.{ForeingKeyDeclaration, Table, Query, KeyedEntity}
+import collection.mutable.{HashMap, ArrayBuffer, Buffer}
 
 trait Relation[L <: KeyedEntity[_],R <: KeyedEntity[_]] {
   
@@ -30,7 +31,60 @@ trait OneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]] extends Relatio
   
   def left(leftSide: O): OneToMany[M]
 
+  def leftStateful(leftSide: O) = new StatefulOneToMany[M](left(leftSide))
+
   def right(rightSide: M): ManyToOne[O]
+
+  def rightStateful(rightSide: M) = new StatefulManyToOne[O](right(rightSide))
+}
+
+class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
+
+  private val _buffer = new ArrayBuffer[M]
+
+  refresh
+  
+  def refresh = {
+    _buffer.clear
+    for(m <- relation)
+      _buffer.append(m)
+  }
+
+  def iterator = _buffer.iterator
+
+  def associate(m: M) = {
+    relation.associate(m)
+    _buffer.append(m)
+  }
+
+  def deleteAll: Int = {
+    val r = relation.deleteAll
+    _buffer.clear
+    r
+  }
+}
+
+class StatefulManyToOne[O <: KeyedEntity[_]](val relation: ManyToOne[O]) {
+
+  private var _one: Option[O] = None
+
+  refresh
+
+  def refresh = 
+    _one = relation.headOption
+
+  def one = _one
+
+  def assign(o: O) = {
+    relation.assign(o)
+    _one = Some(o)
+  }
+
+  def delete = {
+    val b = relation.delete
+    _one = None
+    b
+  }
 }
 
 trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]] extends Relation[L,R] {
@@ -43,8 +97,12 @@ trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEnt
   def rightForeingKeyDeclaration: ForeingKeyDeclaration
 
   def left(leftSide: L): ManyToMany[R,A]
-  
+
+  def leftStateful(leftSide: L) = new StatefulManyToMany[R,A](left(leftSide))
+
   def right(rightSide: R): ManyToMany[L,A]
+
+  def rightStateful(rightSide: R) = new StatefulManyToMany[L,A](right(rightSide))
 }
 
 
@@ -96,6 +154,14 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
   def associate(o: O): A
 
   /**
+   * Causes the deletion of the 'Association object' between this side and the other side
+   * of the relation.
+   * @return true if 'o' was associated (if an association object existed between 'this' and 'o') false otherwise
+   */
+
+  def dissociate(o: O): Boolean
+
+  /**
    *  Deletes all "associations" relating this "side" to the other
    */
   def dissociateAll: Int
@@ -104,6 +170,55 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
    * a Query returning all of this member's association entries 
    */
   def associations: Query[A]
+
+  /**
+   * @return a Query of Tuple2 containing all objects on the 'other side' along with their association object
+   */
+  def associationMap: Query[(O,A)]
+}
+
+
+class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: ManyToMany[O,A]) extends Iterable[O] {
+
+  private val _map = new HashMap[O,A]
+
+  refresh
+
+  def refresh = {
+    _map.clear
+    _map ++= relation.associationMap      
+  }
+
+  def iterator = _map.keysIterator
+
+  def associate(o: O, a: A) = {
+    relation.associate(o, a)
+    _map.put(o, a)
+  }
+
+  def associate(o: O): A = {
+    val a = relation.associate(o)
+    _map.put(o, a)
+    a
+  }
+
+  def dissociate(o: O): Boolean = {
+    val b1 = relation.dissociate(o)
+    val b2 = _map.remove(o) != None
+    assert(b1 == b2,
+      'MutableManyToMany + " out of sync " + o.getClass.getName +" with id=" +
+      o.id + (if(b1) "" else "does not") + " exist in the db, and cached collection says the opposite")
+    b1
+  }
+
+  def dissociateAll: Int = {
+    val r = relation.dissociateAll
+    _map.clear
+    r
+  }
+
+  def associations: Iterable[A] =
+    _map.valuesIterable  
 }
 
 
@@ -129,5 +244,5 @@ trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
 
   def assign(one: O): Unit
 
-  def delete: Unit
+  def delete: Boolean
 }

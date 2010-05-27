@@ -348,6 +348,7 @@ trait QueryDsl
           outerQueryDsl.where(matchClause._1 and matchClause._2).select(r)
         })
 
+
       new DelegateQuery(q) with ManyToMany[R,A] {
 
         private def _assignKeys(r: R, a: AnyRef): Unit = {
@@ -358,6 +359,12 @@ trait QueryDsl
           leftFkFmd.set(a, leftPk)
           rightFkFmd.set(a, rightPk)
         }
+
+        def associationMap =
+          from(thisTableOfA, rightTable)((a,r) => {
+            val matchClause = f(leftSideMember, r, a)
+            outerQueryDsl.where(matchClause._1 and matchClause._2).select((r,a))
+          })
 
         def assign(o: R, a: A) =
           _assignKeys(o, a.asInstanceOf[AnyRef])
@@ -377,12 +384,21 @@ trait QueryDsl
         def associate(o: R): A =
           _associate(o,this)
 
+        def dissociate(o: R) =
+          thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0) and _equalityForRightSide(a0, o)) > 0
+
         def _whereClauseForAssociations(a0: A) = {
           val leftPk = leftPkFmd.get(leftSideMember.asInstanceOf[AnyRef])
           leftFkFmd.get(a0.asInstanceOf[AnyRef])
           FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk)
         }
-        
+
+        def _equalityForRightSide(a0: A, r: R) = {
+          val rightPk = rightPkFmd.get(r.asInstanceOf[AnyRef])
+          rightFkFmd.get(a0.asInstanceOf[AnyRef])
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(rightPk)
+        }
+
         def dissociateAll = 
           thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0))
 
@@ -409,6 +425,12 @@ trait QueryDsl
           leftFkFmd.set(a, leftPk)
         }
 
+        def associationMap =
+          from(thisTableOfA, leftTable)((a,l) => {
+             val matchClause = f(l, rightSideMember, a)
+             outerQueryDsl.where(matchClause._1 and matchClause._2).select((l, a))
+          })
+
         def assign(o: L, a: A) =
           _assignKeys(o, a.asInstanceOf[AnyRef])
         
@@ -426,6 +448,15 @@ trait QueryDsl
 
         def associate(o: L): A =
           _associate(o,this)
+
+        def dissociate(o: L) =
+          thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0) and _leftEquality(o, a0)) > 0
+
+        def _leftEquality(l: L, a0: A) = {
+          val leftPk = leftPkFmd.get(l.asInstanceOf[AnyRef])
+          leftFkFmd.get(a0.asInstanceOf[AnyRef])
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk)
+        }
 
         def _whereClauseForAssociations(a0: A) = {
           val rightPk = rightPkFmd.get(rightSideMember.asInstanceOf[AnyRef])
@@ -513,7 +544,7 @@ trait QueryDsl
         }
 
         def delete =
-          leftTable.deleteWhere(o => f(o, rightSide))
+          leftTable.deleteWhere(o => f(o, rightSide)) > 0
       }
     }
   }

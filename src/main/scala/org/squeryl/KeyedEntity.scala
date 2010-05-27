@@ -40,6 +40,24 @@ import annotations.Transient
 trait KeyedEntity[K] extends PersistenceStatus {
 
   def id: K
+
+  override def hashCode =
+    if(isPersisted)
+      id.hashCode
+    else
+      super.hashCode
+
+  override def equals(z: Any):Boolean = {
+    if(z == null)
+      return false
+    val ar = z.asInstanceOf[AnyRef]
+    if(!ar.getClass.isAssignableFrom(this.getClass))
+      false
+    else if(isPersisted)
+      id == ar.asInstanceOf[KeyedEntity[K]].id
+    else
+      super.equals(z)
+  }
 }
 
 

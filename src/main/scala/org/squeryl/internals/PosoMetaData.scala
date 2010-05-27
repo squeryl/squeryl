@@ -25,7 +25,6 @@ import org.squeryl.annotations._
 import org.squeryl._
 
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
-    
 
   override def toString =
     'PosoMetaData + "[" + clasz.getSimpleName + "]" + fieldsMetaData.mkString("(",",",")")
@@ -270,7 +269,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       s.add(a)
 
   private def _includeFieldOrMethodType(c: Class[_]) =
-      ! classOf[Query[_]].isAssignableFrom(c)  
+    FieldMetaData.factory.isSupportedFieldType(c)
+      //! classOf[Query[_]].isAssignableFrom(c)
 
   private def _fillWithMembers(clasz: Class[_], members: ArrayBuffer[(Member,HashSet[Annotation])]) {
 
@@ -294,3 +294,5 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       _fillWithMembers(c, members)
   }
 }
+
+

@@ -19,6 +19,7 @@ import _root_.org.squeryl.demos.MusicDb
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
+import mutablerelations.SchoolDb2MetableRelations
 import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleAdapter}
 import schooldb.SchoolDb
 import org.squeryl.{Session}
@@ -92,6 +93,8 @@ object Tests extends QueryTester {
     
     transaction {
 
+      (new SchoolDb2MetableRelations).testAll
+      
       (new SchoolDb2Tests).testAll
 
       (new SchoolDb).test1
