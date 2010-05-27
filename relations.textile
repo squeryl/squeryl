@@ -5,8 +5,14 @@ title: Relations
 
 *Note*: relations are a beta feature, supported only as of version 0.9.4beta, that corresponds to the 'relations' branch in the Git repository.
 
+h3. Stateful vs Stateless relations
 
-Relations allow foreign key relationships to appear as collection like objects. There are two types of relations in Squeryl : OneToMany and ManyToMany
+Relations allow foreign key relationships to appear as collection like objects. There are two types of relations in Squeryl : OneToMany and ManyToMany, and each has a statefull counterpart. 
+
+Stateful relations owe their name to the fact that they maintain members of the relation in memory. A stateful relation loads all of it's members in memory when it is accessed for the first time, and they are kept with the relation. When an object is inserted or updated, the modified (or inserted) object is persisted in the database and kept in memory 'inside' the relation object.
+
+From here on, stateless relations will be referred simply as relations, stateful relations are described "here":stateful-relations.html .
+ 
 
 h3. OneToMany
 
@@ -51,8 +57,7 @@ trait OneToMany[M] extends Query[M] {
   def assign(m: M): Unit
 
   /**
-   * Calls 'assign(m)' and persists the changes the database, 
-   * by inserting or updating 'm', depending
+   * Calls 'assign(m)' and persists the changes the database, by inserting or updating 'm', depending
    * on if it has been persisted or not.
    */
   def associate(m: M): Unit
@@ -60,12 +65,13 @@ trait OneToMany[M] extends Query[M] {
   def deleteAll: Int
 }
 
-trait ManyToOne[O] extends Query[O] {
+trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
 
   def assign(one: O): Unit
 
-  def delete: Unit
+  def delete: Boolean
 }
+
 ]]></script>
 
 
@@ -143,23 +149,36 @@ Examples of many to many relation usage :
 h4. The trait ManyToMany[O,A] 
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
-trait ManyToMany[O,A] extends Query[O] {
+/**
+ * This trait is what is referred by both the left and right side of a manyToMany relation.
+ * Type parameters are :
+ *   O: the type at the "other" side of the relation
+ *   A: the association type i.e. the entity in the "middle" of the relation
+ *
+ *  Object mapping to the "middle" entity are called "association objects"
+ *
+ * this trait extends Query[O] and can be queried against like a normal query.
+ *
+ * Note that this trait is used on both "left" and "right" sides of the relation,
+ * but in a given relation  
+ */
+trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
 
   /**
    * @param a: the association object
    * 
-   * Sets the foreing keys of the association object to the primary keys of the left 
-   * and right side, this method does not update the database, changes to the association 
-   * object must be done for the operation to be persisted. Alternatively the method 
-   * 'associate(o, a)' will call this assign(o, a) and persist the changes.  
+   * Sets the foreing keys of the association object to the primary keys of the left and right side,
+   * this method does not update the database, changes to the association object must be done for
+   * the operation to be persisted. Alternatively the method 'associate(o, a)' will call this assign(o, a)
+   * and persist the changes.  
    */
   def assign(o: O, a: A): Unit
 
   /**
    * @param a: the association object
    *
-   * Calls assign(o,a) and persists the changes the database, by inserting or updating 
-   * 'a', depending on if it has been persisted or not.
+   * Calls assign(o,a) and persists the changes the database, by inserting or updating 'a', depending
+   * on if it has been persisted or not.
    */
   def associate(o: O, a: A): Unit
 
@@ -171,11 +190,19 @@ trait ManyToMany[O,A] extends Query[O] {
   /**
    * Creates a new association object 'a' and calls associate(o,a)
    *
-   * Note that this method will fail if the association object has NOT NULL constraint 
-   * fields appart from the foreing keys in the relations
+   * Note that this method will fail if the association object has NOT NULL constraint fields appart from the
+   * foreing keys in the relations
    *  
    */
   def associate(o: O): A
+
+  /**
+   * Causes the deletion of the 'Association object' between this side and the other side
+   * of the relation.
+   * @return true if 'o' was associated (if an association object existed between 'this' and 'o') false otherwise
+   */
+
+  def dissociate(o: O): Boolean
 
   /**
    *  Deletes all "associations" relating this "side" to the other
@@ -186,8 +213,12 @@ trait ManyToMany[O,A] extends Query[O] {
    * a Query returning all of this member's association entries 
    */
   def associations: Query[A]
-}
 
+  /**
+   * @return a Query of Tuple2 containing all objects on the 'other side' along with their association object
+   */
+  def associationMap: Query[(O,A)]
+}
 ]]></script>
 
 
