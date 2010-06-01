@@ -64,4 +64,6 @@ public @interface Column {
 
     /** Add UNIQUE constraint to this column */
     boolean unique() default false;
+    /** Create an index on this column */
+    boolean indexed() default false;
 }

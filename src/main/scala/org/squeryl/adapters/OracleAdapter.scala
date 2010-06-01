@@ -35,7 +35,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
   override def postCreateTable(s: Session, t: Table[_]) = {
-
+    super.postCreateTable(s,t)
     val sw = new StatementWriter(false, this)
     sw.write("create sequence ", sequenceName(t), " start with 1 increment by 1 nomaxvalue")
     val st = s.connection.createStatement

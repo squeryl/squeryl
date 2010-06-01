@@ -361,8 +361,18 @@ trait DatabaseAdapter {
 //      "?"
 //    }
 
-  def postCreateTable(s: Session, t: Table[_]) = {}
+  def postCreateTable(s: Session, t: Table[_]): Unit = {
+    t.posoMetaData.fieldsMetaData.foreach(
+      fmd => if (fmd.isIndexed) createIndexOnColumn(s, t, fmd))
+}
   
+  protected def createIndexOnColumn(s: Session, t: Table[_], fmd: FieldMetaData) = {
+    val sw = new StatementWriter(this)
+    sw.write("create index ", t.name , "_", fmd.columnName, " on ", t.name, "(", fmd.columnName, ")")
+    val st = s.connection.createStatement
+    st.execute(sw.statement)
+  }
+
   def postDropTable(t: Table[_]) = {}
 
   def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) = {
