@@ -75,8 +75,10 @@ trait FieldTypes {
     def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
     def in[B <% NumericalExpression[_]](e: Query[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
+    def notIn[B <% NumericalExpression[_]](e: Query[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in")
 
     def in(l: ListNumerical) = new BinaryOperatorNodeLogicalBoolean(this, l, "in")
+    def notIn(l: ListNumerical) = new BinaryOperatorNodeLogicalBoolean(this, l, "not in")
 
     def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
 
@@ -99,6 +101,7 @@ trait FieldTypes {
     def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
     def in[A](e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
+    def notIn[A](e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in")
 
     def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
   }
@@ -110,6 +113,7 @@ trait FieldTypes {
   trait StringExpression[A] extends NonNumericalExpression[A] {
 
     def in(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "in")
+    def notIn(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "not in")
 
     //def between(lower: BaseScalarString, upper: BaseScalarString): LogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with LogicalBoolean
     def like(e: StringExpression[_])  = new BinaryOperatorNodeLogicalBoolean(this, e, "like")
@@ -120,6 +124,7 @@ trait FieldTypes {
   trait DateExpression[A] extends NonNumericalExpression[A] {
 
     def in(e: ListDate) = new BinaryOperatorNodeLogicalBoolean(this, e, "in")
+    def notIn(e: ListDate) = new BinaryOperatorNodeLogicalBoolean(this, e, "not in")
     
     def ~ = this
   }

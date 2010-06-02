@@ -176,9 +176,35 @@ class SchoolDb2MetableRelations extends QueryTester {
     val philosophyCourse2PMWednesday = new Course
     val philosophyCourse3PMFriday = new Course
 
-    philosophy.courses.associate(philosophyCourse10AMWednesday)
-    philosophy.courses.associate(philosophyCourse2PMWednesday)
-    philosophy.courses.associate(philosophyCourse3PMFriday)
+    val c1 = philosophy.courses.associate(philosophyCourse10AMWednesday)
+    val c2 = philosophy.courses.associate(philosophyCourse2PMWednesday)
+    val c3 = philosophy.courses.associate(philosophyCourse3PMFriday)
+
+    val c4 = chemistry.courses.associate(new Course)
+
+
+    val s = from(subjects)(s0 =>
+      where(s0.id notIn(Seq(computationTheory.id, physics.id)))
+      select(s0)
+    )
+
+    var cnt = 0
+
+    for(s0 <- s ) {
+      var sCnt = 0
+      for(c <- s0.courses) {
+        cnt += 1
+        sCnt += 1
+      }
+      if(s0.id == philosophy.id)
+        assertEquals(3, sCnt, 'testOneToMany)
+      else if(s0.id == chemistry.id)
+        assertEquals(2, sCnt, 'testOneToMany)
+      else
+        error("unknown subject : " + s0)
+    }
+
+    assertEquals(5, cnt, 'testOneToMany)
 
     assertEquals(
       philosophy.courses.map(_.id).toSet,
