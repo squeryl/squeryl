@@ -21,9 +21,9 @@ import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
 import mutablerelations.SchoolDb2MetableRelations
 import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleAdapter}
-import schooldb.SchoolDb
 import org.squeryl.{Session}
 import java.sql.{Connection, DriverManager}
+import schooldb.{Issue14, SchoolDb}
 import schooldb2.SchoolDb2Tests
 
 
@@ -31,15 +31,17 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
     
     //dumpResourceClosingPolicyOfAllDrivers
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    allTestsOnH2
+    //allTestsOnH2
 
     //leakTest
+
+    issue14Test
   }
 
   def leakTest = {
@@ -55,6 +57,14 @@ object Tests extends QueryTester {
     mdb.leakTest
   }
 
+  def issue14Test = {
+
+    import org.squeryl.PrimitiveTypeMode._
+
+    SessionFactory.concreteFactory = Some(createOracleTestConnection _)
+    (new Issue14).testIssue14
+  }
+  
   def allTestsOnH2 = {
     allTests("H2", createH2TestConnection _)
   }

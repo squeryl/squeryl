@@ -33,28 +33,99 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
      fieldsMetaData.find(fmd => fmd.nameOfProperty == name)
 
   val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
+  
+  val constructor =
+    _const.headOption.orElse(error(clasz.getName +
+            " must have a 0 param constructor or a constructor with only primitive types")).get
 
-  lazy val primaryKey: Option[FieldMetaData] = {
+  val (fieldsMetaData, primaryKey) = { //(Iterable[FieldMetaData], Option[FieldMetaData])
+
+    val isImplicitMode = _isImplicitMode
+
+    val setters = new ArrayBuffer[Method]
+
+    val sampleInstance4OptionTypeDeduction =
+      try {
+        constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];
+      }
+      catch {
+        case e:IllegalArgumentException =>
+          throw new RuntimeException("invalid constructor choice " + constructor._1, e)
+        case e:Exception =>
+          throw new RuntimeException("exception occured while invoking constructor : " + constructor._1, e)
+      }
+
+    val members = new ArrayBuffer[(Member,HashSet[Annotation])]
+
+    _fillWithMembers(clasz, members)
+
+    val name2MembersMap =
+      members.groupBy(m => {
+
+        val n = m._1.getName
+        val idx = n.indexOf("_$eq")
+        if(idx != -1)
+          n.substring(0, idx)
+        else
+          n
+      })
+
+    val fmds = new ArrayBuffer[FieldMetaData];
+
+    for(e <- name2MembersMap) {
+      val name = e._1
+      val v = e._2
+
+      var a:Set[Annotation] = Set.empty
+      for(memberWithAnnotationTuple <- v)
+        a = a.union(memberWithAnnotationTuple._2)
+
+      val members = v.map(t => t._1)
+
+      // here we do a filter and not a find, because there can be more than one setter/getter/field
+      // with the same name, we want one that is not an erased type, excluding return and input type
+      // of java.lang.Object does it.
+
+      val o = classOf[java.lang.Object]
+
+      val field =
+        members.filter(m => m.isInstanceOf[Field]).
+           map(m=> m.asInstanceOf[Field]).filter(f=> f.getType != o).headOption
+
+      val getter =
+        members.filter(m => m.isInstanceOf[Method] && m.getName == name).
+          map(m=> m.asInstanceOf[Method]).filter(m=> m.getReturnType != o).headOption
+
+      val setter =
+        members.filter(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).
+          map(m=> m.asInstanceOf[Method]).filter(m=> m.getParameterTypes.apply(0) != o).headOption
+
+      val property = (field, getter, setter, a)
+
+      if(isImplicitMode && _groupOfMembersIsProperty(property)) {
+        fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
+      }
+//      else {
+//        val colA = a.find(an => an.isInstanceOf[Column])
+//        if(colA != None)
+//          fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction))
+//      }
+    }
 
     val isIndirectKeyedEntity = classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(clasz)
     val isKeyedEntity = classOf[KeyedEntity[_]].isAssignableFrom(clasz)
 
-    val k = fieldsMetaData.find(fmd =>
+    val k = fmds.find(fmd =>
       (isIndirectKeyedEntity && fmd.nameOfProperty == "idField") ||
       (isKeyedEntity && fmd.nameOfProperty == "id")
     )
 
     if(k != None) //TODO: this is config by convention, implement override for exceptions
       k.get.isAutoIncremented = true
-    k
+
+    (fmds, k) : (Iterable[FieldMetaData], Option[FieldMetaData])
   }
   
-  val constructor =
-    _const.headOption.orElse(error(clasz.getName +
-            " must have a 0 param constructor or a constructor with only primitive types")).get
-
-  val fieldsMetaData = buildFieldMetaData
-
   def optimisticCounter =
     fieldsMetaData.find(fmd => fmd.isOptimisticCounter)
 
@@ -135,83 +206,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
 
     rowAnnotation == null ||
      rowAnnotation.fieldToColumnCorrespondanceMode == FieldToColumnCorrespondanceMode.IMPLICIT
-  }
-
-  private def buildFieldMetaData : Iterable[FieldMetaData] = {
-
-    val isImplicitMode = _isImplicitMode
-
-    val setters = new ArrayBuffer[Method]
-
-    val sampleInstance4OptionTypeDeduction =
-      try {
-        constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];
-      }
-      catch {
-        case e:IllegalArgumentException =>
-          throw new RuntimeException("invalid constructor choice " + constructor._1, e)
-        case e:Exception =>
-          throw new RuntimeException("exception occured while invoking constructor : " + constructor._1, e)        
-      }
-
-    val members = new ArrayBuffer[(Member,HashSet[Annotation])]
-
-    _fillWithMembers(clasz, members)
-
-    val name2MembersMap =
-      members.groupBy(m => {
-
-        val n = m._1.getName
-        val idx = n.indexOf("_$eq")
-        if(idx != -1)
-          n.substring(0, idx)
-        else
-          n
-      })
-
-    val fmds = new ArrayBuffer[FieldMetaData];
-
-    for(e <- name2MembersMap) {
-      val name = e._1
-      val v = e._2
-
-      var a:Set[Annotation] = Set.empty
-      for(memberWithAnnotationTuple <- v)
-        a = a.union(memberWithAnnotationTuple._2)
-
-      val members = v.map(t => t._1)
-
-      // here we do a filter and not a find, because there can be more than one setter/getter/field
-      // with the same name, we want one that is not an erased type, excluding return and input type
-      // of java.lang.Object does it.
-
-      val o = classOf[java.lang.Object]
-
-      val field =
-        members.filter(m => m.isInstanceOf[Field]).
-           map(m=> m.asInstanceOf[Field]).filter(f=> f.getType != o).headOption
-
-      val getter =
-        members.filter(m => m.isInstanceOf[Method] && m.getName == name).
-          map(m=> m.asInstanceOf[Method]).filter(m=> m.getReturnType != o).headOption
-
-      val setter =
-        members.filter(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).
-          map(m=> m.asInstanceOf[Method]).filter(m=> m.getParameterTypes.apply(0) != o).headOption
-
-      val property = (field, getter, setter, a)
-
-      if(isImplicitMode && _groupOfMembersIsProperty(property)) {
-        fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
-      }
-//      else {
-//        val colA = a.find(an => an.isInstanceOf[Column])
-//        if(colA != None)
-//          fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction))
-//      }
-    }
-
-    fmds
   }
 
   private def _groupOfMembersIsProperty(property: (Option[Field], Option[Method], Option[Method], Set[Annotation])): Boolean  = {
