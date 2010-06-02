@@ -61,6 +61,7 @@ class BasicORMTestsOnH2 extends Specification {
 
     "not throw an exception " in {
       org.squeryl.tests.Tests.allTestsOnH2
+      org.squeryl.tests.Tests.issue14Test
       //"a" mustMatch "a"
     }
   }
