@@ -403,7 +403,12 @@ trait QueryDsl
           thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0))
 
         def associations =
-          thisTableOfA.where(a0 => _whereClauseForAssociations(a0))                  
+          thisTableOfA.where(a0 => _whereClauseForAssociations(a0))
+
+        def ids =
+          from(thisTableOfA)(a => {
+            outerQueryDsl.where(_whereClauseForAssociations(a)).select(leftFkFmd.get(a.asInstanceOf[AnyRef]))
+          })        
       }
     }
 
@@ -468,7 +473,12 @@ trait QueryDsl
           thisTableOfA.deleteWhere(a0 => _whereClauseForAssociations(a0))
 
         def associations =
-          thisTableOfA.where(a0 => _whereClauseForAssociations(a0))      
+          thisTableOfA.where(a0 => _whereClauseForAssociations(a0))
+        
+        def ids =
+          from(thisTableOfA)(a => {
+            outerQueryDsl.where(_whereClauseForAssociations(a)).select(rightFkFmd.get(a.asInstanceOf[AnyRef]))
+          })
       }
     }
   }
@@ -526,6 +536,11 @@ trait QueryDsl
           assign(m)
           rightTable.insertOrUpdate(m)
         }
+
+        def ids =
+          from(rightTable)(m0 =>
+            outerQueryDsl.where(f(leftSide, m0)).select(_rightFkFmd.get(m0.asInstanceOf[AnyRef]))
+          )
       }
     }
 
