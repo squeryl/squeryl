@@ -39,9 +39,7 @@ object Tests extends QueryTester {
 
     //allTestsOnH2
 
-    //leakTest
-
-    issue14Test
+    //leakTest    
   }
 
   def leakTest = {
@@ -76,6 +74,8 @@ object Tests extends QueryTester {
     allTests("MySQL", createMySQLTestConnection _)
 
     allTests("Oracle", createOracleTestConnection _)
+
+    issue14Test
 
     allTests("H2", createH2TestConnection _)
   }

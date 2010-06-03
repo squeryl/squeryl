@@ -186,7 +186,8 @@ class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: 
 
   def refresh = {
     _map.clear
-    _map ++= relation.associationMap      
+    for(e <- relation.associationMap)
+      _map.put(e._1, e._2)
   }
 
   def iterator = _map.keysIterator
