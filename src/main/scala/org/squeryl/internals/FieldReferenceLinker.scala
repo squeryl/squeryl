@@ -77,10 +77,11 @@ object FieldReferenceLinker {
       res
     }
 
-    def addSelectElement(e: SelectElement) = {
-      _utilizedFields.append(e)            
-      e.prepareColumnMapper(_utilizedFields.size)
-    }
+    def addSelectElement(e: SelectElement) =
+      if(!e.inhibited) {
+        _utilizedFields.append(e)
+        e.prepareColumnMapper(_utilizedFields.size)
+      }    
     
     def addOutGroupExpressionNodes(oen: Iterable[SelectElement]): Int = {
 

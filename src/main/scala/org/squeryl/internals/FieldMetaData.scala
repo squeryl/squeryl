@@ -15,11 +15,11 @@
  ******************************************************************************/
 package org.squeryl.internals
 
-import org.squeryl.annotations.Column
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
 import java.math.BigDecimal
+import org.squeryl.annotations.{ColumnBase, Column}
 
 
 class FieldMetaData(
@@ -231,7 +231,7 @@ object FieldMetaData {
       val setter = property._3
       val annotations = property._4
 
-      val colAnnotation = annotations.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column])
+      val colAnnotation = annotations.find(a => a.isInstanceOf[ColumnBase]).map(a => a.asInstanceOf[ColumnBase])
 
       var typeOfField =
         if(setter != None)

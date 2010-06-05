@@ -252,7 +252,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
   }
 
   private def _includeAnnotation(a: Annotation) =
-   a.isInstanceOf[Column] || a.isInstanceOf[Transient] || a.isInstanceOf[OptionType]
+   a.isInstanceOf[ColumnBase] || a.isInstanceOf[Transient] || a.isInstanceOf[OptionType]
   
   private def _addAnnotations(m: Field, s: HashSet[Annotation]) =
     for(a <- m.getAnnotations if _includeAnnotation(a))

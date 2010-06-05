@@ -40,7 +40,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Column {
+public @interface ColumnBase {
 
     String value() default "";
     

@@ -219,7 +219,7 @@ class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: 
   }
 
   def associations: Iterable[A] =
-    _map.valuesIterable  
+    _map.values.toSeq  
 }
 
 
