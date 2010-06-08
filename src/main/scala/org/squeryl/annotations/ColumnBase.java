@@ -62,4 +62,6 @@ public @interface ColumnBase {
 
     Class<?> optionType() default Object.class;
 
+    /** Add UNIQUE constraint to this column */
+    boolean unique() default false;
 }
