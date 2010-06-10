@@ -1,0 +1,396 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>Scaladoc for org.squeryl.dsl.ast</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+          
+      <link href="../../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value">
+
+      <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a></p>
+
+      <div id="definition">
+        <img src="../../../../lib/package_big.png" />
+        <h1>ast</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">ast</span>
+      </span>
+      </h4>
+      <div class="fullcomment" id="comment"></div>
+      
+      <div id="template">
+
+        <div id="mbrsel">
+          
+          <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+          </div>
+        </div>
+        
+                
+        
+        <div class="members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.squeryl.dsl.ast.BetweenExpression">
+      <h4 class="signature"><a href="BetweenExpression.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BetweenExpression</span><span class="result"> extends TernaryOperatorNode with LogicalBoolean</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.BinaryOperatorNode">
+      <h4 class="signature"><a href="BinaryOperatorNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BinaryOperatorNode</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">
+      <h4 class="signature"><a href="BinaryOperatorNodeLogicalBoolean.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BinaryOperatorNodeLogicalBoolean</span><span class="result"> extends BinaryOperatorNode with LogicalBoolean</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ConstantExpressionNode">
+      <h4 class="signature"><a href="ConstantExpressionNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ConstantExpressionNode</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ConstantExpressionNodeList">
+      <h4 class="signature"><a href="ConstantExpressionNodeList.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ConstantExpressionNodeList</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends ExpressionNode with ListExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.EqualityExpression">
+      <h4 class="signature"><a href="EqualityExpression.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">EqualityExpression</span><span class="result"> extends BinaryOperatorNodeLogicalBoolean</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExportedSelectElement">
+      <h4 class="signature"><a href="ExportedSelectElement.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ExportedSelectElement</span><span class="result"> extends SelectElement with PathReferenceToSelectElement</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">SelectElement that refer to a SelectElement of an inner query
+</p>
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode">
+      <h4 class="signature"><a href="ExpressionNode.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ExpressionNode</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.FieldSelectElement">
+      <h4 class="signature"><a href="FieldSelectElement.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">FieldSelectElement</span><span class="result"> extends SelectElement</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.FullOuterJoinNode">
+      <h4 class="signature"><a href="FullOuterJoinNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">FullOuterJoinNode</span><span class="result"> extends BinaryOperatorNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.FunctionNode">
+      <h4 class="signature"><a href="FunctionNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">FunctionNode</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.LeftOuterJoinNode">
+      <h4 class="signature"><a href="LeftOuterJoinNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">LeftOuterJoinNode</span><span class="result"> extends BinaryOperatorNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListBigDecimal">
+      <h4 class="signature"><a href="ListBigDecimal.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListBigDecimal</span><span class="result"> extends ListNumerical</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListDate">
+      <h4 class="signature"><a href="ListDate.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListDate</span><span class="result"> extends ListExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListDouble">
+      <h4 class="signature"><a href="ListDouble.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListDouble</span><span class="result"> extends ListNumerical</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListExpressionNode">
+      <h4 class="signature"><a href="ListExpressionNode.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListExpressionNode</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListFloat">
+      <h4 class="signature"><a href="ListFloat.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListFloat</span><span class="result"> extends ListNumerical</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListInt">
+      <h4 class="signature"><a href="ListInt.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListInt</span><span class="result"> extends ListNumerical</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListLong">
+      <h4 class="signature"><a href="ListLong.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListLong</span><span class="result"> extends ListNumerical</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListNumerical">
+      <h4 class="signature"><a href="ListNumerical.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListNumerical</span><span class="result"> extends ListExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ListString">
+      <h4 class="signature"><a href="ListString.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ListString</span><span class="result"> extends ListExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.LogicalBoolean">
+      <h4 class="signature"><a href="LogicalBoolean.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">LogicalBoolean</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.OrderByArg">
+      <h4 class="signature"><a href="OrderByArg.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">OrderByArg</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.OrderByExpression">
+      <h4 class="signature"><a href="OrderByExpression.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">OrderByExpression</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.OuterJoinExpression">
+      <h4 class="signature"><a href="OuterJoinExpression.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">OuterJoinExpression</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.PathReferenceToSelectElement">
+      <h4 class="signature"><a href="PathReferenceToSelectElement.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">PathReferenceToSelectElement</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.PostfixOperatorNode">
+      <h4 class="signature"><a href="PostfixOperatorNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">PostfixOperatorNode</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.QueryExpressionElements">
+      <h4 class="signature"><a href="QueryExpressionElements.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">QueryExpressionElements</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.QueryExpressionNode">
+      <h4 class="signature"><a href="QueryExpressionNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">QueryExpressionNode</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends QueryExpressionElements with QueryableExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.QueryableExpressionNode">
+      <h4 class="signature"><a href="QueryableExpressionNode.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">QueryableExpressionNode</span><span class="result"> extends ExpressionNode with UniqueIdInAliaseRequired</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.SelectElement">
+      <h4 class="signature"><a href="SelectElement.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">SelectElement</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">SelectElement are elements of a select list, they are either
+ ValueSelectElement for composite expressions, i.</p>
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.SelectElementReference">
+      <h4 class="signature"><a href="SelectElementReference.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">SelectElementReference</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypedExpressionNode[A] with PathReferenceToSelectElement</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">All nodes that refer to a SelectElement are SelectElementReference,
+with the exception of SelectElement that refer to an inner query's SelectElement,
+these are ExportedSelectElement
+</p>
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TernaryOperatorNode">
+      <h4 class="signature"><a href="TernaryOperatorNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TernaryOperatorNode</span><span class="result"> extends FunctionNode[Nothing] with LogicalBoolean</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TokenExpressionNode">
+      <h4 class="signature"><a href="TokenExpressionNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TokenExpressionNode</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TupleSelectElement">
+      <h4 class="signature"><a href="TupleSelectElement.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TupleSelectElement</span><span class="result"> extends SelectElement</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypeConversion">
+      <h4 class="signature"><a href="TypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TypeConversion</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode">
+      <h4 class="signature"><a href="TypedExpressionNode.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">TypedExpressionNode</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.UniqueIdInAliaseRequired">
+      <h4 class="signature"><a href="UniqueIdInAliaseRequired.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">UniqueIdInAliaseRequired</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.UpdateAssignment">
+      <h4 class="signature"><a href="UpdateAssignment.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">UpdateAssignment</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.UpdateStatement">
+      <h4 class="signature"><a href="UpdateStatement.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">UpdateStatement</span><span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ValueSelectElement">
+      <h4 class="signature"><a href="ValueSelectElement.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ValueSelectElement</span><span class="result"> extends SelectElement with UniqueIdInAliaseRequired</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ViewExpressionNode">
+      <h4 class="signature"><a href="ViewExpressionNode.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ViewExpressionNode</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> extends QueryableExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li></ol>
+            </div>
+        
+        
+                
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>
