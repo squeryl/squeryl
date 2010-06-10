@@ -56,6 +56,11 @@ object FieldReferenceLinker {
     override def initialValue = None
   }
 
+  def lastAccessedFieldReferenceMessage(msg: String) = {
+    Console.err.println(msg)
+    (new Throwable).printStackTrace
+  }
+
 //  private [squeryl] val _compositeKey = new ThreadLocal[Option[Iterable[SelectElementReference[Any]]]] {
 //    override def initialValue = None
 //  }
@@ -103,6 +108,7 @@ object FieldReferenceLinker {
       _on = false
       _utilizedFields.clear
       _lastAccessedFieldReference.set(None)
+      lastAccessedFieldReferenceMessage("Clearing")
     }
 
     def turnOn(q: QueryExpressionNode[_], rsm: ResultSetMapper) = {
@@ -130,13 +136,16 @@ object FieldReferenceLinker {
   def putLastAccessedSelectElement(e: SelectElement) = {
     if(_yieldInspectionTL.get.isOn)
       _yieldInspectionTL.get.addSelectElement(new ExportedSelectElement(e))
-    else
-    _lastAccessedFieldReference.set(Some(e))
+    else {
+      _lastAccessedFieldReference.set(Some(e))
+      lastAccessedFieldReferenceMessage("Setting")
+    }
   }
 
   def takeLastAccessedFieldReference: Option[SelectElement] = {
     val res = _lastAccessedFieldReference.get
     _lastAccessedFieldReference.set(None)
+    lastAccessedFieldReferenceMessage("Getting, then clearing")
     res
   }
 
@@ -275,8 +284,10 @@ object FieldReferenceLinker {
           if(yi.isOn)
             yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
 
-          if(_compositeKeyMembers.get == None)
+          if(_compositeKeyMembers.get == None) {
             _lastAccessedFieldReference.set(Some(viewExpressionNode.getOrCreateSelectElement(fmd.get)));
+            lastAccessedFieldReferenceMessage("Setting")
+          }
           else
             _compositeKeyMembers.get.get.append(viewExpressionNode.getOrCreateSelectElement(fmd.get))
         }
