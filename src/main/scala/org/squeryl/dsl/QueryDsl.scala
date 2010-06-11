@@ -20,6 +20,7 @@ import boilerplate._
 import fsm.{QueryElements, StartState, WhereState}
 import org.squeryl.internals._
 import org.squeryl._
+import internals.FieldReferenceLinker.YieldInspection
 import java.sql.{SQLException, ResultSet}
 
 trait QueryDsl
@@ -507,6 +508,7 @@ trait QueryDsl
     
     def left(leftSide: O): OneToMany[M] = {
           
+      (new YieldInspection).cleanUp
       val q = from(rightTable)(m => where(f(leftSide, m)) select(m))
 
       new DelegateQuery(q) with OneToMany[M] {

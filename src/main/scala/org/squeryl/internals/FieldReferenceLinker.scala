@@ -57,7 +57,7 @@ object FieldReferenceLinker {
   }
 
   def lastAccessedFieldReferenceMessage(msg: String) = {
-    Console.err.println(msg)
+    Console.err.println(msg + "; Thread " + Thread.currentThread.getName + "(" + System.identityHashCode(Thread.currentThread.getName) +")")
     (new Throwable).printStackTrace
   }
 
