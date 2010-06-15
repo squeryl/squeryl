@@ -22,14 +22,14 @@ import java.sql._
 
 trait DatabaseAdapter {
 
-  class Zip[T](val element: T, val isNotLast: Boolean)
+  class Zip[T](val element: T, val isLast: Boolean, val isFirst: Boolean)
   
   class ZipIterable[T](iterable: Iterable[T]) {
     val count = iterable.size
     def foreach[U](f: Zip[T] => U):Unit = {
       var c = 1  
       for(i <- iterable) {
-        f(new Zip(i, c < count))
+        f(new Zip(i, c == count, c == 1))
         c += 1
       }
     }
@@ -448,7 +448,7 @@ trait DatabaseAdapter {
       sw.write(" = ")
       val v = z.element
       v.write(sw)
-      if(z.isNotLast) {
+      if(!z.isLast) {
         sw.write(",")
         sw.nextLine
       }      
