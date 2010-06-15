@@ -53,26 +53,41 @@ trait DatabaseAdapter {
     sw.nextLine
     sw.write("From")
     sw.nextLine
-    var fromListSize = 0
     sw.writeIndented {
-      for(z <- qen.tableExpressions.zipi) {
-        fromListSize += 1
-        z.element.write(sw)
-        sw.write(" ")
-        sw.write(z.element.alias)
-        if(z.isNotLast) {
-          sw.write(",")
-          sw.nextLine
-        }
-      }      
-    }
-    
-    sw.pushPendingNextLine
-    
-    if(qen.outerJoinExpressions != Nil) sw.writeIndented {
-      for(oje <- qen.outerJoinExpressions.zipi) {
-        writeOuterJoin(oje.element, sw)
-        sw.pushPendingNextLine
+      qen.outerJoinExpressions match {
+        case Nil =>
+            for(z <- qen.tableExpressions.zipi) {
+              z.element.write(sw)
+              sw.write(" ")
+              sw.write(z.element.alias)
+              if(!z.isLast) {
+                sw.write(",")
+                sw.nextLine
+              }
+            }
+            sw.pushPendingNextLine
+        case joinExprs =>
+          for(z <- qen.tableExpressions.zipi) {
+            if(z.isFirst) {
+              z.element.write(sw)
+              sw.write(" ")
+              sw.write(z.element.alias)
+              sw.indent
+              sw.nextLine
+            } else {
+              sw.write("inner join ")
+              z.element.write(sw)
+              sw.write(" as ")
+              sw.write(z.element.alias)
+              sw.nextLine
+            }
+          }
+          for(oje <- joinExprs.zipi) {
+            writeOuterJoin(oje.element, sw)
+            if(oje.isLast)
+              sw.unindent
+            sw.pushPendingNextLine
+          }
       }
     }
     
