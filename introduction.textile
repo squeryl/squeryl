@@ -5,7 +5,7 @@ title: Introduction
 
 h3. With all the Java ORMs available, why was Squeryl written ?
 
-Squeryl is a departure from standard Java ORMs, we hope that the following arguments will provide sufficient justification for not following the Java standards, all of the arguments presented apply equally to JPA, JDO or Hybernate.
+Squeryl is a departure from standard Java ORMs, we hope that the following arguments will provide sufficient justification for not following the Java standards, all of the arguments presented apply equally to JPA, JDO or Hibernate.
 
 JPA was designed to provide the maximum functionality and expressiveness within the constraints of the Java language. All of them escape the language with a string based query language (JPA-QL, JDOQL, HQL, etc...) for situations where their imperative APIs aren't sufficient or yields poor performance. Squeryl does everything with a single language : Scala
 
