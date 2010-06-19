@@ -18,8 +18,8 @@ package org.squeryl.customtypes;
 
 import org.squeryl.dsl.QueryDsl
 import org.squeryl.internals.FieldReferenceLinker
-import org.squeryl.dsl.ast.{SelectElementReference, ConstantExpressionNode}
 import java.util.Date
+import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
 
 
 trait CustomType extends Product1[Any] {
@@ -88,46 +88,132 @@ trait CustomTypesMode extends QueryDsl {
   protected implicit val sampleDate = new DateField(new Date)
   //TODO Scala bug report, implicit params should work here , but they don't ...
   def createLeafNodeOfScalarIntType(i: IntField) =
-    new SelectElementReference[IntType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntType) with NumericalExpression[IntType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[IntType](i) with NumericalExpression[IntType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[IntType](n)(createOutMapperIntType) with NumericalExpression[IntType]
+    }
+
   def createLeafNodeOfScalarIntOptionType(i: Option[IntField]) =
-    new SelectElementReference[Option[IntType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperIntTypeOption) with NumericalExpression[Option[IntType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[IntType]](i) with NumericalExpression[Option[IntType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[IntType]](n)(createOutMapperIntTypeOption) with NumericalExpression[Option[IntType]]
+    }
 
   def createLeafNodeOfScalarStringType(s: StringField) =
-    new SelectElementReference[StringType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringType) with StringExpression[StringType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[StringType](s) with StringExpression[StringType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[StringType](n)(createOutMapperStringType) with StringExpression[StringType]
+    }
+
   def createLeafNodeOfScalarStringOptionType(s: Option[StringField]) =
-    new SelectElementReference[Option[StringType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperStringTypeOption) with StringExpression[Option[StringType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[StringType]](s) with StringExpression[Option[StringType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[StringType]](n)(createOutMapperStringTypeOption) with StringExpression[Option[StringType]]
+    }
 
   def createLeafNodeOfScalarDoubleType(i: DoubleField) =
-    new SelectElementReference[DoubleType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleType) with  NumericalExpression[DoubleType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[DoubleType](i) with NumericalExpression[DoubleType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[DoubleType](n)(createOutMapperDoubleType) with NumericalExpression[DoubleType]
+    }
+
   def createLeafNodeOfScalarDoubleOptionType(i: Option[DoubleField]) =
-    new SelectElementReference[Option[DoubleType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDoubleTypeOption) with  NumericalExpression[Option[DoubleType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[DoubleType]](i) with NumericalExpression[Option[DoubleType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[DoubleType]](n)(createOutMapperDoubleTypeOption) with  NumericalExpression[Option[DoubleType]]
+    }
 
   def createLeafNodeOfScalarBigDecimalType(i: BigDecimalField) =
-    new SelectElementReference[BigDecimalType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBigDecimalType) with  NumericalExpression[BigDecimalType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[BigDecimalType](i) with NumericalExpression[BigDecimalType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[BigDecimalType](n)(createOutMapperBigDecimalType) with  NumericalExpression[BigDecimalType]
+    }
+
   def createLeafNodeOfScalarBigDecimalOptionType(i: Option[BigDecimalField]) =
-    new SelectElementReference[Option[BigDecimalType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBigDecimalTypeOption) with  NumericalExpression[Option[BigDecimalType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[BigDecimalType]](i) with NumericalExpression[Option[BigDecimalType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[BigDecimalType]](n)(createOutMapperBigDecimalTypeOption) with  NumericalExpression[Option[BigDecimalType]]
+    }
 
   def createLeafNodeOfScalarFloatType(i: FloatField) =
-    new SelectElementReference[FloatType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatType) with  NumericalExpression[FloatType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[FloatType](i) with NumericalExpression[FloatType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[FloatType](n)(createOutMapperFloatType) with NumericalExpression[FloatType]
+    }
+
   def createLeafNodeOfScalarFloatOptionType(i: Option[FloatField]) =
-    new SelectElementReference[Option[FloatType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperFloatTypeOption) with  NumericalExpression[Option[FloatType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[FloatType]](i) with NumericalExpression[Option[FloatType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[FloatType]](n)(createOutMapperFloatTypeOption) with  NumericalExpression[Option[FloatType]]
+    }
 
   def createLeafNodeOfScalarLongType(i: LongField) =
-    new SelectElementReference[LongType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongType) with  NumericalExpression[LongType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[LongType](i) with NumericalExpression[LongType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[LongType](n)(createOutMapperLongType) with  NumericalExpression[LongType]
+    }
+
   def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
-    new SelectElementReference[Option[LongType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperLongTypeOption) with  NumericalExpression[Option[LongType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[LongType]](l) with NumericalExpression[Option[LongType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[LongType]](n)(createOutMapperLongTypeOption) with  NumericalExpression[Option[LongType]]
+    }
 
   def createLeafNodeOfScalarBooleanType(i: BooleanField) =
-    new SelectElementReference[BooleanType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanType) with  BooleanExpression[BooleanType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[BooleanType](i) with BooleanExpression[BooleanType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[BooleanType](n)(createOutMapperBooleanType) with  BooleanExpression[BooleanType]
+    }
 
   def createLeafNodeOfScalarBooleanOptionType(i: Option[BooleanField]) =
-    new SelectElementReference[Option[BooleanType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperBooleanTypeOption) with  BooleanExpression[Option[BooleanType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[BooleanType]](i) with BooleanExpression[Option[BooleanType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[BooleanType]](n)(createOutMapperBooleanTypeOption) with  BooleanExpression[Option[BooleanType]]
+    }
 
   def createLeafNodeOfScalarDateType(i: DateField) =
-    new SelectElementReference[DateType](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateType) with  DateExpression[DateType]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[DateType](i) with DateExpression[DateType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[DateType](n)(createOutMapperDateType) with  DateExpression[DateType]
+    }
 
   def createLeafNodeOfScalarDateOptionType(i: Option[DateField]) =
-    new SelectElementReference[Option[DateType]](FieldReferenceLinker.takeLastAccessedFieldReference.get)(createOutMapperDateTypeOption) with  DateExpression[Option[DateType]]
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[DateType]](i) with DateExpression[Option[DateType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[DateType]](n)(createOutMapperDateTypeOption) with  DateExpression[Option[DateType]]
+    }
   
 }
 
