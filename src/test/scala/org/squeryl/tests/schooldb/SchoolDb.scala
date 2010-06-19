@@ -178,6 +178,9 @@ class SchoolDb extends Schema with QueryTester {
 
   def test1 = {
 
+    //Must run first, because later we won't have the rows we need to perform the test
+    testOuterJoinMixed1
+
     testBigDecimal
     
     testBatchUpdate1
@@ -271,6 +274,34 @@ class SchoolDb extends Schema with QueryTester {
     assert(expected == res, "expected :\n " + expected + "\ngot :\n " + res)
 
     println('testFullOuterJoin1 + " passed.")
+  }
+
+  def testOuterJoinMixed1 {
+    import testInstance._
+
+    //Creates a situation with two implicit inner joins and one outer join
+    val studentsWithCoursesInFeb2010OuterJoinAdresses =
+      from(students, courses, courseSubscriptions, addresses)((student, course, subscription, address) =>
+        where(student.id === subscription.studentId and
+              subscription.courseId === course.id and
+              course.startDate === feb2010).
+        select((student, course, leftOuterJoin(address, student.addressId === address.id))).
+        orderBy(student.id)
+      )
+
+    val res: Seq[(Int, Int, Option[Int])] = studentsWithCoursesInFeb2010OuterJoinAdresses.map({
+      case (student, course, address) =>
+        (student.id, course.id, address.map(_.id))
+    })(collection.breakOut)
+
+    val expected = Seq(
+      (pratap.id, counterpoint.id, Some(oneTwoThreePieIXStreet.id)),
+      (gaitan.id, mandarin.id,     None)
+    )
+
+    assert(expected sameElements res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    println('testOuterJoinMixed1 + " passed.")
   }
 
   import testInstance._
