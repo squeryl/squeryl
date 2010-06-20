@@ -48,17 +48,19 @@ object FieldReferenceLinker {
     override def initialValue = new ArrayBuffer[AnyRef]
   }
   
-  private val _lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]] {
+  private val __lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]] {
     override def initialValue = None
   }
 
+  private [squeryl] def _lastAccessedFieldReference: Option[SelectElement] =
+    __lastAccessedFieldReference.get
+
+  private [squeryl] def _lastAccessedFieldReference_=(se: Option[SelectElement]) =
+    __lastAccessedFieldReference.set(se)
+  
   private val _compositeKeyMembers = new ThreadLocal[Option[ArrayBuffer[SelectElement]]] {
     override def initialValue = None
   }
-
-//  private [squeryl] val _compositeKey = new ThreadLocal[Option[Iterable[SelectElementReference[Any]]]] {
-//    override def initialValue = None
-//  }
 
   class YieldInspection {
     
@@ -102,7 +104,7 @@ object FieldReferenceLinker {
       queryExpressionNode = null
       _on = false
       _utilizedFields.clear
-      _lastAccessedFieldReference.set(None)
+      _lastAccessedFieldReference = None
     }
 
     def turnOn(q: QueryExpressionNode[_], rsm: ResultSetMapper) = {
@@ -131,12 +133,12 @@ object FieldReferenceLinker {
     if(_yieldInspectionTL.get.isOn)
       _yieldInspectionTL.get.addSelectElement(new ExportedSelectElement(e))
     else
-    _lastAccessedFieldReference.set(Some(e))
+    _lastAccessedFieldReference = Some(e)
   }
 
   def takeLastAccessedFieldReference: Option[SelectElement] = {
-    val res = _lastAccessedFieldReference.get
-    _lastAccessedFieldReference.set(None)
+    val res = _lastAccessedFieldReference
+    _lastAccessedFieldReference = None
     res
   }
 
@@ -276,7 +278,7 @@ object FieldReferenceLinker {
             yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
 
           if(_compositeKeyMembers.get == None)
-            _lastAccessedFieldReference.set(Some(viewExpressionNode.getOrCreateSelectElement(fmd.get)));
+            _lastAccessedFieldReference = Some(viewExpressionNode.getOrCreateSelectElement(fmd.get));
           else
             _compositeKeyMembers.get.get.append(viewExpressionNode.getOrCreateSelectElement(fmd.get))
         }
