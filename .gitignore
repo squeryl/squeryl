@@ -12,4 +12,4 @@ project/boot/
 .idea/uiDesigner.xml
 .idea/dictionaries/
 .idea/copyright/
-
+lib*
