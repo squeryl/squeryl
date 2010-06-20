@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat
 import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl.ast._
 import org.squeryl._
+import adapters.MySQLAdapter
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -179,8 +180,11 @@ class SchoolDb extends Schema with QueryTester {
   def test1 = {
 
     //Must run first, because later we won't have the rows we need to perform the test
-    testOuterJoinMixed1
 
+    if(Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter]) {
+      testOuterJoinMixed1
+    }
+    
     testBigDecimal
     
     testBatchUpdate1
