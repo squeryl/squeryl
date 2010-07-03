@@ -246,7 +246,8 @@ trait DatabaseAdapter {
     catch {
       case e: SQLException =>
           throw new RuntimeException(
-            "Exception while executing statement, errorCode: " +
+            "Exception while executing statement : "+ e.getMessage+
+           "\nerrorCode: " +
             e.getErrorCode + ", sqlState: " + e.getSQLState + "\n" +
             sw.statement, e)
     }    
