@@ -19,6 +19,7 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.Session
+import org.squeryl.dsl._
 
 trait ExpressionNode {
 
@@ -394,4 +395,68 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode { //with TypedExpr
 
   override def children = List(e)
   
+}
+
+trait CaseWhenTerminalElement {
+  def previous: CaseWhenElement
+}
+
+trait CaseWhenElement {
+  def condition: Option[LogicalBoolean]
+  def previous: Option[CaseWhenElement]
+}
+
+class CaseWhenNumericalElement[A](val condition: Option[LogicalBoolean], val then: NumericalExpression[A], val previous: Option[CaseWhenNumericalElement[_]])
+  extends CaseWhenElement {
+
+  def when[B,C](condition: LogicalBoolean, then: NumericalExpression[B])(implicit ev: BinaryAMSOp[A,B] <%< NumericalExpression[C]) = {
+
+    val bo = new BinaryAMSOp[A,B](this.then, then,"!CaseWhen!") : NumericalExpression[C]
+
+    new CaseWhenNumericalElement[C](Some(condition), bo, Some(this))
+  }
+
+  def otherwise[B,C](then: NumericalExpression[B])(implicit ev: BinaryAMSOp[A,B] <%< NumericalExpression[C]) = {
+
+    val bo = new BinaryAMSOp[A,B](this.then, then,"!CaseOtherwise!") : NumericalExpression[C]
+
+    new CaseWhenNumericalTerminalElement[C](bo, this)
+  }
+}
+
+class CaseWhenNumericalTerminalElement[A](val otherwise: NumericalExpression[A], val previous: CaseWhenNumericalElement[_])
+  extends NumericalExpression[A] with CaseWhenTerminalElement {
+
+  override def mapper = otherwise.mapper
+
+  def doWrite(sw: StatementWriter) =
+    sw.databaseAdapter.writeCaseWhenStatement(this, sw)
+}
+
+
+class CaseWhenNonNumericalElement[A](val condition: Option[LogicalBoolean], val then: NonNumericalExpression[A], val previous: Option[CaseWhenNonNumericalElement[_]])
+  extends CaseWhenElement {
+
+  def when[B,C](condition: LogicalBoolean, then: NonNumericalExpression[B])(implicit ev: NonNumericalCoalesce[A,B] <%< NonNumericalExpression[C]) = {
+
+    val bo = new NonNumericalCoalesce[A,B](this.then, then,"!CaseWhen!") : NonNumericalExpression[C]
+
+    new CaseWhenNonNumericalElement[C](Some(condition), bo, Some(this))
+  }
+
+  def otherwise[B,C](then: NonNumericalExpression[B])(implicit ev: NonNumericalCoalesce[A,B] <%< NonNumericalExpression[C]) = {
+
+    val bo = new NonNumericalCoalesce[A,B](this.then, then,"!CaseOtherwise!") : NonNumericalExpression[C]
+
+    new CaseWhenNonNumericalTerminalElement[C](bo, this)
+  }
+}
+
+class CaseWhenNonNumericalTerminalElement[A](val otherwise: NonNumericalExpression[A], val previous: CaseWhenNonNumericalElement[_])
+  extends NonNumericalExpression[A] with CaseWhenTerminalElement {
+
+  override def mapper = otherwise.mapper
+
+  def doWrite(sw: StatementWriter) =
+    sw.databaseAdapter.writeCaseWhenStatement(this, sw)
 }

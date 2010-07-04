@@ -40,7 +40,7 @@ trait SqlFunctions  {
 
   def count = new CountFunction
 
-  def nvl[A,B](a: NumericalExpression[Option[A]], b: NumericalExpression[B]) = new NvlFunctionNumerical[A,B](a,b)
+  def nvl[A,B](a: NumericalExpression[Option[A]], b: NumericalExpression[B]) = new NvlFunctionNumerical[A,B](a.asInstanceOf[NumericalExpression[A]],b)
 
   def nvl[A](a: NonNumericalExpression[Option[A]], b: NonNumericalExpression[A]) = new NvlFunctionNonNumerical[Option[A],A](a,b)
 

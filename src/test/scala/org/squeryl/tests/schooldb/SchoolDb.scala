@@ -22,7 +22,8 @@ import org.squeryl.tests.QueryTester
 import java.util.Date
 import java.text.SimpleDateFormat
 import org.squeryl.dsl.{GroupWithMeasures}
-import org.squeryl.dsl.ast._
+import org.squeryl.dsl._
+import ast.{CaseWhenNonNumericalElement, CaseWhenNumericalElement, CaseWhenElement, TypedExpressionNode}
 import org.squeryl._
 import adapters.MySQLAdapter
 
@@ -936,5 +937,53 @@ class Issue14 extends Schema with QueryTester {
     finally {
       transaction {drop}
     }
+  }
+
+  def excerciseTypeArythmeticFotCaseStatements = {
+    
+    val a1 = caseWhen(1 === 2, 1) : CaseWhenNumericalElement[Int]
+    val a2 = a1.when(3 === 4, 1 : NumericalExpression[Int]) : CaseWhenNumericalElement[Int]
+    val a3 = a2.when(3 === 4, 1.3F) : CaseWhenNumericalElement[Float]
+    val a4 = a3.when(3 === 4, Some(1.3 : Double)) : CaseWhenNumericalElement[Option[Double]]
+    val a5 = a4.when(3 === 4, 1 : Int) : CaseWhenNumericalElement[Option[Double]]
+    val a6 = a5.otherwise(2 : Int) : NumericalExpression[Option[Double]]
+
+
+    val b1 = caseWhen(3 === 5, "allo"): CaseWhenNonNumericalElement[String]
+    val b2 = b1.when(3 === 5, Some("z")): CaseWhenNonNumericalElement[Option[String]]
+    val b3 = b2.when(3 === 5, "wqe"): CaseWhenNonNumericalElement[Option[String]]
+    val b4 = b3.otherwise("wqe"): NonNumericalExpression[Option[String]]
+
+    val c1 = caseWhen(3 === 5, new Date): CaseWhenNonNumericalElement[Date]
+    val c2 = c1.when(3 === 5, Some(new Date)): CaseWhenNonNumericalElement[Option[Date]]
+    val c3 = c2.when(3 === 5, new Date): CaseWhenNonNumericalElement[Option[Date]]
+    val c4 = c3.otherwise(new Date) : NonNumericalExpression[Option[Date]]
+
+//    val d1 = caseWhen(1 === 2, 1)
+//    val d2 = d1.when(3 === 4, 1)
+//    val d3 = d2.when(3 === 4, 1.3F)
+//    val d4 = d3.when(3 === 4, Some(1.3 : Double))
+//    val d5 = d4.when(3 === 4, 1 : Int)
+//    val d6: NumericalExpression[Option[Double]] = d5.otherwise(2 : Int)
+
+    //val e1 = cw(1).z(3 : NumericalExpression[Int]).z(4: NumericalExpression[Int])
+  }
+
+  def testCaseStatement = {
+
+    professors.insert(new Professor("case1", 10.0F, Some(70.5F), 80.0F, Some(70.5F)))
+    professors.insert(new Professor("case1", 20.0F, Some(70.5F), 80.0F, Some(70.5F)))
+    professors.insert(new Professor("case1", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
+    professors.insert(new Professor("case1", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
+    professors.insert(new Professor("case1", 800.0F, Some(70.5F), 80.0F, Some(70.5F)))
+    professors.insert(new Professor("case1", 8000.0F, Some(70.5F), 80.0F, Some(70.5F)))
+
+
+//    from(professors)(p=>
+//      where(p.lastName like("case%"))
+//      select(&(
+//        caseWhen(p.yearlySalary between(0,21), 1).when(p.yearlySalary between(21,81), 2).otherwise(p.yearlySalary between(82, 10000), 3)
+//      ))
+//    )
   }
 }

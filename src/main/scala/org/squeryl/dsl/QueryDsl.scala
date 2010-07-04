@@ -118,7 +118,7 @@ trait QueryDsl
 
   def &[A](i: =>TypedExpressionNode[A]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
-  
+
   def leftOuterJoin[A](a: A, matchClause: =>ExpressionNode): Option[A] = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
@@ -564,5 +564,55 @@ trait QueryDsl
   implicit def t3te[A1,A2,A3](t: (A1,A2,A3)) = new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
 
   implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4)) = new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
+
+
+
+
+  def caseWhen[A](condition: LogicalBoolean, then: NumericalExpression[A]) = new CaseWhenNumericalElement(Some(condition), then, None)
+
+  def caseWhen[A](condition: LogicalBoolean, then: NonNumericalExpression[A]) = new CaseWhenNonNumericalElement(Some(condition), then, None)
+
+
+  //class ZAZA[A,B](then, t2) extends BinaryAMSOp[A,B](then, t2)
+
+
+  // let the NE be a wrapper type :
+  class NE[A]
+
+  // some conversions from primitives to NEs :
+  implicit def i2NE(i: Int) = new NE[Int]
+  implicit def f2NE(i: Float) = new NE[Float]
+
+
+  // BOP is a type for representing an operation on 2 NEs :
+  class BOP[A,B]
+
+  // conversions for BOPs to NEs :
+  implicit def if2NE1(bop: BOP[Int,Float]) = new NE[Float]
+  implicit def if2NE2(bop: BOP[Int,Int]) = new NE[Int]
+  implicit def if2NE3(bop: BOP[Float,Int]) = new NE[Float]
+  implicit def if2NE4(bop: BOP[Float,Float]) = new NE[Float]
+
+
+  case class CW[A](then: NE[A]) {
+    def z[B](t2: NE[B]) = new BOP[A,B]
+  }
+
+  // a chained conversion :
+  implicit def bop2CW[A,B,C](b: BOP[A,B])(implicit ev: BOP[A,B] <%< NE[C]) = new CW[C](b: NE[C])
+
+  //implicit def bop2NE[A,B,C,Z <% NE[C]](bop: BOP[A,B]) = new NE[C]
+
+//  class Then[A](cw: CW[A]) {
+//    def then[B](b: NE[B]) = new BOP[A,B]
+//  }
+//
+//  implicit def cw2t[A](cw: CW[A]) = new Then(cw)
+//  (new CW(2)).z.then(3).z.then(6).z.then(4.5F)
+
+  //def cw[A](x: NE[A]) = new CW[A](x)
+
+  //This should resolve to a NE[Float]
+  CW(2).z(3).z(6).z(4.5F).z(1)
 
 }

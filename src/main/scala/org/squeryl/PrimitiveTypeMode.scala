@@ -17,7 +17,7 @@ package org.squeryl
 
 
 import dsl.ast._
-import dsl.QueryDsl
+import dsl._
 import internals.FieldReferenceLinker
 import java.util.Date
 

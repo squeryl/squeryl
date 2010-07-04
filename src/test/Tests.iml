@@ -65,7 +65,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0.RC6/test/specs_2.8.0.Beta1-1.6.4.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0.RC6/compile/specs_2.8.0.RC6-1.6.5-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

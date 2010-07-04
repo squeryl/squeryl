@@ -581,4 +581,8 @@ trait DatabaseAdapter {
     sb.append(")")
     sb.toString
   }
+
+
+
+  def writeCaseWhenStatement(s: CaseWhenTerminalElement, sw: StatementWriter) = {}
 }
