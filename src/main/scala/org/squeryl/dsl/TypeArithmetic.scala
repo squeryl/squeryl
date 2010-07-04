@@ -20,41 +20,47 @@ import org.squeryl.internals._
 import java.util.Date
 import java.sql.ResultSet
 
+class NumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NumericalExpression[A]
+
+class DateTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with DateExpression[A]
+
+class StringTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with StringExpression[A]
+
+class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with BooleanExpression[A]
+
+class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
+
+class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||")
+
+class NonNumericalCoalesce[A1,A2](val a1: NonNumericalExpression[A1], val a2: NonNumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
+
+class NonNumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NonNumericalExpression[A]
+
+
+trait NvlNode {
+  self: BinaryOperatorNode =>
+
+  override def doWrite(sw: StatementWriter) =
+    sw.databaseAdapter.writeNvlCall(left, right, sw)
+}
+
+class NvlFunctionNonNumerical[A1,A2](a1: NonNumericalExpression[A1], a2: NonNumericalExpression[A2])
+  extends BinaryOperatorNode(a1,a2, "nvl") with NvlNode
+
+class NvlFunctionNumerical[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2])
+  extends BinaryAMSOp[A1,A2](a1,a2, "nvl")  with NvlNode
+
+class BinaryDivOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
+
+class UnaryFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
+
+class UnaryAgregateFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
+
+class UnaryAgregateLengthNeutralOp[A](val a: TypedExpressionNode[A], op: String) extends FunctionNode(op, a)
+
 
 trait TypeArithmetic extends FieldTypes {
 
-  class NumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NumericalExpression[A]
-
-  class DateTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with DateExpression[A]
-
-  class StringTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with StringExpression[A]
-
-  class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with BooleanExpression[A]
-
-  class BinaryAMSOp[A1,A2](a1: NumericalExpression[_], a2: NumericalExpression[_], op: String) extends BinaryOperatorNode(a1,a2, op)
-
-  class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||")
-  
-  trait NvlNode {
-    self: BinaryOperatorNode =>
-
-    override def doWrite(sw: StatementWriter) =
-      sw.databaseAdapter.writeNvlCall(left, right, sw)
-  }
-
-  class NvlFunctionNonNumerical[A1,A2](a1: NonNumericalExpression[A1], a2: NonNumericalExpression[A2])
-    extends BinaryOperatorNode(a1,a2, "nvl") with NvlNode
-
-  class NvlFunctionNumerical[A1,A2](a1: NumericalExpression[_], a2: NumericalExpression[_])
-    extends BinaryAMSOp[A1,A2](a1,a2, "nvl")  with NvlNode
-
-  class BinaryDivOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
-
-  class UnaryFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
-  
-  class UnaryAgregateFloatOp[A](a: NumericalExpression[A], op: String) extends FunctionNode(op, a)
-
-  class UnaryAgregateLengthNeutralOp[A](val a: TypedExpressionNode[A], op: String) extends FunctionNode(op, a)
 
   // conversions for binary ops like Addition subtraction, multiplication :
   implicit def binaryOpConv1(op: BinaryAMSOp[ByteType,ByteType]) = new NumericalTypeConversion[ByteType](op)
@@ -350,7 +356,13 @@ trait TypeArithmetic extends FieldTypes {
   implicit def e2concat2[A1,A2](e: ConcatOp[A1,Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
   implicit def e2concat3[A1,A2](e: ConcatOp[Option[A1],A2]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
   implicit def e2concat4[A1,A2](e: ConcatOp[Option[A1],Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
-  
+
+  //Conversions for non mumerical case statements and coalesce like functions :
+  implicit def nnCoalesce1[A](e: NonNumericalCoalesce[A,A]) = new NonNumericalTypeConversion[A](e)(e.a1.mapper)
+  implicit def nnCoalesce2[A](e: NonNumericalCoalesce[A,Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
+  implicit def nnCoalesce3[A](e: NonNumericalCoalesce[Option[A],A]) = new NonNumericalTypeConversion[Option[A]](e)(e.a1.mapper)
+  implicit def nnCoalesce4[A](e: NonNumericalCoalesce[Option[A],Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
+
   protected def mapByte2ByteType(b:Byte): ByteType
   protected def mapInt2IntType(i: Int): IntType
   protected def mapString2StringType(s: String): StringType

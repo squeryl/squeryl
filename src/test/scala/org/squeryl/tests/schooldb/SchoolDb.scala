@@ -22,7 +22,8 @@ import org.squeryl.tests.QueryTester
 import java.util.Date
 import java.text.SimpleDateFormat
 import org.squeryl.dsl.{GroupWithMeasures}
-import org.squeryl.dsl.ast._
+import org.squeryl.dsl._
+import ast.TypedExpressionNode
 import org.squeryl._
 import adapters.MySQLAdapter
 

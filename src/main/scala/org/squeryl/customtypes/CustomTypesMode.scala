@@ -16,11 +16,10 @@
 package org.squeryl.customtypes;
 
 
-import org.squeryl.dsl.QueryDsl
 import org.squeryl.internals.FieldReferenceLinker
 import java.util.Date
 import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
-
+import org.squeryl.dsl._
 
 trait CustomType extends Product1[Any] {
   def canEqual(a:Any) = false

@@ -19,6 +19,7 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.Session
+import org.squeryl.dsl._
 
 trait ExpressionNode {
 
