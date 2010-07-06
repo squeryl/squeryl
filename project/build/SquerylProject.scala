@@ -35,8 +35,6 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
 	
   val posgresDriver = "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided"
 
-  //val snapshotsRepo = Resolver.url("snapshots-repo", new java.net.URL("http://www.scala-tools.org/repo-snapshots"))
-
   val snapshotsRepo = "snapshots-repo" at "http://www.scala-tools.org/repo-snapshots"
   
   val specs = "org.scala-tools.testing" %% "specs" % "1.6.5-SNAPSHOT"

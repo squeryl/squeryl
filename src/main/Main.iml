@@ -6,12 +6,12 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.RC6/lib/scala-compiler.jar" />
+            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.RC7/lib/scala-compiler.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.RC6/lib/scala-library.jar" />
+            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0.RC7/lib/scala-library.jar" />
           </array>
         </option>
       </configuration>
@@ -27,8 +27,8 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0.RC6/lib/scala-compiler.jar!/" />
-          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0.RC6/lib/scala-library.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0.RC7/lib/scala-compiler.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0.RC7/lib/scala-library.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -37,7 +37,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0.RC6/compile/cglib-nodep-2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0.RC7/compile/cglib-nodep-2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
