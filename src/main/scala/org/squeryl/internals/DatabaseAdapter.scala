@@ -188,6 +188,7 @@ trait DatabaseAdapter {
   def bigDecimalTypeDeclaration = "decimal"
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   def timestampTypeDeclaration = "date"
+  def binaryTypeDeclaration = "binary"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
 
@@ -201,6 +202,7 @@ trait DatabaseAdapter {
     def handleFloatType = floatTypeDeclaration
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
     def handleTimestampType = timestampTypeDeclaration
+    def handleBinaryType = binaryTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }

@@ -216,6 +216,7 @@ object FieldMetaData {
     def handleFloatType = true
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = true
     def handleTimestampType = true
+    def handleBinaryType = true
     def handleUnknownType(c: Class[_]) =
       c.isAssignableFrom(classOf[Some[_]]) ||
       classOf[Product1[Any]].isAssignableFrom(c)
@@ -350,6 +351,7 @@ object FieldMetaData {
     def handleFloatType = 4
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultSizeOfBigDecimal._1
     def handleTimestampType = -1
+    def handleBinaryType = 255
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
@@ -365,6 +367,7 @@ object FieldMetaData {
     def handleFloatType = new java.lang.Float(0)
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleTimestampType = new java.sql.Timestamp(0)
+    def handleBinaryType = new Array[Byte](0)
     def handleUnknownType(c: Class[_]) = null
   }
 
@@ -386,6 +389,7 @@ object FieldMetaData {
     val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
     val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
     val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
+    val _binaryM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBytes(i))
 
     def handleIntType = _intM
     def handleStringType  = _stringM
@@ -398,6 +402,7 @@ object FieldMetaData {
     def handleBigDecimalType = _bigDecM
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = _bigDecM
     def handleTimestampType = _timestampM
+    def handleBinaryType = _binaryM
 
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")
