@@ -185,6 +185,8 @@ class SchoolDb extends Schema with QueryTester {
     if(Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter]) {
       testOuterJoinMixed1
     }
+
+    testInWithCompute
     
     testBigDecimal
     
@@ -220,6 +222,7 @@ class SchoolDb extends Schema with QueryTester {
     testOptionAndNonOptionMixInComputeTuple
     testConcatWithOptionalCols
     testLeftOuterJoin1
+    testLeftOuterJoin2
 
     if(Session.currentSession.databaseAdapter.isFullOuterJoinSupported)
       testFullOuterJoin1
@@ -255,6 +258,33 @@ class SchoolDb extends Schema with QueryTester {
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
     
     println('testOuterJoin1 + " passed.")
+  }
+
+  def testLeftOuterJoin2 {
+    import testInstance._
+
+    loggerOn
+
+    val leftOuterJoinStudentAddresses =
+      from(students, addresses, addresses)((s,a,a2) =>
+        select((s,leftOuterJoin(a, s.addressId === a.id), leftOuterJoin(a2, s.addressId === a2.id)))
+        orderBy(s.id)
+      )
+
+    val res =
+      (for(t <- leftOuterJoinStudentAddresses)
+       yield (t._1.id, t._2.map(a=>a.id), t._3.map(a=>a.id))).toList
+
+    val expected = List(
+      (xiao.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
+      (georgi.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
+      (pratap.id,Some(oneTwoThreePieIXStreet.id),Some(oneTwoThreePieIXStreet.id)),
+      (gontran.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
+      (gaitan.id,None,None))
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('testOuterJoin2)
   }
 
   def testFullOuterJoin1 {
@@ -698,7 +728,7 @@ class SchoolDb extends Schema with QueryTester {
           max(s.isMultilingual) : TypedExpressionNode[Option[Boolean]],
           min(c.startDate)  : TypedExpressionNode[Option[Date]]
         )
-      )
+      )                              
 
     try {
        q.single : GroupWithMeasures[
@@ -890,6 +920,30 @@ class SchoolDb extends Schema with QueryTester {
 
     assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
   }
+
+  def testInWithCompute = {
+
+    val z0 =
+      from(students)(s2 =>
+        where(s2.age gt 0)
+        compute(min(s2.age))
+      )
+
+
+    val q2 = (z0 : Query[Measures[Option[Int]]] ):  Query[Option[Int]]
+
+    val q3 =
+      from(students)(s =>
+        where(s.age.isNotNull and s.age.in(q2))
+        select(s)
+      )
+
+    val res = q3.single
+
+    assertEquals(5, res.id,'testInWithCompute)
+    //println("------------->" + res.id)
+    passed('testInWithCompute)
+  }  
 }
 
 
