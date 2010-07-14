@@ -18,8 +18,8 @@ package org.squeryl.dsl.ast
 
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
-import org.squeryl.Session
 import org.squeryl.dsl._
+import org.squeryl.{Schema, Session}
 
 trait ExpressionNode {
 
@@ -160,17 +160,31 @@ trait LogicalBoolean extends ExpressionNode  {
 
 class UpdateAssignment(val left: FieldMetaData, val right: ExpressionNode)
 
+class BaseColumnAttributeAssignment(val left: FieldMetaData)
+
+case class ColumnAttributeAssignment(_left: FieldMetaData, val columnAttributes: Seq[ColumnAttribute])
+  extends BaseColumnAttributeAssignment(_left)
+
+case class DefaultValueAssignment(_left: FieldMetaData, val value: TypedExpressionNode[_])
+  extends BaseColumnAttributeAssignment(_left)
+
 trait TypedExpressionNode[T] extends ExpressionNode {
 
   def sample:T = mapper.sample
 
   def mapper: OutMapper[T]
 
-  def :=[B <% TypedExpressionNode[T]] (b: B) = {
+  def :=[B <% TypedExpressionNode[T]] (b: B) =
     new UpdateAssignment(_fieldMetaData, b : TypedExpressionNode[T])
-  }
+
+  def is(columnAttributes: ColumnAttribute*)(implicit restrictUsageWithinSchema: Schema) =
+    new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
+
+  def defaultsTo[B <% TypedExpressionNode[T]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
+    new DefaultValueAssignment(_fieldMetaData, value : TypedExpressionNode[T])
 
   /**
+   * TODO: make safer with compiler plugin
    * Not type safe ! a TypedExpressionNode[T] might not be a SelectElementReference[_] that refers to a FieldSelectElement...   
    */
   private [squeryl] def _fieldMetaData = {

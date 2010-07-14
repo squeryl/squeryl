@@ -16,11 +16,12 @@
 package org.squeryl
 
 
-import dsl.{CompositeKey, ManyToManyRelation, OneToManyRelation}
+import dsl._
+import ast._
 import internals._
 import reflect.{Manifest}
 import java.sql.SQLException
-import collection.mutable.{HashSet, ArrayBuffer};
+import collection.mutable.{HashSet, ArrayBuffer}
 
 
 trait Schema {
@@ -65,11 +66,15 @@ trait Schema {
     res
   }
 
-
+  @deprecated("will be removed in a future version")
   def findTableFor[A](a: A): Option[Table[A]] = {
     val c = a.asInstanceOf[AnyRef].getClass
     _tables.find(_.posoMetaData.clasz == c).asInstanceOf[Option[Table[A]]]
   }
+
+  private def findAllTablesFor[A](c: Class[A]) =
+    _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Traversable[Table[_]]]
+
 
   object NamingConventionTransforms {
     
@@ -292,4 +297,36 @@ trait Schema {
    * default is 128 
    */
   def defaultLengthOfString = 123
+
+  /**
+   * this implicit conversion is protected since table declarations must only be done inside a Schema
+   */
+  protected implicit def table2TableDeclarations[A](t: Table[A]) = new TableDeclarations(t)
+
+  class TableDeclarations[A](table: Table[A]) {
+
+    def declareColumnAttributes(declarations: Function1[A,BaseColumnAttributeAssignment]*) = {
+
+      val colAss =
+        Utils.mapSampleObject(table, (a:A)=> declarations.map(d=> d(a)))
+
+      for(ca <- colAss) ca match {
+        case dva:DefaultValueAssignment    => dva.left._defaultValue = Some(dva.value)
+        case cas:ColumnAttributeAssignment => cas.left._columnAttributes.union(cas.columnAttributes)
+      }
+    }
+
+  def defaultColumnAttributesForKeyedEntityId = Set(new PrimaryKey, new AutoIncremented(None))
+  
+  def unique = Unique()
+
+  def primaryKey = PrimaryKey()
+
+  def autoIncremented = AutoIncremented(None)
+  
+  def autoIncremented(sequenceName: String) = AutoIncremented(Some(sequenceName))
+
+  def indexed = Indexed(None)
+
+  def indexed(indexName: String) = Indexed(Some(indexName))
 }

@@ -79,15 +79,11 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
   var id: Long = 0
   def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
   override def toString = "Professor:" + id
+}
 
-  import org.squeryl.PrimitiveTypeMode._
-  
-  //def assignments =
-    //oneToMany(this, SDB.courseAssigments) ((p, ca) => p.id === ca.professorId)
 
-  //def assign = Relation(this, SDB.courseAssigments) {}
-//  def assignments =
-//    One(this) ToMany(SDB.courseAssigments) on(p=>p.id, ca => ca.professorId)
+class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
+  var id: Long = 0
 }
 
 object SDB extends SchoolDb
@@ -116,7 +112,16 @@ class SchoolDb extends Schema with QueryTester {
   val courseSubscriptions = table[CourseSubscription]
 
   val courseAssigments = table[CourseAssignment]
-  
+
+  val schools = table[School]
+
+  schools.declareColumnAttributes(
+    _.id   is(unique),
+    _.name is(indexed("uniqueIndexName"), unique),
+    _.name defaultsTo("no name")
+  )
+
+
   val testInstance = new {
 
     drop
@@ -182,8 +187,9 @@ class SchoolDb extends Schema with QueryTester {
 
     //Must run first, because later we won't have the rows we need to perform the test
 
+
     testNewLeftOuterJoin3
-    
+
     testNewLeftOuterJoin1
 
     testNewLeftOuterJoin2
@@ -1021,7 +1027,7 @@ class SchoolDb extends Schema with QueryTester {
 
     println('testNewOuterJoin2 + " passed.")
   }
-
+  
   def testNewLeftOuterJoin3 {
     import testInstance._
 

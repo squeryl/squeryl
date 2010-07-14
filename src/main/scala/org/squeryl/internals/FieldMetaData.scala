@@ -20,7 +20,8 @@ import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import org.squeryl.annotations.{ColumnBase, Column}
-
+import org.squeryl.dsl.ast.TypedExpressionNode
+import collection.mutable.{HashSet, ArrayBuffer}
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -35,7 +36,20 @@ class FieldMetaData(
         field:  Option[Field],
         columnAnnotation: Option[Column],
         val isOptimisticCounter: Boolean) {
+  /**
+   * This field is mutable only by the Schema trait, and only during the Schema instantiation,
+   * so it can safely be considered immutable (read only) by the columnAttributes accessor 
+   */
+  private [squeryl] val _columnAttributes = new HashSet[ColumnAttribute]
 
+  _columnAttributes.appendAll(schema.defaultColumnAttributesForKeyedEntityId)
+
+  private [squeryl] var _defaultValue: Option[TypedExpressionNode[_]] = None
+
+  def columnAttributes: Iterable[ColumnAttribute] = _columnAttributes
+
+  def defaultValue: Option[TypedExpressionNode[_]] = _defaultValue
+  
   def isCustomType = customTypeFactory != None
 
   /**
@@ -107,6 +121,7 @@ class FieldMetaData(
     parentMetaData.primaryKey != None &&
     this == parentMetaData.primaryKey.get
 
+  // TODO: use columnAttribute
   var isAutoIncremented = false
 
   /**
