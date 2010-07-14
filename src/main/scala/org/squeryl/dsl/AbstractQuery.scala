@@ -16,6 +16,7 @@
 package org.squeryl.dsl
 
 import ast.{QueryableExpressionNode, ViewExpressionNode, ExpressionNode, QueryExpressionNode}
+import internal.{InnerJoinedQueryable, OuterJoinedQueryable}
 import java.sql.ResultSet
 import org.squeryl.internals._
 import org.squeryl.{View, Queryable, Session, Query}
@@ -46,6 +47,18 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val subQueries = new ArrayBuffer[QueryableExpressionNode]
 
     val views = new ArrayBuffer[ViewExpressionNode[_]]
+
+    if(qy.joinExpressions != Nil) {
+      val sqIterator = subQueryables.iterator
+      val joinExprsIterator = qy.joinExpressions.iterator 
+      sqIterator.next // get rid of the first one
+
+      while(sqIterator.hasNext) {
+        val nthQueryable = sqIterator.next
+        val nthJoinExpr = joinExprsIterator.next
+        nthQueryable.node.joinExpression = Some(nthJoinExpr())
+      }
+    }
 
     for(sq <- subQueryables)
       if(! sq.isQuery)
@@ -160,6 +173,18 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       sq.node.inhibited = oqr.inhibited
       new SubQueryable(q, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
     }
+    else if(q.isInstanceOf[OuterJoinedQueryable[U]]) {
+      val ojq = q.asInstanceOf[OuterJoinedQueryable[U]]
+      val sq = createSubQueryable[U](ojq.queryable)
+      sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
+      new SubQueryable(ojq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
+    }
+    else if(q.isInstanceOf[InnerJoinedQueryable[U]]) {
+      val ijq = q.asInstanceOf[InnerJoinedQueryable[U]]
+      val sq = createSubQueryable[U](ijq.queryable)
+      sq.node.joinKind = Some((ijq.leftRightOrFull, "inner"))
+      new SubQueryable(ijq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
+    }
     else {
       val qr = q.asInstanceOf[AbstractQuery[U]]
       val copy = qr.copy(false)
@@ -173,8 +198,18 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
      val isQuery:Boolean,
      val node: QueryableExpressionNode) {
 
-    def give(rs: ResultSet): U = 
-      if((node.isRightJoined || node.isOuterJoined) && resultSetMapper.isNoneInOuterJoin(rs))
+    def give(rs: ResultSet): U =
+      if(node.joinKind != None) {
+        if(node.isOuterJoined) {
+           if(resultSetMapper.isNoneInOuterJoin(rs))
+             None.asInstanceOf[U]
+           else
+             Some(queryable.give(resultSetMapper, rs)).asInstanceOf[U]
+        }
+        else
+          queryable.give(resultSetMapper, rs)
+      }
+      else if((node.isRightJoined || node.isOuterJoinedDEPRECATED) && resultSetMapper.isNoneInOuterJoin(rs))
         sample
       else
         queryable.give(resultSetMapper, rs)

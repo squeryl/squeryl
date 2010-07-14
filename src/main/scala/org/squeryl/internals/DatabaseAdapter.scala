@@ -53,41 +53,61 @@ trait DatabaseAdapter {
     sw.nextLine
     sw.write("From")
     sw.nextLine
-    sw.writeIndented {
-      qen.outerJoinExpressions match {
-        case Nil =>
+
+
+    if(!qen.isJoinForm) {
+      sw.writeIndented {
+        qen.outerJoinExpressionsDEPRECATED match {
+          case Nil =>
+              for(z <- qen.tableExpressions.zipi) {
+                z.element.write(sw)
+                sw.write(" ")
+                sw.write(z.element.alias)
+                if(!z.isLast) {
+                  sw.write(",")
+                  sw.nextLine
+                }
+              }
+              sw.pushPendingNextLine
+          case joinExprs =>
             for(z <- qen.tableExpressions.zipi) {
-              z.element.write(sw)
-              sw.write(" ")
-              sw.write(z.element.alias)
-              if(!z.isLast) {
-                sw.write(",")
+              if(z.isFirst) {
+                z.element.write(sw)
+                sw.write(" ")
+                sw.write(z.element.alias)
+                sw.indent
+                sw.nextLine
+              } else {
+                sw.write("inner join ")
+                z.element.write(sw)
+                sw.write(" as ")
+                sw.write(z.element.alias)
                 sw.nextLine
               }
             }
-            sw.pushPendingNextLine
-        case joinExprs =>
-          for(z <- qen.tableExpressions.zipi) {
-            if(z.isFirst) {
-              z.element.write(sw)
-              sw.write(" ")
-              sw.write(z.element.alias)
-              sw.indent
-              sw.nextLine
-            } else {
-              sw.write("inner join ")
-              z.element.write(sw)
-              sw.write(" as ")
-              sw.write(z.element.alias)
-              sw.nextLine
+            for(oje <- joinExprs.zipi) {
+              writeOuterJoinDEPRECATED(oje.element, sw)
+              if(oje.isLast)
+                sw.unindent
+              sw.pushPendingNextLine
             }
-          }
-          for(oje <- joinExprs.zipi) {
-            writeOuterJoin(oje.element, sw)
-            if(oje.isLast)
-              sw.unindent
-            sw.pushPendingNextLine
-          }
+        }
+      }
+    }
+    else {
+      val texp = qen.tableExpressions.splitAt(1)
+      val firstJoinExpr = texp._1.head
+      val restOfJoinExpr = texp._2
+      firstJoinExpr.write(sw)
+      sw.write(" ")
+      sw.write(firstJoinExpr.alias)
+      sw.nextLine
+
+      for(z <- restOfJoinExpr.zipi) {
+        writeJoin(z.element, sw)
+        if(z.isLast)
+          sw.unindent
+        sw.pushPendingNextLine
       }
     }
     
@@ -135,7 +155,7 @@ trait DatabaseAdapter {
     })
 
   
-  def writeOuterJoin(oje: OuterJoinExpression, sw: StatementWriter) = {
+  def writeOuterJoinDEPRECATED(oje: OuterJoinExpression, sw: StatementWriter) = {
     sw.write(oje.leftRightOrFull)
     sw.write(" outer join ")
     oje.queryableExpressionNode.write(sw)
@@ -143,6 +163,18 @@ trait DatabaseAdapter {
     sw.write(oje.queryableExpressionNode.alias)
     sw.write(" on ")
     oje.matchExpression.write(sw)
+  }
+
+  def writeJoin(queryableExpressionNode: QueryableExpressionNode, sw: StatementWriter) = {
+    sw.write(queryableExpressionNode.joinKind.get._1)
+    sw.write(" ")
+    sw.write(queryableExpressionNode.joinKind.get._2)
+    sw.write(" join ")
+    queryableExpressionNode.write(sw)
+    sw.write(" as ")
+    sw.write(queryableExpressionNode.alias)
+    sw.write(" on ")
+    queryableExpressionNode.joinExpression.get.write(sw)
   }
 
   def intTypeDeclaration = "int"

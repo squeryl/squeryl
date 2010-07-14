@@ -181,11 +181,27 @@ class ResultSetMapper extends ResultSetUtils {
       yvp.push(resultSet)
   }
 
+  private lazy val _firstNonOption: Option[ColumnToFieldMapper] =
+    _fieldMapper.find(!_.fieldMetaData.isOption)
+
   def isNoneInOuterJoin(rs: ResultSet): Boolean = {
-    for(c2fm <- _fieldMapper)
-      if(!c2fm.fieldMetaData.isOption)
-        return rs.getObject(c2fm.index) == null
-    false
+
+    //decide based on the nullity of the first non Option field :
+
+    if(_firstNonOption != None) {
+      return rs.getObject(_firstNonOption.get.index) == null
+    }
+
+    //if we get here all fields are optional, decide on the first Option that is not null :    
+    for(c2fm <- _fieldMapper) {
+      assert(c2fm.fieldMetaData.isOption)
+      if(rs.getObject(c2fm.index) != null)
+        return false
+    }
+    // if we get here we have matched on a row wit all nulls OR we haven't matched,
+    // this is an extreme corner case, we will return None, in reallity we should
+    // sometimes return a Some with all fields None
+    true
   }
 
   def map(o: AnyRef, resultSet: ResultSet):Unit = {

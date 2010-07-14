@@ -182,6 +182,12 @@ class SchoolDb extends Schema with QueryTester {
 
     //Must run first, because later we won't have the rows we need to perform the test
 
+    testNewLeftOuterJoin3
+    
+    testNewLeftOuterJoin1
+
+    testNewLeftOuterJoin2
+    
     if(Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter]) {
       testOuterJoinMixed1
     }
@@ -943,7 +949,111 @@ class SchoolDb extends Schema with QueryTester {
     assertEquals(5, res.id,'testInWithCompute)
     //println("------------->" + res.id)
     passed('testInWithCompute)
-  }  
+  }
+
+  def testNewJoin1 = {
+      val q =
+       join(students, addresses.leftOuter, addresses)((s,a1,a2) => {
+
+         val s0: Student = s
+         val  z0: Option[Address] = a1
+         //val  z1: Address = a1
+         val  z2: Address = a2
+         select(s,a1,a2).
+         on(s.addressId === a1.map(_.id), s.addressId === a2.id)
+       })
+
+    passed('testNewJoin1)
+  }
+
+  def testNewLeftOuterJoin1 {
+    import testInstance._
+
+    //loggerOn
+
+    val leftOuterJoinStudentAddresses =
+      join(students, addresses.leftOuter)((s,a) =>
+        select((s,a))
+        orderBy(s.id)
+        on(s.addressId === a.map(_.id))
+      )
+
+    val res =
+      (for(t <- leftOuterJoinStudentAddresses)
+       yield (t._1.id, t._2.map(a=>a.id))).toList
+
+    val expected = List(
+      (xiao.id,Some(oneHutchissonStreet.id)),
+      (georgi.id,Some(oneHutchissonStreet.id)),
+      (pratap.id,Some(oneTwoThreePieIXStreet.id)),
+      (gontran.id,Some(oneHutchissonStreet.id)),
+      (gaitan.id,None))
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    println('testNewOuterJoin1 + " passed.")
+  }
+
+  def testNewLeftOuterJoin2 {
+    import testInstance._
+
+    //loggerOn
+
+    val leftOuterJoinStudentAddresses =
+      join(students, addresses.leftOuter,addresses.leftOuter)((s,a,a2) =>
+        select((s,a,a2))
+        orderBy(s.id)
+        on(s.addressId === a.map(_.id), s.addressId === a2.map(_.id))
+      )
+
+    val res =
+      (for(t <- leftOuterJoinStudentAddresses)
+       yield (t._1.id, t._2.map(a=>a.id), t._3.map(a=>a.id))).toList
+
+    val expected = List(
+      (xiao.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
+      (georgi.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
+      (pratap.id,Some(oneTwoThreePieIXStreet.id),Some(oneTwoThreePieIXStreet.id)),
+      (gontran.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
+      (gaitan.id,None,None))
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    println('testNewOuterJoin2 + " passed.")
+  }
+
+  def testNewLeftOuterJoin3 {
+    import testInstance._
+
+    //loggerOn
+
+    val leftOuterJoinStudentAddressesAndCourseSubs =
+      join(students, addresses.leftOuter,courseSubscriptions)((s,a,cs) =>
+        select((s,a,cs))
+        orderBy(s.id, cs.courseId)
+        on(s.addressId === a.map(_.id), s.id === cs.studentId)
+      )
+
+    println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
+
+    val res =
+      (for(t <- leftOuterJoinStudentAddressesAndCourseSubs)
+       yield (t._1.id, t._2.map(a=>a.id), t._3.courseId)).toList
+
+
+    println(res)
+              
+    val expected = List(
+      (xiao.id,Some(oneHutchissonStreet.id),1),
+      (georgi.id,Some(oneHutchissonStreet.id),2),
+      (pratap.id,Some(oneTwoThreePieIXStreet.id),3),
+      (gontran.id,Some(oneHutchissonStreet.id),2),
+      (gaitan.id,None,4))
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    println('testNewOuterJoin3 + " passed.")
+  }
 }
 
 

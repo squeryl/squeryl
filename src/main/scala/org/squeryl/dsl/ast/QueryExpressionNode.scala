@@ -26,14 +26,16 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     with QueryableExpressionNode {
 
   def tableExpressions: Iterable[QueryableExpressionNode] = 
-    List(views.filter(v => ! v.isOuterJoined && ! v.inhibited),
-         subQueries.filter(v => ! v.isOuterJoined && ! v.inhibited)).flatten
+    List(views.filter(v => ! v.isOuterJoinedDEPRECATED && ! v.inhibited),
+         subQueries.filter(v => ! v.isOuterJoinedDEPRECATED && ! v.inhibited)).flatten
 
-  def outerJoinExpressions: Iterable[OuterJoinExpression] =
-    List(views.filter(v => v.isOuterJoined && ! v.inhibited),
-         subQueries.filter(v => v.isOuterJoined && ! v.inhibited))
+  def outerJoinExpressionsDEPRECATED: Iterable[OuterJoinExpression] =
+    List(views.filter(v => v.isOuterJoinedDEPRECATED && ! v.inhibited),
+         subQueries.filter(v => v.isOuterJoinedDEPRECATED && ! v.inhibited))
             .flatten.map(v => v.outerJoinExpression.get)
-  
+
+  def isJoinForm = _queryYield.joinExpressions != Nil
+
   val (whereClause, havingClause, groupByClause, orderByClause) =
      _queryYield.queryElements
 
@@ -65,7 +67,8 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       selectList.toList,
       views.toList,
       subQueries.toList,
-      outerJoinExpressions.map(oje => oje.matchExpression),
+      outerJoinExpressionsDEPRECATED.map(oje => oje.matchExpression),
+      tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get).toList,  
       whereClause.toList,
       groupByClause.toList,
       orderByClause.toList      

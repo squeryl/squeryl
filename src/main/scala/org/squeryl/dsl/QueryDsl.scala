@@ -28,6 +28,7 @@ trait QueryDsl
   with ComputeMeasuresSignaturesFromStartOrWhereState
   with StartState
   with QueryElements
+  with JoinSignatures
   with FromSignatures {
   outerQueryDsl =>
   
@@ -119,6 +120,7 @@ trait QueryDsl
   def &[A](i: =>TypedExpressionNode[A]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
 
+  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
   def leftOuterJoin[A](a: A, matchClause: =>ExpressionNode): Option[A] = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
@@ -134,6 +136,7 @@ trait QueryDsl
       Some(a)  
   }
 
+  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
   def rightOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],B) = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
@@ -149,6 +152,7 @@ trait QueryDsl
     }
   }
 
+  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
   def fullOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],Option[B]) = {
     val im = FieldReferenceLinker.isYieldInspectionMode
 
@@ -564,4 +568,5 @@ trait QueryDsl
   implicit def t3te[A1,A2,A3](t: (A1,A2,A3)) = new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
 
   implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4)) = new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
+
 }

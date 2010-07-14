@@ -15,7 +15,8 @@
  ******************************************************************************/
 package org.squeryl.dsl
 
-import ast.{ExpressionNode, QueryExpressionNode, SelectElement}
+import ast.{LogicalBoolean, ExpressionNode, QueryExpressionNode, SelectElement}
+import boilerplate._
 import org.squeryl.internals.{ResultSetMapper}
 import java.sql.ResultSet
 
@@ -30,5 +31,42 @@ trait QueryYield[R] {
     (Option[ExpressionNode],
      Option[ExpressionNode],
      Iterable[ExpressionNode],
-     Iterable[ExpressionNode])  
+     Iterable[ExpressionNode])
+
+  private [squeryl] var joinExpressions: Seq[()=>LogicalBoolean] = Nil
+
+  def on(lb1: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _)
+    new JoinQueryYield1(this)
+  }
+
+  def on(lb1: =>LogicalBoolean, lb2: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _, lb2 _)
+    new JoinQueryYield2(this)
+  }
+
+  def on(lb1: =>LogicalBoolean, lb2: =>LogicalBoolean, lb3: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _, lb2 _, lb3 _)
+    new JoinQueryYield3(this)
+  }
+
+  def on(lb1: =>LogicalBoolean, lb2: =>LogicalBoolean, lb3: =>LogicalBoolean, lb4: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _, lb2 _, lb3 _, lb4 _)
+    new JoinQueryYield4(this)
+  }
+
+  def on(lb1: =>LogicalBoolean, lb2: =>LogicalBoolean, lb3: =>LogicalBoolean, lb4: =>LogicalBoolean, lb5: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _, lb2 _, lb3 _, lb4 _, lb5 _)
+    new JoinQueryYield5(this)
+  }
+
+  def on(lb1: =>LogicalBoolean, lb2: =>LogicalBoolean, lb3: =>LogicalBoolean, lb4: =>LogicalBoolean, lb5: =>LogicalBoolean, lb6: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _, lb2 _, lb3 _, lb4 _, lb5 _, lb6 _)
+    new JoinQueryYield6(this)
+  }
+
+  def on(lb1: =>LogicalBoolean, lb2: =>LogicalBoolean, lb3: =>LogicalBoolean, lb4: =>LogicalBoolean, lb5: =>LogicalBoolean, lb6: =>LogicalBoolean, lb7: =>LogicalBoolean) = {
+    joinExpressions = Seq(lb1 _, lb2 _, lb3 _, lb4 _, lb5 _, lb6 _, lb7 _)
+    new JoinQueryYield7(this)
+  }
 }

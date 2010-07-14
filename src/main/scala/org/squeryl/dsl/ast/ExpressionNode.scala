@@ -325,14 +325,23 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
 
   def inhibited_=(b: Boolean) = _inhibited = b
 
+  // new join syntax
+  var joinKind: Option[(String,String)] = None
+
+  def isOuterJoined =
+    joinKind != None && joinKind.get._2 == "outer"
+
+  var joinExpression: Option[LogicalBoolean] = None
+
+  // this 'old' join syntax will become deprecated : 
   var outerJoinExpression: Option[OuterJoinExpression] = None
 
-  def isOuterJoined = outerJoinExpression != None
+  def isOuterJoinedDEPRECATED = outerJoinExpression != None
 
   var isRightJoined = false
   
   def dumpOuterJoinInfoForAst(sb: StringBuffer) =
-    if(isOuterJoined) {
+    if(isOuterJoinedDEPRECATED) {
       val oje = outerJoinExpression.get
       sb.append(oje.leftRightOrFull)
       sb.append("OuterJoin(")

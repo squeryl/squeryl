@@ -31,7 +31,9 @@ trait QueryExpressionElements extends ExpressionNode {
 
   def views: Iterable[QueryableExpressionNode]
 
-  def outerJoinExpressions: Iterable[OuterJoinExpression]
+  def outerJoinExpressionsDEPRECATED: Iterable[OuterJoinExpression]
+
+  def isJoinForm: Boolean
 
   def subQueries: Iterable[QueryableExpressionNode]
 
