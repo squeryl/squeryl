@@ -7,20 +7,20 @@ h2. Requirements
 
 You will need 
 
-* The Scala runtime jar, version 2.8.0.RC6
+* The Scala runtime jar, version 2.8.0 (final)
 * The Squeryl jar found "here":http://github.com/max-l/Squeryl/downloads
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
 
-h3. The recomended version is 0.9.4beta6
+h3. The recomended version is 0.9.4beta8
 
 Squeryl is available on the Maven repo @ http://nexus.scala-tools.org/
 
-the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/squeryl_2.8.0.RC6/0.9.4beta6/squeryl_2.8.0.RC6-0.9.4beta6.pom
+the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/squeryl_2.8.0/0.9.4beta8/squeryl_2.8.0-0.9.4beta8.pom
  
 * groupId : *org.squeryl*
-* artifactId: *squeryl_2.8.0.RC6*
-* version *0.9.4beta6*
+* artifactId: *squeryl_2.8.0*
+* version *0.9.4beta8*
 
 For building with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 
