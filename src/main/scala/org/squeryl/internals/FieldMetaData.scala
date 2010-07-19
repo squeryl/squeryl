@@ -82,6 +82,10 @@ class FieldMetaData(
       else
         res
     }
+
+  def isUnique = columnAnnotation != None && columnAnnotation.get.unique
+  
+  def isIndexed = columnAnnotation != None && columnAnnotation.get.indexed
   
   val resultSetHandler =
     FieldMetaData.resultSetHandlerFor(wrappedFieldType)
