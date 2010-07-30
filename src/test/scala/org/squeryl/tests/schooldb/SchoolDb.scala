@@ -25,7 +25,7 @@ import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
-import adapters.MySQLAdapter
+import adapters.{OracleAdapter, MySQLAdapter}
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -119,6 +119,7 @@ class SchoolDb extends Schema with QueryTester {
     _.id   is(unique),
     _.name is(indexed("uniqueIndexName"), unique),
     _.name defaultsTo("no name")
+    //_.addressId is(autoIncremented) currently only supported on KeyedEntity.id ... ! :(
   )
 
 
@@ -1087,7 +1088,9 @@ class Issue14 extends Schema with QueryTester {
     weight real
   )
 """)
-        stmt.execute("create sequence s_issue14")
+        //stmt.execute("create sequence s_id_issue14")
+        val seqName = (new OracleAdapter).createSequenceName(professors.posoMetaData.findFieldMetaDataForProperty("id").get)
+        stmt.execute("create sequence " + seqName)
       }
       transaction {
         // The problem is that because schema.create wasn't called in this JVM instance, the schema doesn't know

@@ -69,7 +69,7 @@ trait PersistenceStatus {
   def isPersisted: Boolean = _isPersisted
 }
 
-
+@deprecated("this trait is no longer necessary, it will disapear in a future version")
 trait IndirectKeyedEntity[K,T] extends KeyedEntity[K] {
   
   def idField: T

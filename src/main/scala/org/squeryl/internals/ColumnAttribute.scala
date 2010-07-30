@@ -21,8 +21,14 @@ trait ColumnAttribute
 
 case class Unique() extends ColumnAttribute
 
-case class AutoIncremented(nameOfSequence: Option[String]) extends ColumnAttribute
+case class AutoIncremented(var nameOfSequence: Option[String]) extends ColumnAttribute {
 
-case class Indexed(nameOfIndex: Option[String]) extends ColumnAttribute
+  override def hashCode = this.getClass.hashCode
+  
+  override def equals(any: Any) =
+    any.isInstanceOf[AutoIncremented]
+}
+
+case class Indexed(val nameOfIndex: Option[String]) extends ColumnAttribute
 
 case class PrimaryKey() extends ColumnAttribute

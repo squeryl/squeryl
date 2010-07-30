@@ -310,12 +310,39 @@ trait Schema {
       val colAss =
         Utils.mapSampleObject(table, (a:A)=> declarations.map(d=> d(a)))
 
+      // all fields that have declarations are first reset :
+      for(ca <- colAss)
+        ca.left._clearColumnAttributes
+
       for(ca <- colAss) ca match {
         case dva:DefaultValueAssignment    => dva.left._defaultValue = Some(dva.value)
-        case cas:ColumnAttributeAssignment => cas.left._columnAttributes.union(cas.columnAttributes)
+        case caa:ColumnAttributeAssignment => {
+
+          for(ca <- caa.columnAttributes)
+            (caa.left._addColumnAttribute(ca))
+        }
+      }
+
+      // Validate that a KeyedEntity.id is not left without a uniqueness constraint :
+      for(ca <- colAss.find(_.left.isIdFieldOfKeyedEntity))
+        assert(
+          ca.left.columnAttributes.exists(_.isInstanceOf[PrimaryKey]) ||
+          ca.left.columnAttributes.exists(_.isInstanceOf[Unique]),
+          "Column 'id' of table '" + table.name + "' must have a uniqueness constraint by having the column attribute primaryKey or unique"
+        )
+
+      // Validate that autoIncremented is not used on other fields than KeyedEntity[A].id :  
+      for(ca <- colAss) ca match {
+        case caa:ColumnAttributeAssignment => {
+          for(ca <- caa.columnAttributes if ca.isInstanceOf[AutoIncremented] && !(caa.left.isIdFieldOfKeyedEntity))
+            error("Field " + caa.left.nameOfProperty + " of table " + table.name +
+                  " is declared as autoIncrementeded, auto increment is currently only supported on KeyedEntity[A].id")
+        }        
+        case dva:Any => {}
       }
     }
-
+  }
+  
   def defaultColumnAttributesForKeyedEntityId = Set(new PrimaryKey, new AutoIncremented(None))
   
   def unique = Unique()

@@ -411,6 +411,9 @@ trait DatabaseAdapter {
   
   def postDropTable(t: Table[_]) = {}
 
+  def createSequenceName(fmd: FieldMetaData) = 
+    "s_" + fmd.parentMetaData.viewOrTable.name + "_" + fmd.columnName
+
   def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) = {
     sw.write(fn.name)
     sw.write("(")

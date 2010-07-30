@@ -24,7 +24,7 @@ import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
 import org.squeryl._
 
-class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
+class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: View[T]) {
 
   override def toString =
     'PosoMetaData + "[" + clasz.getSimpleName + "]" + fieldsMetaData.mkString("(",",",")")
@@ -120,8 +120,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       (isKeyedEntity && fmd.nameOfProperty == "id")
     )
 
-    if(k != None) //TODO: this is config by convention, implement override for exceptions
-      k.get.isAutoIncremented = true
 
     (fmds, k) : (Iterable[FieldMetaData], Option[FieldMetaData])
   }
