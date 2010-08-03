@@ -81,6 +81,8 @@ trait Schema {
 
   def tableNameFromClassName(tableName: String) = tableName
 
+  def name: Option[String] = None
+
   def printDml = {
 
     for(t <- _tables) {
@@ -235,7 +237,13 @@ trait Schema {
     table(tableNameFromClass(manifestT.erasure))(manifestT)
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this)
+    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this, None)
+    _addTable(t)
+    t
+  }
+
+  protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T]): Table[T] = {
+    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this, Some(prefix))
     _addTable(t)
     t
   }
