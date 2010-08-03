@@ -51,6 +51,12 @@ case class Course(var name: String, var startDate: Date, var finalExamDate: Opti
 
   def this() = this("", null, Some(new Date), 0, Some(0), false)
   override def toString = "Course:" + id + ":" + name
+
+  var rawData = {
+    val a = new Array[Byte](1)
+    a(0) = 5
+    a
+  }
 }
 
 class CourseSubscription(var courseId: Int, var studentId: Int)

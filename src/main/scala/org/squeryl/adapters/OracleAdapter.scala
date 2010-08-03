@@ -31,6 +31,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def booleanTypeDeclaration = "number(1)"
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "number"
+  override def binaryTypeDeclaration = "blob"
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 

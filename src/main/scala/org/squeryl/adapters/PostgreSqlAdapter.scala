@@ -30,7 +30,8 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def longTypeDeclaration = "bigint"
   override def bigDecimalTypeDeclaration = "numeric"
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
-  
+  override def binaryTypeDeclaration = "bytea"
+
   override def postCreateTable(s: Session, t: Table[_]) = {
 
     val sw = new StatementWriter(false, this)
