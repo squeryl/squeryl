@@ -146,10 +146,23 @@ class MusicDb extends Schema with QueryTester {
       orderBy(cd.title)
     )
 
-  def songCountPerAlbumIdJoinedWithAlbumNested =
+  lazy val songCountPerAlbumIdJoinedWithAlbumZ  =
+    from(songCountPerAlbumId(cds), cds)((sc, cd) =>
+      where(sc.key === cd.id)
+      select((cd, sc))
+      orderBy(cd.title)
+    )
+
+  def songCountPerAlbumIdJoinedWithAlbumNested_I =
     from(songCountPerAlbumIdJoinedWithAlbum)(q =>
       select(q)
       orderBy(q._1)
+    )
+
+  def songCountPerAlbumIdJoinedWithAlbumNested =
+    from(songCountPerAlbumIdJoinedWithAlbumZ)(q =>
+      select((q._1.title,q._2.measures))
+      orderBy(q._1.title)
     )
 
   //TODO: list2Queryable conversion using 'select x0 as x from dual union ...'
@@ -210,6 +223,12 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    val q = songCountPerAlbumIdJoinedWithAlbumNested    
+
+    validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, q,
+      (t:(String,Long)) => (t._1,t._2),
+      expectedSongCountPerAlbum)
+    
     testLoopInNestedInTransaction
     
     testBetweenOperator
@@ -261,10 +280,6 @@ class MusicDb extends Schema with QueryTester {
     validateQuery('selfJoinNested3Level, selfJoinNested3Level, (a:Person)=>a.lastName, List(ponchoSanchez.lastName))
 
     validateQuery('songCountPerAlbumIdJoinedWithAlbum, songCountPerAlbumIdJoinedWithAlbum,
-      (t:(String,Long)) => (t._1,t._2),
-      expectedSongCountPerAlbum)
-
-   validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, songCountPerAlbumIdJoinedWithAlbumNested,
       (t:(String,Long)) => (t._1,t._2),
       expectedSongCountPerAlbum)
 

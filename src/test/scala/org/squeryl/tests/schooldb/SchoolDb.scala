@@ -26,6 +26,7 @@ import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
 import adapters.MySQLAdapter
+import internals.FieldReferenceLinker
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -34,7 +35,7 @@ class SchoolDbObject extends KeyedEntity[Int] {
 class Student(var name: String, var lastName: String, var age: Option[Int], var gender: Int, var addressId: Option[Int], var isMultilingual: Option[Boolean])
   extends SchoolDbObject {
 
-  def this() = this(null,null,Some(0),0, Some(0), Some(false))
+  def this() = this("","",Some(0),0, Some(0), Some(false))
 
   override def toString = "Student:" + id + ":" + name
 }
@@ -182,6 +183,8 @@ class SchoolDb extends Schema with QueryTester {
 
     //Must run first, because later we won't have the rows we need to perform the test
 
+    testYieldInspectionResidue
+    
     testNewLeftOuterJoin3
     
     testNewLeftOuterJoin1
@@ -227,6 +230,7 @@ class SchoolDb extends Schema with QueryTester {
     testScalarOptionQuery
     testOptionAndNonOptionMixInComputeTuple
     testConcatWithOptionalCols
+
     testLeftOuterJoin1
     testLeftOuterJoin2
 
@@ -269,7 +273,7 @@ class SchoolDb extends Schema with QueryTester {
   def testLeftOuterJoin2 {
     import testInstance._
 
-    loggerOn
+    //loggerOn
 
     val leftOuterJoinStudentAddresses =
       from(students, addresses, addresses)((s,a,a2) =>
@@ -927,6 +931,17 @@ class SchoolDb extends Schema with QueryTester {
     assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
   }
 
+  def testYieldInspectionResidue = {
+
+    val z = from(students)(s => where(s.lastName === "Jimbao Gallois") select(s.name)).single
+
+    val r = FieldReferenceLinker.takeLastAccessedFieldReference
+
+    assert(r == None, "!!!!!!!!!!!!")
+
+    passed('testYieldInspectionResidue)
+  }
+
   def testInWithCompute = {
 
     val z0 =
@@ -1034,7 +1049,7 @@ class SchoolDb extends Schema with QueryTester {
         on(s.addressId === a.map(_.id), s.id === cs.studentId)
       )
 
-    println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
+    //println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
 
     val res =
       (for(t <- leftOuterJoinStudentAddressesAndCourseSubs)
@@ -1081,7 +1096,10 @@ class Issue14 extends Schema with QueryTester {
     weight real
   )
 """)
-        stmt.execute("create sequence s_issue14")
+        try {stmt.execute("create sequence s_issue14")}
+        catch {
+          case e:SQLException => {} 
+        }
       }
       transaction {
         // The problem is that because schema.create wasn't called in this JVM instance, the schema doesn't know

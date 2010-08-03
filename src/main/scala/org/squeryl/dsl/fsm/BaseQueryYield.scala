@@ -23,7 +23,7 @@ import java.sql.ResultSet
 
 
 class BaseQueryYield[G]
-  (val queryElementzz: QueryElements, val yieldClosure: ()=>G)
+  (val queryElementzz: QueryElements, val selectClosure: ()=>G)
   extends SelectState[G]
     with OrderBySignatures[G]
     with QueryYield[G] {
@@ -78,7 +78,7 @@ class BaseQueryYield[G]
   }
 
   def invokeYield(rsm: ResultSetMapper, rs: ResultSet): G =
-    yieldClosure()
+    selectClosure()
 
   def invokeYieldForAst(q: QueryExpressionNode[_], rsm: ResultSetMapper) =
     FieldReferenceLinker.determineColumnsUtilizedInYeldInvocation(
