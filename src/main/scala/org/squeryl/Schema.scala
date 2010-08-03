@@ -44,22 +44,22 @@ trait Schema {
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
   /**
-   * @returns a tuple of (Table[_], Table[_], ForeingKeyDeclaration) where
-   *  ._1 is the foreing key table,
+   * @returns a tuple of (Table[_], Table[_], ForeignKeyDeclaration) where
+   *  ._1 is the foreign key table,
    *  ._2 is the primary key table
-   *  ._3 is the ForeingKeyDeclaration between _1 and _2
+   *  ._3 is the ForeignKeyDeclaration between _1 and _2
    */
-  private def _activeForeingKeySpecs = {
-    val res = new ArrayBuffer[(Table[_], Table[_], ForeingKeyDeclaration)]
+  private def _activeForeignKeySpecs = {
+    val res = new ArrayBuffer[(Table[_], Table[_], ForeignKeyDeclaration)]
 
-    for( r <- _oneToManyRelations if r.foreingKeyDeclaration._isActive)
-      res.append((r.rightTable, r.leftTable, r.foreingKeyDeclaration))
+    for( r <- _oneToManyRelations if r.foreignKeyDeclaration._isActive)
+      res.append((r.rightTable, r.leftTable, r.foreignKeyDeclaration))
 
     for(r <- _manyToManyRelations) {
-      if(r.leftForeingKeyDeclaration._isActive)
-        res.append((r.thisTable, r.leftTable , r.leftForeingKeyDeclaration))
-      if(r.rightForeingKeyDeclaration._isActive)
-        res.append((r.thisTable, r.rightTable, r.rightForeingKeyDeclaration))
+      if(r.leftForeignKeyDeclaration._isActive)
+        res.append((r.thisTable, r.leftTable , r.leftForeignKeyDeclaration))
+      if(r.rightForeignKeyDeclaration._isActive)
+        res.append((r.thisTable, r.rightTable, r.rightForeignKeyDeclaration))
     }
 
     res
@@ -112,7 +112,7 @@ trait Schema {
   def create = {
     _createTables
     if(_dbAdapter.supportsForeignKeyConstraints)
-      _declareForeingKeyConstraints
+      _declareForeignKeyConstraints
 
     _createUniqueConstraints
   }
@@ -122,18 +122,18 @@ trait Schema {
     val cs = Session.currentSession
     val dba = cs.databaseAdapter
 
-    for(fk <- _activeForeingKeySpecs) {
+    for(fk <- _activeForeignKeySpecs) {
       val s = cs.connection.createStatement
-      dba.dropForeignKeyStatement(fk._1, dba.foreingKeyConstraintName(fk._1, fk._3.idWithinSchema), cs)
+      dba.dropForeignKeyStatement(fk._1, dba.foreignKeyConstraintName(fk._1, fk._3.idWithinSchema), cs)
     }
   }
 
-  private def _declareForeingKeyConstraints =
-    for(fk <- _activeForeingKeySpecs) {
+  private def _declareForeignKeyConstraints =
+    for(fk <- _activeForeignKeySpecs) {
       val fkDecl = fk._3
 
-      val fkStatement = _dbAdapter.writeForeingKeyDeclaration(
-         fk._1, fkDecl.foreingKeyColumnName,
+      val fkStatement = _dbAdapter.writeForeignKeyDeclaration(
+         fk._1, fkDecl.foreignKeyColumnName,
          fk._2, fkDecl.referencedPrimaryKey,
          fkDecl._referentialAction1,
          fkDecl._referentialAction2,
@@ -267,15 +267,19 @@ trait Schema {
 
   private var _fkIdGen = 1 
 
-  private [squeryl] def _createForeingKeyDeclaration(fkColName: String, pkColName: String) = {
-    val fkd = new ForeingKeyDeclaration(_fkIdGen, fkColName, pkColName)
+  private [squeryl] def _createForeignKeyDeclaration(fkColName: String, pkColName: String) = {
+    val fkd = new ForeignKeyDeclaration(_fkIdGen, fkColName, pkColName)
     _fkIdGen += 1
-    applyDefaultForeingKeyPolicy(fkd)
+    applyDefaultForeignKeyPolicy(fkd)
     fkd
   }
 
-  def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
-    foreingKeyDeclaration.constrainReference
+  def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
+    foreignKeyDeclaration.constrainReference
+
+  @deprecated("Use applyDefaultForeignKeyPolicy instead")
+  final def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeignKeyDeclaration) =
+    applyDefaultForeignKeyPolicy(foreingKeyDeclaration)
 
   /**
    * @return a Tuple2 with (LengthOfDecimal, Scale) that will determin the storage

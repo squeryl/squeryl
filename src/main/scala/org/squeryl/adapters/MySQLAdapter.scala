@@ -27,8 +27,8 @@ class MySQLAdapter extends DatabaseAdapter {
 
   //override def nvlToken = "ifnull"
 
-  override def writeForeingKeyDeclaration(
-    foreingKeyTable: Table[_], foreingKeyColumnName: String,
+  override def writeForeignKeyDeclaration(
+    foreignKeyTable: Table[_], foreignKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
     referentialAction2: Option[ReferentialAction],
@@ -37,11 +37,11 @@ class MySQLAdapter extends DatabaseAdapter {
     val sb = new StringBuilder(256)
 
     sb.append("alter table ")
-    sb.append(foreingKeyTable.name)
+    sb.append(foreignKeyTable.name)
     sb.append(" add constraint ")
-    sb.append(foreingKeyConstraintName(foreingKeyTable, fkId))
+    sb.append(foreignKeyConstraintName(foreignKeyTable, fkId))
     sb.append(" foreign key (")
-    sb.append(foreingKeyColumnName)
+    sb.append(foreignKeyColumnName)
     sb.append(") references ")
     sb.append(primaryKeyTable.name)
     sb.append("(")
@@ -61,8 +61,8 @@ class MySQLAdapter extends DatabaseAdapter {
     sb.toString
   }
 
-  override def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
-    "alter table " + foreingKeyTable.name + " drop foreign key " + fkName
+  override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
+    "alter table " + foreignKeyTable.name + " drop foreign key " + fkName
 
   override def isTableDoesNotExistException(e: SQLException) =
     e.getErrorCode == 1051 
@@ -78,7 +78,7 @@ class MySQLAdapter extends DatabaseAdapter {
    *
    *  http://dev.mysql.com/doc/refman/5.1/en/innodb-foreign-key-constraints.html
    *
-   *  Apparently there are other pre requisites, because creating foreing key constraints still gives :
+   *  Apparently there are other pre requisites, because creating foreign key constraints still gives :
    *
    * 		Time	Action	Response	Duration / Fetch
    *  0	1	18:26:25	alter table CourseSubscription add constraint CourseSubscriptionFK3

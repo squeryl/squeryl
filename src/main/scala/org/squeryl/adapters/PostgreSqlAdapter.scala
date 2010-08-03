@@ -73,8 +73,8 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def isTableDoesNotExistException(e: SQLException) =
    e.getSQLState.equals("42P01")
 
-  override def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
-    "alter table " + foreingKeyTable.name + " drop constraint " + fkName
+  override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
+    "alter table " + foreignKeyTable.name + " drop constraint " + fkName
 
   override def failureOfStatementRequiresRollback = true
   
