@@ -189,6 +189,8 @@ class SchoolDb extends Schema with QueryTester {
 
     //Must run first, because later we won't have the rows we need to perform the test
 
+    blobTest
+    
     testYieldInspectionResidue
     
     testNewLeftOuterJoin3
@@ -247,6 +249,24 @@ class SchoolDb extends Schema with QueryTester {
     testNotOperator
 
     drop
+  }
+
+  def blobTest = {
+    import testInstance._
+
+    var c = courses.where(_.id === counterpoint.id).single
+
+    assertEquals(c.rawData(0), 5, 'blobTest)
+
+    c.rawData(0) = 3
+
+    courses.update(c)
+
+    c = courses.where(_.id === counterpoint.id).single
+
+    assertEquals(c.rawData(0), 3, 'blobTest)
+
+    passed('blobTest)
   }
 
   def testLeftOuterJoin1 {

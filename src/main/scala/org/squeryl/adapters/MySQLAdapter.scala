@@ -28,6 +28,8 @@ class MySQLAdapter extends DatabaseAdapter {
 
   //override def nvlToken = "ifnull"
 
+  override def binaryTypeDeclaration = "blob"
+  
   override def writeForeignKeyDeclaration(
     foreignKeyTable: Table[_], foreignKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,
