@@ -636,11 +636,17 @@ trait DatabaseAdapter {
     sb.toString
   }
 
+
   def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
     sw.write(" ~ '")
     sw.write(pattern)
     sw.write("')")
+  }
+
+  def writeConcatOperator[A1,A2]( left: TypedExpressionNode[A1], right: TypedExpressionNode[A2], sw: StatementWriter) = {
+    val binaryOpNode = new BinaryOperatorNode(left, right, "||")
+    binaryOpNode.doWrite(sw)
   }
 }

@@ -20,11 +20,11 @@ import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.MusicDb
 import mutablerelations.SchoolDb2MetableRelations
-import org.squeryl.adapters.{MySQLAdapter, PostgreSqlAdapter, H2Adapter, OracleAdapter}
 import org.squeryl.{Session}
 import java.sql.{Connection, DriverManager}
 import schooldb.{Issue14, SchoolDb}
 import schooldb2.SchoolDb2Tests
+import org.squeryl.adapters._
 
 
 object Tests extends QueryTester {
@@ -67,6 +67,10 @@ object Tests extends QueryTester {
     allTests("H2", createH2TestConnection _)
   }
 
+  def allTestsOnDB2 = {
+    allTests("DB2", createDB2TestConnection _)
+  }
+
   def allTestsOnAllDatabases = {
 
     allTests("PosgreSQL", createPostgreSqlTestConnection _)
@@ -78,6 +82,8 @@ object Tests extends QueryTester {
     issue14Test
 
     allTests("H2", createH2TestConnection _)
+
+    allTests("DB2", createDB2TestConnection _)
   }
 
   def dumpResourceClosingPolicyOfAllDrivers = {
@@ -86,6 +92,7 @@ object Tests extends QueryTester {
     testConnectionClose(createOracleTestConnection)
     testConnectionClose(createMySQLTestConnection)
     testConnectionClose(createH2TestConnection)
+    testConnectionClose(createDB2TestConnection)
   }
 
   def allTests(dbName: String, s: ()=>Session) = {
@@ -181,4 +188,12 @@ object Tests extends QueryTester {
     
     Session.create(c,new MySQLAdapter)
   }
+
+  def createDB2TestConnection = {
+      Class.forName("com.ibm.db2.jcc.DB2Driver")
+      val c = DriverManager.getConnection("jdbc:db2://localhost:50000/squeryl", "squeryl", "squeryl")
+
+      Session.create(c, new DB2Adapter )
+  }
+
 }
