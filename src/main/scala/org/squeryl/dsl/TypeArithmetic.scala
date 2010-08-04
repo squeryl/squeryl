@@ -30,7 +30,10 @@ class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper
 
 class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
-class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||")
+class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||") {
+  override def doWrite(sw: StatementWriter) =
+      sw.databaseAdapter.writeConcatOperator(a1, a2, sw)
+}
 
 class NonNumericalCoalesce[A1,A2](val a1: NonNumericalExpression[A1], val a2: NonNumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 

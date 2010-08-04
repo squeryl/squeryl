@@ -615,4 +615,10 @@ trait DatabaseAdapter {
     sb.append(")")
     sb.toString
   }
+
+  def writeConcatOperator[A1,A2]( left: TypedExpressionNode[A1], right: TypedExpressionNode[A2], sw: StatementWriter) = {
+    val binaryOpNode = new BinaryOperatorNode(left, right, "||")
+    binaryOpNode.doWrite(sw)
+  }
+
 }
