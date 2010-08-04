@@ -196,6 +196,14 @@ class OracleAdapter extends DatabaseAdapter {
     val r = shrinkTo30AndPreserveUniquenessInScope(name, foreignKeyTable.schema._namingScope)
     r
   }
+
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write(" REGEXP_LIKE(")
+    left.write(sw)
+    sw.write(",'")
+    sw.write(pattern)
+    sw.write("')")
+  }  
 }
 
 

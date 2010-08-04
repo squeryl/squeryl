@@ -15,9 +15,10 @@
  ******************************************************************************/
 package org.squeryl.adapters
 
-import org.squeryl.internals.{DatabaseAdapter}
 import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
+import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.dsl.ast.ExpressionNode
 
 class MySQLAdapter extends DatabaseAdapter {
 
@@ -92,4 +93,12 @@ class MySQLAdapter extends DatabaseAdapter {
    */
 
   override def supportsForeignKeyConstraints = false
+
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write("(")
+    left.write(sw)
+    sw.write(" regexp '")
+    sw.write(pattern)
+    sw.write("')")
+  }
 }

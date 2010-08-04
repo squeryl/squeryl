@@ -635,4 +635,12 @@ trait DatabaseAdapter {
     sb.append(")")
     sb.toString
   }
+
+  def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write("(")
+    left.write(sw)
+    sw.write(" ~ '")
+    sw.write(pattern)
+    sw.write("')")
+  }
 }

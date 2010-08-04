@@ -18,7 +18,9 @@ package org.squeryl.tests.musicdb
 import java.sql.SQLException
 import org.squeryl.tests.QueryTester
 import org.squeryl._
-import dsl.{Measures, GroupWithMeasures}
+import adapters.H2Adapter
+import dsl.ast.BinaryOperatorNodeLogicalBoolean
+import dsl.{StringExpression, Measures, GroupWithMeasures}
 
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
@@ -222,7 +224,13 @@ class MusicDb extends Schema with QueryTester {
 
   def working = {
     import testInstance._
+    
+    testRegexFunctionSupport
 
+    //testUpperAndLowerFuncs
+    
+    testCustomRegexFunctionSupport
+    
     val q = songCountPerAlbumIdJoinedWithAlbumNested    
 
     validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, q,
@@ -297,6 +305,70 @@ class MusicDb extends Schema with QueryTester {
     testUpdate1
   }
 
+
+  implicit def sExpr[E <% StringExpression[_]](s: E) = new RegexCall(s)
+  
+  class RegexCall(left: StringExpression[_]) {    
+
+    def regexC(e: String)  = new BinaryOperatorNodeLogicalBoolean(left, e, "~")
+  }
+
+  def testCustomRegexFunctionSupport =
+    if(Session.currentSession.databaseAdapter.isInstanceOf[H2Adapter]) {
+
+      val q =
+        from(artists)(a=>
+          where(a.firstName.regexC(".*on.*"))
+          select(a.firstName)
+          orderBy(a.firstName)
+        )
+
+      import testInstance._
+      
+      assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
+
+      passed('testCustomRegexFunctionSupport)
+    }
+
+
+  def testRegexFunctionSupport = {
+
+      val q =
+        from(artists)(a=>
+          where(a.firstName.regex(".*on.*"))
+          select(a.firstName)
+          orderBy(a.firstName)
+        )
+
+      import testInstance._
+
+      assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
+
+      passed('testRegexFunctionSupport)
+    }
+
+
+  def testUpperAndLowerFuncs = {
+
+      val q =
+        from(artists)(a=>
+          where(a.firstName.regex(".*on.*"))
+          select(&(upper(a.firstName) || lower(a.firstName)))
+          orderBy(a.firstName)
+        )
+
+    println(q.statement)
+    
+      import testInstance._
+
+      val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s.toUpperCase + s.toLowerCase)
+
+      assertEquals(expected, q.toList, 'testUpperAndLowerFuncs)
+
+      passed('testUpperAndLowerFuncs)
+    }
+
+  
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))
