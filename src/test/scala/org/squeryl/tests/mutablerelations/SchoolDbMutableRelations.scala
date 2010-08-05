@@ -70,8 +70,8 @@ object SchoolDb2 extends Schema {
     via((s,c) => s.id === c.subjectId)
 
   // the default constraint for all foreign keys in this schema :
-  override def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
-    foreingKeyDeclaration.constrainReference
+  override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
+    foreignKeyDeclaration.constrainReference
 
   override def drop = super.drop
 }

@@ -305,7 +305,7 @@ trait QueryDsl
 
     /**
      * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
-     * and where ._2 is the foreing key of the association object/table
+     * and where ._2 is the foreign key of the association object/table
      */
     private def _splitEquality(ee: EqualityExpression) =
       if(ee.left._fieldMetaData.parentMetaData.clasz == aClass) {
@@ -321,11 +321,11 @@ trait QueryDsl
 
     private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr)
 
-    val leftForeingKeyDeclaration =
-      schema._createForeingKeyDeclaration(leftFkFmd.columnName, leftPkFmd.columnName)
+    val leftForeignKeyDeclaration =
+      schema._createForeignKeyDeclaration(leftFkFmd.columnName, leftPkFmd.columnName)
 
-    val rightForeingKeyDeclaration =
-      schema._createForeingKeyDeclaration(rightFkFmd.columnName, rightPkFmd.columnName)
+    val rightForeignKeyDeclaration =
+      schema._createForeignKeyDeclaration(rightFkFmd.columnName, rightPkFmd.columnName)
     
     private def _associate[T <: KeyedEntity[_]](o: T, m2m: ManyToMany[T,A]): A = {
       val aInst = m2m.assign(o)
@@ -506,8 +506,8 @@ trait QueryDsl
        ee_.right.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
     }
 
-    val foreingKeyDeclaration =
-      schema._createForeingKeyDeclaration(_rightFkFmd.columnName, _leftPkFmd.columnName)
+    val foreignKeyDeclaration =
+      schema._createForeignKeyDeclaration(_rightFkFmd.columnName, _leftPkFmd.columnName)
     
     def left(leftSide: O): OneToMany[M] = {
           

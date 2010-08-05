@@ -36,7 +36,7 @@ object Utils {
 
   private def _failSafeString(s: ()=>String, valueOnFail: String) =
     try {
-      s
+      s()
     }
     catch {
       case e:Exception => valueOnFail

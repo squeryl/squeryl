@@ -173,13 +173,21 @@ object FieldReferenceLinker {
    * if (the assumption) was broken.   
    */
 
-  def determineColumnsUtilizedInYeldInvocation(q: QueryExpressionNode[_], rsm: ResultSetMapper, yieldClosure: ()=>AnyRef) = {
+  def determineColumnsUtilizedInYeldInvocation(q: QueryExpressionNode[_], rsm: ResultSetMapper, selectClosure: ()=>AnyRef) = {
     
     val yi = _yieldInspectionTL.get
     var result:(List[SelectElement],AnyRef) = null
     try {
       yi.turnOn(q, rsm)
-      val res0 = yieldClosure()
+
+      val prev = _lastAccessedFieldReference
+      val res0 =
+        try {
+          selectClosure()
+        }
+        finally {
+          _lastAccessedFieldReference = prev
+        }
 
       if(res0 == null)
         error("query " + q + " yielded null")
@@ -212,7 +220,10 @@ object FieldReferenceLinker {
     for(f <-o.getClass.getDeclaredFields) {
       f.setAccessible(true);
       val ob = f.get(o)
-      _populateSelectColsRecurse(visited, yi, q, ob)
+
+      // don't follow closures 
+      if(! f.getType.getName.startsWith("scala.Function"))
+        _populateSelectColsRecurse(visited, yi, q, ob)
     }
   }
   

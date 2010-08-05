@@ -96,10 +96,12 @@ trait ReferentialAction {
 }
 
 /**
- * ForeingKeyDeclaration are to be manipulated only during the Schema definition
+ * ForeignKeyDeclaration are to be manipulated only during the Schema definition
  * (this is why all public methods have the implicit arg (implicit ev: Schema))
  */
-class ForeingKeyDeclaration(val idWithinSchema: Int, val foreingKeyColumnName: String, val referencedPrimaryKey: String) {
+class ForeignKeyDeclaration(val idWithinSchema: Int, val foreignKeyColumnName: String, val referencedPrimaryKey: String) {
+  @deprecated("Use foreignKeyColumnName instead")
+  final def foreingKeyColumnName = foreignKeyColumnName
 
   private var _referentialActions: Option[(Option[ReferentialAction],Option[ReferentialAction])] = None
 
@@ -113,27 +115,27 @@ class ForeingKeyDeclaration(val idWithinSchema: Int, val foreingKeyColumnName: S
     _referentialActions.get._2
 
   /**
-   * Causes the foreing key to have no constraint 
+   * Causes the foreign key to have no constraint 
    */
   def unConstrainReference()(implicit ev: Schema) =
     _referentialActions = None
 
   /**
-   * Will cause a foreing key constraint to be created at schema creation time :
-   * alter table <tableOfForeingKey> add foreing key (<foreingKey>) references <tableOfPrimaryKey>(<primaryKey>)
+   * Will cause a foreign key constraint to be created at schema creation time :
+   * alter table <tableOfForeignKey> add foreign key (<foreignKey>) references <tableOfPrimaryKey>(<primaryKey>)
    */
   def constrainReference()(implicit ev: Schema) =
     _referentialActions = Some((None, None))
 
   /**
-   * Does the same as constrainReference, plus adds a ReferentialAction (ex.: foreingKeyDeclaration.constrainReference(onDelete cascade)) 
+   * Does the same as constrainReference, plus adds a ReferentialAction (ex.: foreignKeyDeclaration.constrainReference(onDelete cascade)) 
    */
   def constrainReference(a1: ReferentialAction)(implicit ev: Schema) =
     _referentialActions = Some((Some(a1), None))
 
   /**
    * Does the same as constrainReference, plus adds two ReferentialActions
-   * (ex.: foreingKeyDeclaration.constrainReference(onDelete cascade, onUpdate restrict)) 
+   * (ex.: foreignKeyDeclaration.constrainReference(onDelete cascade, onUpdate restrict)) 
    */
   def constrainReference(a1: ReferentialAction, a2: ReferentialAction)(implicit ev: Schema) =
     _referentialActions = Some((Some(a1), Some(a2)))

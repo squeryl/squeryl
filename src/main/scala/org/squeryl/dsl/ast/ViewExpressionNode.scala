@@ -39,24 +39,26 @@ class ViewExpressionNode[U](val view: View[U])
   private def getOrCreateSelectElement(fmd: FieldMetaData, export: Boolean): SelectElement = {
 
     val e = _selectElements.get(fmd)
-    if(e == None) {
-      val r = new FieldSelectElement(this, fmd, resultSetMapper)
-      _selectElements.put(fmd, r)
-      r
-    }
-    else {
-      if(export)
-        new ExportedSelectElement(e.get)
-      else
+    val n =
+      if(e != None)
         e.get
-    }
+      else {
+        val r = new FieldSelectElement(this, fmd, resultSetMapper)
+        _selectElements.put(fmd, r)
+        r
+      }
+
+    if(export)
+      new ExportedSelectElement(n)
+    else
+      n
   }
 
   def getOrCreateSelectElement(fmd: FieldMetaData): SelectElement =
-    getOrCreateSelectElement(fmd: FieldMetaData, false)
+    getOrCreateSelectElement(fmd, false)
 
   def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements): SelectElement =
-    getOrCreateSelectElement(fmd: FieldMetaData, ! forScope.isChild(this))
+    getOrCreateSelectElement(fmd, ! forScope.isChild(this))
 
 
   val resultSetMapper = new ResultSetMapper

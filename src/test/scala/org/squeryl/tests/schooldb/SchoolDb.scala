@@ -26,6 +26,8 @@ import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
 import adapters.{OracleAdapter, MySQLAdapter}
+import internals.FieldReferenceLinker
+
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -34,7 +36,7 @@ class SchoolDbObject extends KeyedEntity[Int] {
 class Student(var name: String, var lastName: String, var age: Option[Int], var gender: Int, var addressId: Option[Int], var isMultilingual: Option[Boolean])
   extends SchoolDbObject {
 
-  def this() = this(null,null,Some(0),0, Some(0), Some(false))
+  def this() = this("","",Some(0),0, Some(0), Some(false))
 
   override def toString = "Student:" + id + ":" + name
 }
@@ -50,6 +52,12 @@ case class Course(var name: String, var startDate: Date, var finalExamDate: Opti
 
   def this() = this("", null, Some(new Date), 0, Some(0), false)
   override def toString = "Course:" + id + ":" + name
+
+  var rawData = {
+    val a = new Array[Byte](1)
+    a(0) = 5
+    a
+  }
 }
 
 class CourseSubscription(var courseId: Int, var studentId: Int)
@@ -188,6 +196,9 @@ class SchoolDb extends Schema with QueryTester {
 
     //Must run first, because later we won't have the rows we need to perform the test
 
+    blobTest
+    
+    testYieldInspectionResidue
 
     testNewLeftOuterJoin3
 
@@ -234,6 +245,7 @@ class SchoolDb extends Schema with QueryTester {
     testScalarOptionQuery
     testOptionAndNonOptionMixInComputeTuple
     testConcatWithOptionalCols
+
     testLeftOuterJoin1
     testLeftOuterJoin2
 
@@ -244,6 +256,24 @@ class SchoolDb extends Schema with QueryTester {
     testNotOperator
 
     drop
+  }
+
+  def blobTest = {
+    import testInstance._
+
+    var c = courses.where(_.id === counterpoint.id).single
+
+    assertEquals(c.rawData(0), 5, 'blobTest)
+
+    c.rawData(0) = 3
+
+    courses.update(c)
+
+    c = courses.where(_.id === counterpoint.id).single
+
+    assertEquals(c.rawData(0), 3, 'blobTest)
+
+    passed('blobTest)
   }
 
   def testLeftOuterJoin1 {
@@ -276,7 +306,7 @@ class SchoolDb extends Schema with QueryTester {
   def testLeftOuterJoin2 {
     import testInstance._
 
-    loggerOn
+    //loggerOn
 
     val leftOuterJoinStudentAddresses =
       from(students, addresses, addresses)((s,a,a2) =>
@@ -934,6 +964,17 @@ class SchoolDb extends Schema with QueryTester {
     assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
   }
 
+  def testYieldInspectionResidue = {
+
+    val z = from(students)(s => where(s.lastName === "Jimbao Gallois") select(s.name)).single
+
+    val r = FieldReferenceLinker.takeLastAccessedFieldReference
+
+    assert(r == None, "!!!!!!!!!!!!")
+
+    passed('testYieldInspectionResidue)
+  }
+
   def testInWithCompute = {
 
     val z0 =
@@ -1041,7 +1082,7 @@ class SchoolDb extends Schema with QueryTester {
         on(s.addressId === a.map(_.id), s.id === cs.studentId)
       )
 
-    println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
+    //println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
 
     val res =
       (for(t <- leftOuterJoinStudentAddressesAndCourseSubs)
@@ -1088,9 +1129,13 @@ class Issue14 extends Schema with QueryTester {
     weight real
   )
 """)
+
         //stmt.execute("create sequence s_id_issue14")
         val seqName = (new OracleAdapter).createSequenceName(professors.posoMetaData.findFieldMetaDataForProperty("id").get)
-        stmt.execute("create sequence " + seqName)
+        try {stmt.execute("create sequence " + seqName)}
+        catch {
+          case e:SQLException => {} 
+        }
       }
       transaction {
         // The problem is that because schema.create wasn't called in this JVM instance, the schema doesn't know

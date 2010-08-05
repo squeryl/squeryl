@@ -18,7 +18,9 @@ package org.squeryl.tests.musicdb
 import java.sql.SQLException
 import org.squeryl.tests.QueryTester
 import org.squeryl._
-import dsl.{Measures, GroupWithMeasures}
+import adapters.H2Adapter
+import dsl.ast.BinaryOperatorNodeLogicalBoolean
+import dsl.{StringExpression, Measures, GroupWithMeasures}
 
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
@@ -146,10 +148,23 @@ class MusicDb extends Schema with QueryTester {
       orderBy(cd.title)
     )
 
-  def songCountPerAlbumIdJoinedWithAlbumNested =
+  lazy val songCountPerAlbumIdJoinedWithAlbumZ  =
+    from(songCountPerAlbumId(cds), cds)((sc, cd) =>
+      where(sc.key === cd.id)
+      select((cd, sc))
+      orderBy(cd.title)
+    )
+
+  def songCountPerAlbumIdJoinedWithAlbumNested_I =
     from(songCountPerAlbumIdJoinedWithAlbum)(q =>
       select(q)
       orderBy(q._1)
+    )
+
+  def songCountPerAlbumIdJoinedWithAlbumNested =
+    from(songCountPerAlbumIdJoinedWithAlbumZ)(q =>
+      select((q._1.title,q._2.measures))
+      orderBy(q._1.title)
     )
 
   //TODO: list2Queryable conversion using 'select x0 as x from dual union ...'
@@ -210,6 +225,20 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testConcatFunc
+    
+    testRegexFunctionSupport
+
+    testUpperAndLowerFuncs
+    
+    testCustomRegexFunctionSupport
+    
+    val q = songCountPerAlbumIdJoinedWithAlbumNested    
+
+    validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, q,
+      (t:(String,Long)) => (t._1,t._2),
+      expectedSongCountPerAlbum)
+    
     testLoopInNestedInTransaction
     
     testBetweenOperator
@@ -264,10 +293,6 @@ class MusicDb extends Schema with QueryTester {
       (t:(String,Long)) => (t._1,t._2),
       expectedSongCountPerAlbum)
 
-   validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, songCountPerAlbumIdJoinedWithAlbumNested,
-      (t:(String,Long)) => (t._1,t._2),
-      expectedSongCountPerAlbum)
-
     validateQuery('artistsInvolvedInSongsm, artistsInvolvedInSongs(List(watermelonMan.id)),
       (a:Person) => a.id, List(ponchoSanchez.id, herbyHancock.id))
 
@@ -282,6 +307,89 @@ class MusicDb extends Schema with QueryTester {
     testUpdate1
   }
 
+
+  implicit def sExpr[E <% StringExpression[_]](s: E) = new RegexCall(s)
+  
+  class RegexCall(left: StringExpression[_]) {    
+
+    def regexC(e: String)  = new BinaryOperatorNodeLogicalBoolean(left, e, "~")
+  }
+
+  def testCustomRegexFunctionSupport =
+    if(Session.currentSession.databaseAdapter.isInstanceOf[H2Adapter]) {
+
+      val q =
+        from(artists)(a=>
+          where(a.firstName.regexC(".*on.*"))
+          select(a.firstName)
+          orderBy(a.firstName)
+        )
+
+      import testInstance._
+      
+      assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
+
+      passed('testCustomRegexFunctionSupport)
+    }
+
+
+  def testRegexFunctionSupport = {
+
+      val q =
+        from(artists)(a=>
+          where(a.firstName.regex(".*on.*"))
+          select(a.firstName)
+          orderBy(a.firstName)
+        )
+
+      import testInstance._
+
+      assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
+
+      passed('testRegexFunctionSupport)
+    }
+
+
+  def testUpperAndLowerFuncs = {
+
+      val q =
+        from(artists)(a=>
+          where(a.firstName.regex(".*on.*"))
+          select(&(upper(a.firstName) || lower(a.firstName)))
+          orderBy(a.firstName)
+        )
+
+    println(q.statement)
+    
+      import testInstance._
+
+      val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s.toUpperCase + s.toLowerCase)
+
+      assertEquals(expected, q.toList, 'testUpperAndLowerFuncs)
+
+      passed('testUpperAndLowerFuncs)
+    }
+
+
+  def testConcatFunc = {
+    import testInstance._
+    
+      val q =
+        from(artists)(a=>
+          where(a.firstName in(Seq(mongoSantaMaria.firstName, ponchoSanchez.firstName)))
+          select(&(a.firstName || "zozo"))
+          orderBy(a.firstName)
+        )
+
+    println(q.statement)
+
+      val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s + "zozo")
+
+      assertEquals(expected, q.toList, 'testConcatFunc)
+
+      passed('testConcatFunc)
+    }
+  
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))

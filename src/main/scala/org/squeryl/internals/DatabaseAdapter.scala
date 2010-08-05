@@ -188,6 +188,7 @@ trait DatabaseAdapter {
   def bigDecimalTypeDeclaration = "decimal"
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   def timestampTypeDeclaration = "date"
+  def binaryTypeDeclaration = "binary"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
 
@@ -201,6 +202,7 @@ trait DatabaseAdapter {
     def handleFloatType = floatTypeDeclaration
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
     def handleTimestampType = timestampTypeDeclaration
+    def handleBinaryType = binaryTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
@@ -544,11 +546,31 @@ trait DatabaseAdapter {
    */
   def isNotNullConstraintViolation(e: SQLException): Boolean = false  
 
+  @deprecated("Use foreignKeyConstraintName instead")
   def foreingKeyConstraintName(foreingKeyTable: Table[_], idWithinSchema: Int) =
-    foreingKeyTable.name + "FK" + idWithinSchema
+    foreignKeyConstraintName(foreingKeyTable, idWithinSchema)
 
+  def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
+    foreignKeyTable.name + "FK" + idWithinSchema
+
+  @deprecated("Use writeForeignKeyDeclaration instead")
   def writeForeingKeyDeclaration(
     foreingKeyTable: Table[_], foreingKeyColumnName: String,
+    primaryKeyTable: Table[_], primaryKeyColumnName: String,
+    referentialAction1: Option[ReferentialAction],
+    referentialAction2: Option[ReferentialAction],
+    fkId: Int) =
+      writeForeignKeyDeclaration(
+	foreingKeyTable,
+	foreingKeyColumnName,
+	primaryKeyTable,
+	primaryKeyColumnName,
+	referentialAction1: Option[ReferentialAction],
+	referentialAction2: Option[ReferentialAction],
+	fkId)
+
+  def writeForeignKeyDeclaration(
+    foreignKeyTable: Table[_], foreignKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
     referentialAction2: Option[ReferentialAction],
@@ -557,11 +579,11 @@ trait DatabaseAdapter {
     val sb = new StringBuilder(256)
 
     sb.append("alter table ")
-    sb.append(foreingKeyTable.name)
+    sb.append(foreignKeyTable.name)
     sb.append(" add constraint ")
-    sb.append(foreingKeyConstraintName(foreingKeyTable, fkId))
+    sb.append(foreignKeyConstraintName(foreignKeyTable, fkId))
     sb.append(" foreign key (")
-    sb.append(foreingKeyColumnName)
+    sb.append(foreignKeyColumnName)
     sb.append(") references ")
     sb.append(primaryKeyTable.name)
     sb.append("(")
@@ -584,11 +606,11 @@ trait DatabaseAdapter {
   protected def currenSession =
     Session.currentSession
 
-  def writeDropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String) =
-    "alter table " + foreingKeyTable.name + " drop constraint " + fkName
+  def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
+    "alter table " + foreignKeyTable.name + " drop constraint " + fkName
 
-  def dropForeignKeyStatement(foreingKeyTable: Table[_], fkName: String, session: Session):Unit =
-    execFailSafeExecute(writeDropForeignKeyStatement(foreingKeyTable, fkName), e => true)
+  def dropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String, session: Session):Unit =
+    execFailSafeExecute(writeDropForeignKeyStatement(foreignKeyTable, fkName), e => true)
 
   def isTableDoesNotExistException(e: SQLException): Boolean
 
@@ -615,5 +637,19 @@ trait DatabaseAdapter {
     sb.append(cols.map(_.columnName).mkString(","))
     sb.append(")")
     sb.toString
+  }
+
+
+  def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write("(")
+    left.write(sw)
+    sw.write(" ~ '")
+    sw.write(pattern)
+    sw.write("')")
+  }
+
+  def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
+    val binaryOpNode = new BinaryOperatorNode(left, right, "||")
+    binaryOpNode.doWrite(sw)
   }
 }

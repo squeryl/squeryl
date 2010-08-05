@@ -16,7 +16,8 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.{Query}
+import org.squeryl.{Session, Query}
+import org.squeryl.internals.StatementWriter
 
 trait FieldTypes {
   self: TypeArithmetic =>
@@ -132,13 +133,20 @@ trait BooleanExpression[A] extends NonNumericalExpression[A] {
 }
 
 trait StringExpression[A] extends NonNumericalExpression[A] {
-
+  outer =>
+  
   def in(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "in")
   def notIn(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "not in")
 
   //def between(lower: BaseScalarString, upper: BaseScalarString): LogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with LogicalBoolean
   def like(e: StringExpression[_])  = new BinaryOperatorNodeLogicalBoolean(this, e, "like")
 
+  def regex(pattern: String) = new FunctionNode(pattern, this) with LogicalBoolean {
+
+    override def doWrite(sw: StatementWriter) =
+      Session.currentSession.databaseAdapter.writeRegexExpression(outer, pattern, sw) 
+  }
+  
   def ~ = this
 }
 

@@ -71,15 +71,15 @@ object SchoolDb2 extends Schema {
     via((s,c) => s.id === c.subjectId)
 
   // the default constraint for all foreign keys in this schema :
-  override def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
-    foreingKeyDeclaration.constrainReference
+  override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
+    foreignKeyDeclaration.constrainReference
 
-  //now we will redefine some of the foreing key constraints :
+  //now we will redefine some of the foreign key constraints :
   //if we delete a subject, we want all courses to be deleted
-  subjectToCourses.foreingKeyDeclaration.constrainReference(onDelete cascade)
+  subjectToCourses.foreignKeyDeclaration.constrainReference(onDelete cascade)
 
   //when a course is deleted, all of the subscriptions will get deleted :
-  courseSubscriptions.leftForeingKeyDeclaration.constrainReference(onDelete cascade)
+  courseSubscriptions.leftForeignKeyDeclaration.constrainReference(onDelete cascade)
 
   override def drop = super.drop
 }

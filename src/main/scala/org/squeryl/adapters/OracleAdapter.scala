@@ -31,6 +31,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def booleanTypeDeclaration = "number(1)"
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "number"
+  override def binaryTypeDeclaration = "blob"
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
@@ -220,11 +221,19 @@ class OracleAdapter extends DatabaseAdapter {
   override def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
     sw.write(shrinkTo30AndPreserveUniquenessInScope(se.alias, sw.scope))
 
-  override def foreingKeyConstraintName(foreingKeyTable: Table[_], idWithinSchema: Int) = {
-    val name = super.foreingKeyConstraintName(foreingKeyTable, idWithinSchema)
-    val r = shrinkTo30AndPreserveUniquenessInScope(name, foreingKeyTable.schema._namingScope)
+  override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) = {
+    val name = super.foreignKeyConstraintName(foreignKeyTable, idWithinSchema)
+    val r = shrinkTo30AndPreserveUniquenessInScope(name, foreignKeyTable.schema._namingScope)
     r
   }
+
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write(" REGEXP_LIKE(")
+    left.write(sw)
+    sw.write(",'")
+    sw.write(pattern)
+    sw.write("')")
+  }  
 }
 
 

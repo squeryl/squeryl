@@ -15,7 +15,7 @@
  ******************************************************************************/
 package org.squeryl.dsl
 
-import org.squeryl.{ForeingKeyDeclaration, Table, Query, KeyedEntity}
+import org.squeryl.{ForeignKeyDeclaration, Table, Query, KeyedEntity}
 import collection.mutable.{HashMap, ArrayBuffer, Buffer}
 
 trait Relation[L <: KeyedEntity[_],R <: KeyedEntity[_]] {
@@ -27,7 +27,10 @@ trait Relation[L <: KeyedEntity[_],R <: KeyedEntity[_]] {
 
 trait OneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]] extends Relation[O,M] {
 
-  def foreingKeyDeclaration: ForeingKeyDeclaration
+  def foreignKeyDeclaration: ForeignKeyDeclaration
+
+  @deprecated("Use foreignKeyDeclaration instead")
+  final def foreingKeyDeclaration = foreignKeyDeclaration
   
   def left(leftSide: O): OneToMany[M]
 
@@ -92,9 +95,15 @@ trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEnt
 
   def thisTable: Table[A]
 
-  def leftForeingKeyDeclaration: ForeingKeyDeclaration
+  def leftForeignKeyDeclaration: ForeignKeyDeclaration
 
-  def rightForeingKeyDeclaration: ForeingKeyDeclaration
+  @deprecated("Use leftForeignKeyDeclaration instead")
+  final def leftForeingKeyDeclaration = leftForeignKeyDeclaration
+
+  def rightForeignKeyDeclaration: ForeignKeyDeclaration
+  
+  @deprecated("Use rightForeignKeyDeclaration instead")
+  final def rightForeingKeyDeclaration = rightForeignKeyDeclaration
 
   def left(leftSide: L): ManyToMany[R,A]
 
@@ -124,7 +133,7 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
   /**
    * @param a: the association object
    * 
-   * Sets the foreing keys of the association object to the primary keys of the left and right side,
+   * Sets the foreign keys of the association object to the primary keys of the left and right side,
    * this method does not update the database, changes to the association object must be done for
    * the operation to be persisted. Alternatively the method 'associate(o, a)' will call this assign(o, a)
    * and persist the changes.  
@@ -148,7 +157,7 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
    * Creates a new association object 'a' and calls associate(o,a)
    *
    * Note that this method will fail if the association object has NOT NULL constraint fields appart from the
-   * foreing keys in the relations
+   * foreign keys in the relations
    *  
    */
   def associate(o: O): A
@@ -228,7 +237,7 @@ trait OneToMany[M] extends Query[M] {
   /**
    * @param the object on the 'many side' to be associated with this
    *
-   *  Sets the foreing key of 'm' to refer to the primary key of the 'one' instance
+   *  Sets the foreign key of 'm' to refer to the primary key of the 'one' instance
    */
   def assign(m: M): Unit
 
