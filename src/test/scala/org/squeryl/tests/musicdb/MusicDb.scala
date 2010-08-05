@@ -224,10 +224,12 @@ class MusicDb extends Schema with QueryTester {
 
   def working = {
     import testInstance._
+
+    testConcatFunc
     
     testRegexFunctionSupport
 
-    //testUpperAndLowerFuncs
+    testUpperAndLowerFuncs
     
     testCustomRegexFunctionSupport
     
@@ -368,6 +370,25 @@ class MusicDb extends Schema with QueryTester {
       passed('testUpperAndLowerFuncs)
     }
 
+
+  def testConcatFunc = {
+    import testInstance._
+    
+      val q =
+        from(artists)(a=>
+          where(a.firstName in(Seq(mongoSantaMaria.firstName, ponchoSanchez.firstName)))
+          select(&(a.firstName || "zozo"))
+          orderBy(a.firstName)
+        )
+
+    println(q.statement)
+
+      val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s + "zozo")
+
+      assertEquals(expected, q.toList, 'testConcatFunc)
+
+      passed('testConcatFunc)
+    }
   
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)

@@ -18,7 +18,7 @@ package org.squeryl.adapters
 import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
-import org.squeryl.dsl.ast.ExpressionNode
+import org.squeryl.dsl.ast.{BinaryOperatorNode, ExpressionNode}
 
 class MySQLAdapter extends DatabaseAdapter {
 
@@ -102,5 +102,13 @@ class MySQLAdapter extends DatabaseAdapter {
     sw.write(" regexp '")
     sw.write(pattern)
     sw.write("')")
+  }
+
+  override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
+    sw.write("concat(")
+    left.write(sw)
+    sw.write(",")
+    right.write(sw)
+    sw.write(")")
   }
 }

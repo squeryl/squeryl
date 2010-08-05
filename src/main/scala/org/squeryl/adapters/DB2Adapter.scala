@@ -107,7 +107,7 @@ class DB2Adapter extends DatabaseAdapter {
       }
     }
 
-  override def writeConcatOperator[A1, A2](left: TypedExpressionNode[A1], right: TypedExpressionNode[A2], sw: StatementWriter) = {
+  override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
     sw.write("(")
     _writeConcatOperand(left, sw)
     sw.write(" ")
@@ -117,9 +117,9 @@ class DB2Adapter extends DatabaseAdapter {
     sw.write(")")
   }
 
-  private def _writeConcatOperand[A1](e: TypedExpressionNode[A1], sw: StatementWriter) = {
-    if (e.isInstanceOf[ConstantExpressionNode[A1]]) {
-      val c = e.asInstanceOf[ConstantExpressionNode[A1]]
+  private def _writeConcatOperand(e: ExpressionNode, sw: StatementWriter) = {
+    if (e.isInstanceOf[ConstantExpressionNode[Any]]) {
+      val c = e.asInstanceOf[ConstantExpressionNode[Any]]
       sw.write("cast(")
       e.write(sw)
       sw.write(" as varchar(")
