@@ -26,9 +26,9 @@ class MySQLAdapter extends DatabaseAdapter {
 
   override def floatTypeDeclaration = "float"
 
-  //override def nvlToken = "ifnull"
-
   override def binaryTypeDeclaration = "blob"
+
+  override def timestampTypeDeclaration = "datetime"
   
   override def writeForeignKeyDeclaration(
     foreignKeyTable: Table[_], foreignKeyColumnName: String,

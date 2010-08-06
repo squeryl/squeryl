@@ -16,6 +16,8 @@
 package org.squeryl.tests.musicdb
 
 import java.sql.SQLException
+import java.sql.Timestamp
+import java.util.Calendar
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters.H2Adapter
@@ -24,6 +26,7 @@ import dsl.{StringExpression, Measures, GroupWithMeasures}
 
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
+  var timeOfLastUpdate = new Timestamp(System.currentTimeMillis)
 }
 
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
@@ -225,6 +228,8 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testTimestamp
+    
     testConcatFunc
     
     testRegexFunctionSupport
@@ -389,7 +394,41 @@ class MusicDb extends Schema with QueryTester {
 
       passed('testConcatFunc)
     }
-  
+
+  def testTimestamp = {
+    import testInstance._
+
+    var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    val t1 = mongo.timeOfLastUpdate
+
+    val cal = Calendar.getInstance
+
+    cal.setTime(t1)
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+    
+    artists.update(mongo)
+    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+
+    cal.roll(Calendar.SECOND, 12);
+
+    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+
+    println(mongo.timeOfLastUpdate)
+    
+    artists.update(mongo)
+    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+    
+    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+
+    passed('testTimestamp)
+  }
+
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))

@@ -187,7 +187,7 @@ trait DatabaseAdapter {
   def floatTypeDeclaration = "real"
   def bigDecimalTypeDeclaration = "decimal"
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
-  def timestampTypeDeclaration = "date"
+  def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
