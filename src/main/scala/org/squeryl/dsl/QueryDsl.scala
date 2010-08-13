@@ -39,10 +39,10 @@ trait QueryDsl
     try {
       session.bindToCurrentThread
       val r = a()
-      session.unbindFromCurrentThread
       r
     }
     finally {
+      session.unbindFromCurrentThread
       session.cleanup
     }
 
