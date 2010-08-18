@@ -375,6 +375,7 @@ trait TypeArithmetic extends FieldTypes {
   protected def mapLong2LongType(l: Long): LongType
   protected def mapBoolean2BooleanType(b: Boolean): BooleanType
   protected def mapDate2DateType(b: Date): DateType
+  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType    
 
   protected implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
     def doMap(rs: ResultSet) = mapByte2ByteType(rs.getByte(index))
@@ -420,6 +421,11 @@ trait TypeArithmetic extends FieldTypes {
     def doMap(rs: ResultSet) = mapDate2DateType(rs.getDate(index))
     def sample = sampleDate
   }
+
+//  protected implicit def createOutMapperEnumerationValueType: OutMapper[EnumerationValueType] = new OutMapper[EnumerationValueType] {
+//    def doMap(rs: ResultSet) = mapInt2EnumerationValueType(rs.getInt(index))
+//    def sample = sampleEnumerationValueType
+//  }
 
   protected implicit def createOutMapperByteTypeOption: OutMapper[Option[ByteType]] = new OutMapper[Option[ByteType]] {
     def doMap(rs: ResultSet) = {

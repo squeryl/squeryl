@@ -546,21 +546,21 @@ class SchoolDb extends Schema with QueryTester {
 
     val result1 =
       from(courses)(c=>
-        where(c.finalExamDate >= jan2008 and c.finalExamDate.isNotNull)
+        where(c.finalExamDate >= Some(jan2008) and c.finalExamDate.isNotNull)
         select(c)
         orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result2 =
       from(courses)(c=>
-        where(c.finalExamDate <= jan2009)
+        where(c.finalExamDate <= Some(jan2009))
         select(c)
         orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result3 =
       from(courses)(c=>
-        where(c.finalExamDate >= feb2009)
+        where(c.finalExamDate >= Some(feb2009))
         select(c)
         orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)

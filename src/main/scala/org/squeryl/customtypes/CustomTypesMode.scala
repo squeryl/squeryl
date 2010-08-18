@@ -66,6 +66,8 @@ trait CustomTypesMode extends QueryDsl {
 
   type DateType = DateField
 
+  type EnumerationValueType = Enumeration#Value
+  
   protected def mapByte2ByteType(i: Byte) = new ByteField(i)
   protected def mapInt2IntType(i: Int) = new IntField(i)
   protected def mapString2StringType(s: String) = new StringField(s)
@@ -213,7 +215,14 @@ trait CustomTypesMode extends QueryDsl {
       case Some(n:SelectElement) =>
         new SelectElementReference[Option[DateType]](n)(createOutMapperDateTypeOption) with  DateExpression[Option[DateType]]
     }
-  
+
+  def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Enumeration#Value](e) with EnumExpression[Enumeration#Value]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
+    }  
 }
 
 object CustomTypesMode extends CustomTypesMode 

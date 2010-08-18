@@ -22,7 +22,25 @@ import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters.H2Adapter
 import dsl.ast.BinaryOperatorNodeLogicalBoolean
-import dsl.{StringExpression, Measures, GroupWithMeasures}
+import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
+
+object Genre extends Enumeration {
+  type Genre = Value
+  val Jazz = Value(1, "Jazz")
+  val Rock = Value(2, "Rock")
+  val Latin = Value(3, "Latin")
+  val Bluegrass = Value(4, "Bluegrass")
+  val RenaissancePolyphony = Value(5, "RenaissancePolyphony")
+}
+
+object Tempo extends Enumeration {
+  type Tempo = Value
+  val Largo = Value(1, "Largo")
+  val Allegro = Value(2, "Allegro")
+  val Presto = Value(3, "Presto")
+}
+
+import Genre._
 
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
@@ -31,7 +49,9 @@ class MusicDbObject extends KeyedEntity[Int] {
 
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
 
-class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int) extends MusicDbObject
+class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, val genre: Genre) extends MusicDbObject {
+  def this() = this("", 0, 0, 0, Genre.Bluegrass)
+}
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
 
@@ -64,11 +84,11 @@ class MusicDb extends Schema with QueryTester {
     val hossamRamzy = artists.insert(new Person("Hossam", "Ramzy"))
 
     val congaBlue = cds.insert(new Cd("Conga Blue", ponchoSanchez.id, 1998))
-    val   watermelonMan = songs.insert(new Song("Watermelon Man", herbyHancock.id, ponchoSanchez.id, congaBlue.id))
-    val   besameMama = songs.insert(new Song("Besame Mama", mongoSantaMaria.id, ponchoSanchez.id, congaBlue.id))
+    val   watermelonMan = songs.insert(new Song("Watermelon Man", herbyHancock.id, ponchoSanchez.id, congaBlue.id, Jazz))
+    val   besameMama = songs.insert(new Song("Besame Mama", mongoSantaMaria.id, ponchoSanchez.id, congaBlue.id, Latin))
 
     val freedomSoundAlbum = cds.insert(new Cd("Freedom Sound", ponchoSanchez.id, 1997))
-    val   freedomSound = songs.insert(new Song("Freedom Sound", ponchoSanchez.id, ponchoSanchez.id, freedomSoundAlbum.id))
+    val   freedomSound = songs.insert(new Song("Freedom Sound", ponchoSanchez.id, ponchoSanchez.id, freedomSoundAlbum.id, Jazz))
         
 
     val expectedSongCountPerAlbum = List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
@@ -228,6 +248,8 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testEnums
+    
     testTimestamp
     
     testConcatFunc
@@ -464,7 +486,6 @@ class MusicDb extends Schema with QueryTester {
     assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
     passed('testKeyedEntityImplicitLookup)
   }
-
   import testInstance._
 
   def testDeleteVariations = {
@@ -615,4 +636,37 @@ class MusicDb extends Schema with QueryTester {
       }).start
     }
   }
+  
+  
+  def testEnums = {
+
+    val md = songs.posoMetaData.findFieldMetaDataForProperty("genre").get
+
+    val z = md.canonicalEnumerationValueFor(2)
+
+    val q = songs.where(_.genre === Jazz).toList
+
+    //val q2 = songs.where(_.genre === Tempo.Allegro)
+  }
+
+//  //class EnumE[A <: Enumeration#Value](val a: A) {
+//  class EnumE[A](val a: A) {
+//
+//    def ===(b: EnumE[A]) = "not relevant"
+//  }
+//
+//  //implicit def enum2EnumNode[A <: Enumeration#Value](e: A) = new EnumE[A](e)
+//
+//  implicit def enum2EnumNode[A <: Enumeration#Value](e: A) = new EnumE[A](e)
+//
+//  import Genre._
+//  import Tempo._
+//
+//  val genre = Jazz
+//  val tempo = Allegro
+//
+//  genre === Latin
+//
+//  tempo === Latin
+//
 }
