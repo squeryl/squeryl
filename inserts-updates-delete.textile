@@ -5,7 +5,7 @@ title: Insert, Update and Delete
 
 h2. Insert 
 
-The insert mechanism is the least suprising of all : 
+The insert mechanism is the least surprising of all : 
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
@@ -50,7 +50,7 @@ There are two forms of updates :
 
 (The explanation for the '~' in s.year.~ is "here":./getting-started.html#disambiguate)
 
-The sql will be : 
+The SQL will be : 
 
 <script type="syntaxhighlighter" class="brush: sql"><![CDATA[
   update Song set
@@ -84,7 +84,7 @@ example of Table[PlaylistElement].deleteWhere usage :
 h2. Batched updates and Inserts
 
 
-org.squeryl.Table[A] has insert and update methods that take an Iterable[A]. Invoking them does the update in a single roundtrip to the database via JDBC's batched update functionnality. 
+org.squeryl.Table[A] has insert and update methods that take an Iterable[A]. Invoking them does the update in a single roundtrip to the database via JDBC's batched update functionality. 
 
 The advantage of this is obviously making 1 trip to the DB versus N trips (given an iterable with N elements).
 

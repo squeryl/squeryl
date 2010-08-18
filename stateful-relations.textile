@@ -3,7 +3,7 @@ layout: manual
 title: Stateful Relations
 ---
 
-*Note*: statefull relations are a beta feature, supported only as of version 0.9.4beta4
+*Note*: stateful relations are a beta feature, supported only as of version 0.9.4beta4
 
 h3. Declaring Stateful Relations
 
@@ -41,7 +41,7 @@ class Subject(val name: String) extends SchoolDb2Object {
 
 h3. StatefulOneToMany and StatefulManyToOne
 
-Methods in statefull relations are very similar than their stateless counterpart, their signatures are slightly different, and have a refresh method. Note the *relation* property, it is the stateless relation objects that provides the persistence related functionality. A stateful relation is in fact a wrapper over a stateless one, with caching.  
+Methods in stateful relations are very similar than their stateless counterpart, their signatures are slightly different, and have a refresh method. Note the *relation* property, it is the stateless relation objects that provides the persistence related functionality. A stateful relation is in fact a wrapper over a stateless one, with caching.  
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
@@ -68,7 +68,7 @@ class StatefulManyToOne[O <: KeyedEntity[_]](val relation: ManyToOne[O]) {
 ]]></script>
 
 
-h3. StatefullManyToMany
+h3. StatefulManyToMany
 
 The similarity between StatefulManyToMany and ManyToMany is also very apparent :
 

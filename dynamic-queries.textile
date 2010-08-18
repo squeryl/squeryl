@@ -31,7 +31,7 @@ Example :
 ]]></script>
 
 Notice the Option[] in the result type of the query, and how the Author
-table disapears from the generated SQL base on the input of *inhibitWhen* :
+table disappears from the generated SQL base on the input of *inhibitWhen* :
 
 <script type="syntaxhighlighter" class="brush: sql"><![CDATA[
 

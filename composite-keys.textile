@@ -20,7 +20,7 @@ Consider the following example where CourseAssignment is a KeyedEntity[Composite
   }
 ]]></script>
 
-CourseAssignment.id is a unique identifier for a CourseAssignment. In this case *id* is what maked the class a KeyedEntity[CompositeKey2[Long,Long]]. A class can have any number of composite keys, a composite key is not necessarily a primary key.
+CourseAssignment.id is a unique identifier for a CourseAssignment. In this case *id* is what makes the class a KeyedEntity[CompositeKey2[Long,Long]]. A class can have any number of composite keys, a composite key is not necessarily a primary key.
 
 * *Important*: Squeryl will create a uniqueness constraint on composite keys that form the *id* of a KeyedEntity[_]  
 

@@ -5,11 +5,11 @@ title: Features and Roadmap
 
 h2. Features 
 
-* A DSL for manipulating database objects with Sql like expressions. Supported sql constructs are : <br/>
+* A DSL for manipulating database objects with SQL like expressions. Supported SQL constructs are : <br/>
 Select, Update, Insert, Delete, SubQueries, Left Right and Full Outer Join, <br/>
-Standard agregage functions, Group By, Distinct, ForUpdate.
+Standard aggregate functions, Group By, Distinct, ForUpdate.
 
-* Sql Schema generation based on class definitions
+* SQL Schema generation based on class definitions
 
 * Transparent management of auto incremented keys
 
@@ -25,11 +25,11 @@ h2. Features Not yet implemented
 * A compiler plugin that provides a greater level of validation <br/><br/>
 Right now there are still ways that one can write an invalid query, 
 i.e. one for which the database will complain at runtime.
-For one can call an agregate function within a group by clause without 
+For one can call an aggregate function within a group by clause without 
 the compiler preventing it.<br/><br/>
 I have experimented with ways of enforcing this using the type system,
 but it adds complexity not only to the implementation but to the the DSL. <br/><br/>
-A plugin could also give more explanatory (sql specific) messages than the 
+A plugin could also give more explanatory (SQL specific) messages than the 
 ones given by the type system. <br/><br/>
 At the moment my only reluctance for such a plugin is the required 
 configuration that is required by user code (breaking the minimalism), 
@@ -37,9 +37,9 @@ for this reason, the plugin should limit itself to validation.
 
 * Batched updates
 
-* Support for mapping inheritance in the database other than the _map each concreate class to a table_ approach
+* Support for mapping inheritance in the database other than the _map each concrete class to a table_ approach
 
-* Schema evolution (other than droping the whole database and recreating it)
+* Schema evolution (other than dropping the whole database and recreating it)
 
 * Optimistic Concurrency Control
 

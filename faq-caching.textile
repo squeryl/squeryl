@@ -7,7 +7,7 @@ h3. Q: What kind of caching mechanism is supported ?
 
 h3. A: No caching mechanism is supported at the moment.
 
-However with Scala's lazy val's, a rudimentary (but usefull) form of 
+However with Scala's lazy val's, a rudimentary (but useful) form of 
 caching with lazy loading is possible :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[  

@@ -3,19 +3,19 @@ layout: manual
 title: <br/>
 ---
 
-h2. Logging the generated Sql
+h2. Logging the generated SQL
 
-The org.squeryl.Query.statement method returns the statement with the jdbc's prepared
-statement parameters subsituted.
+The org.squeryl.Query.statement method returns the statement with the JDBC's prepared
+statement parameters substituted.
 
-To log all SQL activity of a sesson, use org.squeryl.Session.currentSession.setLogger(String => Unit)
-the closure receives all Sql statements and gets to do what it wants with it.
+To log all SQL activity of a session, use org.squeryl.Session.currentSession.setLogger(String => Unit)
+the closure receives all SQL statements and gets to do what it wants with it.
 
 
-h2. Implicit conversions for single row agregate queries
+h2. Implicit conversions for single row aggregate queries
 
-In Sql, queries that consist of only agregate functions (without group by clause) 
-always return exactly one row. Squeryl allows you to implicitely convert them to tupes 
+In SQL, queries that consist of only aggregate functions (without group by clause) 
+always return exactly one row. Squeryl allows you to implicitly convert them to tuples 
 or to a scalar, as following example illustrates :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[

@@ -9,7 +9,7 @@ The databases currently supported are :
 
 * Oracle
 
-* MySql
+* MySQL
 
 * H2
 

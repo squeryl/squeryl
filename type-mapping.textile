@@ -1,11 +1,11 @@
 ---
 layout: manual
-title: Mapping Types from Sql to Scala
+title: Mapping Types from SQL to Scala
 ---
 
 h2. Preserving Type Information
 
-In order to be _type safe_, any Sql expression must be converted into a Scala defined type, Squeryl does this using implicit type conversion that are designed to ensure the following : 
+In order to be _type safe_, any SQL expression must be converted into a Scala defined type, Squeryl does this using implicit type conversion that are designed to ensure the following : 
 
 * The bit length of a numeric expressions is equal to the bit length of the longest argument
 
@@ -13,7 +13,7 @@ In order to be _type safe_, any Sql expression must be converted into a Scala de
 
 * The result of a numerical expression is floating point if it has least one floating point operation or argument
 
-* All agregate functions (avg, min, max, etc...) with the exception of count result are Option[]
+* All aggregate functions (avg, min, max, etc...) with the exception of count result are Option[]
 
 In plain english these rule say that conversions are designed to not cause loss of numerical precision,
 that floating point absorb (or dominate) as they do in mathematics, and that the existence of an
@@ -39,5 +39,5 @@ Here are some examples :
 ]]></script>
 
 Note how in query *q4* the presence of a single Option[] element causes the result to become an Option[],
-this is consistent with the sql92 standard. The *&* function is explained "here":arbitrary-select-expressions.html .
+this is consistent with the SQL92 standard. The *&* function is explained "here":arbitrary-select-expressions.html .
 

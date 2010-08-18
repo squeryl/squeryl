@@ -38,11 +38,11 @@ After the initialization of SessionFactory.concreteFactory, the *transaction* an
 ]]></script>
 
 The 'transaction' function binds the session to the current thread for the duration
-of the block, so any method called directly *and undirectly* from the block
+of the block, so any method called directly *and indirectly* from the block
 will be _in the context_ of the transaction.
 
 h3. Distinction between transaction and inTransaction
 
-* *'transacton'* causes a new transaction to begin and commit after the block's execution, or rollback if an exception occurs. Invoking a transaction always cause a new one to be created, even if called in the context of an existing transaction.
+* *'transaction'* causes a new transaction to begin and commit after the block's execution, or rollback if an exception occurs. Invoking a transaction always cause a new one to be created, even if called in the context of an existing transaction.
 
 * *'inTransaction'* will create a new transaction if none is in progress and commit it upon completion or rollback on exceptions. If a transaction already exists, it has no effect, the block will execute in the context of the existing transaction. The commit/rollback is handled in this case by the parent transaction block.

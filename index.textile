@@ -23,7 +23,7 @@ database objects from within the Scala language"</h3>
 <div class='span-12'>
 h3. Write declaratively
 
-Write as declaratively as Sql, only with less boilerplate. Sql's declarativeness is _*preserved*_, not encapsulated in a lower level API that requires imperative and procedural code to get things done.
+Write as declaratively as SQL, only with less boilerplate. SQL's declarativeness is _*preserved*_, not encapsulated in a lower level API that requires imperative and procedural code to get things done.
 </div>
 
 <div class='span-12 last'>

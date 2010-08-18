@@ -133,7 +133,7 @@ object KickTheTires {
   Class.forName("org.h2.Driver");
   val session = Session.create(
     java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
-    //Currently there are adapters for Oracle, Postgres, MySql and H2 :
+    //Currently there are adapters for Oracle, Postgres, MySQL and H2 :
     new H2Adapter
   )
  

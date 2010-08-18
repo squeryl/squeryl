@@ -1,6 +1,6 @@
 ---
 layout: manual
-title: Sql Functions
+title: SQL Functions
 ---
 
 h2. Conversion Functions
@@ -23,6 +23,6 @@ h4. String :
 
  || (concatenation)
 
-h2. Agregate Functions
+h2. Aggregate Functions
 
 max, min, sum, avg, sDevPopulation, sDevSample, varPopulation, varSample, count

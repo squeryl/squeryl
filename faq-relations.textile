@@ -27,16 +27,16 @@ with more reuse. Consider for example a "one to many" relation :
 
 On each sides of the relation, you have to write one line of code,
 In JPA you would have an annotation on each side, the effort is 
-slighly higher higher with Squeryl, but you get to reuse the code
+slightly higher higher with Squeryl, but you get to reuse the code
 you wrote for the relation.
 
 Suppose you want to filter the artists.songs relation, in JPA you
 would either filter the result on the client causing a waste of resources, 
-or define a separate query for filtering, loosing the oportunity for reuse.
+or define a separate query for filtering, loosing the opportunity for reuse.
 
-Since the *Artists.songs* method is a lazily evaluated Qurey[Song], it can
+Since the *Artists.songs* method is a lazily evaluated Query[Song], it can
 be further filtered with the 'where' method, yielding a unevaluated
-Query[Song] wich will generate the SQL with the appropriate where clause.
+Query[Song] which will generate the SQL with the appropriate where clause.
 
 Here's how it happens, suppose you execute the following :
 

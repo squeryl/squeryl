@@ -3,7 +3,7 @@ layout: manual
 title: Result Set Pagination
 ---
 
-Paginaged queries are supported via the *page(offset:Int, pageLength:Int)* method on all org.squeryl.Query[A]
+Paginated queries are supported via the *page(offset:Int, pageLength:Int)* method on all org.squeryl.Query[A]
 
 Example : 
 

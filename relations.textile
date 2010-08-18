@@ -7,7 +7,7 @@ title: Relations
 
 h3. Stateful vs Stateless relations
 
-Relations allow foreign key relationships to appear as collection like objects. There are two types of relations in Squeryl : OneToMany and ManyToMany, and each has a statefull counterpart. 
+Relations allow foreign key relationships to appear as collection like objects. There are two types of relations in Squeryl : OneToMany and ManyToMany, and each has a stateful counterpart. 
 
 Stateful relations owe their name to the fact that they maintain members of the relation in memory. A stateful relation loads all of it's members in memory when it is accessed for the first time, and they are kept with the relation. When an object is inserted or updated, the modified (or inserted) object is persisted in the database and kept in memory 'inside' the relation object.
 
@@ -43,7 +43,7 @@ class Subject(val name: String) extends SchoolDb2Object {
 
 
 The traits OneToMany and ManyToOne both extends Query[], they have an *assign* method 
-that assigns the keys while leaving the database unchanged. The *associate* calls assing
+that assigns the keys while leaving the database unchanged. The *associate* calls assign
 *and* persists the changes to the database.
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
@@ -52,7 +52,7 @@ trait OneToMany[M] extends Query[M] {
   /**
    * @param the object on the 'many side' to be associated with this
    *
-   *  Sets the foreing key of 'm' to refer to the primary key of the 'one' instance
+   *  Sets the foreign key of 'm' to refer to the primary key of the 'one' instance
    */
   def assign(m: M): Unit
 
@@ -77,9 +77,9 @@ trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
 
 h3. ManyToMany
 
-A ManyToMany relation has a table in the _middle_ called the *association table*, it has a foreing key for the _left_ and _right_ side. It is a symetrical relation, so the choice of left and right is arbitrary. 
+A ManyToMany relation has a table in the _middle_ called the *association table*, it has a foreign key for the _left_ and _right_ side. It is a symmetrical relation, so the choice of left and right is arbitrary. 
 In the following example we have a course to student relation, in which the left side is the course and the right side is the student.
-The association table can have other fields besides the _left_ and _right_ foeing keys, in the example, *CourseSubscription* has a *grade:Float* column.   
+The association table can have other fields besides the _left_ and _right_ foreign keys, in the example, *CourseSubscription* has a *grade:Float* column.   
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
@@ -117,7 +117,7 @@ Examples of many to many relation usage :
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
   // the following two lines are equivalent, they both create 
-  // and insert a CourseSubscription, with the proper foreing keys : 
+  // and insert a CourseSubscription, with the proper foreign keys : 
   
   physics.students.associate(olga)
     
@@ -167,7 +167,7 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
   /**
    * @param a: the association object
    * 
-   * Sets the foreing keys of the association object to the primary keys of the left and right side,
+   * Sets the foreign keys of the association object to the primary keys of the left and right side,
    * this method does not update the database, changes to the association object must be done for
    * the operation to be persisted. Alternatively the method 'associate(o, a)' will call this assign(o, a)
    * and persist the changes.  
@@ -191,7 +191,7 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
    * Creates a new association object 'a' and calls associate(o,a)
    *
    * Note that this method will fail if the association object has NOT NULL constraint fields appart from the
-   * foreing keys in the relations
+   * foreign keys in the relations
    *  
    */
   def associate(o: O): A
@@ -225,8 +225,8 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
 
 h3. Defining foreign key constraints with relations
 
-The org.squeryl.Schema.create method will create relations based on the declarations in the schema as the next example shows, note the different signatures of *constrainReference*. The applyDefaultForeingKeyPolicy method will determine how the relations are declared at the schema level, each relation can then redefine the default. 
-Calling unConstrainReference in applyDefaultForeingKeyPolicy will cause foreing key constraints to be inhibited.    
+The org.squeryl.Schema.create method will create relations based on the declarations in the schema as the next example shows, note the different signatures of *constrainReference*. The applyDefaultForeignKeyPolicy method will determine how the relations are declared at the schema level, each relation can then redefine the default. 
+Calling unConstrainReference in applyDefaultForeignKeyPolicy will cause foreign key constraints to be inhibited.    
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
@@ -250,15 +250,15 @@ object SchoolDb2 extends Schema {
     via((s,c) => s.id === c.subjectId)
 
   // the default constraint for all foreign keys in this schema :  
-  override def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeingKeyDeclaration) =
-    foreingKeyDeclaration.constrainReference
+  override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
+    foreignKeyDeclaration.constrainReference
 
-  //now we will redefine some of the foreing key constraints :  
+  //now we will redefine some of the foreign key constraints :  
   //if we delete a subject, we want all courses to be deleted
-  subjectToCourses.foreingKeyDeclaration.constrainReference(onDelete cascade)
+  subjectToCourses.foreignKeyDeclaration.constrainReference(onDelete cascade)
 
   //when a course is deleted, all of the subscriptions will get deleted :
-  courseSubscriptions.leftForeingKeyDeclaration.constrainReference(onDelete cascade)
+  courseSubscriptions.leftForeignKeyDeclaration.constrainReference(onDelete cascade)
 }
 
 ]]></script>
@@ -267,7 +267,7 @@ object SchoolDb2 extends Schema {
 h3. Performance considerations
 
 A significant part of optimizing a database abstraction layer is to choose for every situation the 
-right balance between fine and large grained retrieval, and the optimal mix of lazyness and eagerness.
+right balance between fine and large grained retrieval, and the optimal mix of laziness and eagerness.
 
 Relations are lazy, and are subject to the "N+1 problem":http://stackoverflow.com/questions/97197/what-is-the-n1-selects-problem . If we have a _deep_ relation chain, it is often preferable to use a query, for example if we have an N level _relation chain_ : R1 x R2,..., Rn, looping through relations will cause : 
 

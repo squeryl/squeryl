@@ -48,7 +48,7 @@ while(books.hasNext()) {
 ]]></script>
 
 The answer is : two database round trips for every row returned by the findBySubjectId query, 
-an N ary relation typically causes O(N-1) calls to the database, which can have disastrous 
+an N-ary relation typically causes O(N-1) calls to the database, which can have disastrous 
 performance consequences.
 
 Squeryl allows you to combine the efficiency of the first approach 
@@ -68,6 +68,6 @@ for(r <- q)
 
 <br/>
 
-Squeryl's main building block, the composable Query[A], coupled with the lazyness of Scala, 
+Squeryl's main building block, the composable Query[A], coupled with the laziness of Scala, 
 allows the implementation of relations that compare advantageously with JPAs
 you can read about it "here.":faq-relations.html 

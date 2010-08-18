@@ -41,7 +41,7 @@ The org.squeryl.Schema trait can create the Schema or dump the definition to a f
 h2. Mapping fields to Columns
 
 Squeryl applies the principle of _Convention over Configuration_ :
-The class to table and field to column correspondance is determined
+The class to table and field to column correspondence is determined
 by name equivalence. It is possible to override a field's column name 
 with the org.squeryl.annotations.Column annotations and the class's 
 table name table with the org.squeryl.Schema.table[T](tableName:String) 
@@ -67,14 +67,14 @@ and Option[] fields are nullable.
   This constraint could be relaxed in a future version by a compiler plugin
   that would _tell_ Squeryl the erased type information.
   
-h2. Choosing between primitive or custon types
+h2. Choosing between primitive or custom types
 
 You will have to decide if your table objects will be mapped with primitive (Int. Long, Date, String etc.) or custom types. It's a question of tradeoffs :
 
   
 h3. Primitive types
 
-The main motivations for using primitive types are for performance and symplicity.
+The main motivations for using primitive types are for performance and simplicity.
 If a query returns N rows of objects with M fields primitive types
 will cause the the garbage collector to handle of N objects, while same 
 query using custom types will cause the creation of N * M objects.

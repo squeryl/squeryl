@@ -18,11 +18,11 @@ class Artist(val id: Long, val name:String)  {
 }
 ]]></script>
 
-The lazyness here means that the query is sent to the database only
+The laziness here means that the query is sent to the database only
 when starting iteration, or in other words, when Iterable.iterator is called.
 
 The select function takes any legal Scala expression whose
-type determins the generic parameter of the <notextile>Query[R]</notextile>
+type determines the generic parameter of the <notextile>Query[R]</notextile>
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   def select[R](r: =>R): R
@@ -98,7 +98,7 @@ Joins can also be nested in the where clause just like in SQL :
       println(s.title + " : " + s.year)
 ]]></script>
 
- The Sql generated for the above statement is :
+ The SQL generated for the above statement is :
 
 <script type="syntaxhighlighter" class="brush: sql"><![CDATA[
 Select
