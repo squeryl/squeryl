@@ -404,7 +404,7 @@ object TypeArithmetic {
     }
   }
 
-  //for agregate functions like Avg, Stdev, etc...
+  //for aggregate functions like Avg, Stdev, etc...
   val computeTypeAgregateFloatOp = (t1: TypeDescription) => {
 
     t1.length match {

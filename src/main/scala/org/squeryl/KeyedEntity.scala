@@ -19,7 +19,7 @@ import annotations.Transient
 
 /**
  *  For use with View[A] or Table[A], when A extends KeyedEntity[K],
- * lookup and delete by key become implicitely available
+ * lookup and delete by key become implicitly available
  * Example :
  *
  * class Peanut(weight: Float) extends KeyedEntity[Long]
@@ -31,7 +31,7 @@ import annotations.Transient
  * def removePeanut(idOfThePeanut: Long) =
  *   peanutJar.delete(idOfThePeanut)
  *
- * And lookup by id is also implicitely available :
+ * And lookup by id is also implicitly available :
  * 
  * peanutJar.lookup(idOfThePeanut)
  *

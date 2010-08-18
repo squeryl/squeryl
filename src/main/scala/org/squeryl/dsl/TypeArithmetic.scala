@@ -360,7 +360,7 @@ trait TypeArithmetic extends FieldTypes {
   implicit def e2concat3[A1,A2](e: ConcatOp[Option[A1],A2]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
   implicit def e2concat4[A1,A2](e: ConcatOp[Option[A1],Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
 
-  //Conversions for non mumerical case statements and coalesce like functions :
+  //Conversions for non numerical case statements and coalesce like functions :
   implicit def nnCoalesce1[A](e: NonNumericalCoalesce[A,A]) = new NonNumericalTypeConversion[A](e)(e.a1.mapper)
   implicit def nnCoalesce2[A](e: NonNumericalCoalesce[A,Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
   implicit def nnCoalesce3[A](e: NonNumericalCoalesce[Option[A],A]) = new NonNumericalTypeConversion[Option[A]](e)(e.a1.mapper)

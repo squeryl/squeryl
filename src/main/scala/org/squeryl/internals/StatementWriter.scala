@@ -21,7 +21,7 @@ import collection.mutable.{HashSet, HashMap, ArrayBuffer}
 /**
  * @arg isForDisplay: when true, users of StatementWriter should write
  *   jdbc params as strings in statement,
- *   otherwise a jdbc param declerations '?' should be written, and
+ *   otherwise a jdbc param declarations '?' should be written, and
  *   the param values should be accumulated with addParam(s)
  */
 class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAdapter) {
@@ -38,9 +38,9 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
   }
 
   /**
-   * a surrogate witer will accumulate text whithin itself (not the parent)
+   * a surrogate writer will accumulate text within itself (not the parent)
    * while param accumulation (addParam) will go to the root writer, this
-   * is usefull when it is easyer to first build a string and to write it
+   * is useful when it is easier to first build a string and to write it
    * afterwards
    */
   def surrogate:StatementWriter = new StatementWriter(isForDisplay, databaseAdapter) {

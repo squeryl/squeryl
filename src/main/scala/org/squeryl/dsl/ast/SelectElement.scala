@@ -186,7 +186,7 @@ trait PathReferenceToSelectElement {
         return e.asInstanceOf[QueryExpressionNode[_]]
     } while (e != None)
 
-    error("could not determin use site of "+ this)
+    error("could not determine use site of "+ this)
   }
 
   protected def path: String = {

@@ -47,7 +47,7 @@ trait QueryDsl
     }
 
   /**
-   * 'transaction' causes a new transaction to begin and commit after the block exection, or rollback
+   * 'transaction' causes a new transaction to begin and commit after the block execution, or rollback
    * if an exception occurs. Invoking a transaction always cause a new one to
    * be created, even if called in the context of an existing transaction.
    */

@@ -24,7 +24,7 @@ object Utils {
 
   /**
    * Will attempt to evaluate a string expression and will catch any exception.
-   * For use in circumstances when loggin is needed (i.e. a fatal error has already occured
+   * For use in circumstances when logging is needed (i.e. a fatal error has already occurred
    * and we need to log as much info as possible (i.e. put as much info as possible in the 'black box').
    * Also used to allow dumping (ex. for logging) a Query AST *before* it is completely built.
    */
