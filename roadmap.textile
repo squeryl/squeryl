@@ -1,17 +1,16 @@
 ---
 layout: default
-title: Features and Roadmap
+title: Roadmap
 ---
 
-h2. Features 
+h3. Features for next release (0.9.5)
 
-* A DSL for manipulating database objects with SQL like expressions. Supported SQL constructs are : <br/>
-Select, Update, Insert, Delete, SubQueries, Left Right and Full Outer Join, <br/>
-Standard aggregate functions, Group By, Distinct, ForUpdate.
+* Sql Case Statements
 
-* SQL Schema generation based on class definitions
+h3. Wish list of _highly_ desired features (Unscheduled)
 
-* Transparent management of auto incremented keys
+* Free text indexing via integration of Lucene
+* Support for MS SqlServer
 
 * Type safety making SQL's conversion rules enforceable at compile time
 
@@ -44,3 +43,12 @@ for this reason, the plugin should limit itself to validation.
 * Optimistic Concurrency Control
 
 Proposals for new features can be discussed on the "discussion group":http://groups.google.com/group/squeryl
+
+h4. Wish list of _mildly_ desired features (Unscheduled)  
+
+* Support for dynamic query construction
+* A tool for Schema evolution (other than droping the whole database and recreating it)
+* A compiler plugin that provides a greater level of validation, and more explanatory messages for queries that don't compile
+* Support for mapping inheritance in the database other than the _map each concreate class to a table_ approach
+
+The place to discuss features  proposals is the "discussion group":http://groups.google.com/group/squeryl

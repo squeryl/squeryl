@@ -1,0 +1,5 @@
+---
+layout: manual
+title: Custom Functions
+---
+

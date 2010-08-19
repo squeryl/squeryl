@@ -66,6 +66,37 @@ and Option[] fields are nullable.
   imposed by the JVM prevents from reflecting on the Option[] type parameter.
   This constraint could be relaxed in a future version by a compiler plugin
   that would _tell_ Squeryl the erased type information.
+
+
+h2. Scala to Database type correspondance
+
+|_. JDBC Type |_. Oracle     |_. PostgreSql     |_. DB2 |_. MySql |_. H2
+| int          | number      | integer          |   |   |   |
+| long         | number      | bigint           |   |   |   |
+| float        | float       | real             |   |   |   |
+| double       | real        | double precision |   |   |   |
+| BidDecimal   | decimal     | numeric          |   |   |   |
+| String       | varchar2(x) | varchar(x)       |   |   |   |
+| Date         | date        | date             |   |   |   |
+| Timestamp    | date        | timestamp        |   |   |   |
+| byte[]       | blob        | bytea            |   |   |   |
+
+
+  def intTypeDeclaration = "int"
+  def stringTypeDeclaration = "varchar(255)"  
+  def stringTypeDeclaration(length:Int) = "varchar("+length+")"
+  def booleanTypeDeclaration = "boolean"
+  def doubleTypeDeclaration = "double"
+  def dateTypeDeclaration = "date"
+  def longTypeDeclaration = "bigint"
+  def floatTypeDeclaration = "real"
+  def bigDecimalTypeDeclaration = "decimal"
+  def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
+  def timestampTypeDeclaration = "timestamp"
+  def binaryTypeDeclaration = "binary"
+
+
+<!-- |byte         |number      |   |   |   |   | -->
   
 h2. Choosing between primitive or custom types
 
