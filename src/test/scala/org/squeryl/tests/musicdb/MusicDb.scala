@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,8 @@
 package org.squeryl.tests.musicdb
 
 import java.sql.SQLException
+import java.sql.Timestamp
+import java.util.Calendar
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters.H2Adapter
@@ -24,6 +26,7 @@ import dsl.{StringExpression, Measures, GroupWithMeasures}
 
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
+  var timeOfLastUpdate = new Timestamp(System.currentTimeMillis)
 }
 
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
@@ -49,7 +52,7 @@ class MusicDb extends Schema with QueryTester {
       drop // *NOT* something to do in real life...
     }
     catch {
-      case e:SQLException => {} 
+      case e:SQLException => {}
     }
 
     create
@@ -66,7 +69,7 @@ class MusicDb extends Schema with QueryTester {
 
     val freedomSoundAlbum = cds.insert(new Cd("Freedom Sound", ponchoSanchez.id, 1997))
     val   freedomSound = songs.insert(new Song("Freedom Sound", ponchoSanchez.id, ponchoSanchez.id, freedomSoundAlbum.id))
-        
+
 
     val expectedSongCountPerAlbum = List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
   }
@@ -76,13 +79,13 @@ class MusicDb extends Schema with QueryTester {
 
   val basicSelectUsingWhereOnQueryableNested =
     basicSelectUsingWhereOnQueryable.where(a=> a.id === testInstance.mongoSantaMaria.id)
-  
+
   lazy val poncho =
    from(artists)(a =>
       where(a.firstName === "Poncho") select(a)
    )
 
-  def selfJoinNested3Level = 
+  def selfJoinNested3Level =
     from(
       from(
         from(artists)(a =>   where(a.id === testInstance.ponchoSanchez.id) select(a))
@@ -113,7 +116,7 @@ class MusicDb extends Schema with QueryTester {
       where(cd.title === testInstance.congaBlue.title)
       select(&(cd.year plus 1))
     )
-  
+
   def songCountPerAlbum(cds: Queryable[Cd]) =
     from(cds, songs)((cd, song) =>
       where(song.cdId === cd.id)
@@ -225,38 +228,40 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testTimestamp
+
     testConcatFunc
-    
+
     testRegexFunctionSupport
 
     testUpperAndLowerFuncs
-    
+
     testCustomRegexFunctionSupport
-    
-    val q = songCountPerAlbumIdJoinedWithAlbumNested    
+
+    val q = songCountPerAlbumIdJoinedWithAlbumNested
 
     validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, q,
       (t:(String,Long)) => (t._1,t._2),
       expectedSongCountPerAlbum)
-    
+
     testLoopInNestedInTransaction
-    
+
     testBetweenOperator
-    
+
     testPaginatedQuery1
-    
+
     testDynamicQuery1
-    
+
     testDynamicQuery2
-    
+
     testDeleteVariations
-    
+
     testKeyedEntityImplicitLookup
-    
+
     validateQuery('basicSelectUsingWhereOnQueryable, basicSelectUsingWhereOnQueryable, (a:Person)=>a.id, List(mongoSantaMaria.id))
 
     validateQuery('basicSelectUsingWhereOnQueryableNested, basicSelectUsingWhereOnQueryableNested, (a:Person)=>a.id, List(mongoSantaMaria.id))
-    
+
     validateQuery('poncho, poncho, (a:Person)=>a.lastName, List(ponchoSanchez.lastName))
 
     val ponchoSongs = List(besameMama.title, freedomSound.title, watermelonMan.title)
@@ -270,14 +275,14 @@ class MusicDb extends Schema with QueryTester {
     validateQuery('songCountPerAlbum, songCountPerAlbum(cds),
       (g:GroupWithMeasures[String,Long]) => (g.key,g.measures),
       expectedSongCountPerAlbum)
-    
+
     validateQuery('yearOfCongaBluePlus1, yearOfCongaBluePlus1, identity[Int], List(1999))
 
     validateQuery('songCountPerAlbumFeaturingPoncho, songCountPerAlbumFeaturingPoncho,
       (g:GroupWithMeasures[String,Long]) => (g.key,g.measures),
       List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
     )
-    
+
     validateQuery('songsFeaturingPonchoNestedInFrom, songsFeaturingPonchoNestedInFrom,
       (t:(Song,String)) => (t._1.id,t._2),
       List((besameMama.id, ponchoSanchez.firstName),
@@ -309,8 +314,8 @@ class MusicDb extends Schema with QueryTester {
 
 
   implicit def sExpr[E <% StringExpression[_]](s: E) = new RegexCall(s)
-  
-  class RegexCall(left: StringExpression[_]) {    
+
+  class RegexCall(left: StringExpression[_]) {
 
     def regexC(e: String)  = new BinaryOperatorNodeLogicalBoolean(left, e, "~")
   }
@@ -326,7 +331,7 @@ class MusicDb extends Schema with QueryTester {
         )
 
       import testInstance._
-      
+
       assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
 
       passed('testCustomRegexFunctionSupport)
@@ -334,12 +339,12 @@ class MusicDb extends Schema with QueryTester {
 
 
   def testRegexFunctionSupport = {
-
+    try {
       val q =
-        from(artists)(a=>
+        from(artists)(a =>
           where(a.firstName.regex(".*on.*"))
-          select(a.firstName)
-          orderBy(a.firstName)
+          select (a.firstName)
+          orderBy (a.firstName)
         )
 
       import testInstance._
@@ -348,32 +353,40 @@ class MusicDb extends Schema with QueryTester {
 
       passed('testRegexFunctionSupport)
     }
+    catch {
+      case e: UnsupportedOperationException => println("testRegexFunctionSupport: regex not supported by database adapter")
+    }
+  }
 
 
   def testUpperAndLowerFuncs = {
+    try {
+        val q =
+          from(artists)(a=>
+            where(a.firstName.regex(".*on.*"))
+            select(&(upper(a.firstName) || lower(a.firstName)))
+            orderBy(a.firstName)
+          )
 
-      val q =
-        from(artists)(a=>
-          where(a.firstName.regex(".*on.*"))
-          select(&(upper(a.firstName) || lower(a.firstName)))
-          orderBy(a.firstName)
-        )
+        println(q.statement)
 
-    println(q.statement)
-    
-      import testInstance._
+        import testInstance._
 
-      val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s.toUpperCase + s.toLowerCase)
+        val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s.toUpperCase + s.toLowerCase)
 
-      assertEquals(expected, q.toList, 'testUpperAndLowerFuncs)
+        assertEquals(expected, q.toList, 'testUpperAndLowerFuncs)
 
-      passed('testUpperAndLowerFuncs)
+        passed('testUpperAndLowerFuncs)
     }
+    catch {
+      case e: UnsupportedOperationException => println("testUpperAndLowerFuncs: regex not supported by database adapter")
+    }
+  }
 
 
   def testConcatFunc = {
     import testInstance._
-    
+
       val q =
         from(artists)(a=>
           where(a.firstName in(Seq(mongoSantaMaria.firstName, ponchoSanchez.firstName)))
@@ -389,7 +402,41 @@ class MusicDb extends Schema with QueryTester {
 
       passed('testConcatFunc)
     }
-  
+
+  def testTimestamp = {
+    import testInstance._
+
+    var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    val t1 = mongo.timeOfLastUpdate
+
+    val cal = Calendar.getInstance
+
+    cal.setTime(t1)
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+
+    artists.update(mongo)
+    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+
+    cal.roll(Calendar.SECOND, 12);
+
+    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+
+    println(mongo.timeOfLastUpdate)
+
+    artists.update(mongo)
+    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+
+    passed('testTimestamp)
+  }
+
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))
@@ -410,7 +457,7 @@ class MusicDb extends Schema with QueryTester {
     import testInstance._
 
     var ac = artists.where(a=> a.id === alainCaron.id).single
-    ac.lastName = "Karon" 
+    ac.lastName = "Karon"
     artists.update(ac)
     ac = artists.where(a=> a.id === alainCaron.id).single
     assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
@@ -421,7 +468,7 @@ class MusicDb extends Schema with QueryTester {
     import testInstance._
 
     var ac = artists.lookup(alainCaron.id).get
-    
+
     assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
     passed('testKeyedEntityImplicitLookup)
   }
@@ -439,7 +486,7 @@ class MusicDb extends Schema with QueryTester {
     artistForDelete = artists.insert(new Person("Delete", "Me"))
 
     var c = artists.deleteWhere(a => a.id === artistForDelete.id)
-    
+
     assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
 
     assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
@@ -452,7 +499,7 @@ class MusicDb extends Schema with QueryTester {
       where(a.get.firstName === "Poncho" and s.interpretId === a.get.id)
       select(s)
       orderBy(s.title, a.get.id desc)
-    )  
+    )
 
   def testDynamicQuery1 = {
 
@@ -469,12 +516,12 @@ class MusicDb extends Schema with QueryTester {
     assert(allSongs == songsInhibited, "query inhibition failed, expected "+allSongs+", got " + songsInhibited)
 
     val songsNotInhibited = inhibitedArtistsInQuery(false)
-    
+
     val ponchoSongs = List(besameMama.title, freedomSound.title, watermelonMan.title)
 
     validateQuery('songsNotInhibited, songsNotInhibited, (s:Song)=>s.title,
       ponchoSongs)
- 
+
     passed('testDynamicQuery1)
   }
 
@@ -504,7 +551,7 @@ class MusicDb extends Schema with QueryTester {
         select((s.id, a.id))
         orderBy(s.title, a.id desc)
       )
-    
+
     validateQuery('inhibitedSongsInQuery, songArtistsTuples,  (t:(Option[Song],Person)) => (t._1.get.id, t._2.id),
       expected.toList
     )
@@ -532,7 +579,7 @@ class MusicDb extends Schema with QueryTester {
     assertionFailed('testPaginatedQuery1, p2, ep2)
     assertionFailed('testPaginatedQuery1, p3, ep3)
 
-    passed('testPaginatedQuery1)    
+    passed('testPaginatedQuery1)
   }
 
 
@@ -560,7 +607,7 @@ class MusicDb extends Schema with QueryTester {
 
     passed('testBetweenOperator)
   }
-  
+
   def leakTest = {
 
     for(i <- 1 to 5000) {

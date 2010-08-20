@@ -24,7 +24,7 @@ import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
  *  - Updatable Views ? Could it be used to model inheritance ?
  *
  *  - Dirty check on updates using either
- *    i) intercepter cglib ? (easyer on memory harder on CPU)
+ *    i) intercepter cglib ? (easier on memory harder on CPU)
  *    ii) hash code + signature ? ()
  *
  *  - ConcreteFactory[D <: Driver]
@@ -143,7 +143,7 @@ object Labo {
 //
 //  def b: B = this   // the compiler allows this
 //
-//  z(this)  // but not this, wich is strange,
+//  z(this)  // but not this, which is strange,
 //
 //  z(b) // since this it allowed
 //}

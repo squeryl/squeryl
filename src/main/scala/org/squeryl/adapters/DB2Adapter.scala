@@ -26,6 +26,9 @@ class DB2Adapter extends DatabaseAdapter {
 
   override def timestampTypeDeclaration = "timestamp"
 
+  // This defaults to 1M in size.
+  override def binaryTypeDeclaration = "blob"
+
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
   override def postCreateTable(s: Session, t: Table[_]) = {
@@ -128,6 +131,12 @@ class DB2Adapter extends DatabaseAdapter {
     }
     else
       e.write(sw)
+  }
+
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    // If you are keen enough you can implement a UDF and subclass this method to call out to it.
+    // See http://www.ibm.com/developerworks/data/library/techarticle/0301stolze/0301stolze.html for how.
+    throw new UnsupportedOperationException("DB2 does not support a regex scalar function")
   }
 
 }

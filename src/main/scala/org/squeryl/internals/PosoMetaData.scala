@@ -52,7 +52,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
         case e:IllegalArgumentException =>
           throw new RuntimeException("invalid constructor choice " + constructor._1, e)
         case e:Exception =>
-          throw new RuntimeException("exception occured while invoking constructor : " + constructor._1, e)
+          throw new RuntimeException("exception occurred while invoking constructor : " + constructor._1, e)
       }
 
     val members = new ArrayBuffer[(Member,HashSet[Annotation])]
@@ -156,7 +156,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       val cn = clasz.getName
       val test = params(0).getName + "$" + clasz.getSimpleName
       if(cn == test)
-        error("inner classes are not supported, except when outter class is a singleton (object)\ninner class is : " + cn)
+        error("inner classes are not supported, except when outer class is a singleton (object)\ninner class is : " + cn)
     }
 
     var res = new Array[Object](params.size)

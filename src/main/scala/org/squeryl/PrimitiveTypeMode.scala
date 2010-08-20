@@ -24,12 +24,12 @@ import java.util.Date
 /**
  *  This factory is meant to use POSOs (Plain old Scala Objects),
  * i.e. your object use Scala's primitive types to map to columns.
- * This can have a significantl performance advantage over using object
+ * This can have a significant performance advantage over using object
  * types i.e. a result set of N rows of objects with M field will generate
  * N * M objects for the garbage collector, while POSOs with primitive types
  * will each count for 1 for the garbage collector (to be more precise,
  * String and Option[] fields will add a +1 in both cases, but a custom String wrapper will
- * allso add one ref, for a total of 2 refs vs a single ref per string column
+ * also add one ref, for a total of 2 refs vs a single ref per string column
  * for the POSO).
  *  This lightweight strategy has a cost : constants and object field references
  * cannot distinguish at compile time, so this mode is less 'strict' than
@@ -58,7 +58,7 @@ trait PrimitiveTypeMode extends QueryDsl {
 
   type DateType = Date
 
-  //TODO: consider spliting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
+  //TODO: consider splitting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
   
   def createLeafNodeOfScalarIntType(i: IntType) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
