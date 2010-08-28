@@ -34,6 +34,8 @@ trait Schema {
 
   private val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[_,_,_]]
 
+  private val _columnGroupAttributeAssignments = new ArrayBuffer[ColumnGroupAttributeAssignment]
+
   private [squeryl] val _namingScope = new HashSet[String] 
 
   private [squeryl] def _addRelation(r: OneToManyRelation[_,_]) =
@@ -119,8 +121,42 @@ trait Schema {
     if(_dbAdapter.supportsForeignKeyConstraints)
       _declareForeignKeyConstraints
 
-    _createUniqueConstraints
+    _createUniqueConstraintsOfCompositePKs
   }
+
+  private def _writeColumnGroupAttributeAssignments: Iterable[String] = {
+
+    for(cgaa <- _columnGroupAttributeAssignments) yield {
+
+
+      val unique = cgaa.findAttribute[Unique]
+      val index = cgaa.findAttribute[Indexed]
+
+      (unique, index) match {
+        case (None,         None) => error("emtpy attribute list should not be possible to create with DSL (Squeryl bug).")
+        case (Some(_), None) => _dbAdapter.writeUniquenessConstraint(cgaa.columns)
+        case (None,         Some(Indexed(idxName))) => _dbAdapter.writeIndexDeclaration(cgaa.columns, idxName, false)
+        case (Some(_), Some(Indexed(idxName))) => _dbAdapter.writeIndexDeclaration(cgaa.columns, idxName, true)
+      }
+    }
+  }
+//      val sw = new StatementWriter(_dbAdapter)
+//      _dbAdapter.writeColumnGroupDeclaration(cgaa, sw)
+//      val cs = Session.currentSession
+//      val s = cs.connection.createStatement
+//      val statement = sw.statement
+//      try {
+//        s.execute(statement)
+//      }
+//      catch {
+//        case e:SQLException => throw new RuntimeException("error executing " + statement + "\n" + e, e)
+//      }
+//      finally {
+//        s.close
+//      }
+//    }
+//  }
+
 
   private def _dropForeignKeyConstraints = {
 
@@ -182,7 +218,7 @@ trait Schema {
       _dbAdapter.postCreateTable(Session.currentSession, t)
     }    
 
-  private def _createUniqueConstraints = {
+  private def _createUniqueConstraintsOfCompositePKs = {
 
     val cs = Session.currentSession
 
@@ -309,14 +345,14 @@ trait Schema {
 
   class TableDeclarations[A](table: Table[A]) {
 
-    def declareColumnAttributes(declarations: Function1[A,BaseColumnAttributeAssignment]*) = {
+    def declare(declarations: Function1[A,BaseColumnAttributeAssignment]*) = {
 
       val colAss =
         Utils.mapSampleObject(table, (a:A)=> declarations.map(d=> d(a)))
 
       // all fields that have declarations are first reset :
       for(ca <- colAss)
-        ca.left._clearColumnAttributes
+        ca.clearColumnAttributes
 
       for(ca <- colAss) ca match {
         case dva:DefaultValueAssignment    => dva.left._defaultValue = Some(dva.value)
@@ -324,19 +360,25 @@ trait Schema {
 
           for(ca <- caa.columnAttributes)
             (caa.left._addColumnAttribute(ca))
-        }
+        }        
+        case gca:ColumnGroupAttributeAssignment => _addClumnGroupAttributeAssignment(gca)
+        case ctaa:ColumnTupleAttributeAssignment => {}
+        case a:Any => error("did not match on " + a.getClass.getName)
       }
 
       // Validate that a KeyedEntity.id is not left without a uniqueness constraint :
-      for(ca <- colAss.find(_.left.isIdFieldOfKeyedEntity))
+      for(ca <- colAss.find(_.isIdFieldOfKeyedEntity))
         assert(
-          ca.left.columnAttributes.exists(_.isInstanceOf[PrimaryKey]) ||
-          ca.left.columnAttributes.exists(_.isInstanceOf[Unique]),
-          "Column 'id' of table '" + table.name + "' must have a uniqueness constraint by having the column attribute primaryKey or unique"
+          ca.columnAttributes.exists(_.isInstanceOf[PrimaryKey]) ||
+          ca.columnAttributes.exists(_.isInstanceOf[Unique]),
+          "Column 'id' of table '" + table.name +
+          "' must have a uniqueness constraint by having the column attribute 'primaryKey' or 'unique' to honor it's KeyedEntity trait"
         )
 
-      // Validate that autoIncremented is not used on other fields than KeyedEntity[A].id :  
+      // Validate that autoIncremented is not used on other fields than KeyedEntity[A].id :
+      // since it is not yet unsupported :
       for(ca <- colAss) ca match {
+        case cga:ColumnGroupAttributeAssignment => {}
         case caa:ColumnAttributeAssignment => {
           for(ca <- caa.columnAttributes if ca.isInstanceOf[AutoIncremented] && !(caa.left.isIdFieldOfKeyedEntity))
             error("Field " + caa.left.nameOfProperty + " of table " + table.name +
@@ -346,18 +388,32 @@ trait Schema {
       }
     }
   }
+
+  private def _addClumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
+    _columnGroupAttributeAssignments.append(cga);
   
   def defaultColumnAttributesForKeyedEntityId = Set(new PrimaryKey, new AutoIncremented(None))
   
-  def unique = Unique()
+  protected def unique = Unique()
 
-  def primaryKey = PrimaryKey()
+  protected def primaryKey = PrimaryKey()
 
-  def autoIncremented = AutoIncremented(None)
+  protected def autoIncremented = AutoIncremented(None)
   
-  def autoIncremented(sequenceName: String) = AutoIncremented(Some(sequenceName))
+  protected def autoIncremented(sequenceName: String) = AutoIncremented(Some(sequenceName))
 
-  def indexed = Indexed(None)
+  protected def indexed = Indexed(None)
 
-  def indexed(indexName: String) = Indexed(Some(indexName))
+  protected def indexed(indexName: String) = Indexed(Some(indexName))
+
+  class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
+
+    def are(columnAttributes: AttributeValidOnMultipleColumn*) =
+      new ColumnTupleAttributeAssignment(cols, columnAttributes)
+  }
+
+  def columns(fieldList: TypedExpressionNode[_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
+
+//  def columns[A1](a1: TypedExpressionNode[A1]) = new ColGroupDeclaration(Seq(a1._fieldMetaData))
+//  def columns[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) = new ColGroupDeclaration(Seq(a1._fieldMetaData,a2._fieldMetaData))
 }

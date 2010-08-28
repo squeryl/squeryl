@@ -19,7 +19,7 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.dsl._
-import org.squeryl.{Schema, Session}
+import org.squeryl.{KeyedEntity, Schema, Session}
 
 trait ExpressionNode {
 
@@ -160,13 +160,74 @@ trait LogicalBoolean extends ExpressionNode  {
 
 class UpdateAssignment(val left: FieldMetaData, val right: ExpressionNode)
 
-class BaseColumnAttributeAssignment(val left: FieldMetaData)
+trait BaseColumnAttributeAssignment {
 
-case class ColumnAttributeAssignment(_left: FieldMetaData, val columnAttributes: Seq[ColumnAttribute])
-  extends BaseColumnAttributeAssignment(_left)
+  def clearColumnAttributes: Unit
 
-case class DefaultValueAssignment(_left: FieldMetaData, val value: TypedExpressionNode[_])
-  extends BaseColumnAttributeAssignment(_left)
+  def isIdFieldOfKeyedEntity: Boolean
+
+  def columnAttributes: Seq[ColumnAttribute]
+}
+
+class ColumnGroupAttributeAssignment(val group: CompositeKey, val columnAttributes: Seq[ColumnAttribute])
+  extends BaseColumnAttributeAssignment {
+
+  def clearColumnAttributes = group._fields.foreach(_._clearColumnAttributes)
+
+  def columns: Iterable[FieldMetaData] = group._fields
+
+  def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+    findAttribute[A](m) != None
+
+  def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) = 
+    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))
+
+
+  //def schema =
+    //group._fields.head.parentMetaData.schema
+
+  def isIdFieldOfKeyedEntity = {
+    val fmdHead = group._fields.head
+    classOf[KeyedEntity[Any]].isAssignableFrom(fmdHead.parentMetaData.clasz) &&
+    group._propertyName == "id"
+  }
+}
+
+
+class ColumnTupleAttributeAssignment(cols: Seq[FieldMetaData], val columnAttributes: Seq[ColumnAttribute], pkName: Option[String] = None)
+  extends BaseColumnAttributeAssignment {
+
+  def clearColumnAttributes = cols.foreach(_._clearColumnAttributes)
+
+  def columns: Iterable[FieldMetaData] = cols
+
+  def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+    findAttribute[A](m) != None
+
+  def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))
+
+  def isIdFieldOfKeyedEntity = false
+}
+
+class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: Seq[ColumnAttribute])
+  extends BaseColumnAttributeAssignment {
+
+  def clearColumnAttributes = left._clearColumnAttributes
+
+  def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity 
+}
+
+class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpressionNode[_])
+  extends BaseColumnAttributeAssignment {
+
+  def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity
+
+  def clearColumnAttributes = left._clearColumnAttributes
+
+  def columnAttributes = Nil
+}
+
 
 trait TypedExpressionNode[T] extends ExpressionNode {
 
@@ -176,9 +237,6 @@ trait TypedExpressionNode[T] extends ExpressionNode {
 
   def :=[B <% TypedExpressionNode[T]] (b: B) =
     new UpdateAssignment(_fieldMetaData, b : TypedExpressionNode[T])
-
-  def is(columnAttributes: ColumnAttribute*)(implicit restrictUsageWithinSchema: Schema) =
-    new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
 
   def defaultsTo[B <% TypedExpressionNode[T]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
     new DefaultValueAssignment(_fieldMetaData, value : TypedExpressionNode[T])

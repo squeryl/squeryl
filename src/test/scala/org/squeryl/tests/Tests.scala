@@ -107,6 +107,12 @@ object Tests extends QueryTester {
     import org.squeryl.PrimitiveTypeMode._
 
     SessionFactory.concreteFactory = Some(s)
+
+    inTransaction {
+      inTransaction {
+        (new MusicDb).test1
+      }
+    }
     
     transaction {
 
@@ -115,12 +121,6 @@ object Tests extends QueryTester {
       (new SchoolDb2Tests).testAll
 
       (new SchoolDb).test1
-    }
-
-    inTransaction {
-      inTransaction {
-        (new MusicDb).test1
-      }
     }
 
     val session = s()

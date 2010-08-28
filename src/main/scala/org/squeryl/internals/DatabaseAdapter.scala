@@ -203,6 +203,7 @@ trait DatabaseAdapter {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
     def handleTimestampType = timestampTypeDeclaration
     def handleBinaryType = binaryTypeDeclaration
+    def handleEnumerationValueType = intTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
@@ -370,10 +371,14 @@ trait DatabaseAdapter {
     var v = r
     if(v.isInstanceOf[Product1[_]])
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
+
     if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date]  && ! v.isInstanceOf[Timestamp])
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
-    if(v.isInstanceOf[scala.math.BigDecimal])
+    else if(v.isInstanceOf[scala.math.BigDecimal])
        v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
+    else if(v.isInstanceOf[scala.Enumeration#Value])
+       v = v.asInstanceOf[scala.Enumeration#Value].id.asInstanceOf[AnyRef]
+
     v
   }
 
@@ -652,4 +657,31 @@ trait DatabaseAdapter {
     val binaryOpNode = new BinaryOperatorNode(left, right, "||")
     binaryOpNode.doWrite(sw)
   }
+
+  def writeUniquenessConstraint(columnDefs: Iterable[FieldMetaData]) = ""
+
+  def writeIndexDeclaration(columnDefs: Iterable[FieldMetaData], nameOfIndex: Option[String], isUnique: Boolean) = ""
+
+
+//  def writeColumnGroupDeclaration(cga: ColumnGroupAttributeAssignment, sw: StatementWriter): Unit = {
+//
+//    val index = cga.columnAttributes.find(_.isInstanceOf[Indexed])
+//
+//    sw.write("create ")
+//
+//    if(cga.columnAttributes.contains(new Unique())) {
+//      sw.write("unique ")
+//      index.foreach(
+//        sw.write(_.nameOfIndex + " ")
+//      )
+//    }
+//
+//    sw.write("index ")
+//    sw.write(cga.group._propertyName + "_idx ")
+//
+//    sw.write("on ")
+//    sw.write(
+//      cga.group._fields.map(_.columnName).mkString("(",",",")")
+//    )
+//  }
 }

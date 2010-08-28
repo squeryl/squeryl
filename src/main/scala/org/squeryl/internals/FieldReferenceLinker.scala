@@ -274,7 +274,9 @@ object FieldReferenceLinker {
         var res = proxy.invokeSuper(o, args);
 
         if(isComposite) {
-          res.asInstanceOf[CompositeKey]._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper)))
+          val ck = res.asInstanceOf[CompositeKey]
+          ck._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper)))
+          ck._propertyName = Some(m.getName)
           //_compositeKey.set(Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper))))
           _compositeKeyMembers.set(None)
         }

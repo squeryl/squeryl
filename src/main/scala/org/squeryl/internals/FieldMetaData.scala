@@ -36,7 +36,34 @@ class FieldMetaData(
         setter: Option[Method],
         field:  Option[Field],
         columnAnnotation: Option[Column],
-        val isOptimisticCounter: Boolean) {
+        val isOptimisticCounter: Boolean,
+        val sampleValue: AnyRef) {
+  
+  def isEnumeration = {
+    classOf[Enumeration#Value].isAssignableFrom(wrappedFieldType)
+  }
+
+  def canonicalEnumerationValueFor(id: Int) =
+    if(sampleValue == null) {
+      error("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
+    }
+    else {
+
+      val svE =
+        if(sampleValue.isInstanceOf[Option[_]])
+          sampleValue.asInstanceOf[Option[Enumeration#Value]].get
+        else
+          sampleValue.asInstanceOf[Enumeration#Value]
+
+      val m = svE.getClass.getField("$outer")
+
+      val enu = m.get(svE).asInstanceOf[Enumeration]
+
+      val r = enu.values.find(_.id == id).get
+
+      r
+    }
+
   /**
    * This field is mutable only by the Schema trait, and only during the Schema instantiation,
    * so it can safely be considered immutable (read only) by the columnAttributes accessor 
@@ -224,7 +251,13 @@ class FieldMetaData(
   def set(target: AnyRef, v: AnyRef) = {
     try {
       val v0:AnyRef =
-        if(customTypeFactory == None)
+        if(isEnumeration) {
+          if(v != null)
+            canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
+          else
+            null
+        }
+        else if(customTypeFactory == None)
           v
         else {
           val f = customTypeFactory.get
@@ -293,6 +326,7 @@ object FieldMetaData {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = true
     def handleTimestampType = true
     def handleBinaryType = true
+    def handleEnumerationValueType = true
     def handleUnknownType(c: Class[_]) =
       c.isAssignableFrom(classOf[Some[_]]) ||
       classOf[Product1[Any]].isAssignableFrom(c)
@@ -333,6 +367,8 @@ object FieldMetaData {
 
       if(v != null && v == None) // can't deduce the type from None in this case the Annotation
         v = null         //needs to tell us the type, if it doesn't it will a few lines bellow
+
+      val constructorSuppliedDefaultValue = v
 
       var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
@@ -385,7 +421,8 @@ object FieldMetaData {
         setter,
         field,
         colAnnotation,
-        isOptimisticCounter)
+        isOptimisticCounter,
+        constructorSuppliedDefaultValue)
     }
   }
 
@@ -428,6 +465,7 @@ object FieldMetaData {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultSizeOfBigDecimal._1
     def handleTimestampType = -1
     def handleBinaryType = 255
+    def handleEnumerationValueType = 4
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
@@ -444,7 +482,13 @@ object FieldMetaData {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleTimestampType = new java.sql.Timestamp(0)
     def handleBinaryType = new Array[Byte](0)
+    def handleEnumerationValueType = DummyE.Z
     def handleUnknownType(c: Class[_]) = null
+  }
+
+  object DummyE extends Enumeration {
+    type DummyE = Value
+    val Z = Value
   }
 
   private val _mapper = new FieldTypeHandler[(ResultSet,Int)=>AnyRef] {
@@ -479,6 +523,7 @@ object FieldMetaData {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = _bigDecM
     def handleTimestampType = _timestampM
     def handleBinaryType = _binaryM
+    def handleEnumerationValueType = _intM
 
     def handleUnknownType(c: Class[_]) =
       error("field type " + c.getName + " is not supported")

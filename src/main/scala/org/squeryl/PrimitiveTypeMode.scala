@@ -58,7 +58,9 @@ trait PrimitiveTypeMode extends QueryDsl {
 
   type DateType = Date
 
-  //TODO: consider splitting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
+  type EnumerationValueType = Enumeration#Value
+
+  //TODO: consider spliting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
   
   def createLeafNodeOfScalarIntType(i: IntType) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
@@ -192,6 +194,21 @@ trait PrimitiveTypeMode extends QueryDsl {
         new SelectElementReference[Option[Date]](n) with  DateExpression[Option[Date]]
     }
 
+  def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Enumeration#Value](e) with EnumExpression[Enumeration#Value]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
+    }
+
+  def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[Enumeration#Value]] =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[Enumeration#Value]](e) with EnumExpression[Option[Enumeration#Value]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
+    }
 
   protected def mapByte2ByteType(i: Byte) = i
   protected def mapInt2IntType(i: Int) = i
@@ -202,6 +219,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected def mapLong2LongType(l: Long) = l
   protected def mapBoolean2BooleanType(b: Boolean) = b
   protected def mapDate2DateType(b: Date) = b
+  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
 
   protected implicit val sampleByte: ByteType = 0xF.byteValue
   protected implicit val sampleInt: IntType = 0
@@ -212,4 +230,10 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected implicit val sampleLong: LongType = 0
   protected implicit val sampleBoolean: BooleanType = false
   protected implicit val sampleDate: DateType = new Date
+  //protected implicit def sampleEnumerationValueType: EnumerationValueType = DummyEnum.DummyEnumerationValue
+}
+
+object DummyEnum extends Enumeration {
+  type DummyEnum = Value
+  val DummyEnumerationValue = Value(-1, "DummyEnumerationValue")
 }

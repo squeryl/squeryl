@@ -17,11 +17,19 @@ package org.squeryl.internals
 
 
 trait ColumnAttribute
+trait MultipleColumnAttribute
 
+trait AttributeValidOnMultipleColumn extends ColumnAttribute
+trait AttributeValidOnNumericalColumn extends ColumnAttribute
+trait AttributeValidOnNonNumericalColumn extends ColumnAttribute
 
-case class Unique() extends ColumnAttribute
+case class Unique() extends ColumnAttribute with MultipleColumnAttribute
+  with AttributeValidOnNonNumericalColumn
+  with AttributeValidOnNumericalColumn
+  with AttributeValidOnMultipleColumn
 
-case class AutoIncremented(var nameOfSequence: Option[String]) extends ColumnAttribute {
+case class AutoIncremented(var nameOfSequence: Option[String]) extends ColumnAttribute
+  with AttributeValidOnNumericalColumn {
 
   override def hashCode = this.getClass.hashCode
   
@@ -29,6 +37,12 @@ case class AutoIncremented(var nameOfSequence: Option[String]) extends ColumnAtt
     any.isInstanceOf[AutoIncremented]
 }
 
-case class Indexed(val nameOfIndex: Option[String]) extends ColumnAttribute
+case class Indexed(val nameOfIndex: Option[String]) extends ColumnAttribute with MultipleColumnAttribute
+        with AttributeValidOnNonNumericalColumn
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnMultipleColumn
 
 case class PrimaryKey() extends ColumnAttribute
+        with AttributeValidOnNonNumericalColumn
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnMultipleColumn

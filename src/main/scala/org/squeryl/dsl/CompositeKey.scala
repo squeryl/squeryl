@@ -17,11 +17,14 @@ package org.squeryl.dsl
 
 import ast._
 import collection.mutable.ArrayBuffer
-import org.squeryl.internals.FieldMetaData
+import org.squeryl.Schema
+import org.squeryl.internals.{AttributeValidOnMultipleColumn, ColumnAttribute, FieldMetaData}
 
 trait CompositeKey {
 
   private [squeryl] var _members: Option[Iterable[SelectElementReference[Any]]] = None
+
+  private [squeryl] var _propertyName: Option[String] = None
 
   private [squeryl] def _fields: Iterable[FieldMetaData] =
     if(_members == None)
@@ -56,6 +59,8 @@ trait CompositeKey {
 
     r
   }
+
+  def is(attributes: AttributeValidOnMultipleColumn*) = new ColumnTupleAttributeAssignment(_fields.toSeq, attributes, Some(_propertyName.get))  
 }
 
 case class CompositeKey2[A1,A2](val a1:A1, val a2: A2) extends CompositeKey {
