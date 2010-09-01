@@ -44,9 +44,7 @@ class FieldMetaData(
 
   def canonicalEnumerationValueFor(id: Int) =
     if(sampleValue == null) {
-
-      //val c = classOf[Enumeration#Value]
-      error(".......")
+      error("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
     }
     else {
 
@@ -56,7 +54,7 @@ class FieldMetaData(
 
       val enu = m.get(sampleValue).asInstanceOf[Enumeration]
 
-      val r = enu.values.find(_.id == svE.id).get
+      val r = enu.values.find(_.id == id).get
 
       r
     }

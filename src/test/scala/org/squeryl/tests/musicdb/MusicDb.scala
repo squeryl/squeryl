@@ -49,7 +49,7 @@ class MusicDbObject extends KeyedEntity[Int] {
 
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
 
-class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, val genre: Genre) extends MusicDbObject {
+class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre) extends MusicDbObject {
   def this() = this("", 0, 0, 0, Genre.Bluegrass)
 }
 
@@ -652,7 +652,31 @@ class MusicDb extends Schema with QueryTester {
 
     val z = md.canonicalEnumerationValueFor(2)
 
-    val q = songs.where(_.genre === Jazz).toList
+    val q = songs.where(_.genre === Jazz).map(_.id).toSet
+
+    assertEquals(q, Set(watermelonMan.id, freedomSound.id), "testEnum failed")
+
+    var wmm = songs.where(_.id === watermelonMan.id).single
+    
+    wmm.genre = Genre.Latin
+
+    //loggerOn
+    songs.update(wmm)
+
+    wmm = songs.where(_.id === watermelonMan.id).single
+
+    assertEquals(Genre.Latin, wmm.genre, "testEnum failed")
+
+    update(songs)(s =>
+      where(s.id === watermelonMan.id)
+      set(s.genre := Genre.Jazz)
+    )
+
+    wmm = songs.where(_.id === watermelonMan.id).single
+
+    assertEquals(Genre.Jazz, wmm.genre, "testEnum failed")
+
+    passed('testEnums)
 
     //val q2 = songs.where(_.genre === Tempo.Allegro)
   }
