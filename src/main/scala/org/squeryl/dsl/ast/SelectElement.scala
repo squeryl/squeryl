@@ -78,6 +78,19 @@ trait SelectElement extends ExpressionNode {
 
     def sample = error("!")
   }
+
+  /**
+   * Will throw a ClassCastException if this type is not a Enumeration#Value
+   */
+  def createEnumerationOptionMapper: OutMapper[Option[Enumeration#Value]] = new OutMapper[Option[Enumeration#Value]]() {
+
+    def doMap(rs: ResultSet) = {
+      val fmd = this.asInstanceOf[FieldSelectElement].fieldMataData
+      Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
+    }
+
+    def sample = error("!")
+  }
 }
 
 class TupleSelectElement

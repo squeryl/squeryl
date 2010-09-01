@@ -48,11 +48,15 @@ class FieldMetaData(
     }
     else {
 
-      val svE = sampleValue.asInstanceOf[Enumeration#Value]
+      val svE =
+        if(sampleValue.isInstanceOf[Option[_]])
+          sampleValue.asInstanceOf[Option[Enumeration#Value]].get
+        else 
+          sampleValue.asInstanceOf[Enumeration#Value]
 
-      val m = sampleValue.getClass.getField("$outer")
+      val m = svE.getClass.getField("$outer")
 
-      val enu = m.get(sampleValue).asInstanceOf[Enumeration]
+      val enu = m.get(svE).asInstanceOf[Enumeration]
 
       val r = enu.values.find(_.id == id).get
 
@@ -171,8 +175,12 @@ class FieldMetaData(
   def set(target: AnyRef, v: AnyRef) = {
     try {
       val v0:AnyRef =
-        if(isEnumeration)
-          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
+        if(isEnumeration) {
+          if(v != null)
+            canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
+          else
+            null
+        }
         else if(customTypeFactory == None)
           v
         else {

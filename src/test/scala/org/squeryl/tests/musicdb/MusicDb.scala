@@ -49,8 +49,8 @@ class MusicDbObject extends KeyedEntity[Int] {
 
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
 
-class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre) extends MusicDbObject {
-  def this() = this("", 0, 0, 0, Genre.Bluegrass)
+class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject {
+  def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
 }
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
@@ -84,12 +84,12 @@ class MusicDb extends Schema with QueryTester {
     val hossamRamzy = artists.insert(new Person("Hossam", "Ramzy"))
 
     val congaBlue = cds.insert(new Cd("Conga Blue", ponchoSanchez.id, 1998))
-    val   watermelonMan = songs.insert(new Song("Watermelon Man", herbyHancock.id, ponchoSanchez.id, congaBlue.id, Jazz))
-    val   besameMama = songs.insert(new Song("Besame Mama", mongoSantaMaria.id, ponchoSanchez.id, congaBlue.id, Latin))
+    val   watermelonMan = songs.insert(new Song("Watermelon Man", herbyHancock.id, ponchoSanchez.id, congaBlue.id, Jazz, Some(Latin)))
+    val   besameMama = songs.insert(new Song("Besame Mama", mongoSantaMaria.id, ponchoSanchez.id, congaBlue.id, Latin, None))
 
     val freedomSoundAlbum = cds.insert(new Cd("Freedom Sound", ponchoSanchez.id, 1997))
 
-    val   freedomSound = songs.insert(new Song("Freedom Sound", ponchoSanchez.id, ponchoSanchez.id, freedomSoundAlbum.id, Jazz))
+    val   freedomSound = songs.insert(new Song("Freedom Sound", ponchoSanchez.id, ponchoSanchez.id, freedomSoundAlbum.id, Jazz, Some(Latin)))
 
     val expectedSongCountPerAlbum = List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
   }
@@ -648,9 +648,8 @@ class MusicDb extends Schema with QueryTester {
   
   def testEnums = {
 
-    val md = songs.posoMetaData.findFieldMetaDataForProperty("genre").get
-
-    val z = md.canonicalEnumerationValueFor(2)
+    //val md = songs.posoMetaData.findFieldMetaDataForProperty("genre").get
+    //val z = md.canonicalEnumerationValueFor(2)
 
     val q = songs.where(_.genre === Jazz).map(_.id).toSet
 
@@ -675,6 +674,42 @@ class MusicDb extends Schema with QueryTester {
     wmm = songs.where(_.id === watermelonMan.id).single
 
     assertEquals(Genre.Jazz, wmm.genre, "testEnum failed")
+
+    //test for  Option[Enumeration] :
+
+    val q2 = songs.where(_.secondaryGenre === Some(Genre.Latin)).map(_.id).toSet
+
+    assertEquals(q2, Set(watermelonMan.id, freedomSound.id), "testEnum failed")
+
+    wmm = songs.where(_.id === watermelonMan.id).single
+
+    wmm.secondaryGenre = Some(Genre.Rock)
+
+    //loggerOn
+    songs.update(wmm)
+
+    wmm = songs.where(_.id === watermelonMan.id).single
+
+    assertEquals(Some(Genre.Rock), wmm.secondaryGenre, "testEnum failed")
+
+    update(songs)(s =>
+      where(s.id === watermelonMan.id)
+      set(s.secondaryGenre := None)
+    )
+
+    wmm = songs.where(_.id === watermelonMan.id).single
+
+    assertEquals(None, wmm.secondaryGenre, "testEnum failed")
+
+
+    update(songs)(s =>
+      where(s.id === watermelonMan.id)
+      set(s.secondaryGenre := Some(Genre.Latin))
+    )
+
+    wmm = songs.where(_.id === watermelonMan.id).single
+
+    assertEquals(Some(Genre.Latin), wmm.secondaryGenre, "testEnum failed")    
 
     passed('testEnums)
 
