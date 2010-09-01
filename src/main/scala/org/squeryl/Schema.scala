@@ -91,9 +91,9 @@ trait Schema {
 
   /**
    * This will drop all tables and related sequences in the schema... it's a
-   * dangerous operation, typically this is only usefull for devellopment
+   * dangerous operation, typically this is only useful for development
    * database instances, the method is protected in order to make it a little
-   * less 'accessible'  
+   * less 'accessible'
    */
   protected def drop: Unit = {
 
@@ -282,9 +282,9 @@ trait Schema {
     applyDefaultForeignKeyPolicy(foreingKeyDeclaration)
 
   /**
-   * @return a Tuple2 with (LengthOfDecimal, Scale) that will determin the storage
+   * @return a Tuple2 with (LengthOfDecimal, Scale) that will determine the storage
    * length of the database type that map fields of type java.lang.BigDecimal
-   * Can be overriden by the Column Annotation, ex.: Column(length=22, scale=20)
+   * Can be overridden by the Column Annotation, ex.: Column(length=22, scale=20)
    * default is (20,16)
    */
   
@@ -292,7 +292,7 @@ trait Schema {
 
   /**
    * @return the default database storage (column) length for String columns for this Schema,
-   * Can be overriden by the Column Annotation ex.: Column(length=256)
+   * Can be overridden by the Column Annotation ex.: Column(length=256)
    * default is 128 
    */
   def defaultLengthOfString = 123

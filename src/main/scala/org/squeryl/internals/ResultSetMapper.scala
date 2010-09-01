@@ -199,7 +199,7 @@ class ResultSetMapper extends ResultSetUtils {
         return false
     }
     // if we get here we have matched on a row wit all nulls OR we haven't matched,
-    // this is an extreme corner case, we will return None, in reallity we should
+    // this is an extreme corner case, we will return None, in reality we should
     // sometimes return a Some with all fields None
     true
   }

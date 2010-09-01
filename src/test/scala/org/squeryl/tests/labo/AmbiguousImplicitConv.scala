@@ -77,7 +77,7 @@ object AmbiguousImplicitConv {
 
   I haven't checked in the language spec if, in case of an
   ambiguity, the compiler should choose the shortest path
-  (or the lesser count of conversion neccessary) to resolve it
+  (or the lesser count of conversion necessary) to resolve it
   If it's not, then I would put it on my 2.8 wish list ! ;-)
   Anyhow, since it did compile with r19650-b20091114020153,
   I figure it must have been doing this (resolving using the
