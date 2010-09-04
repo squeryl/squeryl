@@ -31,13 +31,13 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
     
     //dumpResourceClosingPolicyOfAllDrivers
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    allTestsOnH2
+    //allTestsOnH2
 
     //leakTest    
   }
@@ -73,11 +73,11 @@ object Tests extends QueryTester {
 
   def allTestsOnAllDatabases = {
 
+    allTests("Oracle", createOracleTestConnection _)
+    
     allTests("PosgreSQL", createPostgreSqlTestConnection _)
     
     allTests("MySQL", createMySQLTestConnection _)
-
-    allTests("Oracle", createOracleTestConnection _)
 
     issue14Test
 

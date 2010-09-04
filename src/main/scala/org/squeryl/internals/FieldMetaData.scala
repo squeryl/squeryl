@@ -38,7 +38,7 @@ class FieldMetaData(
         columnAnnotation: Option[Column],
         val isOptimisticCounter: Boolean,
         val sampleValue: AnyRef) {
-  
+
   def isEnumeration = {
     classOf[Enumeration#Value].isAssignableFrom(wrappedFieldType)
   }
@@ -54,7 +54,7 @@ class FieldMetaData(
           sampleValue.asInstanceOf[Option[Enumeration#Value]].get
         else
           sampleValue.asInstanceOf[Enumeration#Value]
-
+      
       val m = svE.getClass.getField("$outer")
 
       val enu = m.get(svE).asInstanceOf[Enumeration]

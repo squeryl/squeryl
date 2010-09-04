@@ -167,47 +167,38 @@ trait BaseColumnAttributeAssignment {
   def isIdFieldOfKeyedEntity: Boolean
 
   def columnAttributes: Seq[ColumnAttribute]
-}
-
-class ColumnGroupAttributeAssignment(val group: CompositeKey, val columnAttributes: Seq[ColumnAttribute])
-  extends BaseColumnAttributeAssignment {
-
-  def clearColumnAttributes = group._fields.foreach(_._clearColumnAttributes)
-
-  def columns: Iterable[FieldMetaData] = group._fields
-
-  def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
-    findAttribute[A](m) != None
-
-  def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) = 
-    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))
-
-
-  //def schema =
-    //group._fields.head.parentMetaData.schema
-
-  def isIdFieldOfKeyedEntity = {
-    val fmdHead = group._fields.head
-    classOf[KeyedEntity[Any]].isAssignableFrom(fmdHead.parentMetaData.clasz) &&
-    group._propertyName == "id"
-  }
-}
-
-
-class ColumnTupleAttributeAssignment(cols: Seq[FieldMetaData], val columnAttributes: Seq[ColumnAttribute], pkName: Option[String] = None)
-  extends BaseColumnAttributeAssignment {
-
-  def clearColumnAttributes = cols.foreach(_._clearColumnAttributes)
-
-  def columns: Iterable[FieldMetaData] = cols
 
   def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
     findAttribute[A](m) != None
 
   def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
-    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))
+    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))  
+}
+
+class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], val columnAttributes: Seq[ColumnAttribute])
+  extends BaseColumnAttributeAssignment {
+
+  def clearColumnAttributes = columns.foreach(_._clearColumnAttributes)
+
+  def columns: Seq[FieldMetaData] = cols
 
   def isIdFieldOfKeyedEntity = false
+
+  def name:Option[String] = None
+}
+
+class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes: Seq[ColumnAttribute])
+  extends ColumnGroupAttributeAssignment(group._fields, _columnAttributes) {
+
+  override def isIdFieldOfKeyedEntity = {
+    val fmdHead = group._fields.head
+    classOf[KeyedEntity[Any]].isAssignableFrom(fmdHead.parentMetaData.clasz) &&
+    group._propertyName == "id"
+  }
+
+  assert(group._propertyName != None)
+
+  override def name:Option[String] = group._propertyName
 }
 
 class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: Seq[ColumnAttribute])

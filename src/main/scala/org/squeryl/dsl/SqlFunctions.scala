@@ -16,7 +16,7 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.internals.{OutMapper}
+import org.squeryl.internals.{StatementWriter, OutMapper}
 /*
 
 
@@ -38,7 +38,11 @@ trait SqlFunctions  {
   def max[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
   def min[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")
 
-  def count = new CountFunction
+  def count: CountFunction = count()
+
+  def count(e: TypedExpressionNode[_]*) = new CountFunction(e, false)
+
+  def countDistinct(e: TypedExpressionNode[_]*) = new CountFunction(e, true)
 
   def nvl[A,B](a: NumericalExpression[Option[A]], b: NumericalExpression[B]) = new NvlFunctionNumerical[A,B](a.asInstanceOf[NumericalExpression[A]],b)
 
@@ -51,7 +55,24 @@ trait SqlFunctions  {
   def lower[A](s: StringExpression[A]) = new FunctionNode("lower", Some(s.mapper), Seq(s)) with StringExpression[A]
 
 
-  class CountFunction
-    extends FunctionNode[LongType]("count", Some(createOutMapperLongType) : Option[OutMapper[LongType]], List(new TokenExpressionNode("*"))) 
-      with NumericalExpression[LongType]
+  class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean)
+    extends FunctionNode[LongType](
+      "count",
+      Some(createOutMapperLongType) : Option[OutMapper[LongType]],
+      if(_args == Nil) Seq(new TokenExpressionNode("*")) else _args
+    )
+    with NumericalExpression[LongType] {
+
+    override def doWrite(sw: StatementWriter) = {
+
+      sw.write(name)
+      sw.write("(")
+
+      if(isDistinct)
+        sw.write("distinct ")
+
+      sw.writeNodesWithSeparator(args, ",", false)
+      sw.write(")")
+    }
+  }
 }

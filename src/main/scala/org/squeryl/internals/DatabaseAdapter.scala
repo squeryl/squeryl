@@ -658,30 +658,52 @@ trait DatabaseAdapter {
     binaryOpNode.doWrite(sw)
   }
 
-  def writeUniquenessConstraint(columnDefs: Iterable[FieldMetaData]) = ""
+//  /**
+//   * @nameOfCompositeKey when not None, the column group forms a composite key, 'nameOfCompositeKey' can be used
+//   * as part of the name to create a more meaningfull name for the constraint
+//   */
+//  def writeUniquenessConstraint(columnDefs: Seq[FieldMetaData], nameOfCompositeKey: Option[String]) = ""
 
-  def writeIndexDeclaration(columnDefs: Iterable[FieldMetaData], nameOfIndex: Option[String], isUnique: Boolean) = ""
+  /**
+   * @name the name specified in the Schema, when not None, it  must be used as the name
+   * @nameOfCompositeKey when not None, the column group forms a composite key, 'nameOfCompositeKey' can be used
+   * as part of the name to create a more meaningfull name for the constraint, when 'name' is None
+   */
+  def writeIndexDeclaration(columnDefs: Seq[FieldMetaData], name:Option[String], nameOfCompositeKey: Option[String], isUnique: Boolean) = {                                    
+    val sb = new StringBuilder(256)
+    sb.append("create ")
 
+    if(isUnique)
+      sb.append("unique ")
 
-//  def writeColumnGroupDeclaration(cga: ColumnGroupAttributeAssignment, sw: StatementWriter): Unit = {
-//
-//    val index = cga.columnAttributes.find(_.isInstanceOf[Indexed])
-//
-//    sw.write("create ")
-//
-//    if(cga.columnAttributes.contains(new Unique())) {
-//      sw.write("unique ")
-//      index.foreach(
-//        sw.write(_.nameOfIndex + " ")
-//      )
-//    }
-//
-//    sw.write("index ")
-//    sw.write(cga.group._propertyName + "_idx ")
-//
-//    sw.write("on ")
-//    sw.write(
-//      cga.group._fields.map(_.columnName).mkString("(",",",")")
-//    )
-//  }
+    sb.append("index ")
+
+    val tableName = columnDefs.head.parentMetaData.viewOrTable.name
+
+    if(name != None)
+      sb.append(name.get)
+    else if(nameOfCompositeKey != None)
+      sb.append("idx" + nameOfCompositeKey.get)
+    else
+      sb.append("idx" + generateAlmostUniqueSuffixWithHash(tableName + "-" + columnDefs.map(_.columnName).mkString("-")))
+
+    sb.append(" on ")
+
+    sb.append(tableName)
+
+    sb.append(columnDefs.map(_.columnName).mkString(" (",",",")"))
+
+    sb.toString
+  }
+
+  /**
+   * This will create an probabilistically unique string of length no longer than 11 chars,
+   * it can be used to create "almost unique" names where uniqueness is not an absolute requirement,
+   * is not ,
+   */
+  def generateAlmostUniqueSuffixWithHash(s: String): String = {
+    val a32 = new java.util.zip.Adler32
+    a32.update(s.getBytes)
+    a32.getValue.toHexString
+  }
 }

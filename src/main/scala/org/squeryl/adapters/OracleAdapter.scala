@@ -67,18 +67,7 @@ class OracleAdapter extends DatabaseAdapter {
 
     shrunkName
   }
-  
-  /**
-   * This will create an probabilistically unique string of length no longer than 11 chars,
-   * it can be used to create "almost unique" names where uniqueness is not an absolute requirement,
-   * is not ,
-   */
-  def generateAlmostUniqueSuffixWithHash(s: String): String = {
-    val a32 = new java.util.zip.Adler32
-    a32.update(s.getBytes)
-    a32.getValue.toHexString
-  }
-  
+    
   override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
 
     val o_ = o.asInstanceOf[AnyRef]

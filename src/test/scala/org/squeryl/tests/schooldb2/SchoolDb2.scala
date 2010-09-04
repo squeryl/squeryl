@@ -57,15 +57,14 @@ object SchoolDb2 extends Schema {
 
   val students = table[Student]
 
-  students.declare(
-  
-    _.firstName is(indexed),
-    _.lastName defaultsTo("!"),
-    _.fullName is(unique, indexed),
-      s => columns(s.firstName, s.lastName) are(indexed)
-     //(columns(_.firstName, _.lastName) are(indexed))
-  )
-  
+
+  on(students)(s => declare(
+    s.firstName is(indexed),
+    s.lastName defaultsTo("!"),
+    s.fullName is(unique, indexed),
+    columns(s.firstName, s.lastName) are(indexed)  
+  ))
+
   val courses = table[Course]
 
   val subjects = table[Subject]

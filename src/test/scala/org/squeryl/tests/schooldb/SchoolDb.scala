@@ -123,12 +123,13 @@ class SchoolDb extends Schema with QueryTester {
 
   val schools = table[School]
 
-  schools.declare(
-    _.id   is(unique),
-    _.name is(indexed("uniqueIndexName"), unique),
-    _.name defaultsTo("no name")
+  on(schools)(s => declare(
+    s.id   is(unique),
+    s.name is(indexed("uniqueIndexName"), unique),
+    s.name defaultsTo("no name"),
+    columns(s.name, s.addressId) are(indexed)
     //_.addressId is(autoIncremented) currently only supported on KeyedEntity.id ... ! :(
-  )
+  ))
 
 
   val testInstance = new {
@@ -170,6 +171,32 @@ class SchoolDb extends Schema with QueryTester {
     Session.currentSession.connection.commit
   }
 
+  def testCountSignatures = {
+
+    val q =
+      from(courseSubscriptions)(cs =>
+        compute(countDistinct(cs.courseId))
+      )
+
+    assertEquals(4L, q: Long, 'testCountSignatures)
+
+    val q2 =
+      from(courseSubscriptions)(cs =>
+        compute(count(cs.courseId))
+      )
+
+    assertEquals(5L, q2: Long, 'testCountSignatures)
+    
+    val q3 =
+      from(courseSubscriptions)(cs =>
+        compute(count)
+      )
+
+    assertEquals(5L, q3: Long, 'testCountSignatures)
+
+    passed('testCountSignatures)
+  }
+
   def avgStudentAge =
     from(students)(s =>
       compute(avg(s.age))
@@ -196,6 +223,8 @@ class SchoolDb extends Schema with QueryTester {
 
     //Must run first, because later we won't have the rows we need to perform the test
 
+    testCountSignatures
+    
     blobTest
     
     testYieldInspectionResidue
