@@ -38,11 +38,11 @@ class ComponentTests extends Specification {
       scope must haveSize(setOfPossibleUniqeIdsWithAB)
     }
 
-    "shrink idenditifiers and preserve uniqueness in a given Set" in {
+    "shrink identifiers and preserve uniqueness in a given Set" in {
       shrinkTestSet must haveSize(50)
     }
 
-    "shrink idenditifiers to a length of 30" in {
+    "shrink identifiers to a length of 30" in {
       shrinkTestSet.filter(_.length != 30) must haveSize(0)
     }
   }  

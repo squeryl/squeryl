@@ -24,12 +24,12 @@ import java.util.Date
 /**
  *  This factory is meant to use POSOs (Plain old Scala Objects),
  * i.e. your object use Scala's primitive types to map to columns.
- * This can have a significantl performance advantage over using object
+ * This can have a significant performance advantage over using object
  * types i.e. a result set of N rows of objects with M field will generate
  * N * M objects for the garbage collector, while POSOs with primitive types
  * will each count for 1 for the garbage collector (to be more precise,
  * String and Option[] fields will add a +1 in both cases, but a custom String wrapper will
- * allso add one ref, for a total of 2 refs vs a single ref per string column
+ * also add one ref, for a total of 2 refs vs a single ref per string column
  * for the POSO).
  *  This lightweight strategy has a cost : constants and object field references
  * cannot distinguish at compile time, so this mode is less 'strict' than
@@ -57,6 +57,8 @@ trait PrimitiveTypeMode extends QueryDsl {
   type BooleanType = Boolean
 
   type DateType = Date
+
+  type EnumerationValueType = Enumeration#Value
 
   //TODO: consider spliting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
   
@@ -192,6 +194,21 @@ trait PrimitiveTypeMode extends QueryDsl {
         new SelectElementReference[Option[Date]](n) with  DateExpression[Option[Date]]
     }
 
+  def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Enumeration#Value](e) with EnumExpression[Enumeration#Value]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
+    }
+
+  def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[Enumeration#Value]] =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[Enumeration#Value]](e) with EnumExpression[Option[Enumeration#Value]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
+    }
 
   protected def mapByte2ByteType(i: Byte) = i
   protected def mapInt2IntType(i: Int) = i
@@ -202,6 +219,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected def mapLong2LongType(l: Long) = l
   protected def mapBoolean2BooleanType(b: Boolean) = b
   protected def mapDate2DateType(b: Date) = b
+  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
 
   protected implicit val sampleByte: ByteType = 0xF.byteValue
   protected implicit val sampleInt: IntType = 0
@@ -212,4 +230,10 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected implicit val sampleLong: LongType = 0
   protected implicit val sampleBoolean: BooleanType = false
   protected implicit val sampleDate: DateType = new Date
+  //protected implicit def sampleEnumerationValueType: EnumerationValueType = DummyEnum.DummyEnumerationValue
+}
+
+object DummyEnum extends Enumeration {
+  type DummyEnum = Value
+  val DummyEnumerationValue = Value(-1, "DummyEnumerationValue")
 }

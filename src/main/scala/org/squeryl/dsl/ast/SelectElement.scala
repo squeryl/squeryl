@@ -17,6 +17,7 @@ package org.squeryl.dsl.ast
 
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
+import java.sql.ResultSet
 
 /**
  * SelectElement are elements of a select list, they are either
@@ -63,6 +64,32 @@ trait SelectElement extends ExpressionNode {
     expression.write(sw)
     sw.write(" as ")
     sw.databaseAdapter.writeSelectElementAlias(this, sw)
+  }
+
+  /**
+   * Will throw a ClassCastException if this type is not a Enumeration#Value
+   */
+  def createEnumerationMapper: OutMapper[Enumeration#Value] = new OutMapper[Enumeration#Value]() {
+
+    def doMap(rs: ResultSet) = {
+      val fmd = this.asInstanceOf[FieldSelectElement].fieldMataData
+      fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
+    }
+
+    def sample = error("!")
+  }
+
+  /**
+   * Will throw a ClassCastException if this type is not a Enumeration#Value
+   */
+  def createEnumerationOptionMapper: OutMapper[Option[Enumeration#Value]] = new OutMapper[Option[Enumeration#Value]]() {
+
+    def doMap(rs: ResultSet) = {
+      val fmd = this.asInstanceOf[FieldSelectElement].fieldMataData
+      Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
+    }
+
+    def sample = error("!")
   }
 }
 
@@ -186,7 +213,7 @@ trait PathReferenceToSelectElement {
         return e.asInstanceOf[QueryExpressionNode[_]]
     } while (e != None)
 
-    error("could not determin use site of "+ this)
+    error("could not determine use site of "+ this)
   }
 
   protected def path: String = {

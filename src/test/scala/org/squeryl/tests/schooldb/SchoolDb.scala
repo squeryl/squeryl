@@ -170,6 +170,32 @@ class SchoolDb extends Schema with QueryTester {
     Session.currentSession.connection.commit
   }
 
+  def testCountSignatures = {
+
+    val q =
+      from(courseSubscriptions)(cs =>
+        compute(countDistinct(cs.courseId))
+      )
+
+    assertEquals(4L, q: Long, 'testCountSignatures)
+
+    val q2 =
+      from(courseSubscriptions)(cs =>
+        compute(count(cs.courseId))
+      )
+
+    assertEquals(5L, q2: Long, 'testCountSignatures)
+    
+    val q3 =
+      from(courseSubscriptions)(cs =>
+        compute(count)
+      )
+
+    assertEquals(5L, q3: Long, 'testCountSignatures)
+
+    passed('testCountSignatures)
+  }
+
   def avgStudentAge =
     from(students)(s =>
       compute(avg(s.age))
@@ -195,7 +221,10 @@ class SchoolDb extends Schema with QueryTester {
   def test1 = {
 
     //Must run first, because later we won't have the rows we need to perform the test
-    loggerOn
+    testCountSignatures
+    
+    blobTest
+    
     testYieldInspectionResidue
     
     testNewLeftOuterJoin3
@@ -254,6 +283,24 @@ class SchoolDb extends Schema with QueryTester {
     testNotOperator
 
     drop
+  }
+
+  def blobTest = {
+    import testInstance._
+
+    var c = courses.where(_.id === counterpoint.id).single
+
+    assertEquals(c.rawData(0), 5, 'blobTest)
+
+    c.rawData(0) = 3
+
+    courses.update(c)
+
+    c = courses.where(_.id === counterpoint.id).single
+
+    assertEquals(c.rawData(0), 3, 'blobTest)
+
+    passed('blobTest)
   }
 
   def testLeftOuterJoin1 {
@@ -533,21 +580,21 @@ class SchoolDb extends Schema with QueryTester {
 
     val result1 =
       from(courses)(c=>
-        where(c.finalExamDate >= jan2008 and c.finalExamDate.isNotNull)
+        where(c.finalExamDate >= Some(jan2008) and c.finalExamDate.isNotNull)
         select(c)
         orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result2 =
       from(courses)(c=>
-        where(c.finalExamDate <= jan2009)
+        where(c.finalExamDate <= Some(jan2009))
         select(c)
         orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result3 =
       from(courses)(c=>
-        where(c.finalExamDate >= feb2009)
+        where(c.finalExamDate >= Some(feb2009))
         select(c)
         orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)

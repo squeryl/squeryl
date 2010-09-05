@@ -15,9 +15,10 @@
  ******************************************************************************/
 package org.squeryl.adapters
 
-import org.squeryl.internals.{DatabaseAdapter}
 import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
+import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.dsl.ast.{BinaryOperatorNode, ExpressionNode}
 
 class MySQLAdapter extends DatabaseAdapter {
 
@@ -25,8 +26,10 @@ class MySQLAdapter extends DatabaseAdapter {
 
   override def floatTypeDeclaration = "float"
 
-  //override def nvlToken = "ifnull"
+  override def binaryTypeDeclaration = "blob"
 
+  override def timestampTypeDeclaration = "datetime"
+  
   override def writeForeignKeyDeclaration(
     foreignKeyTable: Table[_], foreignKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,
@@ -92,4 +95,20 @@ class MySQLAdapter extends DatabaseAdapter {
    */
 
   override def supportsForeignKeyConstraints = false
+
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write("(")
+    left.write(sw)
+    sw.write(" regexp '")
+    sw.write(pattern)
+    sw.write("')")
+  }
+
+  override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
+    sw.write("concat(")
+    left.write(sw)
+    sw.write(",")
+    right.write(sw)
+    sw.write(")")
+  }
 }

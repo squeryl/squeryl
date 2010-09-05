@@ -30,7 +30,10 @@ class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper
 
 class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
-class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||")
+class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||") {
+  override def doWrite(sw: StatementWriter) =
+      sw.databaseAdapter.writeConcatOperator(a1, a2, sw)
+}
 
 class NonNumericalCoalesce[A1,A2](val a1: NonNumericalExpression[A1], val a2: NonNumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
@@ -357,7 +360,7 @@ trait TypeArithmetic extends FieldTypes {
   implicit def e2concat3[A1,A2](e: ConcatOp[Option[A1],A2]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
   implicit def e2concat4[A1,A2](e: ConcatOp[Option[A1],Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
 
-  //Conversions for non mumerical case statements and coalesce like functions :
+  //Conversions for non numerical case statements and coalesce like functions :
   implicit def nnCoalesce1[A](e: NonNumericalCoalesce[A,A]) = new NonNumericalTypeConversion[A](e)(e.a1.mapper)
   implicit def nnCoalesce2[A](e: NonNumericalCoalesce[A,Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
   implicit def nnCoalesce3[A](e: NonNumericalCoalesce[Option[A],A]) = new NonNumericalTypeConversion[Option[A]](e)(e.a1.mapper)
@@ -372,6 +375,7 @@ trait TypeArithmetic extends FieldTypes {
   protected def mapLong2LongType(l: Long): LongType
   protected def mapBoolean2BooleanType(b: Boolean): BooleanType
   protected def mapDate2DateType(b: Date): DateType
+  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType    
 
   protected implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
     def doMap(rs: ResultSet) = mapByte2ByteType(rs.getByte(index))
@@ -417,6 +421,11 @@ trait TypeArithmetic extends FieldTypes {
     def doMap(rs: ResultSet) = mapDate2DateType(rs.getDate(index))
     def sample = sampleDate
   }
+
+//  protected implicit def createOutMapperEnumerationValueType: OutMapper[EnumerationValueType] = new OutMapper[EnumerationValueType] {
+//    def doMap(rs: ResultSet) = mapInt2EnumerationValueType(rs.getInt(index))
+//    def sample = sampleEnumerationValueType
+//  }
 
   protected implicit def createOutMapperByteTypeOption: OutMapper[Option[ByteType]] = new OutMapper[Option[ByteType]] {
     def doMap(rs: ResultSet) = {

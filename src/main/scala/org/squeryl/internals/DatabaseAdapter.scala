@@ -187,7 +187,7 @@ trait DatabaseAdapter {
   def floatTypeDeclaration = "real"
   def bigDecimalTypeDeclaration = "decimal"
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
-  def timestampTypeDeclaration = "date"
+  def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
   
   private val _declarationHandler = new FieldTypeHandler[String] {
@@ -203,6 +203,7 @@ trait DatabaseAdapter {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
     def handleTimestampType = timestampTypeDeclaration
     def handleBinaryType = binaryTypeDeclaration
+    def handleEnumerationValueType = intTypeDeclaration
     def handleUnknownType(c: Class[_]) =
       error("don't know how to map field type " + c.getName)
   }
@@ -370,10 +371,14 @@ trait DatabaseAdapter {
     var v = r
     if(v.isInstanceOf[Product1[_]])
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
+
     if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date]  && ! v.isInstanceOf[Timestamp])
        v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
-    if(v.isInstanceOf[scala.math.BigDecimal])
+    else if(v.isInstanceOf[scala.math.BigDecimal])
        v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
+    else if(v.isInstanceOf[scala.Enumeration#Value])
+       v = v.asInstanceOf[scala.Enumeration#Value].id.asInstanceOf[AnyRef]
+
     v
   }
 
@@ -634,5 +639,19 @@ trait DatabaseAdapter {
     sb.append(cols.map(_.columnName).mkString(","))
     sb.append(")")
     sb.toString
+  }
+
+
+  def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write("(")
+    left.write(sw)
+    sw.write(" ~ '")
+    sw.write(pattern)
+    sw.write("')")
+  }
+
+  def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
+    val binaryOpNode = new BinaryOperatorNode(left, right, "||")
+    binaryOpNode.doWrite(sw)
   }
 }

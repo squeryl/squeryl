@@ -16,7 +16,8 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.{Query}
+import org.squeryl.{Session, Query}
+import org.squeryl.internals.StatementWriter
 
 trait FieldTypes {
   self: TypeArithmetic =>
@@ -40,7 +41,7 @@ trait FieldTypes {
 
   type BigDecimalType
 
-
+  type EnumerationValueType
   
   protected implicit def sampleByte: ByteType
   protected implicit def sampleInt: IntType
@@ -51,6 +52,7 @@ trait FieldTypes {
   protected implicit def sampleBoolean: BooleanType
   protected implicit def sampleDate: DateType
   protected implicit def sampleBigDecimal: BigDecimalType
+  //protected implicit def sampleEnumerationValueType: EnumerationValueType
 
   protected implicit val sampleByteO = Some(sampleByte)
   protected implicit val sampleIntO = Some(sampleInt)
@@ -60,7 +62,8 @@ trait FieldTypes {
   protected implicit val sampleLongO = Some(sampleLong)
   protected implicit val sampleBooleanO = Some(sampleBoolean)
   protected implicit val sampleDateO = Some(sampleDate)  
-  protected implicit val sampleBigDecimalO = Some(sampleBigDecimal)  
+  protected implicit val sampleBigDecimalO = Some(sampleBigDecimal)
+  //protected implicit val sampleEnumerationValueTypeO = Some(sampleEnumerationValueType)
 }
 
 
@@ -108,12 +111,12 @@ trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
 trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 
-  def ===[A](b: NonNumericalExpression[A]) = new EqualityExpression(this, b)
-  def <>[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
-  def > [A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
-  def >=[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
-  def < [A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
-  def <=[A](b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
+  def ===(b: NonNumericalExpression[A]) = new EqualityExpression(this, b)
+  def <>(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
+  def > (b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+  def >=(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+  def < (b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+  def <=(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
 
   def ||[B](e: TypedExpressionNode[B]) = new ConcatOp(this,e)
 
@@ -121,8 +124,8 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 
   def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
-  def in[A](e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
-  def notIn[A](e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in")
+  def in(e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in")
+  def notIn(e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in")
 
   def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
 }
@@ -131,14 +134,25 @@ trait BooleanExpression[A] extends NonNumericalExpression[A] {
   def ~ = this
 }
 
-trait StringExpression[A] extends NonNumericalExpression[A] {
+trait EnumExpression[A] extends NonNumericalExpression[A] {
+  def ~ = this
+}
 
+trait StringExpression[A] extends NonNumericalExpression[A] {
+  outer =>
+  
   def in(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "in")
   def notIn(e: ListString) = new BinaryOperatorNodeLogicalBoolean(this, e, "not in")
 
   //def between(lower: BaseScalarString, upper: BaseScalarString): LogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with LogicalBoolean
   def like(e: StringExpression[_])  = new BinaryOperatorNodeLogicalBoolean(this, e, "like")
 
+  def regex(pattern: String) = new FunctionNode(pattern, this) with LogicalBoolean {
+
+    override def doWrite(sw: StatementWriter) =
+      Session.currentSession.databaseAdapter.writeRegexExpression(outer, pattern, sw) 
+  }
+  
   def ~ = this
 }
 

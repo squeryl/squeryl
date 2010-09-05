@@ -32,6 +32,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "number"
   override def binaryTypeDeclaration = "blob"
+  override def timestampTypeDeclaration = "date"
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
@@ -196,6 +197,14 @@ class OracleAdapter extends DatabaseAdapter {
     val r = shrinkTo30AndPreserveUniquenessInScope(name, foreignKeyTable.schema._namingScope)
     r
   }
+
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+    sw.write(" REGEXP_LIKE(")
+    left.write(sw)
+    sw.write(",'")
+    sw.write(pattern)
+    sw.write("')")
+  }  
 }
 
 

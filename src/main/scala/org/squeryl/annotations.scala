@@ -28,8 +28,8 @@ package object annotations {
    * Float/float -> 4 byte floating point
    * String -> varchar(256)
    *
-   * The default mappings can be overriden at the field/column level using the
-   * Column attribute, and they can also be  overriden at the Schema level
+   * The default mappings can be overridden at the field/column level using the
+   * Column attribute, and they can also be  overridden at the Schema level
    * by overriding the method. For example, the following causes all string
    * field in the schema to become varchars of length 64 :
    *
