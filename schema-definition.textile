@@ -70,33 +70,17 @@ and Option[] fields are nullable.
 
 h2. Scala to Database type correspondance
 
-|_. JDBC Type |_. Oracle     |_. PostgreSql     |_. DB2 |_. MySql |_. H2
-| int          | number      | integer          |   |   |   |
-| long         | number      | bigint           |   |   |   |
-| float        | float       | real             |   |   |   |
-| double       | real        | double precision |   |   |   |
-| BidDecimal   | decimal     | numeric          |   |   |   |
-| String       | varchar2(x) | varchar(x)       |   |   |   |
-| Date         | date        | date             |   |   |   |
-| Timestamp    | date        | timestamp        |   |   |   |
-| byte[]       | blob        | bytea            |   |   |   |
+|_. Java/JDBC  |_. Oracle     |_. PostgreSql     |_. DB2       |_. MySql    |_. H2       |
+| int          | number      | integer          | int         | int        | int        |
+| long         | number      | bigint           | bigint      | bigint     | bigint     |
+| float        | float       | real             | real        | float      | real       |
+| double       | real        | double precision | double      | double     | double     |
+| BidDecimal   | decimal     | numeric          | decimal     | decimal    | decimal    |
+| String       | varchar2(x) | varchar(x)       | varchar(x)  | varchar(x) | varchar(x) |
+| Date         | date        | date             | date        | date       | date       |
+| Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  |
+| byte[]       | blob        | bytea            | blob        | blob       | binary     |
 
-
-  def intTypeDeclaration = "int"
-  def stringTypeDeclaration = "varchar(255)"  
-  def stringTypeDeclaration(length:Int) = "varchar("+length+")"
-  def booleanTypeDeclaration = "boolean"
-  def doubleTypeDeclaration = "double"
-  def dateTypeDeclaration = "date"
-  def longTypeDeclaration = "bigint"
-  def floatTypeDeclaration = "real"
-  def bigDecimalTypeDeclaration = "decimal"
-  def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
-  def timestampTypeDeclaration = "timestamp"
-  def binaryTypeDeclaration = "binary"
-
-
-<!-- |byte         |number      |   |   |   |   | -->
   
 h2. Choosing between primitive or custom types
 
