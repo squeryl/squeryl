@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ **************************************************************************** */
 package org.squeryl.tests
 
 import _root_.org.squeryl.demos.MusicDb
@@ -31,13 +31,13 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    allTestsOnAllDatabases
+    //allTestsOnAllDatabases
     
     //dumpResourceClosingPolicyOfAllDrivers
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    //allTestsOnH2
+    allTestsOnH2
 
     //leakTest    
   }

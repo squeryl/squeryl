@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ **************************************************************************** */
 package org.squeryl.customtypes;
 
 
@@ -21,7 +21,7 @@ import java.util.Date
 import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
 import org.squeryl.dsl._
 
-trait CustomType extends Product1[Any] {
+trait CustomType[T] extends Product1[T] {
   def canEqual(a:Any) = false
 }
 
@@ -236,38 +236,38 @@ trait CustomTypesMode extends QueryDsl {
 object CustomTypesMode extends CustomTypesMode 
 
 
-class ByteField(val value: Byte) extends CustomType {
-  def _1: Any = value
+class ByteField(val value: Byte) extends CustomType[Byte] {
+  def _1: Byte = value
 }
 
-class IntField(val value: Int) extends CustomType {
-  def _1: Any = value
+class IntField(val value: Int) extends CustomType[Int] {
+  def _1: Int = value
 }
 
-class StringField(val value: String) extends CustomType {
-  def _1: Any = value
+class StringField(val value: String) extends CustomType[String] {
+  def _1: String = value
 }
 
-class DoubleField(val value: Double) extends CustomType {
-  def _1: Any = value
+class DoubleField(val value: Double) extends CustomType[Double] {
+  def _1: Double = value
 }
 
-class BigDecimalField(val value: BigDecimal) extends CustomType {
-  def _1: Any = value
+class BigDecimalField(val value: BigDecimal) extends CustomType[BigDecimal] {
+  def _1: BigDecimal = value
 }
 
-class FloatField(val value: Float) extends CustomType {
-  def _1: Any = value
+class FloatField(val value: Float) extends CustomType[Float] {
+  def _1: Float = value
 }
 
-class LongField(val value: Long) extends CustomType {
-  def _1: Any = value
+class LongField(val value: Long) extends CustomType[Long] {
+  def _1: Long = value
 }
 
-class BooleanField(val value: Boolean) extends CustomType {
-  def _1: Any = value
+class BooleanField(val value: Boolean) extends CustomType[Boolean] {
+  def _1: Boolean = value
 }
 
-class DateField(val value: Date) extends CustomType {
-  def _1: Any = value
+class DateField(val value: Date) extends CustomType[Date] {
+  def _1: Date = value
 }

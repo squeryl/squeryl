@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ **************************************************************************** */
 package org.squeryl.tests.musicdb
 
 import java.sql.SQLException
@@ -50,7 +50,7 @@ class MusicDbObject extends KeyedEntity[Int] {
 class Person(var firstName:String, var lastName: String) extends MusicDbObject
 
 class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject {
-  def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
+  //def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
 }
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject

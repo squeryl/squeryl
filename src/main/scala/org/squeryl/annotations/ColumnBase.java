@@ -42,7 +42,4 @@ public @interface ColumnBase {
     int scale() default -1;
 
     String dbType() default "";
-
-    Class<?> optionType() default Object.class;
-
 }
