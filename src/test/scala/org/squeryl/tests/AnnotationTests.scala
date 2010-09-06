@@ -23,15 +23,7 @@ import java.util.Date
 @Row("T_TOASTER")
 class Toaster(
 
-  @Column(optionType=classOf[Int])
   var yearOfManufacture: Option[Int],
-
-// TODO: uncomment when scalac bug #3003 is resolved
-//  @Column(optionType=classOf[String], length=25)
-//  var countryOfOrigin: Option[String],
-
-//  @Column(name="dateOfPurchase", optionType=classOf[java.util.Date])
-//  var dateOfPurchase: Option[java.util.Date]
 
   @Column(length=25)
   var countryOfOrigin: String,
@@ -39,7 +31,7 @@ class Toaster(
   @Column(name="BRAND_NAME", length=32)
   var brandName: String) {
 
-  @Column(name="WEIGHT", optionType=classOf[Float])
+  @Column(name="WEIGHT")
   var weightInGrams: Option[String] = None
 
   @Column("Zozo12")
@@ -65,10 +57,9 @@ class AnnotationTests {
 
 
   class C(
-    @Column(optionType=classOf[Long]) var j: Option[Long],
-    @Column(optionType=classOf[java.lang.String]) var k: Option[String]) (
+    var j: Option[Long],
+    var k: Option[String]) (
   
-    @Column(optionType=classOf[Int])
     var i:Option[Int]
   )
 
@@ -122,24 +113,4 @@ class AnnotationTests {
 
     println('testMetaData + " passed.")
   }
-
-  /**
-   * There has been a Scala bug with obtaining a Class[_] member in annotations,
-   * if this test fails, it means that Scala has regressed TODO: file a bug 
-   */
-  def scalaReflectionTests = {
-    val colAnotations =
-      classOf[C].getDeclaredFields.toList.sortBy(f => f.getName).map(f => f.getAnnotations.toList).flatten
-
-    val c = colAnotations.size 
-    assert(c == 3, "class " + classOf[C].getName + " has 3 field annotations of type Column that have failed to be reflected, " + c + " were reflected")
-
-    val t1 = colAnotations.apply(0).asInstanceOf[Column].optionType
-    val t2 = colAnotations.apply(1).asInstanceOf[Column].optionType
-    val t3 = colAnotations.apply(2).asInstanceOf[Column].optionType
-
-    assert(classOf[Int].isAssignableFrom(t1), "expected classOf[Int], got " + t1.getName)
-    assert(classOf[Long].isAssignableFrom(t2), "expected classOf[Long], got " + t2.getName)
-    assert(classOf[String].isAssignableFrom(t3), "expected classOf[String], got " + t3.getName)
-  }  
 }

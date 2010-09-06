@@ -16,7 +16,7 @@
 package org.squeryl.internals
 
 import java.lang.annotation.Annotation
-import java.lang.reflect.{Field, Method}
+import java.lang.reflect.{Field, Method, ParameterizedType, Type, TypeVariable}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import org.squeryl.annotations.{ColumnBase, Column}
@@ -34,9 +34,10 @@ class FieldMetaData(
         setter: Option[Method],
         field:  Option[Field],
         columnAnnotation: Option[Column],
-        val isOptimisticCounter: Boolean,
-        val sampleValue: AnyRef) {
+        val isOptimisticCounter: Boolean) {
 
+
+  private lazy val sampleValue = get(parentMetaData.sampleInstance)
 
   def isEnumeration = {
     classOf[Enumeration#Value].isAssignableFrom(wrappedFieldType)
@@ -227,7 +228,7 @@ class FieldMetaData(
 
 trait FieldMetaDataFactory {
 
-  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
+  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), isOptimisticCounter: Boolean): FieldMetaData
 
   def isSupportedFieldType(c: Class[_]): Boolean =
     FieldMetaData._isSupportedFieldType.handleType(c, None)      
@@ -236,6 +237,10 @@ trait FieldMetaDataFactory {
 object FieldMetaData {
 
   private val _EMPTY_ARRAY = new Array[Object](0)
+
+  private val AnyClass = classOf[Any]
+  private val OptionClass = classOf[Option[_]]
+  private val Product1Class = classOf[Product1[_]]
 
   private [squeryl] val _isSupportedFieldType = new FieldTypeHandler[Boolean] {
 
@@ -256,10 +261,204 @@ object FieldMetaData {
       classOf[Product1[Any]].isAssignableFrom(c)
         //classOf[Some[_]].isAssignableFrom(c)
   }
-  
+
+  final case class DeducedFieldType(isOption: Boolean, fieldValueType: Class[_], primitiveType: Class[_]) {
+    def wrapWithCustomType(in: AnyRef): AnyRef =
+      if (primitiveType != fieldValueType) {
+        fieldValueType.getConstructors.find(_.getParameterTypes.length == 1).get.newInstance(in).asInstanceOf[AnyRef]
+      } else {
+        in
+      }
+
+    def createDefaultValue: AnyRef = {
+      val v = wrapWithCustomType(_defaultValueFactory.handleType(primitiveType, None))
+      if (isOption) Some(v)
+      else v
+    }
+  }
+
+  /**
+   * Deduce the simplified type of a field, ensuring that a supported combination of Option / custom type nesting is being used.
+   * Results in Left(errorText) in the case where the type is unsupported, or Right(DeducedFieldType) in the case where it is.
+   */
+  def deduceFieldTypeAndOption(in: Type): Either[String, DeducedFieldType] = {
+    def cannotDeduceErasedType(what: String) =
+      Left("cannot deduce type of " + what + " because the type was erased. this can occur when the field has no getter or setter")
+
+    val invalidCustomInCustom = Left("nested custom types are not supported -- that is, CustomType[CustomType[T]] not supported")
+    val invalidOptionInOption = Left("Option[Option[T]] not supported")
+    val invalidOptionInCustom = Left("primitive type of a custom type cannot be option -- that is, CustomType[Option[T]] not supported")
+
+    val invalidUseOfProduct1 = Left("Product1[T] cannot be used directly -- custom types are types that conform to Product1[T] and have " + 
+                                    "a single argument constructor that can be used to wrap a primitive type")
+
+    def withOneTypeArgument[A](pt: ParameterizedType, f: Type => Either[String, A]): Either[String, A] =
+      pt.getActualTypeArguments.toList match {
+        case ty :: Nil => f(ty)
+        case _ => Left("wrong number of type arguments for " + pt.getRawType)
+      }
+
+    def unsupportedType(t: Type) =
+      t match {
+        case AnyClass =>
+          Left("unsupported field value type Any -- usually this occurs when type erasure has lost the type. Ensure that your field " +
+               "values are of some refined type, e.g. Option[String] not Option[T]")
+
+        case _ => 
+          Left("unsupported field value type " + t + " -- only primitive types, " +
+               "possibly wrapped by Options or custom types (Product1) are supported")
+      }
+
+    /*
+     * Helper function that does the complicated deduction of what type T some subtype of Product1[T] has. This is
+     * complicated because of two factors -- first is that we have to walk the supertypes (superclass and interfaces) of the
+     * leaf type recursively to go find the Product1[T], and second is that it might literally be Product1[T] so we have to
+     * resolve type variables along the way while walking supertypes.
+     *
+     * If this sounds unlikely, it isn't. In fact it occurs in Squeryl itself --
+     *   IntField <: CustomType[Int] <: Product1[T]
+     */
+    def deduceTypeOfProduct1Subtype(in: Type): Either[String, DeducedFieldType] = {
+      /* Helper function that replaces any TypeVariables inside ParameterizedType "in" with the type argument from context */
+      def resolvePT(context: ParameterizedType)(in: Type): Type =
+        in match {
+          case (pt: ParameterizedType) if (context.getRawType.isInstanceOf[Class[_]] &&
+                                           context.getRawType.asInstanceOf[Class[_]].getTypeParameters.length > 0) => {
+            val contextArgs = context.getActualTypeArguments
+            val paramSlots = Map(context.getRawType.asInstanceOf[Class[_]].getTypeParameters.map(_.getName).zipWithIndex: _*)
+            val resolvedArgs = pt.getActualTypeArguments.map {
+              case (tv: TypeVariable[_]) if paramSlots contains tv.getName => contextArgs(paramSlots(tv.getName))
+              case other => other
+            }
+            new ParameterizedType {
+              def getActualTypeArguments = resolvedArgs
+              def getOwnerType = pt.getOwnerType
+              def getRawType = pt.getRawType
+              override def toString = getRawType.toString + "<" + getActualTypeArguments.mkString(", ") + ">"
+            }
+          }
+
+          case other => other
+        }
+
+      /** Recursive function that collects all type arguments to Product1 anywhere in the supertypes of "in" */
+      def collectProduct1Types(in: Type, rest: List[Class[_]]): List[Class[_]] =
+        in match {
+          case Product1Class => rest // can't figure out what the type of it was
+          case (c: Class[_]) => {
+            // no type arguments to pass down, so let any TypeVariables go down unhindered
+            val toTry = if (c.getGenericSuperclass eq null) c.getGenericInterfaces.toList
+                        else c.getGenericSuperclass :: c.getGenericInterfaces.toList
+            toTry.foldLeft(rest)((prev, cur) => collectProduct1Types(cur, prev))
+          }
+
+          case (pt: ParameterizedType) =>
+            pt.getRawType match {
+              case Product1Class =>
+                pt.getActualTypeArguments.toList match {
+                  case (c: Class[_]) :: Nil => c :: rest
+                  case _ => Nil
+                }
+                
+              case (c: Class[_]) => {
+                val toTry = if (c.getGenericSuperclass eq null) c.getGenericInterfaces.toList
+                            else c.getGenericSuperclass :: c.getGenericInterfaces.toList
+                toTry.map(resolvePT(pt)).foldLeft(rest)((prev, cur) => collectProduct1Types(cur, prev))
+              }
+
+              case _ => rest
+            }
+
+          case _ => Nil
+        }
+
+      // presume that there are not incompatible instances of Product1, e.g. Product1[String] and Product1[Double]
+      val innerTypePart: Either[String, Class[_]] =
+        collectProduct1Types(in, Nil).sortWith(_ isAssignableFrom _).reverse.headOption match {
+          case None =>
+            Left("could not find type of Product1 by searching supertypes of " + in + " -- looked everywhere for Product1[simple class]")
+
+          case Some(AnyClass) => 
+            Left("could not find type of Product1 by searching supertypes of " + in +
+                 " -- found Product1[Any], which usually means the actual type was lost in type erasure")
+
+          case Some(c) if _defaultValueFactory.handleType(c, None) ne null =>
+            Right(c)
+
+          case Some(c) =>
+            Left("found Product1[" + c.getName + "] -- but that type is not a primitive type, so is unsupported")
+        }
+
+      val outerTypePart: Either[String, Class[_]] =
+        in match {
+          case (c: Class[_]) => Right(c)
+          case (pt: ParameterizedType) =>
+            pt.getRawType match {
+              case (c: Class[_]) => Right(c)
+              case other => Left("custom type is " + pt + " has a non-Class raw type which is unsupported")
+            }
+
+          case other => Left("custom type " + in + " is neither a Class nor a ParameterizedType and is unsupported")
+        }
+
+      (outerTypePart, innerTypePart) match {
+        case (Left(err), _) => Left(err)
+        case (_, Left(err)) => Left(err)
+        case (Right(outer), Right(inner)) => Right(DeducedFieldType(false, outer, inner))
+      }
+    }
+
+    /*
+     * Helper function that does the main type deduction, returning Left for various error conditions and Right for a deduced
+     * type.
+     * 
+     * insideOption and insideCustomType are passed in during recursion to disallow certain types of nesting -- Option[T] is
+     * now allowed when insideOption or insideCustomType, and custom types are not supported when already inside a custom type.
+     */
+    def deduce(in: Type, insideOption: Boolean, insideCustomType: Boolean): Either[String, DeducedFieldType] =
+      in match {
+        // Handle the simple case of a primitive type.
+        case (c: Class[_]) if _defaultValueFactory.handleType(c, None) ne null => Right(DeducedFieldType(false, c, c))
+
+        // Error out if we see an erased Option or Product1, since we don't have enough information to deduce
+        case OptionClass   => cannotDeduceErasedType("Option")
+
+        // Product1[T] by itself cannot be supported (could not be instantiated) so error out in that case
+        case Product1Class => invalidUseOfProduct1
+        case (pt: ParameterizedType) if pt.getRawType == Product1Class => invalidUseOfProduct1
+
+        // Error out on incorrect nesting
+        case (c: Class[_]) if Product1Class.isAssignableFrom(c) && insideCustomType => invalidCustomInCustom
+
+        // Do the complicated deduction of a Product1 subclass
+        case (c: Class[_]) if Product1Class.isAssignableFrom(c) => deduceTypeOfProduct1Subtype(c)
+
+        case (pt: ParameterizedType) =>
+          pt.getRawType match {
+            // Error out on incorrect nesting
+            case OptionClass   if insideOption     => invalidOptionInOption
+            case OptionClass   if insideCustomType => invalidOptionInCustom
+            case Product1Class if insideCustomType => invalidCustomInCustom
+            case (c: Class[_]) if Product1Class.isAssignableFrom(c) && insideCustomType => invalidCustomInCustom
+
+            // Properly parameterized Option[T]
+            case OptionClass => withOneTypeArgument(pt, ty => deduce(ty, true, false).right.map(_.copy(isOption = true)))
+
+            // Likely but complicated case of some subtype of Product[1] that happens to be parameterized
+            case (c: Class[_]) if Product1Class.isAssignableFrom(c) => deduceTypeOfProduct1Subtype(pt)
+
+            case other => unsupportedType(other)
+          }
+
+        case other => unsupportedType(other)
+      }
+
+    deduce(in, false, false)
+  }
+
   var factory = new FieldMetaDataFactory {   
     
-    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
+    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), isOptimisticCounter: Boolean) = {
 
       val field  = property._1
       val getter = property._2
@@ -268,76 +467,26 @@ object FieldMetaData {
 
       val colAnnotation = annotations.find(a => a.isInstanceOf[ColumnBase]).map(a => a.asInstanceOf[ColumnBase])
 
-      var typeOfField =
-        if(setter != None)
-          setter.get.getParameterTypes.apply(0)
-        else if(getter != None)
-          getter.get.getReturnType
-        else if(field != None)
-          field.get.getType
-        else
-          error("invalid field group")
+      val typeOfField =
+        (setter.flatMap(_.getGenericParameterTypes.headOption)
+         .orElse(getter.map(_.getGenericReturnType))
+         .orElse(field.map(_.getType))
+         .getOrElse(error("invalid field group")))
 
-      var v =
-         if(sampleInstance4OptionTypeDeduction != null) {
-           if(field != None)
-             field.get.get(sampleInstance4OptionTypeDeduction)
-           else if(getter != None)
-             getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
-           else
-             createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
-         }
-         else null
+      val deducedFieldType@DeducedFieldType(isOption, fieldValueType, primitiveFieldType) =
+        deduceFieldTypeAndOption(typeOfField).fold(
+          s => error("cannot deduce field type for " + name + " in " + parentMetaData.clasz.getName + ": " + s),
+          identity
+        )
 
-      if(v != null && v == None) // can't deduce the type from None in this case the Annotation
-        v = null         //needs to tell us the type, if it doesn't it will a few lines bellow
-
-      val constructorSuppliedDefaultValue = v
-
-      var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
-
-      if(classOf[Product1[Any]].isAssignableFrom(typeOfField))
-        customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfField)
-
-      if(customTypeFactory != None) {
-        val f = customTypeFactory.get
-        v = f(null) // this creates a dummy (sample) field
-      }
-
-      if(v == null)
-        v = try {
-          createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
-        }
-        catch {
-          case e:Exception => null
-        }
-
-      if(v == null)
-        error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
-
-      val isOption = v.isInstanceOf[Some[_]]
-
-      val typeOfFieldOrTypeOfOption =
-        if(!isOption)
-          v.getClass
-        else
-          v.asInstanceOf[Option[AnyRef]].get.getClass
-
-      val primitiveFieldType =
-        if(v.isInstanceOf[Product1[_]])
-          v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
-        else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[Product1[_]]) {
-          //if we get here, customTypeFactory has not had a chance to get created
-          customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfFieldOrTypeOfOption)
-          v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
-        }
-        else
-          typeOfFieldOrTypeOfOption
+      var customTypeFactory: Option[AnyRef=>Product1[Any]] =
+        if (fieldValueType != primitiveFieldType) _createCustomTypeFactory(parentMetaData.clasz, deducedFieldType)
+        else None
 
       new FieldMetaData(
         parentMetaData,
         name,
-        typeOfFieldOrTypeOfOption,
+        fieldValueType,
         primitiveFieldType,
         customTypeFactory,
         isOption,
@@ -345,8 +494,7 @@ object FieldMetaData {
         setter,
         field,
         colAnnotation,
-        isOptimisticCounter,
-        constructorSuppliedDefaultValue)
+        isOptimisticCounter)
     }
   }
 
@@ -355,19 +503,16 @@ object FieldMetaData {
    * that creates an instance of a custom type with it, the factory accepts null to create
    * default values for non nullable primitive types (int, long, etc...)
    */
-  private def _createCustomTypeFactory(ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any]] = {
-    for(c <- typeOfField.getConstructors if c.getParameterTypes.length == 1) {
-      val pTypes = c.getParameterTypes
-      val dv = createDefaultValue(ownerClass, pTypes(0), None)
-      if(dv != null)
-        return  Some(
-          (i:AnyRef)=> {
-            if(i != null)
-              c.newInstance(i).asInstanceOf[Product1[Any]]
-            else
-              c.newInstance(dv).asInstanceOf[Product1[Any]]
-          }
-        )
+  private def _createCustomTypeFactory(ownerClass: Class[_], deducedType: DeducedFieldType): Option[AnyRef=>Product1[Any]] = {
+    for(c <- deducedType.fieldValueType.getConstructors if c.getParameterTypes.length == 1) {
+      return  Some(
+        (i:AnyRef)=> {
+          if(i != null)
+            c.newInstance(i).asInstanceOf[Product1[Any]]
+          else
+            deducedType.createDefaultValue.asInstanceOf[Product1[Any]]
+        }
+      )
     }
 
     None
@@ -456,33 +601,9 @@ object FieldMetaData {
   def resultSetHandlerFor(c: Class[_]) =
     _mapper.handleType(c, None)
 
-//  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Array[Annotation]): Object =
-//    createDefaultValue(ownerCLass, p, optionFieldsInfo.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]))
-
-  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Option[Column]): Object = {
-
-    if(p.isAssignableFrom(classOf[Option[Any]])) {
-
-//      if(optionFieldsInfo == None)
-//        error("Option[Option[]] fields in "+ownerCLass.getName+ " are not supported")
-//
-//      if(optionFieldsInfo.size == 0)
-//        return null
-//      val oc0 = optionFieldsInfo.find(a => a.isInstanceOf[Column])
-//      if(oc0 == None)
-//        return null
-//
-//      val oc = oc0.get.asInstanceOf[Column]
-
-      if(optionFieldsInfo == None)
-        return null
-
-      if(classOf[Object].isAssignableFrom(optionFieldsInfo.get.optionType))
-        error("cannot deduce type of Option[] in " + ownerCLass.getName)
-
-      Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, optionFieldsInfo))
-    }
-    else
-      _defaultValueFactory.handleType(p, None)
-  }
+  def createDefaultValue(ownerClass: Class[_], p: Type): Object =
+    deduceFieldTypeAndOption(p).fold(
+        s => error("cannot deduce field type in " + ownerClass.getName + ": " + s),
+        dft => dft.createDefaultValue
+    )
 }

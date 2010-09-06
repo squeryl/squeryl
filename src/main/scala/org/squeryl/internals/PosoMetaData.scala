@@ -35,25 +35,31 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
   val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
   
   val constructor =
-    _const.headOption.orElse(error(clasz.getName +
-            " must have a 0 param constructor or a constructor with only primitive types")).get
+    (clasz.getConstructors.find(_.getParameterTypes.length == 0)
+     .orElse(clasz.getConstructors.sortWith(_.getParameterTypes.length > _.getParameterTypes.length).headOption)) match {
+      case Some(ctor) => (ctor, makeSampleConstructorArgs(ctor.asInstanceOf[Constructor[T]]))
+      case None => error(clasz.getName + " must have a 0 param constructor or a constructor with only primitive types")
+    }
+
+  private def makeSampleConstructorArgs(ctor: Constructor[T]): Array[AnyRef] = {
+    val params = ctor.getGenericParameterTypes
+
+    params match {
+      case Array(c: Class[_]) if clasz.getName == c.getName + "$" + clasz.getSimpleName =>
+        error("inner classes are not supported, except when outter class is a singleton (object)\ninner class is : " + clasz.getName)
+      case _ => { }
+    }
+
+    for (ty <- params) yield FieldMetaData.deduceFieldTypeAndOption(ty).fold(error, identity).createDefaultValue
+  }
+
+  lazy val sampleInstance = constructor._1.newInstance(constructor._2: _*).asInstanceOf[AnyRef]
 
   val (fieldsMetaData, primaryKey) = { //(Iterable[FieldMetaData], Option[FieldMetaData])
 
     val isImplicitMode = _isImplicitMode
 
     val setters = new ArrayBuffer[Method]
-
-    val sampleInstance4OptionTypeDeduction =
-      try {
-        constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];
-      }
-      catch {
-        case e:IllegalArgumentException =>
-          throw new RuntimeException("invalid constructor choice " + constructor._1, e)
-        case e:Exception =>
-          throw new RuntimeException("exception occurred while invoking constructor : " + constructor._1, e)
-      }
 
     val members = new ArrayBuffer[(Member,HashSet[Annotation])]
 
@@ -103,7 +109,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
       val property = (field, getter, setter, a)
 
       if(isImplicitMode && _groupOfMembersIsProperty(property)) {
-        fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
+        fmds.append(FieldMetaData.factory.build(this, name, property, isOptimistic && name == "occVersionNumber"))
       }
 //      else {
 //        val colA = a.find(an => an.isInstanceOf[Column])
@@ -131,48 +137,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema) {
 
   if(isOptimistic)
     assert(optimisticCounter != None)
-
-  def _const = {
-
-    val r = new ArrayBuffer[(Constructor[_],Array[Object])]
-
-//    for(ct <- clasz.getConstructors)
-//      println("CT: " + ct.getParameterTypes.map(c=>c.getName).mkString(","))
-    
-    for(ct <- clasz.getConstructors)
-      _tryToCreateParamArray(r, ct)
-
-    r.sortWith(
-      (a:(Constructor[_],Array[Object]),
-       b:(Constructor[_],Array[Object])) => a._2.length < b._2.length
-    )
-  }
-
-  def _tryToCreateParamArray(
-    r: ArrayBuffer[(Constructor[_],Array[Object])],
-    c: Constructor[_]): Unit = {
-
-    val params: Array[Class[_]] = c.getParameterTypes
-
-    if(params.length >= 1) {
-      val cn = clasz.getName
-      val test = params(0).getName + "$" + clasz.getSimpleName
-      if(cn == test)
-        error("inner classes are not supported, except when outer class is a singleton (object)\ninner class is : " + cn)
-    }
-
-    var res = new Array[Object](params.size)
-
-    for(i <- 0 to params.length -1) {
-      val v = FieldMetaData.createDefaultValue(clasz, params(i), None)
-      res(i) = v
-    }
-
-    r.append((c, res))
-  }
-
-  private def _noOptionalColumnDeclared =
-    error("class " + clasz.getName + " has an Option[] member with no Column annotation with optionType declared.")
 
   //def createSamplePoso[T](vxn: ViewExpressionNode[T], classOfT: Class[T]): T = {
     //Enhancer.create(classOfT, new PosoPropertyAccessInterceptor(vxn)).asInstanceOf[T]
