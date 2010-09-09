@@ -106,6 +106,8 @@ class SchoolDb extends Schema with QueryTester {
   override val name = {
     if(Session.currentSession.databaseAdapter.isInstanceOf[OracleAdapter])
       Some("squeryl")
+    else if(Session.currentSession.databaseAdapter.isInstanceOf[PostgreSqlAdapter])
+      Some("public")
     else
       None
   }
