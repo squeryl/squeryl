@@ -40,7 +40,8 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     st.execute(sw.statement)
   }                                               
 
-  def sequenceName(t: Table[_]) = "seq_" + t.name
+  def sequenceName(t: Table[_]) =
+    t.prefixedPrefixedName("seq_")
 
   override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
@@ -62,7 +63,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     val colVals = List("nextval('" + sequenceName(t) + "')") ::: f.map(fmd => writeValue(o_, fmd, sw)).toList
 
     sw.write("insert into ");
-    sw.write(t.name);
+    sw.write(t.prefixedName);
     sw.write(" (");
     sw.write(colNames.map(fmd => fmd.columnName).mkString(", "));
     sw.write(") values ");
@@ -75,7 +76,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
    e.getSQLState.equals("42P01")
 
   override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
-    "alter table " + foreignKeyTable.name + " drop constraint " + fkName
+    "alter table " + foreignKeyTable.prefixedName + " drop constraint " + fkName
 
   override def failureOfStatementRequiresRollback = true
   

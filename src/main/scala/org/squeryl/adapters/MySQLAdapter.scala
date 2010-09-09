@@ -40,13 +40,13 @@ class MySQLAdapter extends DatabaseAdapter {
     val sb = new StringBuilder(256)
 
     sb.append("alter table ")
-    sb.append(foreignKeyTable.name)
+    sb.append(foreignKeyTable.prefixedName)
     sb.append(" add constraint ")
     sb.append(foreignKeyConstraintName(foreignKeyTable, fkId))
     sb.append(" foreign key (")
     sb.append(foreignKeyColumnName)
     sb.append(") references ")
-    sb.append(primaryKeyTable.name)
+    sb.append(primaryKeyTable.prefixedName)
     sb.append("(")
     sb.append(primaryKeyColumnName)
     sb.append(")")
@@ -65,7 +65,7 @@ class MySQLAdapter extends DatabaseAdapter {
   }
 
   override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
-    "alter table " + foreignKeyTable.name + " drop foreign key " + fkName
+    "alter table " + foreignKeyTable.prefixedName + " drop foreign key " + fkName
 
   override def isTableDoesNotExistException(e: SQLException) =
     e.getErrorCode == 1051 

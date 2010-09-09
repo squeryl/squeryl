@@ -154,7 +154,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       if(checkOCC && posoMetaData.isOptimistic) {
         val version = posoMetaData.optimisticCounter.get.get(o.asInstanceOf[AnyRef])
         throw new StaleUpdateException(
-           "Object "+name + "(id=" + o.asInstanceOf[KeyedEntity[_]].id + ", occVersionNumber=" + version +
+           "Object "+prefixedName + "(id=" + o.asInstanceOf[KeyedEntity[_]].id + ", occVersionNumber=" + version +
            ") has become stale, it cannot be updated under optimistic concurrency control")
       }
       else

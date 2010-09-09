@@ -79,10 +79,7 @@ class ViewExpressionNode[U](val view: View[U])
   def sample = _sample.get
 
   def doWrite(sw: StatementWriter) =
-    if(view.prefix != None)
-      sw.write(view.prefix.get + "." + view.name)
-    else
-      sw.write(view.name)
+      sw.write(view.prefixedName)
 
   override def toString = {
     val sb = new StringBuffer

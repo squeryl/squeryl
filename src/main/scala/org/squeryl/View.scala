@@ -36,6 +36,23 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     else
       schema.name
 
+  def prefixedName =
+    if(prefix != None)
+      prefix.get + "." + name
+    else
+      name
+
+  /**
+   * Suppose you have : prefix.MyTable
+   * myTable.prefixedPrefixedName("z") will yield : prefix.zMyTable
+   * used for creating names for objects derived from a table, ex.: a sequence 
+   */
+  def prefixedPrefixedName(s: String) =
+    if(prefix != None)
+      prefix.get + "." + s + name
+    else
+      s + name
+  
   private [squeryl] def findFieldMetaDataForProperty(name: String) = posoMetaData.findFieldMetaDataForProperty(name)
 
   val posoMetaData = new PosoMetaData(classOfT, schema)

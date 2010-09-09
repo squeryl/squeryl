@@ -234,7 +234,7 @@ trait DatabaseAdapter {
   def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 
     sw.write("create table ")
-    sw.write(t.name);
+    sw.write(t.prefixedName);
     sw.write(" (\n");
     val pk = t.posoMetaData.primaryKey;    
     sw.writeIndented {
@@ -353,7 +353,7 @@ trait DatabaseAdapter {
     val f = t.posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented)
 
     sw.write("insert into ");
-    sw.write(t.name);
+    sw.write(t.prefixedName);
     sw.write(" (");
     sw.write(f.map(fmd => fmd.columnName).mkString(", "));
     sw.write(") values ");
@@ -432,7 +432,7 @@ trait DatabaseAdapter {
     val o_ = o.asInstanceOf[AnyRef]
     val pkMd = t.posoMetaData.primaryKey.get
 
-    sw.write("update ", t.name, " set ")
+    sw.write("update ", t.prefixedName, " set ")
     sw.nextLine
     sw.indent
     sw.writeLinesWithSeparator(
@@ -464,7 +464,7 @@ trait DatabaseAdapter {
   def writeDelete[T](t: Table[T], whereClause: Option[ExpressionNode], sw: StatementWriter) = {
 
     sw.write("delete from ")
-    sw.write(t.name)
+    sw.write(t.prefixedName)
     if(whereClause != None) {
       sw.nextLine
       sw.write("where")
@@ -493,7 +493,7 @@ trait DatabaseAdapter {
     val colsToUpdate = us.columns.iterator
 
     sw.write("update ")
-    sw.write(t.name)
+    sw.write(t.prefixedName)
     sw.write(" set")
     sw.indent
     sw.nextLine
@@ -553,7 +553,7 @@ trait DatabaseAdapter {
     foreignKeyConstraintName(foreingKeyTable, idWithinSchema)
 
   def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
-    foreignKeyTable.name + "FK" + idWithinSchema
+    foreignKeyTable.prefixedName + "FK" + idWithinSchema
 
   @deprecated("Use writeForeignKeyDeclaration instead")
   def writeForeingKeyDeclaration(
@@ -581,13 +581,13 @@ trait DatabaseAdapter {
     val sb = new StringBuilder(256)
 
     sb.append("alter table ")
-    sb.append(foreignKeyTable.name)
+    sb.append(foreignKeyTable.prefixedName)
     sb.append(" add constraint ")
     sb.append(foreignKeyConstraintName(foreignKeyTable, fkId))
     sb.append(" foreign key (")
     sb.append(foreignKeyColumnName)
     sb.append(") references ")
-    sb.append(primaryKeyTable.name)
+    sb.append(primaryKeyTable.prefixedName)
     sb.append("(")
     sb.append(primaryKeyColumnName)
     sb.append(")")
@@ -609,7 +609,7 @@ trait DatabaseAdapter {
     Session.currentSession
 
   def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
-    "alter table " + foreignKeyTable.name + " drop constraint " + fkName
+    "alter table " + foreignKeyTable.prefixedName + " drop constraint " + fkName
 
   def dropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String, session: Session):Unit =
     execFailSafeExecute(writeDropForeignKeyStatement(foreignKeyTable, fkName), e => true)
@@ -622,7 +622,7 @@ trait DatabaseAdapter {
     "drop table " + tableName
 
   def dropTable(t: Table[_]) =
-    execFailSafeExecute(writeDropTable(t.name), e=> isTableDoesNotExistException(e))
+    execFailSafeExecute(writeDropTable(t.prefixedName), e=> isTableDoesNotExistException(e))
 
   def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
     sw.write(se.alias)
@@ -632,9 +632,9 @@ trait DatabaseAdapter {
     val sb = new StringBuilder(256)
     
     sb.append("alter table ")
-    sb.append(t.name)
+    sb.append(t.prefixedName)
     sb.append(" add constraint ")
-    sb.append(t.name + "CPK")
+    sb.append(t.prefixedName + "CPK")
     sb.append(" unique(")
     sb.append(cols.map(_.columnName).mkString(","))
     sb.append(")")
