@@ -109,11 +109,21 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
 
   override def inhibited =
-    if(left.isInstanceOf[LogicalBoolean])
+    if(_inhibitedByWhen)
+      true
+    else if(left.isInstanceOf[LogicalBoolean])
       left.inhibited && right.inhibited
     else
       left.inhibited || right.inhibited
 
+  private var _inhibitedByWhen = false
+  
+  def when(inhibited: Boolean) = {
+    _inhibitedByWhen = true
+    this
+  }
+
+  
   override def doWrite(sw: StatementWriter) = {
     // since we are executing this method, we have at least one non inhibited children
     val nonInh = children.filter(c => ! c.inhibited).iterator
