@@ -56,7 +56,7 @@ class OracleAdapter extends DatabaseAdapter {
     for(fmd <-autoIncrementedFields)
       execFailSafeExecute("drop sequence " + fmd.sequenceName, e=>e.getErrorCode == 2289)
   }
-  
+
   override def createSequenceName(fmd: FieldMetaData) = {
     
     val prefix = "s_" + fmd.columnName.take(6) + "_" + fmd.parentMetaData.viewOrTable.name.take(10)
@@ -85,7 +85,7 @@ class OracleAdapter extends DatabaseAdapter {
     val colVals = List(autoIncPK.get.sequenceName + ".nextval") ::: f.map(fmd => writeValue(o_, fmd, sw)).toList
 
     sw.write("insert into ");
-    sw.write(t.name);
+    sw.write(t.prefixedName);
     sw.write(" (");
     sw.write(colNames.map(fmd => fmd.columnName).mkString(", "));
     sw.write(") values ");

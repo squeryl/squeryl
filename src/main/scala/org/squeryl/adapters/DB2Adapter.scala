@@ -42,7 +42,8 @@ class DB2Adapter extends DatabaseAdapter {
   override def postDropTable(t: Table[_]) =
     execFailSafeExecute("drop sequence " + sequenceName(t), e => e.getErrorCode == -204)
 
-  def sequenceName(t: Table[_]) = "s_" + t.name
+  def sequenceName(t: Table[_]) =
+    t.prefixedPrefixedName("s_")
 
   override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter): Unit = {
 
@@ -61,7 +62,7 @@ class DB2Adapter extends DatabaseAdapter {
     val colVals = List("next value for " + sequenceName(t)) ::: f.map(fmd => writeValue(o_, fmd, sw)).toList
 
     sw.write("insert into ");
-    sw.write(t.name);
+    sw.write(t.prefixedName);
     sw.write(" (");
     sw.write(colNames.map(fmd => fmd.columnName).mkString(", "));
     sw.write(") values ");

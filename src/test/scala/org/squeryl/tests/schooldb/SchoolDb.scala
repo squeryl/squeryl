@@ -25,7 +25,7 @@ import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
-import adapters.{OracleAdapter, MySQLAdapter}
+import adapters.{PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
 import internals.FieldReferenceLinker
 
 
@@ -99,6 +99,15 @@ object SDB extends SchoolDb
 class SchoolDb extends Schema with QueryTester {
 
   import org.squeryl.PrimitiveTypeMode._
+
+  override val name = {
+    if(Session.currentSession.databaseAdapter.isInstanceOf[OracleAdapter])
+      Some("squeryl")
+    else if(Session.currentSession.databaseAdapter.isInstanceOf[PostgreSqlAdapter])
+      Some("public")
+    else
+      None
+  }
 
   override def columnNameFromPropertyName(n:String) =
     NamingConventionTransforms.camelCase2underScore(n)
@@ -222,7 +231,6 @@ class SchoolDb extends Schema with QueryTester {
   def test1 = {
 
     //Must run first, because later we won't have the rows we need to perform the test
-
     testCountSignatures
     
     blobTest

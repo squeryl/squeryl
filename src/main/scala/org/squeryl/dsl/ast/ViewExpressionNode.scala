@@ -63,7 +63,11 @@ class ViewExpressionNode[U](val view: View[U])
 
   val resultSetMapper = new ResultSetMapper
 
-  def alias = view.name + uniqueId.get
+  def alias =
+    if(view.prefix != None)
+      view.prefix.get + "_" + view.name + uniqueId.get
+    else
+      view.name + uniqueId.get
 
   def owns(aSample: AnyRef) = aSample eq sample.asInstanceOf[AnyRef]
 
@@ -75,7 +79,7 @@ class ViewExpressionNode[U](val view: View[U])
   def sample = _sample.get
 
   def doWrite(sw: StatementWriter) =
-    sw.write(view.name)
+      sw.write(view.prefixedName)
 
   override def toString = {
     val sb = new StringBuffer
