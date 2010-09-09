@@ -166,6 +166,9 @@ trait BaseColumnAttributeAssignment {
 
   def isIdFieldOfKeyedEntity: Boolean
 
+  def isIdFieldOfKeyedEntityWithoutUniquenessConstraint =
+    isIdFieldOfKeyedEntity && ! (columnAttributes.exists(_.isInstanceOf[PrimaryKey]) || columnAttributes.exists(_.isInstanceOf[Unique]))
+
   def columnAttributes: Seq[ColumnAttribute]
 
   def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
@@ -175,8 +178,17 @@ trait BaseColumnAttributeAssignment {
     columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))  
 }
 
-class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], val columnAttributes: Seq[ColumnAttribute])
+class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], columnAttributes_ : Seq[ColumnAttribute])
   extends BaseColumnAttributeAssignment {
+
+  private val _columnAttributes = new ArrayBuffer[ColumnAttribute]
+
+  _columnAttributes.appendAll(columnAttributes_)
+
+  def columnAttributes = _columnAttributes 
+
+  def addAttribute(a: ColumnAttribute) =
+    _columnAttributes.append(a)
 
   def clearColumnAttributes = columns.foreach(_._clearColumnAttributes)
 

@@ -62,7 +62,8 @@ object SchoolDb2 extends Schema {
     s.firstName is(indexed),
     s.lastName defaultsTo("!"),
     s.fullName is(unique, indexed),
-    columns(s.firstName, s.lastName) are(indexed)  
+    s.id is(indexed),
+    columns(s.id, s.firstName, s.lastName) are(indexed)  
   ))
 
   val courses = table[Course]

@@ -366,8 +366,8 @@ trait Schema {
     val colAss: Seq[BaseColumnAttributeAssignment] =
       Utils.mapSampleObject(table, declarations)
 
-    // all fields that have declarations are first reset :
-    for(ca <- colAss)
+    // all fields that have a single 'is' declaration are first reset :
+    for(ca <- colAss if ca.isInstanceOf[ColumnAttributeAssignment])
       ca.clearColumnAttributes
 
     for(ca <- colAss) ca match {
@@ -376,19 +376,31 @@ trait Schema {
 
         for(ca <- caa.columnAttributes)
           (caa.left._addColumnAttribute(ca))
+
+        //don't allow a KeyedEntity.id field to not have a uniqueness constraint :
+        if(ca.isIdFieldOfKeyedEntityWithoutUniquenessConstraint)
+          caa.left._addColumnAttribute(primaryKey)
       }
-      case ctaa:ColumnGroupAttributeAssignment => _addClumnGroupAttributeAssignment(ctaa)
+      case ctaa:ColumnGroupAttributeAssignment => {
+
+        //don't allow a KeyedEntity.id field to not have a uniqueness constraint :
+        if(ca.isIdFieldOfKeyedEntityWithoutUniquenessConstraint)
+          ctaa.addAttribute(primaryKey)
+
+        _addColumnGroupAttributeAssignment(ctaa)
+      }
+      
       case a:Any => error("did not match on " + a.getClass.getName)
     }
 
-    // Validate that a KeyedEntity.id is not left without a uniqueness constraint :
-    for(ca <- colAss.find(_.isIdFieldOfKeyedEntity))
-      assert(
-        ca.columnAttributes.exists(_.isInstanceOf[PrimaryKey]) ||
-        ca.columnAttributes.exists(_.isInstanceOf[Unique]),
-        "Column 'id' of table '" + table.name +
-        "' must have a uniqueness constraint by having the column attribute 'primaryKey' or 'unique' to honor it's KeyedEntity trait"
-      )
+//    for(ca <- colAss.find(_.isIdFieldOfKeyedEntity))
+//      assert(
+//        ca.columnAttributes.exists(_.isInstanceOf[PrimaryKey]) ||
+//        ca.columnAttributes.exists(_.isInstanceOf[Unique]),
+//        "Column 'id' of table '" + table.name +
+//        "' must have a uniqueness constraint by having the column attribute 'primaryKey' or 'unique' to honor it's KeyedEntity trait"
+//      )
+
 
     // Validate that autoIncremented is not used on other fields than KeyedEntity[A].id :
     // since it is not yet unsupported :
@@ -403,7 +415,7 @@ trait Schema {
     }
   }
 
-  private def _addClumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
+  private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
     _columnGroupAttributeAssignments.append(cga);
   
   def defaultColumnAttributesForKeyedEntityId = Set(new PrimaryKey, new AutoIncremented(None))
