@@ -83,7 +83,7 @@ The association table can have other fields besides the _left_ and _right_ forei
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
-class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float)
+class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float) extends KeyedEntity[CompositeKey2[Int,Int]]
 
 object SchoolDb extends Schema {
 
