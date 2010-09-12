@@ -50,7 +50,7 @@
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol">
-        <span class="name">FieldMetaData</span><span class="params">(<span name="parentMetaData">parentMetaData: org.squeryl.internals.PosoMetaData[_]</span>, <span name="nameOfProperty">nameOfProperty: <span class="extype" name="java.lang.String">String</span></span>, <span name="fieldType">fieldType: java.lang.Class[_]</span>, <span name="wrappedFieldType">wrappedFieldType: java.lang.Class[_]</span>, <span name="customTypeFactory">customTypeFactory: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>, <span name="isOption">isOption: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="getter">getter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="setter">setter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="field">field: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Field">Field</span>]</span>, <span name="columnAnnotation">columnAnnotation: <span class="extype" name="scala.Option">Option</span>[org.squeryl.annotations.ColumnBase @scala.annotation.target.field]</span>, <span name="isOptimisticCounter">isOptimisticCounter: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">FieldMetaData</span><span class="params">(<span name="parentMetaData">parentMetaData: org.squeryl.internals.PosoMetaData[_]</span>, <span name="nameOfProperty">nameOfProperty: <span class="extype" name="java.lang.String">String</span></span>, <span name="fieldType">fieldType: java.lang.Class[_]</span>, <span name="wrappedFieldType">wrappedFieldType: java.lang.Class[_]</span>, <span name="customTypeFactory">customTypeFactory: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>, <span name="isOption">isOption: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="getter">getter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="setter">setter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="field">field: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Field">Field</span>]</span>, <span name="columnAnnotation">columnAnnotation: <span class="extype" name="scala.Option">Option</span>[org.squeryl.annotations.ColumnBase @scala.annotation.target.field]</span>, <span name="isOptimisticCounter">isOptimisticCounter: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="sampleValue">sampleValue: AnyRef</span>)</span>
       </span>
       </h4>
       
@@ -206,6 +206,14 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#canonicalEnumerationValueFor">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">canonicalEnumerationValueFor</span><span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Enumeration.Value">Value</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="prt" name="scala.AnyRef#clone">
       <h4 class="signature">
       <span class="kind">def</span>
@@ -227,6 +235,14 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#columnAttributes">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">columnAttributes</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="ColumnAttribute.html" class="extype" name="org.squeryl.internals.ColumnAttribute">ColumnAttribute</a>]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#columnName">
       <h4 class="signature">
       <span class="kind">def</span>
@@ -250,6 +266,14 @@ part of compilation it is not possible to check whether the contents of the list
       <span class="kind">val</span>
       <span class="symbol">
         <span class="name">customTypeFactory</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#defaultValue">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">defaultValue</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[org.squeryl.dsl.ast.ConstantExpressionNode[_]]</span>
       </span>
       </h4>
       
@@ -418,7 +442,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           
     </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isAutoIncremented">
       <h4 class="signature">
-      <span class="kind">var</span>
+      <span class="kind">def</span>
       <span class="symbol">
         <span class="name">isAutoIncremented</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
@@ -429,6 +453,22 @@ to verify that the behavior is consistent with the <code>equals</code> method.
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">isCustomType</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isEnumeration">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isEnumeration</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isIdFieldOfKeyedEntity">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isIdFieldOfKeyedEntity</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -473,7 +513,7 @@ possible to check whether the contents of the list are of the requested typed.
       
     </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isPrimaryKey">
       <h4 class="signature">
-      <span class="kind">lazy val</span>
+      <span class="kind">def</span>
       <span class="symbol">
         <span class="name">isPrimaryKey</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
@@ -596,6 +636,14 @@ the most appropriate column type
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#sampleValue">
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">sampleValue</span><span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#scale">
       <h4 class="signature">
       <span class="kind">def</span>
@@ -609,6 +657,14 @@ the most appropriate column type
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">schema</span><span class="result">: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#sequenceName">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">sequenceName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       

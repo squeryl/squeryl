@@ -297,7 +297,7 @@ scala.Int
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">failSafeString</span><span class="params">(<span name="s">s: ⇒ <span class="extype" name="java.lang.String">String</span></span>, <span name="valueOnFail">valueOnFail: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: AnyRef</span>
+        <span class="name">failSafeString</span><span class="params">(<span name="s">s: ⇒ <span class="extype" name="java.lang.String">String</span></span>, <span name="valueOnFail">valueOnFail: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -305,13 +305,13 @@ scala.Int
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">failSafeString</span><span class="params">(<span name="s">s: ⇒ <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: AnyRef</span>
+        <span class="name">failSafeString</span><span class="params">(<span name="s">s: ⇒ <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">Will attempt to evaluate a string expression and will catch any exception.</p>
             <div class="fullcomment"><div class="comment cmt"><p>Will attempt to evaluate a string expression and will catch any exception.
-For use in circumstances when loggin is needed (i.e. a fatal error has already occured
+For use in circumstances when logging is needed (i.e. a fatal error has already occurred
 and we need to log as much info as possible (i.e. put as much info as possible in the 'black box').
 Also used to allow dumping (ex. for logging) a Query AST *before* it is completely built.
 </p></div>
@@ -419,9 +419,9 @@ possible to check whether the contents of the list are of the requested typed.
       </h4>
       
             <p class="shortcomment cmt">visitor will get applied on a proxied Sample object of the Queryable[A],
-this function is used for obtaining AST nodes or metadata of from A.</p>
+this function is used for obtaining AST nodes or metadata from A.</p>
             <div class="fullcomment"><div class="comment cmt"><p>visitor will get applied on a proxied Sample object of the Queryable[A],
-this function is used for obtaining AST nodes or metadata of from A.
+this function is used for obtaining AST nodes or metadata from A.
 </p></div>
             
             

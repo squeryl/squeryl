@@ -55,6 +55,38 @@
           attributes: abstract 
         </div></div>
           
+    </li><li visbl="pub" name="org.squeryl.dsl.BinaryAMSOp">
+      <h4 class="signature"><a href="BinaryAMSOp.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BinaryAMSOp</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.BinaryDivOp">
+      <h4 class="signature"><a href="BinaryDivOp.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BinaryDivOp</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.BooleanExpression">
+      <h4 class="signature"><a href="BooleanExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BooleanExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.BooleanTypeConversion">
+      <h4 class="signature"><a href="BooleanTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BooleanTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with BooleanExpression[A]</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.CompositeKey">
       <h4 class="signature"><a href="CompositeKey.html">
       <span class="kind">trait</span>
@@ -87,6 +119,30 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.squeryl.dsl.ConcatOp">
+      <h4 class="signature"><a href="ConcatOp.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ConcatOp</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.DateExpression">
+      <h4 class="signature"><a href="DateExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">DateExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.DateTypeConversion">
+      <h4 class="signature"><a href="DateTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">DateTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with DateExpression[A]</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.DelegateQuery">
       <h4 class="signature"><a href="DelegateQuery.html">
       <span class="kind">class</span>
@@ -100,6 +156,14 @@
       <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">DslFactory</span><span class="result"> extends TypeArithmetic with SqlFunctions</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.EnumExpression">
+      <h4 class="signature"><a href="EnumExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">EnumExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       
@@ -159,6 +223,86 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalCoalesce">
+      <h4 class="signature"><a href="NonNumericalCoalesce.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NonNumericalCoalesce</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression">
+      <h4 class="signature"><a href="NonNumericalExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">NonNumericalExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypedExpressionNode[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalInputOnlyTypeConversion">
+      <h4 class="signature"><a href="NonNumericalInputOnlyTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NonNumericalInputOnlyTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NonNumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">SQL allows operators are 'null agnostic', i.</p>
+    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalTypeConversion">
+      <h4 class="signature"><a href="NonNumericalTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NonNumericalTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NonNumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NumericalExpression">
+      <h4 class="signature"><a href="NumericalExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">NumericalExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypedExpressionNode[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NumericalInputOnlyTypeConversion">
+      <h4 class="signature"><a href="NumericalInputOnlyTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NumericalInputOnlyTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NumericalTypeConversion">
+      <h4 class="signature"><a href="NumericalTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NumericalTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NvlFunctionNonNumerical">
+      <h4 class="signature"><a href="NvlFunctionNonNumerical.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NvlFunctionNonNumerical</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode with NvlNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NvlFunctionNumerical">
+      <h4 class="signature"><a href="NvlFunctionNumerical.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">NvlFunctionNumerical</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryAMSOp[A1, A2] with NvlNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.NvlNode">
+      <h4 class="signature"><a href="NvlNode.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">NvlNode</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.OneToMany">
       <h4 class="signature"><a href="OneToMany.html">
       <span class="kind">trait</span>
@@ -187,7 +331,7 @@
       <h4 class="signature"><a href="QueryDsl.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">QueryDsl</span><span class="result"> extends DslFactory with WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState with QueryElements with FromSignatures</span>
+        <span class="name">QueryDsl</span><span class="result"> extends DslFactory with WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState with QueryElements with JoinSignatures with FromSignatures</span>
       </span>
       </a></h4>
       
@@ -239,11 +383,51 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.squeryl.dsl.StringExpression">
+      <h4 class="signature"><a href="StringExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">StringExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.StringTypeConversion">
+      <h4 class="signature"><a href="StringTypeConversion.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">StringTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with StringExpression[A]</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.TypeArithmetic">
       <h4 class="signature"><a href="TypeArithmetic.html">
       <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">TypeArithmetic</span><span class="result"> extends FieldTypes</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.UnaryAgregateFloatOp">
+      <h4 class="signature"><a href="UnaryAgregateFloatOp.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">UnaryAgregateFloatOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends FunctionNode[Nothing]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">
+      <h4 class="signature"><a href="UnaryAgregateLengthNeutralOp.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">UnaryAgregateLengthNeutralOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends FunctionNode[Nothing]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.UnaryFloatOp">
+      <h4 class="signature"><a href="UnaryFloatOp.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">UnaryFloatOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends FunctionNode[Nothing]</span>
       </span>
       </a></h4>
       
@@ -273,6 +457,14 @@
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">fsm</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.internal">
+      <h4 class="signature"><a href="internal/package.html">
+      <span class="kind">package</span>
+      <span class="symbol">
+        <span class="name">internal</span>
       </span>
       </a></h4>
       

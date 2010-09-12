@@ -197,7 +197,7 @@
           
     </li><li visbl="prt" name="org.squeryl.internals.StatementWriter#_paramList">
       <h4 class="signature">
-      <span class="kind">lazy val</span>
+      <span class="kind">val</span>
       <span class="symbol">
         <span class="name">_paramList</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[AnyRef]</span>
       </span>
@@ -552,14 +552,14 @@ possible to check whether the contents of the list are of the requested typed.
       </span>
       </h4>
       
-            <p class="shortcomment cmt">a surrogate witer will accumulate text whithin itself (not the parent)
+            <p class="shortcomment cmt">a surrogate writer will accumulate text within itself (not the parent)
 while param accumulation (addParam) will go to the root writer, this
-is usefull when it is easyer to first build a string and to write it
+is useful when it is easier to first build a string and to write it
 afterwards
 </p>
-            <div class="fullcomment"><div class="comment cmt"><p>a surrogate witer will accumulate text whithin itself (not the parent)
+            <div class="fullcomment"><div class="comment cmt"><p>a surrogate writer will accumulate text within itself (not the parent)
 while param accumulation (addParam) will go to the root writer, this
-is usefull when it is easyer to first build a string and to write it
+is useful when it is easier to first build a string and to write it
 afterwards
 </p></div>
             

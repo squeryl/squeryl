@@ -3,7 +3,7 @@ layout: manual
 title: Joins
 ---
 
-h2. Inner Joins 
+h2. Joining with *from* 
 
 A two table join :
 
@@ -25,8 +25,25 @@ class Playlist(var id: Long, var name: String, var path: String) extends KeyedEn
   The select clause can return anything that is in the scope, for example it
   could return both joined objects with a Tuple2 : select((s, ple))
 
+
+h2. The *join* keyword
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    var ratingsForAllSongs =
+      join(songs, ratings.leftOuter)((s,r) =>
+          select(s, r)
+          on(s.id === r.songId)
+      )
+
+    for(sr <- ratingsForAllSongs)
+      println(sr._1.title + " rating is " + 
+	  sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
+	  
+]]></script>
+
   
-h2. Outer Joins 
+h2. Outer Joins _(deprecated syntax)_ 
   
 A Left Outer Join is done by calling leftOuterJoin within the select clause,
 where the fist parameter is the row object variable, and the second a boolean clause.

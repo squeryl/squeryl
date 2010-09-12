@@ -10,16 +10,19 @@ h3. 0.9.4
 
 Features :
 
-* Relations (OneToMany and ManyToMany)  : http://squeryl.org/relations.html
-* Support for Composite Keys  : http://squeryl.org/composite-keys.html
+* OneToMany and ManyToMany 	"Relations":relations.html
+* "Composite Keys":http://squeryl.org/composite-keys.html
 * Support for BigDecimal, (kindly contributed by Antti Tuppurainen)
 * Support for Binary column type (graciousness of Mitsutoshi Aoe)
 * Support for Injection of custom SQL functions by implit conversions
-* Declaration of column attributes for schema creation (indexes, uniqueness constraint, auto increment, etc...)
+* Enhancements to "Schema Definition":schema-definition.html : declaration of column attributes for schema creation (indexes, uniqueness constraint, auto increment, etc...)
 * Support for DB2 (a huge thanks to Christian Maslen) 
-* Support for DDL prefixes (issue #2)
+* Fully qualified table names, i.e. support for prefixing table names with the schema name "issue #2":http://github.com/max-l/Squeryl/issues#issue
 * Injection of SQL functions by implicit conversion
-* regex, lower, upper string functions 
+* regex, lower, upper string functions
+* "Dynamic where clause definition":dynamic-queries.html#dyn-where-clause
+* Redesign of inner,outer joins with new *join* function
+* fixed a bunch of "issue":http://github.com/max-l/Squeryl/issues/closed
  
 As well as a few minor enhancements and bug fixes.
 

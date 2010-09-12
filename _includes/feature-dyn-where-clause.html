@@ -1,0 +1,88 @@
+
+h3. Dynamic Where clause construction
+
+The following method builds a query with a dynamically varying where clause, the *.?* function on the optional parameters has the effect of removing the enclosing condition when the argument is None.
+
+* *Note* the .? operator is just a shorthand for the inhibitWhen(b: Boolean) methods that applies on any AST node
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
+      from(artists)(a =>
+        where(
+          (a.firstName === firstName.?) and
+          (a.lastName like lastName.?)
+        )
+        select(a)
+      )
+]]></script>
+
+Observe how following calls affect the generated SQL : 
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+ 
+    val q1 = dynamicWhereOnArtists(None, None)
+       
+    val q2 = dynamicWhereOnArtists(None, Some("S%"))
+    
+    val q3 = dynamicWhereOnArtists(Some("Poncho"), Some("S%"))
+
+]]></script>
+
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+
+-- q1 :
+Select
+  Person1.age as Person1_age,
+  Person1.timeOfLastUpdate as Person1_timeOfLastUpdate,
+  Person1.lastName as Person1_lastName,
+  Person1.firstName as Person1_firstName,
+  Person1.id as Person1_id
+From
+  Person Person1
+
+--q2 :  
+Select
+  Person1.age as Person1_age,
+  Person1.timeOfLastUpdate as Person1_timeOfLastUpdate,
+  Person1.lastName as Person1_lastName,
+  Person1.firstName as Person1_firstName,
+  Person1.id as Person1_id
+From
+  Person Person1
+Where
+  ((Person1.lastName like ?) )
+  
+  
+--q3 :
+ 
+Select
+  Person1.age as Person1_age,
+  Person1.timeOfLastUpdate as Person1_timeOfLastUpdate,
+  Person1.lastName as Person1_lastName,
+  Person1.firstName as Person1_firstName,
+  Person1.id as Person1_id
+From
+  Person Person1
+Where
+  ((Person1.firstName = ?) and (Person1.lastName like ?))  
+]]></script>
+
+
+
+* *Note* the .? operator is just a shorthand for the inhibitWhen(b: Boolean) methods that applies on any AST node, it translates into a.inhibitWhen(a === None)
+
+The same method using inhibitWhen would be :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
+      from(artists)(a =>
+        where(
+          (a.firstName === firstName.inhibitWhen(firstName == None)) and
+          (a.lastName like lastName.inhibitWhen(lastName == None))
+        )
+        select(a)
+      )
+]]></script>

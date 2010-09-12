@@ -34,7 +34,7 @@
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="scala.collection.Iterable">Iterable</li><li class="in" name="scala.collection.IterableLike">IterableLike</li><li class="in" name="scala.Equals">Equals</li><li class="in" name="scala.collection.Traversable">Traversable</li><li class="in" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</li><li class="in" name="scala.collection.TraversableLike">TraversableLike</li><li class="in" name="scala.collection.TraversableOnce">TraversableOnce</li><li class="in" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="scala.collection.Iterable">Iterable</li><li class="in" name="scala.collection.IterableLike">IterableLike</li><li class="in" name="scala.Equals">Equals</li><li class="in" name="scala.collection.Traversable">Traversable</li><li class="in" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</li><li class="in" name="scala.collection.TraversableLike">TraversableLike</li><li class="in" name="scala.collection.TraversableOnce">TraversableOnce</li><li class="in" name="scala.collection.generic.FilterMonadic">FilterMonadic</li><li class="in" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -696,7 +696,7 @@ there are no more references to the object.</p><p>The details of when and if the
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#flatten">
@@ -761,7 +761,7 @@ there are no more references to the object.</p><p>The details of when and if the
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: IterableLike → TraversableLike → TraversableOnce
+          definition classes: IterableLike → TraversableLike → TraversableOnce → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#genericBuilder">
@@ -802,7 +802,7 @@ there are no more references to the object.</p><p>The details of when and if the
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">groupBy</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="f">f: (O) ⇒ K</span>)</span><span class="result">: <span class="extype" name="scala.collection.Map">Map</span>[K, <span class="extype" name="scala.collection.Iterable">Iterable</span>[O]]</span>
+        <span class="name">groupBy</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="f">f: (O) ⇒ K</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[K, <span class="extype" name="scala.collection.Iterable">Iterable</span>[O]]</span>
       </span>
       </h4>
       
@@ -999,7 +999,7 @@ possible to check whether the contents of the list are of the requested typed.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.TraversableOnce#max">
@@ -1624,7 +1624,7 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toSeq">
+    </li><li visbl="pub" name="scala.collection.IterableLike#toSeq">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1634,7 +1634,7 @@ possible to check whether the contents of the list are of the requested typed.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableOnce
+          definition classes: IterableLike → TraversableOnce
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.TraversableOnce#toSet">
@@ -1660,7 +1660,7 @@ possible to check whether the contents of the list are of the requested typed.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: IterableLike → TraversableOnce
+          definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.TraversableLike#toString">
@@ -1796,13 +1796,13 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">withFilter</span><span class="params">(<span name="p">p: (O) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.TraversableLike.WithFilter">WithFilter</span></span>
+        <span class="name">withFilter</span><span class="params">(<span name="p">p: (O) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[O, <span class="extype" name="scala.collection.Iterable">Iterable</span>[O]]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.IterableLike#zip">
