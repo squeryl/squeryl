@@ -89,7 +89,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     val q = from(this)(a => dsl.where {
       FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(a.id, k)
     } select(a))
-    q.headOption
 
+    val it = q.iterator
+
+    if(it.hasNext)
+      Some(it.next)
+    else
+      None
   }  
 }
