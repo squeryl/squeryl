@@ -13,11 +13,11 @@ h2. Operators
 
 h4. Boolean :
 
-not, isNull, isNotNull, between, ===, <, lt, >, gt, <=, lte, <=, gte, <>
+not, isNull, isNotNull, between, ===, <, lt, >, gt, <=, lte, <=, gte, <>, regex(String)
 
 h4. Math :
 
- plus, +, minus, -, times, *, div, /
+plus, +, minus, -, times, *, div, /
 
 h4. String : 
 
@@ -25,4 +25,4 @@ h4. String :
 
 h2. Aggregate Functions
 
-max, min, sum, avg, sDevPopulation, sDevSample, varPopulation, varSample, count
+max, min, sum, avg, sDevPopulation, sDevSample, varPopulation, varSample, count(cols*), countDistinct(cols*)

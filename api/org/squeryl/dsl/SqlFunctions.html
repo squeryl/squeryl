@@ -210,7 +210,7 @@ part of compilation it is not possible to check whether the contents of the list
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">avg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
+        <span class="name">avg</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
       </span>
       </h4>
       
@@ -239,7 +239,23 @@ part of compilation it is not possible to check whether the contents of the list
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
+        <span class="name">count</span><span class="params">(<span name="e">e: org.squeryl.dsl.ast.TypedExpressionNode[_]*</span>)</span><span class="result">: <a href="SqlFunctions$CountFunction.html" class="extype" name="org.squeryl.dsl.SqlFunctions.CountFunction">CountFunction</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#count">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
         <span class="name">count</span><span class="result">: <a href="SqlFunctions$CountFunction.html" class="extype" name="org.squeryl.dsl.SqlFunctions.CountFunction">CountFunction</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#countDistinct">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">countDistinct</span><span class="params">(<span name="e">e: org.squeryl.dsl.ast.TypedExpressionNode[_]*</span>)</span><span class="result">: <a href="SqlFunctions$CountFunction.html" class="extype" name="org.squeryl.dsl.SqlFunctions.CountFunction">CountFunction</a></span>
       </span>
       </h4>
       
@@ -395,11 +411,11 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#max">
+    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#lower">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">max</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
+        <span class="name">lower</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="s">s: <a href="StringExpression.html" class="extype" name="org.squeryl.dsl.StringExpression">StringExpression</a>[A]</span>)</span><span class="result">: <a href="ast/FunctionNode.html" class="extype" name="org.squeryl.dsl.ast.FunctionNode">FunctionNode</a>[A] with <a href="StringExpression.html" class="extype" name="org.squeryl.dsl.StringExpression">StringExpression</a>[A]</span>
       </span>
       </h4>
       
@@ -407,7 +423,15 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">max</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
+        <span class="name">max</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#max">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">max</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
       </span>
       </h4>
       
@@ -415,7 +439,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">min</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
+        <span class="name">min</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
       </span>
       </h4>
       
@@ -423,7 +447,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">min</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
+        <span class="name">min</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
       </span>
       </h4>
       
@@ -500,7 +524,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">nvl</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="FieldTypes$NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NonNumericalExpression">NonNumericalExpression</a>[<span class="extype" name="scala.Option">Option</span>[A]]</span>, <span name="b">b: <a href="FieldTypes$NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$NvlFunctionNonNumerical.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.NvlFunctionNonNumerical">NvlFunctionNonNumerical</a>[<span class="extype" name="scala.Option">Option</span>[A], A]</span>
+        <span class="name">nvl</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[<span class="extype" name="scala.Option">Option</span>[A]]</span>, <span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="NvlFunctionNonNumerical.html" class="extype" name="org.squeryl.dsl.NvlFunctionNonNumerical">NvlFunctionNonNumerical</a>[<span class="extype" name="scala.Option">Option</span>[A], A]</span>
       </span>
       </h4>
       
@@ -508,7 +532,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">nvl</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[<span class="extype" name="scala.Option">Option</span>[A]]</span>, <span name="b">b: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[B]</span>)</span><span class="result">: <a href="TypeArithmetic$NvlFunctionNumerical.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.NvlFunctionNumerical">NvlFunctionNumerical</a>[A, B]</span>
+        <span class="name">nvl</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="a">a: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[<span class="extype" name="scala.Option">Option</span>[A]]</span>, <span name="b">b: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[B]</span>)</span><span class="result">: <a href="NvlFunctionNumerical.html" class="extype" name="org.squeryl.dsl.NvlFunctionNumerical">NvlFunctionNumerical</a>[A, B]</span>
       </span>
       </h4>
       
@@ -516,7 +540,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sDevPopulation</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
+        <span class="name">sDevPopulation</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
       </span>
       </h4>
       
@@ -524,7 +548,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sDevSample</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
+        <span class="name">sDevSample</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
       </span>
       </h4>
       
@@ -532,7 +556,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sum</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
+        <span class="name">sum</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateLengthNeutralOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">UnaryAgregateLengthNeutralOp</a>[A]</span>
       </span>
       </h4>
       
@@ -570,11 +594,19 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
+    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#upper">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">upper</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="s">s: <a href="StringExpression.html" class="extype" name="org.squeryl.dsl.StringExpression">StringExpression</a>[A]</span>)</span><span class="result">: <a href="ast/FunctionNode.html" class="extype" name="org.squeryl.dsl.ast.FunctionNode">FunctionNode</a>[A] with <a href="StringExpression.html" class="extype" name="org.squeryl.dsl.StringExpression">StringExpression</a>[A]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions#varPopulation">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">varPopulation</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
+        <span class="name">varPopulation</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
       </span>
       </h4>
       
@@ -582,7 +614,7 @@ possible to check whether the contents of the list are of the requested typed.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">varSample</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="TypeArithmetic$UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.TypeArithmetic.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
+        <span class="name">varSample</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="e">e: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[A]</span>)</span><span class="result">: <a href="UnaryAgregateFloatOp.html" class="extype" name="org.squeryl.dsl.UnaryAgregateFloatOp">UnaryAgregateFloatOp</a>[A]</span>
       </span>
       </h4>
       

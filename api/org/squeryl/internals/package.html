@@ -42,7 +42,47 @@
         
         <div class="members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.internals.ColumnToFieldMapper">
+              <ol><li visbl="pub" name="org.squeryl.internals.AttributeValidOnMultipleColumn">
+      <h4 class="signature"><a href="AttributeValidOnMultipleColumn.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AttributeValidOnMultipleColumn</span><span class="result"> extends ColumnAttribute</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.AttributeValidOnNonNumericalColumn">
+      <h4 class="signature"><a href="AttributeValidOnNonNumericalColumn.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AttributeValidOnNonNumericalColumn</span><span class="result"> extends ColumnAttribute</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.AttributeValidOnNumericalColumn">
+      <h4 class="signature"><a href="AttributeValidOnNumericalColumn.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">AttributeValidOnNumericalColumn</span><span class="result"> extends ColumnAttribute</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.AutoIncremented">
+      <h4 class="signature"><a href="AutoIncremented.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">AutoIncremented</span><span class="params">(<span name="nameOfSequence">nameOfSequence: Option[String]</span>)</span><span class="result"> extends ColumnAttribute with AttributeValidOnNumericalColumn with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.ColumnAttribute">
+      <h4 class="signature"><a href="ColumnAttribute.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">ColumnAttribute</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.ColumnToFieldMapper">
       <h4 class="signature"><a href="ColumnToFieldMapper.html">
       <span class="kind">class</span>
       <span class="symbol">
@@ -90,6 +130,22 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.squeryl.internals.Indexed">
+      <h4 class="signature"><a href="Indexed.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Indexed</span><span class="params">(<span name="nameOfIndex">nameOfIndex: Option[String]</span>)</span><span class="result"> extends ColumnAttribute with MultipleColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.MultipleColumnAttribute">
+      <h4 class="signature"><a href="MultipleColumnAttribute.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">MultipleColumnAttribute</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.internals.OutMapper">
       <h4 class="signature"><a href="OutMapper.html">
       <span class="kind">trait</span>
@@ -103,6 +159,14 @@
       <span class="kind">class</span>
       <span class="symbol">
         <span class="name">PosoMetaData</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals.PrimaryKey">
+      <h4 class="signature"><a href="PrimaryKey.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">PrimaryKey</span><span class="params">()</span><span class="result"> extends ColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
       </span>
       </a></h4>
       
@@ -130,6 +194,14 @@
       </span>
       </a></h4>
       <p class="comment cmt">no summary matey</p>
+    </li><li visbl="pub" name="org.squeryl.internals.Unique">
+      <h4 class="signature"><a href="Unique.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Unique</span><span class="params">()</span><span class="result"> extends ColumnAttribute with MultipleColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.internals.YieldValuePusher">
       <h4 class="signature"><a href="YieldValuePusher.html">
       <span class="kind">class</span>

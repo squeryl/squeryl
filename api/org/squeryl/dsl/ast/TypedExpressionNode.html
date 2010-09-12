@@ -27,7 +27,7 @@
       </span>
       </h4>
       <div class="fullcomment" id="comment"><div class="block">
-            known subclasses: <a href="SelectElementReference.html" class="extype" name="org.squeryl.dsl.ast.SelectElementReference">SelectElementReference</a>, <a href="../FieldTypes$NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NonNumericalExpression">NonNumericalExpression</a>, <a href="../FieldTypes$NumericalExpression.html" class="extype" name="org.squeryl.dsl.FieldTypes.NumericalExpression">NumericalExpression</a>
+            known subclasses: <a href="SelectElementReference.html" class="extype" name="org.squeryl.dsl.ast.SelectElementReference">SelectElementReference</a>, <a href="../NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>, <a href="../NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>
           </div></div>
       
       <div id="template">
@@ -181,6 +181,14 @@
             
           </div>
           
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#?">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">?</span><span class="result">: <a href="" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#asInstanceOf">
       <h4 class="signature">
       <span class="kind">def</span>
@@ -237,6 +245,14 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#defaultsTo">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">defaultsTo</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="value">value: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ <a href="" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T]</span>)</span><span class="result">: <a href="DefaultValueAssignment.html" class="extype" name="org.squeryl.dsl.ast.DefaultValueAssignment">DefaultValueAssignment</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#doWrite">
       <h4 class="signature">
       <span class="kind">def</span>
@@ -420,7 +436,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#inhibited">
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#inhibitWhen">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">inhibitWhen</span><span class="params">(<span name="inhibited">inhibited: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#inhibited">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -430,7 +454,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: <a href="ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
+          definition classes: <a href="" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a> → <a href="ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
     </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#inhibitedFlagForAstDump">

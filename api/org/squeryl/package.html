@@ -50,24 +50,29 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.ForeingKeyDeclaration">
-      <h4 class="signature"><a href="ForeingKeyDeclaration.html">
+    </li><li visbl="pub" name="org.squeryl.ForeignKeyDeclaration">
+      <h4 class="signature"><a href="ForeignKeyDeclaration.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ForeingKeyDeclaration</span><span class="result"> extends AnyRef</span>
+        <span class="name">ForeignKeyDeclaration</span><span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
-      <p class="comment cmt">ForeingKeyDeclaration are to be manipulated only during the Schema definition
+      <p class="comment cmt">ForeignKeyDeclaration are to be manipulated only during the Schema definition
 (this is why all public methods have the implicit arg (implicit ev: Schema))
 </p>
     </li><li visbl="pub" name="org.squeryl.IndirectKeyedEntity">
       <h4 class="signature"><a href="IndirectKeyedEntity.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">IndirectKeyedEntity</span><span class="tparams">[<span name="K">K</span>, <span name="T">T</span>]</span><span class="result"> extends KeyedEntity[K]</span>
+        <span class="name deprecated">IndirectKeyedEntity</span><span class="tparams">[<span name="K">K</span>, <span name="T">T</span>]</span><span class="result"> extends KeyedEntity[K]</span>
       </span>
       </a></h4>
       
+            
+            <div class="fullcomment"><div class="block"><ol>deprecated:
+          <li><p>this trait is no longer necessary, it will disapear in a future version</p></li>
+        </ol></div></div>
+          
     </li><li visbl="pub" name="org.squeryl.KeyedEntity">
       <h4 class="signature"><a href="KeyedEntity.html">
       <span class="kind">trait</span>
@@ -76,7 +81,7 @@
       </span>
       </a></h4>
       <p class="comment cmt"> For use with View[A] or Table[A], when A extends KeyedEntity[K],
-lookup and delete by key become implicitely available
+lookup and delete by key become implicitly available
 Example :</p>
     </li><li visbl="pub" name="org.squeryl.Optimistic">
       <h4 class="signature"><a href="Optimistic.html">
@@ -181,7 +186,15 @@ for an updatable view, or table use Table[T]
         
         <div class="members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.PrimitiveTypeMode">
+              <ol><li visbl="pub" name="org.squeryl.DummyEnum">
+      <h4 class="signature"><a href="DummyEnum$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">DummyEnum</span><span class="result"> extends Enumeration</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.PrimitiveTypeMode">
       <h4 class="signature"><a href="PrimitiveTypeMode$.html">
       <span class="kind">object</span>
       <span class="symbol">

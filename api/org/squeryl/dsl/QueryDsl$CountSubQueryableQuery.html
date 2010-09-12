@@ -34,7 +34,7 @@
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="org.squeryl.dsl.QueryDsl.ScalarQuery">ScalarQuery</li><li class="in" name="org.squeryl.dsl.QueryDsl.SingleRowQuery">SingleRowQuery</li><li class="in" name="org.squeryl.dsl.QueryDsl.SingleColumnQuery">SingleColumnQuery</li><li class="in" name="org.squeryl.Query">Query</li><li class="in" name="org.squeryl.Queryable">Queryable</li><li class="in" name="scala.collection.Iterable">Iterable</li><li class="in" name="scala.collection.IterableLike">IterableLike</li><li class="in" name="scala.Equals">Equals</li><li class="in" name="scala.collection.Traversable">Traversable</li><li class="in" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</li><li class="in" name="scala.collection.TraversableLike">TraversableLike</li><li class="in" name="scala.collection.TraversableOnce">TraversableOnce</li><li class="in" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.dsl.QueryDsl.ScalarQuery">ScalarQuery</li><li class="in" name="org.squeryl.dsl.QueryDsl.SingleRowQuery">SingleRowQuery</li><li class="in" name="org.squeryl.dsl.QueryDsl.SingleColumnQuery">SingleColumnQuery</li><li class="in" name="org.squeryl.Query">Query</li><li class="in" name="org.squeryl.Queryable">Queryable</li><li class="in" name="scala.collection.Iterable">Iterable</li><li class="in" name="scala.collection.IterableLike">IterableLike</li><li class="in" name="scala.Equals">Equals</li><li class="in" name="scala.collection.Traversable">Traversable</li><li class="in" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</li><li class="in" name="scala.collection.TraversableLike">TraversableLike</li><li class="in" name="scala.collection.TraversableOnce">TraversableOnce</li><li class="in" name="scala.collection.generic.FilterMonadic">FilterMonadic</li><li class="in" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -703,7 +703,7 @@ there are no more references to the object.</p><p>The details of when and if the
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#flatten">
@@ -781,7 +781,7 @@ there are no more references to the object.</p><p>The details of when and if the
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: IterableLike → TraversableLike → TraversableOnce
+          definition classes: IterableLike → TraversableLike → TraversableOnce → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#genericBuilder">
@@ -822,7 +822,7 @@ there are no more references to the object.</p><p>The details of when and if the
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">groupBy</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="f">f: (LongType) ⇒ K</span>)</span><span class="result">: <span class="extype" name="scala.collection.Map">Map</span>[K, <span class="extype" name="scala.collection.Iterable">Iterable</span>[LongType]]</span>
+        <span class="name">groupBy</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="f">f: (LongType) ⇒ K</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[K, <span class="extype" name="scala.collection.Iterable">Iterable</span>[LongType]]</span>
       </span>
       </h4>
       
@@ -1034,7 +1034,7 @@ possible to check whether the contents of the list are of the requested typed.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.TraversableOnce#max">
@@ -1721,7 +1721,7 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toSeq">
+    </li><li visbl="pub" name="scala.collection.IterableLike#toSeq">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
@@ -1731,7 +1731,7 @@ if the query returns no row or more than one row.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableOnce
+          definition classes: IterableLike → TraversableOnce
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.TraversableOnce#toSet">
@@ -1757,7 +1757,7 @@ if the query returns no row or more than one row.
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: IterableLike → TraversableOnce
+          definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.TraversableLike#toString">
@@ -1919,13 +1919,13 @@ if the query returns no row or more than one row.
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">withFilter</span><span class="params">(<span name="p">p: (LongType) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.TraversableLike.WithFilter">WithFilter</span></span>
+        <span class="name">withFilter</span><span class="params">(<span name="p">p: (LongType) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[LongType, <span class="extype" name="scala.collection.Iterable">Iterable</span>[LongType]]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
     </li><li visbl="pub" name="scala.collection.IterableLike#zip">

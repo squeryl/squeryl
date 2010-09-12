@@ -42,7 +42,15 @@
         
         <div class="members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.ast.BetweenExpression">
+              <ol><li visbl="pub" name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment">
+      <h4 class="signature"><a href="BaseColumnAttributeAssignment.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BaseColumnAttributeAssignment</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.BetweenExpression">
       <h4 class="signature"><a href="BetweenExpression.html">
       <span class="kind">class</span>
       <span class="symbol">
@@ -66,6 +74,30 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ColumnAttributeAssignment">
+      <h4 class="signature"><a href="ColumnAttributeAssignment.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ColumnAttributeAssignment</span><span class="result"> extends BaseColumnAttributeAssignment</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.ColumnGroupAttributeAssignment">
+      <h4 class="signature"><a href="ColumnGroupAttributeAssignment.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ColumnGroupAttributeAssignment</span><span class="result"> extends BaseColumnAttributeAssignment</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.CompositeKeyAttributeAssignment">
+      <h4 class="signature"><a href="CompositeKeyAttributeAssignment.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">CompositeKeyAttributeAssignment</span><span class="result"> extends ColumnGroupAttributeAssignment</span>
+      </span>
+      </a></h4>
+      
     </li><li visbl="pub" name="org.squeryl.dsl.ast.ConstantExpressionNode">
       <h4 class="signature"><a href="ConstantExpressionNode.html">
       <span class="kind">class</span>
@@ -79,6 +111,14 @@
       <span class="kind">class</span>
       <span class="symbol">
         <span class="name">ConstantExpressionNodeList</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends ExpressionNode with ListExpressionNode</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl.ast.DefaultValueAssignment">
+      <h4 class="signature"><a href="DefaultValueAssignment.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">DefaultValueAssignment</span><span class="result"> extends BaseColumnAttributeAssignment</span>
       </span>
       </a></h4>
       
