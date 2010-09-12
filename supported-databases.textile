@@ -13,6 +13,7 @@ The databases currently supported are :
 
 * H2
 
+* DB2
 
 Supporting an additional database is pretty easy, have a
 look at the existing adapters in the package : <notextile><a target = 'none' href='http://github.com/max-l/Squeryl/tree/master/src/main/scala/org/squeryl/adapters/'>org.squeryl.adapters</a></notextile>

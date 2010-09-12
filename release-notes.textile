@@ -22,6 +22,7 @@ Features :
 * regex, lower, upper string functions
 * "Dynamic where clause definition":dynamic-queries.html#dyn-where-clause
 * Redesign of inner,outer joins with new *join* function
+* Lift support (Lift 2.0 M2)
 * fixed a bunch of "issue":http://github.com/max-l/Squeryl/issues/closed
  
 As well as a few minor enhancements and bug fixes.
