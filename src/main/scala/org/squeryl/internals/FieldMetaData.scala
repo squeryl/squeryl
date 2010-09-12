@@ -20,7 +20,9 @@ import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import org.squeryl.annotations.{ColumnBase, Column}
-
+import org.squeryl.dsl.ast.TypedExpressionNode
+import collection.mutable.{HashSet, ArrayBuffer}
+import org.squeryl.{Session, KeyedEntity}
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -37,7 +39,6 @@ class FieldMetaData(
         val isOptimisticCounter: Boolean,
         val sampleValue: AnyRef) {
 
-
   def isEnumeration = {
     classOf[Enumeration#Value].isAssignableFrom(wrappedFieldType)
   }
@@ -51,9 +52,9 @@ class FieldMetaData(
       val svE =
         if(sampleValue.isInstanceOf[Option[_]])
           sampleValue.asInstanceOf[Option[Enumeration#Value]].get
-        else 
+        else
           sampleValue.asInstanceOf[Enumeration#Value]
-
+      
       val m = svE.getClass.getField("$outer")
 
       val enu = m.get(svE).asInstanceOf[Enumeration]
@@ -63,6 +64,81 @@ class FieldMetaData(
       r
     }
 
+  /**
+   * This field is mutable only by the Schema trait, and only during the Schema instantiation,
+   * so it can safely be considered immutable (read only) by the columnAttributes accessor 
+   */
+  private val _columnAttributes = new HashSet[ColumnAttribute]
+
+
+  private [squeryl] def _clearColumnAttributes = {
+    _columnAttributes.clear
+  }
+
+//  private [squeryl] def _addColumnAttribute(ca: ColumnAttribute) =
+//    if(!ca.isInstanceOf[AutoIncremented])
+//      _columnAttributes.add(ca)
+//    else {
+//      val ai = ca.asInstanceOf[AutoIncremented]
+//
+//      // ensure that AutoIncremented has a sequence name :
+//      val aiToInsert =
+//        if(ai.nameOfSequence == None)
+//          new AutoIncremented(Some(schema.databaseAdapter.createSequenceName(this)))
+//        else
+//          ai
+//
+//      _columnAttributes.add(aiToInsert)
+//    }
+//
+//  def sequenceName: String =
+//    _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
+//      getOrElse(error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
+//        asInstanceOf[AutoIncremented].nameOfSequence.get
+
+  private [squeryl] def _addColumnAttribute(ca: ColumnAttribute) =
+      _columnAttributes.add(ca)
+
+  def sequenceName: String = {
+
+    val ai = _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
+      getOrElse(error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
+        asInstanceOf[AutoIncremented]
+            
+    synchronized {
+      if(ai.nameOfSequence != None)
+        return ai.nameOfSequence.get
+
+      ai.nameOfSequence = Some(Session.currentSession.databaseAdapter.createSequenceName(this))
+    }
+
+    ai.nameOfSequence.get
+  }
+
+  def isIdFieldOfKeyedEntity =
+    classOf[KeyedEntity[Any]].isAssignableFrom(parentMetaData.clasz) &&
+    nameOfProperty == "id"
+
+  if(isIdFieldOfKeyedEntity) {
+    schema.defaultColumnAttributesForKeyedEntityId.foreach(ca => {
+
+      if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
+        error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
+          " all KeyedEntity tables, while class " + parentMetaData.clasz.getName +
+          "\n has it's id field of type " + fieldType.getName + ", that is neither an Int or a Long, \n the only two types that can " +
+          "be auto incremented. Tables of this class must redefine the attributes of the id field using Shema.declareColumnAttributes\n" +
+          " within the schema definition (" + schema.getClass.getName + ").")
+
+      _addColumnAttribute(ca)
+    })
+  }
+
+  private [squeryl] var _defaultValue: Option[TypedExpressionNode[_]] = None
+
+  def columnAttributes: Iterable[ColumnAttribute] = _columnAttributes
+
+  def defaultValue: Option[TypedExpressionNode[_]] = _defaultValue
+  
   def isCustomType = customTypeFactory != None
 
   /**
@@ -130,11 +206,11 @@ class FieldMetaData(
       else
         fieldType.getName)  
 
-  lazy val isPrimaryKey =
-    parentMetaData.primaryKey != None &&
-    this == parentMetaData.primaryKey.get
+  def isPrimaryKey =
+    columnAttributes.exists(_.isInstanceOf[PrimaryKey])
 
-  var isAutoIncremented = false
+  def isAutoIncremented =
+    columnAttributes.exists(_.isInstanceOf[AutoIncremented])
 
   /**
    * gets the value of the field from the object.

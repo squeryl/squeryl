@@ -122,7 +122,7 @@ class DB2Adapter extends DatabaseAdapter {
   }
 
   private def _writeConcatOperand(e: ExpressionNode, sw: StatementWriter) = {
-    if (e.isInstanceOf[ConstantExpressionNode[Any]]) {
+    if (e.isInstanceOf[ConstantExpressionNode[_]]) {
       val c = e.asInstanceOf[ConstantExpressionNode[Any]]
       sw.write("cast(")
       e.write(sw)

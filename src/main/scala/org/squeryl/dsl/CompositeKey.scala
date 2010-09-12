@@ -17,13 +17,16 @@ package org.squeryl.dsl
 
 import ast._
 import collection.mutable.ArrayBuffer
-import org.squeryl.internals.FieldMetaData
+import org.squeryl.Schema
+import org.squeryl.internals.{AttributeValidOnMultipleColumn, ColumnAttribute, FieldMetaData}
 
 trait CompositeKey {
 
-  private [squeryl] var _members: Option[Iterable[SelectElementReference[Any]]] = None
+  private [squeryl] var _members: Option[Seq[SelectElementReference[Any]]] = None
 
-  private [squeryl] def _fields: Iterable[FieldMetaData] =
+  private [squeryl] var _propertyName: Option[String] = None
+
+  private [squeryl] def _fields: Seq[FieldMetaData] =
     if(_members == None)
       List.empty
     else
@@ -56,6 +59,8 @@ trait CompositeKey {
 
     r
   }
+
+  def is(attributes: AttributeValidOnMultipleColumn*) = new CompositeKeyAttributeAssignment(this, attributes)  
 }
 
 case class CompositeKey2[A1,A2](val a1:A1, val a2: A2) extends CompositeKey {

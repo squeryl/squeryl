@@ -16,11 +16,12 @@
 package org.squeryl
 
 
-import dsl.{CompositeKey, ManyToManyRelation, OneToManyRelation}
+import dsl._
+import ast._
 import internals._
 import reflect.{Manifest}
 import java.sql.SQLException
-import collection.mutable.{HashSet, ArrayBuffer};
+import collection.mutable.{HashSet, ArrayBuffer}
 
 
 trait Schema {
@@ -32,6 +33,8 @@ trait Schema {
   private val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
 
   private val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[_,_,_]]
+
+  private val _columnGroupAttributeAssignments = new ArrayBuffer[ColumnGroupAttributeAssignment]
 
   private [squeryl] val _namingScope = new HashSet[String] 
 
@@ -65,11 +68,15 @@ trait Schema {
     res
   }
 
-
+  @deprecated("will be removed in a future version")
   def findTableFor[A](a: A): Option[Table[A]] = {
     val c = a.asInstanceOf[AnyRef].getClass
     _tables.find(_.posoMetaData.clasz == c).asInstanceOf[Option[Table[A]]]
   }
+
+  private def findAllTablesFor[A](c: Class[A]) =
+    _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Traversable[Table[_]]]
+
 
   object NamingConventionTransforms {
     
@@ -116,8 +123,48 @@ trait Schema {
     if(_dbAdapter.supportsForeignKeyConstraints)
       _declareForeignKeyConstraints
 
-    _createUniqueConstraints
+    _createUniqueConstraintsOfCompositePKs
+
+    createColumnGroupConstraintsAndIndexes
   }
+
+  private def _writeColumnGroupAttributeAssignments: Seq[String] = {
+
+    for(cgaa <- _columnGroupAttributeAssignments) yield {
+
+
+      val unique = cgaa.findAttribute[Unique]
+      val index = cgaa.findAttribute[Indexed]
+
+      (unique, index) match {
+        case (None,    None)                   => error("emtpy attribute list should not be possible to create with DSL (Squeryl bug).")
+        case (Some(_), None)                   => _dbAdapter.writeIndexDeclaration(cgaa.columns, None,    cgaa.name, true)
+        case (None,    Some(Indexed(idxName))) => _dbAdapter.writeIndexDeclaration(cgaa.columns, idxName, cgaa.name, false)
+        case (Some(_), Some(Indexed(idxName))) => _dbAdapter.writeIndexDeclaration(cgaa.columns, idxName, cgaa.name, true)
+      }
+    }
+  }
+
+  def createColumnGroupConstraintsAndIndexes = {
+      
+    val cs = Session.currentSession
+
+    for(statement <- _writeColumnGroupAttributeAssignments) {
+            
+      cs.log(statement)
+
+      val s = cs.connection.createStatement
+      try {
+        s.execute(statement)
+      }
+      catch {
+        case e:SQLException => throw new RuntimeException("error executing " + statement + "\n" + e, e)
+      }
+      finally {
+        s.close
+      }
+    }
+  }  
 
   private def _dropForeignKeyConstraints = {
 
@@ -179,7 +226,7 @@ trait Schema {
       _dbAdapter.postCreateTable(Session.currentSession, t)
     }    
 
-  private def _createUniqueConstraints = {
+  private def _createUniqueConstraintsOfCompositePKs = {
 
     val cs = Session.currentSession
 
@@ -304,4 +351,92 @@ trait Schema {
    * default is 128 
    */
   def defaultLengthOfString = 123
+
+  /**
+   * protected since table declarations must only be done inside a Schema
+   */
+
+  protected def declare[B](a: BaseColumnAttributeAssignment*) = a
+
+  /**
+   * protected since table declarations must only be done inside a Schema
+   */  
+  protected def on[A](table: Table[A]) (declarations: A=>Seq[BaseColumnAttributeAssignment]) = {
+
+    val colAss: Seq[BaseColumnAttributeAssignment] =
+      Utils.mapSampleObject(table, declarations)
+
+    // all fields that have a single 'is' declaration are first reset :
+    for(ca <- colAss if ca.isInstanceOf[ColumnAttributeAssignment])
+      ca.clearColumnAttributes
+
+    for(ca <- colAss) ca match {
+      case dva:DefaultValueAssignment    => dva.left._defaultValue = Some(dva.value)
+      case caa:ColumnAttributeAssignment => {
+
+        for(ca <- caa.columnAttributes)
+          (caa.left._addColumnAttribute(ca))
+
+        //don't allow a KeyedEntity.id field to not have a uniqueness constraint :
+        if(ca.isIdFieldOfKeyedEntityWithoutUniquenessConstraint)
+          caa.left._addColumnAttribute(primaryKey)
+      }
+      case ctaa:ColumnGroupAttributeAssignment => {
+
+        //don't allow a KeyedEntity.id field to not have a uniqueness constraint :
+        if(ca.isIdFieldOfKeyedEntityWithoutUniquenessConstraint)
+          ctaa.addAttribute(primaryKey)
+
+        _addColumnGroupAttributeAssignment(ctaa)
+      }
+      
+      case a:Any => error("did not match on " + a.getClass.getName)
+    }
+
+//    for(ca <- colAss.find(_.isIdFieldOfKeyedEntity))
+//      assert(
+//        ca.columnAttributes.exists(_.isInstanceOf[PrimaryKey]) ||
+//        ca.columnAttributes.exists(_.isInstanceOf[Unique]),
+//        "Column 'id' of table '" + table.name +
+//        "' must have a uniqueness constraint by having the column attribute 'primaryKey' or 'unique' to honor it's KeyedEntity trait"
+//      )
+
+
+    // Validate that autoIncremented is not used on other fields than KeyedEntity[A].id :
+    // since it is not yet unsupported :
+    for(ca <- colAss) ca match {
+      case cga:CompositeKeyAttributeAssignment => {}
+      case caa:ColumnAttributeAssignment => {
+        for(ca <- caa.columnAttributes if ca.isInstanceOf[AutoIncremented] && !(caa.left.isIdFieldOfKeyedEntity))
+          error("Field " + caa.left.nameOfProperty + " of table " + table.name +
+                " is declared as autoIncrementeded, auto increment is currently only supported on KeyedEntity[A].id")
+      }
+      case dva:Any => {}
+    }
+  }
+
+  private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
+    _columnGroupAttributeAssignments.append(cga);
+  
+  def defaultColumnAttributesForKeyedEntityId = Set(new PrimaryKey, new AutoIncremented(None))
+  
+  protected def unique = Unique()
+
+  protected def primaryKey = PrimaryKey()
+
+  protected def autoIncremented = AutoIncremented(None)
+  
+  protected def autoIncremented(sequenceName: String) = AutoIncremented(Some(sequenceName))
+
+  protected def indexed = Indexed(None)
+
+  protected def indexed(indexName: String) = Indexed(Some(indexName))
+
+  class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
+
+    def are(columnAttributes: AttributeValidOnMultipleColumn*) =
+      new ColumnGroupAttributeAssignment(cols, columnAttributes)
+  }
+
+  def columns(fieldList: TypedExpressionNode[_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
 }

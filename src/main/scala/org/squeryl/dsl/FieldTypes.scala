@@ -16,8 +16,8 @@
 package org.squeryl.dsl
 
 import ast._
-import org.squeryl.{Session, Query}
-import org.squeryl.internals.StatementWriter
+import org.squeryl.{Schema, Session, Query}
+import org.squeryl.internals.{AttributeValidOnNonNumericalColumn, AttributeValidOnNumericalColumn, StatementWriter}
 
 trait FieldTypes {
   self: TypeArithmetic =>
@@ -106,6 +106,9 @@ trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
   def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
 
+  def is(columnAttributes: AttributeValidOnNumericalColumn*)(implicit restrictUsageWithinSchema: Schema) =
+    new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
+  
   def ~ = this
 }
 
@@ -128,6 +131,9 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
   def notIn(e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in")
 
   def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
+
+  def is(columnAttributes: AttributeValidOnNonNumericalColumn*)(implicit restrictUsageWithinSchema: Schema) =
+    new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)  
 }
 
 trait BooleanExpression[A] extends NonNumericalExpression[A] {

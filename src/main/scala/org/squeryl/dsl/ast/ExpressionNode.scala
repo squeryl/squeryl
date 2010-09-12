@@ -18,8 +18,8 @@ package org.squeryl.dsl.ast
 
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
-import org.squeryl.Session
 import org.squeryl.dsl._
+import org.squeryl.{KeyedEntity, Schema, Session}
 
 trait ExpressionNode {
 
@@ -160,17 +160,92 @@ trait LogicalBoolean extends ExpressionNode  {
 
 class UpdateAssignment(val left: FieldMetaData, val right: ExpressionNode)
 
+trait BaseColumnAttributeAssignment {
+
+  def clearColumnAttributes: Unit
+
+  def isIdFieldOfKeyedEntity: Boolean
+
+  def isIdFieldOfKeyedEntityWithoutUniquenessConstraint =
+    isIdFieldOfKeyedEntity && ! (columnAttributes.exists(_.isInstanceOf[PrimaryKey]) || columnAttributes.exists(_.isInstanceOf[Unique]))
+
+  def columnAttributes: Seq[ColumnAttribute]
+
+  def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+    findAttribute[A](m) != None
+
+  def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))  
+}
+
+class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], columnAttributes_ : Seq[ColumnAttribute])
+  extends BaseColumnAttributeAssignment {
+
+  private val _columnAttributes = new ArrayBuffer[ColumnAttribute]
+
+  _columnAttributes.appendAll(columnAttributes_)
+
+  def columnAttributes = _columnAttributes 
+
+  def addAttribute(a: ColumnAttribute) =
+    _columnAttributes.append(a)
+
+  def clearColumnAttributes = columns.foreach(_._clearColumnAttributes)
+
+  def columns: Seq[FieldMetaData] = cols
+
+  def isIdFieldOfKeyedEntity = false
+
+  def name:Option[String] = None
+}
+
+class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes: Seq[ColumnAttribute])
+  extends ColumnGroupAttributeAssignment(group._fields, _columnAttributes) {
+
+  override def isIdFieldOfKeyedEntity = {
+    val fmdHead = group._fields.head
+    classOf[KeyedEntity[Any]].isAssignableFrom(fmdHead.parentMetaData.clasz) &&
+    group._propertyName == "id"
+  }
+
+  assert(group._propertyName != None)
+
+  override def name:Option[String] = group._propertyName
+}
+
+class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: Seq[ColumnAttribute])
+  extends BaseColumnAttributeAssignment {
+
+  def clearColumnAttributes = left._clearColumnAttributes
+
+  def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity 
+}
+
+class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpressionNode[_])
+  extends BaseColumnAttributeAssignment {
+
+  def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity
+
+  def clearColumnAttributes = left._clearColumnAttributes
+
+  def columnAttributes = Nil
+}
+
+
 trait TypedExpressionNode[T] extends ExpressionNode {
 
   def sample:T = mapper.sample
 
   def mapper: OutMapper[T]
 
-  def :=[B <% TypedExpressionNode[T]] (b: B) = {
+  def :=[B <% TypedExpressionNode[T]] (b: B) =
     new UpdateAssignment(_fieldMetaData, b : TypedExpressionNode[T])
-  }
+
+  def defaultsTo[B <% TypedExpressionNode[T]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
+    new DefaultValueAssignment(_fieldMetaData, value : TypedExpressionNode[T])
 
   /**
+   * TODO: make safer with compiler plugin
    * Not type safe ! a TypedExpressionNode[T] might not be a SelectElementReference[_] that refers to a FieldSelectElement...   
    */
   private [squeryl] def _fieldMetaData = {

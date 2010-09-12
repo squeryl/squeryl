@@ -3,6 +3,7 @@ package org.squeryl.tests.schooldb2
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
 import org.squeryl._
+import dsl.ast.TypedExpressionNode
 import dsl.CompositeKey2
 import java.sql.{Savepoint, SQLException}
 
@@ -30,6 +31,8 @@ class Course(val subjectId: Long) extends SchoolDb2Object {
 class Student(val firstName: String, val lastName: String) extends SchoolDb2Object {
 
   lazy val courses = SchoolDb2.courseSubscriptions.right(this)
+
+  def fullName = compositeKey(firstName, lastName)
 }
 
 class Subject(val name: String) extends SchoolDb2Object {
@@ -53,6 +56,15 @@ object SchoolDb2 extends Schema {
   val professors = table[Professor]
 
   val students = table[Student]
+
+
+  on(students)(s => declare(
+    s.firstName is(indexed),
+    s.lastName defaultsTo("!"),
+    s.fullName is(unique, indexed),
+    s.id is(indexed),
+    columns(s.id, s.firstName, s.lastName) are(indexed)  
+  ))
 
   val courses = table[Course]
 
@@ -286,4 +298,59 @@ class SchoolDb2Tests extends QueryTester {
 
     assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
   }
+
+//  class A {
+//    def b = new B
+//  }
+//
+//  class B
+//
+//  class C
+//
+//  //def bb(a1: A, a2: A) = new B
+//  def bb(a1: A) = new B
+//
+//  def cc(c: C) = new B
+//
+//  class T[U](u: U) {
+//    def z(f: Function1[U,B]*) = {}
+//  }
+//
+//  implicit def a2TA(a: A) = new T
+//  implicit def a2C(a: A) = new C
+//
+//  val a = new A
+//
+//  a.z(s => bb(s), s=>cc(s))
+
+  //////////////////////////////////////////////
+  
+  class T[A](a: A)
+  class U
+  class Z {
+    def u = new U
+  }
+
+
+  class A0(val hello: String)
+
+  implicit def string2Z(s: String) = new Z
+
+  class TD[A](a: T[A]) {
+    def z(f: Function1[A,U]) = {}
+  }
+
+  implicit def t2TD[A](t: T[A]) = new TD(t)
+
+  val ta = new T(new A0(""))
+
+  def zz(z: Z*) = new Z
+
+//  ta.z(_.hello u, s => zz(s.hello, s.hello) u)
+  
+//  ta.z(_.hello u, zz(_.hello, _.hello) u)
+
+  //ta.z(zz(_.hello, _.hello) u)
+
+  //ta.z(s => zz(s.hello, s.hello) u)
 }

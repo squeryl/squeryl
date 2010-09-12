@@ -15,13 +15,13 @@
  ******************************************************************************/
 package org.squeryl.adapters
 
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
 import org.squeryl.{Session, Table}
 import org.squeryl.dsl.ast._
 import java.sql.SQLException
 import collection.Set
 import collection.immutable.List
 import collection.mutable.HashSet
+import org.squeryl.internals.{FieldMetaData, StatementWriter, DatabaseAdapter}
 
 class OracleAdapter extends DatabaseAdapter {
 
@@ -38,18 +38,36 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def postCreateTable(s: Session, t: Table[_]) = {
 
-    val sw = new StatementWriter(false, this)
-    sw.write("create sequence ", sequenceName(t), " start with 1 increment by 1 nomaxvalue")
-    val st = s.connection.createStatement
-    st.execute(sw.statement)
+    val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
+
+    for(fmd <-autoIncrementedFields) {
+      
+      val sw = new StatementWriter(false, this)
+      sw.write("create sequence ", fmd.sequenceName, " start with 1 increment by 1 nomaxvalue")
+      val st = s.connection.createStatement
+      st.execute(sw.statement)
+    }
   }
 
-  override def postDropTable(t: Table[_]) =
-    execFailSafeExecute("drop sequence " + sequenceName(t), e=>e.getErrorCode == 2289)
-  
-  def sequenceName(t: Table[_]) =
-    t.prefixedPrefixedName("s_")
-  
+  override def postDropTable(t: Table[_]) = {
+
+    val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
+
+    for(fmd <-autoIncrementedFields)
+      execFailSafeExecute("drop sequence " + fmd.sequenceName, e=>e.getErrorCode == 2289)
+  }
+
+  override def createSequenceName(fmd: FieldMetaData) = {
+    
+    val prefix = "s_" + fmd.columnName.take(6) + "_" + fmd.parentMetaData.viewOrTable.name.take(10)
+
+    // prefix is no longer than 19, we will pad it with a suffix no longer than 11 :
+    val shrunkName = prefix +
+      generateAlmostUniqueSuffixWithHash(fmd.columnName + "_" + fmd.parentMetaData.viewOrTable.name)
+
+    shrunkName
+  }
+    
   override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
 
     val o_ = o.asInstanceOf[AnyRef]
@@ -64,7 +82,7 @@ class OracleAdapter extends DatabaseAdapter {
     val f = t.posoMetaData.fieldsMetaData.filter(fmd => fmd != autoIncPK.get)
 
     val colNames = List(autoIncPK.get) ::: f.toList
-    val colVals = List(sequenceName(t) + ".nextval") ::: f.map(fmd => writeValue(o_, fmd, sw)).toList
+    val colVals = List(autoIncPK.get.sequenceName + ".nextval") ::: f.map(fmd => writeValue(o_, fmd, sw)).toList
 
     sw.write("insert into ");
     sw.write(t.prefixedName);

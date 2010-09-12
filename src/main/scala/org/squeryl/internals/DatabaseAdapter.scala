@@ -418,6 +418,9 @@ trait DatabaseAdapter {
   
   def postDropTable(t: Table[_]) = {}
 
+  def createSequenceName(fmd: FieldMetaData) = 
+    "s_" + fmd.parentMetaData.viewOrTable.name + "_" + fmd.columnName
+
   def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) = {
     sw.write(fn.name)
     sw.write("(")
@@ -653,5 +656,54 @@ trait DatabaseAdapter {
   def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
     val binaryOpNode = new BinaryOperatorNode(left, right, "||")
     binaryOpNode.doWrite(sw)
+  }
+
+//  /**
+//   * @nameOfCompositeKey when not None, the column group forms a composite key, 'nameOfCompositeKey' can be used
+//   * as part of the name to create a more meaningfull name for the constraint
+//   */
+//  def writeUniquenessConstraint(columnDefs: Seq[FieldMetaData], nameOfCompositeKey: Option[String]) = ""
+
+  /**
+   * @name the name specified in the Schema, when not None, it  must be used as the name
+   * @nameOfCompositeKey when not None, the column group forms a composite key, 'nameOfCompositeKey' can be used
+   * as part of the name to create a more meaningfull name for the constraint, when 'name' is None
+   */
+  def writeIndexDeclaration(columnDefs: Seq[FieldMetaData], name:Option[String], nameOfCompositeKey: Option[String], isUnique: Boolean) = {                                    
+    val sb = new StringBuilder(256)
+    sb.append("create ")
+
+    if(isUnique)
+      sb.append("unique ")
+
+    sb.append("index ")
+
+    val tableName = columnDefs.head.parentMetaData.viewOrTable.name
+
+    if(name != None)
+      sb.append(name.get)
+    else if(nameOfCompositeKey != None)
+      sb.append("idx" + nameOfCompositeKey.get)
+    else
+      sb.append("idx" + generateAlmostUniqueSuffixWithHash(tableName + "-" + columnDefs.map(_.columnName).mkString("-")))
+
+    sb.append(" on ")
+
+    sb.append(tableName)
+
+    sb.append(columnDefs.map(_.columnName).mkString(" (",",",")"))
+
+    sb.toString
+  }
+
+  /**
+   * This will create an probabilistically unique string of length no longer than 11 chars,
+   * it can be used to create "almost unique" names where uniqueness is not an absolute requirement,
+   * is not ,
+   */
+  def generateAlmostUniqueSuffixWithHash(s: String): String = {
+    val a32 = new java.util.zip.Adler32
+    a32.update(s.getBytes)
+    a32.getValue.toHexString
   }
 }
