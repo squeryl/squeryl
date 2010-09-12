@@ -11,6 +11,8 @@ trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
 }
 
+object SchoolDb2 extends SchoolDb2
+
 class Professor(val lastName: String) extends SchoolDb2Object {
 
   lazy val courses = SchoolDb2.courseAssignments.left(this)
@@ -51,7 +53,7 @@ class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedE
 }
 
 
-object SchoolDb2 extends Schema {
+class SchoolDb2 extends Schema {
 
   val professors = table[Professor]
 
@@ -98,29 +100,38 @@ object SchoolDb2 extends Schema {
 
 class SchoolDb2Tests extends QueryTester {
 
-  SchoolDb2.drop
+  val schema = new SchoolDb2
+  
+  import schema._
+
+  schema.drop
 
   //loggerOn
 
-  SchoolDb2.create
+  schema.create
 
-  import SchoolDb2._
+  lazy val seedData = new {
+    
+    val professeurTournesol = professors.insert(new Professor("Tournesol"))
+    val madProfessor = professors.insert(new Professor("Mad Professor"))
 
-  val professeurTournesol = professors.insert(new Professor("Tournesol"))
-  val madProfessor = professors.insert(new Professor("Mad Professor"))
-
-  val philosophy = subjects.insert(new Subject("Philosophy"))
-  val chemistry = subjects.insert(new Subject("Chemistry"))
-  val physics = subjects.insert(new Subject("Physic"))
-  val computationTheory = subjects.insert(new Subject("Computation Theory"))
+    val philosophy = subjects.insert(new Subject("Philosophy"))
+    val chemistry = subjects.insert(new Subject("Chemistry"))
+    val physics = subjects.insert(new Subject("Physic"))
+    val computationTheory = subjects.insert(new Subject("Computation Theory"))
 
 
-  val chemistryCourse = courses.insert(new Course(chemistry.id))
-  val physicsCourse = courses.insert(new Course(physics.id))
+    val chemistryCourse = courses.insert(new Course(chemistry.id))
+    val physicsCourse = courses.insert(new Course(physics.id))
+  }
 
+  def dumpSchema =
+     SchoolDb2.printDdl
 
   def testAll = {
 
+    seedData
+    
     testCompositeEquality
 
     testMany2ManyAssociationFromLeftSide
@@ -135,6 +146,8 @@ class SchoolDb2Tests extends QueryTester {
 
 
   def testMany2ManyAssociationFromLeftSide = {
+
+    import seedData._
 
     assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
 
@@ -159,6 +172,8 @@ class SchoolDb2Tests extends QueryTester {
 
   def testMany2ManyAssociationsFromRightSide = {
 
+    import seedData._
+
     assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
 
     physicsCourse.professors.associate(professeurTournesol)
@@ -181,6 +196,10 @@ class SchoolDb2Tests extends QueryTester {
   }
 
   def testOneToMany = {
+
+    import seedData._
+
+    val pc = philosophy.id
 
     val philosophyCourse10AMWednesday = new Course
     val philosophyCourse2PMWednesday = new Course
@@ -228,7 +247,8 @@ class SchoolDb2Tests extends QueryTester {
 
   def testCompositeEquality = {
 
-
+    import seedData._
+    
     val a = physicsCourse.professors.associate(professeurTournesol)
 
     val qA = courseAssignments.lookup(compositeKey(a.courseId, a.professorId))
@@ -267,6 +287,8 @@ class SchoolDb2Tests extends QueryTester {
 
   def testUniquenessConstraint = {
 
+    import seedData._
+    
     assertEquals(0, courseAssignments.Count : Long, 'testUniquenessConstraint)
 
     physicsCourse.professors.associate(professeurTournesol)
@@ -298,59 +320,5 @@ class SchoolDb2Tests extends QueryTester {
 
     assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
   }
-
-//  class A {
-//    def b = new B
-//  }
-//
-//  class B
-//
-//  class C
-//
-//  //def bb(a1: A, a2: A) = new B
-//  def bb(a1: A) = new B
-//
-//  def cc(c: C) = new B
-//
-//  class T[U](u: U) {
-//    def z(f: Function1[U,B]*) = {}
-//  }
-//
-//  implicit def a2TA(a: A) = new T
-//  implicit def a2C(a: A) = new C
-//
-//  val a = new A
-//
-//  a.z(s => bb(s), s=>cc(s))
-
-  //////////////////////////////////////////////
   
-  class T[A](a: A)
-  class U
-  class Z {
-    def u = new U
-  }
-
-
-  class A0(val hello: String)
-
-  implicit def string2Z(s: String) = new Z
-
-  class TD[A](a: T[A]) {
-    def z(f: Function1[A,U]) = {}
-  }
-
-  implicit def t2TD[A](t: T[A]) = new TD(t)
-
-  val ta = new T(new A0(""))
-
-  def zz(z: Z*) = new Z
-
-//  ta.z(_.hello u, s => zz(s.hello, s.hello) u)
-  
-//  ta.z(_.hello u, zz(_.hello, _.hello) u)
-
-  //ta.z(zz(_.hello, _.hello) u)
-
-  //ta.z(s => zz(s.hello, s.hello) u)
 }

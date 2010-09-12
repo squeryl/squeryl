@@ -22,6 +22,7 @@ import internals._
 import reflect.{Manifest}
 import java.sql.SQLException
 import collection.mutable.{HashSet, ArrayBuffer}
+import java.io.PrintWriter
 
 
 trait Schema {
@@ -90,12 +91,52 @@ trait Schema {
 
   def name: Option[String] = None
 
-  def printDml = {
+  /**
+   * Prints the schema to standard output, it is simply : schema.printDdl(println(_))
+   */
+  def printDdl: Unit = printDdl(println(_))
+
+  def printDdl(pw: PrintWriter): Unit = printDdl(pw.println(_))
+
+  /**
+   * @arg statementHandler is a clusure that reveices every declaration in the schema.   
+   */
+  def printDdl(statementHandler: String => Unit): Unit = {
+
+    statementHandler("-- table declarations :")
 
     for(t <- _tables) {
       val sw = new StatementWriter(true, _dbAdapter)
       _dbAdapter.writeCreateTable(t, sw, this)
+      statementHandler(sw.statement + ";")
+      _dbAdapter.postCreateTable(t, Some(statementHandler))
     }
+
+    val constraints = _foreignKeyConstraints.toList
+    
+    if(constraints != Nil)
+      statementHandler("-- foreign key constraints :")
+
+    for(fkc <- constraints)
+      statementHandler(fkc + ";")
+
+    val compositePKs = _allCompositePrimaryKeys.toList
+
+    if(compositePKs != Nil)
+      statementHandler("-- composite key indexes :")
+    
+    for(cpk <- compositePKs) {
+      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      statementHandler(createConstraintStmt + ";")
+    }
+
+    val columnGroupIndexes = _writeColumnGroupAttributeAssignments.toList
+
+    if(columnGroupIndexes != Nil)
+      statementHandler("-- column group indexes :")
+
+    for(decl <- columnGroupIndexes)
+      statementHandler(decl + ";")
   }
 
   /**
@@ -178,30 +219,34 @@ trait Schema {
   }
 
   private def _declareForeignKeyConstraints =
-    for(fk <- _activeForeignKeySpecs) {
-      val fkDecl = fk._3
-
-      val fkStatement = _dbAdapter.writeForeignKeyDeclaration(
-         fk._1, fkDecl.foreignKeyColumnName,
-         fk._2, fkDecl.referencedPrimaryKey,
-         fkDecl._referentialAction1,
-         fkDecl._referentialAction2,
-         fkDecl.idWithinSchema
-      )
+    for(fk <- _foreignKeyConstraints) {
             
       val cs = Session.currentSession
       val s = cs.connection.createStatement
       try {
-        s.execute(fkStatement)
+        s.execute(fk)
       }
       catch {
-        case e:SQLException => throw new RuntimeException("error executing " + fkStatement + "\n" + e, e)
+        case e:SQLException => throw new RuntimeException("error executing " + fk + "\n" + e, e)
       }
       finally {
         s.close
       }
     }
 
+  private def _foreignKeyConstraints =
+    for(fk <- _activeForeignKeySpecs) yield {
+      val fkDecl = fk._3
+
+      _dbAdapter.writeForeignKeyDeclaration(
+         fk._1, fkDecl.foreignKeyColumnName,
+         fk._2, fkDecl.referencedPrimaryKey,
+         fkDecl._referentialAction1,
+         fkDecl._referentialAction2,
+         fkDecl.idWithinSchema
+      )
+    }
+  
 
   private def _createTables =
     for(t <- _tables) {
@@ -223,7 +268,7 @@ trait Schema {
         )
       }
 
-      _dbAdapter.postCreateTable(Session.currentSession, t)
+      _dbAdapter.postCreateTable(t, None)
     }    
 
   private def _createUniqueConstraintsOfCompositePKs = {
@@ -371,7 +416,14 @@ trait Schema {
       ca.clearColumnAttributes
 
     for(ca <- colAss) ca match {
-      case dva:DefaultValueAssignment    => dva.left._defaultValue = Some(dva.value)
+      case dva:DefaultValueAssignment    => {
+
+        if(! dva.value.isInstanceOf[ConstantExpressionNode[_]])
+          error("error in declaration of column "+ table.prefixedName + "." + dva.left.nameOfProperty + ", " + 
+                "only constant expressions are supported in 'defaultsTo' declaration")
+
+        dva.left._defaultValue = Some(dva.value.asInstanceOf[ConstantExpressionNode[_]])
+      }
       case caa:ColumnAttributeAssignment => {
 
         for(ca <- caa.columnAttributes)

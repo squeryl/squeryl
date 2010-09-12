@@ -32,15 +32,20 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
   override def binaryTypeDeclaration = "bytea"
 
-  override def postCreateTable(s: Session, t: Table[_]) = {
+  override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
 
     for(fmd <-autoIncrementedFields) {
       val sw = new StatementWriter(false, this)
       sw.write("create sequence ", fmd.sequenceName)
-      val st = s.connection.createStatement
-      st.execute(sw.statement)
+
+      if(printSinkWhenWriteOnlyMode == None) {
+        val st = Session.currentSession.connection.createStatement
+        st.execute(sw.statement)
+      }
+      else
+        printSinkWhenWriteOnlyMode.get.apply(sw.statement)
     }
   }                                               
 

@@ -20,9 +20,9 @@ import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import org.squeryl.annotations.{ColumnBase, Column}
-import org.squeryl.dsl.ast.TypedExpressionNode
-import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.{Session, KeyedEntity}
+import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
+import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -75,44 +75,39 @@ class FieldMetaData(
     _columnAttributes.clear
   }
 
-//  private [squeryl] def _addColumnAttribute(ca: ColumnAttribute) =
-//    if(!ca.isInstanceOf[AutoIncremented])
-//      _columnAttributes.add(ca)
-//    else {
-//      val ai = ca.asInstanceOf[AutoIncremented]
-//
-//      // ensure that AutoIncremented has a sequence name :
-//      val aiToInsert =
-//        if(ai.nameOfSequence == None)
-//          new AutoIncremented(Some(schema.databaseAdapter.createSequenceName(this)))
-//        else
-//          ai
-//
-//      _columnAttributes.add(aiToInsert)
-//    }
-//
-//  def sequenceName: String =
-//    _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
-//      getOrElse(error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
-//        asInstanceOf[AutoIncremented].nameOfSequence.get
-
   private [squeryl] def _addColumnAttribute(ca: ColumnAttribute) =
       _columnAttributes.add(ca)
+
+  /**
+   * In some circumstances (like in the test suite) a Schema instance must run on multiple database types,
+   * this Map keeps the sequence names 'per schema'
+   */
+  private val _sequenceNamePerDBAdapter = new HashMap[Class[_],String]
 
   def sequenceName: String = {
 
     val ai = _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
       getOrElse(error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
         asInstanceOf[AutoIncremented]
-            
-    synchronized {
-      if(ai.nameOfSequence != None)
-        return ai.nameOfSequence.get
 
-      ai.nameOfSequence = Some(Session.currentSession.databaseAdapter.createSequenceName(this))
+    if(ai.nameOfSequence != None) {
+      return ai.nameOfSequence.get
     }
 
-    ai.nameOfSequence.get
+    synchronized {
+      val c = Session.currentSession.databaseAdapter.getClass
+
+      val s = _sequenceNamePerDBAdapter.get(c)
+
+      if(s != None)
+        return s.get
+
+      val s0 = Session.currentSession.databaseAdapter.createSequenceName(this)
+      
+      _sequenceNamePerDBAdapter.put(c, s0)
+
+      return s0
+    }
   }
 
   def isIdFieldOfKeyedEntity =
@@ -133,11 +128,11 @@ class FieldMetaData(
     })
   }
 
-  private [squeryl] var _defaultValue: Option[TypedExpressionNode[_]] = None
+  private [squeryl] var _defaultValue: Option[ConstantExpressionNode[_]] = None
 
   def columnAttributes: Iterable[ColumnAttribute] = _columnAttributes
 
-  def defaultValue: Option[TypedExpressionNode[_]] = _defaultValue
+  def defaultValue: Option[ConstantExpressionNode[_]] = _defaultValue
   
   def isCustomType = customTypeFactory != None
 

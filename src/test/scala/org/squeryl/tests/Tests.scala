@@ -18,13 +18,13 @@ package org.squeryl.tests
 import _root_.org.squeryl.demos.MusicDb
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
-import musicdb.MusicDb
+import musicdb.{MusicDbTestRun, MusicDb}
 import mutablerelations.SchoolDb2MetableRelations
 import org.squeryl.{Session}
 import java.sql.{Connection, DriverManager}
-import schooldb.{Issue14, SchoolDb}
-import schooldb2.SchoolDb2Tests
+import schooldb.{SchoolDbTestRun, Issue14, SchoolDb}
 import org.squeryl.adapters._
+import schooldb2.SchoolDb2Tests
 
 
 object Tests extends QueryTester {
@@ -32,6 +32,8 @@ object Tests extends QueryTester {
   def main(args : Array[String]) : Unit = {
 
     //allTestsOnAllDatabases
+
+    //allTests("PosgreSQL", createPostgreSqlTestConnection _)
     
     //dumpResourceClosingPolicyOfAllDrivers
     
@@ -39,6 +41,8 @@ object Tests extends QueryTester {
 
     allTestsOnH2
 
+    //dumpSchemasForAllDatabases
+    
     //leakTest    
   }
 
@@ -49,7 +53,7 @@ object Tests extends QueryTester {
     import org.squeryl.PrimitiveTypeMode._
     
     val mdb = transaction {
-      new MusicDb
+      new MusicDbTestRun
     }
 
     mdb.leakTest
@@ -108,21 +112,21 @@ object Tests extends QueryTester {
 
     SessionFactory.concreteFactory = Some(s)
 
-    inTransaction {
-      inTransaction {
-        (new MusicDb).test1
-      }
-    }
-    
     transaction {
 
       (new SchoolDb2MetableRelations).testAll
       
       (new SchoolDb2Tests).testAll
 
-      (new SchoolDb).test1
+      (new SchoolDbTestRun).test1
     }
 
+    inTransaction {
+      inTransaction {
+        (new MusicDbTestRun).test1
+      }
+    }
+    
     val session = s()
     try {
       using(session) {                
@@ -196,4 +200,28 @@ object Tests extends QueryTester {
       Session.create(c, new DB2Adapter )
   }
 
+
+  def dumpSchemasForAllDatabases = {
+    
+    dumpSchemas("-----------Postgres Schema",createPostgreSqlTestConnection _)
+    dumpSchemas("-----------Oracle Schema",createOracleTestConnection _)
+    dumpSchemas("-----------MySql Schema",createMySQLTestConnection _)
+    dumpSchemas("-----------H2 Schema",createH2TestConnection _)
+  }
+
+  def dumpSchemas(dbName: String, s: ()=>Session)= {
+
+    val session = s()
+
+    import org.squeryl.PrimitiveTypeMode._
+    
+    using(session) {
+      (new MusicDb).printDdl
+
+      (new SchoolDb).printDdl
+
+      (new org.squeryl.tests.schooldb2.SchoolDb2).printDdl
+    }
+
+  }
 }

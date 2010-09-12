@@ -31,12 +31,17 @@ class DB2Adapter extends DatabaseAdapter {
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
-  override def postCreateTable(s: Session, t: Table[_]) = {
+  override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val sw = new StatementWriter(false, this)
     sw.write("create sequence ", sequenceName(t), " start with 1 increment by 1 nomaxvalue")
-    val st = s.connection.createStatement
-    st.execute(sw.statement)
+
+    if(printSinkWhenWriteOnlyMode == None) {
+      val st = Session.currentSession.connection.createStatement
+      st.execute(sw.statement)
+    }
+    else
+      printSinkWhenWriteOnlyMode.get.apply(sw.statement)
   }
 
   override def postDropTable(t: Table[_]) =

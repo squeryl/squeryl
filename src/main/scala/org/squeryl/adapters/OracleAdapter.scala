@@ -23,6 +23,7 @@ import collection.immutable.List
 import collection.mutable.HashSet
 import org.squeryl.internals.{FieldMetaData, StatementWriter, DatabaseAdapter}
 
+
 class OracleAdapter extends DatabaseAdapter {
 
   override def intTypeDeclaration = "number"
@@ -36,7 +37,7 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
-  override def postCreateTable(s: Session, t: Table[_]) = {
+  override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
 
@@ -44,8 +45,13 @@ class OracleAdapter extends DatabaseAdapter {
       
       val sw = new StatementWriter(false, this)
       sw.write("create sequence ", fmd.sequenceName, " start with 1 increment by 1 nomaxvalue")
-      val st = s.connection.createStatement
-      st.execute(sw.statement)
+
+      if(printSinkWhenWriteOnlyMode == None) {
+        val st = Session.currentSession.connection.createStatement
+        st.execute(sw.statement)
+      }
+      else
+        printSinkWhenWriteOnlyMode.get.apply(sw.statement)
     }
   }
 

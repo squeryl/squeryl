@@ -215,18 +215,31 @@ trait DatabaseAdapter {
 
     val dbTypeDeclaration = schema._columnTypeFor(fmd, this)
 
-    var res = "  " + fmd.columnName + " " + dbTypeDeclaration
+    val sb = new StringBuilder(128)
+  
+    sb.append("  ")
+    sb.append(fmd.columnName)
+    sb.append(" ")
+    sb.append(dbTypeDeclaration)
+
+    for(d <- fmd.defaultValue) {
+      sb.append(" default ")
+      val sw = new StatementWriter(true,this)
+      sw.addParam(d.value.asInstanceOf[AnyRef])
+      d.doWrite(sw)
+      sb.append(sw.statement)
+    }
 
     if(isPrimaryKey)
-      res += " primary key"
+      sb.append(" primary key")
 
     if(!fmd.isOption)
-      res += " not null"
+      sb.append(" not null")
     
     if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
-      res += " auto_increment"
+      sb.append(" auto_increment")
 
-    res
+    sb.toString
   }
 
   def supportsAutoIncrementInColumnDeclaration:Boolean = true
@@ -414,7 +427,10 @@ trait DatabaseAdapter {
 //      "?"
 //    }
 
-  def postCreateTable(s: Session, t: Table[_]) = {}
+  /**
+   * When @arg printSinkWhenWriteOnlyMode is not None, the adapter will not execute any statement, but only silently give it to the String=>Unit closure
+   */
+  def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {}
   
   def postDropTable(t: Table[_]) = {}
 

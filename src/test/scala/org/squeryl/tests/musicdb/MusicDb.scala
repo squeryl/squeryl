@@ -57,7 +57,6 @@ class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId:
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
 
-
 class MusicDb extends Schema with QueryTester {
 
   import org.squeryl.PrimitiveTypeMode._
@@ -68,6 +67,17 @@ class MusicDb extends Schema with QueryTester {
 
   val cds = table[Cd]
 
+  override def drop = super.drop
+}
+
+class MusicDbTestRun extends QueryTester {
+
+  import org.squeryl.PrimitiveTypeMode._
+
+  val schema = new MusicDb
+
+  import schema._
+  
   val testInstance = new {
 
     try {
@@ -78,7 +88,7 @@ class MusicDb extends Schema with QueryTester {
     }
 
     create
-
+    
     val herbyHancock = artists.insert(new Person("Herby", "Hancock", Some(68)))
     val ponchoSanchez = artists.insert(new Person("Poncho", "Sanchez", None))
     val mongoSantaMaria = artists.insert(new Person("Mongo", "Santa Maria", None))
@@ -419,8 +429,6 @@ class MusicDb extends Schema with QueryTester {
           orderBy(a.firstName)
         )
 
-    println(q.statement)
-
       val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s + "zozo")
 
       assertEquals(expected, q.toList, 'testConcatFunc)
@@ -721,7 +729,7 @@ class MusicDb extends Schema with QueryTester {
   def testDynamicWhereClause1 = {
 
     val allArtists = artists.toList
-    loggerOn
+    
     val q1 = dynamicWhereOnArtists(None, None)
 
     assertEquals(allArtists.map(_.id).toSet, q1.map(_.id).toSet, 'testDynamicWhereClause1)

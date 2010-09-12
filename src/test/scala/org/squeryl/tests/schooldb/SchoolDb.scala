@@ -96,7 +96,7 @@ class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
 
 object SDB extends SchoolDb
 
-class SchoolDb extends Schema with QueryTester {
+class SchoolDb extends Schema {
 
   import org.squeryl.PrimitiveTypeMode._
 
@@ -140,6 +140,16 @@ class SchoolDb extends Schema with QueryTester {
     //_.addressId is(autoIncremented) currently only supported on KeyedEntity.id ... ! :(
   ))
 
+  override def drop = super.drop
+}
+
+class SchoolDbTestRun extends QueryTester {
+
+  import org.squeryl.PrimitiveTypeMode._
+  
+  val schema = new SchoolDb
+
+  import schema._
 
   val testInstance = new {
 

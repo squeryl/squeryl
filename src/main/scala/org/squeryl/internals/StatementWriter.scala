@@ -31,11 +31,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   val scope = new HashSet[String]
 
-  protected lazy val _paramList = {
-    if(isForDisplay)
-      error("should not be adding params when in display mode")
-    new ArrayBuffer[AnyRef]
-  }
+  protected val _paramList = new ArrayBuffer[AnyRef]
 
   /**
    * a surrogate writer will accumulate text within itself (not the parent)
