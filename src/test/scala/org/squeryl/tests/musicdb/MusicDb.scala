@@ -47,7 +47,9 @@ class MusicDbObject extends KeyedEntity[Int] {
   var timeOfLastUpdate = new Timestamp(System.currentTimeMillis)
 }
 
-class Person(var firstName:String, var lastName: String) extends MusicDbObject
+class Person(var firstName:String, var lastName: String, val age: Option[Int]) extends MusicDbObject{
+  def this() = this("", "", Some(0))
+}
 
 class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject {
   def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
@@ -77,11 +79,11 @@ class MusicDb extends Schema with QueryTester {
 
     create
 
-    val herbyHancock = artists.insert(new Person("Herby", "Hancock"))
-    val ponchoSanchez = artists.insert(new Person("Poncho", "Sanchez"))
-    val mongoSantaMaria = artists.insert(new Person("Mongo", "Santa Maria"))
-    val alainCaron = artists.insert(new Person("Alain", "Caron"))
-    val hossamRamzy = artists.insert(new Person("Hossam", "Ramzy"))
+    val herbyHancock = artists.insert(new Person("Herby", "Hancock", Some(68)))
+    val ponchoSanchez = artists.insert(new Person("Poncho", "Sanchez", None))
+    val mongoSantaMaria = artists.insert(new Person("Mongo", "Santa Maria", None))
+    val alainCaron = artists.insert(new Person("Alain", "Caron", None))
+    val hossamRamzy = artists.insert(new Person("Hossam", "Ramzy", None))
 
     val congaBlue = cds.insert(new Cd("Conga Blue", ponchoSanchez.id, 1998))
     val   watermelonMan = songs.insert(new Song("Watermelon Man", herbyHancock.id, ponchoSanchez.id, congaBlue.id, Jazz, Some(Latin)))
@@ -248,6 +250,8 @@ class MusicDb extends Schema with QueryTester {
   def working = {
     import testInstance._
 
+    testDynamicWhereClause1
+
     testEnums
     
     testTimestamp
@@ -389,8 +393,7 @@ class MusicDb extends Schema with QueryTester {
             select(&(upper(a.firstName) || lower(a.firstName)))
             orderBy(a.firstName)
           )
-
-        println(q.statement)
+        
 
         import testInstance._
 
@@ -448,8 +451,7 @@ class MusicDb extends Schema with QueryTester {
     cal.roll(Calendar.SECOND, 12);
 
     mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
-
-    println(mongo.timeOfLastUpdate)
+    
 
     artists.update(mongo)
     mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
@@ -498,13 +500,13 @@ class MusicDb extends Schema with QueryTester {
 
   def testDeleteVariations = {
 
-    var artistForDelete = artists.insert(new Person("Delete", "Me"))
+    var artistForDelete = artists.insert(new Person("Delete", "Me", None))
 
     assert(artists.delete(artistForDelete.id), "delete returned false, expected true")
 
     assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
 
-    artistForDelete = artists.insert(new Person("Delete", "Me"))
+    artistForDelete = artists.insert(new Person("Delete", "Me", None))
 
     var c = artists.deleteWhere(a => a.id === artistForDelete.id)
 
@@ -715,6 +717,43 @@ class MusicDb extends Schema with QueryTester {
 
     //val q2 = songs.where(_.genre === Tempo.Allegro)
   }
+
+  def testDynamicWhereClause1 = {
+
+    val allArtists = artists.toList
+    loggerOn
+    val q1 = dynamicWhereOnArtists(None, None)
+
+    assertEquals(allArtists.map(_.id).toSet, q1.map(_.id).toSet, 'testDynamicWhereClause1)
+
+    val q2 = dynamicWhereOnArtists(None, Some("S%"))
+
+    assertEquals(Set(ponchoSanchez.id, mongoSantaMaria.id), q2.map(_.id).toSet, 'testDynamicWhereClause1)
+
+    val q3 = dynamicWhereOnArtists(Some("Poncho"), Some("S%"))
+
+    assertEquals(Set(ponchoSanchez.id), q3.map(_.id).toSet, 'testDynamicWhereClause1)
+
+    passed('testDynamicWhereClause1)
+
+    /// Non compilation Test :
+
+    val z1 = from(artists)(a => select(&(nvl(a.age,a.age)))).toList : List[Option[Int]]
+
+    val z2 = from(artists)(a => select(&(nvl(a.age,0)))).toList : List[Int]
+
+    println(z1)
+  }
+
+  def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
+      from(artists)(a =>
+        where(
+          (a.firstName === firstName.?) and
+          (a.lastName like lastName.?)
+        )
+        select(a)
+      )
+
 
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {

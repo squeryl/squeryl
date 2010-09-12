@@ -109,20 +109,10 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
 
   override def inhibited =
-    if(_inhibitedByWhen)
-      true
-    else if(left.isInstanceOf[LogicalBoolean])
+    if(left.isInstanceOf[LogicalBoolean])
       left.inhibited && right.inhibited
     else
       left.inhibited || right.inhibited
-
-  private var _inhibitedByWhen = false
-  
-  def when(inhibited: Boolean) = {
-    _inhibitedByWhen = true
-    this
-  }
-
   
   override def doWrite(sw: StatementWriter) = {
     // since we are executing this method, we have at least one non inhibited children
@@ -205,6 +195,25 @@ trait TypedExpressionNode[T] extends ExpressionNode {
       }
     fmd
   }
+
+  private var _inhibitedByWhen = false
+
+  override def inhibited =
+    super.inhibited || _inhibitedByWhen
+
+  def inhibitWhen(inhibited: Boolean): this.type = {
+    _inhibitedByWhen = inhibited
+    this
+  }
+
+  def ? : this.type = {
+    if(! this.isInstanceOf[ConstantExpressionNode[_]])
+      error("the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument")
+
+    val c = this.asInstanceOf[ConstantExpressionNode[_]]
+
+    inhibitWhen(c.value == None)
+  }  
 }
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {

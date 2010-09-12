@@ -39,6 +39,22 @@ class NonNumericalCoalesce[A1,A2](val a1: NonNumericalExpression[A1], val a2: No
 
 class NonNumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NonNumericalExpression[A]
 
+/**
+ * SQL allows operators are 'null agnostic', i.e. where a.z = 4 is valid
+ * even if z is Option[Int]. this class is meant for conversions like :
+ *  
+ *   NonNumericalExpression[Option[A]]) --> NonNumericalExpression[A]
+ */
+class NonNumericalInputOnlyTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with NonNumericalExpression[A] {
+   override def mapper: OutMapper[A] = error(
+      "Bug ! implicit conversion 'emulateSqlTyping1' is not supposed to get triggered in AST nodes participating in ResulSet extraction")
+}
+
+class NumericalInputOnlyTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with NumericalExpression[A] {
+   override def mapper: OutMapper[A] = error(
+      "Bug ! implicit conversion 'emulateSqlTyping1' is not supposed to get triggered in AST nodes participating in ResulSet extraction")
+}
+
 
 trait NvlNode {
   self: BinaryOperatorNode =>
@@ -366,6 +382,10 @@ trait TypeArithmetic extends FieldTypes {
   implicit def nnCoalesce3[A](e: NonNumericalCoalesce[Option[A],A]) = new NonNumericalTypeConversion[Option[A]](e)(e.a1.mapper)
   implicit def nnCoalesce4[A](e: NonNumericalCoalesce[Option[A],Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
 
+  implicit def emulateSqlTyping1[A](e: NonNumericalExpression[Option[A]]): NonNumericalExpression[A] = new NonNumericalInputOnlyTypeConversion(e)
+
+  implicit def emulateSqlTyping2[A](e: NumericalExpression[Option[A]]): NumericalExpression[A] = new NumericalInputOnlyTypeConversion(e)
+  
   protected def mapByte2ByteType(b:Byte): ByteType
   protected def mapInt2IntType(i: Int): IntType
   protected def mapString2StringType(s: String): StringType

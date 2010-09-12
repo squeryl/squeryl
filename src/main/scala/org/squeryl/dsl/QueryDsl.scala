@@ -254,6 +254,8 @@ trait QueryDsl
 
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 
+  implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
+
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
   def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r)
