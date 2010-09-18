@@ -185,6 +185,9 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       sq.node.joinKind = Some((ijq.leftRightOrFull, "inner"))
       new SubQueryable(ijq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
     }
+    else if(q.isInstanceOf[DelegateQuery[U]]) {
+      createSubQueryable(q.asInstanceOf[DelegateQuery[U]].q)
+    }      
     else {
       val qr = q.asInstanceOf[AbstractQuery[U]]
       val copy = qr.copy(false)

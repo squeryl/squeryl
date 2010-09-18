@@ -4,7 +4,7 @@ import org.squeryl.Query
 import org.squeryl.internals.ResultSetMapper
 import java.sql.ResultSet
 
-class DelegateQuery[M](q: Query[M]) extends Query[M] {
+class DelegateQuery[M](val q: Query[M]) extends Query[M] {
 
   def iterator = q.iterator
 

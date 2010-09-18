@@ -4,7 +4,7 @@ import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import dsl.ast.TypedExpressionNode
-import dsl.CompositeKey2
+import dsl.{OneToMany, CompositeKey2}
 import java.sql.{Savepoint, SQLException}
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
@@ -52,9 +52,26 @@ class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedE
   def id = compositeKey(courseId, professorId)
 }
 
+case class Entry(text: String) extends KeyedEntity[Int] {
+ val id:Int = 0
+ // entryToComments is a one-to-many relation:
+ lazy val comments: OneToMany[Comment] = SchoolDb2.entryToComments.left(this)
+}
+
+case class Comment(text: String, entryId: Int = 0, userId: Int = 0)
+   extends KeyedEntity[Int] {
+ val id:Int = 0
+}
+
 
 class SchoolDb2 extends Schema {
 
+  val entries = table[Entry]
+  val comments = table[Comment]
+
+  val entryToComments = oneToManyRelation(entries, comments).via(
+    (e,c) => e.id === c.entryId)
+  
   val professors = table[Professor]
 
   val students = table[Student]
@@ -130,6 +147,13 @@ class SchoolDb2Tests extends QueryTester {
 
   def testAll = {
 
+
+    val entry = entries.insert(Entry("An entry"))
+    val comment = Comment("A single comment")
+    entry.comments.associate(comment)
+    Console.err.println("[DEBUG] entry.comments is of type"+entry.comments.getClass)
+    from(entry.comments)(c => where(c.id === comment.id) select(c))
+    
     seedData
     
     testCompositeEquality
