@@ -133,7 +133,6 @@ class SchoolDb extends Schema {
   val schools = table[School]
 
   on(schools)(s => declare(
-    s.id   is(unique),
     s.name is(indexed("uniqueIndexName"), unique),
     s.name defaultsTo("no name"),
     columns(s.name, s.addressId) are(indexed)

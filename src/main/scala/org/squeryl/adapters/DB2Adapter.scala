@@ -41,7 +41,7 @@ class DB2Adapter extends DatabaseAdapter {
       st.execute(sw.statement)
     }
     else
-      printSinkWhenWriteOnlyMode.get.apply(sw.statement)
+      printSinkWhenWriteOnlyMode.get.apply(sw.statement + ";")
   }
 
   override def postDropTable(t: Table[_]) =

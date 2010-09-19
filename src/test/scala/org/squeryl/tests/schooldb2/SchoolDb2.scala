@@ -67,7 +67,7 @@ case class Comment(text: String, entryId: Int = 0, userId: Int = 0)
 class SchoolDb2 extends Schema {
 
   val entries = table[Entry]
-  val comments = table[Comment]
+  val comments = table[Comment]("commentz")
 
   val entryToComments = oneToManyRelation(entries, comments).via(
     (e,c) => e.id === c.entryId)
@@ -81,7 +81,6 @@ class SchoolDb2 extends Schema {
     s.firstName is(indexed),
     s.lastName defaultsTo("!"),
     s.fullName is(unique, indexed),
-    s.id is(indexed),
     columns(s.id, s.firstName, s.lastName) are(indexed)  
   ))
 
@@ -151,7 +150,7 @@ class SchoolDb2Tests extends QueryTester {
     val entry = entries.insert(Entry("An entry"))
     val comment = Comment("A single comment")
     entry.comments.associate(comment)
-    Console.err.println("[DEBUG] entry.comments is of type"+entry.comments.getClass)
+
     from(entry.comments)(c => where(c.id === comment.id) select(c))
     
     seedData

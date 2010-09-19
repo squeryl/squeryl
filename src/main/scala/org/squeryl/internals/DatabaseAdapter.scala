@@ -258,7 +258,7 @@ trait DatabaseAdapter {
         ","
       )
     }
-    sw.write(")\n ")
+    sw.write(")")
   }
 
   def prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =

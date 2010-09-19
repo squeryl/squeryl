@@ -27,8 +27,11 @@ import java.io.PrintWriter
 
 trait Schema {
 
-  protected implicit def thisSchema = this 
+  protected implicit def thisSchema = this
 
+  /**
+   * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
+   */
   private val _tables = new ArrayBuffer[Table[_]] 
 
   private val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
@@ -48,7 +51,7 @@ trait Schema {
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
   /**
-   * @returns a tuple of (Table[_], Table[_], ForeignKeyDeclaration) where
+   *  @returns a tuple of (Table[_], Table[_], ForeignKeyDeclaration) where
    *  ._1 is the foreign key table,
    *  ._2 is the primary key table
    *  ._3 is the ForeignKeyDeclaration between _1 and _2
@@ -99,7 +102,7 @@ trait Schema {
   def printDdl(pw: PrintWriter): Unit = printDdl(pw.println(_))
 
   /**
-   * @arg statementHandler is a clusure that reveices every declaration in the schema.   
+   * @arg statementHandler is a closure that receives every declaration in the schema.
    */
   def printDdl(statementHandler: String => Unit): Unit = {
 
@@ -110,6 +113,14 @@ trait Schema {
       _dbAdapter.writeCreateTable(t, sw, this)
       statementHandler(sw.statement + ";")
       _dbAdapter.postCreateTable(t, Some(statementHandler))
+
+      val indexDecl = _indexDeclarationsFor(t)
+
+      if(indexDecl != Nil)
+        statementHandler("-- indexes on " + t.prefixedName)
+
+      for(i <- indexDecl)
+        statementHandler(i + ";")
     }
 
     val constraints = _foreignKeyConstraints.toList
@@ -169,23 +180,33 @@ trait Schema {
     createColumnGroupConstraintsAndIndexes
   }
 
-  private def _writeColumnGroupAttributeAssignments: Seq[String] = {
+  private def _indexDeclarationsFor(t: Table[_]) = {
+    val d0 =
+      for(fmd <- t.posoMetaData.fieldsMetaData)
+        yield _writeIndexDeclarationIfApplicable(fmd.columnAttributes.toSeq, Seq(fmd), None)
 
-    for(cgaa <- _columnGroupAttributeAssignments) yield {
+    d0.filter(_ != None).map(_.get).toList
+  }
+  
 
+  private def _writeColumnGroupAttributeAssignments: Seq[String] =
+    for(cgaa <- _columnGroupAttributeAssignments)
+      yield _writeIndexDeclarationIfApplicable(cgaa.columnAttributes, cgaa.columns, cgaa.name).
+        getOrElse(error("emtpy attribute list should not be possible to create with DSL (Squeryl bug)."))
 
-      val unique = cgaa.findAttribute[Unique]
-      val index = cgaa.findAttribute[Indexed]
+  private def _writeIndexDeclarationIfApplicable(columnAttributes: Seq[ColumnAttribute], cols: Seq[FieldMetaData], name: Option[String]): Option[String] = {
 
-      (unique, index) match {
-        case (None,    None)                   => error("emtpy attribute list should not be possible to create with DSL (Squeryl bug).")
-        case (Some(_), None)                   => _dbAdapter.writeIndexDeclaration(cgaa.columns, None,    cgaa.name, true)
-        case (None,    Some(Indexed(idxName))) => _dbAdapter.writeIndexDeclaration(cgaa.columns, idxName, cgaa.name, false)
-        case (Some(_), Some(Indexed(idxName))) => _dbAdapter.writeIndexDeclaration(cgaa.columns, idxName, cgaa.name, true)
-      }
+    val unique = columnAttributes.find(_.isInstanceOf[Unique])
+    val indexed = columnAttributes.find(_.isInstanceOf[Indexed])
+  
+    (unique, indexed) match {
+      case (None,    None)                   => None
+      case (Some(_), None)                   => Some(_dbAdapter.writeIndexDeclaration(cols, None,    name, true))
+      case (None,    Some(Indexed(idxName))) => Some(_dbAdapter.writeIndexDeclaration(cols, idxName, name, false))
+      case (Some(_), Some(Indexed(idxName))) => Some(_dbAdapter.writeIndexDeclaration(cols, idxName, name, true))
     }
   }
-
+  
   def createColumnGroupConstraintsAndIndexes =
     for(statement <- _writeColumnGroupAttributeAssignments)
       _executeDdl(statement)
@@ -235,13 +256,16 @@ trait Schema {
       )
     }
   
-  private def _createTables =
+  private def _createTables = {
     for(t <- _tables) {
       val sw = new StatementWriter(_dbAdapter)
       _dbAdapter.writeCreateTable(t, sw, this)
       _executeDdl(sw.statement)
       _dbAdapter.postCreateTable(t, None)
+      for(indexDecl <- _indexDeclarationsFor(t))
+        _executeDdl(indexDecl)
     }
+  }
 
   private def _createUniqueConstraintsOfCompositePKs =
     for(cpk <- _allCompositePrimaryKeys) {

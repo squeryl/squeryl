@@ -51,7 +51,7 @@ class OracleAdapter extends DatabaseAdapter {
         st.execute(sw.statement)
       }
       else
-        printSinkWhenWriteOnlyMode.get.apply(sw.statement)
+        printSinkWhenWriteOnlyMode.get.apply(sw.statement + ";")
     }
   }
 
