@@ -43,6 +43,11 @@ trait QueryExpressionElements extends ExpressionNode {
 
   def whereClause: Option[ExpressionNode]
 
+  def hasUnInhibitedWhereClause =
+    whereClause != None &&
+    (! whereClause.get.inhibited) &&
+    (whereClause.get.children.filter(c => !c.inhibited) != Nil)
+
   def havingClause: Option[ExpressionNode]
 
   def groupByClause: Iterable[ExpressionNode]

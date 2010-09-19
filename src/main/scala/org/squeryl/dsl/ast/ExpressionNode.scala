@@ -86,7 +86,10 @@ trait ExpressionNode {
 
 
 trait ListExpressionNode extends ExpressionNode {
+
   def quotesElement = false
+  
+  def isEmpty: Boolean
 }
 
 trait ListNumerical extends ListExpressionNode
@@ -104,6 +107,22 @@ trait ListString extends ListExpressionNode {
 }
 
 class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=")
+
+class InListExpression(left: ExpressionNode, right: ListExpressionNode, inclusion: Boolean) extends BinaryOperatorNodeLogicalBoolean(left, right, if(inclusion) "in" else "not in") {
+
+  override def inhibited =
+    if(right.isEmpty)
+      (! inclusion)
+    else
+      super.inhibited
+
+  override def doWrite(sw: StatementWriter) =
+    if(inclusion  && right.isEmpty)
+      sw.write("(1 = 0)")
+    else
+      super.doWrite(sw)
+}
+
 
 class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
@@ -324,7 +343,10 @@ class ConstantExpressionNode[T](val value: T) extends ExpressionNode {
 }
 
 class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode with ListExpressionNode {
-  
+
+  def isEmpty =
+    value == Nil
+
   def doWrite(sw: StatementWriter) =
     if(quotesElement)
       sw.write(this.value.map(e=>"'" +e+"'").mkString("(",",",")"))

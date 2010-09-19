@@ -111,7 +111,7 @@ trait DatabaseAdapter {
       }
     }
     
-    if(qen.whereClause != None && qen.whereClause.get.children.filter(c => !c.inhibited) != Nil) {      
+    if(qen.hasUnInhibitedWhereClause) {      
       sw.write("Where")
       sw.nextLine
       sw.writeIndented {

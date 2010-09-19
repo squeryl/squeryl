@@ -260,6 +260,10 @@ class MusicDbTestRun extends QueryTester {
   def working = {
     import testInstance._
 
+    testInTautology
+    
+    testNotInTautology
+
     testDynamicWhereClause1
 
     testEnums
@@ -762,6 +766,25 @@ class MusicDbTestRun extends QueryTester {
         select(a)
       )
 
+  def testInTautology = {
+    
+    val q = artists.where(_.firstName in Nil).toList
+
+    assertEquals(Nil, q, 'testInTautology)
+
+    passed('testInTautology)
+  }
+
+  def testNotInTautology = {
+
+   val allArtists = artists.map(_.id).toSet
+
+   val q = artists.where(_.firstName notIn Nil).map(_.id).toSet
+
+    assertEquals(allArtists, q, 'testNotInTautology)
+
+    passed('testNotInTautology)
+  }  
 
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {
