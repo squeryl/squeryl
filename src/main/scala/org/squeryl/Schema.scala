@@ -186,26 +186,9 @@ trait Schema {
     }
   }
 
-  def createColumnGroupConstraintsAndIndexes = {
-      
-    val cs = Session.currentSession
-
-    for(statement <- _writeColumnGroupAttributeAssignments) {
-            
-      cs.log(statement)
-
-      val s = cs.connection.createStatement
-      try {
-        s.execute(statement)
-      }
-      catch {
-        case e:SQLException => throw new RuntimeException("error executing " + statement + "\n" + e, e)
-      }
-      finally {
-        s.close
-      }
-    }
-  }  
+  def createColumnGroupConstraintsAndIndexes =
+    for(statement <- _writeColumnGroupAttributeAssignments)
+      _executeDdl(statement)
 
   private def _dropForeignKeyConstraints = {
 
@@ -219,21 +202,26 @@ trait Schema {
   }
 
   private def _declareForeignKeyConstraints =
-    for(fk <- _foreignKeyConstraints) {
-            
-      val cs = Session.currentSession
-      val s = cs.connection.createStatement
-      try {
-        s.execute(fk)
-      }
-      catch {
-        case e:SQLException => throw new RuntimeException("error executing " + fk + "\n" + e, e)
-      }
-      finally {
-        s.close
-      }
-    }
+    for(fk <- _foreignKeyConstraints)
+      _executeDdl(fk)
 
+  private def _executeDdl(statement: String) = {
+
+    val cs = Session.currentSession
+    cs.log(statement)
+
+    val s = cs.connection.createStatement
+    try {
+      s.execute(statement)
+    }
+    catch {
+      case e:SQLException => throw new RuntimeException("error executing " + statement + "\n" + e, e)
+    }
+    finally {
+      s.close
+    }
+  }
+  
   private def _foreignKeyConstraints =
     for(fk <- _activeForeignKeySpecs) yield {
       val fkDecl = fk._3
@@ -247,48 +235,19 @@ trait Schema {
       )
     }
   
-
   private def _createTables =
     for(t <- _tables) {
-      var sw:StatementWriter = null
-      try {
-        sw = new StatementWriter(_dbAdapter)
-        _dbAdapter.writeCreateTable(t, sw, this)
-        val cs = Session.currentSession
-        val s = cs.connection.createStatement
-        val createS = sw.statement
-        if(cs.isLoggingEnabled)
-          cs.log(createS)
-        s.execute(createS)
-      }
-      catch {
-        case e:SQLException => throw new RuntimeException(
-          "error creating table : " +
-          e.getMessage + "ErrorCode:" + e.getErrorCode + ", SQLState:" + e.getSQLState + "\n" + sw.statement, e
-        )
-      }
-
+      val sw = new StatementWriter(_dbAdapter)
+      _dbAdapter.writeCreateTable(t, sw, this)
+      _executeDdl(sw.statement)
       _dbAdapter.postCreateTable(t, None)
-    }    
-
-  private def _createUniqueConstraintsOfCompositePKs = {
-
-    val cs = Session.currentSession
-
-    for(cpk <- _allCompositePrimaryKeys) {
-
-      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
-      val s = cs.connection.createStatement
-      try{
-        if(cs.isLoggingEnabled)
-          cs.log(createConstraintStmt)
-        s.execute(createConstraintStmt)
-      }
-      finally {
-        s.close
-      }
     }
-  }
+
+  private def _createUniqueConstraintsOfCompositePKs =
+    for(cpk <- _allCompositePrimaryKeys) {
+      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      _executeDdl(createConstraintStmt)
+    }  
 
   /**
    * returns an Iterable of (Table[_],Iterable[FieldMetaData]), the list of
