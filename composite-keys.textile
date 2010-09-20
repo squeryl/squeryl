@@ -3,8 +3,6 @@ layout: manual
 title: Composite Keys
 ---
 
-*Note*: composite keys are a beta feature, supported as of commit 932ac571574586883db3 in the Git repository.
-
 
 h3. Declaring composite keys for self documentation and fulfilling KeyedEntity's contract 
 

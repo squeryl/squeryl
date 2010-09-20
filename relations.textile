@@ -3,8 +3,6 @@ layout: manual
 title: Relations
 ---
 
-*Note*: relations are a beta feature, supported only as of version 0.9.4beta, that corresponds to the 'relations' branch in the Git repository.
-
 h3. Stateful vs Stateless relations
 
 Relations allow foreign key relationships to appear as collection like objects. There are two types of relations in Squeryl : OneToMany and ManyToMany, and each has a stateful counterpart. 
@@ -83,7 +81,10 @@ The association table can have other fields besides the _left_ and _right_ forei
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
-class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float)
+class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float) extends KeyedEntity[CompositeKey2[Int,Int]] {
+  def id = compositeKey(courseId, studentId)
+}
+
 
 object SchoolDb extends Schema {
 

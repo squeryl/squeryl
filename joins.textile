@@ -33,7 +33,7 @@ h2. The *join* keyword
     var ratingsForAllSongs =
       join(songs, ratings.leftOuter)((s,r) =>
           select(s, r)
-          on(s.id === r.songId)
+          on(s.id === r.map(_.songId))
       )
 
     for(sr <- ratingsForAllSongs)
