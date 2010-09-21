@@ -62,7 +62,8 @@ trait KeyedEntity[K] extends PersistenceStatus {
 
 
 trait PersistenceStatus {
-  
+
+  @transient
   @Transient
   private [squeryl] var _isPersisted = false
 
