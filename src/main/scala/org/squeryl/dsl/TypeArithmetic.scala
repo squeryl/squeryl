@@ -18,7 +18,7 @@ package org.squeryl.dsl
 import ast._
 import org.squeryl.internals._
 import java.util.Date
-import java.sql.ResultSet
+import java.sql.{Timestamp, ResultSet}
 
 class NumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NumericalExpression[A]
 
@@ -395,6 +395,7 @@ trait TypeArithmetic extends FieldTypes {
   protected def mapLong2LongType(l: Long): LongType
   protected def mapBoolean2BooleanType(b: Boolean): BooleanType
   protected def mapDate2DateType(b: Date): DateType
+  protected def mapTimestamp2TimestampType(b: Timestamp): TimestampType
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType    
 
   protected implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
@@ -442,6 +443,10 @@ trait TypeArithmetic extends FieldTypes {
     def sample = sampleDate
   }
 
+  protected implicit def createOutMapperTimestampType: OutMapper[TimestampType] = new OutMapper[TimestampType] {
+    def doMap(rs: ResultSet) = mapTimestamp2TimestampType(rs.getTimestamp(index))
+    def sample = sampleTimestamp
+  }
 //  protected implicit def createOutMapperEnumerationValueType: OutMapper[EnumerationValueType] = new OutMapper[EnumerationValueType] {
 //    def doMap(rs: ResultSet) = mapInt2EnumerationValueType(rs.getInt(index))
 //    def sample = sampleEnumerationValueType
@@ -544,5 +549,16 @@ trait TypeArithmetic extends FieldTypes {
         Some(v)
     }
     def sample = Some(sampleDate)
+  }
+
+  protected implicit def createOutMapperTimestampTypeOption: OutMapper[Option[TimestampType]] = new OutMapper[Option[TimestampType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapTimestamp2TimestampType(rs.getTimestamp(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleTimestamp)
   }  
 }

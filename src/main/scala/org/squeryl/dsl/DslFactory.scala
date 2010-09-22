@@ -49,6 +49,9 @@ trait DslFactory
   protected def createLeafNodeOfScalarDateType(d: DateType): DateExpression[DateType]
   protected def createLeafNodeOfScalarDateOptionType(d: Option[DateType]): DateExpression[Option[DateType]]
 
+  protected def createLeafNodeOfScalarTimestampType(d: TimestampType): DateExpression[TimestampType]
+  protected def createLeafNodeOfScalarTimestampOptionType(d: Option[TimestampType]): DateExpression[Option[TimestampType]]
+  
   protected def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[EnumerationValueType]
   protected def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[EnumerationValueType]]
 
@@ -85,6 +88,10 @@ trait DslFactory
   implicit def optionBoolean2ScalarBoolean(i: Option[BooleanType]) = createLeafNodeOfScalarBooleanOptionType(i)
 
   implicit def optionDate2ScalarDate(i: Option[DateType]) = createLeafNodeOfScalarDateOptionType(i)
+
+  implicit def timestamp2ScalarTimestamp(ts: TimestampType) = createLeafNodeOfScalarTimestampType(ts)
+
+  implicit def timestamp2ScalarTimestampOptionNode(ts: Option[TimestampType]) = createLeafNodeOfScalarTimestampOptionType(ts)
 
   implicit def enum2EnumNode[A <: EnumerationValueType](e: A): EnumExpression[A] =
     createLeafNodeOfEnumExpressionType(e).asInstanceOf[EnumExpression[A]]

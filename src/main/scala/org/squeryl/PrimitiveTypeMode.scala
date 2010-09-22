@@ -20,6 +20,7 @@ import dsl.ast._
 import dsl._
 import internals.FieldReferenceLinker
 import java.util.Date
+import java.sql.Timestamp
 
 /**
  *  This factory is meant to use POSOs (Plain old Scala Objects),
@@ -57,6 +58,8 @@ trait PrimitiveTypeMode extends QueryDsl {
   type BooleanType = Boolean
 
   type DateType = Date
+
+  type TimestampType = Timestamp
 
   type EnumerationValueType = Enumeration#Value
 
@@ -194,6 +197,22 @@ trait PrimitiveTypeMode extends QueryDsl {
         new SelectElementReference[Option[Date]](n) with  DateExpression[Option[Date]]
     }
 
+  def createLeafNodeOfScalarTimestampType(d: Timestamp) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Timestamp](d) with DateExpression[Timestamp]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Timestamp](n) with DateExpression[Timestamp]
+    }
+
+  def createLeafNodeOfScalarTimestampOptionType(d: Option[Timestamp]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[Timestamp]](d) with DateExpression[Option[Timestamp]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[Timestamp]](n) with DateExpression[Option[Timestamp]]
+    }
+
   def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
@@ -219,6 +238,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected def mapLong2LongType(l: Long) = l
   protected def mapBoolean2BooleanType(b: Boolean) = b
   protected def mapDate2DateType(b: Date) = b
+  protected def mapTimestamp2TimestampType(b: Timestamp) = b
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
 
   protected implicit val sampleByte: ByteType = 0xF.byteValue
@@ -230,6 +250,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected implicit val sampleLong: LongType = 0
   protected implicit val sampleBoolean: BooleanType = false
   protected implicit val sampleDate: DateType = new Date
+  protected implicit def sampleTimestamp: TimestampType = new Timestamp(0)
   //protected implicit def sampleEnumerationValueType: EnumerationValueType = DummyEnum.DummyEnumerationValue
 }
 

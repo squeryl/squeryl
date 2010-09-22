@@ -20,6 +20,7 @@ import org.squeryl.internals.FieldReferenceLinker
 import java.util.Date
 import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
 import org.squeryl.dsl._
+import java.sql.Timestamp
 
 trait CustomType extends Product1[Any] {
   def canEqual(a:Any) = false
@@ -66,6 +67,8 @@ trait CustomTypesMode extends QueryDsl {
 
   type DateType = DateField
 
+  type TimestampType = TimestampField
+
   type EnumerationValueType = Enumeration#Value
   
   protected def mapByte2ByteType(i: Byte) = new ByteField(i)
@@ -77,6 +80,8 @@ trait CustomTypesMode extends QueryDsl {
   protected def mapLong2LongType(l: Long) = new LongField(l)
   protected def mapBoolean2BooleanType(b: Boolean) = new BooleanField(b)
   protected def mapDate2DateType(b: Date) = new DateField(b)
+  protected def mapTimestamp2TimestampType(b: Timestamp) = new TimestampField(b)
+  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
 
   protected implicit val sampleByte: ByteType = new ByteField(0)
   protected implicit val sampleInt = new IntField(0)
@@ -87,6 +92,9 @@ trait CustomTypesMode extends QueryDsl {
   protected implicit val sampleLong = new LongField(1)
   protected implicit val sampleBoolean = new BooleanField(false)
   protected implicit val sampleDate = new DateField(new Date)
+  protected implicit def sampleTimestamp = new TimestampField(new Timestamp(0))
+
+  
   //TODO Scala bug report, implicit params should work here , but they don't ...
   def createLeafNodeOfScalarIntType(i: IntField) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
@@ -230,7 +238,24 @@ trait CustomTypesMode extends QueryDsl {
         new ConstantExpressionNode[Option[Enumeration#Value]](e) with EnumExpression[Option[Enumeration#Value]]
       case Some(n:SelectElement) =>
         new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
-    }  
+    }
+
+  def createLeafNodeOfScalarTimestampType(d: TimestampField) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[TimestampType](d) with DateExpression[TimestampType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[TimestampType](n) with DateExpression[TimestampType]
+    }
+
+  def createLeafNodeOfScalarTimestampOptionType(d: Option[TimestampField]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[TimestampType]](d) with DateExpression[Option[TimestampType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[TimestampType]](n) with DateExpression[Option[TimestampType]]
+    }
+  
 }
 
 object CustomTypesMode extends CustomTypesMode 
@@ -269,5 +294,9 @@ class BooleanField(val value: Boolean) extends CustomType {
 }
 
 class DateField(val value: Date) extends CustomType {
+  def _1: Any = value
+}
+
+class TimestampField(val value: Timestamp) extends CustomType {
   def _1: Any = value
 }

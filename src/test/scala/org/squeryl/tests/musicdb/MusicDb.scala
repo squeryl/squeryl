@@ -17,12 +17,12 @@ package org.squeryl.tests.musicdb
 
 import java.sql.SQLException
 import java.sql.Timestamp
-import java.util.Calendar
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters.H2Adapter
 import dsl.ast.BinaryOperatorNodeLogicalBoolean
 import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
+import java.util.{Date, Calendar}
 
 object Genre extends Enumeration {
   type Genre = Value
@@ -453,6 +453,8 @@ class MusicDbTestRun extends QueryTester {
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
 
+    val tX1 = new Timestamp(cal.getTimeInMillis)
+
     mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
 
     artists.update(mongo)
@@ -462,6 +464,8 @@ class MusicDbTestRun extends QueryTester {
 
     cal.roll(Calendar.SECOND, 12);
 
+    val tX2 = new Timestamp(cal.getTimeInMillis)
+
     mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
     
 
@@ -469,6 +473,15 @@ class MusicDbTestRun extends QueryTester {
     mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
 
     assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+
+    val mustBeSome =
+      artists.where(a =>
+        a.firstName === mongoSantaMaria.firstName and
+        //a.timeOfLastUpdate.between(createLeafNodeOfScalarTimestampType(tX1), createLeafNodeOfScalarTimestampType(tX2))
+        a.timeOfLastUpdate.between(tX1, tX2)
+      ).headOption
+
+    assert(mustBeSome != None, "testTimestamp failed");
 
     passed('testTimestamp)
   }
