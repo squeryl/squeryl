@@ -26,8 +26,7 @@ import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
 import adapters.{PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
-import internals.FieldReferenceLinker
-
+import internals.{FieldMetaData, FieldReferenceLinker}
 
 class SchoolDbObject extends KeyedEntity[Int] {
   var id: Int = 0
@@ -138,6 +137,19 @@ class SchoolDb extends Schema {
     columns(s.name, s.addressId) are(indexed)
     //_.addressId is(autoIncremented) currently only supported on KeyedEntity.id ... ! :(
   ))
+
+  on(professors)(p => declare(
+    p.yearlySalary is(dbType("real"))
+  ))
+
+  // disable the override, since the above is good for Oracle only, this is not a usage demo, but
+  // a necessary hack to test the dbType override mechanism and still allow the test suite can run on all database : 
+  override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_])  =
+    if(fieldMetaData.nameOfProperty == "yearlySalary" && Session.currentSession.databaseAdapter.isInstanceOf[OracleAdapter])
+      Some("float")
+    else
+      None
+
 
   override def drop = super.drop
 }

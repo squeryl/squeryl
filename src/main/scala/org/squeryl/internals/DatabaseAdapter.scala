@@ -209,11 +209,15 @@ trait DatabaseAdapter {
   }
   
   def databaseTypeFor(fmd: FieldMetaData) =
-    _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
+    fmd.explicitDbTypeDeclaration.getOrElse(
+      fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse(
+        _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
+      )
+    )
 
   def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    val dbTypeDeclaration = schema._columnTypeFor(fmd, this)
+    val dbTypeDeclaration = databaseTypeFor(fmd)
 
     val sb = new StringBuilder(128)
   

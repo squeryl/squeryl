@@ -133,7 +133,19 @@ class FieldMetaData(
   def columnAttributes: Iterable[ColumnAttribute] = _columnAttributes
 
   def defaultValue: Option[ConstantExpressionNode[_]] = _defaultValue
-  
+
+  /**
+   * The db column type declaration overriden in the schema, if None, it means that it is the default value for
+   * the adapter (see Correspondance of field types to database column types http://squeryl.org/schema-definition.html)  
+   */
+  def explicitDbTypeDeclaration: Option[String] = {
+    val dbt = _columnAttributes.find(_.isInstanceOf[DBType])
+    if(dbt == None)
+      None
+    else
+      Some(dbt.get.asInstanceOf[DBType].declaration)
+  }
+
   def isCustomType = customTypeFactory != None
 
   /**
