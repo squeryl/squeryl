@@ -117,6 +117,30 @@ class MusicDbTestRun extends QueryTester {
       where(a.firstName === "Poncho") select(a)
    )
 
+  def testJoinWithCompute = {
+    import testInstance._
+    
+    val q =
+      join(artists,songs.leftOuter)((a,s)=>
+        groupBy(a.id, a.firstName)
+        compute(countDistinct(s.map(_.id)))
+        on(a.id === s.map(_.authorId))
+      )
+
+    val r = q.map(q0 => (q0.key._1, q0.measures)).toSet
+
+    println("!:" + r)
+
+    assertEquals(
+      Set((herbyHancock.id, 1),
+          (ponchoSanchez.id,1),
+          (mongoSantaMaria.id,1),
+          (alainCaron.id, 0),
+          (hossamRamzy.id, 0)),
+      r, 'testJoinWithCompute)
+  }
+
+
   def selfJoinNested3Level =
     from(
       from(
@@ -260,6 +284,8 @@ class MusicDbTestRun extends QueryTester {
   def working = {
     import testInstance._
 
+    testJoinWithCompute
+    
     testInTautology
     
     testNotInTautology
