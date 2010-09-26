@@ -42,6 +42,64 @@ h2. The *join* keyword
 	  
 ]]></script>
 
+produces :
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+Select
+  Song1.id as Song1_id,
+  Rating2.songId as Rating2_songId,
+  Rating2.songId as Rating2_songId,
+  Rating2.appreciationScore as Rating2_appreciationScore,
+  Rating2.userId as Rating2_userId,
+  Song1.year as Song1_year,
+  Song1.title as Song1_title,
+  Song1.filePath as Song1_filePath,
+  Song1.artistId as Song1_artistId,
+  Song1.id as Song1_id
+From
+  Song Song1
+  left outer join Rating as Rating2 on (Song1.id = Rating2.songId)
+]]></script>
+
+
+A join can also be an agreate query, for example :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    val q =
+      join(artists,songs.leftOuter)((a,s)=>
+        groupBy(a.id, a.firstName)
+        compute(countDistinct(s.map(_.id)))
+        on(a.id === s.map(_.authorId))
+      )
+
+]]></script>
+
+The type of this query is *Query[GroupWithMeasures[(Long,String),Long]*, it produces the following SQL :
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+Select
+  Person1.id as g0,
+  Person1.firstName as g1,
+  count(distinct Song2.id) as c0
+From
+Person Person1
+left outer join Song as Song2 on (Person1.id = Song2.authorId)
+Group By
+  Person1.id,
+  Person1.firstName
+]]></script>
+  
+Of course, like in SQL, a *join* can have a where clause :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    val q =
+      join(artists,songs.leftOuter)((a,s)=>
+        where(a.id in myListOfArtistId)
+        groupBy(a.id, a.firstName)
+        compute(countDistinct(s.map(_.id)))
+        on(a.id === s.map(_.authorId))
+      )
+]]></script>
   
 h2. Outer Joins _(deprecated syntax)_ 
   
