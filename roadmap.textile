@@ -24,6 +24,8 @@ h3. Wish list of _highly_ desired features (Unscheduled)
 
 h3. Features at the brainstorming stage
 
+* Caching : the goal here is not to have a _transparent_ cache, but to give a few building blocks to that can be leveraged to build caches at the application level.
+
 * Support for mapping inheritance in the database other than the _map each concreate class to a table_ approach
 
 * A compiler plugin that provides a greater level of validation <br/><br/>
