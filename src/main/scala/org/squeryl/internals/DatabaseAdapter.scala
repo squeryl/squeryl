@@ -95,9 +95,10 @@ trait DatabaseAdapter {
       }
     }
     else {
-      val texp = qen.tableExpressions.splitAt(1)
-      val firstJoinExpr = texp._1.head
-      val restOfJoinExpr = texp._2
+      val singleNonJoinTableExpression = qen.tableExpressions.filter(! _.isMemberOfJoinList)
+      assert(singleNonJoinTableExpression.size == 1, "join query must have exactly one FROM argument, got : " + qen.tableExpressions)
+      val firstJoinExpr = singleNonJoinTableExpression.head
+      val restOfJoinExpr = qen.tableExpressions.filter(_.isMemberOfJoinList)
       firstJoinExpr.write(sw)
       sw.write(" ")
       sw.write(firstJoinExpr.alias)

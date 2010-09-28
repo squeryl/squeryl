@@ -129,8 +129,6 @@ class MusicDbTestRun extends QueryTester {
 
     val r = q.map(q0 => (q0.key._1, q0.measures)).toSet
 
-    println("!:" + r)
-
     assertEquals(
       Set((herbyHancock.id, 1),
           (ponchoSanchez.id,1),
@@ -138,8 +136,36 @@ class MusicDbTestRun extends QueryTester {
           (alainCaron.id, 0),
           (hossamRamzy.id, 0)),
       r, 'testJoinWithCompute)
+
+    passed('testJoinWithCompute)
   }
 
+  def testOuterJoinWithSubQuery = {
+    import testInstance._
+
+    val artistsQ = artists.where(_.firstName <> "zozo")
+
+    val q =
+      join(artistsQ,songs.leftOuter)((a,s)=>
+        select((a,s))
+        on(a.id === s.map(_.authorId))
+      ).toList
+
+
+    val artistIdsWithoutSongs = q.filter(_._2 == None).map(_._1.id).toSet
+
+    assertEquals(
+      Set(alainCaron.id,hossamRamzy.id),
+      artistIdsWithoutSongs, 'testOuterJoinWithSubQuery)
+
+    val artistIdsWithSongs = q.filter(_._2 != None).map(_._1.id).toSet
+    
+    assertEquals(
+      Set(herbyHancock.id,ponchoSanchez.id,mongoSantaMaria.id),
+      artistIdsWithSongs, 'testOuterJoinWithSubQuery)
+
+    passed('testOuterJoinWithSubQuery)
+  }  
 
   def selfJoinNested3Level =
     from(
@@ -284,6 +310,8 @@ class MusicDbTestRun extends QueryTester {
   def working = {
     import testInstance._
 
+    testOuterJoinWithSubQuery
+    
     testJoinWithCompute
     
     testInTautology
