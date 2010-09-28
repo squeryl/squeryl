@@ -6,7 +6,24 @@ title: Relases
 
 For upcoming features, have a look at "Squeryl's Roadmap":roadmap.html 
 
-h3. 0.9.4
+h3. 0.9.4-RC2
+
+*   Fix for issue 48 (Exception thrown in outer join with subquery member)
+    the problem was that the ordering of the table expression was not strict, so the from expression
+    would get mixed with a join expression.
+*   test case for outer join with group by
+*   Support for overriding default database column type declaration
+*   Fix for issue 45 (Timestamp as query input param gets truncated)
+*   @transient applied to PersistenceStatus._isPersisted
+*   Fix for issue 16 : SQL 'in' operator now accepts empty lists and inhibits
+    "not in (empty)" tautology and returns an always false for "in (empty)"
+      http://github.com/max-l/Squeryl/issues#issue/16
+*   Fix for issue 42 (problems creating indices: missing single-column indices)
+*    Moved annotations package to adhere to the convention
+*   Fix for issue 44 (Class cast exception on OneToMany query)
+
+
+h3. 0.9.4-RC1
 
 Features :
 

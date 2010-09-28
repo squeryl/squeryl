@@ -3,8 +3,6 @@ layout: manual
 title: Stateful Relations
 ---
 
-*Note*: stateful relations are a beta feature, supported only as of version 0.9.4beta4
-
 h3. Declaring Stateful Relations
 
 Stateful relations have the same methods as stateless ones, the main difference is that wherever you have a Query[A] in a stateless 

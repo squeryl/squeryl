@@ -12,15 +12,15 @@ You will need
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
 
-h3. The recommended version is 0.9.4-RC1
+h3. The recommended version is 0.9.4-RC2
 
 Squeryl is available on the Maven repo @ http://nexus.scala-tools.org/
 
-the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/squeryl_2.8.0/0.9.4-RC1/squeryl_2.8.0-0.9.4-RC1.pom
+the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/squeryl_2.8.0/0.9.4-RC2/squeryl_2.8.0-0.9.4-RC2.pom
  
 * groupId : *org.squeryl*
 * artifactId: *squeryl_2.8.0*
-* version *0.9.4beta-RC1*
+* version *0.9.4beta-RC2*
 
 For building with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 
