@@ -299,13 +299,31 @@ trait Schema {
     res
   }
 
-  protected def columnTypeFor(fieldMetaData: FieldMetaData, databaseAdapter: DatabaseAdapter): String =
-    databaseAdapter.databaseTypeFor(fieldMetaData)
-
-  private [squeryl] def _columnTypeFor(fmd: FieldMetaData, dba: DatabaseAdapter): String =
-    this.columnTypeFor(fmd, dba)
+  /**
+   * Use this method to override the DatabaseAdapter's default column type for the given field
+   * (FieldMetaData), returning None means that no override will take place.
+   *
+   * There are two levels at which db column type can be overriden, in order of precedence :
+   *
+   *   on(professors)(p => declare(
+   *      s.yearlySalary is(dbType("real"))
+   *    ))
+   *
+   *  overrides (has precedence over) :
+   *
+   *  MySchema extends Schema {
+   *    ...
+   *    override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]) =
+   *      if(fieldMetaData.wrappedFieldType.isInstanceOf[Int)
+   *        Some("number")
+   *      else
+   *        None
+   *  }
+   *
+   */
+  def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]): Option[String] = None
   
-  def tableNameFromClass(c: Class[_]):String =     
+  def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
   protected def table[T]()(implicit manifestT: Manifest[T]): Table[T] =
@@ -466,6 +484,8 @@ trait Schema {
   protected def indexed = Indexed(None)
 
   protected def indexed(indexName: String) = Indexed(Some(indexName))
+
+  protected def dbType(declaration: String) = DBType(declaration)
 
   class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
 

@@ -46,3 +46,7 @@ case class PrimaryKey() extends ColumnAttribute
         with AttributeValidOnNonNumericalColumn
         with AttributeValidOnNumericalColumn
         with AttributeValidOnMultipleColumn
+
+case class DBType(val declaration: String) extends ColumnAttribute
+  with AttributeValidOnNonNumericalColumn
+  with AttributeValidOnNumericalColumn

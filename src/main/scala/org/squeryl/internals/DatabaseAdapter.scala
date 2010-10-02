@@ -95,9 +95,10 @@ trait DatabaseAdapter {
       }
     }
     else {
-      val texp = qen.tableExpressions.splitAt(1)
-      val firstJoinExpr = texp._1.head
-      val restOfJoinExpr = texp._2
+      val singleNonJoinTableExpression = qen.tableExpressions.filter(! _.isMemberOfJoinList)
+      assert(singleNonJoinTableExpression.size == 1, "join query must have exactly one FROM argument, got : " + qen.tableExpressions)
+      val firstJoinExpr = singleNonJoinTableExpression.head
+      val restOfJoinExpr = qen.tableExpressions.filter(_.isMemberOfJoinList)
       firstJoinExpr.write(sw)
       sw.write(" ")
       sw.write(firstJoinExpr.alias)
@@ -209,11 +210,15 @@ trait DatabaseAdapter {
   }
   
   def databaseTypeFor(fmd: FieldMetaData) =
-    _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
+    fmd.explicitDbTypeDeclaration.getOrElse(
+      fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse(
+        _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
+      )
+    )
 
   def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    val dbTypeDeclaration = schema._columnTypeFor(fmd, this)
+    val dbTypeDeclaration = databaseTypeFor(fmd)
 
     val sb = new StringBuilder(128)
   

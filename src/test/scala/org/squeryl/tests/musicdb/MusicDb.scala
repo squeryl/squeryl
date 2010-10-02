@@ -17,12 +17,12 @@ package org.squeryl.tests.musicdb
 
 import java.sql.SQLException
 import java.sql.Timestamp
-import java.util.Calendar
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters.H2Adapter
 import dsl.ast.BinaryOperatorNodeLogicalBoolean
 import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
+import java.util.{Date, Calendar}
 
 object Genre extends Enumeration {
   type Genre = Value
@@ -116,6 +116,56 @@ class MusicDbTestRun extends QueryTester {
    from(artists)(a =>
       where(a.firstName === "Poncho") select(a)
    )
+
+  def testJoinWithCompute = {
+    import testInstance._
+    
+    val q =
+      join(artists,songs.leftOuter)((a,s)=>
+        groupBy(a.id, a.firstName)
+        compute(countDistinct(s.map(_.id)))
+        on(a.id === s.map(_.authorId))
+      )
+
+    val r = q.map(q0 => (q0.key._1, q0.measures)).toSet
+
+    assertEquals(
+      Set((herbyHancock.id, 1),
+          (ponchoSanchez.id,1),
+          (mongoSantaMaria.id,1),
+          (alainCaron.id, 0),
+          (hossamRamzy.id, 0)),
+      r, 'testJoinWithCompute)
+
+    passed('testJoinWithCompute)
+  }
+
+  def testOuterJoinWithSubQuery = {
+    import testInstance._
+
+    val artistsQ = artists.where(_.firstName <> "zozo")
+
+    val q =
+      join(artistsQ,songs.leftOuter)((a,s)=>
+        select((a,s))
+        on(a.id === s.map(_.authorId))
+      ).toList
+
+
+    val artistIdsWithoutSongs = q.filter(_._2 == None).map(_._1.id).toSet
+
+    assertEquals(
+      Set(alainCaron.id,hossamRamzy.id),
+      artistIdsWithoutSongs, 'testOuterJoinWithSubQuery)
+
+    val artistIdsWithSongs = q.filter(_._2 != None).map(_._1.id).toSet
+    
+    assertEquals(
+      Set(herbyHancock.id,ponchoSanchez.id,mongoSantaMaria.id),
+      artistIdsWithSongs, 'testOuterJoinWithSubQuery)
+
+    passed('testOuterJoinWithSubQuery)
+  }  
 
   def selfJoinNested3Level =
     from(
@@ -260,6 +310,10 @@ class MusicDbTestRun extends QueryTester {
   def working = {
     import testInstance._
 
+    testOuterJoinWithSubQuery
+    
+    testJoinWithCompute
+    
     testInTautology
     
     testNotInTautology
@@ -268,7 +322,7 @@ class MusicDbTestRun extends QueryTester {
 
     testEnums
     
-    testTimestamp
+    //testTimestamp
 
     testConcatFunc
 
@@ -453,6 +507,8 @@ class MusicDbTestRun extends QueryTester {
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
 
+    val tX1 = new Timestamp(cal.getTimeInMillis)
+
     mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
 
     artists.update(mongo)
@@ -462,6 +518,8 @@ class MusicDbTestRun extends QueryTester {
 
     cal.roll(Calendar.SECOND, 12);
 
+    val tX2 = new Timestamp(cal.getTimeInMillis)
+
     mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
     
 
@@ -469,6 +527,15 @@ class MusicDbTestRun extends QueryTester {
     mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
 
     assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+
+    val mustBeSome =
+      artists.where(a =>
+        a.firstName === mongoSantaMaria.firstName and
+        //a.timeOfLastUpdate.between(createLeafNodeOfScalarTimestampType(tX1), createLeafNodeOfScalarTimestampType(tX2))
+        a.timeOfLastUpdate.between(tX1, tX2)
+      ).headOption
+
+    assert(mustBeSome != None, "testTimestamp failed");
 
     passed('testTimestamp)
   }

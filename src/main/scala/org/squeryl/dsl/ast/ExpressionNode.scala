@@ -441,6 +441,12 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
 
   def inhibited_=(b: Boolean) = _inhibited = b
 
+  /**
+   * When the join syntax is used, isMemberOfJoinList is true if this instance is not in the from clause
+   * but a 'join element'. 
+   */
+  def isMemberOfJoinList = joinKind != None
+
   // new join syntax
   var joinKind: Option[(String,String)] = None
 
