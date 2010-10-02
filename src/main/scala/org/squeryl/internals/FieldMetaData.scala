@@ -20,9 +20,9 @@ import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import org.squeryl.annotations.{ColumnBase, Column}
-import org.squeryl.{Session, KeyedEntity}
 import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
+import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -111,13 +111,13 @@ class FieldMetaData(
   }
 
   def isIdFieldOfKeyedEntity =
-    classOf[KeyedEntity[Any]].isAssignableFrom(parentMetaData.clasz) &&
-    nameOfProperty == "id"
+    (classOf[KeyedEntity[Any]].isAssignableFrom(parentMetaData.clasz) && nameOfProperty == "id") ||
+    (classOf[IndirectKeyedEntity[Any,Any]].isAssignableFrom(parentMetaData.clasz) && nameOfProperty == "idField")
 
   if(isIdFieldOfKeyedEntity) {
     schema.defaultColumnAttributesForKeyedEntityId.foreach(ca => {
 
-      if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
+      if(ca.isInstanceOf[AutoIncremented] && (! _isIntegerOrLong))
         error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
           " all KeyedEntity tables, while class " + parentMetaData.clasz.getName +
           "\n has it's id field of type " + fieldType.getName + ", that is neither an Int or a Long, \n the only two types that can " +
@@ -127,6 +127,13 @@ class FieldMetaData(
       _addColumnAttribute(ca)
     })
   }
+
+  private def _isIntegerOrLong =
+    if(wrappedFieldType.isPrimitive)
+      wrappedFieldType.getName == "int" || wrappedFieldType.getName == "long"
+    else
+      wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])
+
 
   private [squeryl] var _defaultValue: Option[ConstantExpressionNode[_]] = None
 
