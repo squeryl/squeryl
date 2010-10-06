@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Further Examples
+headtitle: Further Examples - 
 ---
 
 The most extensive examples are from the test suite, there are two 

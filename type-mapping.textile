@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Mapping Types from SQL to Scala
+headtitle: Mapping Types from SQL - 
 ---
 
 h2. Preserving Type Information

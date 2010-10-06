@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Insert, Update and Delete
+headtitle: Insert, Update and Delete - 
 ---
 
 h2. Insert 

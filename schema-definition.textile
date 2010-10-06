@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Schema Definition
+headtitle: Schema Definition - 
 ---
 
 h2. Defining a Schema

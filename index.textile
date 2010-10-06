@@ -1,6 +1,7 @@
 ---
 layout: default
 title: <div class='zquote'>A Scala ORM and DSL for talking with Databases with minimum verbosity and maximum type safety</div>
+headtitle:
 ---
 
 

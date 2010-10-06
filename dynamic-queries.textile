@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Dynamically varying Queries
+headtitle: Dynamic Queries - 
 ---
 
 <a name='DynamicQuery'></a>

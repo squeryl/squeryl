@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Relations
+headtitle: Relations - 
 ---
 
 h3. Stateful vs Stateless relations

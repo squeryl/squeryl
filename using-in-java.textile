@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Using in a Java project
+headtitle: Using in a Java project - 
 ---
 
 h2. Defining "Java friendly DAOs" in Scala  

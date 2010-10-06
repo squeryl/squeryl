@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Group and Aggregate Queries
+headtitle: Group and Aggregate Queries - 
 ---
 
 Group and Aggregate queries, unlike Select queries do not return arbitrary types, but the types : 

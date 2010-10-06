@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: SQL Functions
+headtitle: SQL Functions - 
 ---
 
 h2. Conversion Functions

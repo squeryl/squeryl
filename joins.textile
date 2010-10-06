@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Joins
+headtitle: Joins - 
 ---
 
 h2. Joining with *from* 

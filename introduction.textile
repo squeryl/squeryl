@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Introduction
+headtitle: Introduction - 
 ---
 
 h3. With all the Java ORMs available, why was Squeryl written ?

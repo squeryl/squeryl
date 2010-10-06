@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Community
+headtitle: Community - 
 ---
 
 h2. The people behind Squeryl

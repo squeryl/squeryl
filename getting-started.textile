@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Getting Started
+headtitle: Getting Started - 
 ---
 
 h2. Requirements 

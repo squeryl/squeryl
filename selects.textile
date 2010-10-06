@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Select
+headtitle: Select - 
 ---
 
 h2. The variations on Select

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Frequently Asked Questions
+headtitle: Frequently Asked Questions - 
 ---
 
 h3. Q: There is  already a plethora of Java ORMs, do we _really_ need one more ? What is wrong with JPA ?

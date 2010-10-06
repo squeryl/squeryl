@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Stateful Relations
+headtitle: Stateful Relations - 
 ---
 
 h3. Declaring Stateful Relations

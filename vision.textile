@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Design principles
+headtitle: Vision - 
 ---
 
 <h3 class='zquote' align='left'> 

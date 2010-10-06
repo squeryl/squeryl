@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Submiting bugs and Contributing
+headtitle: Contributing - 
 ---
 
 h2. Help us make Squeryl a world class game changing technology

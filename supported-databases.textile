@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Supported Databases
+headtitle: Supported Databases - 
 ---
 
 The databases currently supported are :
