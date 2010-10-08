@@ -669,9 +669,8 @@ trait DatabaseAdapter {
   def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
-    sw.write(" ~ '")
-    sw.write(pattern)
-    sw.write("')")
+    sw.write(" ~ ?)")
+    sw.addParam(pattern)
   }
 
   def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {

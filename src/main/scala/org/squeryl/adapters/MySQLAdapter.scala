@@ -99,9 +99,8 @@ class MySQLAdapter extends DatabaseAdapter {
   override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
-    sw.write(" regexp '")
-    sw.write(pattern)
-    sw.write("')")
+    sw.write(" regexp ?)")
+    sw.addParam(pattern)
   }
 
   override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
