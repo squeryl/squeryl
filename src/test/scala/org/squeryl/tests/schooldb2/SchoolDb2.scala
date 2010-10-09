@@ -42,7 +42,7 @@ class Subject(val name: String) extends SchoolDb2Object {
   lazy val courses = SchoolDb2.subjectToCourses.left(this)
 }
 
-class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float) extends KeyedEntity[CompositeKey2[Int,Int]] {
+class CourseSubscription(val courseId: Long, val studentId: Long, var grade: Float) extends KeyedEntity[CompositeKey2[Long,Long]] {
 
   def id = compositeKey(courseId, studentId)
 }
@@ -139,6 +139,8 @@ class SchoolDb2Tests extends QueryTester {
 
     val chemistryCourse = courses.insert(new Course(chemistry.id))
     val physicsCourse = courses.insert(new Course(physics.id))
+
+    val xiaoJimbao = students.insert(new Student("Xiao", "Jimbao"))
   }
 
   def dumpSchema =
@@ -154,6 +156,8 @@ class SchoolDb2Tests extends QueryTester {
     from(entry.comments)(c => where(c.id === comment.id) select(c))
     
     seedData
+
+    testUpdateWithCompositePK
     
     testCompositeEquality
 
@@ -167,6 +171,23 @@ class SchoolDb2Tests extends QueryTester {
     SchoolDb2.drop
   }
 
+  def testUpdateWithCompositePK = {
+    import seedData._
+
+    val xiao = students.lookup(xiaoJimbao.id).get
+
+    val courseSubscription = xiao.courses.assign(chemistryCourse)
+
+    courseSubscriptions.insert(courseSubscription)
+    courseSubscription.grade = 95.0F
+    courseSubscriptions.update(courseSubscription)
+
+    val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
+    
+    assertEquals(95.0F, cs2.grade, 'testUpdateWithCompositePK)
+
+    passed('testUpdateWithCompositePK)
+  }
 
   def testMany2ManyAssociationFromLeftSide = {
 

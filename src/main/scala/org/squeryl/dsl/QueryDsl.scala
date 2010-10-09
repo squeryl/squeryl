@@ -311,11 +311,11 @@ trait QueryDsl
      */
     private def _splitEquality(ee: EqualityExpression) =
       if(ee.left._fieldMetaData.parentMetaData.clasz == aClass) {
-        assert(ee.right._fieldMetaData.isPrimaryKey)
+        assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
         (ee.right._fieldMetaData, ee.left._fieldMetaData)
       }
       else {
-        assert(ee.left._fieldMetaData.isPrimaryKey)
+        assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
         (ee.left._fieldMetaData, ee.right._fieldMetaData)
       }
 

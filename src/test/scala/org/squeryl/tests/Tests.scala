@@ -31,7 +31,7 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
 
     //allTests("PosgreSQL", createPostgreSqlTestConnection _)
     
@@ -39,7 +39,7 @@ object Tests extends QueryTester {
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    allTestsOnH2
+    //allTestsOnH2
 
     //dumpSchemasForAllDatabases
     

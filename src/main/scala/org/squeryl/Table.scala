@@ -21,7 +21,6 @@ import internals.{FieldMetaData, NoOpOutMapper, FieldReferenceLinker, StatementW
 import java.sql.{Statement}
 import scala.reflect.Manifest
 
-
 private [squeryl] object DummySchema extends Schema
 
 class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String]) extends View[T](n, c, schema, _prefix) {
@@ -38,35 +37,38 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val sw = new StatementWriter(_dbAdapter)
     _dbAdapter.writeInsert(t, this, sw)
 
-    val st = 
-      if(_dbAdapter.supportsAutoIncrementInColumnDeclaration)
-        sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
-      else if( posoMetaData.primaryKey != None) {
-        val autoIncPk = new Array[String](1)
-        autoIncPk(0) = posoMetaData.primaryKey.get.columnName
-        sess.connection.prepareStatement(sw.statement, autoIncPk)
-      }
-      else
-        sess.connection.prepareStatement(sw.statement)
+    val st =
+      (_dbAdapter.supportsAutoIncrementInColumnDeclaration, posoMetaData.primaryKey) match {
+        case (true, a:Any) => sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
+        case (false, Some(Left(pk:FieldMetaData))) => {
+          val autoIncPk = new Array[String](1)
+          autoIncPk(0) = pk.columnName
+          sess.connection.prepareStatement(sw.statement, autoIncPk)
+        }
+        case a:Any => sess.connection.prepareStatement(sw.statement)
+      }        
 
     val (cnt, s) = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
     if(cnt != 1)
       error("failed to insert")
 
-    if(posoMetaData.primaryKey != None && posoMetaData.primaryKey.get.isAutoIncremented) {      
-      val rs = s.getGeneratedKeys
-      try {
-        sess._addResultSet(rs)
-        assert(rs.next,
-          "getGeneratedKeys returned no rows for the auto incremented\n"+
-          " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
-          " column might not be defined as auto increment")
-        posoMetaData.primaryKey.get.setFromResultSet(o, rs, 1)
+    posoMetaData.primaryKey match {
+      case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
+        val rs = s.getGeneratedKeys
+        try {
+          sess._addResultSet(rs)
+          assert(rs.next,
+            "getGeneratedKeys returned no rows for the auto incremented\n"+
+            " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
+            " column might not be defined as auto increment")
+          pk.setFromResultSet(o, rs, 1)
+        }
+        finally {
+          rs.close
+        }
       }
-      finally {
-        rs.close
-      }
+      case a:Any =>{}
     }
 
     _setPersisted(t)
@@ -164,10 +166,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
 
-    val pkMd = posoMetaData.primaryKey.get
+    val pkMd = posoMetaData.primaryKey.getOrElse(error("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
 
     val fmds = List(
-      posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter).toList,            
+      posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter).toList,
       List(pkMd),
       posoMetaData.optimisticCounter.toList
     ).flatten

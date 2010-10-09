@@ -19,6 +19,8 @@ import java.sql.{ResultSet, SQLException, Statement}
 import org.squeryl.dsl.boilerplate.Query1
 import org.squeryl.Queryable
 import org.squeryl.dsl.fsm.QueryElements
+import org.squeryl.dsl.QueryYield
+import org.squeryl.dsl.ast.{QueryExpressionElements, LogicalBoolean}
 
 object Utils {
 
@@ -51,20 +53,28 @@ object Utils {
     catch {case e:SQLException => {}}
 
 
-  private class DummyQueryElements
-    extends QueryElements {
-    override val whereClause = None
-  }
+  private class DummyQueryElements(override val whereClause: Option[()=>LogicalBoolean]) extends QueryElements
+  
   
   private class DummyQuery[A,B](q: Queryable[A],f: A=>B, g: B=>Unit) extends Query1[A,Int](
     q,
     a => {
       val res = f(a);
       g(res)
-      (new DummyQueryElements).select(0)
+      (new DummyQueryElements(None)).select(0)
     },
     true)
 
+  private class DummyQuery4WhereClause[A,B](q: Queryable[A],whereClause: A=>LogicalBoolean) extends Query1[A,Int](
+    q,
+    a => {
+      (new DummyQueryElements(Some(() => whereClause(a)))).select(0)
+    },
+    true)
+
+  def createQuery4WhereClause[A](q: Queryable[A], whereClause: A=>LogicalBoolean): QueryExpressionElements =
+    new DummyQuery4WhereClause(q, whereClause).ast
+  
   /**
    * visitor will get applied on a proxied Sample object of the Queryable[A],
    * this function is used for obtaining AST nodes or metadata from A.

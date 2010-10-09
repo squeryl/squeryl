@@ -20,9 +20,10 @@ import java.lang.reflect.{Field, Method}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import org.squeryl.annotations.{ColumnBase, Column}
-import org.squeryl.{Session, KeyedEntity}
 import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
+import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
+import org.squeryl.dsl.CompositeKey
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -111,10 +112,10 @@ class FieldMetaData(
   }
 
   def isIdFieldOfKeyedEntity =
-    classOf[KeyedEntity[Any]].isAssignableFrom(parentMetaData.clasz) &&
-    nameOfProperty == "id"
+    (classOf[KeyedEntity[Any]].isAssignableFrom(parentMetaData.clasz) && nameOfProperty == "id") ||
+    (classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(parentMetaData.clasz)  && nameOfProperty == "idField")
 
-  if(isIdFieldOfKeyedEntity) {
+  if(isIdFieldOfKeyedEntity && ! classOf[CompositeKey].isAssignableFrom(wrappedFieldType)) {
     schema.defaultColumnAttributesForKeyedEntityId.foreach(ca => {
 
       if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
@@ -211,16 +212,34 @@ class FieldMetaData(
      (if(isOption)
         "Option[" + fieldType.getName + "]"
       else
-        fieldType.getName)  
+        fieldType.getName)
 
-  def isPrimaryKey =
+  /**
+   * When true, will cause Schema generation to declare as PrimaryKey, Note that for
+   * KeyedEntity[]s,  declaredAsPrimaryKeyInSchema is always true, and the cannot be made otherwise,
+   * the inverse is not true, a field can be declared as primary key in the Shema without it being the
+   * id of a KeyedEntity[], ex. :
+   *  
+   * <pre>
+   * on(myTable)(t =>declare(
+   *   myField.is(primaryKey)  // myField doesn't need to be a KeyedEntity.id 
+   * ))
+   * </pre>
+   * 
+   * <pre>
+   * on(myKeyedEntityTable)(t =>declare(
+   *   id.is(autoIncremented)  // omiting primaryKey here has no effect, it is equivalent as id.is(primaryKey,autoIncremented)
+   * ))
+   * </pre>
+   */
+  def declaredAsPrimaryKeyInSchema =
     columnAttributes.exists(_.isInstanceOf[PrimaryKey])
 
   def isAutoIncremented =
     columnAttributes.exists(_.isInstanceOf[AutoIncremented])
 
   /**
-   * gets the value of the field from the object.
+   *  gets the value of the field from the object.
    * Note that it will unwrap Option[] and return null instead of None, i.e.
    * if converts None and Some to null and some.get respectively 
    * @arg o the object that owns the field
@@ -247,8 +266,8 @@ class FieldMetaData(
     }
 
   def setFromResultSet(target: AnyRef, rs: ResultSet, index: Int) = {
-    val v = resultSetHandler(rs, index)    
-    set(target, v)
+    val v = resultSetHandler(rs, index)
+    set(target, v)    
   }
   
   /**

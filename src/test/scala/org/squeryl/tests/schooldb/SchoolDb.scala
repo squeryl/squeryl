@@ -444,13 +444,13 @@ class SchoolDbTestRun extends QueryTester {
   
   def testMetaData = {
 
-    professors.posoMetaData.primaryKey
+    professors.posoMetaData.primaryKey.get.left.get
     
     val tst = new Student("Xiao", "Jimbao Gallois", Some(24), 2,Some(1), None)
     val fmd = addresses.posoMetaData.findFieldMetaDataForProperty("appNumberSuffix")
     assert(fmd.get.fieldType.isAssignableFrom(classOf[String]), "'FieldMetaData " + fmd + " should be of type java.lang.String")
 
-    val pk = addresses.posoMetaData.primaryKey
+    val pk = addresses.posoMetaData.primaryKey.get.left.get
     assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
 
     println('testMetaData + " passed.")

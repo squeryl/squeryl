@@ -17,6 +17,7 @@ package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
 import org.squeryl._
+import dsl.CompositeKey
 import org.squeryl.{Schema, Session, Table}
 import java.sql._
 
@@ -254,11 +255,10 @@ trait DatabaseAdapter {
     sw.write("create table ")
     sw.write(t.prefixedName);
     sw.write(" (\n");
-    val pk = t.posoMetaData.primaryKey;    
     sw.writeIndented {
       sw.writeLinesWithSeparator(
         t.posoMetaData.fieldsMetaData.map(
-          fmd => writeColumnDeclaration(fmd, pk != None && pk.get == fmd, schema)
+          fmd => writeColumnDeclaration(fmd, fmd.declaredAsPrimaryKeyInSchema, schema)
         ),
         ","
       )
@@ -454,14 +454,14 @@ trait DatabaseAdapter {
   def writeUpdate[T](o: T, t: Table[T], sw: StatementWriter, checkOCC: Boolean) = {
 
     val o_ = o.asInstanceOf[AnyRef]
-    val pkMd = t.posoMetaData.primaryKey.get
+
 
     sw.write("update ", t.prefixedName, " set ")
     sw.nextLine
     sw.indent
     sw.writeLinesWithSeparator(
       t.posoMetaData.fieldsMetaData.
-        filter(fmd=> fmd != pkMd).
+        filter(fmd=> ! fmd.isIdFieldOfKeyedEntity).
           map(fmd => {
             if(fmd.isOptimisticCounter)
               fmd.columnName + " = " + fmd.columnName + " + 1 "
@@ -474,7 +474,17 @@ trait DatabaseAdapter {
     sw.write("where")
     sw.nextLine
     sw.indent
-    sw.write(pkMd.columnName, " = ", writeValue(o_, pkMd, sw))
+    
+    t.posoMetaData.primaryKey.getOrElse(error("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
+      pkMd => sw.write(pkMd.columnName, " = ", writeValue(o_, pkMd, sw)),
+      pkGetter => {
+        val astOfQuery4WhereClause = Utils.createQuery4WhereClause(t, (t0:T) =>
+          pkGetter.invoke(t0).asInstanceOf[CompositeKey].buildEquality(o.asInstanceOf[KeyedEntity[CompositeKey]].id))
+
+        astOfQuery4WhereClause.inhibitAliasOnSelectElementReference = true
+        astOfQuery4WhereClause.whereClause.get.write(sw)
+      }
+    )
 
     if(checkOCC)
       t.posoMetaData.optimisticCounter.foreach(occ => {

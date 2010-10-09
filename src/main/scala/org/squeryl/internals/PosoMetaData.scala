@@ -23,6 +23,7 @@ import java.lang.reflect.{Member, Constructor, Method, Field}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
 import org.squeryl._
+import dsl.CompositeKey
 
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: View[T]) {
 
@@ -38,7 +39,11 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     _const.headOption.orElse(error(clasz.getName +
             " must have a 0 param constructor or a constructor with only primitive types")).get
 
-  val (fieldsMetaData, primaryKey) = { //(Iterable[FieldMetaData], Option[FieldMetaData])
+  /**
+   * @arg fieldsMetaData the metadata of the persistent fields of this Poso
+   * @arg primaryKey None if this Poso is not a KeyedEntity[], Either[a persistedField, a composite key]  
+   */
+  val (fieldsMetaData, primaryKey): (Iterable[FieldMetaData], Option[Either[FieldMetaData,Method]]) = {
 
     val isImplicitMode = _isImplicitMode
 
@@ -105,25 +110,47 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       if(isImplicitMode && _groupOfMembersIsProperty(property)) {
         fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
       }
-//      else {
-//        val colA = a.find(an => an.isInstanceOf[Column])
-//        if(colA != None)
-//          fmds.append(FieldMetaData.build(this, name, property, sampleInstance4OptionTypeDeduction))
-//      }
     }
+    
+    var k = fmds.find(fmd => fmd.isIdFieldOfKeyedEntity)
 
-    val isIndirectKeyedEntity = classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(clasz)
-    val isKeyedEntity = classOf[KeyedEntity[_]].isAssignableFrom(clasz)
+    val compositePrimaryKeyGetter: Option[Method] =
+      if(k != None) // can't have both PK Field and CompositePK
+        None
+      else {
+        // verify if we have an 'id' method that is a composite key, in this case we need to construct a
+        // FieldMetaData that will become the 'primaryKey' field of this PosoMetaData
+        val isKE = classOf[KeyedEntity[Any]].isAssignableFrom(clasz)
+        val isIKE = classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(clasz)
+        if(isKE || isIKE) {
 
-    val k = fmds.find(fmd =>
-      (isIndirectKeyedEntity && fmd.nameOfProperty == "idField") ||
-      (isKeyedEntity && fmd.nameOfProperty == "id")
-    )
+          val pkMethod =
+            if(isKE)
+              clasz.getMethod("id")
+            else
+              clasz.getMethod("idField")
 
+          assert(pkMethod != null, "method id or idField should exist in class " + clasz.getName)
+          assert(classOf[CompositeKey].isAssignableFrom(pkMethod.getReturnType),
+            " expected return type of CompositeKey on method " + pkMethod.getName + " in " + clasz.getName)
 
-    (fmds, k) : (Iterable[FieldMetaData], Option[FieldMetaData])
+          Some(pkMethod)
+        }
+        else
+          None
+      }
+
+    val metaDataForPk: Option[Either[FieldMetaData,Method]] =
+      if(k != None)
+        Some(Left(k.get))
+      else if(compositePrimaryKeyGetter != None)
+        Some(Right(compositePrimaryKeyGetter.get))
+      else
+        None
+    
+    (fmds, metaDataForPk) //: (Iterable[FieldMetaData], Option[Either[FieldMetaData,Method]])
   }
-  
+
   def optimisticCounter =
     fieldsMetaData.find(fmd => fmd.isOptimisticCounter)
 
