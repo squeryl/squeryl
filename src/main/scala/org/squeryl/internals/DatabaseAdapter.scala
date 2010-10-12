@@ -659,7 +659,7 @@ trait DatabaseAdapter {
     execFailSafeExecute(writeDropTable(t.prefixedName), e=> isTableDoesNotExistException(e))
 
   def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
-    sw.write(se.alias)
+    sw.write(se.aliasComponent)
 
   def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
     //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)

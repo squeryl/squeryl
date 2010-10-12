@@ -28,7 +28,7 @@ class BaseQueryYield[G]
     with OrderBySignatures[G]
     with QueryYield[G] {
 
-  protected def _createColumnToTupleMapper(origin: QueryableExpressionNode, agregateArgs: List[TypedExpressionNode[_]], offsetInResultSet:Int, isForGroup:Boolean) = {
+  protected def _createColumnToTupleMapper(origin: QueryExpressionNode[_], agregateArgs: List[TypedExpressionNode[_]], offsetInResultSet:Int, isForGroup:Boolean) = {
 
     var i = -1;
     val nodes = agregateArgs.map(e => { i += 1; new TupleSelectElement(origin, e, i, isForGroup)})

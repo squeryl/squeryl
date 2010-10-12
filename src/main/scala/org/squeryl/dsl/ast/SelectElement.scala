@@ -32,13 +32,49 @@ import java.sql.ResultSet
  */
 trait SelectElement extends ExpressionNode {
 
+  /**
+   * <pre>
+   * In the following select :
+   *
+   *   select t.x from t
+   *
+   *  t.x is a select element and t is it's origin
+   *
+   * Here q.z1 is a SelectElement who's origin is t
+   *
+   *   select q.z1
+   *   from
+   *     (select t.x as z1 from t) q
+   *
+   * </pre>
+   */  
   def origin: QueryableExpressionNode
+
+  def parentQueryable = parent.get.asInstanceOf[QueryableExpressionNode]  
 
   def resultSetMapper: ResultSetMapper
 
   def alias: String
 
   def aliasSuffix: String
+
+  def aliasComponent: String =
+    alias
+
+  def lastSE: SelectElement = this
+  
+  //TODO: move to ExpressionNode ?
+  def root: QueryExpressionElements = {
+
+    var e:ExpressionNode = origin
+
+    while(e.parent != None) {
+
+      e = e.parent.get
+    }
+
+    e.asInstanceOf[QueryExpressionElements]
+  }
 
   def prepareColumnMapper(index: Int): Unit
 
@@ -49,7 +85,7 @@ trait SelectElement extends ExpressionNode {
 
   def isActive = _isActive
 
-  var _isActive = false
+  protected [squeryl] var _isActive = false
   
   def expression: ExpressionNode
 
@@ -94,11 +130,12 @@ trait SelectElement extends ExpressionNode {
 }
 
 class TupleSelectElement
- (val origin: QueryableExpressionNode, val expression: ExpressionNode, indexInTuple: Int, isGroupTuple: Boolean)
+ (val origin: QueryExpressionNode[_], val expression: ExpressionNode, indexInTuple: Int, isGroupTuple: Boolean)
     extends SelectElement {
 
   def resultSetMapper: ResultSetMapper = error("refactor me")
-  
+
+  //TODO: normalize ?
   def alias =
     if(isGroupTuple)
       "g" + indexInTuple
@@ -126,12 +163,19 @@ class TupleSelectElement
 }
 
 class FieldSelectElement
-(val origin: QueryableExpressionNode, val fieldMataData: FieldMetaData, val resultSetMapper: ResultSetMapper)
+(val origin: ViewExpressionNode[_], val fieldMataData: FieldMetaData, val resultSetMapper: ResultSetMapper)
   extends SelectElement {
 
-  def alias = origin.alias + "_" + fieldMataData.columnName
+  def alias =
+    if(root.inhibitAliasOnSelectElementReference)
+      fieldMataData.columnName
+    else
+      origin.alias + "." + fieldMataData.columnName
 
   def aliasSuffix = fieldMataData.columnName
+
+  override def aliasComponent: String =
+    origin.alias + "_" + fieldMataData.columnName
   
   val expression = new ExpressionNode {
     
@@ -160,7 +204,7 @@ class FieldSelectElement
 }
 
 class ValueSelectElement
-  (val expression: ExpressionNode, val resultSetMapper: ResultSetMapper, mapper: OutMapper[_], val origin: QueryableExpressionNode)
+  (val expression: ExpressionNode, val resultSetMapper: ResultSetMapper, mapper: OutMapper[_], val origin: QueryExpressionNode[_])
      extends SelectElement with UniqueIdInAliaseRequired {
 
   def alias = "v" + uniqueId.get
@@ -242,7 +286,7 @@ trait PathReferenceToSelectElement {
     if(ab.size == 1)
       ab.remove(0).alias + "." + selectElement.aliasSuffix
     else
-      ab.remove(0).alias + "." + ab.map(n=>n.alias).mkString("_") + "_" + selectElement.aliasSuffix
+      ab.remove(0).alias + "." + ab.map(n=>n.alias).mkString("_") + "_" + selectElement.aliasSuffix    
   }
 }
 
@@ -254,7 +298,7 @@ trait PathReferenceToSelectElement {
  */
 class SelectElementReference[A]
   (val selectElement: SelectElement)(implicit val mapper: OutMapper[A])
-    extends TypedExpressionNode[A] with PathReferenceToSelectElement {
+    extends TypedExpressionNode[A]  with PathReferenceToSelectElement {
 
   override def toString =
     'SelectElementReference + ":" + Utils.failSafeString(path) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
@@ -287,25 +331,61 @@ class ExportedSelectElement
 
   def typeOfExpressionToString =
     selectElement.typeOfExpressionToString
-  
+
   def origin = selectElement.origin
 
   def aliasSuffix = selectElement.aliasSuffix
 
   val expression = new ExpressionNode {
 
-    def doWrite(sw: StatementWriter) = error("refactor me")
+    def doWrite(sw: StatementWriter) = error("!!!")     
   }
 
-  def alias = error("refactor me")
-
   override def toString =
-    'ExportedSelectElement + ":" + path
+    'ExportedSelectElement + ":" + path + ",(selectElement=" + selectElement + ")"
 
   override def doWrite(sw: StatementWriter) = {
-    val p = path
+
+
+    val p = //path
+      alias
+    
     sw.write(p)
     sw.write(" as ")
     sw.write(p.replace('.','_'))
   }
+
+
+  def alias:String =
+    target2.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target2.aliasComponent
+
+  override def aliasComponent: String = {
+    target2.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target2.aliasComponent
+  }
+
+  override def lastSE: SelectElement = {
+    if(selectElement.isInstanceOf[ExportedSelectElement])
+      selectElement.asInstanceOf[ExportedSelectElement].lastSE
+    else
+      selectElement
+  }
+
+  lazy val target2: SelectElement = {
+
+    val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
+
+    if(selectElement.origin.parent.get == parentOfThis) {
+      selectElement
+    }
+    else {
+
+      val q =
+        for(q <- parentOfThis.subQueries;
+            se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.lastSE == selectElement)
+        yield se
+
+      val r = q.headOption.getOrElse(error("!!!!!!!!!!!!!" + selectElement))
+      r
+    }
+  }  
 }

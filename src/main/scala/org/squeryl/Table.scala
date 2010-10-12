@@ -200,6 +200,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     val dba = _dbAdapter
     val sw = new StatementWriter(dba)
+    sw.inhibitAliasOnSelectElementReference = true
     dba.writeUpdate(this, us, sw)
     val res = dba.executeUpdate(Session.currentSession, sw)
     res._1    

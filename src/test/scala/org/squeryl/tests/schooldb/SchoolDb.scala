@@ -251,6 +251,10 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    //testDeepNest1
+    
+    //testDeepNest2
+    
     //Must run first, because later we won't have the rows we need to perform the test
     testCountSignatures
     
@@ -314,6 +318,34 @@ class SchoolDbTestRun extends QueryTester {
     testNotOperator
 
     drop
+  }
+
+  def testDeepNest1 = {
+    import testInstance._
+
+    val q = from(professors)(p0 => select(p0))
+
+    val q1 = from(q)(p => where(p.lastName === tournesol.lastName) select(p))
+
+    val profTournesol = q1.single
+
+    assertEquals(tournesol.id, profTournesol.id, 'testDeepNest)
+
+    passed('testDeepNest)
+  }
+  
+  def testDeepNest2 = {
+    import testInstance._
+
+    val q = from(from(from(professors)(p0 => select(p0)))(p1 => select(p1)))(p2 => select(p2))
+
+    val q1 = from(q)(p => where(p.lastName === tournesol.lastName) select(p))
+
+    val profTournesol = q1.single
+
+    assertEquals(tournesol.id, profTournesol.id, 'testDeepNest)
+
+    passed('testDeepNest)
   }
 
   def blobTest = {

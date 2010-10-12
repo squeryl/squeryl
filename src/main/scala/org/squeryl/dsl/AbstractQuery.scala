@@ -15,7 +15,7 @@
  ******************************************************************************/
 package org.squeryl.dsl
 
-import ast.{QueryableExpressionNode, ViewExpressionNode, ExpressionNode, QueryExpressionNode}
+import ast._
 import internal.{InnerJoinedQueryable, OuterJoinedQueryable}
 import java.sql.ResultSet
 import org.squeryl.internals._
@@ -24,11 +24,11 @@ import collection.mutable.ArrayBuffer
 
 abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
-  var selectDistinct = false
+  private [squeryl] var selectDistinct = false
   
-  var isForUpdate = false
+  private [squeryl] var isForUpdate = false
 
-  var page: Option[(Int,Int)] = None
+  private [squeryl] var page: Option[(Int,Int)] = None
 
 
   val resultSetMapper = new ResultSetMapper
@@ -41,6 +41,14 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     r
   }
 
+  /**
+   * Builds the AST tree of the this Query, *some state mutation of the AST nodes occurs
+   * during AST construction, for example, the parent child relationship is set by this method,
+   * unique IDs of node that needs them for example.
+   *
+   * After this call, the query (and it's AST) becomes immutable by virtue of the unaccessibility
+   * of it's public methods 
+   */
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
 
@@ -71,6 +79,11 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val qen = new QueryExpressionNode[R](this, qy, subQueries, views)
     val (sl,d) = qy.invokeYieldForAst(qen, resultSetMapper)
     qen.setOutExpressionNodesAndSample(sl, d)
+
+//    sl.filter(_.isInstanceOf[ExportedSelectElement]).
+//       map(_.asInstanceOf[ExportedSelectElement]).
+//       foreach(_.buildReferencePath)
+
     qen
   }
 

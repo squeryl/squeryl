@@ -31,7 +31,9 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
 
-    allTestsOnAllDatabases
+    allTestsOnH2
+    
+    //allTestsOnAllDatabases
 
     //allTests("PosgreSQL", createPostgreSqlTestConnection _)
     

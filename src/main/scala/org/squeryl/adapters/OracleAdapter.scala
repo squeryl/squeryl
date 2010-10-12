@@ -215,7 +215,7 @@ class OracleAdapter extends DatabaseAdapter {
     }  
 
   override def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
-    sw.write(shrinkTo30AndPreserveUniquenessInScope(se.alias, sw.scope))
+    sw.write(shrinkTo30AndPreserveUniquenessInScope(se.aliasComponent, sw.scope))
 
   override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) = {
     val name = super.foreignKeyConstraintName(foreignKeyTable, idWithinSchema)
