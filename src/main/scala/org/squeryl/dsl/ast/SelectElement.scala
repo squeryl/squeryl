@@ -180,7 +180,7 @@ class FieldSelectElement
   val expression = new ExpressionNode {
     
     def doWrite(sw: StatementWriter) =
-      sw.write(origin.alias + "." + fieldMataData.columnName)
+      sw.write(alias)
   }
 
   def prepareColumnMapper(index: Int) =
@@ -238,14 +238,6 @@ trait PathReferenceToSelectElement {
   self: ExpressionNode =>
 
   def selectElement: SelectElement
-
-  def doWrite(sw: StatementWriter) = {
-
-    if(_useSite == selectElement.origin.parent.get)
-      selectElement.expression.write(sw)
-    else
-      sw.write(path)
-  }
   
   private def _useSite: QueryExpressionNode[_] = {
 
@@ -338,23 +330,12 @@ class ExportedSelectElement
 
   val expression = new ExpressionNode {
 
-    def doWrite(sw: StatementWriter) = error("!!!")     
+    def doWrite(sw: StatementWriter) =
+      sw.write(alias)
   }
 
   override def toString =
     'ExportedSelectElement + ":" + path + ",(selectElement=" + selectElement + ")"
-
-  override def doWrite(sw: StatementWriter) = {
-
-
-    val p = //path
-      alias
-    
-    sw.write(p)
-    sw.write(" as ")
-    sw.write(p.replace('.','_'))
-  }
-
 
   def alias:String =
     target2.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target2.aliasComponent
