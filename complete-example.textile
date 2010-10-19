@@ -5,7 +5,7 @@ headtitle: Examples -
 ---
 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 
 package org.squeryl.demos;
@@ -161,4 +161,4 @@ object KickTheTires {
   }
 }
 
-]]></script>
+{% endhighlight %}

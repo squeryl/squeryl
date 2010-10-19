@@ -12,7 +12,7 @@ becomes an Iterable[A] in a stateful relation.
 Stateful relations are defined exactly the same way as their stateless counterpart, with the exception that the *leftStateful* and *rightStateful* methods are 
 invoke instead of *left* and *right* :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 class Course(val subjectId: Long) extends SchoolDb2Object {
 
@@ -36,13 +36,13 @@ class Subject(val name: String) extends SchoolDb2Object {
   lazy val courses: OneToMany[Course] = SchoolDb.subjectToCourses.leftStateful(this)
 }
 
-]]></script>
+{% endhighlight %}
 
 h3. StatefulOneToMany and StatefulManyToOne
 
 Methods in stateful relations are very similar than their stateless counterpart, their signatures are slightly different, and have a refresh method. Note the *relation* property, it is the stateless relation objects that provides the persistence related functionality. A stateful relation is in fact a wrapper over a stateless one, with caching.  
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
   
@@ -64,14 +64,14 @@ class StatefulManyToOne[O <: KeyedEntity[_]](val relation: ManyToOne[O]) {
   def delete: Boolean
 }
 
-]]></script>
+{% endhighlight %}
 
 
 h3. StatefulManyToMany
 
 The similarity between StatefulManyToMany and ManyToMany is also very apparent :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: ManyToMany[O,A]) extends Iterable[O] {
 
@@ -83,4 +83,4 @@ class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: 
   def associations: Iterable[A]  
 }
 
-]]></script>
+{% endhighlight %}

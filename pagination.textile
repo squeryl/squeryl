@@ -8,7 +8,7 @@ Paginated queries are supported via the *page(offset:Int, pageLength:Int)* metho
 
 Example : 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     def searchForBooks(title : String, offset: Int, pageLength: Int) =
       from(books)(b =>
@@ -23,6 +23,6 @@ Example :
 	val page2 = searchForBooks("The Art of%", pageLength * 1, pageLength)
 	
 	val page3 = searchForBooks("The Art of%", pageLength * 2, pageLength)
-]]></script>
+{% endhighlight %}
 
 Squeryl's DatabaseAdaptor uses the appropriate mechanism from each database to paginate efficiently.

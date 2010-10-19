@@ -19,23 +19,23 @@ In SQL, queries that consist of only aggregate functions (without group by claus
 always return exactly one row. Squeryl allows you to implicitly convert them to tuples 
 or to a scalar, as following example illustrates :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     
   val x:Float = from(aTable)(t=> compute(avg(t.anInt)))
   
   val t:(Float,String) = from(aTable)(t=> compute(avg(t.anInt), min(t.aString)))
   
-]]></script>
+{% endhighlight %}
 
 Instead of the (slightly) more verbose way :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     
   val x:Float = from(aTable)(t=> compute(avg(t.anInt))).single._1
   
   val t:(Float,String) = from(aTable)(t=> compute(avg(t.anInt), min(t.aString))).single
   
-]]></script>
+{% endhighlight %}
 
 h2. Is an object persisted ?
 

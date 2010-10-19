@@ -8,7 +8,7 @@ h2. Bootstrap with org.squeryl.SessionFactory
 
 *SessionFactory.concreteFactory* must be initialized before Squeryl transactions can be invoked : 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   import org.squeryl.SessionFactory
 
     Class.forName("org.postgresql.Driver");
@@ -17,11 +17,11 @@ h2. Bootstrap with org.squeryl.SessionFactory
 	  Session.create(
         java.sql.DriverManager.getConnection("..."),
         new PostgreSqlAdapter))
-]]></script>
+{% endhighlight %}
 
 After the initialization of SessionFactory.concreteFactory, the *transaction* and *inTransaction* block functions (call by names) become available :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   import org.squeryl.PrimitiveTypeMode._
   
 	//Squeryl database interaction must occur in a transaction block : 
@@ -36,7 +36,7 @@ After the initialization of SessionFactory.concreteFactory, the *transaction* an
 	   //when in a transaction, the current session can be obtained with :
 	   val s = Squeryl.currentSession
 	}
-]]></script>
+{% endhighlight %}
 
 The 'transaction' function binds the session to the current thread for the duration
 of the block, so any method called directly *and indirectly* from the block

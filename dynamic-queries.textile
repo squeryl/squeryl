@@ -19,7 +19,7 @@ into a Queryable[Option[A]] and remove the queryable from the query
 
 Example :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     def searchForBooks(authorLastName: Option[String], bookTitle: String) =
       from(authors.inhibitWhen(authorName == None), books)((a,b)=>
@@ -30,12 +30,12 @@ Example :
 	val result1:List[(Book,Option(Author))] = searchForBooks(None, "Un Loup est un loup").toList
 	
 	val result2:List[(Book,Option(Author))] = searchForBooks("Tolstoi", "War and Peace").toList
-]]></script>
+{% endhighlight %}
 
 Notice the Option[] in the result type of the query, and how the Author
 table disappears from the generated SQL base on the input of *inhibitWhen* :
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 
   -- first query : searchForBooks(None, "Un Loup est un loup").toList
   
@@ -55,7 +55,7 @@ table disappears from the generated SQL base on the input of *inhibitWhen* :
 	  a.lastName like ? and   -- "Tolstoi"
 	  b.title like ? and      -- "War and Peace"
 	  a.id = b.authorId
-]]></script>
+{% endhighlight %}
 
 
 <a name='dyn-where-clause'></a>

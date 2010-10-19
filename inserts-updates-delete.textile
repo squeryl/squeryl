@@ -8,7 +8,7 @@ h2. Insert
 
 The insert mechanism is the least surprising of all : 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     val herbyHancock = 
 	  artists.insert(new Artist("Herby Hancock"))
@@ -18,7 +18,7 @@ The insert mechanism is the least surprising of all :
 	  
     val theMeters = 
 	  artists.insert(new Artist("The Meters"))	
-]]></script>
+{% endhighlight %}
 
 Objects that extend KeyedEntity[K] where K is a numeric type
 will have their id field assigned their newly created primary key
@@ -30,36 +30,36 @@ There are two forms of updates :
 
 1. Full
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   watermelonMan.title = "The Watermelon Man"
   watermelonMan.year = watermelonMan.year + 1  
   songs.update(watermelonMan)
-]]></script>
+{% endhighlight %}
 
 
 2. Partial :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     update(songs)(s =>
       where(s.title === "Watermelon Man")
       set(s.title := "The Watermelon Man",
           s.year  := s.year.~ + 1)
     )	
-]]></script>
+{% endhighlight %}
 
 (The explanation for the '~' in s.year.~ is "here":./getting-started.html#disambiguate)
 
 The SQL will be : 
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
   update Song set
     title = ?,
     year = (year + ?)
   Where
     (title = ?)
-]]></script>
+{% endhighlight %}
 
 
 h2. Delete
@@ -68,7 +68,7 @@ Delete is done either by key (when objects extend KeyedEntity[K]), or
 with a boolean clause via the table's deleteWhere method, 
 example of Table[PlaylistElement].deleteWhere usage :
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight scala %}
 
   def removeSong(song: Song) =
     playlistElements.deleteWere(ple => ple.songId === song.id)
@@ -79,7 +79,7 @@ example of Table[PlaylistElement].deleteWhere usage :
       (ple.songId in from(songsOf(artist.id))(s => select(s.id)))
     )
 
-]]></script>
+{% endhighlight %}
 
 
 h2. Batched updates and Inserts
@@ -89,7 +89,7 @@ org.squeryl.Table[A] has insert and update methods that take an Iterable[A]. Inv
 
 The advantage of this is obviously making 1 trip to the DB versus N trips (given an iterable with N elements).
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     addresses.insert(List(
       new Address("St-Dominique",14, None,None,None),
@@ -115,5 +115,5 @@ The advantage of this is obviously making 1 trip to the DB versus N trips (given
     val updatedQ = addresses.where(a => a.streetName in updatedStreetNames)
 
  
-]]></script>
+{% endhighlight %}
     

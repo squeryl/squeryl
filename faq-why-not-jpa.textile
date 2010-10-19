@@ -12,7 +12,7 @@ forced to sacrifice one or the other
 
 Can you spot the typo in this JPA query ?
 
-<script type="syntaxhighlighter" class="brush: java"><![CDATA[
+{% highlight java %}
 //JPA  :
 Query query = 
  em.createQuery( 
@@ -23,7 +23,7 @@ Query query =
  );  
  
  query.setParameter("idOfSubject", idOfSubject);
-]]></script>
+{% endhighlight %}
 
 
 *Let's hope that you can, because the compiler won't tell you !*
@@ -37,7 +37,7 @@ like the following example illustrates, you will regain type safety,
 but at the cost of horrible performance,
 Can you count the number of database calls resulting from this JPA query ?
 
-<script type="syntaxhighlighter" class="brush: java"><![CDATA[  
+{% highlight java %}  
 
 Iterable<Book> books = bookEntityManager.findBySubjectId(idOfSubject);
 while(books.hasNext()) {
@@ -46,7 +46,7 @@ while(books.hasNext()) {
   Publisher p = b.getPublisher();
   System.out.println(b.getTitle() + " by " + a.getFullName() + " published by " + p.getName());
 }
-]]></script>
+{% endhighlight %}
 
 The answer is : two database round trips for every row returned by the findBySubjectId query, 
 an N-ary relation typically causes O(N-1) calls to the database, which can have disastrous 
@@ -55,7 +55,7 @@ performance consequences.
 Squeryl allows you to combine the efficiency of the first approach 
 (the query is done in a single database call), and the type safety of the second :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[  
+{% highlight scala %}  
 val q =
   from(authors, books, publisher)((a,b,p) =>
     where(b.subjectId === idOfSubject and
@@ -65,7 +65,7 @@ val q =
   )
 for(r <- q)
   println(r._2.title + " by " + r._1.fullName + " published by " + p._3.name)
-]]></script>
+{% endhighlight %}
 
 <br/>
 

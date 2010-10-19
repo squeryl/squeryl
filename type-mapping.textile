@@ -22,7 +22,7 @@ unknown (None) value in an expression, causes it's result to become unknown (Non
 
 Here are some examples : 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   val q1 = 
     from(aTable)(t => select( &(t.aLong * t.aFloat) )) : Query[Double]
@@ -37,7 +37,7 @@ Here are some examples :
     from(aTable)(t => 
 	  select( &(t.aString || t.aLong || " " || a.IntOption) )) : Query[Option[String]]
     
-]]></script>
+{% endhighlight %}
 
 Note how in query *q4* the presence of a single Option[] element causes the result to become an Option[],
 this is consistent with the SQL92 standard. The *&* function is explained "here":arbitrary-select-expressions.html .

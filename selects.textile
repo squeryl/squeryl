@@ -9,7 +9,7 @@ h2. The variations on Select
 Select statements return an immutable Query[T] that
 is itself a Queryable[T] and a lazy Iterable[T].
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
  
 class Artist(val id: Long, val name:String)  {
    
@@ -17,7 +17,7 @@ class Artist(val id: Long, val name:String)  {
     from(MusicDb.songs)(s => where(s.artistId === id) select(s))
 
 }
-]]></script>
+{% endhighlight %}
 
 The laziness here means that the query is sent to the database only
 when starting iteration, or in other words, when Iterable.iterator is called.
@@ -25,15 +25,15 @@ when starting iteration, or in other words, when Iterable.iterator is called.
 The select function takes any legal Scala expression whose
 type determines the generic parameter of the <notextile>Query[R]</notextile>
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   def select[R](r: =>R): R
-]]></script>
+{% endhighlight %}
 
 The select expression will be evaluated for every row returned by the query.
 
 It is also possible to select with alternative (shorter but less generic) syntax :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 class Song(var title: String, var artistId: Long) extends KeyedEntity {
    
   import MusicDb._ // the schema can be imported in the scope
@@ -45,7 +45,7 @@ class Song(var title: String, var artistId: Long) extends KeyedEntity {
   // KeyedEntity[Long] : 
   def lookupArtist = artists.lookup(artistId)
 }
-]]></script>
+{% endhighlight %}
 
 Note that the .lookup[K](k: K) i.e. lookup by key method on a Table[T] is only 
 available for Table[T] that are of the form : Table[KeyedEntity[K]]
@@ -58,34 +58,34 @@ h2. Nesting Sub Queries
 For the next examples, the following query will be nested as an inner query 
 into other queries :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   def songsInPlaylistOrder =
     from(playlistElements, songs)((ple, s) =>
       where(ple.playlistId === id and ple.songId === s.id)
       select(s)
       orderBy(ple.songNumber asc)
     )
-]]></script>
+{% endhighlight %}
 
 h3. Sub Queries in the From clause :
 
 The from clause takes Queryable[T]'s, a trait of Table[T] View[T] *and* Query[T].
 Notice the Query[Song] *funkAndLatinJazz.songsInPlaylistOrder* in the from clause :
  
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
       from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
         where(s.id === 123)
         select(s)
       )
-]]></script>
+{% endhighlight %}
 
 h3. Sub Queries in the Where clause :
 
 Joins can also be nested in the where clause just like in SQL :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     val songsFromThe60sInFunkAndLatinJazzPlaylist =
       from(songs)(s=>
         where(s.id in 
@@ -97,11 +97,11 @@ Joins can also be nested in the where clause just like in SQL :
 
     for(s <- songsFromThe60sInFunkAndLatinJazzPlaylist)
       println(s.title + " : " + s.year)
-]]></script>
+{% endhighlight %}
 
  The SQL generated for the above statement is :
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 Select
   Song1.year as Song1_year,
   Song1.title as Song1_title,
@@ -131,7 +131,7 @@ Where
       )  q3   
   ))
 
-]]></script>
+{% endhighlight %}
 
 Doing a 3 level nested join is by no means necessary and serves
 no other purposes than demonstration.
@@ -140,14 +140,14 @@ h2. Select Distinct
 
 Calling the *.distinct* method on a Query[] creates a copy of it that has a 'distinct' select clause :
  
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   from(songs)(s => select(&(s.title))).distinct
-]]></script>
+{% endhighlight %}
 
 h2. For Update
 
 Calling the *.forUpdate* method on a Query[] creates a copy of it that has a 'forUpdate' locking directive :
  
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   aTable.where(t => t.aField === aValue).forUpdate
-]]></script>
+{% endhighlight %}

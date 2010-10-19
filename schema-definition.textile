@@ -9,7 +9,7 @@ h2. Defining a Schema
 Scala classes are mapped to tables via instances of org.squeryl.Table[T],
 that are grouped in a org.squeryl.Schema singleton.
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   import org.squeryl.PrimitiveTypeMode._
 
   class Author(val id: Long, 
@@ -47,13 +47,13 @@ that are grouped in a org.squeryl.Schema singleton.
 	val borrowals = table[Borrowal]
   }
     
-]]></script>
+{% endhighlight %}
 
 h3. Columns attributes
 
 Columns and group of columns can have attributes declared via the on/declare syntax. Inside the example schema defined above, we could influence the DDL generation with the following declarations :  
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 object Library extends Schema {
 ...
@@ -72,7 +72,7 @@ object Library extends Schema {
   ))
 }  
   
-]]></script>
+{% endhighlight %}
 
 Of course, not all combinations of column attributes make sense, the valid combinations are : 
 
@@ -91,7 +91,7 @@ Schema.create will connect to the database and create all tables, constraints, i
 
 Use Schema.printDdl to print your schema :  
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   def printDdl: Unit = printDdl(println(_))
 
@@ -99,7 +99,7 @@ Use Schema.printDdl to print your schema :
   
   def printDdl(pw: String => Unit): Unit = {...}
   
-]]></script>
+{% endhighlight %}
 
 h2. Mapping fields to Columns
 
@@ -152,7 +152,7 @@ Enumerations are persisted by 'int' columns
 
 * Classes with an Enumeration field *require* a zero arg constructor that gives a default value to all enumeration fields
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 object Tempo extends Enumeration {
   type Tempo = Value
@@ -165,7 +165,7 @@ class Song(name: String, tempo: Tempo) {
   def this() = this("",Tempo.Largo)
 }
   
-]]></script>
+{% endhighlight %}
 
   
 h2. Choosing between primitive or custom types
@@ -183,7 +183,7 @@ query using custom types will cause the creation of N * M objects.
 To use primitive types, simply import org.squeryl.PrimitiveTypeMode._ 
 in the scope where database objects and queries are defined :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   import org.squeryl.PrimitiveTypeMode._
   
@@ -194,7 +194,7 @@ in the scope where database objects and queries are defined :
 			 val year: Int)
   
   from(songs)(s => where(s.title like "%funk%") select(s))  
-]]></script>
+{% endhighlight %}
 
 that's all there is to it.
 
@@ -207,7 +207,7 @@ one in the next example as a Boolean. The .~ function is needed to tell the comp
 left side is a node of TypedExpressionNode[Int] which will cause the whole expression to be a
 LogicalBoolean which is what the where clause takes :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     from(songs)(s =>
        where(s.year.~ > 1965)
        select(s)
@@ -217,11 +217,11 @@ LogicalBoolean which is what the where clause takes :
        where(s.year gt 1965)
        select(s)
     )    
-]]></script>		
+{% endhighlight %}		
 
 It is also needed in the following case :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     from(songs)(s =>
       where(s.year.~ + 10 === 1965)
       select(s)
@@ -231,7 +231,7 @@ It is also needed in the following case :
       where(s.year plus 10 === 1965)
       select(s)
     )    
-]]></script>
+{% endhighlight %}
 
  This is only required when using PrimitiveType mode, with custom types 
 there is no ambiguity, since custom types are not (AnyVal) numerics.
@@ -251,7 +251,7 @@ Custom field types must inherit one of the subtypes of CustomType in the package
 org.squeryl.customtypes, and import the org.squeryl.customtypes.CustomTypesMode._
 into the scope where statements are defined.
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 import org.squeryl.customtypes.CustomTypesMode._
 import org.squeryl.customtypes._
@@ -289,5 +289,5 @@ class Patient(val firstName: FirstName, val age: Age, val weight: WeightInKilogr
 
 val heavyWeights = from(patients)(p => where(p.weight > 250) select(p))
 
-]]></script>
+{% endhighlight %}
   

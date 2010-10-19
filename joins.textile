@@ -8,7 +8,7 @@ h2. Joining with *from*
 
 A two table join :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 class Playlist(var id: Long, var name: String, var path: String) extends KeyedEntity[Long] {
  
   import MusicDb._
@@ -21,7 +21,7 @@ class Playlist(var id: Long, var name: String, var path: String) extends KeyedEn
       orderBy(ple.songNumber asc)
     )
 }
-]]></script>
+{% endhighlight %}
 
   The select clause can return anything that is in the scope, for example it
   could return both joined objects with a Tuple2 : select((s, ple))
@@ -29,7 +29,7 @@ class Playlist(var id: Long, var name: String, var path: String) extends KeyedEn
 
 h2. The *join* keyword
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     var ratingsForAllSongs =
       join(songs, ratings.leftOuter)((s,r) =>
@@ -41,11 +41,11 @@ h2. The *join* keyword
       println(sr._1.title + " rating is " + 
 	  sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
 	  
-]]></script>
+{% endhighlight %}
 
 produces :
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 Select
   Song1.id as Song1_id,
   Rating2.songId as Rating2_songId,
@@ -60,12 +60,12 @@ Select
 From
   Song Song1
   left outer join Rating as Rating2 on (Song1.id = Rating2.songId)
-]]></script>
+{% endhighlight %}
 
 
 A join can also be an agreate query, for example :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     val q =
       join(artists,songs.leftOuter)((a,s)=>
         groupBy(a.id, a.firstName)
@@ -73,11 +73,11 @@ A join can also be an agreate query, for example :
         on(a.id === s.map(_.authorId))
       )
 
-]]></script>
+{% endhighlight %}
 
 The type of this query is *Query[GroupWithMeasures[(Long,String),Long]*, it produces the following SQL :
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 Select
   Person1.id as g0,
   Person1.firstName as g1,
@@ -88,11 +88,11 @@ left outer join Song as Song2 on (Person1.id = Song2.authorId)
 Group By
   Person1.id,
   Person1.firstName
-]]></script>
+{% endhighlight %}
   
 Of course, like in SQL, a *join* can have a where clause :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
     val q =
       join(artists,songs.leftOuter)((a,s)=>
         where(a.id in myListOfArtistId)
@@ -100,7 +100,7 @@ Of course, like in SQL, a *join* can have a where clause :
         compute(countDistinct(s.map(_.id)))
         on(a.id === s.map(_.authorId))
       )
-]]></script>
+{% endhighlight %}
   
 h2. Outer Joins _(deprecated syntax)_ 
   
@@ -110,7 +110,7 @@ where the fist parameter is the row object variable, and the second a boolean cl
 This query returns the joined objects in a tuple, leftOuterJoin causes the second tuple 
 member to be an Option[Rating]
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     var ratingsForAllSongs =
       from(songs, ratings)((s,r) =>
@@ -121,7 +121,7 @@ member to be an Option[Rating]
       println(sr._1.title + " rating is " + 
 	  sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
 	  
-]]></script>
+{% endhighlight %}
 
 The signatures of (left, right and full) outer joins ensure that the null part of the 
 outer join returns an Option[] 
@@ -134,7 +134,7 @@ fullOuterJoin[A,B](a: A, b:B, c: =>LogicalBoolean): (Option[A], Option[B])
 
 The SQL of the previous query is : 
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 Select
   Song1.id as Song1_id,
   Rating2.songId as Rating2_songId,
@@ -149,4 +149,4 @@ Select
 From
   Song Song1
   left outer join Rating as Rating2 on (Song1.id = Rating2.songId)
-]]></script>
+{% endhighlight %}

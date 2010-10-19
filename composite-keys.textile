@@ -11,13 +11,13 @@ The most compelling reason to use composite key is to implement the KeyedEntity 
 
 Consider the following example where CourseAssignment is a KeyedEntity[CompositeKey2[Long,Long]]
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedEntity[CompositeKey2[Long,Long]] {
     
     def id = compositeKey(courseId, professorId)
   }
-]]></script>
+{% endhighlight %}
 
 CourseAssignment.id is a unique identifier for a CourseAssignment. In this case *id* is what makes the class a KeyedEntity[CompositeKey2[Long,Long]]. A class can have any number of composite keys, a composite key is not necessarily a primary key.
 
@@ -30,7 +30,7 @@ composite key or a tuple that is compatible, i.e. that has the same type paramet
 
 * CompositeKey2[Long,Int] is *not* compatible with Tuple2(Long,Long)
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   val aCourseAssignment = courseAssignments.where(...).single
 
@@ -42,10 +42,10 @@ composite key or a tuple that is compatible, i.e. that has the same type paramet
 
   println(q.statement)
     	  
-]]></script>
+{% endhighlight %}
   
   
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 
   Select
     CourseAssignment1.professorId as CourseAssignment1_professorId,
@@ -55,10 +55,10 @@ composite key or a tuple that is compatible, i.e. that has the same type paramet
   Where
     ((CourseAssignment1.courseId = 113243) and (CourseAssignment1.professorId = 26543546))
         
-]]></script>
+{% endhighlight %}
     
     
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   val aCourseAssignment = courseAssignments.where(...).single
 
@@ -68,5 +68,5 @@ composite key or a tuple that is compatible, i.e. that has the same type paramet
       _.id.professorId === aCourseAssignment.professorId
     )    
     	  
-]]></script>
+{% endhighlight %}
   

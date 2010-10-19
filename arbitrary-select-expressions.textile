@@ -7,7 +7,7 @@ h2. The <u>&</u> function
 
 Squeryl's select clause will take any closure in parameter and evaluate it on the client side (client side as opposed to database side). Sometimes the expressions needs to be evaluated on the database side, this is what the *&* function does :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   	
   	// the * is done on the client side :
   	 
@@ -20,17 +20,17 @@ Squeryl's select clause will take any closure in parameter and evaluate it on th
     from(artists)(a => 
       select(&(a.id * 1000))
 	)  	
-]]></script>
+{% endhighlight %}
 
 * Note that the return type are equivalent in both cases, i.e. both queries resolve to *Query[Float]*
 
 
 A select can have more than one invocation of & :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   	
   val q: Query[Tuple2[Double, String]] =  
     from(artists)(a => 
       select((&(a.id * 1000), &(a.firstName || a.lastName)))
 	)  	
-]]></script>
+{% endhighlight %}

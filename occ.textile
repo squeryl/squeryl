@@ -10,18 +10,18 @@ Classes that extend the Optimistic trait will have an optimistic concurrency con
 
 The Optimistic trait has the Int field *occVersionNumber* that gets incremented on each update, when updating via table[T].update(t:T), a StaleUpdateException is thrown if the row has been updated since 't' was fetched (i.e. if the occVersionNumber does not match the value it was fetched with). 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   class Book(val id: Long, 
              var title: String,
 			 var authorId: Long) extends KeyedEntity[Long] with Optimistic
   
-]]></script>
+{% endhighlight %}
 
 
 As can be seen below the org.squeryl.Optimistic trait has a self type declaration of KeyedEntity[], which means that a class must extend KeyedEntity[] in order extend Optimistic.  
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 trait Optimistic {
   self: KeyedEntity[_] =>
@@ -29,7 +29,7 @@ trait Optimistic {
   protected val occVersionNumber = 0
 }
 
-]]></script>
+{% endhighlight %}
 
 h3. Forcing updates
 

@@ -18,7 +18,7 @@ When a project has tens of thousands of lines of code, making changes to the ORM
 
 Here is a comparison of a Squeryl and a JPA version of the same query : 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
 //All is validated at compile time here : 
 
@@ -29,7 +29,7 @@ var avg: Option[Float] = // The compiler 'knows' that this query returns an Opti
     compute(avg(g.scoreInPercentage))
   )
 
-]]></script>
+{% endhighlight %}
 
 <!--
 // partial select :
@@ -42,7 +42,7 @@ var name =
 
 The equivalent JPA query invocation is subject to a runtime failure at five places :
    
-<script type="syntaxhighlighter" class="brush: java"><![CDATA[
+{% highlight java %}
 
 // Equivalent JPA query
 Query q = entityManager.createQuery(
@@ -58,7 +58,7 @@ Number avg = (Number) q.getSingleResult();
 // NullPointerException if the query returns null 
 //(ex.: if there are no math Grades in the table) 
 avg.floatValue(); 
-]]></script>
+{% endhighlight %}
 
 h3. String/annotation based queries inhibit reusability by not being composable 
 

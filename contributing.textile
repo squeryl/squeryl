@@ -18,7 +18,7 @@ h2. A snippet of code to reproduce the bug is ideal.
 When that is not possible, sending the AST of the query 
 (with Query[T].dumpAst) is also helpful  :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
   val q = 
     from(artists, songs)((a,s) =>
       where(a.id === s.artistId)
@@ -28,7 +28,7 @@ When that is not possible, sending the AST of the query
 	
    println(q.dumpAst)
 	
-]]></script>
+{% endhighlight %}
 
 
 h2. Submitting Ideas and Issues

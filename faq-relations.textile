@@ -13,7 +13,7 @@ There is no concept in Squeryl of relations, but you can just as easily
 implement them using the building blocks of the DSL, and end up
 with more reuse. Consider for example a "one to many" relation :
   
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
     class Song(val id, val title: String, val artistId: Long, val year)  {
 	
@@ -24,7 +24,7 @@ with more reuse. Consider for example a "one to many" relation :
      
       def songs = from(songsTable).where(s => s.artistId === id)
     } 
-]]></script>
+{% endhighlight %}
 
 On each sides of the relation, you have to write one line of code,
 In JPA you would have an annotation on each side, the effort is 
@@ -41,11 +41,11 @@ Query[Song] which will generate the SQL with the appropriate where clause.
 
 Here's how it happens, suppose you execute the following :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
    for(so <- jamesBrown.songs.where(s => s.year <= 1965))
      println(so.title)
-]]></script>
+{% endhighlight %}
 
 The 1-M relation is filtered with a condition, and *only one*
 query is sent to the database, since jamesBrown.songs
