@@ -251,6 +251,8 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    testOptionStringInWhereClause
+    
     //Must run first, because later we won't have the rows we need to perform the test
     testCountSignatures
     
@@ -316,6 +318,21 @@ class SchoolDbTestRun extends QueryTester {
     drop
   }
 
+  def testOptionStringInWhereClause = {
+    import testInstance._
+
+    val q =
+      from(addresses)(a => where(a.appNumberSuffix === Some("A")) select(a))
+
+    val h = q.head
+
+    assertEquals(oneTwoThreePieIXStreet.id, h.id, 'testOptionStringInWhereClause)
+
+    assertEquals(Some("A"), h.appNumberSuffix, 'testOptionStringInWhereClause)
+    
+    passed('testOptionStringInWhereClause)
+  }
+  
   def blobTest = {
     import testInstance._
 

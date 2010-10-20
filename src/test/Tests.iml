@@ -71,7 +71,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0/provided/specs_2.8.0-1.6.5-SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0/provided/specs_2.8.0-1.6.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
