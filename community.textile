@@ -17,6 +17,7 @@ h3. Contributors
 *  Christian Maslen
 *  David Flemström
 *  Mitsutoshi Aoe
+*  Rémy Roy
 *  Ross Mellgren
 
 
