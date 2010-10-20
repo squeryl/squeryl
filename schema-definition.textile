@@ -216,8 +216,8 @@ LogicalBoolean which is what the where clause takes :
     from(songs)(s =>
        where(s.year gt 1965)
        select(s)
-    )    
-{% endhighlight %}		
+    )
+{% endhighlight %}
 
 It is also needed in the following case :
 
@@ -230,7 +230,7 @@ It is also needed in the following case :
     from(songs)(s =>
       where(s.year plus 10 === 1965)
       select(s)
-    )    
+    )
 {% endhighlight %}
 
  This is only required when using PrimitiveType mode, with custom types 
