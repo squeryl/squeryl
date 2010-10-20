@@ -5,7 +5,7 @@ The following method builds a query with a dynamically varying where clause, the
 
 * *Note* the .? operator is just a shorthand for the inhibitWhen(b: Boolean) methods that applies on any AST node
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
       from(artists)(a =>
@@ -15,11 +15,11 @@ The following method builds a query with a dynamically varying where clause, the
         )
         select(a)
       )
-]]></script>
+{% endhighlight %}
 
 Observe how following calls affect the generated SQL : 
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
  
     val q1 = dynamicWhereOnArtists(None, None)
        
@@ -27,10 +27,10 @@ Observe how following calls affect the generated SQL :
     
     val q3 = dynamicWhereOnArtists(Some("Poncho"), Some("S%"))
 
-]]></script>
+{% endhighlight %}
 
 
-<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+{% highlight sql %}
 
 -- q1 :
 Select
@@ -67,7 +67,7 @@ From
   Person Person1
 Where
   ((Person1.firstName = ?) and (Person1.lastName like ?))  
-]]></script>
+{% endhighlight %}
 
 
 
@@ -75,7 +75,7 @@ Where
 
 The same method using inhibitWhen would be :
 
-<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+{% highlight scala %}
 
   def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
       from(artists)(a =>
@@ -85,4 +85,4 @@ The same method using inhibitWhen would be :
         )
         select(a)
       )
-]]></script>
+{% endhighlight %}
