@@ -11,7 +11,5 @@ A key goal in the design of Scala was interoperability with Java, and Martin Ode
 Once a build is setup for compiling Java and Scala sources, the rest is very straight forward.
 
 # Setup a build 
-
 # Define the Schema classes in Scala, persistent classes should use @BeanInfo annotations, this will cause the compiler to generate Java style getters and setters for every property, the class will then look exactly like POJOs in the Java code.  
-
 # Define DAOs (query wrappers) in Scala, with methods that take "Java friendly" types, which means any Scala types provided that they don't involve too many fancy closures !   
