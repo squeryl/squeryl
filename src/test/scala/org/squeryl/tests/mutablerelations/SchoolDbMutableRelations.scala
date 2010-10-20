@@ -36,7 +36,7 @@ class Subject(val name: String) extends SchoolDb2Object {
   lazy val courses = SchoolDb2.subjectToCourses.leftStateful(this)
 }
 
-class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float) extends KeyedEntity[CompositeKey2[Int,Int]] {
+class CourseSubscription(val courseId: Long, val studentId: Long, val grade: Float) extends KeyedEntity[CompositeKey2[Long,Long]] {
 
   def id = compositeKey(courseId, studentId)
 }

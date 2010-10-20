@@ -77,6 +77,8 @@ object Tests extends QueryTester {
 
   def allTestsOnAllDatabases = {
 
+    allTests("MS Sql", createMSSqlTestConnection _)
+
     allTests("Oracle", createOracleTestConnection _)
     
     allTests("PosgreSQL", createPostgreSqlTestConnection _)
@@ -191,6 +193,19 @@ object Tests extends QueryTester {
     c.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED)
     
     Session.create(c,new MySQLAdapter)
+  }
+
+  def createMSSqlTestConnection = {
+
+      Class.forName("net.sourceforge.jtds.jdbc.Driver")
+      //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/SQLEXPRESS;user=sa;password=zaza")
+      //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost/SQLEXPRESS","sa","zaza")
+
+      //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost/SQLEXPRESS;user=sa;password=zaza")
+
+      val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/squeryl;instance=SQLEXPRESS;user=sa;password=zaza")
+
+      Session.create(c, new MSSQLServer )    
   }
 
   def createDB2TestConnection = {
