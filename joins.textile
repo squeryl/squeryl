@@ -31,7 +31,7 @@ h2. The *join* keyword
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
-    var ratingsForAllSongs =
+    val ratingsForAllSongs =
       join(songs, ratings.leftOuter)((s,r) =>
           select(s, r)
           on(s.id === r.map(_.songId))
@@ -112,7 +112,7 @@ member to be an Option[Rating]
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
-    var ratingsForAllSongs =
+    val ratingsForAllSongs =
       from(songs, ratings)((s,r) =>
           select((s, leftOuterJoin(r, s.id === r.songId)))
       )

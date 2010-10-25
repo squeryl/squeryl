@@ -21,7 +21,16 @@ the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/sq
  
 * groupId : *org.squeryl*
 * artifactId: *squeryl_2.8.0*
-* version *0.9.4beta-RC2*
+* version *0.9.4-RC2*
+
+<pre>
+import sbt._
+
+class Project(info: ProjectInfo) extends DefaultProject(info) {
+	
+   val squeryl = "org.squeryl" % "squeryl_2.8.0" % "0.9.4-RC2"
+}
+</pre>
 
 For building with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 
