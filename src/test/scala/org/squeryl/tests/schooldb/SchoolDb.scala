@@ -95,6 +95,8 @@ class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
 
 object SDB extends SchoolDb
 
+class StringKeyedEntity(val id: String) extends KeyedEntity[String]
+
 class SchoolDb extends Schema {
 
   import org.squeryl.PrimitiveTypeMode._
@@ -116,6 +118,9 @@ class SchoolDb extends Schema {
    */
   override def tableNameFromClassName(n:String) =
     "T_" + n
+
+  val stringKeyedEntities =
+    table[StringKeyedEntity]
 
   val professors = table[Professor]
   
@@ -201,6 +206,10 @@ class SchoolDbTestRun extends QueryTester {
     Session.currentSession.connection.commit
   }
 
+  def testStringKeyedEntities = {
+    val se = stringKeyedEntities.insert(new StringKeyedEntity("123"))
+  }
+
   def testCountSignatures = {
 
     val q =
@@ -250,6 +259,8 @@ class SchoolDbTestRun extends QueryTester {
     )
 
   def test1 = {
+
+    testStringKeyedEntities
 
     testOptionStringInWhereClause
     
