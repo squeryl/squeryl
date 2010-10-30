@@ -17,6 +17,7 @@ package org.squeryl.dsl.ast
 
 import org.squeryl.internals._
 import org.squeryl.dsl.{QueryYield, AbstractQuery}
+import org.squeryl.adapters.H2Adapter
 
 class QueryExpressionNode[R](_query: AbstractQuery[R],
                              _queryYield:QueryYield[R],

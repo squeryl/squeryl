@@ -15,16 +15,13 @@
  ******************************************************************************/
 package org.squeryl
 
+import logging.StatisticsListener
 import org.squeryl.internals._
 import collection.mutable.ArrayBuffer
 import java.sql.{SQLException, ResultSet, Statement, Connection}
 
 
-trait Session {
-  
-  def connection: Connection
-
-  def databaseAdapter: DatabaseAdapter
+class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, val statisticsListener: Option[StatisticsListener] = None) {
 
   def bindToCurrentThread = Session.currentSession = Some(this)
 
@@ -96,10 +93,8 @@ object Session {
     override def initialValue = None
   }
   
-  def create(c: Connection, a: DatabaseAdapter) = new Session {
-    def connection = c
-    def databaseAdapter = a
-  }
+  def create(c: Connection, a: DatabaseAdapter) =
+    new Session(c, a)
 
   def currentSession: Session =
     if(SessionFactory.externalTransactionManagementAdapter != None) {

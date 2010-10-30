@@ -33,16 +33,6 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0/lib/scala-compiler.jar!/" />
-          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.0/lib/scala-library.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0/compile/cglib-nodep-2.2.jar!/" />
         </CLASSES>
         <JAVADOC />

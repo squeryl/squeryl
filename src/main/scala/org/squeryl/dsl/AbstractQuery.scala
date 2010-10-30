@@ -21,6 +21,7 @@ import java.sql.ResultSet
 import org.squeryl.internals._
 import org.squeryl.{View, Queryable, Session, Query}
 import collection.mutable.ArrayBuffer
+import org.squeryl.logging.StatementExecution
 
 abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
@@ -40,6 +41,8 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val r = invokeYield(rsm, rs)
     r
   }
+
+  private def _thisQueryClass = this.getClass
 
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
@@ -120,10 +123,17 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)
     val s = Session.currentSession
+    val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
+    val statEx = new StatementExecution(_thisQueryClass, beforeQueryExecute, System.currentTimeMillis, sw.statement)
+
+    if(s.statisticsListener != None)
+      s.statisticsListener.get.queryExecuted(statEx)
     
     var _nextCalled = false;
     var _hasNext = false;
+
+    var rowCount = 0
 
     def _next = {
       _hasNext = rs.next
@@ -131,8 +141,13 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       if(!_hasNext) {// close it ASAP
         Utils.close(rs)
         stmt.close
-      }
 
+        if(s.statisticsListener != None) {
+          s.statisticsListener.get.resultSetIterationEnded(statEx, System.currentTimeMillis, rowCount, true)
+        }
+      }
+      
+      rowCount = rowCount + 1
       _nextCalled = true
     }
 
