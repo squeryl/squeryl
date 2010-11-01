@@ -95,7 +95,16 @@ class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
 
 object SDB extends SchoolDb
 
-class StringKeyedEntity(val id: String) extends KeyedEntity[String]
+object Tempo extends Enumeration {
+  type Tempo = Value
+  val Largo = Value(1, "Largo")
+  val Allegro = Value(2, "Allegro")
+  val Presto = Value(3, "Presto")
+}
+
+class StringKeyedEntity(val id: String, val tempo: Tempo.Tempo) extends KeyedEntity[String] {
+  def this() = this("", Tempo.Largo)
+}
 
 class SchoolDb extends Schema {
 
@@ -145,6 +154,10 @@ class SchoolDb extends Schema {
 
   on(professors)(p => declare(
     p.yearlySalary is(dbType("real"))
+  ))
+
+  on(stringKeyedEntities)(e => declare(
+    e.tempo.defaultsTo(Tempo.Largo)
   ))
 
   // disable the override, since the above is good for Oracle only, this is not a usage demo, but
@@ -207,7 +220,7 @@ class SchoolDbTestRun extends QueryTester {
   }
 
   def testStringKeyedEntities = {
-    val se = stringKeyedEntities.insert(new StringKeyedEntity("123"))
+    val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
   }
 
   def testCountSignatures = {
