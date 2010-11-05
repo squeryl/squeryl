@@ -44,7 +44,9 @@ trait FieldTypes {
   type BigDecimalType
 
   type EnumerationValueType
-  
+
+  type BinaryType
+
   protected implicit def sampleByte: ByteType
   protected implicit def sampleInt: IntType
   protected implicit def sampleString: StringType
@@ -56,6 +58,7 @@ trait FieldTypes {
   protected implicit def sampleTimestamp: TimestampType
   protected implicit def sampleBigDecimal: BigDecimalType
   //protected implicit def sampleEnumerationValueType: EnumerationValueType
+  protected implicit def sampleBinary: BinaryType
 
   protected implicit val sampleByteO = Some(sampleByte)
   protected implicit val sampleIntO = Some(sampleInt)
@@ -68,6 +71,7 @@ trait FieldTypes {
   protected implicit val sampleTimestampTypeO = Some(sampleTimestamp)
   protected implicit val sampleBigDecimalO = Some(sampleBigDecimal)
   //protected implicit val sampleEnumerationValueTypeO = Some(sampleEnumerationValueType)
+  protected implicit val sampleBinaryO = Some(sampleBinary)
 }
 
 
@@ -141,6 +145,10 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 }
 
 trait BooleanExpression[A] extends NonNumericalExpression[A] {
+  def ~ = this
+}
+
+trait BinaryExpression[A] extends NonNumericalExpression[A] {
   def ~ = this
 }
 

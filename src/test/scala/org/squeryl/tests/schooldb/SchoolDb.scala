@@ -372,6 +372,12 @@ class SchoolDbTestRun extends QueryTester {
 
     assertEquals(c.rawData(0), 3, 'blobTest)
 
+    val data = Array.fill(2)(2.toByte)
+    courses.update(c => where(c.id === counterpoint.id) set(c.rawData := data))
+    c = courses.where(_.id === counterpoint.id).single
+    assertEquals(2, c.rawData(0), 'blobTest)
+    assertEquals(2, c.rawData(1), 'blobTest)
+
     passed('blobTest)
   }
 
