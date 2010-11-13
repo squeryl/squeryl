@@ -162,6 +162,7 @@ object Tests extends QueryTester {
 
     Session.create(
       java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
+    //java.sql.DriverManager.getConnection("jdbc:h2:mem:", "", ""),
       new H2Adapter
     )
   }

@@ -3,7 +3,8 @@ package org.squeryl.tests.schooldb2
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
 import org.squeryl._
-import dsl.ast.TypedExpressionNode
+import annotations.Transient
+import dsl.ast._
 import dsl.{OneToMany, CompositeKey2}
 import java.sql.{Savepoint, SQLException}
 
@@ -64,6 +65,22 @@ case class Comment(text: String, entryId: Int = 0, userId: Int = 0)
 }
 
 
+
+class ASTConstructionInterferenceA extends KeyedEntity[Long] {
+  val id: Long = 0
+
+  lazy val bs = SchoolDb2.aToB.left(this)
+}
+
+class ASTConstructionInterferenceB(val aId: Long) extends KeyedEntity[Long] {
+  val id: Long = 0
+
+  val field1 = "abc"
+  val field2 = ""//field1
+}
+
+
+
 class SchoolDb2 extends Schema {
 
   val entries = table[Entry]
@@ -112,6 +129,13 @@ class SchoolDb2 extends Schema {
   courseSubscriptions.leftForeignKeyDeclaration.constrainReference(onDelete cascade)
 
   override def drop = super.drop
+
+  val as = table[ASTConstructionInterferenceA]
+  val bs = table[ASTConstructionInterferenceB]
+
+  val aToB =
+    oneToManyRelation(as, bs).
+    via((a, b) => a.id === b.aId)  
 }
 
 class SchoolDb2Tests extends QueryTester {
@@ -148,6 +172,7 @@ class SchoolDb2Tests extends QueryTester {
 
   def testAll = {
 
+    testIssue68
 
     val entry = entries.insert(Entry("An entry"))
     val comment = Comment("A single comment")
@@ -364,5 +389,19 @@ class SchoolDb2Tests extends QueryTester {
 
     assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
   }
-  
+
+
+  def testIssue68 = {
+    //https://github.com/max-l/Squeryl/issues#issue/68
+    // Invoking a persisent field during construction causes interference in AST construction
+    
+    val a = new ASTConstructionInterferenceA
+    val bs = a.bs
+    val ast = bs.ast.asInstanceOf[QueryExpressionElements]
+
+    val andExp = ast.whereClause.get.asInstanceOf[EqualityExpression]
+
+    assert(andExp.left.isInstanceOf[ConstantExpressionNode[_]], "expected a ConstantExpressionNode[_] in the where clause :\n" + bs.statement)
+  }
 }
+
