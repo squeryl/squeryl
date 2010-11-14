@@ -46,6 +46,9 @@ trait DslFactory
   protected def createLeafNodeOfScalarBooleanType(s: BooleanType): BooleanExpression[BooleanType]
   protected def createLeafNodeOfScalarBooleanOptionType(s: Option[BooleanType]): BooleanExpression[Option[BooleanType]]
 
+  protected def createLeafNodeOfScalarBinaryType(s: BinaryType): BinaryExpression[BinaryType]
+  protected def createLeafNodeOfScalarBinaryOptionType(s: Option[BinaryType]): BinaryExpression[Option[BinaryType]]
+
   protected def createLeafNodeOfScalarDateType(d: DateType): DateExpression[DateType]
   protected def createLeafNodeOfScalarDateOptionType(d: Option[DateType]): DateExpression[Option[DateType]]
 
@@ -98,6 +101,8 @@ trait DslFactory
 
   implicit def enum2OptionEnumNode[A <: Option[EnumerationValueType]](e: A): EnumExpression[Option[A]] =
     createLeafNodeOfEnumExpressionOptionType(e).asInstanceOf[EnumExpression[Option[A]]]
+
+  implicit def binary2ScalarBinary(b: BinaryType) = createLeafNodeOfScalarBinaryType(b)
 
   // List Conversion implicits don't vary with the choice of
   // column/field types, so they don't need to be overridable factory methods :

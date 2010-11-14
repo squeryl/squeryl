@@ -32,7 +32,7 @@ class MSSQLServer extends DatabaseAdapter {
   override def longTypeDeclaration = "bigint"
   override def bigDecimalTypeDeclaration = "decimal"
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
-  override def binaryTypeDeclaration = "varbinary"
+  override def binaryTypeDeclaration = "varbinary(8000)"
 
 
   override def dateTypeDeclaration = "date"

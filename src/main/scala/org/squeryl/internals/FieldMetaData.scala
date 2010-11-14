@@ -116,14 +116,13 @@ class FieldMetaData(
     (classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(parentMetaData.clasz)  && nameOfProperty == "idField")
 
   if(isIdFieldOfKeyedEntity && ! classOf[CompositeKey].isAssignableFrom(wrappedFieldType)) {
-    schema.defaultColumnAttributesForKeyedEntityId.foreach(ca => {
+    schema.defaultColumnAttributesForKeyedEntityId(wrappedFieldType).foreach(ca => {
 
       if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
         error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
           " all KeyedEntity tables, while class " + parentMetaData.clasz.getName +
           "\n has it's id field of type " + fieldType.getName + ", that is neither an Int or a Long, \n the only two types that can " +
-          "be auto incremented. Tables of this class must redefine the attributes of the id field using Shema.declareColumnAttributes\n" +
-          " within the schema definition (" + schema.getClass.getName + ").")
+          "be auto incremented")
 
       _addColumnAttribute(ca)
     })

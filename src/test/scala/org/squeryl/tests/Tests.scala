@@ -30,7 +30,7 @@ import schooldb2.SchoolDb2Tests
 object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
-
+    //dumpSchemasForAllDatabases
     allTestsOnAllDatabases
 
     //allTests("PosgreSQL", createPostgreSqlTestConnection _)
@@ -164,6 +164,7 @@ object Tests extends QueryTester {
 
     Session.create(
       java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
+    //java.sql.DriverManager.getConnection("jdbc:h2:mem:", "", ""),
       new H2Adapter
     )
   }
@@ -203,7 +204,7 @@ object Tests extends QueryTester {
 
       //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost/SQLEXPRESS;user=sa;password=zaza")
 
-      val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/squeryl;instance=SQLEXPRESS;user=sa;password=zaza")
+      val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/squeryl;instance=SQLEXPRESS;user=sa;password=zaza;prepareSQL=1")
 
       Session.create(c, new MSSQLServer )    
   }
@@ -222,6 +223,7 @@ object Tests extends QueryTester {
     dumpSchemas("-----------Oracle Schema",createOracleTestConnection _)
     dumpSchemas("-----------MySql Schema",createMySQLTestConnection _)
     dumpSchemas("-----------H2 Schema",createH2TestConnection _)
+    dumpSchemas("-----------Postgres Schema",createMSSqlTestConnection _)
   }
 
   def dumpSchemas(dbName: String, s: ()=>Session)= {
