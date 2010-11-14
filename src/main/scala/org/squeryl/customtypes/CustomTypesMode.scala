@@ -49,6 +49,9 @@ trait CustomTypesMode extends QueryDsl {
   implicit def createConstantNodeOfScalarBooleanType(i: Boolean) =
     new ConstantExpressionNode[Boolean](i) with NonNumericalExpression[Boolean]
 
+  implicit def createConstantNodeOfScalarBinaryType(i: Array[Byte]) =
+    new ConstantExpressionNode[Array[Byte]](i) with BinaryExpression[Array[Byte]]
+
   type ByteType = ByteField
 
   type IntType = IntField
@@ -70,6 +73,8 @@ trait CustomTypesMode extends QueryDsl {
   type TimestampType = TimestampField
 
   type EnumerationValueType = Enumeration#Value
+
+  type BinaryType = BinaryField
   
   protected def mapByte2ByteType(i: Byte) = new ByteField(i)
   protected def mapInt2IntType(i: Int) = new IntField(i)
@@ -82,6 +87,7 @@ trait CustomTypesMode extends QueryDsl {
   protected def mapDate2DateType(b: Date) = new DateField(b)
   protected def mapTimestamp2TimestampType(b: Timestamp) = new TimestampField(b)
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
+  protected def mapBinary2BinaryType(d: Array[Byte]) = new BinaryField(d)
 
   protected implicit val sampleByte: ByteType = new ByteField(0)
   protected implicit val sampleInt = new IntField(0)
@@ -93,6 +99,7 @@ trait CustomTypesMode extends QueryDsl {
   protected implicit val sampleBoolean = new BooleanField(false)
   protected implicit val sampleDate = new DateField(new Date)
   protected implicit def sampleTimestamp = new TimestampField(new Timestamp(0))
+  protected implicit val sampleBinary: BinaryType = new BinaryField(Array[Byte](0))
 
   
   //TODO Scala bug report, implicit params should work here , but they don't ...
@@ -256,6 +263,22 @@ trait CustomTypesMode extends QueryDsl {
         new SelectElementReference[Option[TimestampType]](n) with DateExpression[Option[TimestampType]]
     }
   
+  def createLeafNodeOfScalarBinaryType(i: BinaryField) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[BinaryType](i) with BinaryExpression[BinaryType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[BinaryType](n)(createOutMapperBinaryType) with BinaryExpression[BinaryType]
+    }
+
+  def createLeafNodeOfScalarBinaryOptionType(i: Option[BinaryField]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[BinaryType]](i) with BinaryExpression[Option[BinaryType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[BinaryType]](n)(createOutMapperBinaryTypeOption) with BinaryExpression[Option[BinaryType]]
+    }
+
 }
 
 object CustomTypesMode extends CustomTypesMode 
@@ -298,5 +321,9 @@ class DateField(val value: Date) extends CustomType {
 }
 
 class TimestampField(val value: Timestamp) extends CustomType {
+  def _1: Any = value
+}
+
+class BinaryField(val value: Array[Byte]) extends CustomType {
   def _1: Any = value
 }

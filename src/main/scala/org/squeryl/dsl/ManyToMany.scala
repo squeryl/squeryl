@@ -18,14 +18,14 @@ package org.squeryl.dsl
 import org.squeryl.{ForeignKeyDeclaration, Table, Query, KeyedEntity}
 import collection.mutable.{HashMap, ArrayBuffer, Buffer}
 
-trait Relation[L <: KeyedEntity[_],R <: KeyedEntity[_]] {
+trait Relation[L <: KeyedEntity[_],R] {
   
   def leftTable: Table[L]
 
   def rightTable: Table[R]
 }
 
-trait OneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]] extends Relation[O,M] {
+trait OneToManyRelation[O <: KeyedEntity[_],M] extends Relation[O,M] {
 
   def foreignKeyDeclaration: ForeignKeyDeclaration
 
@@ -55,7 +55,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
 
   def iterator = _buffer.iterator
 
-  def associate(m: M) = {
+  def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
     relation.associate(m)
     _buffer.append(m)
   }
@@ -245,7 +245,7 @@ trait OneToMany[M] extends Query[M] {
    * Calls 'assign(m)' and persists the changes the database, by inserting or updating 'm', depending
    * on if it has been persisted or not.
    */
-  def associate(m: M): Unit
+  def associate(m: M)(implicit ev: M <:< KeyedEntity[_]): Unit
   
   def deleteAll: Int
 }

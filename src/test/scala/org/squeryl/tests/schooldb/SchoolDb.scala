@@ -95,6 +95,17 @@ class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
 
 object SDB extends SchoolDb
 
+object Tempo extends Enumeration {
+  type Tempo = Value
+  val Largo = Value(1, "Largo")
+  val Allegro = Value(2, "Allegro")
+  val Presto = Value(3, "Presto")
+}
+
+class StringKeyedEntity(val id: String, val tempo: Tempo.Tempo) extends KeyedEntity[String] {
+  def this() = this("", Tempo.Largo)
+}
+
 class SchoolDb extends Schema {
 
   import org.squeryl.PrimitiveTypeMode._
@@ -116,6 +127,9 @@ class SchoolDb extends Schema {
    */
   override def tableNameFromClassName(n:String) =
     "T_" + n
+
+  val stringKeyedEntities =
+    table[StringKeyedEntity]
 
   val professors = table[Professor]
   
@@ -140,6 +154,10 @@ class SchoolDb extends Schema {
 
   on(professors)(p => declare(
     p.yearlySalary is(dbType("real"))
+  ))
+
+  on(stringKeyedEntities)(e => declare(
+    e.tempo.defaultsTo(Tempo.Largo)
   ))
 
   // disable the override, since the above is good for Oracle only, this is not a usage demo, but
@@ -201,6 +219,10 @@ class SchoolDbTestRun extends QueryTester {
     Session.currentSession.connection.commit
   }
 
+  def testStringKeyedEntities = {
+    val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
+  }
+
   def testCountSignatures = {
 
     val q =
@@ -254,6 +276,9 @@ class SchoolDbTestRun extends QueryTester {
     //testDeepNest1
     
     //testDeepNest2
+    testStringKeyedEntities
+
+    testOptionStringInWhereClause
     
     //Must run first, because later we won't have the rows we need to perform the test
     testCountSignatures
@@ -348,6 +373,21 @@ class SchoolDbTestRun extends QueryTester {
     passed('testDeepNest)
   }
 
+  def testOptionStringInWhereClause = {
+    import testInstance._
+
+    val q =
+      from(addresses)(a => where(a.appNumberSuffix === Some("A")) select(a))
+
+    val h = q.head
+
+    assertEquals(oneTwoThreePieIXStreet.id, h.id, 'testOptionStringInWhereClause)
+
+    assertEquals(Some("A"), h.appNumberSuffix, 'testOptionStringInWhereClause)
+    
+    passed('testOptionStringInWhereClause)
+  }
+  
   def blobTest = {
     import testInstance._
 
@@ -362,6 +402,12 @@ class SchoolDbTestRun extends QueryTester {
     c = courses.where(_.id === counterpoint.id).single
 
     assertEquals(c.rawData(0), 3, 'blobTest)
+
+    val data = Array.fill(2)(2.toByte)
+    courses.update(c => where(c.id === counterpoint.id) set(c.rawData := data))
+    c = courses.where(_.id === counterpoint.id).single
+    assertEquals(2, c.rawData(0), 'blobTest)
+    assertEquals(2, c.rawData(1), 'blobTest)
 
     passed('blobTest)
   }

@@ -79,13 +79,10 @@ object Utils {
    * visitor will get applied on a proxied Sample object of the Queryable[A],
    * this function is used for obtaining AST nodes or metadata from A.
    */
-  def mapSampleObject[A,B](q: Queryable[A], visitor: A=>B): B = {
-    var b:Option[B] = None
-    // if we are currently building an AST, we must save the (last) _lastAccessedFieldReference
-    val prev = FieldReferenceLinker._lastAccessedFieldReference
-    new DummyQuery(q, visitor, (b0:B) =>b = Some(b0))
-    // and restore it to the previous state (issue19)
-    FieldReferenceLinker._lastAccessedFieldReference = prev
-    b.get
-  }  
+  def mapSampleObject[A,B](q: Queryable[A], visitor: A=>B): B =
+    FieldReferenceLinker.executeAndRestoreLastAccessedFieldReference {
+      var b:Option[B] = None
+      new DummyQuery(q, visitor, (b0:B) =>b = Some(b0))
+      b.get
+    }
 }

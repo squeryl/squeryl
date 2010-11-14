@@ -203,7 +203,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     //Enhancer.create(classOfT, new PosoPropertyAccessInterceptor(vxn)).asInstanceOf[T]
   //}
 
-  def createSample(cb: Callback) = _builder(cb)
+  def createSample(cb: Callback) =
+    FieldReferenceLinker.executeAndRestoreLastAccessedFieldReference(_builder(cb))
 
   private val _builder: (Callback) => T = {
 
@@ -219,6 +220,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       val cb = new Array[Callback](1)
       cb(0) = callB
       e.setCallback(callB)
+      //TODO : are we creating am unnecessary instance ?  
       val fac = e.create(pc , constructor._2).asInstanceOf[Factory]
 
       fac.newInstance(pc, constructor._2, cb).asInstanceOf[T]

@@ -230,10 +230,12 @@ trait DatabaseAdapter {
 
     for(d <- fmd.defaultValue) {
       sb.append(" default ")
-      val sw = new StatementWriter(true,this)
-      sw.addParam(d.value.asInstanceOf[AnyRef])
-      d.doWrite(sw)
-      sb.append(sw.statement)
+
+      val v = convertToJdbcValue(d.value.asInstanceOf[AnyRef])
+      if(v.isInstanceOf[String])
+        sb.append("'" + v + "'")
+      else
+        sb.append(v)
     }
 
     if(isPrimaryKey)

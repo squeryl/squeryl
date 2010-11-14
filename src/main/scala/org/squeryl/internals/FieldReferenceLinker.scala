@@ -62,6 +62,22 @@ object FieldReferenceLinker {
     override def initialValue = None
   }
 
+  /**
+   * _lastAccessedFieldReference is unique per thread, AST construction can be nested and can interfere with
+   * one another, this method is used for  preserving the previous _lastAccessedFieldReference when a nested
+   * AST construction takes place *and* during the construction of 'sample' POSOs, because they are proxied,
+   * and can call their intercepted fields during construction, calling the constructor for 'sample' POSO construction
+   * without wrapping with this methor would have the effect of 'polluting' the _lastAccessedFieldReference (issue 68). 
+   */
+  def executeAndRestoreLastAccessedFieldReference[A](expressionWithSideEffectsASTConstructionThreadLocalState: =>A): A = {
+    // if we are currently building an AST, we must save the (last) _lastAccessedFieldReference
+    val prev = FieldReferenceLinker._lastAccessedFieldReference
+    val a = expressionWithSideEffectsASTConstructionThreadLocalState
+    // and restore it to the previous state (issue19)
+    FieldReferenceLinker._lastAccessedFieldReference = prev
+    a
+  }
+  
   class YieldInspection {
     
     private val _utilizedFields = new ArrayBuffer[SelectElement]
