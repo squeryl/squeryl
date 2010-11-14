@@ -3,10 +3,9 @@ package org.squeryl.tests.schooldb2
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.tests.QueryTester
 import org.squeryl._
-import annotations.Transient
 import dsl.ast._
 import dsl.{OneToMany, CompositeKey2}
-import java.sql.{Savepoint, SQLException}
+import java.sql.{Savepoint}
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -76,7 +75,7 @@ class ASTConstructionInterferenceB(val aId: Long) extends KeyedEntity[Long] {
   val id: Long = 0
 
   val field1 = "abc"
-  val field2 = ""//field1
+  val field2 = field1
 }
 
 
@@ -135,7 +134,9 @@ class SchoolDb2 extends Schema {
 
   val aToB =
     oneToManyRelation(as, bs).
-    via((a, b) => a.id === b.aId)  
+    via((a, b) => a.id === b.aId)
+
+  aToB.foreignKeyDeclaration.unConstrainReference
 }
 
 class SchoolDb2Tests extends QueryTester {
@@ -344,6 +345,7 @@ class SchoolDb2Tests extends QueryTester {
     assertEquals(0L, qA3.Count: Long, 'testCompositeEquality)
 
     //println(ca2.statement)
+    passed('testCompositeEquality)
   }
 
   private def _existsAndEquals(oca: Option[CourseAssignment], ca: CourseAssignment) = {
@@ -388,6 +390,8 @@ class SchoolDb2Tests extends QueryTester {
       error('testUniquenessConstraint + " failed, unique constraint violation occured")
 
     assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
+
+    passed('testUniquenessConstraint)
   }
 
 
@@ -402,6 +406,9 @@ class SchoolDb2Tests extends QueryTester {
     val andExp = ast.whereClause.get.asInstanceOf[EqualityExpression]
 
     assert(andExp.left.isInstanceOf[ConstantExpressionNode[_]], "expected a ConstantExpressionNode[_] in the where clause :\n" + bs.statement)
+
+    bs.deleteAll
+    passed('testIssue68)
   }
 }
 
