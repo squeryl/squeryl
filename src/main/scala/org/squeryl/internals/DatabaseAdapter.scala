@@ -40,9 +40,14 @@ trait DatabaseAdapter {
 
   implicit def zipIterable[T](i: Iterable[T]) = new ZipIterable(i)
 
-  def writeQuery(qen: QueryExpressionElements, sw: StatementWriter):Unit = {
+  def writeQuery(qen: QueryExpressionElements, sw: StatementWriter):Unit =
+    writeQuery(qen, sw, false, None)
+
+  protected def writeQuery(qen: QueryExpressionElements, sw: StatementWriter, inverseOrderBy: Boolean, topHint: Option[String]):Unit = {
 
     sw.write("Select")
+
+    topHint.foreach(" "  + sw.write(_) + " ")
 
     if(qen.selectDistinct)
       sw.write(" distinct")
@@ -112,6 +117,8 @@ trait DatabaseAdapter {
         sw.pushPendingNextLine
       }
     }
+
+    writeEndOfFromHint(qen, sw)
     
     if(qen.hasUnInhibitedWhereClause) {      
       sw.write("Where")
@@ -134,19 +141,26 @@ trait DatabaseAdapter {
     if(! qen.orderByClause.isEmpty && qen.parent == None) {
       sw.write("Order By")
       sw.nextLine
+      val ob0 = qen.orderByClause.filter(e => ! e.inhibited)
+      val ob = if(inverseOrderBy) ob0.map(_.asInstanceOf[OrderByExpression].inverse) else ob0
       sw.writeIndented {
-        sw.writeNodesWithSeparator(qen.orderByClause.filter(e => ! e.inhibited), ",", true)
+        sw.writeNodesWithSeparator(ob, ",", true)
       }
       sw.pushPendingNextLine
     }
 
+    writeEndOfQueryHint(qen, sw)
+
+    writePaginatedQueryDeclaration(qen, sw)
+  }
+
+  def writeEndOfQueryHint(qen: QueryExpressionElements, sw: StatementWriter) = 
     if(qen.isForUpdate) {
       sw.write("for update")
       sw.pushPendingNextLine
     }
 
-    writePaginatedQueryDeclaration(qen, sw)
-  }
+  def writeEndOfFromHint(qen: QueryExpressionElements, sw: StatementWriter) = {}
 
   def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = 
     qen.page.foreach(p => {

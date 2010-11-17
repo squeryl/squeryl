@@ -25,7 +25,7 @@ import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
-import adapters.{PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
+import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker}
 
 class SchoolDbObject extends KeyedEntity[Int] {
@@ -508,14 +508,13 @@ class SchoolDbTestRun extends QueryTester {
     println('testOptionAndNonOptionMixInComputeTuple + " passed.")
   }
 
-  def testConcatWithOptionalCols = {
+  def testConcatWithOptionalCols =
+    if(!Session.currentSession.databaseAdapter.isInstanceOf[MSSQLServer]){
 
-    //loggerOn
+      val res = addressesOfStudentsOlderThan24.toList
 
-    val res = addressesOfStudentsOlderThan24.toList
-    
-    println('testConcatWithOptionalCols + " passed.")
-  }
+      println('testConcatWithOptionalCols + " passed.")
+    }
 
   def testScalarOptionQuery = {
     val avgAge:Option[Float] = avgStudentAge

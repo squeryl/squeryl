@@ -510,7 +510,7 @@ class OrderByArg(val e: ExpressionNode) {
   }  
 }
 
-class OrderByExpression(a: OrderByArg) extends ExpressionNode { //with TypedExpressionNode[_] {
+class OrderByExpression(a: OrderByArg) extends ExpressionNode {
 
   private def e = a.e
   
@@ -525,5 +525,16 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode { //with TypedExpr
   }
 
   override def children = List(e)
-  
+
+  def inverse = {
+
+    val aCopy = new OrderByArg(a.e)
+
+    if(aCopy.isAscending)
+      aCopy.desc
+    else
+      aCopy.asc
+
+    new OrderByExpression(aCopy)
+  }
 }
