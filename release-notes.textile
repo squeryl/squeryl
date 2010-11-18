@@ -7,6 +7,20 @@ headtitle: Releases -
 
 For upcoming features, have a look at "Squeryl's Roadmap":roadmap.html 
 
+h3. 0.9.4-RC3
+
+*  compiled against Scala 2.8.1
+*  Externalisation of POSO creation, now part of the FieldMetaDataFactory (for fixing metadata in Lift squery-record)
+*  fix for issue 68 Invoking a persisent field during construction causes interference in AST construction
+*  Allow the many side of a one-to-many relatonship to be a non-KeyedEntity.
+*  Fixed/finished support for Binary/Array[Byte] types. (thanks to Michael Bayne)
+*  fix for issue 61: Schema.defaultsTo(T) on Enumerations outputs String instead of Int
+*  Fix for issue 59 on/declare expression on KeyedEntity.id doesn't override the schema default attributes
+*  MSSQL support (*note* : query pagination, not yet working...)
+*  Fix for issue 51 : update fails with KeyedEntities[CompositeKey[...]]
+*  Fix for issue 52 : regex expression not passed as param to jdbc prepared statement.
+
+
 h3. 0.9.4-RC2
 
 *   Fix for issue 48 (Exception thrown in outer join with subquery member)

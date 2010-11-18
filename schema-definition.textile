@@ -133,16 +133,16 @@ and Option[] fields are nullable.
 
 h3. Correspondance of field types to database column types
 
-|_. Java/JDBC  |_. Oracle     |_. PostgreSql     |_. DB2       |_. MySql    |_. H2       |
-| int          | number      | integer          | int         | int        | int        |
-| long         | number      | bigint           | bigint      | bigint     | bigint     |
-| float        | float       | real             | real        | float      | real       |
-| double       | real        | double precision | double      | double     | double     |
-| BidDecimal   | decimal     | numeric          | decimal     | decimal    | decimal    |
-| String       | varchar2(x) | varchar(x)       | varchar(x)  | varchar(x) | varchar(x) |
-| Date         | date        | date             | date        | date       | date       |
-| Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  |
-| byte[]       | blob        | bytea            | blob        | blob       | binary     |
+|_. Java/JDBC  |_. Oracle    |_. PostgreSql     |_. DB2       |_. MySql    |_. H2       |_. MS SQL  |
+| int          | number      | integer          | int         | int        | int        | int       |
+| long         | number      | bigint           | bigint      | bigint     | bigint     | bigint    |
+| float        | float       | real             | real        | float      | real       | real      |
+| double       | real        | double precision | double      | double     | double     | float     |
+| BidDecimal   | decimal     | numeric          | decimal     | decimal    | decimal    | decimal   |
+| String       | varchar2(x) | varchar(x)       | varchar(x)  | varchar(x) | varchar(x) | varchar(x)|
+| Date         | date        | date             | date        | date       | date       | date      |
+| Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  | datetime  |
+| byte[]       | blob        | bytea            | blob        | blob       | binary     | varbinary |
 
 h3. Enumerations
 
