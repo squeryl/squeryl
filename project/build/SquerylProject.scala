@@ -7,7 +7,13 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   override def managedStyle = ManagedStyle.Maven
   
   val publishTo = "Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"
-
+  
+  override def packageSrcJar = defaultJarPath("-sources.jar")
+  
+  val sourceArtifact = Artifact.sources(artifactID)
+  
+  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageSrc)
+    
   Credentials(Path.userHome / ".ivy2" / ".credentials", log)
   
   override def pomExtra =
@@ -34,9 +40,12 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   val mysqlDriver = "mysql" % "mysql-connector-java" % "5.1.10" % "provided"
 	
   val posgresDriver = "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided"
+  
+  val msSqlDriver = "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided"
 
   val snapshotsRepo = "snapshots-repo" at "http://www.scala-tools.org/repo-snapshots"
   
-  val specs = "org.scala-tools.testing" %% "specs" % "1.6.5" % "provided"
-
+  //val specs = "org.scala-tools.testing" %% "specs" % "1.6.5" % "provided"
+  
+  val specs = "org.scala-tools.testing" % "specs_2.8.0" % "1.6.5" % "provided"  
 }

@@ -331,7 +331,9 @@ trait FieldMetaDataFactory {
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
   def isSupportedFieldType(c: Class[_]): Boolean =
-    FieldMetaData._isSupportedFieldType.handleType(c, None)      
+    FieldMetaData._isSupportedFieldType.handleType(c, None)
+
+  def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
 
 object FieldMetaData {
@@ -359,6 +361,12 @@ object FieldMetaData {
   }
   
   var factory = new FieldMetaDataFactory {   
+
+    def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef =
+      () => {
+        val c = posoMetaData.constructor
+        c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
+      }
     
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 

@@ -30,8 +30,7 @@ import schooldb2.SchoolDb2Tests
 object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
-
-    allTestsOnH2
+    //dumpSchemasForAllDatabases
     //allTestsOnAllDatabases
 
     //allTests("PosgreSQL", createPostgreSqlTestConnection _)
@@ -77,6 +76,8 @@ object Tests extends QueryTester {
   }
 
   def allTestsOnAllDatabases = {
+
+    allTests("MS Sql", createMSSqlTestConnection _)
 
     allTests("Oracle", createOracleTestConnection _)
     
@@ -195,6 +196,19 @@ object Tests extends QueryTester {
     Session.create(c,new MySQLAdapter)
   }
 
+  def createMSSqlTestConnection = {
+
+      Class.forName("net.sourceforge.jtds.jdbc.Driver")
+      //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/SQLEXPRESS;user=sa;password=zaza")
+      //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost/SQLEXPRESS","sa","zaza")
+
+      //val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost/SQLEXPRESS;user=sa;password=zaza")
+
+      val c = DriverManager.getConnection("jdbc:jtds:sqlserver://localhost:1433/squeryl;instance=SQLEXPRESS;user=sa;password=zaza;prepareSQL=1")
+
+      Session.create(c, new MSSQLServer )    
+  }
+
   def createDB2TestConnection = {
       Class.forName("com.ibm.db2.jcc.DB2Driver")
       val c = DriverManager.getConnection("jdbc:db2://localhost:50000/squeryl", "squeryl", "squeryl")
@@ -209,6 +223,7 @@ object Tests extends QueryTester {
     dumpSchemas("-----------Oracle Schema",createOracleTestConnection _)
     dumpSchemas("-----------MySql Schema",createMySQLTestConnection _)
     dumpSchemas("-----------H2 Schema",createH2TestConnection _)
+    dumpSchemas("-----------MSSql Schema",createMSSqlTestConnection _)
   }
 
   def dumpSchemas(dbName: String, s: ()=>Session)= {
