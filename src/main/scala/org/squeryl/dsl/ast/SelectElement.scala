@@ -61,19 +61,19 @@ trait SelectElement extends ExpressionNode {
   def aliasComponent: String =
     alias
 
-  def lastSE: SelectElement = this
-  
-  //TODO: move to ExpressionNode ?
-  def root: QueryExpressionElements = {
+  def actualSelectElement: SelectElement = this
 
+  def inhibitAliasOnSelectElementReference: Boolean = {
     var e:ExpressionNode = origin
 
     while(e.parent != None) {
-
       e = e.parent.get
     }
 
-    e.asInstanceOf[QueryExpressionElements]
+    if(!e.isInstanceOf[QueryExpressionElements])
+      true
+    else
+      e.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference
   }
 
   def prepareColumnMapper(index: Int): Unit
@@ -167,7 +167,7 @@ class FieldSelectElement
   extends SelectElement {
 
   def alias =
-    if(root.inhibitAliasOnSelectElementReference)
+    if(inhibitAliasOnSelectElementReference)
       fieldMataData.columnName
     else
       origin.alias + "." + fieldMataData.columnName
@@ -233,12 +233,21 @@ class ValueSelectElement
     'ValueSelectElement + ":" + expression.writeToString  
 }
 
+/**
+ * All nodes that refer to a SelectElement are SelectElementReference,
+ * with the exception of SelectElement that refer to an inner query's SelectElement,
+ * these are ExportedSelectElement
+ */
+class SelectElementReference[A]
+  (val selectElement: SelectElement)(implicit val mapper: OutMapper[A])
+    extends TypedExpressionNode[A]  {
 
-trait PathReferenceToSelectElement {
-  self: ExpressionNode =>
+  override def toString =
+    'SelectElementReference + ":" + Utils.failSafeString(_delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 
-  def selectElement: SelectElement
-  
+  override def inhibited =
+    selectElement.inhibited
+
   private def _useSite: QueryExpressionNode[_] = {
 
     var e: ExpressionNode = this
@@ -252,54 +261,22 @@ trait PathReferenceToSelectElement {
     error("could not determine use site of "+ this)
   }
 
-  protected def path: String = {
-
-    val origin = selectElement.origin
-
-    if(origin.parent == None)
-      return selectElement.alias
-
-    if(origin.parent.get.isInstanceOf[UpdateStatement] ||
-       origin.parent.get.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference)
-      return selectElement.asInstanceOf[FieldSelectElement].fieldMataData.columnName
-
-    val us = _useSite
-
-    val ab = new ArrayBuffer[QueryableExpressionNode]
-
-    var o:ExpressionNode = origin
-
-    do {
-      if(o.isInstanceOf[QueryableExpressionNode])
-        ab.prepend(o.asInstanceOf[QueryableExpressionNode])
-      o = o.parent.get
-    } while(o != us && o.parent != None)
-
-    if(ab.size == 1)
-      ab.remove(0).alias + "." + selectElement.aliasSuffix
-    else
-      ab.remove(0).alias + "." + ab.map(n=>n.alias).mkString("_") + "_" + selectElement.aliasSuffix    
-  }
-}
-
-
-/**
- * All nodes that refer to a SelectElement are SelectElementReference,
- * with the exception of SelectElement that refer to an inner query's SelectElement,
- * these are ExportedSelectElement
- */
-class SelectElementReference[A]
-  (val selectElement: SelectElement)(implicit val mapper: OutMapper[A])
-    extends TypedExpressionNode[A]  with PathReferenceToSelectElement {
-
-  override def toString =
-    'SelectElementReference + ":" + Utils.failSafeString(path) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
-
-  override def inhibited =
-    selectElement.inhibited
+  private lazy val _delegateAtUseSite =
+    if(selectElement.parent == None)
+      selectElement
+    else {
+      val us = this._useSite
+      if(selectElement.parentQueryable == us)
+        selectElement
+      else {
+        val ese = new ExportedSelectElement(this.selectElement)
+        ese.parent = Some(us)
+        ese
+      }
+    }
 
   override def doWrite(sw: StatementWriter) =
-    sw.write(path)
+    sw.write(_delegateAtUseSite.alias)
 }
 
 /**
@@ -307,8 +284,7 @@ class SelectElementReference[A]
  */
 class ExportedSelectElement
   (val selectElement: SelectElement)
-    extends SelectElement
-    with PathReferenceToSelectElement {
+    extends SelectElement {
 
   def resultSetMapper = selectElement.resultSetMapper
 
@@ -335,23 +311,23 @@ class ExportedSelectElement
   }
 
   override def toString =
-    'ExportedSelectElement + ":" + path + ",(selectElement=" + selectElement + ")"
+    'ExportedSelectElement + ":" + alias + ",(selectElement=" + selectElement + ")"
 
   def alias:String =
-    target2.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target2.aliasComponent
+    target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target.aliasComponent
 
   override def aliasComponent: String = {
-    target2.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target2.aliasComponent
+    target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target.aliasComponent
   }
 
-  override def lastSE: SelectElement = {
+  override def actualSelectElement: SelectElement = {
     if(selectElement.isInstanceOf[ExportedSelectElement])
-      selectElement.asInstanceOf[ExportedSelectElement].lastSE
+      selectElement.asInstanceOf[ExportedSelectElement].actualSelectElement
     else
       selectElement
   }
 
-  lazy val target2: SelectElement = {
+  lazy val target: SelectElement = {
 
     val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
 
@@ -362,7 +338,7 @@ class ExportedSelectElement
 
       val q =
         for(q <- parentOfThis.subQueries;
-            se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.lastSE == selectElement)
+            se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
         yield se
 
       val r = q.headOption.getOrElse(error("!!!!!!!!!!!!!" + selectElement))
