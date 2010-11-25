@@ -270,7 +270,7 @@ trait QueryDsl
   }
 
   class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
-    extends Table[A](schema.tableNameFromClass(aClass), aClass, schema, None) with ManyToManyRelation[L,R,A] {
+    extends Table[A](schema.tableNameFromClass(aClass), aClass, schema, None, schema._createPosoLifecycleEventListenerFor(aClass)) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
 
     def thisTable = thisTableOfA

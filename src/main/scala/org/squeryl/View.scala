@@ -23,11 +23,11 @@ import java.sql.ResultSet
  * This class can be used for read only tables or (database) views
  * for an updatable view, or table use Table[T] 
  */
-class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema, _prefix: Option[String]) extends Queryable[T] {
+class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema, _prefix: Option[String], protected val posoLifecycleEventListener: PosoLifecycleEventListener) extends Queryable[T] {
 
-  def this(n:String)(implicit manifestT: Manifest[T]) =
-    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None)
-
+  def this(n:String)(implicit manifestT: Manifest[T], posoLifecycleEventListener: PosoLifecycleEventListener) =
+    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None, posoLifecycleEventListener)
+  
   def name = schema.tableNameFromClassName(_name)
 
   def prefix: Option[String] =
@@ -80,6 +80,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     resultSetMapper.map(o, resultSet);
     val t = o.asInstanceOf[T]
     _setPersisted(t)
+    posoLifecycleEventListener.afterSelect(o)
     t
   }
 

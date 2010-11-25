@@ -170,6 +170,17 @@ class SchoolDb extends Schema {
 
 
   override def drop = super.drop
+
+  def _afterSelect(p: KeyedEntity[Long]) =
+    println("if this method was spelled 'afterSelect' it would be a callback..." + p)
+
+  def _afterSelect(p: Professor) =
+    println("this callback overrides the previous because it is more specific (Professor is a subtype of KeyedEntity[Long])" + p)
+
+  def beforeInsert(p: KeyedEntity[_]) =
+    println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" + p)
+
+  beforeInsertZ((p:Professor)=> println(p))
 }
 
 class SchoolDbTestRun extends QueryTester {

@@ -17,16 +17,16 @@ package org.squeryl;
 
 import dsl.ast._
 import dsl.{QueryDsl}
-import internals.{FieldMetaData, NoOpOutMapper, FieldReferenceLinker, StatementWriter}
+import internals._
 import java.sql.{Statement}
 import scala.reflect.Manifest
 
 private [squeryl] object DummySchema extends Schema
 
-class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String]) extends View[T](n, c, schema, _prefix) {
+class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String], _posoLifecycleEventListener: PosoLifecycleEventListener) extends View[T](n, c, schema, _prefix, _posoLifecycleEventListener) {
 
-  def this(n:String)(implicit manifestT: Manifest[T]) =
-    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None)  
+  def this(n:String)(implicit manifestT: Manifest[T], _posoLifecycleEventListener: PosoLifecycleEventListener) =
+    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None, _posoLifecycleEventListener)  
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
   
@@ -47,7 +47,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         }
         case a:Any => sess.connection.prepareStatement(sw.statement)
       }        
-
+    posoLifecycleEventListener.beforeInsert(o)
     val (cnt, s) = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
     if(cnt != 1)
@@ -72,7 +72,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     }
 
     _setPersisted(t)
-    
+    posoLifecycleEventListener.afterInsert(o)
     t
   }
 
@@ -116,7 +116,11 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         st.addBatch
         updateCount += 1
       }
-
+      if(isInsert)
+        e.foreach(o => posoLifecycleEventListener.beforeInsert(o.asInstanceOf[AnyRef]))
+      else
+        e.foreach(o => posoLifecycleEventListener.beforeUpdate(o.asInstanceOf[AnyRef]))
+      
       val execResults = st.executeBatch
       
       if(checkOCC)
@@ -126,6 +130,11 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
             throw new StaleUpdateException(
               "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
           }
+
+      if(isInsert)
+        e.foreach(o => posoLifecycleEventListener.afterInsert(o.asInstanceOf[AnyRef]))
+      else
+        e.foreach(o => posoLifecycleEventListener.afterUpdate(o.asInstanceOf[AnyRef]))      
     }
   }
 
@@ -149,7 +158,9 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
     dba.writeUpdate(o, this, sw, checkOCC)
+    val oRef = o.asInstanceOf[AnyRef]
 
+    posoLifecycleEventListener.beforeUpdate(oRef)
     val (cnt, s) = dba.executeUpdate(Session.currentSession, sw)
 
     if(cnt != 1) {
@@ -162,6 +173,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       else
         error("failed to update")
     }
+    posoLifecycleEventListener.afterUpdate(oRef)
   }
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {

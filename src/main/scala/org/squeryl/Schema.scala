@@ -23,6 +23,7 @@ import reflect.{Manifest}
 import java.sql.SQLException
 import collection.mutable.{HashSet, ArrayBuffer}
 import java.io.PrintWriter
+import java.lang.reflect.Method
 
 
 trait Schema {
@@ -330,13 +331,15 @@ trait Schema {
     table(tableNameFromClass(manifestT.erasure))(manifestT)
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this, None)
+    val clazz = manifestT.erasure.asInstanceOf[Class[T]]
+    val t = new Table[T](name, clazz, this, None, _createPosoLifecycleEventListenerFor(clazz))
     _addTable(t)
     t
   }
 
   protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this, Some(prefix))
+    val clazz = manifestT.erasure.asInstanceOf[Class[T]]
+    val t = new Table[T](name, clazz, this, Some(prefix), _createPosoLifecycleEventListenerFor(clazz))
     _addTable(t)
     t
   }
@@ -347,9 +350,10 @@ trait Schema {
   protected def view[T]()(implicit manifestT: Manifest[T]): View[T] =
     view(tableNameFromClass(manifestT.erasure))(manifestT)
 
-  protected def view[T](name: String)(implicit manifestT: Manifest[T]): View[T] =
-    new View[T](name)(manifestT)
-
+  protected def view[T](name: String)(implicit manifestT: Manifest[T]): View[T] = {
+    val clazz = manifestT.erasure.asInstanceOf[Class[T]]
+    new View[T](name)(manifestT, _createPosoLifecycleEventListenerFor(clazz))
+  }
   
   class ReferentialEvent(val eventName: String) {
     def restrict = new ReferentialActionImpl("restrict", this)
@@ -497,5 +501,66 @@ trait Schema {
       new ColumnGroupAttributeAssignment(cols, columnAttributes)
   }
 
-  def columns(fieldList: TypedExpressionNode[_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
+  protected def columns(fieldList: TypedExpressionNode[_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
+
+  protected def beforeInsertZ[A](f: A=>Unit)(implicit manifestT: Manifest[A]) = {}
+  
+  private val _posoLifecycleEventInvokers: Iterable[LifecycleEventInvoker] = _createPosoLifecycleEventInvokers
+
+  private [squeryl] def _createPosoLifecycleEventListenerFor(clazz: Class[_]): PosoLifecycleEventListener = {
+
+    import PosoLifeCycleEvent._
+    
+    val beforeInsertInvoker = _getLifecycleEventInvokerFor(clazz, BeforeInsert)
+    val afterInsertInvoker =  _getLifecycleEventInvokerFor(clazz, AfterInsert)
+    val beforeDeleteInvoker = _getLifecycleEventInvokerFor(clazz, BeforeDelete)
+    val afterDeleteInvoker =  _getLifecycleEventInvokerFor(clazz, AfterDelete)
+    val beforeUpdateInvoker = _getLifecycleEventInvokerFor(clazz, BeforeUpdate)
+    val afterUpdateInvoker =  _getLifecycleEventInvokerFor(clazz, AfterUpdate)
+    val afterSelectInvoker =  _getLifecycleEventInvokerFor(clazz, AfterSelect)
+
+    new PosoLifecycleEventListenerImpl(
+      this,
+      beforeInsertInvoker,
+      afterInsertInvoker,
+      beforeDeleteInvoker,
+      afterDeleteInvoker,
+      beforeUpdateInvoker,
+      afterUpdateInvoker,
+      afterSelectInvoker)
+  }
+
+  private val _classAncestryOrderingComparator =
+    (c1: LifecycleEventInvoker, c2: LifecycleEventInvoker) => c2.posoClass.isAssignableFrom(c1.posoClass)
+
+  private def _getLifecycleEventInvokerFor(clazz:Class[_], event: PosoLifeCycleEvent.Value): Option[LifecycleEventInvoker] = {
+
+    val candidates = _posoLifecycleEventInvokers.filter(i =>
+      i.event == event &&
+      i.posoClass.isAssignableFrom(clazz)
+    )
+
+    candidates.toList.sortWith(_classAncestryOrderingComparator).headOption
+  }
+
+  private def _createPosoLifecycleEventInvokers = {
+    val result = new ArrayBuffer[LifecycleEventInvoker]
+    for(e <- PosoLifeCycleEvent.values) {
+
+      val name = e.toString
+      val nameOfMethod = name.head.toLower + name.tail
+      val methods = this.getClass.getMethods.filter(_.getName == nameOfMethod)
+
+      for(m <- methods) {
+        val paramTypes = m.getParameterTypes
+        if(paramTypes.length == 1) {
+          result.append(new LifecycleEventInvoker(e, paramTypes(0), m))
+        }
+      }
+    }
+
+    result
+  }
+
+
 }
