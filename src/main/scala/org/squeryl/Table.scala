@@ -71,6 +71,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       case a:Any =>{}
     }
 
+    st.close
+
     _setPersisted(t)
     
     t
