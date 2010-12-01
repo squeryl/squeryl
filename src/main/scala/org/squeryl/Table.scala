@@ -48,29 +48,33 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         case a:Any => sess.connection.prepareStatement(sw.statement)
       }        
 
-    val (cnt, s) = _dbAdapter.executeUpdateForInsert(sess, sw, st)
+    try {
+      val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
-    if(cnt != 1)
-      error("failed to insert")
+      if(cnt != 1)
+        error("failed to insert")
 
-    posoMetaData.primaryKey match {
-      case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
-        val rs = s.getGeneratedKeys
-        try {
-          sess._addResultSet(rs)
-          assert(rs.next,
-            "getGeneratedKeys returned no rows for the auto incremented\n"+
-            " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
-            " column might not be defined as auto increment")
-          pk.setFromResultSet(o, rs, 1)
+      posoMetaData.primaryKey match {
+        case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
+          val rs = st.getGeneratedKeys
+          try {
+            assert(rs.next,
+              "getGeneratedKeys returned no rows for the auto incremented\n"+
+              " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
+              " column might not be defined as auto increment")
+            pk.setFromResultSet(o, rs, 1)
+          }
+          finally {
+            rs.close
+          }
         }
-        finally {
-          rs.close
-        }
+        case a:Any =>{}
       }
-      case a:Any =>{}
     }
-
+    finally {
+      st.close
+    }
+    
     _setPersisted(t)
     
     t
@@ -101,31 +105,36 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         dba.writeUpdate(e0, this, sw, checkOCC)
       
       val st = sess.connection.prepareStatement(sw.statement)
-      dba.prepareStatement(sess.connection, sw, st, sess)
-      st.addBatch
-
-      var updateCount = 1
-
-      while(it.hasNext) {
-        val eN = it.next.asInstanceOf[AnyRef]      
-        var idx = 1
-        val f = fmds.foreach(fmd => {
-          st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
-          idx += 1
-        })
+      try {
+        dba.prepareStatement(sess.connection, sw, st, sess)
         st.addBatch
-        updateCount += 1
-      }
 
-      val execResults = st.executeBatch
-      
-      if(checkOCC)
-        for(b <- execResults)
-          if(b == 0) {
-            val updateOrInsert = if(isInsert) "insert" else "update"
-            throw new StaleUpdateException(
-              "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
-          }
+        var updateCount = 1
+
+        while(it.hasNext) {
+          val eN = it.next.asInstanceOf[AnyRef]
+          var idx = 1
+          val f = fmds.foreach(fmd => {
+            st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
+            idx += 1
+          })
+          st.addBatch
+          updateCount += 1
+        }
+
+        val execResults = st.executeBatch
+
+        if(checkOCC)
+          for(b <- execResults)
+            if(b == 0) {
+              val updateOrInsert = if(isInsert) "insert" else "update"
+              throw new StaleUpdateException(
+                "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
+            }
+      }
+      finally {
+        st.close
+      }
     }
   }
 
@@ -150,7 +159,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val sw = new StatementWriter(dba)
     dba.writeUpdate(o, this, sw, checkOCC)
 
-    val (cnt, s) = dba.executeUpdate(Session.currentSession, sw)
+    val cnt  = dba.executeUpdateAndCloseStatement(Session.currentSession, sw)
 
     if(cnt != 1) {
       if(checkOCC && posoMetaData.isOptimistic) {
@@ -201,8 +210,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val dba = _dbAdapter
     val sw = new StatementWriter(dba)
     dba.writeUpdate(this, us, sw)
-    val res = dba.executeUpdate(Session.currentSession, sw)
-    res._1    
+    dba.executeUpdateAndCloseStatement(Session.currentSession, sw)    
   }
   
   def delete(q: Query[T]): Int = {
@@ -213,9 +221,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val sw = new StatementWriter(_dbAdapter)
     _dbAdapter.writeDelete(this, queryAst.whereClause, sw)
 
-    val (cnt, s) = _dbAdapter.executeUpdate(Session.currentSession, sw)
-
-    cnt
+    _dbAdapter.executeUpdateAndCloseStatement(Session.currentSession, sw)
   }
 
   def deleteWhere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =

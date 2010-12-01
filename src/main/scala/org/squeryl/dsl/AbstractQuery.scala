@@ -121,6 +121,8 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     ast.write(sw)
     val s = Session.currentSession
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
+    s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
+    s._addResultSet(rs) // same for the result set
     
     var _nextCalled = false;
     var _hasNext = false;
@@ -128,7 +130,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     def _next = {
       _hasNext = rs.next
 
-      if(!_hasNext) {// close it ASAP
+      if(!_hasNext) {// close it since we've completed the iteration
         Utils.close(rs)
         stmt.close
       }
