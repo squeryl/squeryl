@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
@@ -282,12 +282,10 @@ trait DatabaseAdapter {
     sw.write(")")
   }
 
-  def prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =
+  private def _prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =
     prepareStatement(c, sw, c.prepareStatement(sw.statement), session)
   
   def prepareStatement(c: Connection, sw: StatementWriter, s: PreparedStatement, session: Session): PreparedStatement = {    
-
-    session._addStatement(s)
 
     var i = 1;
     for(p <- sw.params) {
@@ -367,18 +365,28 @@ trait DatabaseAdapter {
     _exec[A](s, sw, block _)
 
   def executeQuery(s: Session, sw: StatementWriter) = exec(s, sw) {
-    val st = prepareStatement(s.connection, sw, s)
+    val st = _prepareStatement(s.connection, sw, s)
     (st.executeQuery, st)
   }
 
   def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = exec(s, sw) {
-    val st = prepareStatement(s.connection, sw, s)
+    val st = _prepareStatement(s.connection, sw, s)
     (st.executeUpdate, st)
+  }
+
+  def executeUpdateAndCloseStatement(s: Session, sw: StatementWriter): Int = exec(s, sw) {
+    val st = _prepareStatement(s.connection, sw, s)
+    try {
+      st.executeUpdate
+    }
+    finally {
+      st.close
+    }
   }
 
   def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) {
     val st = prepareStatement(s.connection, sw, ps, s)
-    (st.executeUpdate, st)
+    st.executeUpdate
   }
 
   def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
