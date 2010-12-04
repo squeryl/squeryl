@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl
 
 
@@ -471,7 +471,11 @@ trait Schema {
   private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
     _columnGroupAttributeAssignments.append(cga);
   
-  def defaultColumnAttributesForKeyedEntityId = Set(new PrimaryKey, new AutoIncremented(None))
+  def defaultColumnAttributesForKeyedEntityId(typeOfIdField: Class[_]) =
+    if(typeOfIdField.isAssignableFrom(classOf[java.lang.Long]) || typeOfIdField.isAssignableFrom(classOf[java.lang.Integer]))
+      Set(new PrimaryKey, new AutoIncremented(None))
+    else
+      Set(new PrimaryKey)
   
   protected def unique = Unique()
 

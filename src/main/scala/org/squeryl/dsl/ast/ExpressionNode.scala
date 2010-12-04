@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.dsl.ast
 
 
@@ -525,7 +525,18 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode {
   }
 
   override def children = List(e)
-  
+
+  def inverse = {
+
+    val aCopy = new OrderByArg(a.e)
+
+    if(aCopy.isAscending)
+      aCopy.desc
+    else
+      aCopy.asc
+
+    new OrderByExpression(aCopy)
+  }  
 }
 
 /**

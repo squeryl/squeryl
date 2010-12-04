@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.dsl
 
 import ast._
@@ -394,6 +394,7 @@ trait TypeArithmetic extends FieldTypes {
   protected def mapFloat2FloatType(d: Float): FloatType
   protected def mapLong2LongType(l: Long): LongType
   protected def mapBoolean2BooleanType(b: Boolean): BooleanType
+  protected def mapBinary2BinaryType(b: Array[Byte]): BinaryType
   protected def mapDate2DateType(b: Date): DateType
   protected def mapTimestamp2TimestampType(b: Timestamp): TimestampType
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType    
@@ -436,6 +437,11 @@ trait TypeArithmetic extends FieldTypes {
   protected implicit def createOutMapperBooleanType: OutMapper[BooleanType] = new OutMapper[BooleanType] {
     def doMap(rs: ResultSet) = mapBoolean2BooleanType(rs.getBoolean(index))
     def sample = sampleBoolean
+  }
+
+  protected implicit def createOutMapperBinaryType: OutMapper[BinaryType] = new OutMapper[BinaryType] {
+    def doMap(rs: ResultSet) = mapBinary2BinaryType(rs.getBytes(index))
+    def sample = sampleBinary
   }
 
   protected implicit def createOutMapperDateType: OutMapper[DateType] = new OutMapper[DateType] {
@@ -538,6 +544,17 @@ trait TypeArithmetic extends FieldTypes {
         Some(v)
     }
     def sample = Some(sampleBoolean)
+  }
+
+  protected implicit def createOutMapperBinaryTypeOption: OutMapper[Option[BinaryType]] = new OutMapper[Option[BinaryType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapBinary2BinaryType(rs.getBytes(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleBinary)
   }
 
   protected implicit def createOutMapperDateTypeOption: OutMapper[Option[DateType]] = new OutMapper[Option[DateType]] {

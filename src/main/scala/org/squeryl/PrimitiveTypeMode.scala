@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl
 
 
@@ -62,6 +62,8 @@ trait PrimitiveTypeMode extends QueryDsl {
   type TimestampType = Timestamp
 
   type EnumerationValueType = Enumeration#Value
+
+  type BinaryType = Array[Byte]
 
   //TODO: consider spliting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
   
@@ -181,6 +183,22 @@ trait PrimitiveTypeMode extends QueryDsl {
         new SelectElementReference[Option[Boolean]](n) with BooleanExpression[Option[Boolean]]
     }
 
+  def createLeafNodeOfScalarBinaryType(i: BinaryType) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[BinaryType](i) with BinaryExpression[BinaryType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[BinaryType](n) with BinaryExpression[BinaryType]
+    }
+
+  def createLeafNodeOfScalarBinaryOptionType(i: Option[BinaryType]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[BinaryType]](i) with BinaryExpression[Option[BinaryType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[BinaryType]](n) with BinaryExpression[Option[BinaryType]]
+    }
+
   def createLeafNodeOfScalarDateType(i: Date) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
@@ -240,6 +258,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected def mapDate2DateType(b: Date) = b
   protected def mapTimestamp2TimestampType(b: Timestamp) = b
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
+  protected def mapBinary2BinaryType(d: Array[Byte]) = d
 
   protected implicit val sampleByte: ByteType = 0xF.byteValue
   protected implicit val sampleInt: IntType = 0
@@ -252,6 +271,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected implicit val sampleDate: DateType = new Date
   protected implicit def sampleTimestamp: TimestampType = new Timestamp(0)
   //protected implicit def sampleEnumerationValueType: EnumerationValueType = DummyEnum.DummyEnumerationValue
+  protected implicit val sampleBinary: BinaryType = Array[Byte](0)
 }
 
 object DummyEnum extends Enumeration {

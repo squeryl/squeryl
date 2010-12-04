@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl
 
 import dsl.QueryDsl
@@ -66,11 +66,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
       (t:T) => t.asInstanceOf[PersistenceStatus]._isPersisted = true
     else
       (t:T) => {}
+
+  private val _posoFactory =
+    FieldMetaData.factory.createPosoFactory(posoMetaData)
   
-  private [squeryl] def _createInstanceOfRowObject = {
-    val c = posoMetaData.constructor
-    c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
-  }
+  private [squeryl] def _createInstanceOfRowObject =
+    _posoFactory()
   
   private [squeryl] def give(resultSetMapper: ResultSetMapper, resultSet: ResultSet) : T  = {
 

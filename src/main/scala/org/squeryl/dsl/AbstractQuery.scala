@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.dsl
 
 import ast.{QueryableExpressionNode, ViewExpressionNode, ExpressionNode, QueryExpressionNode}
@@ -125,10 +125,14 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val s = Session.currentSession
     val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
-    val statEx = new StatementExecution(_thisQueryClass, beforeQueryExecute, System.currentTimeMillis, sw.statement)
+
+    lazy val statEx = new StatementExecution(_thisQueryClass, beforeQueryExecute, System.currentTimeMillis, sw.statement)
 
     if(s.statisticsListener != None)
       s.statisticsListener.get.queryExecuted(statEx)
+
+    s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
+    s._addResultSet(rs) // same for the result set
     
     var _nextCalled = false;
     var _hasNext = false;
@@ -138,7 +142,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     def _next = {
       _hasNext = rs.next
 
-      if(!_hasNext) {// close it ASAP
+      if(!_hasNext) {// close it since we've completed the iteration
         Utils.close(rs)
         stmt.close
 

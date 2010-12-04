@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.dsl
 
 import ast._
@@ -479,16 +479,16 @@ trait QueryDsl
     }
   }
 
-  def oneToManyRelation[O <: KeyedEntity[_],M <: KeyedEntity[_]](ot: Table[O], mt: Table[M]) = new OneToManyRelationBuilder(ot,mt)
+  def oneToManyRelation[O <: KeyedEntity[_],M](ot: Table[O], mt: Table[M]) = new OneToManyRelationBuilder(ot,mt)
 
-  class OneToManyRelationBuilder[O <: KeyedEntity[_],M <: KeyedEntity[_]](ot: Table[O], mt: Table[M]) {
+  class OneToManyRelationBuilder[O <: KeyedEntity[_],M](ot: Table[O], mt: Table[M]) {
     
     def via(f: (O,M)=>EqualityExpression)(implicit schema: Schema) =
       new OneToManyRelationImpl(ot,mt,f, schema)
 
   }
 
-  class OneToManyRelationImpl[O <: KeyedEntity[_],M <: KeyedEntity[_]](val leftTable: Table[O], val rightTable: Table[M], f: (O,M)=>EqualityExpression, schema: Schema)
+  class OneToManyRelationImpl[O <: KeyedEntity[_],M](val leftTable: Table[O], val rightTable: Table[M], f: (O,M)=>EqualityExpression, schema: Schema)
     extends OneToManyRelation[O,M] {
 
     schema._addRelation(this)
@@ -528,7 +528,7 @@ trait QueryDsl
           _rightFkFmd.set(m0, v)
         }
 
-        def associate(m: M) = {
+        def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
           assign(m)
           rightTable.insertOrUpdate(m)
         }

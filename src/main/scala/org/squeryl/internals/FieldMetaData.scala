@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.internals
 
 import java.lang.annotation.Annotation
@@ -116,14 +116,13 @@ class FieldMetaData(
     (classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(parentMetaData.clasz)  && nameOfProperty == "idField")
 
   if(isIdFieldOfKeyedEntity && ! classOf[CompositeKey].isAssignableFrom(wrappedFieldType)) {
-    schema.defaultColumnAttributesForKeyedEntityId.foreach(ca => {
+    schema.defaultColumnAttributesForKeyedEntityId(wrappedFieldType).foreach(ca => {
 
       if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
         error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
           " all KeyedEntity tables, while class " + parentMetaData.clasz.getName +
           "\n has it's id field of type " + fieldType.getName + ", that is neither an Int or a Long, \n the only two types that can " +
-          "be auto incremented. Tables of this class must redefine the attributes of the id field using Shema.declareColumnAttributes\n" +
-          " within the schema definition (" + schema.getClass.getName + ").")
+          "be auto incremented")
 
       _addColumnAttribute(ca)
     })
@@ -332,7 +331,9 @@ trait FieldMetaDataFactory {
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
   def isSupportedFieldType(c: Class[_]): Boolean =
-    FieldMetaData._isSupportedFieldType.handleType(c, None)      
+    FieldMetaData._isSupportedFieldType.handleType(c, None)
+
+  def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
 
 object FieldMetaData {
@@ -360,6 +361,12 @@ object FieldMetaData {
   }
   
   var factory = new FieldMetaDataFactory {   
+
+    def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef =
+      () => {
+        val c = posoMetaData.constructor
+        c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
+      }
     
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 

@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.tests.schooldb
 
 
@@ -25,7 +25,7 @@ import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
-import adapters.{PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
+import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker}
 
 class SchoolDbObject extends KeyedEntity[Int] {
@@ -95,6 +95,17 @@ class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
 
 object SDB extends SchoolDb
 
+object Tempo extends Enumeration {
+  type Tempo = Value
+  val Largo = Value(1, "Largo")
+  val Allegro = Value(2, "Allegro")
+  val Presto = Value(3, "Presto")
+}
+
+class StringKeyedEntity(val id: String, val tempo: Tempo.Tempo) extends KeyedEntity[String] {
+  def this() = this("", Tempo.Largo)
+}
+
 class SchoolDb extends Schema {
 
   import org.squeryl.PrimitiveTypeMode._
@@ -116,6 +127,9 @@ class SchoolDb extends Schema {
    */
   override def tableNameFromClassName(n:String) =
     "T_" + n
+
+  val stringKeyedEntities =
+    table[StringKeyedEntity]
 
   val professors = table[Professor]
   
@@ -140,6 +154,10 @@ class SchoolDb extends Schema {
 
   on(professors)(p => declare(
     p.yearlySalary is(dbType("real"))
+  ))
+
+  on(stringKeyedEntities)(e => declare(
+    e.tempo.defaultsTo(Tempo.Largo)
   ))
 
   // disable the override, since the above is good for Oracle only, this is not a usage demo, but
@@ -201,6 +219,10 @@ class SchoolDbTestRun extends QueryTester {
     Session.currentSession.connection.commit
   }
 
+  def testStringKeyedEntities = {
+    val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
+  }
+
   def testCountSignatures = {
 
     val q =
@@ -250,6 +272,8 @@ class SchoolDbTestRun extends QueryTester {
     )
 
   def test1 = {
+
+    testStringKeyedEntities
 
     testOptionStringInWhereClause
     
@@ -347,6 +371,12 @@ class SchoolDbTestRun extends QueryTester {
     c = courses.where(_.id === counterpoint.id).single
 
     assertEquals(c.rawData(0), 3, 'blobTest)
+
+    val data = Array.fill(2)(2.toByte)
+    courses.update(c => where(c.id === counterpoint.id) set(c.rawData := data))
+    c = courses.where(_.id === counterpoint.id).single
+    assertEquals(2, c.rawData(0), 'blobTest)
+    assertEquals(2, c.rawData(1), 'blobTest)
 
     passed('blobTest)
   }
@@ -478,14 +508,13 @@ class SchoolDbTestRun extends QueryTester {
     println('testOptionAndNonOptionMixInComputeTuple + " passed.")
   }
 
-  def testConcatWithOptionalCols = {
+  def testConcatWithOptionalCols =
+    if(!Session.currentSession.databaseAdapter.isInstanceOf[MSSQLServer]){
 
-    //loggerOn
+      val res = addressesOfStudentsOlderThan24.toList
 
-    val res = addressesOfStudentsOlderThan24.toList
-    
-    println('testConcatWithOptionalCols + " passed.")
-  }
+      println('testConcatWithOptionalCols + " passed.")
+    }
 
   def testScalarOptionQuery = {
     val avgAge:Option[Float] = avgStudentAge

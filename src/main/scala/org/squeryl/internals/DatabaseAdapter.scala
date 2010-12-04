@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ ***************************************************************************** */
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
@@ -40,9 +40,14 @@ trait DatabaseAdapter {
 
   implicit def zipIterable[T](i: Iterable[T]) = new ZipIterable(i)
 
-  def writeQuery(qen: QueryExpressionElements, sw: StatementWriter):Unit = {
+  def writeQuery(qen: QueryExpressionElements, sw: StatementWriter):Unit =
+    writeQuery(qen, sw, false, None)
+
+  protected def writeQuery(qen: QueryExpressionElements, sw: StatementWriter, inverseOrderBy: Boolean, topHint: Option[String]):Unit = {
 
     sw.write("Select")
+
+    topHint.foreach(" "  + sw.write(_) + " ")
 
     if(qen.selectDistinct)
       sw.write(" distinct")
@@ -112,6 +117,8 @@ trait DatabaseAdapter {
         sw.pushPendingNextLine
       }
     }
+
+    writeEndOfFromHint(qen, sw)
     
     if(qen.hasUnInhibitedWhereClause) {      
       sw.write("Where")
@@ -134,19 +141,26 @@ trait DatabaseAdapter {
     if(! qen.orderByClause.isEmpty && qen.parent == None) {
       sw.write("Order By")
       sw.nextLine
+      val ob0 = qen.orderByClause.filter(e => ! e.inhibited)
+      val ob = if(inverseOrderBy) ob0.map(_.asInstanceOf[OrderByExpression].inverse) else ob0
       sw.writeIndented {
-        sw.writeNodesWithSeparator(qen.orderByClause.filter(e => ! e.inhibited), ",", true)
+        sw.writeNodesWithSeparator(ob, ",", true)
       }
       sw.pushPendingNextLine
     }
 
+    writeEndOfQueryHint(qen, sw)
+
+    writePaginatedQueryDeclaration(qen, sw)
+  }
+
+  def writeEndOfQueryHint(qen: QueryExpressionElements, sw: StatementWriter) = 
     if(qen.isForUpdate) {
       sw.write("for update")
       sw.pushPendingNextLine
     }
 
-    writePaginatedQueryDeclaration(qen, sw)
-  }
+  def writeEndOfFromHint(qen: QueryExpressionElements, sw: StatementWriter) = {}
 
   def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = 
     qen.page.foreach(p => {
@@ -230,10 +244,12 @@ trait DatabaseAdapter {
 
     for(d <- fmd.defaultValue) {
       sb.append(" default ")
-      val sw = new StatementWriter(true,this)
-      sw.addParam(d.value.asInstanceOf[AnyRef])
-      d.doWrite(sw)
-      sb.append(sw.statement)
+
+      val v = convertToJdbcValue(d.value.asInstanceOf[AnyRef])
+      if(v.isInstanceOf[String])
+        sb.append("'" + v + "'")
+      else
+        sb.append(v)
     }
 
     if(isPrimaryKey)
@@ -266,12 +282,10 @@ trait DatabaseAdapter {
     sw.write(")")
   }
 
-  def prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =
+  private def _prepareStatement(c: Connection, sw: StatementWriter, session: Session): PreparedStatement =
     prepareStatement(c, sw, c.prepareStatement(sw.statement), session)
   
   def prepareStatement(c: Connection, sw: StatementWriter, s: PreparedStatement, session: Session): PreparedStatement = {    
-
-    session._addStatement(s)
 
     var i = 1;
     for(p <- sw.params) {
@@ -351,18 +365,28 @@ trait DatabaseAdapter {
     _exec[A](s, sw, block _)
 
   def executeQuery(s: Session, sw: StatementWriter) = exec(s, sw) {
-    val st = prepareStatement(s.connection, sw, s)
+    val st = _prepareStatement(s.connection, sw, s)
     (st.executeQuery, st)
   }
 
   def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = exec(s, sw) {
-    val st = prepareStatement(s.connection, sw, s)
+    val st = _prepareStatement(s.connection, sw, s)
     (st.executeUpdate, st)
+  }
+
+  def executeUpdateAndCloseStatement(s: Session, sw: StatementWriter): Int = exec(s, sw) {
+    val st = _prepareStatement(s.connection, sw, s)
+    try {
+      st.executeUpdate
+    }
+    finally {
+      st.close
+    }
   }
 
   def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) {
     val st = prepareStatement(s.connection, sw, ps, s)
-    (st.executeUpdate, st)
+    st.executeUpdate
   }
 
   def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
