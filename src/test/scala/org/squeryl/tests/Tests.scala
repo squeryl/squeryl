@@ -40,7 +40,7 @@ object Tests extends QueryTester {
     //org.squeryl.demos.KickTheTires.testWithH2
 
     allTestsOnH2
-
+    //allTests("Drizzle", createDrizzleTestConnection _)
     //dumpSchemasForAllDatabases
     
     //leakTest    
@@ -84,6 +84,8 @@ object Tests extends QueryTester {
     allTests("PosgreSQL", createPostgreSqlTestConnection _)
     
     allTests("MySQL", createMySQLTestConnection _)
+
+    allTests("Drizzle", createDrizzleTestConnection _)
 
     issue14Test
 
@@ -195,6 +197,19 @@ object Tests extends QueryTester {
     
     Session.create(c,new MySQLAdapter)
   }
+
+
+  def createDrizzleTestConnection = {
+    Class.forName("org.drizzle.jdbc.DrizzleDriver");
+
+    val c = DriverManager.getConnection("jdbc:drizzle://localhost:4427/test")
+
+    //com.mysql.jdbc.Driver defaults to TRANSACTION_REPEATABLE_READ
+    c.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED)
+    
+    Session.create(c,new DrizzleAdapter)
+  }
+
 
   def createMSSqlTestConnection = {
 
