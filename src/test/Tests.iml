@@ -4,7 +4,7 @@
     <facet type="scala" name="Scala">
       <configuration>
         <option name="compilerLibraryLevel" value="Global" />
-        <option name="compilerLibraryName" value="Scala2.8.0" />
+        <option name="compilerLibraryName" value="Scala2.8.1" />
       </configuration>
     </facet>
     <facet type="Scala" name="Scala">
@@ -12,12 +12,12 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0/lib/scala-compiler.jar" />
+            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.1/lib/scala-compiler.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">
           <array>
-            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.0/lib/scala-library.jar" />
+            <option value="$MODULE_DIR$/../../project/boot/scala-2.8.1/lib/scala-library.jar" />
           </array>
         </option>
       </configuration>
@@ -43,13 +43,41 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.0/provided/specs_2.8.0-1.6.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.1/lib/scala-compiler.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Scala2.8.0" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../project/boot/scala-2.8.1/lib/scala-library.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.1/provided" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../lib_managed/scala_2.8.1/provided" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.8.1/provided/specs_2.8.0-1.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Scala2.8.1" level="application" />
   </component>
 </module>
 

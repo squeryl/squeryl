@@ -72,12 +72,17 @@ trait Schema {
     res
   }
 
-  @deprecated("will be removed in a future version")
+  @deprecated("will be removed in a future version, use findTablesFor instead.")
   def findTableFor[A](a: A): Option[Table[A]] = {
     val c = a.asInstanceOf[AnyRef].getClass
     _tables.find(_.posoMetaData.clasz == c).asInstanceOf[Option[Table[A]]]
   }
 
+  def findTablesFor[A](a: A): Iterable[Table[A]] = {
+    val c = a.asInstanceOf[AnyRef].getClass
+    _tables.filter(_.posoMetaData.clasz == c).asInstanceOf[Iterable[Table[A]]]
+  }
+  
   private def findAllTablesFor[A](c: Class[A]) =
     _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Traversable[Table[_]]]
 
