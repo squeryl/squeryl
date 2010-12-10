@@ -401,7 +401,7 @@ trait Schema {
    * Can be overridden by the Column Annotation ex.: Column(length=256)
    * default is 128 
    */
-  def defaultLengthOfString = 123
+  def defaultLengthOfString = 128
 
   /**
    * protected since table declarations must only be done inside a Schema
