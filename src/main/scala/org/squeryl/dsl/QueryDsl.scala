@@ -56,9 +56,14 @@ trait QueryDsl
       _executeTransactionWithin(SessionFactory.newSession, a _)
     else {
       val s = Session.currentSession
-      s.unbindFromCurrentThread
-      val res = _executeTransactionWithin(SessionFactory.newSession, a _)
-      s.bindToCurrentThread
+      val res =
+        try {
+          s.unbindFromCurrentThread
+          _executeTransactionWithin(SessionFactory.newSession, a _)
+        }
+        finally {
+          s.bindToCurrentThread
+        }
       res
     }
 
