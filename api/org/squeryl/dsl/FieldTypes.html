@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.dsl.FieldTypes</title>
+          <title>org.squeryl.dsl.FieldTypes</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="type" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="package.html" class="extype" name="org.squeryl.dsl">dsl</a></p>
 
@@ -23,36 +24,56 @@
       <h4 class="signature" id="signature">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">FieldTypes</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldTypes</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       <div class="fullcomment" id="comment"><div class="block">
-            known subclasses: <a href="TypeArithmetic.html" class="extype" name="org.squeryl.dsl.TypeArithmetic">TypeArithmetic</a>
+            linear super types: AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div><div class="block">
+            known subclasses: <a href="TypeArithmetic.html" class="extype" name="org.squeryl.dsl.TypeArithmetic">TypeArithmetic</a>, <a href="DslFactory.html" class="extype" name="org.squeryl.dsl.DslFactory">DslFactory</a>, <a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a>, <a href="../customtypes/CustomTypesMode.html" class="extype" name="org.squeryl.customtypes.CustomTypesMode">CustomTypesMode</a>, <a href="../customtypes/CustomTypesMode$.html" class="extype" name="org.squeryl.customtypes.CustomTypesMode">CustomTypesMode</a>, <a href="../PrimitiveTypeMode.html" class="extype" name="org.squeryl.PrimitiveTypeMode">PrimitiveTypeMode</a>, <a href="../PrimitiveTypeMode$.html" class="extype" name="org.squeryl.PrimitiveTypeMode">PrimitiveTypeMode</a>
+          </div><div class="block">
+            self type: <a href="TypeArithmetic.html" class="extype" name="org.squeryl.dsl.TypeArithmetic">TypeArithmetic</a>
           </div></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.dsl.FieldTypes">FieldTypes</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.FieldTypes#BigDecimalType">
+              <ol><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#BigDecimalType">
+      <a id="BigDecimalType:BigDecimalType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">BigDecimalType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -61,11 +82,32 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#BooleanType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#BinaryType">
+      <a id="BinaryType:BinaryType"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol">
+        <span class="name">BinaryType</span>
+        
+        
+        
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: abstract 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#BooleanType">
+      <a id="BooleanType:BooleanType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">BooleanType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -74,11 +116,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#ByteType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#ByteType">
+      <a id="ByteType:ByteType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">ByteType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -87,11 +133,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#DateType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#DateType">
+      <a id="DateType:DateType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">DateType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -100,11 +150,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#DoubleType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#DoubleType">
+      <a id="DoubleType:DoubleType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">DoubleType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -113,11 +167,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#EnumerationValueType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#EnumerationValueType">
+      <a id="EnumerationValueType:EnumerationValueType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">EnumerationValueType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -126,11 +184,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#FloatType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#FloatType">
+      <a id="FloatType:FloatType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">FloatType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -139,11 +201,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#IntType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#IntType">
+      <a id="IntType:IntType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">IntType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -152,11 +218,15 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#LongType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#LongType">
+      <a id="LongType:LongType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">LongType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -165,11 +235,32 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes#StringType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#StringType">
+      <a id="StringType:StringType"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
         <span class="name">StringType</span>
+        
+        
+        
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: abstract 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes#TimestampType">
+      <a id="TimestampType:TimestampType"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol">
+        <span class="name">TimestampType</span>
+        
+        
+        
       </span>
       </h4>
       
@@ -180,14 +271,18 @@
           
     </li></ol>
             </div>
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=">
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -198,11 +293,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#!=">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -216,14 +315,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef###">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -234,11 +336,15 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: T0</span>
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -249,11 +355,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -264,11 +374,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -282,14 +396,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -303,14 +420,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -325,14 +445,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="scala.AnyRef#clone">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -346,14 +469,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#eq">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -380,14 +506,17 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#equals">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -409,14 +538,17 @@ scala.Int
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="scala.AnyRef#finalize">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -431,14 +563,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#getClass">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       
@@ -452,14 +587,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#hashCode">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -475,14 +613,17 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -498,14 +639,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#ne">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -519,14 +663,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notify">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -539,14 +686,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -559,14 +709,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleBigDecimal">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleBigDecimal">
+      <a id="sampleBigDecimal:BigDecimalType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleBigDecimal</span><span class="result">: BigDecimalType</span>
+        <span class="name">sampleBigDecimal</span>
+        
+        
+        <span class="result">: BigDecimalType</span>
       </span>
       </h4>
       
@@ -575,11 +728,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleBigDecimalO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleBigDecimalO">
+      <a id="sampleBigDecimalO:Some[BigDecimalType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleBigDecimalO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[BigDecimalType]</span>
+        <span class="name">sampleBigDecimalO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[BigDecimalType]</span>
       </span>
       </h4>
       
@@ -588,11 +745,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleBoolean">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleBinary">
+      <a id="sampleBinary:BinaryType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleBoolean</span><span class="result">: BooleanType</span>
+        <span class="name">sampleBinary</span>
+        
+        
+        <span class="result">: BinaryType</span>
       </span>
       </h4>
       
@@ -601,11 +762,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleBooleanO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleBinaryO">
+      <a id="sampleBinaryO:Some[BinaryType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleBooleanO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[BooleanType]</span>
+        <span class="name">sampleBinaryO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[BinaryType]</span>
       </span>
       </h4>
       
@@ -614,11 +779,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleByte">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleBoolean">
+      <a id="sampleBoolean:BooleanType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleByte</span><span class="result">: ByteType</span>
+        <span class="name">sampleBoolean</span>
+        
+        
+        <span class="result">: BooleanType</span>
       </span>
       </h4>
       
@@ -627,11 +796,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleByteO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleBooleanO">
+      <a id="sampleBooleanO:Some[BooleanType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleByteO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[ByteType]</span>
+        <span class="name">sampleBooleanO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[BooleanType]</span>
       </span>
       </h4>
       
@@ -640,11 +813,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleDate">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleByte">
+      <a id="sampleByte:ByteType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleDate</span><span class="result">: DateType</span>
+        <span class="name">sampleByte</span>
+        
+        
+        <span class="result">: ByteType</span>
       </span>
       </h4>
       
@@ -653,11 +830,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleDateO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleByteO">
+      <a id="sampleByteO:Some[ByteType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleDateO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[DateType]</span>
+        <span class="name">sampleByteO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[ByteType]</span>
       </span>
       </h4>
       
@@ -666,11 +847,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleDouble">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleDate">
+      <a id="sampleDate:DateType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleDouble</span><span class="result">: DoubleType</span>
+        <span class="name">sampleDate</span>
+        
+        
+        <span class="result">: DateType</span>
       </span>
       </h4>
       
@@ -679,11 +864,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleDoubleO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleDateO">
+      <a id="sampleDateO:Some[DateType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleDoubleO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[DoubleType]</span>
+        <span class="name">sampleDateO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[DateType]</span>
       </span>
       </h4>
       
@@ -692,11 +881,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleFloat">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleDouble">
+      <a id="sampleDouble:DoubleType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleFloat</span><span class="result">: FloatType</span>
+        <span class="name">sampleDouble</span>
+        
+        
+        <span class="result">: DoubleType</span>
       </span>
       </h4>
       
@@ -705,11 +898,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleFloatO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleDoubleO">
+      <a id="sampleDoubleO:Some[DoubleType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleFloatO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[FloatType]</span>
+        <span class="name">sampleDoubleO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[DoubleType]</span>
       </span>
       </h4>
       
@@ -718,11 +915,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleInt">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleFloat">
+      <a id="sampleFloat:FloatType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleInt</span><span class="result">: IntType</span>
+        <span class="name">sampleFloat</span>
+        
+        
+        <span class="result">: FloatType</span>
       </span>
       </h4>
       
@@ -731,11 +932,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleIntO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleFloatO">
+      <a id="sampleFloatO:Some[FloatType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleIntO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[IntType]</span>
+        <span class="name">sampleFloatO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[FloatType]</span>
       </span>
       </h4>
       
@@ -744,11 +949,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleLong">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleInt">
+      <a id="sampleInt:IntType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleLong</span><span class="result">: LongType</span>
+        <span class="name">sampleInt</span>
+        
+        
+        <span class="result">: IntType</span>
       </span>
       </h4>
       
@@ -757,11 +966,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleLongO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleIntO">
+      <a id="sampleIntO:Some[IntType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleLongO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[LongType]</span>
+        <span class="name">sampleIntO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[IntType]</span>
       </span>
       </h4>
       
@@ -770,11 +983,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleString">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleLong">
+      <a id="sampleLong:LongType"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">sampleString</span><span class="result">: StringType</span>
+        <span class="name">sampleLong</span>
+        
+        
+        <span class="result">: LongType</span>
       </span>
       </h4>
       
@@ -783,11 +1000,15 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit abstract 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.FieldTypes#sampleStringO">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleLongO">
+      <a id="sampleLongO:Some[LongType]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">sampleStringO</span><span class="result">: <span class="extype" name="scala.Some">Some</span>[StringType]</span>
+        <span class="name">sampleLongO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[LongType]</span>
       </span>
       </h4>
       
@@ -796,11 +1017,83 @@ possible to check whether the contents of the list are of the requested typed.
           attributes: protected implicit 
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#synchronized">
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleString">
+      <a id="sampleString:StringType"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">sampleString</span>
+        
+        
+        <span class="result">: StringType</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected implicit abstract 
+        </div></div>
+          
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleStringO">
+      <a id="sampleStringO:Some[StringType]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol">
+        <span class="name">sampleStringO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[StringType]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected implicit 
+        </div></div>
+          
+    </li><li visbl="prt" data-isabs="true" name="org.squeryl.dsl.FieldTypes#sampleTimestamp">
+      <a id="sampleTimestamp:TimestampType"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol">
+        <span class="name">sampleTimestamp</span>
+        
+        
+        <span class="result">: TimestampType</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected implicit abstract 
+        </div></div>
+          
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.FieldTypes#sampleTimestampTypeO">
+      <a id="sampleTimestampTypeO:Some[TimestampType]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit val</span>
+      <span class="symbol">
+        <span class="name">sampleTimestampTypeO</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Some">Some</span>[TimestampType]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected implicit 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: T0</span>)</span><span class="result">: T0</span>
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -811,11 +1104,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#toString">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#toString">
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -827,14 +1124,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -845,11 +1145,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -860,11 +1164,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -877,7 +1185,13 @@ possible to check whether the contents of the list are of the requested typed.
           
     </li></ol>
             </div>
-                
+
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
       </div>
       
       <div id="tooltip"></div>

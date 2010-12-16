@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.dsl.BooleanTypeConversion</title>
+          <title>org.squeryl.dsl.BooleanTypeConversion</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="type" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="package.html" class="extype" name="org.squeryl.dsl">dsl</a></p>
 
@@ -23,47 +24,69 @@
       <h4 class="signature" id="signature">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BooleanTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="ast/TypeConversion.html" class="extype" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</a> with <a href="BooleanExpression.html" class="extype" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</a>[A]</span>
+        <span class="name">BooleanTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends <a href="ast/TypeConversion.html" class="extype" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</a> with <a href="BooleanExpression.html" class="extype" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</a>[A]</span>
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
-      
+      <div class="fullcomment" id="comment"><div class="block">
+            linear super types: <a href="BooleanExpression.html" class="extype" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</a>[A], <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A], <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A], <a href="ast/TypeConversion.html" class="extype" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</a>, <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>, AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div></div>
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</li><li class="in" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</li><li class="in" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</li><li class="in" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</li><li class="in" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.dsl.BooleanTypeConversion">BooleanTypeConversion</li><li class="in" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</li><li class="in" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</li><li class="in" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</li><li class="in" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</li><li class="in" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
-        
+
         <div class="members" id="constructors">
               <h3>Instance constructors</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.BooleanTypeConversion#this">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.BooleanTypeConversion#this">
+      <a id="this:BooleanTypeConversion[A]"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol">
-        <span class="name">BooleanTypeConversion</span><span class="params">(<span name="e">e: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="mapper">mapper: <a href="../internals/OutMapper.html" class="extype" name="org.squeryl.internals.OutMapper">OutMapper</a>[A]</span>)</span>
+        <span class="name">BooleanTypeConversion</span>
+        
+        <span class="params">(<span name="e">e: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="mapper">mapper: <a href="../internals/OutMapper.html" class="extype" name="org.squeryl.internals.OutMapper">OutMapper</a>[A]</span>)</span>
+        
       </span>
       </h4>
       
     </li></ol>
-            </div>        
+            </div>
+
         
-        
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=">
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -74,11 +97,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#!=">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -92,14 +119,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef###">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -110,11 +140,15 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: T0</span>
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -125,11 +159,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -140,11 +178,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#:=">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#:=">
+      <a id=":=[B](B)((B) ⇒ TypedExpressionNode[A]):UpdateAssignment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">:=</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</span>)</span><span class="result">: <a href="ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a></span>
+        <span class="name">:=</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="b">b: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a></span>
       </span>
       </h4>
       
@@ -153,11 +195,15 @@
           definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#&lt;">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#&lt;">
+      <a id="&lt;(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">&lt;</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">&lt;</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -166,11 +212,15 @@
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#&lt;=">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#&lt;=">
+      <a id="&lt;=(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">&lt;=</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">&lt;=</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -179,11 +229,15 @@
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#&lt;&gt;">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#&lt;&gt;">
+      <a id="&lt;&gt;(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">&lt;&gt;</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">&lt;&gt;</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -192,11 +246,15 @@
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -210,14 +268,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -231,14 +292,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#===">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#===">
+      <a id="===(NonNumericalExpression[A]):EqualityExpression"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">===</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/EqualityExpression.html" class="extype" name="org.squeryl.dsl.ast.EqualityExpression">EqualityExpression</a></span>
+        <span class="name">===</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/EqualityExpression.html" class="extype" name="org.squeryl.dsl.ast.EqualityExpression">EqualityExpression</a></span>
       </span>
       </h4>
       
@@ -247,11 +311,15 @@
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#&gt;">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#&gt;">
+      <a id="&gt;(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">&gt;</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">&gt;</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -260,11 +328,15 @@
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#&gt;=">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#&gt;=">
+      <a id="&gt;=(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">&gt;=</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">&gt;=</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -273,11 +345,15 @@
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#?">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#?">
+      <a id="?:BooleanTypeConversion.this.type"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">?</span><span class="result">: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</span>
+        <span class="name">?</span>
+        
+        
+        <span class="result">: BooleanTypeConversion.this.type</span>
       </span>
       </h4>
       
@@ -286,11 +362,15 @@
           definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -305,14 +385,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#between">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#between">
+      <a id="between(NonNumericalExpression[A],NonNumericalExpression[A]):BetweenExpression"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">between</span><span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>, <span name="c">c: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span><span class="result">: <a href="ast/BetweenExpression.html" class="extype" name="org.squeryl.dsl.ast.BetweenExpression">BetweenExpression</a></span>
+        <span class="name">between</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>, <span name="c">c: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BetweenExpression.html" class="extype" name="org.squeryl.dsl.ast.BetweenExpression">BetweenExpression</a></span>
       </span>
       </h4>
       
@@ -321,11 +404,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypeConversion#children">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypeConversion#children">
+      <a id="children:List[ExpressionNode]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">children</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+        <span class="name">children</span>
+        
+        
+        <span class="result">: List[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
       </span>
       </h4>
       
@@ -334,11 +421,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="ast/TypeConversion.html" class="extype" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</a> → <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="prt" name="scala.AnyRef#clone">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -352,14 +443,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#defaultsTo">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#defaultsTo">
+      <a id="defaultsTo[B](B)((B) ⇒ TypedExpressionNode[A]):DefaultValueAssignment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">defaultsTo</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="value">value: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</span>)</span><span class="result">: <a href="ast/DefaultValueAssignment.html" class="extype" name="org.squeryl.dsl.ast.DefaultValueAssignment">DefaultValueAssignment</a></span>
+        <span class="name">defaultsTo</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="value">value: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/DefaultValueAssignment.html" class="extype" name="org.squeryl.dsl.ast.DefaultValueAssignment">DefaultValueAssignment</a></span>
       </span>
       </h4>
       
@@ -368,11 +462,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypeConversion#doWrite">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypeConversion#doWrite">
+      <a id="doWrite(StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">doWrite</span><span class="params">(<span name="sw">sw: <a href="../internals/StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">doWrite</span>
+        
+        <span class="params">(<span name="sw">sw: <a href="../internals/StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -381,11 +479,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="ast/TypeConversion.html" class="extype" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</a> → <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#eq">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -412,14 +514,17 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#equals">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -441,14 +546,17 @@ scala.Int
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#filterDescendants">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#filterDescendants">
+      <a id="filterDescendants((ExpressionNode) ⇒ Boolean):Iterable[ExpressionNode]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">filterDescendants</span><span class="params">(<span name="predicate">predicate: (<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+        <span class="name">filterDescendants</span>
+        
+        <span class="params">(<span name="predicate">predicate: (<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: Iterable[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
       </span>
       </h4>
       
@@ -457,11 +565,15 @@ scala.Int
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#filterDescendantsOfType">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#filterDescendantsOfType">
+      <a id="filterDescendantsOfType[T](Manifest[T]):Iterable[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">filterDescendantsOfType</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="manifest">manifest: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[T]</span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[T]</span>
+        <span class="name">filterDescendantsOfType</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="manifest">manifest: Manifest[T]</span>)</span>
+        <span class="result">: Iterable[T]</span>
       </span>
       </h4>
       
@@ -470,11 +582,15 @@ scala.Int
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="prt" name="scala.AnyRef#finalize">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -489,14 +605,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#getClass">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       
@@ -510,14 +629,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#hashCode">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -533,14 +655,17 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#id">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#id">
+      <a id="id:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">id</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">id</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -549,11 +674,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#in">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#in">
+      <a id="in(Query[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">in</span><span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">in</span>
+        
+        <span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -562,11 +691,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#inhibitWhen">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#inhibitWhen">
+      <a id="inhibitWhen(Boolean):BooleanTypeConversion.this.type"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">inhibitWhen</span><span class="params">(<span name="inhibited">inhibited: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</span>
+        <span class="name">inhibitWhen</span>
+        
+        <span class="params">(<span name="inhibited">inhibited: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: BooleanTypeConversion.this.type</span>
       </span>
       </h4>
       
@@ -575,11 +708,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#inhibited">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#inhibited">
+      <a id="inhibited:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">inhibited</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">inhibited</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -588,11 +725,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a> → <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#inhibitedFlagForAstDump">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#inhibitedFlagForAstDump">
+      <a id="inhibitedFlagForAstDump:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">inhibitedFlagForAstDump</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">inhibitedFlagForAstDump</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -601,11 +742,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#is">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#is">
+      <a id="is(AttributeValidOnNonNumericalColumn*)(Schema):ColumnAttributeAssignment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">is</span><span class="params">(<span name="columnAttributes">columnAttributes: <a href="../internals/AttributeValidOnNonNumericalColumn.html" class="extype" name="org.squeryl.internals.AttributeValidOnNonNumericalColumn">AttributeValidOnNonNumericalColumn</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="restrictUsageWithinSchema">restrictUsageWithinSchema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>)</span><span class="result">: <a href="ast/ColumnAttributeAssignment.html" class="extype" name="org.squeryl.dsl.ast.ColumnAttributeAssignment">ColumnAttributeAssignment</a></span>
+        <span class="name">is</span>
+        
+        <span class="params">(<span name="columnAttributes">columnAttributes: <a href="../internals/AttributeValidOnNonNumericalColumn.html" class="extype" name="org.squeryl.internals.AttributeValidOnNonNumericalColumn">AttributeValidOnNonNumericalColumn</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="restrictUsageWithinSchema">restrictUsageWithinSchema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>)</span>
+        <span class="result">: <a href="ast/ColumnAttributeAssignment.html" class="extype" name="org.squeryl.dsl.ast.ColumnAttributeAssignment">ColumnAttributeAssignment</a></span>
       </span>
       </h4>
       
@@ -614,11 +759,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -634,14 +783,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#isNotNull">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#isNotNull">
+      <a id="isNotNull:PostfixOperatorNode with LogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isNotNull</span><span class="result">: <a href="ast/PostfixOperatorNode.html" class="extype" name="org.squeryl.dsl.ast.PostfixOperatorNode">PostfixOperatorNode</a> with <a href="ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>
+        <span class="name">isNotNull</span>
+        
+        
+        <span class="result">: <a href="ast/PostfixOperatorNode.html" class="extype" name="org.squeryl.dsl.ast.PostfixOperatorNode">PostfixOperatorNode</a> with <a href="ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -650,11 +802,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#isNull">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#isNull">
+      <a id="isNull:PostfixOperatorNode with LogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isNull</span><span class="result">: <a href="ast/PostfixOperatorNode.html" class="extype" name="org.squeryl.dsl.ast.PostfixOperatorNode">PostfixOperatorNode</a> with <a href="ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>
+        <span class="name">isNull</span>
+        
+        
+        <span class="result">: <a href="ast/PostfixOperatorNode.html" class="extype" name="org.squeryl.dsl.ast.PostfixOperatorNode">PostfixOperatorNode</a> with <a href="ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -663,11 +819,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.BooleanTypeConversion#mapper">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.BooleanTypeConversion#mapper">
+      <a id="mapper:OutMapper[A]"></a>
       <h4 class="signature">
       <span class="kind">implicit val</span>
       <span class="symbol">
-        <span class="name">mapper</span><span class="result">: <a href="../internals/OutMapper.html" class="extype" name="org.squeryl.internals.OutMapper">OutMapper</a>[A]</span>
+        <span class="name">mapper</span>
+        
+        
+        <span class="result">: <a href="../internals/OutMapper.html" class="extype" name="org.squeryl.internals.OutMapper">OutMapper</a>[A]</span>
       </span>
       </h4>
       
@@ -678,11 +838,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="" class="extype" name="org.squeryl.dsl.BooleanTypeConversion">BooleanTypeConversion</a> → <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#ne">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -696,14 +860,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#notIn">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#notIn">
+      <a id="notIn(Query[A]):BinaryOperatorNodeLogicalBoolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notIn</span><span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[A]</span>)</span><span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="name">notIn</span>
+        
+        <span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
       </span>
       </h4>
       
@@ -712,11 +879,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notify">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -729,14 +900,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -749,14 +923,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#parent">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#parent">
+      <a id="parent:Option[ExpressionNode]"></a>
       <h4 class="signature">
       <span class="kind">var</span>
       <span class="symbol">
-        <span class="name">parent</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+        <span class="name">parent</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
       </span>
       </h4>
       
@@ -765,11 +942,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.TypedExpressionNode#sample">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#sample">
+      <a id="sample:A"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sample</span><span class="result">: A</span>
+        <span class="name">sample</span>
+        
+        
+        <span class="result">: A</span>
       </span>
       </h4>
       
@@ -778,11 +959,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#synchronized">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: T0</span>)</span><span class="result">: T0</span>
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -793,11 +978,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#toString">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#toString">
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -809,14 +998,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#visitDescendants">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#visitDescendants">
+      <a id="visitDescendants((ExpressionNode, Option[ExpressionNode], Int) ⇒ Unit):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">visitDescendants</span><span class="params">(<span name="visitor">visitor: (<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>, <span class="extype" name="scala.Option">Option</span>[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>], <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">visitDescendants</span>
+        
+        <span class="params">(<span name="visitor">visitor: (<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>, <span class="extype" name="scala.Option">Option</span>[<a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>], <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -835,14 +1027,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -853,11 +1048,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -868,11 +1067,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -883,11 +1086,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#write">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#write">
+      <a id="write(StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">write</span><span class="params">(<span name="sw">sw: <a href="../internals/StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">write</span>
+        
+        <span class="params">(<span name="sw">sw: <a href="../internals/StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -896,11 +1103,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.ast.ExpressionNode#writeToString">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExpressionNode#writeToString">
+      <a id="writeToString:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeToString</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeToString</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -909,11 +1120,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression#||">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#||">
+      <a id="||[B](TypedExpressionNode[B]):ConcatOp[A, B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">||</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="e">e: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[B]</span>)</span><span class="result">: <a href="ConcatOp.html" class="extype" name="org.squeryl.dsl.ConcatOp">ConcatOp</a>[A, B]</span>
+        <span class="name">||</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="e">e: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[B]</span>)</span>
+        <span class="result">: <a href="ConcatOp.html" class="extype" name="org.squeryl.dsl.ConcatOp">ConcatOp</a>[A, B]</span>
       </span>
       </h4>
       
@@ -922,11 +1137,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.BooleanExpression#~">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.BooleanExpression#~">
+      <a id="~:BooleanExpression[A]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">~</span><span class="result">: <a href="BooleanExpression.html" class="extype" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</a>[A]</span>
+        <span class="name">~</span>
+        
+        
+        <span class="result">: <a href="BooleanExpression.html" class="extype" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</a>[A]</span>
       </span>
       </h4>
       
@@ -937,7 +1156,23 @@ possible to check whether the contents of the list are of the requested typed.
           
     </li></ol>
             </div>
-                
+
+        <div class="parent" name="org.squeryl.dsl.BooleanExpression">
+              <h3>Inherited from <a href="BooleanExpression.html" class="extype" name="org.squeryl.dsl.BooleanExpression">BooleanExpression</a>[A]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.NonNumericalExpression">
+              <h3>Inherited from <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.ast.TypedExpressionNode">
+              <h3>Inherited from <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[A]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.ast.TypeConversion">
+              <h3>Inherited from <a href="ast/TypeConversion.html" class="extype" name="org.squeryl.dsl.ast.TypeConversion">TypeConversion</a></h3>
+            </div><div class="parent" name="org.squeryl.dsl.ast.ExpressionNode">
+              <h3>Inherited from <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
       </div>
       
       <div id="tooltip"></div>

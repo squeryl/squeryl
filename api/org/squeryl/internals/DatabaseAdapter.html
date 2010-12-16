@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.internals.DatabaseAdapter</title>
+          <title>org.squeryl.internals.DatabaseAdapter</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="type" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="package.html" class="extype" name="org.squeryl.internals">internals</a></p>
 
@@ -23,57 +24,83 @@
       <h4 class="signature" id="signature">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">DatabaseAdapter</span><span class="result"> extends AnyRef</span>
+        <span class="name">DatabaseAdapter</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       <div class="fullcomment" id="comment"><div class="block">
-            known subclasses: <a href="../adapters/PostgreSqlAdapter.html" class="extype" name="org.squeryl.adapters.PostgreSqlAdapter">PostgreSqlAdapter</a>, <a href="../adapters/OracleAdapter.html" class="extype" name="org.squeryl.adapters.OracleAdapter">OracleAdapter</a>, <a href="../adapters/MySQLAdapter.html" class="extype" name="org.squeryl.adapters.MySQLAdapter">MySQLAdapter</a>, <a href="../adapters/H2Adapter.html" class="extype" name="org.squeryl.adapters.H2Adapter">H2Adapter</a>, <a href="../adapters/DB2Adapter.html" class="extype" name="org.squeryl.adapters.DB2Adapter">DB2Adapter</a>
+            linear super types: AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div><div class="block">
+            known subclasses: <a href="../adapters/PostgreSqlAdapter.html" class="extype" name="org.squeryl.adapters.PostgreSqlAdapter">PostgreSqlAdapter</a>, <a href="../adapters/OracleAdapter.html" class="extype" name="org.squeryl.adapters.OracleAdapter">OracleAdapter</a>, <a href="../adapters/MySQLAdapter.html" class="extype" name="org.squeryl.adapters.MySQLAdapter">MySQLAdapter</a>, <a href="../adapters/MSSQLServer.html" class="extype" name="org.squeryl.adapters.MSSQLServer">MSSQLServer</a>, <a href="../adapters/H2Adapter.html" class="extype" name="org.squeryl.adapters.H2Adapter">H2Adapter</a>, <a href="../adapters/DB2Adapter.html" class="extype" name="org.squeryl.adapters.DB2Adapter">DB2Adapter</a>
           </div></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.internals.DatabaseAdapter">DatabaseAdapter</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter.Zip">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter.Zip">
+      <a id="Zip:Zip[T]"></a>
       <h4 class="signature"><a href="DatabaseAdapter$Zip.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Zip</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">Zip</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter.ZipIterable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter.ZipIterable">
+      <a id="ZipIterable:ZipIterable[T]"></a>
       <h4 class="signature"><a href="DatabaseAdapter$ZipIterable.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ZipIterable</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">ZipIterable</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=">
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -84,11 +111,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#!=">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -102,14 +133,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef###">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -120,11 +154,15 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: T0</span>
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -135,11 +173,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -150,11 +192,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -168,14 +214,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -189,14 +238,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -211,46 +263,65 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#bigDecimalTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#bigDecimalTypeDeclaration">
+      <a id="bigDecimalTypeDeclaration(Int,Int):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">bigDecimalTypeDeclaration</span><span class="params">(<span name="precision">precision: <span class="extype" name="scala.Int">Int</span></span>, <span name="scale">scale: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">bigDecimalTypeDeclaration</span>
+        
+        <span class="params">(<span name="precision">precision: <span class="extype" name="scala.Int">Int</span></span>, <span name="scale">scale: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#bigDecimalTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#bigDecimalTypeDeclaration">
+      <a id="bigDecimalTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">bigDecimalTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">bigDecimalTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#binaryTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#binaryTypeDeclaration">
+      <a id="binaryTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">binaryTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">binaryTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#booleanTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#booleanTypeDeclaration">
+      <a id="booleanTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">booleanTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">booleanTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="prt" name="scala.AnyRef#clone">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -264,14 +335,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#convertFromBooleanForJdbc">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#convertFromBooleanForJdbc">
+      <a id="convertFromBooleanForJdbc(Boolean):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">convertFromBooleanForJdbc</span><span class="params">(<span name="b">b: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">convertFromBooleanForJdbc</span>
+        
+        <span class="params">(<span name="b">b: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -284,14 +358,17 @@ to this, the call can be uncommented in method convertToJdbcValue
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#convertToBooleanForJdbc">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#convertToBooleanForJdbc">
+      <a id="convertToBooleanForJdbc(ResultSet,Int):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">convertToBooleanForJdbc</span><span class="params">(<span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>, <span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">convertToBooleanForJdbc</span>
+        
+        <span class="params">(<span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>, <span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -302,14 +379,17 @@ to this, the call can be uncommented in method convertToJdbcValue
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#convertToJdbcValue">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#convertToJdbcValue">
+      <a id="convertToJdbcValue(AnyRef):AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">convertToJdbcValue</span><span class="params">(<span name="r">r: AnyRef</span>)</span><span class="result">: AnyRef</span>
+        <span class="name">convertToJdbcValue</span>
+        
+        <span class="params">(<span name="r">r: AnyRef</span>)</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -324,22 +404,29 @@ a CustomType
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#createSequenceName">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#createSequenceName">
+      <a id="createSequenceName(FieldMetaData):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">createSequenceName</span><span class="params">(<span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">createSequenceName</span>
+        
+        <span class="params">(<span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="prt" name="org.squeryl.internals.DatabaseAdapter#currenSession">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#currenSession">
+      <a id="currenSession:Session"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">currenSession</span><span class="result">: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>
+        <span class="name">currenSession</span>
+        
+        
+        <span class="result">: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>
       </span>
       </h4>
       
@@ -348,51 +435,75 @@ a CustomType
           attributes: protected 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#databaseTypeFor">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#databaseTypeFor">
+      <a id="databaseTypeFor(FieldMetaData):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">databaseTypeFor</span><span class="params">(<span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">databaseTypeFor</span>
+        
+        <span class="params">(<span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>)</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#dateTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#dateTypeDeclaration">
+      <a id="dateTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">dateTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">dateTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#doubleTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#doubleTypeDeclaration">
+      <a id="doubleTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">doubleTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">doubleTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#dropForeignKeyStatement">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#dropForeignKeyStatement">
+      <a id="dropForeignKeyStatement(org.squeryl.Table[_],String,Session):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">dropForeignKeyStatement</span><span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="fkName">fkName: <span class="extype" name="java.lang.String">String</span></span>, <span name="session">session: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">dropForeignKeyStatement</span>
+        
+        <span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="fkName">fkName: String</span>, <span name="session">session: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#dropTable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#dropTable">
+      <a id="dropTable(org.squeryl.Table[_]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">dropTable</span><span class="params">(<span name="t">t: org.squeryl.Table[_]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">dropTable</span>
+        
+        <span class="params">(<span name="t">t: org.squeryl.Table[_]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#eq">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -419,14 +530,17 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#equals">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -448,14 +562,17 @@ scala.Int
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="org.squeryl.internals.DatabaseAdapter#exec">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#exec">
+      <a id="exec[A](Session,StatementWriter)(⇒ A):A"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">exec</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="params">(<span name="block">block: ⇒ A</span>)</span><span class="result">: A</span>
+        <span class="name">exec</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        <span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="params">(<span name="block">block: ⇒ A</span>)</span>
+        <span class="result">: A</span>
       </span>
       </h4>
       
@@ -464,11 +581,15 @@ scala.Int
           attributes: protected 
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.internals.DatabaseAdapter#execFailSafeExecute">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#execFailSafeExecute">
+      <a id="execFailSafeExecute(StatementWriter,(SQLException) ⇒ Boolean):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">execFailSafeExecute</span><span class="params">(<span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="silenceException">silenceException: (<span class="extype" name="java.sql.SQLException">SQLException</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">execFailSafeExecute</span>
+        
+        <span class="params">(<span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="silenceException">silenceException: (<span class="extype" name="java.sql.SQLException">SQLException</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -482,46 +603,77 @@ It must be used carefully, and an exception should not be silenced unless identi
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#executeQuery">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#executeQuery">
+      <a id="executeQuery(Session,StatementWriter):(ResultSet, PreparedStatement)"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">executeQuery</span><span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: (<span class="extype" name="java.sql.ResultSet">ResultSet</span>, <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span>)</span>
+        <span class="name">executeQuery</span>
+        
+        <span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: (<span class="extype" name="java.sql.ResultSet">ResultSet</span>, <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span>)</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#executeUpdate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#executeUpdate">
+      <a id="executeUpdate(Session,StatementWriter):(Int, PreparedStatement)"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">executeUpdate</span><span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span>)</span>
+        <span class="name">executeUpdate</span>
+        
+        <span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span>)</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#executeUpdateForInsert">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#executeUpdateAndCloseStatement">
+      <a id="executeUpdateAndCloseStatement(Session,StatementWriter):Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">executeUpdateForInsert</span><span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="ps">ps: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>)</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span>)</span>
+        <span class="name">executeUpdateAndCloseStatement</span>
+        
+        <span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#failureOfStatementRequiresRollback">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#executeUpdateForInsert">
+      <a id="executeUpdateForInsert(Session,StatementWriter,PreparedStatement):Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">failureOfStatementRequiresRollback</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">executeUpdateForInsert</span>
+        
+        <span class="params">(<span name="s">s: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="ps">ps: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="prt" name="scala.AnyRef#finalize">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#failureOfStatementRequiresRollback">
+      <a id="failureOfStatementRequiresRollback:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">failureOfStatementRequiresRollback</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -536,30 +688,41 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#floatTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#floatTypeDeclaration">
+      <a id="floatTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">floatTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">floatTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#foreignKeyConstraintName">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#foreignKeyConstraintName">
+      <a id="foreignKeyConstraintName(org.squeryl.Table[_],Int):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">foreignKeyConstraintName</span><span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="idWithinSchema">idWithinSchema: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">foreignKeyConstraintName</span>
+        
+        <span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="idWithinSchema">idWithinSchema: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#foreingKeyConstraintName">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#foreingKeyConstraintName">
+      <a id="foreingKeyConstraintName(org.squeryl.Table[_],Int):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name deprecated">foreingKeyConstraintName</span><span class="params">(<span name="foreingKeyTable">foreingKeyTable: org.squeryl.Table[_]</span>, <span name="idWithinSchema">idWithinSchema: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name deprecated">foreingKeyConstraintName</span>
+        
+        <span class="params">(<span name="foreingKeyTable">foreingKeyTable: org.squeryl.Table[_]</span>, <span name="idWithinSchema">idWithinSchema: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -568,11 +731,15 @@ there are no more references to the object.</p><p>The details of when and if the
           <li><p>Use foreignKeyConstraintName instead</p></li>
         </ol></div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#generateAlmostUniqueSuffixWithHash">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#generateAlmostUniqueSuffixWithHash">
+      <a id="generateAlmostUniqueSuffixWithHash(String):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">generateAlmostUniqueSuffixWithHash</span><span class="params">(<span name="s">s: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">generateAlmostUniqueSuffixWithHash</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -587,14 +754,17 @@ is not ,
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#getClass">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       
@@ -608,14 +778,17 @@ is not ,
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#hashCode">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -631,30 +804,41 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#intTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#intTypeDeclaration">
+      <a id="intTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">intTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">intTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#isFullOuterJoinSupported">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#isFullOuterJoinSupported">
+      <a id="isFullOuterJoinSupported:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isFullOuterJoinSupported</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isFullOuterJoinSupported</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -670,14 +854,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#isNotNullConstraintViolation">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#isNotNullConstraintViolation">
+      <a id="isNotNullConstraintViolation(SQLException):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isNotNullConstraintViolation</span><span class="params">(<span name="e">e: <span class="extype" name="java.sql.SQLException">SQLException</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isNotNullConstraintViolation</span>
+        
+        <span class="params">(<span name="e">e: <span class="extype" name="java.sql.SQLException">SQLException</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -688,14 +875,17 @@ if it's cause is a NOT NULL constraint violation
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#isTableDoesNotExistException">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.DatabaseAdapter#isTableDoesNotExistException">
+      <a id="isTableDoesNotExistException(SQLException):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isTableDoesNotExistException</span><span class="params">(<span name="e">e: <span class="extype" name="java.sql.SQLException">SQLException</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isTableDoesNotExistException</span>
+        
+        <span class="params">(<span name="e">e: <span class="extype" name="java.sql.SQLException">SQLException</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -704,19 +894,27 @@ if it's cause is a NOT NULL constraint violation
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#longTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#longTypeDeclaration">
+      <a id="longTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">longTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">longTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#ne">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -730,14 +928,17 @@ if it's cause is a NOT NULL constraint violation
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notify">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -750,14 +951,17 @@ if it's cause is a NOT NULL constraint violation
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -770,22 +974,29 @@ if it's cause is a NOT NULL constraint violation
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#nvlToken">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#nvlToken">
+      <a id="nvlToken:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">nvlToken</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">nvlToken</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#postCreateTable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#postCreateTable">
+      <a id="postCreateTable(org.squeryl.Table[_],Option[(String) ⇒ Unit]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">postCreateTable</span><span class="params">(<span name="t">t: org.squeryl.Table[_]</span>, <span name="printSinkWhenWriteOnlyMode">printSinkWhenWriteOnlyMode: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="java.lang.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">postCreateTable</span>
+        
+        <span class="params">(<span name="t">t: org.squeryl.Table[_]</span>, <span name="printSinkWhenWriteOnlyMode">printSinkWhenWriteOnlyMode: <span class="extype" name="scala.Option">Option</span>[(String) ⇒ <span class="extype" name="scala.Unit">Unit</span>]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -796,38 +1007,41 @@ if it's cause is a NOT NULL constraint violation
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#postDropTable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#postDropTable">
+      <a id="postDropTable(org.squeryl.Table[_]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">postDropTable</span><span class="params">(<span name="t">t: org.squeryl.Table[_]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">postDropTable</span>
+        
+        <span class="params">(<span name="t">t: org.squeryl.Table[_]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#prepareStatement">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#prepareStatement">
+      <a id="prepareStatement(Connection,StatementWriter,PreparedStatement,Session):PreparedStatement"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">prepareStatement</span><span class="params">(<span name="c">c: <span class="extype" name="java.sql.Connection">Connection</span></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="s">s: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>, <span name="session">session: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>)</span><span class="result">: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>
+        <span class="name">prepareStatement</span>
+        
+        <span class="params">(<span name="c">c: <span class="extype" name="java.sql.Connection">Connection</span></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="s">s: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>, <span name="session">session: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>)</span>
+        <span class="result">: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#prepareStatement">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">prepareStatement</span><span class="params">(<span name="c">c: <span class="extype" name="java.sql.Connection">Connection</span></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="session">session: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>)</span><span class="result">: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#string2StatementWriter">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#string2StatementWriter">
+      <a id="string2StatementWriter(String):StatementWriter"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">string2StatementWriter</span><span class="params">(<span name="s">s: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>
+        <span class="name">string2StatementWriter</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span>
+        <span class="result">: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>
       </span>
       </h4>
       
@@ -836,43 +1050,63 @@ if it's cause is a NOT NULL constraint violation
           attributes: implicit 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#stringTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#stringTypeDeclaration">
+      <a id="stringTypeDeclaration(Int):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">stringTypeDeclaration</span><span class="params">(<span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">stringTypeDeclaration</span>
+        
+        <span class="params">(<span name="length">length: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#stringTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#stringTypeDeclaration">
+      <a id="stringTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">stringTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">stringTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#supportsAutoIncrementInColumnDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#supportsAutoIncrementInColumnDeclaration">
+      <a id="supportsAutoIncrementInColumnDeclaration:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">supportsAutoIncrementInColumnDeclaration</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">supportsAutoIncrementInColumnDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#supportsForeignKeyConstraints">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#supportsForeignKeyConstraints">
+      <a id="supportsForeignKeyConstraints:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">supportsForeignKeyConstraints</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">supportsForeignKeyConstraints</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#synchronized">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: T0</span>)</span><span class="result">: T0</span>
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -883,19 +1117,27 @@ if it's cause is a NOT NULL constraint violation
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#timestampTypeDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#timestampTypeDeclaration">
+      <a id="timestampTypeDeclaration:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">timestampTypeDeclaration</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">timestampTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#toString">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#toString">
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -907,14 +1149,17 @@ if it's cause is a NOT NULL constraint violation
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -925,11 +1170,15 @@ if it's cause is a NOT NULL constraint violation
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -940,11 +1189,15 @@ if it's cause is a NOT NULL constraint violation
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -955,75 +1208,135 @@ if it's cause is a NOT NULL constraint violation
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeColumnDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeColumnDeclaration">
+      <a id="writeColumnDeclaration(FieldMetaData,Boolean,Schema):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeColumnDeclaration</span><span class="params">(<span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>, <span name="isPrimaryKey">isPrimaryKey: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="schema">schema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeColumnDeclaration</span>
+        
+        <span class="params">(<span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>, <span name="isPrimaryKey">isPrimaryKey: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="schema">schema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>)</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeConcatFunctionCall">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeConcatFunctionCall">
+      <a id="writeConcatFunctionCall(org.squeryl.dsl.ast.FunctionNode[_],StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeConcatFunctionCall</span><span class="params">(<span name="fn">fn: org.squeryl.dsl.ast.FunctionNode[_]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeConcatFunctionCall</span>
+        
+        <span class="params">(<span name="fn">fn: org.squeryl.dsl.ast.FunctionNode[_]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeConcatOperator">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeConcatOperator">
+      <a id="writeConcatOperator(ExpressionNode,ExpressionNode,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeConcatOperator</span><span class="params">(<span name="left">left: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="right">right: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeConcatOperator</span>
+        
+        <span class="params">(<span name="left">left: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="right">right: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeCreateTable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeCreateTable">
+      <a id="writeCreateTable[T](Table[T],StatementWriter,Schema):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeCreateTable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="schema">schema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeCreateTable</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="schema">schema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeDelete">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeDelete">
+      <a id="writeDelete[T](Table[T],Option[ExpressionNode],StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeDelete</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="whereClause">whereClause: <span class="extype" name="scala.Option">Option</span>[<a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeDelete</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="whereClause">whereClause: <span class="extype" name="scala.Option">Option</span>[<a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeDropForeignKeyStatement">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeDropForeignKeyStatement">
+      <a id="writeDropForeignKeyStatement(org.squeryl.Table[_],String):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeDropForeignKeyStatement</span><span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="fkName">fkName: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeDropForeignKeyStatement</span>
+        
+        <span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="fkName">fkName: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeDropTable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeDropTable">
+      <a id="writeDropTable(String):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeDropTable</span><span class="params">(<span name="tableName">tableName: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeDropTable</span>
+        
+        <span class="params">(<span name="tableName">tableName: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeForeignKeyDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeEndOfFromHint">
+      <a id="writeEndOfFromHint(QueryExpressionElements,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeForeignKeyDeclaration</span><span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="foreignKeyColumnName">foreignKeyColumnName: <span class="extype" name="java.lang.String">String</span></span>, <span name="primaryKeyTable">primaryKeyTable: org.squeryl.Table[_]</span>, <span name="primaryKeyColumnName">primaryKeyColumnName: <span class="extype" name="java.lang.String">String</span></span>, <span name="referentialAction1">referentialAction1: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="referentialAction2">referentialAction2: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="fkId">fkId: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeEndOfFromHint</span>
+        
+        <span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeForeingKeyDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeEndOfQueryHint">
+      <a id="writeEndOfQueryHint(QueryExpressionElements,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name deprecated">writeForeingKeyDeclaration</span><span class="params">(<span name="foreingKeyTable">foreingKeyTable: org.squeryl.Table[_]</span>, <span name="foreingKeyColumnName">foreingKeyColumnName: <span class="extype" name="java.lang.String">String</span></span>, <span name="primaryKeyTable">primaryKeyTable: org.squeryl.Table[_]</span>, <span name="primaryKeyColumnName">primaryKeyColumnName: <span class="extype" name="java.lang.String">String</span></span>, <span name="referentialAction1">referentialAction1: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="referentialAction2">referentialAction2: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="fkId">fkId: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeEndOfQueryHint</span>
+        
+        <span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeForeignKeyDeclaration">
+      <a id="writeForeignKeyDeclaration(org.squeryl.Table[_],String,org.squeryl.Table[_],String,Option[ReferentialAction],Option[ReferentialAction],Int):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeForeignKeyDeclaration</span>
+        
+        <span class="params">(<span name="foreignKeyTable">foreignKeyTable: org.squeryl.Table[_]</span>, <span name="foreignKeyColumnName">foreignKeyColumnName: String</span>, <span name="primaryKeyTable">primaryKeyTable: org.squeryl.Table[_]</span>, <span name="primaryKeyColumnName">primaryKeyColumnName: String</span>, <span name="referentialAction1">referentialAction1: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="referentialAction2">referentialAction2: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="fkId">fkId: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeForeingKeyDeclaration">
+      <a id="writeForeingKeyDeclaration(org.squeryl.Table[_],String,org.squeryl.Table[_],String,Option[ReferentialAction],Option[ReferentialAction],Int):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name deprecated">writeForeingKeyDeclaration</span>
+        
+        <span class="params">(<span name="foreingKeyTable">foreingKeyTable: org.squeryl.Table[_]</span>, <span name="foreingKeyColumnName">foreingKeyColumnName: String</span>, <span name="primaryKeyTable">primaryKeyTable: org.squeryl.Table[_]</span>, <span name="primaryKeyColumnName">primaryKeyColumnName: String</span>, <span name="referentialAction1">referentialAction1: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="referentialAction2">referentialAction2: <span class="extype" name="scala.Option">Option</span>[<a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a>]</span>, <span name="fkId">fkId: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -1032,115 +1345,94 @@ if it's cause is a NOT NULL constraint violation
           <li><p>Use writeForeignKeyDeclaration instead</p></li>
         </ol></div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeIndexDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeIndexDeclaration">
+      <a id="writeIndexDeclaration(Seq[FieldMetaData],Option[String],Option[String],Boolean):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeIndexDeclaration</span><span class="params">(<span name="columnDefs">columnDefs: <span class="extype" name="scala.collection.Seq">Seq</span>[<a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a>]</span>, <span name="name">name: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.String">String</span>]</span>, <span name="nameOfCompositeKey">nameOfCompositeKey: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.String">String</span>]</span>, <span name="isUnique">isUnique: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeIndexDeclaration</span>
+        
+        <span class="params">(<span name="columnDefs">columnDefs: Seq[<a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a>]</span>, <span name="name">name: <span class="extype" name="scala.Option">Option</span>[String]</span>, <span name="nameOfCompositeKey">nameOfCompositeKey: <span class="extype" name="scala.Option">Option</span>[String]</span>, <span name="isUnique">isUnique: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
-            <p class="shortcomment cmt">no summary matey</p>
+            <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div>
-            
             
             
             
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeInsert">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeInsert">
+      <a id="writeInsert[T](T,Table[T],StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeInsert</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="o">o: T</span>, <span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeInsert</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="o">o: T</span>, <span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeJoin">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeJoin">
+      <a id="writeJoin(QueryableExpressionNode,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeJoin</span><span class="params">(<span name="queryableExpressionNode">queryableExpressionNode: <a href="../dsl/ast/QueryableExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryableExpressionNode">QueryableExpressionNode</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeJoin</span>
+        
+        <span class="params">(<span name="queryableExpressionNode">queryableExpressionNode: <a href="../dsl/ast/QueryableExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryableExpressionNode">QueryableExpressionNode</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeNvlCall">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeNvlCall">
+      <a id="writeNvlCall(ExpressionNode,ExpressionNode,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeNvlCall</span><span class="params">(<span name="left">left: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="right">right: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeNvlCall</span>
+        
+        <span class="params">(<span name="left">left: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="right">right: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeOuterJoinDEPRECATED">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeOuterJoinDEPRECATED">
+      <a id="writeOuterJoinDEPRECATED(OuterJoinExpression,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeOuterJoinDEPRECATED</span><span class="params">(<span name="oje">oje: <a href="../dsl/ast/OuterJoinExpression.html" class="extype" name="org.squeryl.dsl.ast.OuterJoinExpression">OuterJoinExpression</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writeOuterJoinDEPRECATED</span>
+        
+        <span class="params">(<span name="oje">oje: <a href="../dsl/ast/OuterJoinExpression.html" class="extype" name="org.squeryl.dsl.ast.OuterJoinExpression">OuterJoinExpression</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writePaginatedQueryDeclaration">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writePaginatedQueryDeclaration">
+      <a id="writePaginatedQueryDeclaration(QueryExpressionElements,StatementWriter):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writePaginatedQueryDeclaration</span><span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">writePaginatedQueryDeclaration</span>
+        
+        <span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeQuery">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeQuery">
+      <a id="writeQuery(QueryExpressionElements,StatementWriter,Boolean,Option[String]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">writeQuery</span><span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeRegexExpression">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">writeRegexExpression</span><span class="params">(<span name="left">left: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="pattern">pattern: <span class="extype" name="java.lang.String">String</span></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeSelectElementAlias">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">writeSelectElementAlias</span><span class="params">(<span name="se">se: <a href="../dsl/ast/SelectElement.html" class="extype" name="org.squeryl.dsl.ast.SelectElement">SelectElement</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeUniquenessConstraint">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">writeUniquenessConstraint</span><span class="params">(<span name="t">t: org.squeryl.Table[_]</span>, <span name="cols">cols: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a>]</span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeUpdate">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">writeUpdate</span><span class="params">(<span name="t">t: org.squeryl.Table[_]</span>, <span name="us">us: <a href="../dsl/ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#writeUpdate">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">writeUpdate</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="o">o: T</span>, <span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="checkOCC">checkOCC: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="prt" name="org.squeryl.internals.DatabaseAdapter#writeValue">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">writeValue</span><span class="params">(<span name="o">o: AnyRef</span>, <span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">writeQuery</span>
+        
+        <span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="inverseOrderBy">inverseOrderBy: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="topHint">topHint: <span class="extype" name="scala.Option">Option</span>[String]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -1149,11 +1441,104 @@ if it's cause is a NOT NULL constraint violation
           attributes: protected 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter#zipIterable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeQuery">
+      <a id="writeQuery(QueryExpressionElements,StatementWriter):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeQuery</span>
+        
+        <span class="params">(<span name="qen">qen: <a href="../dsl/ast/QueryExpressionElements.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionElements">QueryExpressionElements</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeRegexExpression">
+      <a id="writeRegexExpression(ExpressionNode,String,StatementWriter):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeRegexExpression</span>
+        
+        <span class="params">(<span name="left">left: <a href="../dsl/ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>, <span name="pattern">pattern: String</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeSelectElementAlias">
+      <a id="writeSelectElementAlias(SelectElement,StatementWriter):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeSelectElementAlias</span>
+        
+        <span class="params">(<span name="se">se: <a href="../dsl/ast/SelectElement.html" class="extype" name="org.squeryl.dsl.ast.SelectElement">SelectElement</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeUniquenessConstraint">
+      <a id="writeUniquenessConstraint(org.squeryl.Table[_],Iterable[FieldMetaData]):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeUniquenessConstraint</span>
+        
+        <span class="params">(<span name="t">t: org.squeryl.Table[_]</span>, <span name="cols">cols: Iterable[<a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a>]</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeUpdate">
+      <a id="writeUpdate(org.squeryl.Table[_],UpdateStatement,StatementWriter):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeUpdate</span>
+        
+        <span class="params">(<span name="t">t: org.squeryl.Table[_]</span>, <span name="us">us: <a href="../dsl/ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeUpdate">
+      <a id="writeUpdate[T](T,Table[T],StatementWriter,Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeUpdate</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="o">o: T</span>, <span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[T]</span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="checkOCC">checkOCC: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#writeValue">
+      <a id="writeValue(AnyRef,FieldMetaData,StatementWriter):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">writeValue</span>
+        
+        <span class="params">(<span name="o">o: AnyRef</span>, <span name="fmd">fmd: <a href="FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected 
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#zipIterable">
+      <a id="zipIterable[T](Iterable[T]):ZipIterable[T]"></a>
       <h4 class="signature">
       <span class="kind">implicit def</span>
       <span class="symbol">
-        <span class="name">zipIterable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="i">i: <span class="extype" name="scala.collection.Iterable">Iterable</span>[T]</span>)</span><span class="result">: <a href="DatabaseAdapter$ZipIterable.html" class="extype" name="org.squeryl.internals.DatabaseAdapter.ZipIterable">ZipIterable</a>[T]</span>
+        <span class="name">zipIterable</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="i">i: Iterable[T]</span>)</span>
+        <span class="result">: <a href="DatabaseAdapter$ZipIterable.html" class="extype" name="org.squeryl.internals.DatabaseAdapter.ZipIterable">ZipIterable</a>[T]</span>
       </span>
       </h4>
       
@@ -1164,7 +1549,13 @@ if it's cause is a NOT NULL constraint violation
           
     </li></ol>
             </div>
-                
+
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
       </div>
       
       <div id="tooltip"></div>

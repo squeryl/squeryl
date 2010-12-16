@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.customtypes</title>
+          <title>org.squeryl.customtypes</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value">
+        <body class="value" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a></p>
 
@@ -24,128 +25,211 @@
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">customtypes</span>
+        
+        
+        
       </span>
       </h4>
       <div class="fullcomment" id="comment"></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
           
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.customtypes.BigDecimalField">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.BigDecimalField">
+      <a id="BigDecimalField:BigDecimalField"></a>
       <h4 class="signature"><a href="BigDecimalField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BigDecimalField</span><span class="result"> extends CustomType</span>
+        <span class="name">BigDecimalField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.BooleanField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.BinaryField">
+      <a id="BinaryField:BinaryField"></a>
+      <h4 class="signature"><a href="BinaryField.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">BinaryField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.BooleanField">
+      <a id="BooleanField:BooleanField"></a>
       <h4 class="signature"><a href="BooleanField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BooleanField</span><span class="result"> extends CustomType</span>
+        <span class="name">BooleanField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.ByteField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.ByteField">
+      <a id="ByteField:ByteField"></a>
       <h4 class="signature"><a href="ByteField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ByteField</span><span class="result"> extends CustomType</span>
+        <span class="name">ByteField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.CustomType">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.customtypes.CustomType">
+      <a id="CustomType:CustomType"></a>
       <h4 class="signature"><a href="CustomType.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">CustomType</span><span class="result"> extends Product1[Any]</span>
+        <span class="name">CustomType</span>
+        
+        
+        <span class="result"> extends Product1[Any]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.CustomTypesMode">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.customtypes.CustomTypesMode">
+      <a id="CustomTypesMode:CustomTypesMode"></a>
       <h4 class="signature"><a href="CustomTypesMode.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">CustomTypesMode</span><span class="result"> extends QueryDsl</span>
+        <span class="name">CustomTypesMode</span>
+        
+        
+        <span class="result"> extends QueryDsl</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.DateField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.DateField">
+      <a id="DateField:DateField"></a>
       <h4 class="signature"><a href="DateField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">DateField</span><span class="result"> extends CustomType</span>
+        <span class="name">DateField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.DoubleField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.DoubleField">
+      <a id="DoubleField:DoubleField"></a>
       <h4 class="signature"><a href="DoubleField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">DoubleField</span><span class="result"> extends CustomType</span>
+        <span class="name">DoubleField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.FloatField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.FloatField">
+      <a id="FloatField:FloatField"></a>
       <h4 class="signature"><a href="FloatField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">FloatField</span><span class="result"> extends CustomType</span>
+        <span class="name">FloatField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.IntField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.IntField">
+      <a id="IntField:IntField"></a>
       <h4 class="signature"><a href="IntField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">IntField</span><span class="result"> extends CustomType</span>
+        <span class="name">IntField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.LongField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.LongField">
+      <a id="LongField:LongField"></a>
       <h4 class="signature"><a href="LongField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">LongField</span><span class="result"> extends CustomType</span>
+        <span class="name">LongField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.customtypes.StringField">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.StringField">
+      <a id="StringField:StringField"></a>
       <h4 class="signature"><a href="StringField.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">StringField</span><span class="result"> extends CustomType</span>
+        <span class="name">StringField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.TimestampField">
+      <a id="TimestampField:TimestampField"></a>
+      <h4 class="signature"><a href="TimestampField.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">TimestampField</span>
+        
+        
+        <span class="result"> extends CustomType</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.customtypes.CustomTypesMode">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.customtypes.CustomTypesMode">
+      <a id="CustomTypesMode:CustomTypesMode"></a>
       <h4 class="signature"><a href="CustomTypesMode$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">CustomTypesMode</span><span class="result"> extends CustomTypesMode</span>
+        <span class="name">CustomTypesMode</span>
+        
+        
+        <span class="result"> extends CustomTypesMode</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-                
+
+        
+
       </div>
       
       <div id="tooltip"></div>

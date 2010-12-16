@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.dsl.boilerplate</title>
+          <title>org.squeryl.dsl.boilerplate</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
           
       <link href="../../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value">
+        <body class="value" onload="windowTitle();">
 
       <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a></p>
 
@@ -24,269 +25,400 @@
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">boilerplate</span>
+        
+        
+        
       </span>
       </h4>
       <div class="fullcomment" id="comment"></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
           
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromGroupByState">
+              <ol><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromGroupByState">
+      <a id="ComputeMeasuresSignaturesFromGroupByState:ComputeMeasuresSignaturesFromGroupByState[G]"></a>
       <h4 class="signature"><a href="ComputeMeasuresSignaturesFromGroupByState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ComputeMeasuresSignaturesFromGroupByState</span><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">ComputeMeasuresSignaturesFromGroupByState</span>
+        <span class="tparams">[<span name="G">G</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">
+      <a id="ComputeMeasuresSignaturesFromStartOrWhereState:ComputeMeasuresSignaturesFromStartOrWhereState"></a>
       <h4 class="signature"><a href="ComputeMeasuresSignaturesFromStartOrWhereState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ComputeMeasuresSignaturesFromStartOrWhereState</span><span class="result"> extends AnyRef</span>
+        <span class="name">ComputeMeasuresSignaturesFromStartOrWhereState</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.FromSignatures">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.boilerplate.FromSignatures">
+      <a id="FromSignatures:FromSignatures"></a>
       <h4 class="signature"><a href="FromSignatures.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">FromSignatures</span><span class="result"> extends AnyRef</span>
+        <span class="name">FromSignatures</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.boilerplate.GroupBySignatures">
+      <a id="GroupBySignatures:GroupBySignatures"></a>
       <h4 class="signature"><a href="GroupBySignatures.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">GroupBySignatures</span><span class="result"> extends AnyRef</span>
+        <span class="name">GroupBySignatures</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield1">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield1">
+      <a id="JoinQueryYield1:JoinQueryYield1[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield1.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield1</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield1</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield2">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield2">
+      <a id="JoinQueryYield2:JoinQueryYield2[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield2.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield2</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield2</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield3">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield3">
+      <a id="JoinQueryYield3:JoinQueryYield3[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield3.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield3</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield3</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield4">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield4">
+      <a id="JoinQueryYield4:JoinQueryYield4[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield4.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield4</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield4</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield5">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield5">
+      <a id="JoinQueryYield5:JoinQueryYield5[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield5.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield5</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield5</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield6">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield6">
+      <a id="JoinQueryYield6:JoinQueryYield6[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield6.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield6</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield6</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinQueryYield7">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.JoinQueryYield7">
+      <a id="JoinQueryYield7:JoinQueryYield7[R]"></a>
       <h4 class="signature"><a href="JoinQueryYield7.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">JoinQueryYield7</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinQueryYield7</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.JoinSignatures">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.boilerplate.JoinSignatures">
+      <a id="JoinSignatures:JoinSignatures"></a>
       <h4 class="signature"><a href="JoinSignatures.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">JoinSignatures</span><span class="result"> extends AnyRef</span>
+        <span class="name">JoinSignatures</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.boilerplate.OrderBySignatures">
+      <a id="OrderBySignatures:OrderBySignatures[R]"></a>
       <h4 class="signature"><a href="OrderBySignatures.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">OrderBySignatures</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">OrderBySignatures</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query1">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query1">
+      <a id="Query1:Query1[T1, R]"></a>
       <h4 class="signature"><a href="Query1.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query1</span><span class="tparams">[<span name="T1">T1</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query1</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query10">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query10">
+      <a id="Query10:Query10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R]"></a>
       <h4 class="signature"><a href="Query10.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query10</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="T9">T9</span>, <span name="T10">T10</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query10</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="T9">T9</span>, <span name="T10">T10</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query2">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query2">
+      <a id="Query2:Query2[T1, T2, R]"></a>
       <h4 class="signature"><a href="Query2.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query2</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query2</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query3">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query3">
+      <a id="Query3:Query3[T1, T2, T3, R]"></a>
       <h4 class="signature"><a href="Query3.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query3</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query3</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4">
+      <a id="Query4:Query4[T1, T2, T3, T4, R]"></a>
       <h4 class="signature"><a href="Query4.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query4</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query4</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query5">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query5">
+      <a id="Query5:Query5[T1, T2, T3, T4, T5, R]"></a>
       <h4 class="signature"><a href="Query5.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query5</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query5</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query6">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query6">
+      <a id="Query6:Query6[T1, T2, T3, T4, T5, T6, R]"></a>
       <h4 class="signature"><a href="Query6.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query6</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query6</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query7">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query7">
+      <a id="Query7:Query7[T1, T2, T3, T4, T5, T6, T7, R]"></a>
       <h4 class="signature"><a href="Query7.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query7</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query7</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query8">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query8">
+      <a id="Query8:Query8[T1, T2, T3, T4, T5, T6, T7, T8, R]"></a>
       <h4 class="signature"><a href="Query8.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query8</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query8</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query9">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query9">
+      <a id="Query9:Query9[T1, T2, T3, T4, T5, T6, T7, T8, T9, R]"></a>
       <h4 class="signature"><a href="Query9.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query9</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="T9">T9</span>, <span name="R">R</span>]</span><span class="result"> extends AbstractQuery[R]</span>
+        <span class="name">Query9</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="T9">T9</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AbstractQuery[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.STuple1">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.STuple1">
+      <a id="STuple1:STuple1[T1]"></a>
       <h4 class="signature"><a href="STuple1.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">STuple1</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="result"> extends SampleTuple</span>
+        <span class="name">STuple1</span>
+        <span class="tparams">[<span name="T1">T1</span>]</span>
+        
+        <span class="result"> extends SampleTuple</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.STuple2">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.STuple2">
+      <a id="STuple2:STuple2[T1, T2]"></a>
       <h4 class="signature"><a href="STuple2.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">STuple2</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span><span class="result"> extends STuple1[T1]</span>
+        <span class="name">STuple2</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span>
+        
+        <span class="result"> extends STuple1[T1]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.STuple3">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.STuple3">
+      <a id="STuple3:STuple3[T1, T2, T3]"></a>
       <h4 class="signature"><a href="STuple3.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">STuple3</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span><span class="result"> extends STuple2[T1, T2]</span>
+        <span class="name">STuple3</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span>
+        
+        <span class="result"> extends STuple2[T1, T2]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.STuple4">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.STuple4">
+      <a id="STuple4:STuple4[T1, T2, T3, T4]"></a>
       <h4 class="signature"><a href="STuple4.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">STuple4</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span><span class="result"> extends STuple3[T1, T2, T3]</span>
+        <span class="name">STuple4</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span>
+        
+        <span class="result"> extends STuple3[T1, T2, T3]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.STuple5">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.STuple5">
+      <a id="STuple5:STuple5[T1, T2, T3, T4, T5]"></a>
       <h4 class="signature"><a href="STuple5.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">STuple5</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span><span class="result"> extends STuple4[T1, T2, T3, T4]</span>
+        <span class="name">STuple5</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span>
+        
+        <span class="result"> extends STuple4[T1, T2, T3, T4]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.STuple6">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.STuple6">
+      <a id="STuple6:STuple6[T1, T2, T3, T4, T5, T6]"></a>
       <h4 class="signature"><a href="STuple6.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">STuple6</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span><span class="result"> extends STuple5[T1, T2, T3, T4, T5]</span>
+        <span class="name">STuple6</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span>
+        
+        <span class="result"> extends STuple5[T1, T2, T3, T4, T5]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.SampleTuple">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.SampleTuple">
+      <a id="SampleTuple:SampleTuple"></a>
       <h4 class="signature"><a href="SampleTuple.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">SampleTuple</span><span class="result"> extends Product</span>
+        <span class="name">SampleTuple</span>
+        
+        
+        <span class="result"> extends Product</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
+
         
+
         
-                
+
       </div>
       
       <div id="tooltip"></div>

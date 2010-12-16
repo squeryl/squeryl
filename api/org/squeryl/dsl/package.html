@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.dsl</title>
+          <title>org.squeryl.dsl</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value">
+        <body class="value" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a></p>
 
@@ -24,29 +25,42 @@
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">dsl</span>
+        
+        
+        
       </span>
       </h4>
       <div class="fullcomment" id="comment"></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
           
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.AbstractQuery">
+              <ol><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.AbstractQuery">
+      <a id="AbstractQuery:AbstractQuery[R]"></a>
       <h4 class="signature"><a href="AbstractQuery.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">AbstractQuery</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends Query[R]</span>
+        <span class="name">AbstractQuery</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends Query[R]</span>
       </span>
       </a></h4>
       
@@ -55,422 +69,640 @@
           attributes: abstract 
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.BinaryAMSOp">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.BinaryAMSOp">
+      <a id="BinaryAMSOp:BinaryAMSOp[A1, A2]"></a>
       <h4 class="signature"><a href="BinaryAMSOp.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BinaryAMSOp</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+        <span class="name">BinaryAMSOp</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        
+        <span class="result"> extends BinaryOperatorNode</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.BinaryDivOp">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.BinaryDivOp">
+      <a id="BinaryDivOp:BinaryDivOp[A1, A2]"></a>
       <h4 class="signature"><a href="BinaryDivOp.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BinaryDivOp</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+        <span class="name">BinaryDivOp</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        
+        <span class="result"> extends BinaryOperatorNode</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.BooleanExpression">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.BinaryExpression">
+      <a id="BinaryExpression:BinaryExpression[A]"></a>
+      <h4 class="signature"><a href="BinaryExpression.html">
+      <span class="kind">trait</span>
+      <span class="symbol">
+        <span class="name">BinaryExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends NonNumericalExpression[A]</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.BooleanExpression">
+      <a id="BooleanExpression:BooleanExpression[A]"></a>
       <h4 class="signature"><a href="BooleanExpression.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">BooleanExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+        <span class="name">BooleanExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.BooleanTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.BooleanTypeConversion">
+      <a id="BooleanTypeConversion:BooleanTypeConversion[A]"></a>
       <h4 class="signature"><a href="BooleanTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BooleanTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with BooleanExpression[A]</span>
+        <span class="name">BooleanTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with BooleanExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.CompositeKey">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.CompositeKey">
+      <a id="CompositeKey:CompositeKey"></a>
       <h4 class="signature"><a href="CompositeKey.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">CompositeKey</span><span class="result"> extends AnyRef</span>
+        <span class="name">CompositeKey</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.CompositeKey2">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.CompositeKey2">
+      <a id="CompositeKey2:CompositeKey2[A1, A2]"></a>
       <h4 class="signature"><a href="CompositeKey2.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">CompositeKey2</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="params">(<span name="a1">a1: A1</span>, <span name="a2">a2: A2</span>)</span><span class="result"> extends CompositeKey with Product</span>
+        <span class="name">CompositeKey2</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        <span class="params">(<span name="a1">a1: A1</span>, <span name="a2">a2: A2</span>)</span>
+        <span class="result"> extends CompositeKey with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.CompositeKey3">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.CompositeKey3">
+      <a id="CompositeKey3:CompositeKey3[A1, A2, A3]"></a>
       <h4 class="signature"><a href="CompositeKey3.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">CompositeKey3</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>]</span><span class="params">(<span name="a1">a1: A1</span>, <span name="a2">a2: A2</span>, <span name="a3">a3: A3</span>)</span><span class="result"> extends CompositeKey with Product</span>
+        <span class="name">CompositeKey3</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>]</span>
+        <span class="params">(<span name="a1">a1: A1</span>, <span name="a2">a2: A2</span>, <span name="a3">a3: A3</span>)</span>
+        <span class="result"> extends CompositeKey with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.CompositeKey4">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.CompositeKey4">
+      <a id="CompositeKey4:CompositeKey4[A1, A2, A3, A4]"></a>
       <h4 class="signature"><a href="CompositeKey4.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">CompositeKey4</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>]</span><span class="params">(<span name="a1">a1: A1</span>, <span name="a2">a2: A2</span>, <span name="a3">a3: A3</span>, <span name="a4">a4: A4</span>)</span><span class="result"> extends CompositeKey with Product</span>
+        <span class="name">CompositeKey4</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>, <span name="A3">A3</span>, <span name="A4">A4</span>]</span>
+        <span class="params">(<span name="a1">a1: A1</span>, <span name="a2">a2: A2</span>, <span name="a3">a3: A3</span>, <span name="a4">a4: A4</span>)</span>
+        <span class="result"> extends CompositeKey with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.ConcatOp">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ConcatOp">
+      <a id="ConcatOp:ConcatOp[A1, A2]"></a>
       <h4 class="signature"><a href="ConcatOp.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ConcatOp</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+        <span class="name">ConcatOp</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        
+        <span class="result"> extends BinaryOperatorNode</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.DateExpression">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.DateExpression">
+      <a id="DateExpression:DateExpression[A]"></a>
       <h4 class="signature"><a href="DateExpression.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">DateExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+        <span class="name">DateExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.DateTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.DateTypeConversion">
+      <a id="DateTypeConversion:DateTypeConversion[A]"></a>
       <h4 class="signature"><a href="DateTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">DateTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with DateExpression[A]</span>
+        <span class="name">DateTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with DateExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.DelegateQuery">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.DelegateQuery">
+      <a id="DelegateQuery:DelegateQuery[M]"></a>
       <h4 class="signature"><a href="DelegateQuery.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">DelegateQuery</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends Query[M]</span>
+        <span class="name">DelegateQuery</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        
+        <span class="result"> extends Query[M]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.DslFactory">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.DslFactory">
+      <a id="DslFactory:DslFactory"></a>
       <h4 class="signature"><a href="DslFactory.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">DslFactory</span><span class="result"> extends TypeArithmetic with SqlFunctions</span>
+        <span class="name">DslFactory</span>
+        
+        
+        <span class="result"> extends TypeArithmetic with SqlFunctions</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.EnumExpression">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.EnumExpression">
+      <a id="EnumExpression:EnumExpression[A]"></a>
       <h4 class="signature"><a href="EnumExpression.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">EnumExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+        <span class="name">EnumExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.FieldTypes">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.FieldTypes">
+      <a id="FieldTypes:FieldTypes"></a>
       <h4 class="signature"><a href="FieldTypes.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">FieldTypes</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldTypes</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.Group">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.Group">
+      <a id="Group:Group[K]"></a>
       <h4 class="signature"><a href="Group.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Group</span><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">Group</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.GroupWithMeasures">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.GroupWithMeasures">
+      <a id="GroupWithMeasures:GroupWithMeasures[K, M]"></a>
       <h4 class="signature"><a href="GroupWithMeasures.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">GroupWithMeasures</span><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">GroupWithMeasures</span>
+        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToMany">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ManyToMany">
+      <a id="ManyToMany:ManyToMany[O, A]"></a>
       <h4 class="signature"><a href="ManyToMany.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ManyToMany</span><span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends Query[O]</span>
+        <span class="name">ManyToMany</span>
+        <span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span>
+        
+        <span class="result"> extends Query[O]</span>
       </span>
       </a></h4>
       <p class="comment cmt">This trait is what is referred by both the left and right side of a manyToMany relation.</p>
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToManyRelation">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ManyToManyRelation">
+      <a id="ManyToManyRelation:ManyToManyRelation[L, R, A]"></a>
       <h4 class="signature"><a href="ManyToManyRelation.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ManyToManyRelation</span><span class="tparams">[<span name="L">L &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="R">R &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends Relation[L, R]</span>
+        <span class="name">ManyToManyRelation</span>
+        <span class="tparams">[<span name="L">L &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="R">R &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span>
+        
+        <span class="result"> extends Relation[L, R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToOne">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ManyToOne">
+      <a id="ManyToOne:ManyToOne[O]"></a>
       <h4 class="signature"><a href="ManyToOne.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ManyToOne</span><span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends Query[O]</span>
+        <span class="name">ManyToOne</span>
+        <span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>]</span>
+        
+        <span class="result"> extends Query[O]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.Measures">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.Measures">
+      <a id="Measures:Measures[M]"></a>
       <h4 class="signature"><a href="Measures.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Measures</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">Measures</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalCoalesce">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalCoalesce">
+      <a id="NonNumericalCoalesce:NonNumericalCoalesce[A1, A2]"></a>
       <h4 class="signature"><a href="NonNumericalCoalesce.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NonNumericalCoalesce</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode</span>
+        <span class="name">NonNumericalCoalesce</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        
+        <span class="result"> extends BinaryOperatorNode</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalExpression">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.NonNumericalExpression">
+      <a id="NonNumericalExpression:NonNumericalExpression[A]"></a>
       <h4 class="signature"><a href="NonNumericalExpression.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">NonNumericalExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypedExpressionNode[A]</span>
+        <span class="name">NonNumericalExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypedExpressionNode[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalInputOnlyTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalInputOnlyTypeConversion">
+      <a id="NonNumericalInputOnlyTypeConversion:NonNumericalInputOnlyTypeConversion[A]"></a>
       <h4 class="signature"><a href="NonNumericalInputOnlyTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NonNumericalInputOnlyTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NonNumericalExpression[A]</span>
+        <span class="name">NonNumericalInputOnlyTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       <p class="comment cmt">SQL allows operators are 'null agnostic', i.</p>
-    </li><li visbl="pub" name="org.squeryl.dsl.NonNumericalTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalTypeConversion">
+      <a id="NonNumericalTypeConversion:NonNumericalTypeConversion[A]"></a>
       <h4 class="signature"><a href="NonNumericalTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NonNumericalTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NonNumericalExpression[A]</span>
+        <span class="name">NonNumericalTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NumericalExpression">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.NumericalExpression">
+      <a id="NumericalExpression:NumericalExpression[A]"></a>
       <h4 class="signature"><a href="NumericalExpression.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">NumericalExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypedExpressionNode[A]</span>
+        <span class="name">NumericalExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypedExpressionNode[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NumericalInputOnlyTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NumericalInputOnlyTypeConversion">
+      <a id="NumericalInputOnlyTypeConversion:NumericalInputOnlyTypeConversion[A]"></a>
       <h4 class="signature"><a href="NumericalInputOnlyTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NumericalInputOnlyTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NumericalExpression[A]</span>
+        <span class="name">NumericalInputOnlyTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with NumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NumericalTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NumericalTypeConversion">
+      <a id="NumericalTypeConversion:NumericalTypeConversion[A]"></a>
       <h4 class="signature"><a href="NumericalTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NumericalTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with NumericalExpression[A]</span>
+        <span class="name">NumericalTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with NumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NvlFunctionNonNumerical">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NvlFunctionNonNumerical">
+      <a id="NvlFunctionNonNumerical:NvlFunctionNonNumerical[A1, A2]"></a>
       <h4 class="signature"><a href="NvlFunctionNonNumerical.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NvlFunctionNonNumerical</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryOperatorNode with NvlNode</span>
+        <span class="name">NvlFunctionNonNumerical</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        
+        <span class="result"> extends BinaryOperatorNode with NvlNode</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NvlFunctionNumerical">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NvlFunctionNumerical">
+      <a id="NvlFunctionNumerical:NvlFunctionNumerical[A1, A2]"></a>
       <h4 class="signature"><a href="NvlFunctionNumerical.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">NvlFunctionNumerical</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="result"> extends BinaryAMSOp[A1, A2] with NvlNode</span>
+        <span class="name">NvlFunctionNumerical</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        
+        <span class="result"> extends BinaryAMSOp[A1, A2] with NvlNode</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.NvlNode">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.NvlNode">
+      <a id="NvlNode:NvlNode"></a>
       <h4 class="signature"><a href="NvlNode.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">NvlNode</span><span class="result"> extends AnyRef</span>
+        <span class="name">NvlNode</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.OneToMany">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.OneToMany">
+      <a id="OneToMany:OneToMany[M]"></a>
       <h4 class="signature"><a href="OneToMany.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">OneToMany</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends Query[M]</span>
+        <span class="name">OneToMany</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        
+        <span class="result"> extends Query[M]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.OneToManyRelation">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.OneToManyRelation">
+      <a id="OneToManyRelation:OneToManyRelation[O, M]"></a>
       <h4 class="signature"><a href="OneToManyRelation.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">OneToManyRelation</span><span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="M">M &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends Relation[O, M]</span>
+        <span class="name">OneToManyRelation</span>
+        <span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="M">M</span>]</span>
+        
+        <span class="result"> extends Relation[O, M]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.OptionalQueryable">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.OptionalQueryable">
+      <a id="OptionalQueryable:OptionalQueryable[A]"></a>
       <h4 class="signature"><a href="OptionalQueryable.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">OptionalQueryable</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends Queryable[Option[A]]</span>
+        <span class="name">OptionalQueryable</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends Queryable[Option[A]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.QueryDsl">
+      <a id="QueryDsl:QueryDsl"></a>
       <h4 class="signature"><a href="QueryDsl.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">QueryDsl</span><span class="result"> extends DslFactory with WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState with QueryElements with JoinSignatures with FromSignatures</span>
+        <span class="name">QueryDsl</span>
+        
+        
+        <span class="result"> extends DslFactory with WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState with QueryElements with JoinSignatures with FromSignatures</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.QueryYield">
+      <a id="QueryYield:QueryYield[R]"></a>
       <h4 class="signature"><a href="QueryYield.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">QueryYield</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">QueryYield</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.Relation">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.Relation">
+      <a id="Relation:Relation[L, R]"></a>
       <h4 class="signature"><a href="Relation.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">Relation</span><span class="tparams">[<span name="L">L &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="R">R &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">Relation</span>
+        <span class="tparams">[<span name="L">L &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.SqlFunctions">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.SqlFunctions">
+      <a id="SqlFunctions:SqlFunctions"></a>
       <h4 class="signature"><a href="SqlFunctions.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">SqlFunctions</span><span class="result"> extends AnyRef</span>
+        <span class="name">SqlFunctions</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.StatefulManyToMany">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.StatefulManyToMany">
+      <a id="StatefulManyToMany:StatefulManyToMany[O, A]"></a>
       <h4 class="signature"><a href="StatefulManyToMany.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">StatefulManyToMany</span><span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends Iterable[O]</span>
+        <span class="name">StatefulManyToMany</span>
+        <span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span>
+        
+        <span class="result"> extends Iterable[O]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.StatefulManyToOne">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.StatefulManyToOne">
+      <a id="StatefulManyToOne:StatefulManyToOne[O]"></a>
       <h4 class="signature"><a href="StatefulManyToOne.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">StatefulManyToOne</span><span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">StatefulManyToOne</span>
+        <span class="tparams">[<span name="O">O &lt;: org.squeryl.KeyedEntity[_]</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.StatefulOneToMany">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.StatefulOneToMany">
+      <a id="StatefulOneToMany:StatefulOneToMany[M]"></a>
       <h4 class="signature"><a href="StatefulOneToMany.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">StatefulOneToMany</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends Iterable[M]</span>
+        <span class="name">StatefulOneToMany</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        
+        <span class="result"> extends Iterable[M]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.StringExpression">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.StringExpression">
+      <a id="StringExpression:StringExpression[A]"></a>
       <h4 class="signature"><a href="StringExpression.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">StringExpression</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends NonNumericalExpression[A]</span>
+        <span class="name">StringExpression</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends NonNumericalExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.StringTypeConversion">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.StringTypeConversion">
+      <a id="StringTypeConversion:StringTypeConversion[A]"></a>
       <h4 class="signature"><a href="StringTypeConversion.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">StringTypeConversion</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends TypeConversion with StringExpression[A]</span>
+        <span class="name">StringTypeConversion</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends TypeConversion with StringExpression[A]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.TypeArithmetic">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.TypeArithmetic">
+      <a id="TypeArithmetic:TypeArithmetic"></a>
       <h4 class="signature"><a href="TypeArithmetic.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">TypeArithmetic</span><span class="result"> extends FieldTypes</span>
+        <span class="name">TypeArithmetic</span>
+        
+        
+        <span class="result"> extends FieldTypes</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.UnaryAgregateFloatOp">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.UnaryAgregateFloatOp">
+      <a id="UnaryAgregateFloatOp:UnaryAgregateFloatOp[A]"></a>
       <h4 class="signature"><a href="UnaryAgregateFloatOp.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">UnaryAgregateFloatOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends FunctionNode[Nothing]</span>
+        <span class="name">UnaryAgregateFloatOp</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends FunctionNode[Nothing]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.UnaryAgregateLengthNeutralOp">
+      <a id="UnaryAgregateLengthNeutralOp:UnaryAgregateLengthNeutralOp[A]"></a>
       <h4 class="signature"><a href="UnaryAgregateLengthNeutralOp.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">UnaryAgregateLengthNeutralOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends FunctionNode[Nothing]</span>
+        <span class="name">UnaryAgregateLengthNeutralOp</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends FunctionNode[Nothing]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.UnaryFloatOp">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.UnaryFloatOp">
+      <a id="UnaryFloatOp:UnaryFloatOp[A]"></a>
       <h4 class="signature"><a href="UnaryFloatOp.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">UnaryFloatOp</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends FunctionNode[Nothing]</span>
+        <span class="name">UnaryFloatOp</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends FunctionNode[Nothing]</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.ast">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast">
+      <a id="ast:ast"></a>
       <h4 class="signature"><a href="ast/package.html">
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">ast</span>
+        
+        
+        
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate">
+      <a id="boilerplate:boilerplate"></a>
       <h4 class="signature"><a href="boilerplate/package.html">
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">boilerplate</span>
+        
+        
+        
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm">
+      <a id="fsm:fsm"></a>
       <h4 class="signature"><a href="fsm/package.html">
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">fsm</span>
+        
+        
+        
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.internal">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.internal">
+      <a id="internal:internal"></a>
       <h4 class="signature"><a href="internal/package.html">
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">internal</span>
+        
+        
+        
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-                
+
+        
+
       </div>
       
       <div id="tooltip"></div>

@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.dsl.fsm</title>
+          <title>org.squeryl.dsl.fsm</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
           
       <link href="../../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value">
+        <body class="value" onload="windowTitle();">
 
       <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a></p>
 
@@ -24,125 +25,184 @@
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">fsm</span>
+        
+        
+        
       </span>
       </h4>
       <div class="fullcomment" id="comment"></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
           
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.BaseQueryYield">
+      <a id="BaseQueryYield:BaseQueryYield[G]"></a>
       <h4 class="signature"><a href="BaseQueryYield.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">BaseQueryYield</span><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends SelectState[G] with OrderBySignatures[G] with QueryYield[G]</span>
+        <span class="name">BaseQueryYield</span>
+        <span class="tparams">[<span name="G">G</span>]</span>
+        
+        <span class="result"> extends SelectState[G] with OrderBySignatures[G] with QueryYield[G]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">
+      <a id="ComputeStateFromGroupByState:ComputeStateFromGroupByState[K, M]"></a>
       <h4 class="signature"><a href="ComputeStateFromGroupByState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ComputeStateFromGroupByState</span><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends QueryYield[GroupWithMeasures[K, M]] with OrderBySignatures[GroupWithMeasures[K, M]]</span>
+        <span class="name">ComputeStateFromGroupByState</span>
+        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
+        
+        <span class="result"> extends QueryYield[GroupWithMeasures[K, M]] with OrderBySignatures[GroupWithMeasures[K, M]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">
+      <a id="ComputeStateStartOrWhereState:ComputeStateStartOrWhereState[M]"></a>
       <h4 class="signature"><a href="ComputeStateStartOrWhereState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ComputeStateStartOrWhereState</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends QueryYield[Measures[M]] with OrderBySignatures[Measures[M]]</span>
+        <span class="name">ComputeStateStartOrWhereState</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        
+        <span class="result"> extends QueryYield[Measures[M]] with OrderBySignatures[Measures[M]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupByState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.GroupByState">
+      <a id="GroupByState:GroupByState[K]"></a>
       <h4 class="signature"><a href="GroupByState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">GroupByState</span><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends QueryYield[Group[K]] with ComputeMeasuresSignaturesFromGroupByState[K] with OrderBySignatures[Group[K]]</span>
+        <span class="name">GroupByState</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        
+        <span class="result"> extends QueryYield[Group[K]] with ComputeMeasuresSignaturesFromGroupByState[K] with OrderBySignatures[Group[K]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupQueryYield">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.GroupQueryYield">
+      <a id="GroupQueryYield:GroupQueryYield[K]"></a>
       <h4 class="signature"><a href="GroupQueryYield.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">GroupQueryYield</span><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends BaseQueryYield[Group[K]] with GroupByState[K] with HavingState[K] with OrderBySignatures[Group[K]] with QueryYield[Group[K]]</span>
+        <span class="name">GroupQueryYield</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        
+        <span class="result"> extends BaseQueryYield[Group[K]] with GroupByState[K] with HavingState[K] with OrderBySignatures[Group[K]] with QueryYield[Group[K]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield">
+      <a id="GroupWithMeasuresQueryYield:GroupWithMeasuresQueryYield[K, M]"></a>
       <h4 class="signature"><a href="GroupWithMeasuresQueryYield.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">GroupWithMeasuresQueryYield</span><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends BaseQueryYield[GroupWithMeasures[K, M]] with ComputeStateFromGroupByState[K, M] with OrderBySignatures[GroupWithMeasures[K, M]] with QueryYield[GroupWithMeasures[K, M]]</span>
+        <span class="name">GroupWithMeasuresQueryYield</span>
+        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
+        
+        <span class="result"> extends BaseQueryYield[GroupWithMeasures[K, M]] with ComputeStateFromGroupByState[K, M] with OrderBySignatures[GroupWithMeasures[K, M]] with QueryYield[GroupWithMeasures[K, M]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.HavingState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.HavingState">
+      <a id="HavingState:HavingState[G]"></a>
       <h4 class="signature"><a href="HavingState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">HavingState</span><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends ComputeMeasuresSignaturesFromGroupByState[G]</span>
+        <span class="name">HavingState</span>
+        <span class="tparams">[<span name="G">G</span>]</span>
+        
+        <span class="result"> extends ComputeMeasuresSignaturesFromGroupByState[G]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.MeasuresQueryYield">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.MeasuresQueryYield">
+      <a id="MeasuresQueryYield:MeasuresQueryYield[M]"></a>
       <h4 class="signature"><a href="MeasuresQueryYield.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">MeasuresQueryYield</span><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends BaseQueryYield[Measures[M]] with OrderBySignatures[Measures[M]] with ComputeStateStartOrWhereState[M] with QueryYield[Measures[M]]</span>
+        <span class="name">MeasuresQueryYield</span>
+        <span class="tparams">[<span name="M">M</span>]</span>
+        
+        <span class="result"> extends BaseQueryYield[Measures[M]] with OrderBySignatures[Measures[M]] with ComputeStateStartOrWhereState[M] with QueryYield[Measures[M]]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.QueryElements">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.QueryElements">
+      <a id="QueryElements:QueryElements"></a>
       <h4 class="signature"><a href="QueryElements.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">QueryElements</span><span class="result"> extends WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState</span>
+        <span class="name">QueryElements</span>
+        
+        
+        <span class="result"> extends WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.SelectState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.SelectState">
+      <a id="SelectState:SelectState[R]"></a>
       <h4 class="signature"><a href="SelectState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">SelectState</span><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends QueryYield[R] with OrderBySignatures[R]</span>
+        <span class="name">SelectState</span>
+        <span class="tparams">[<span name="R">R</span>]</span>
+        
+        <span class="result"> extends QueryYield[R] with OrderBySignatures[R]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.StartState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.StartState">
+      <a id="StartState:StartState"></a>
       <h4 class="signature"><a href="StartState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">StartState</span><span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
+        <span class="name">StartState</span>
+        
+        
+        <span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.WhereState">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.WhereState">
+      <a id="WhereState:WhereState"></a>
       <h4 class="signature"><a href="WhereState.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">WhereState</span><span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
+        <span class="name">WhereState</span>
+        
+        
+        <span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
+
         
+
         
-                
+
       </div>
       
       <div id="tooltip"></div>

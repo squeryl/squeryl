@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.internals</title>
+          <title>org.squeryl.internals</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value">
+        <body class="value" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a></p>
 
@@ -24,240 +25,367 @@
       <span class="kind">package</span>
       <span class="symbol">
         <span class="name">internals</span>
+        
+        
+        
       </span>
       </h4>
       <div class="fullcomment" id="comment"></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
           
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
+
         
-                
-        
-        <div class="members" id="types">
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.internals.AttributeValidOnMultipleColumn">
+              <ol><li visbl="pub" data-isabs="true" name="org.squeryl.internals.AttributeValidOnMultipleColumn">
+      <a id="AttributeValidOnMultipleColumn:AttributeValidOnMultipleColumn"></a>
       <h4 class="signature"><a href="AttributeValidOnMultipleColumn.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">AttributeValidOnMultipleColumn</span><span class="result"> extends ColumnAttribute</span>
+        <span class="name">AttributeValidOnMultipleColumn</span>
+        
+        
+        <span class="result"> extends ColumnAttribute</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.AttributeValidOnNonNumericalColumn">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.AttributeValidOnNonNumericalColumn">
+      <a id="AttributeValidOnNonNumericalColumn:AttributeValidOnNonNumericalColumn"></a>
       <h4 class="signature"><a href="AttributeValidOnNonNumericalColumn.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">AttributeValidOnNonNumericalColumn</span><span class="result"> extends ColumnAttribute</span>
+        <span class="name">AttributeValidOnNonNumericalColumn</span>
+        
+        
+        <span class="result"> extends ColumnAttribute</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.AttributeValidOnNumericalColumn">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.AttributeValidOnNumericalColumn">
+      <a id="AttributeValidOnNumericalColumn:AttributeValidOnNumericalColumn"></a>
       <h4 class="signature"><a href="AttributeValidOnNumericalColumn.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">AttributeValidOnNumericalColumn</span><span class="result"> extends ColumnAttribute</span>
+        <span class="name">AttributeValidOnNumericalColumn</span>
+        
+        
+        <span class="result"> extends ColumnAttribute</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.AutoIncremented">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.AutoIncremented">
+      <a id="AutoIncremented:AutoIncremented"></a>
       <h4 class="signature"><a href="AutoIncremented.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">AutoIncremented</span><span class="params">(<span name="nameOfSequence">nameOfSequence: Option[String]</span>)</span><span class="result"> extends ColumnAttribute with AttributeValidOnNumericalColumn with Product</span>
+        <span class="name">AutoIncremented</span>
+        
+        <span class="params">(<span name="nameOfSequence">nameOfSequence: Option[String]</span>)</span>
+        <span class="result"> extends ColumnAttribute with AttributeValidOnNumericalColumn with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.ColumnAttribute">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.ColumnAttribute">
+      <a id="ColumnAttribute:ColumnAttribute"></a>
       <h4 class="signature"><a href="ColumnAttribute.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ColumnAttribute</span><span class="result"> extends AnyRef</span>
+        <span class="name">ColumnAttribute</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.ColumnToFieldMapper">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.ColumnToFieldMapper">
+      <a id="ColumnToFieldMapper:ColumnToFieldMapper"></a>
       <h4 class="signature"><a href="ColumnToFieldMapper.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ColumnToFieldMapper</span><span class="result"> extends AnyRef</span>
+        <span class="name">ColumnToFieldMapper</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.ColumnToTupleMapper">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.ColumnToTupleMapper">
+      <a id="ColumnToTupleMapper:ColumnToTupleMapper"></a>
       <h4 class="signature"><a href="ColumnToTupleMapper.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ColumnToTupleMapper</span><span class="result"> extends AnyRef</span>
+        <span class="name">ColumnToTupleMapper</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.DatabaseAdapter">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DBType">
+      <a id="DBType:DBType"></a>
+      <h4 class="signature"><a href="DBType.html">
+      <span class="kind">case class</span>
+      <span class="symbol">
+        <span class="name">DBType</span>
+        
+        <span class="params">(<span name="declaration">declaration: String</span>)</span>
+        <span class="result"> extends ColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with Product</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.DatabaseAdapter">
+      <a id="DatabaseAdapter:DatabaseAdapter"></a>
       <h4 class="signature"><a href="DatabaseAdapter.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">DatabaseAdapter</span><span class="result"> extends AnyRef</span>
+        <span class="name">DatabaseAdapter</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData">
+      <a id="FieldMetaData:FieldMetaData"></a>
       <h4 class="signature"><a href="FieldMetaData.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">FieldMetaData</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldMetaData</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaDataFactory">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.FieldMetaDataFactory">
+      <a id="FieldMetaDataFactory:FieldMetaDataFactory"></a>
       <h4 class="signature"><a href="FieldMetaDataFactory.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">FieldMetaDataFactory</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldMetaDataFactory</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldTypeHandler">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.FieldTypeHandler">
+      <a id="FieldTypeHandler:FieldTypeHandler[T]"></a>
       <h4 class="signature"><a href="FieldTypeHandler.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">FieldTypeHandler</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldTypeHandler</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.Indexed">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.Indexed">
+      <a id="Indexed:Indexed"></a>
       <h4 class="signature"><a href="Indexed.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">Indexed</span><span class="params">(<span name="nameOfIndex">nameOfIndex: Option[String]</span>)</span><span class="result"> extends ColumnAttribute with MultipleColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
+        <span class="name">Indexed</span>
+        
+        <span class="params">(<span name="nameOfIndex">nameOfIndex: Option[String]</span>)</span>
+        <span class="result"> extends ColumnAttribute with MultipleColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.MultipleColumnAttribute">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.MultipleColumnAttribute">
+      <a id="MultipleColumnAttribute:MultipleColumnAttribute"></a>
       <h4 class="signature"><a href="MultipleColumnAttribute.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">MultipleColumnAttribute</span><span class="result"> extends AnyRef</span>
+        <span class="name">MultipleColumnAttribute</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.OutMapper">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.OutMapper">
+      <a id="OutMapper:OutMapper[T]"></a>
       <h4 class="signature"><a href="OutMapper.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">OutMapper</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends ResultSetUtils</span>
+        <span class="name">OutMapper</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends ResultSetUtils</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.PosoMetaData">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.PosoMetaData">
+      <a id="PosoMetaData:PosoMetaData[T]"></a>
       <h4 class="signature"><a href="PosoMetaData.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">PosoMetaData</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">PosoMetaData</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.PrimaryKey">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.PrimaryKey">
+      <a id="PrimaryKey:PrimaryKey"></a>
       <h4 class="signature"><a href="PrimaryKey.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">PrimaryKey</span><span class="params">()</span><span class="result"> extends ColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
+        <span class="name">PrimaryKey</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends ColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.ResultSetMapper">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.ResultSetMapper">
+      <a id="ResultSetMapper:ResultSetMapper"></a>
       <h4 class="signature"><a href="ResultSetMapper.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">ResultSetMapper</span><span class="result"> extends ResultSetUtils</span>
+        <span class="name">ResultSetMapper</span>
+        
+        
+        <span class="result"> extends ResultSetUtils</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.ResultSetUtils">
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.internals.ResultSetUtils">
+      <a id="ResultSetUtils:ResultSetUtils"></a>
       <h4 class="signature"><a href="ResultSetUtils.html">
       <span class="kind">trait</span>
       <span class="symbol">
-        <span class="name">ResultSetUtils</span><span class="result"> extends AnyRef</span>
+        <span class="name">ResultSetUtils</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.StatementWriter">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.StatementWriter">
+      <a id="StatementWriter:StatementWriter"></a>
       <h4 class="signature"><a href="StatementWriter.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">StatementWriter</span><span class="result"> extends AnyRef</span>
+        <span class="name">StatementWriter</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
-      <p class="comment cmt">no summary matey</p>
-    </li><li visbl="pub" name="org.squeryl.internals.Unique">
+      <p class="comment cmt"></p>
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.Unique">
+      <a id="Unique:Unique"></a>
       <h4 class="signature"><a href="Unique.html">
-      <span class="kind">class</span>
+      <span class="kind">case class</span>
       <span class="symbol">
-        <span class="name">Unique</span><span class="params">()</span><span class="result"> extends ColumnAttribute with MultipleColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
+        <span class="name">Unique</span>
+        
+        <span class="params">()</span>
+        <span class="result"> extends ColumnAttribute with MultipleColumnAttribute with AttributeValidOnNonNumericalColumn with AttributeValidOnNumericalColumn with AttributeValidOnMultipleColumn with Product</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.YieldValuePusher">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.YieldValuePusher">
+      <a id="YieldValuePusher:YieldValuePusher"></a>
       <h4 class="signature"><a href="YieldValuePusher.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">YieldValuePusher</span><span class="result"> extends AnyRef</span>
+        <span class="name">YieldValuePusher</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.internals.FieldMetaData">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData">
+      <a id="FieldMetaData:FieldMetaData"></a>
       <h4 class="signature"><a href="FieldMetaData$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">FieldMetaData</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldMetaData</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldReferenceLinker">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldReferenceLinker">
+      <a id="FieldReferenceLinker:FieldReferenceLinker"></a>
       <h4 class="signature"><a href="FieldReferenceLinker$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">FieldReferenceLinker</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldReferenceLinker</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.NoOpOutMapper">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.NoOpOutMapper">
+      <a id="NoOpOutMapper:NoOpOutMapper"></a>
       <h4 class="signature"><a href="NoOpOutMapper$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">NoOpOutMapper</span><span class="result"> extends OutMapper[Any]</span>
+        <span class="name">NoOpOutMapper</span>
+        
+        
+        <span class="result"> extends OutMapper[Any]</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.ResultSetUtils">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.ResultSetUtils">
+      <a id="ResultSetUtils:ResultSetUtils"></a>
       <h4 class="signature"><a href="ResultSetUtils$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">ResultSetUtils</span><span class="result"> extends ResultSetUtils</span>
+        <span class="name">ResultSetUtils</span>
+        
+        
+        <span class="result"> extends ResultSetUtils</span>
       </span>
       </a></h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.Utils">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.Utils">
+      <a id="Utils:Utils"></a>
       <h4 class="signature"><a href="Utils$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">Utils</span><span class="result"> extends AnyRef</span>
+        <span class="name">Utils</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
     </li></ol>
             </div>
-                
+
+        
+
       </div>
       
       <div id="tooltip"></div>
