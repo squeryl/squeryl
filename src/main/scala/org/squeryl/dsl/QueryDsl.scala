@@ -560,6 +560,7 @@ trait QueryDsl
     }
   }
 
+  // Composite key syntactic sugar :
 
   def compositeKey[A1,A2](a1: A1, a2: A2) =
     new CompositeKey2(a1, a2)
@@ -570,10 +571,36 @@ trait QueryDsl
   def compositeKey[A1,A2,A3,A4](a1: A1, a2: A2, a3: A3, a4: A4) =
     new CompositeKey4(a1, a2, a3, a4)
 
+  def compositeKey[A1,A2,A3,A4,A5](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5) =
+    new CompositeKey5(a1, a2, a3, a4, a5)
+
+  def compositeKey[A1,A2,A3,A4,A5,A6](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6) =
+    new CompositeKey6(a1, a2, a3, a4, a5, a6)
+
+  def compositeKey[A1,A2,A3,A4,A5,A6,A7](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7) =
+    new CompositeKey7(a1, a2, a3, a4, a5, a6, a7)
+
+  def compositeKey[A1,A2,A3,A4,A5,A6,A7,A8](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8) =
+    new CompositeKey8(a1, a2, a3, a4, a5, a6, a7, a8)
+
+  def compositeKey[A1,A2,A3,A4,A5,A6,A7,A8,A9](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8, a9: A9) =
+    new CompositeKey9(a1, a2, a3, a4, a5, a6, a7, a8, a9)
+
+  // Tuple to composite key conversions :
+  
   implicit def t2te[A1,A2](t: (A1,A2)) = new CompositeKey2[A1,A2](t._1, t._2)
 
   implicit def t3te[A1,A2,A3](t: (A1,A2,A3)) = new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
 
   implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4)) = new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
-  
+
+  implicit def t5te[A1,A2,A3,A4,A5](t: (A1,A2,A3,A4,A5)) = new CompositeKey5[A1,A2,A3,A4,A5](t._1, t._2, t._3, t._4, t._5)
+
+  implicit def t6te[A1,A2,A3,A4,A5,A6](t: (A1,A2,A3,A4,A5,A6)) = new CompositeKey6[A1,A2,A3,A4,A5,A6](t._1, t._2, t._3, t._4, t._5, t._6)
+
+  implicit def t7te[A1,A2,A3,A4,A5,A6,A7](t: (A1,A2,A3,A4,A5,A6,A7)) = new CompositeKey7[A1,A2,A3,A4,A5,A6,A7](t._1, t._2, t._3, t._4, t._5, t._6, t._7)
+
+  implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8)) = new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
+
+  implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9)) = new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
 }
