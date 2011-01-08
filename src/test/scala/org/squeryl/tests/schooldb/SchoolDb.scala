@@ -273,7 +273,8 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
-    testPartialUpdateWithInclusionOperator
+    if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter])
+      testPartialUpdateWithInclusionOperator
     
     testStringKeyedEntities
 
@@ -953,7 +954,8 @@ class SchoolDbTestRun extends QueryTester {
     passed('testPartialUpdate1)
   }
 
-  def testPartialUpdateWithInclusionOperator = {
+  def testPartialUpdateWithInclusionOperator =
+  {
     
     update(courses)(c =>
       where(c.id in from(courses)(c0=> where(c0.id lt -1) select(c0.id)))
