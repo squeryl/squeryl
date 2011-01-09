@@ -180,7 +180,7 @@ class FieldSelectElement
   val expression = new ExpressionNode {
     
     def doWrite(sw: StatementWriter) =
-      sw.write(alias)
+      sw.write(sw.quoteName(alias))
   }
 
   def prepareColumnMapper(index: Int) =
@@ -276,7 +276,7 @@ class SelectElementReference[A]
     }
 
   override def doWrite(sw: StatementWriter) =
-    sw.write(_delegateAtUseSite.alias)
+    sw.write(sw.quoteName(_delegateAtUseSite.alias))
 }
 
 /**
@@ -307,7 +307,7 @@ class ExportedSelectElement
   val expression = new ExpressionNode {
 
     def doWrite(sw: StatementWriter) =
-      sw.write(alias)
+      sw.write(sw.quoteName(alias))
   }
 
   override def toString =
@@ -320,12 +320,18 @@ class ExportedSelectElement
     target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target.aliasComponent
   }
 
-  override def actualSelectElement: SelectElement = {
+  override def actualSelectElement: SelectElement =
     if(selectElement.isInstanceOf[ExportedSelectElement])
       selectElement.asInstanceOf[ExportedSelectElement].actualSelectElement
     else
       selectElement
-  }
+
+//  override def doWrite(sw: StatementWriter) = {
+//    val p = path
+//    sw.write(sw.quoteName(p))
+//    sw.write(" as ")
+//    sw.write(sw.quoteName(p.replace('.','_')))
+//  }
 
   lazy val target: SelectElement = {
 

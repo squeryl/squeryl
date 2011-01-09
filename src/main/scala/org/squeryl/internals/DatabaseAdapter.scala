@@ -68,7 +68,7 @@ trait DatabaseAdapter {
               for(z <- qen.tableExpressions.zipi) {
                 z.element.write(sw)
                 sw.write(" ")
-                sw.write(z.element.alias)
+                sw.write(sw.quoteName(z.element.alias))
                 if(!z.isLast) {
                   sw.write(",")
                   sw.nextLine
@@ -80,14 +80,14 @@ trait DatabaseAdapter {
               if(z.isFirst) {
                 z.element.write(sw)
                 sw.write(" ")
-                sw.write(z.element.alias)
+                sw.write(sw.quoteName(z.element.alias))
                 sw.indent
                 sw.nextLine
               } else {
                 sw.write("inner join ")
                 z.element.write(sw)
                 sw.write(" as ")
-                sw.write(z.element.alias)
+                sw.write(sw.quoteName(z.element.alias))
                 sw.nextLine
               }
             }
@@ -107,7 +107,7 @@ trait DatabaseAdapter {
       val restOfJoinExpr = qen.tableExpressions.filter(_.isMemberOfJoinList)
       firstJoinExpr.write(sw)
       sw.write(" ")
-      sw.write(firstJoinExpr.alias)
+      sw.write(sw.quoteName(firstJoinExpr.alias))
       sw.nextLine
 
       for(z <- restOfJoinExpr.zipi) {
@@ -176,7 +176,7 @@ trait DatabaseAdapter {
     sw.write(" outer join ")
     oje.queryableExpressionNode.write(sw)
     sw.write(" as ")
-    sw.write(oje.queryableExpressionNode.alias)
+    sw.write(sw.quoteName(oje.queryableExpressionNode.alias))
     sw.write(" on ")
     oje.matchExpression.write(sw)
   }
@@ -188,7 +188,7 @@ trait DatabaseAdapter {
     sw.write(" join ")
     queryableExpressionNode.write(sw)
     sw.write(" as ")
-    sw.write(queryableExpressionNode.alias)
+    sw.write(sw.quoteName(queryableExpressionNode.alias))
     sw.write(" on ")
     queryableExpressionNode.joinExpression.get.write(sw)
   }
@@ -238,7 +238,7 @@ trait DatabaseAdapter {
     val sb = new StringBuilder(128)
   
     sb.append("  ")
-    sb.append(fmd.columnName)
+    sb.append(quoteName(fmd.columnName))
     sb.append(" ")
     sb.append(dbTypeDeclaration)
 
@@ -269,7 +269,7 @@ trait DatabaseAdapter {
   def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 
     sw.write("create table ")
-    sw.write(t.prefixedName);
+    sw.write(quoteName(t.prefixedName))
     sw.write(" (\n");
     sw.writeIndented {
       sw.writeLinesWithSeparator(
@@ -395,9 +395,9 @@ trait DatabaseAdapter {
     val f = t.posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented)
 
     sw.write("insert into ");
-    sw.write(t.prefixedName);
+    sw.write(quoteName(t.prefixedName));
     sw.write(" (");
-    sw.write(f.map(fmd => fmd.columnName).mkString(", "));
+    sw.write(f.map(fmd => quoteName(fmd.columnName)).mkString(", "));
     sw.write(") values ");
     sw.write(
       f.map(fmd => writeValue(o_, fmd, sw)
@@ -480,7 +480,7 @@ trait DatabaseAdapter {
     val o_ = o.asInstanceOf[AnyRef]
 
 
-    sw.write("update ", t.prefixedName, " set ")
+    sw.write("update ", quoteName(t.prefixedName), " set ")
     sw.nextLine
     sw.indent
     sw.writeLinesWithSeparator(
@@ -488,9 +488,9 @@ trait DatabaseAdapter {
         filter(fmd=> ! fmd.isIdFieldOfKeyedEntity).
           map(fmd => {
             if(fmd.isOptimisticCounter)
-              fmd.columnName + " = " + fmd.columnName + " + 1 "
+              quoteName(fmd.columnName) + " = " + quoteName(fmd.columnName) + " + 1 "
             else
-              fmd.columnName + " = " + writeValue(o_, fmd, sw)
+              quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
           }),
       ","
     )
@@ -500,7 +500,7 @@ trait DatabaseAdapter {
     sw.indent
     
     t.posoMetaData.primaryKey.getOrElse(error("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
-      pkMd => sw.write(pkMd.columnName, " = ", writeValue(o_, pkMd, sw)),
+      pkMd => sw.write(quoteName(pkMd.columnName), " = ", writeValue(o_, pkMd, sw)),
       pkGetter => {
         val astOfQuery4WhereClause = Utils.createQuery4WhereClause(t, (t0:T) =>
           pkGetter.invoke(t0).asInstanceOf[CompositeKey].buildEquality(o.asInstanceOf[KeyedEntity[CompositeKey]].id))
@@ -513,7 +513,7 @@ trait DatabaseAdapter {
     if(checkOCC)
       t.posoMetaData.optimisticCounter.foreach(occ => {
          sw.write(" and ")
-         sw.write(occ.columnName)
+         sw.write(quoteName(occ.columnName))
          sw.write(" = ")
          sw.write(writeValue(o_, occ, sw))
       })
@@ -522,7 +522,7 @@ trait DatabaseAdapter {
   def writeDelete[T](t: Table[T], whereClause: Option[ExpressionNode], sw: StatementWriter) = {
 
     sw.write("delete from ")
-    sw.write(t.prefixedName)
+    sw.write(quoteName(t.prefixedName))
     if(whereClause != None) {
       sw.nextLine
       sw.write("where")
@@ -551,13 +551,13 @@ trait DatabaseAdapter {
     val colsToUpdate = us.columns.iterator
 
     sw.write("update ")
-    sw.write(t.prefixedName)
+    sw.write(quoteName(t.prefixedName))
     sw.write(" set")
     sw.indent
     sw.nextLine
     for(z <- us.values.zipi) {
       val col = colsToUpdate.next
-      sw.write(col.columnName)
+      sw.write(quoteName(col.columnName))
       sw.write(" = ")
       val v = z.element
       v.write(sw)
@@ -571,9 +571,9 @@ trait DatabaseAdapter {
       sw.write(",")
       sw.nextLine      
       val occ = t.posoMetaData.optimisticCounter.get
-      sw.write(occ.columnName)
+      sw.write(quoteName(occ.columnName))
       sw.write(" = ")
-      sw.write(occ.columnName + " + 1")
+      sw.write(quoteName(occ.columnName) + " + 1")
     }
     
     sw.unindent
@@ -639,15 +639,15 @@ trait DatabaseAdapter {
     val sb = new StringBuilder(256)
 
     sb.append("alter table ")
-    sb.append(foreignKeyTable.prefixedName)
+    sb.append(quoteName(foreignKeyTable.prefixedName))
     sb.append(" add constraint ")
-    sb.append(foreignKeyConstraintName(foreignKeyTable, fkId))
+    sb.append(quoteName(foreignKeyConstraintName(foreignKeyTable, fkId)))
     sb.append(" foreign key (")
-    sb.append(foreignKeyColumnName)
+    sb.append(quoteName(foreignKeyColumnName))
     sb.append(") references ")
-    sb.append(primaryKeyTable.prefixedName)
+    sb.append(quoteName(primaryKeyTable.prefixedName))
     sb.append("(")
-    sb.append(primaryKeyColumnName)
+    sb.append(quoteName(primaryKeyColumnName))
     sb.append(")")
 
     val f =  (ra:ReferentialAction) => {
@@ -667,7 +667,7 @@ trait DatabaseAdapter {
     Session.currentSession
 
   def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
-    "alter table " + foreignKeyTable.prefixedName + " drop constraint " + fkName
+    "alter table " + quoteName(foreignKeyTable.prefixedName) + " drop constraint " + quoteName(fkName)
 
   def dropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String, session: Session):Unit =
     execFailSafeExecute(writeDropForeignKeyStatement(foreignKeyTable, fkName), e => true)
@@ -677,24 +677,25 @@ trait DatabaseAdapter {
   def supportsForeignKeyConstraints = true
 
   def writeDropTable(tableName: String) =
-    "drop table " + tableName
+    "drop table " + quoteName(tableName)
 
   def dropTable(t: Table[_]) =
     execFailSafeExecute(writeDropTable(t.prefixedName), e=> isTableDoesNotExistException(e))
 
   def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
-    sw.write(se.aliasComponent)
+    sw.write(quoteName(se.aliasComponent))
+
 
   def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
     //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)
     val sb = new StringBuilder(256)
     
     sb.append("alter table ")
-    sb.append(t.prefixedName)
+    sb.append(quoteName(t.prefixedName))
     sb.append(" add constraint ")
-    sb.append(t.prefixedName + "CPK")
+    sb.append(quoteName(t.prefixedName + "CPK"))
     sb.append(" unique(")
-    sb.append(cols.map(_.columnName).mkString(","))
+    sb.append(cols.map(_.columnName).map(quoteName(_)).mkString(","))
     sb.append(")")
     sb.toString
   }
@@ -735,17 +736,17 @@ trait DatabaseAdapter {
     val tableName = columnDefs.head.parentMetaData.viewOrTable.name
 
     if(name != None)
-      sb.append(name.get)
+      sb.append(quoteName(name.get))
     else if(nameOfCompositeKey != None)
-      sb.append("idx" + nameOfCompositeKey.get)
+      sb.append(quoteName("idx" + nameOfCompositeKey.get))
     else
-      sb.append("idx" + generateAlmostUniqueSuffixWithHash(tableName + "-" + columnDefs.map(_.columnName).mkString("-")))
+      sb.append(quoteName("idx" + generateAlmostUniqueSuffixWithHash(tableName + "-" + columnDefs.map(_.columnName).mkString("-"))))
 
     sb.append(" on ")
 
-    sb.append(tableName)
+    sb.append(quoteName(tableName))
 
-    sb.append(columnDefs.map(_.columnName).mkString(" (",",",")"))
+    sb.append(columnDefs.map(_.columnName).map(quoteName(_)).mkString(" (",",",")"))
 
     sb.toString
   }
@@ -760,4 +761,8 @@ trait DatabaseAdapter {
     a32.update(s.getBytes)
     a32.getValue.toHexString
   }
+
+  def quoteIdentifier(s: String) = s
+
+  def quoteName(s: String) = s.split('.').map(quoteIdentifier(_)).mkString(".")
 }

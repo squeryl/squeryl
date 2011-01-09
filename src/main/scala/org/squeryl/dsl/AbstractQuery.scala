@@ -21,6 +21,7 @@ import java.sql.ResultSet
 import org.squeryl.internals._
 import org.squeryl.{View, Queryable, Session, Query}
 import collection.mutable.ArrayBuffer
+import java.io.Closeable
 
 abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
@@ -128,7 +129,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
-  override def iterator = new Iterator[R] {
+  override def iterator = new Iterator[R] with Closeable {
 
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)
@@ -139,6 +140,11 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     
     var _nextCalled = false;
     var _hasNext = false;
+
+    def close {
+      stmt.close
+      rs.close
+    }
 
     def _next = {
       _hasNext = rs.next

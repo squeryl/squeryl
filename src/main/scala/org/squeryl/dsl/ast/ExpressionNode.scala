@@ -124,7 +124,7 @@ class InListExpression(left: ExpressionNode, right: ListExpressionNode, inclusio
 }
 
 
-class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String)
+class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String, rightArgInParent: Boolean = false)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
 
   override def inhibited =
@@ -145,7 +145,14 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
       if(newLineAfterOperator)
         sw.nextLine
       sw.write(" ")
+
+      if(rightArgInParent)
+        sw.write("(")
+
       nonInh.next.write(sw)
+      
+      if(rightArgInParent)
+        sw.write(")")      
     }
     sw.write(")")
   }

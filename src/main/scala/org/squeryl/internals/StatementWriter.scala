@@ -157,4 +157,6 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     u
     unindent(width)
   }
+
+  def quoteName(s: String) = databaseAdapter.quoteName(s)
 }
