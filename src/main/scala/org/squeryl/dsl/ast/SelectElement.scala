@@ -136,7 +136,7 @@ class FieldSelectElement
   val expression = new ExpressionNode {
     
     def doWrite(sw: StatementWriter) =
-      sw.write(origin.alias + "." + fieldMataData.columnName)
+      sw.write(sw.quoteName(origin.alias + "." + fieldMataData.columnName))
   }
 
   def prepareColumnMapper(index: Int) =
@@ -263,7 +263,7 @@ class SelectElementReference[A]
     selectElement.inhibited
 
   override def doWrite(sw: StatementWriter) =
-    sw.write(path)
+    sw.write(sw.quoteName(path))
 }
 
 /**
@@ -304,8 +304,8 @@ class ExportedSelectElement
 
   override def doWrite(sw: StatementWriter) = {
     val p = path
-    sw.write(p)
+    sw.write(sw.quoteName(p))
     sw.write(" as ")
-    sw.write(p.replace('.','_'))
+    sw.write(sw.quoteName(p.replace('.','_')))
   }
 }

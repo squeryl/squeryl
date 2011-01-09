@@ -93,8 +93,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
 
     val it = q.iterator
 
-    if(it.hasNext)
-      Some(it.next)
+    if(it.hasNext) {
+      val ret = Some(it.next)
+      // Forces statement to be closed.
+      it.hasNext
+      ret
+    }
     else
       None
   }  

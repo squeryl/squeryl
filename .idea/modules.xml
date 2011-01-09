@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/src/main/Main.iml" filepath="$PROJECT_DIR$/src/main/Main.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/test/Tests.iml" filepath="$PROJECT_DIR$/src/test/Tests.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Squerylsrc/profiler/profiler.iml" filepath="$PROJECT_DIR$/../Squerylsrc/profiler/profiler.iml" />
     </modules>
   </component>
 </project>

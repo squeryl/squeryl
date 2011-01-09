@@ -273,6 +273,9 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter])
+      testPartialUpdateWithInclusionOperator
+    
     testStringKeyedEntities
 
     testOptionStringInWhereClause
@@ -284,6 +287,8 @@ class SchoolDbTestRun extends QueryTester {
     
     testYieldInspectionResidue
 
+//    testNewLeftOuterJoin1Reverse
+    
     testNewLeftOuterJoin3
 
     testNewLeftOuterJoin1
@@ -949,6 +954,18 @@ class SchoolDbTestRun extends QueryTester {
     passed('testPartialUpdate1)
   }
 
+  def testPartialUpdateWithInclusionOperator =
+  {
+    
+    update(courses)(c =>
+      where(c.id in from(courses)(c0=> where(c0.id lt -1) select(c0.id)))
+      set(c.meaninglessLong := 0L,
+          c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
+    )
+
+    passed('testPartialUpdateWithInclusionOperator)
+  }
+
   def testOptimisticCC1 = {    
 
     Session.currentSession.connection.commit // we commit to release all locks
@@ -1146,6 +1163,34 @@ class SchoolDbTestRun extends QueryTester {
     println('testNewOuterJoin1 + " passed.")
   }
 
+  def testNewLeftOuterJoin1Reverse {
+    import testInstance._
+
+    //loggerOn
+
+    val leftOuterJoinStudentAddresses =
+      join(addresses.leftOuter, students)((a,s) =>
+        select((s,a))
+        orderBy(s.id)
+        on(s.addressId === a.map(_.id))
+      )
+
+    val res =
+      (for(t <- leftOuterJoinStudentAddresses)
+       yield (t._1.id, t._2.map(a=>a.id))).toList
+
+    val expected = List(
+      (xiao.id,Some(oneHutchissonStreet.id)),
+      (georgi.id,Some(oneHutchissonStreet.id)),
+      (pratap.id,Some(oneTwoThreePieIXStreet.id)),
+      (gontran.id,Some(oneHutchissonStreet.id)),
+      (gaitan.id,None))
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    println('testNewOuterJoin1 + " passed.")
+  }
+  
   def testNewLeftOuterJoin2 {
     import testInstance._
 

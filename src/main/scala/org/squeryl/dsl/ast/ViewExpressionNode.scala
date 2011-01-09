@@ -79,7 +79,7 @@ class ViewExpressionNode[U](val view: View[U])
   def sample = _sample.get
 
   def doWrite(sw: StatementWriter) =
-      sw.write(view.prefixedName)
+      sw.write(sw.quoteName(view.prefixedName))
 
   override def toString = {
     val sb = new StringBuffer

@@ -42,6 +42,8 @@ object Tests extends QueryTester {
     allTestsOnH2
 
     //dumpSchemasForAllDatabases
+
+    TransactionsTests.allTests(() =>createH2TestConnection)
     
     //leakTest    
   }

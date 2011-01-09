@@ -37,6 +37,8 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
 
   def log(s:String) = if(isLoggingEnabled) _logger(s)
 
+  var logUnclosedStatements = false
+
   private val _statements = new ArrayBuffer[Statement]
 
   private val _resultSets = new ArrayBuffer[ResultSet]
@@ -46,7 +48,13 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
   private [squeryl] def _addResultSet(rs: ResultSet) = _resultSets.append(rs)
 
   def cleanup = {
-    _statements.foreach(s => Utils.close(s))
+    _statements.foreach(s => {
+      if (logUnclosedStatements && isLoggingEnabled && !s.isClosed) {
+        val stackTrace = Thread.currentThread.getStackTrace.map("at " + _).mkString("\n")
+        log("Statement is not closed: " + s + ": " + System.identityHashCode(s) + "\n" + stackTrace)
+      }
+      Utils.close(s)
+    })
     _statements.clear
     _resultSets.foreach(rs => Utils.close(rs))
     _resultSets.clear
@@ -109,7 +117,7 @@ object Session {
     _currentSessionThreadLocal.get != None
 
   def cleanupResources =
-    if(_currentSessionThreadLocal != None)
+    if(_currentSessionThreadLocal.get != None)
       _currentSessionThreadLocal.get.get.cleanup
 
   private def currentSession_=(s: Option[Session]) = _currentSessionThreadLocal.set(s)
