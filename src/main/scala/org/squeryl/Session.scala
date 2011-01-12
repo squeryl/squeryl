@@ -102,7 +102,7 @@ object Session {
   }
   
   def create(c: Connection, a: DatabaseAdapter) =
-    new Session(c, a)
+    new Session(c,a)  
 
   def currentSession: Session =
     if(SessionFactory.externalTransactionManagementAdapter != None) {

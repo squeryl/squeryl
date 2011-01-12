@@ -16,6 +16,7 @@
 package org.squeryl.tests
 
 import _root_.org.squeryl.demos.MusicDb
+import _root_.org.squeryl.logging.LocalH2SinkStatisticsListener
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.{MusicDbTestRun, MusicDb}
@@ -161,13 +162,16 @@ object Tests extends QueryTester {
   }
 
 
-  def createH2TestConnection = {
+  def createH2TestConnection: Session = createH2TestConnection(false)
+
+  def createH2TestConnection(withStatProfile: Boolean): Session = {
     Class.forName("org.h2.Driver");
 
-    Session.create(
+    new Session(
       java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
     //java.sql.DriverManager.getConnection("jdbc:h2:mem:", "", ""),
-      new H2Adapter
+      new H2Adapter,
+      if(withStatProfile) Some(new LocalH2SinkStatisticsListener) else None  
     )
   }
 

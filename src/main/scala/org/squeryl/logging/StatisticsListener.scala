@@ -21,7 +21,7 @@ import org.squeryl.dsl.CompositeKey2
 import org.squeryl.{Schema, KeyedEntity}
 
 
-class StatementExecution(_definingClass: Class[_], val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
+class StatementInvocationEvent(_definingClass: Class[_], val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
 
 
   /**
@@ -58,16 +58,35 @@ class StatementExecution(_definingClass: Class[_], val start: Long, val end: Lon
 
 trait StatisticsListener {
 
-  def queryExecuted(se: StatementExecution): Unit
+  def queryExecuted(se: StatementInvocationEvent): Unit
 
-  def resultSetIterationEnded(se: StatementExecution, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
+  def resultSetIterationEnded(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
 
-  def updateExecuted(se: StatementExecution): Unit
+  def updateExecuted(se: StatementInvocationEvent): Unit
 
-  def insertExecuted(se: StatementExecution): Unit
+  def insertExecuted(se: StatementInvocationEvent): Unit
 
-  def deleteExecuted(se: StatementExecution): Unit
+  def deleteExecuted(se: StatementInvocationEvent): Unit
 }
+
+
+class LocalH2SinkStatisticsListener extends StatisticsListener {
+
+  def queryExecuted(se: StatementInvocationEvent) = {
+    
+  }
+
+  def resultSetIterationEnded(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
+
+  }
+
+  def updateExecuted(se: StatementInvocationEvent) = {}
+
+  def insertExecuted(se: StatementInvocationEvent) = {}
+
+  def deleteExecuted(se: StatementInvocationEvent) = {}
+}
+
 
 object StackMarker {
 
@@ -77,11 +96,11 @@ object StackMarker {
 
 class IterationEnd(val iterationCompleted: Boolean, val iterationEndTime: Long)
 
-class StatementExec(
+class StatementInvocation(
  val start: Long, val end: Long, statementHash: Int, statementHashCollisionNumber: Int, val numRows: Int,
  val hostId: Int, val sessionId: Int, val guidHelper: Int) extends KeyedEntity[CompositeKey2[Long, Int]] {
 
-  def this(se: StatementExecution, _statementHash: Int, _hCollision: Int) =
+  def this(se: StatementInvocationEvent, _statementHash: Int, _hCollision: Int) =
     this(se.start, se.end, _statementHash, _hCollision, se.rowCount, 0, 0, 0)
 
   def id =
@@ -91,12 +110,18 @@ class StatementExec(
     new CompositeKey2(statementHash, statementHashCollisionNumber)
 }
 
-case class StatementCase(val sql: String, val definingClass: String, val lineNumber: Int)
+object StatementHasher {
 
-case class Statement(val sql: String, val definingClass: String, val lineNumber: Int, val hash: Int, var statementHashCollisionNumber: Int) extends KeyedEntity[CompositeKey2[Int,Int]] {
+  private case class StatementCaseClass4HashGeneration(val sql: String, val definingClass: String, val lineNumber: Int)
+
+  def hash(sql: String, definingClass: String, lineNumber: Int): Int =
+    StatementCaseClass4HashGeneration(sql, definingClass, lineNumber).hashCode
+}
+
+class Statement(val sql: String, val definingClass: String, val lineNumber: Int, val hash: Int, var statementHashCollisionNumber: Int) extends KeyedEntity[CompositeKey2[Int,Int]] {
 
   def this(sql: String, definingClass: String, lineNumber: Int) =
-    this(sql, definingClass, lineNumber, StatementCase(sql, definingClass, lineNumber).hashCode, 0)
+    this(sql, definingClass, lineNumber, StatementHasher.hash(sql, definingClass, lineNumber), 0)
 
   def this() = this("", "", 0, 0, 0)
 
@@ -110,23 +135,23 @@ object StatsSchema extends Schema {
 
   val statements = table[Statement]
 
-  val statementExecs = table[StatementExec]
+  val statementInvocations = table[StatementInvocation]
 
-  def recordStatementExecution(se: StatementExecution) = {
+  def recordStatementInvocationution(sie: StatementInvocationEvent) = {
 
-    val statementK = lookupStatementKey(se)
-    val s0 = new StatementExec(se, statementK.a1, statementK.a2)
+    val statementK = _lookupOrCreateStatementInvocationAndReturnKey(sie)
+    val si = new StatementInvocation(sie, statementK.a1, statementK.a2)
 
-    statementExecs.insert(s0)
+    statementInvocations.insert(si)
   }
 
-  def lookupStatementKey(se: StatementExecution) = {
+  private def _lookupOrCreateStatementInvocationAndReturnKey(se: StatementInvocationEvent) = {
 
     val s = new Statement(se.jdbcStatement, se.definingClass.getName, -1)
 
     val storedStatement = statements.lookup(s.id)
 
-    val s2 =
+    val result =
       if(storedStatement == None) {
         statements.insert(s)
         s
@@ -155,6 +180,6 @@ object StatsSchema extends Schema {
         }
       }
 
-    s2.id
+    result.id
   }
 }

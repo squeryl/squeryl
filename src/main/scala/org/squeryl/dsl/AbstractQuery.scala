@@ -21,7 +21,7 @@ import java.sql.ResultSet
 import org.squeryl.internals._
 import org.squeryl.{View, Queryable, Session, Query}
 import collection.mutable.ArrayBuffer
-import org.squeryl.logging.StatementExecution
+import org.squeryl.logging._
 import java.io.Closeable
 
 abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
@@ -128,7 +128,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
 
     //(_definingClass: Class[_], val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String)
-    lazy val statEx = new StatementExecution(_thisQueryClass, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
+    lazy val statEx = new StatementInvocationEvent(_thisQueryClass, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
 
     if(s.statisticsListener != None)
       s.statisticsListener.get.queryExecuted(statEx)
