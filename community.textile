@@ -30,13 +30,16 @@ h2. Discussions and bug reports
 
 Brainstorming, constructive criticism happens in the "Discussion Group":http://groups.google.com/group/squeryl
 
+Implementation details are discussed in the "contributor's group":http://groups.google.com/group/squeryl-contributors
+
 Issues and bugs should be submited in the "GitHub issue tracker":http://github.com/max-l/Squeryl/issues
 
-h2. Help us make Squeryl a game changing technology
+h2. Help us take Squeryl to the next level
 
-There are no shortage of interesting problems requiring elegant solutions. Squeryl's DNA, could certainly be enhanced by capable and talented minds.
+There are still some cool featurs to implement, check out the "roadmap":http://squeryl.org/roadmap.html
 
-Like they say on GitHub : Fork me !!!
+
+The GitHub repo : 
 
 "http://github.com/max-l/Squeryl":http://github.com/max-l/Squeryl
 
