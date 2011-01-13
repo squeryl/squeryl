@@ -145,16 +145,18 @@ and Option[] fields are nullable.
 
 h3. Correspondance of field types to database column types
 
-|_. Java/JDBC  |_. Oracle    |_. PostgreSql     |_. DB2       |_. MySql    |_. H2       |_. MS SQL  |
-| int          | number      | integer          | int         | int        | int        | int       |
-| long         | number      | bigint           | bigint      | bigint     | bigint     | bigint    |
-| float        | float       | real             | real        | float      | real       | real      |
-| double       | real        | double precision | double      | double     | double     | float     |
-| BidDecimal   | decimal     | numeric          | decimal     | decimal    | decimal    | decimal   |
-| String       | varchar2(x) | varchar(x)       | varchar(x)  | varchar(x) | varchar(x) | varchar(x)|
-| Date         | date        | date             | date        | date       | date       | date      |
-| Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  | datetime  |
-| byte[]       | blob        | bytea            | blob        | blob       | binary     | varbinary |
+|_. Java/JDBC  |_. Oracle    |_. PostgreSql     |_. DB2       |_. MySql    |_. H2       |_. MS SQL  |_. Derby    |
+| int          | number      | integer          | int         | int        | int        | int       | integer    |
+| long         | number      | bigint           | bigint      | bigint     | bigint     | bigint    | bigint     |
+| float        | float       | real             | real        | float      | real       | real      | real       |
+| double       | real        | double precision | double      | double     | double     | float     | double     |
+| BigDecimal   | decimal     | numeric          | decimal     | decimal    | decimal    | decimal   | decimal    |
+| String       | varchar2(x) | varchar(x)       | varchar(x)  | varchar(x) | varchar(x) | varchar(x)| varchar(x) |
+| Date         | date        | date             | date        | date       | date       | date      | date       |
+| Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  | datetime  | timestamp  |
+| byte[]       | blob        | bytea            | blob        | blob       | binary     | varbinary | blob(1M)   |
+| boolean      | number(1)   | boolean          | char(1)     | boolean    | boolean    | bit       | char(1)    |
+
 
 h3. Enumerations
 
