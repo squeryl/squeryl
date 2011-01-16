@@ -324,6 +324,8 @@ class MusicDbTestRun extends QueryTester {
     
     testTimestamp
 
+    testTimestampDownToMillis
+
     testConcatFunc
 
     testRegexFunctionSupport
@@ -540,6 +542,55 @@ class MusicDbTestRun extends QueryTester {
     passed('testTimestamp)
   }
 
+  def testTimestampDownToMillis = {
+    import testInstance._
+
+    var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    val t1 = mongo.timeOfLastUpdate
+
+    val cal = Calendar.getInstance
+
+    cal.setTime(t1)
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+
+    val tX1 = new Timestamp(cal.getTimeInMillis)
+
+    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+
+    artists.update(mongo)
+    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
+
+    cal.roll(Calendar.MILLISECOND, 12);
+
+    val tX2 = new Timestamp(cal.getTimeInMillis)
+
+    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+
+    artists.update(mongo)
+    val shouldBeSome = artists.where(_.timeOfLastUpdate === tX2).headOption
+
+    if(shouldBeSome == None) error('testTimestampDownToMillis + " failed.")
+
+    mongo = shouldBeSome.get
+
+    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
+
+//    val mustBeSome =
+//      artists.where(a =>
+//        a.firstName === mongoSantaMaria.firstName and
+//        //a.timeOfLastUpdate.between(createLeafNodeOfScalarTimestampType(tX1), createLeafNodeOfScalarTimestampType(tX2))
+//        a.timeOfLastUpdate.between(tX1, tX2)
+//      ).headOption
+//
+//    assert(mustBeSome != None, "testTimestampDownToMillis failed");
+
+    passed('testTimestampDownToMillis)
+  }
+  
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))
