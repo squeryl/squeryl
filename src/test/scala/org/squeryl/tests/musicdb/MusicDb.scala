@@ -67,7 +67,10 @@ class MusicDb extends Schema with QueryTester {
 
   val cds = table[Cd]
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 }
 
 class MusicDbTestRun extends QueryTester {

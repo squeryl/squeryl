@@ -73,7 +73,10 @@ object SchoolDb2 extends Schema {
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
     foreignKeyDeclaration.constrainReference
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 }
 
 class SchoolDb2MetableRelations extends QueryTester {
