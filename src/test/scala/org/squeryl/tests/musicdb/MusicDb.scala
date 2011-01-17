@@ -503,24 +503,13 @@ class MusicDbTestRun extends QueryTester {
     import testInstance._
 
     var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+    // round to 0 second : 
+    mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
 
-    val t1 = mongo.timeOfLastUpdate
-
+    val tX1 = mongo.timeOfLastUpdate
+    
     val cal = Calendar.getInstance
-
-    cal.setTime(t1)
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-
-    val tX1 = new Timestamp(cal.getTimeInMillis)
-
-    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
-
-    artists.update(mongo)
-    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
-
-    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
-
+    cal.setTime(mongo.timeOfLastUpdate)
     cal.roll(Calendar.SECOND, 12);
 
     val tX2 = new Timestamp(cal.getTimeInMillis)
@@ -545,46 +534,61 @@ class MusicDbTestRun extends QueryTester {
     passed('testTimestamp)
   }
 
-  def testTimestampDownToMillis = {
-    import testInstance._
+  private def _truncateTimestampInTimeOfLastUpdate(p: Person) = {
+    val t1 = p.timeOfLastUpdate
 
+    val cal = Calendar.getInstance
+
+    cal.setTime(t1)
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);    
+
+    p.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+    import testInstance._
+    artists.update(p)
+    //cal
+
+    val out = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    assert(new Timestamp(cal.getTimeInMillis) == out.timeOfLastUpdate)
+
+    out
+  }
+
+  private def _rollTimestamp(t: Timestamp, partToRoll: Int, rollAmount: Int) = {
+    val cal = Calendar.getInstance
+    cal.setTime(t)
+    cal.roll(partToRoll, rollAmount);
+    new Timestamp(cal.getTimeInMillis)
+  }
+
+  def testTimestampDownToMillis = {
+
+    // Oracle : http://forums.oracle.com/forums/thread.jspa?threadID=239634
+    // MySql  : http://bugs.mysql.com/bug.php?id=8523
+    // MSSQL  : http://stackoverflow.com/questions/2620627/ms-sql-datetime-precision-problem
+    import testInstance._
+    
     val dbAdapter = Session.currentSession.databaseAdapter
     if(!dbAdapter.isInstanceOf[MSSQLServer] && !dbAdapter.isInstanceOf[OracleAdapter]) {// FIXME or investigate millisecond handling of each DB:
 
       var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+      // round to 0 second :
+      mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
 
-      val t1 = mongo.timeOfLastUpdate
+      val tX2 = _rollTimestamp(mongo.timeOfLastUpdate, Calendar.MILLISECOND, 12)
 
-      val cal = Calendar.getInstance
-
-      cal.setTime(t1)
-      cal.set(Calendar.SECOND, 0);
-      cal.set(Calendar.MILLISECOND, 0);
-
-      val tX1 = new Timestamp(cal.getTimeInMillis)
-
-      mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+      mongo.timeOfLastUpdate = tX2
 
       artists.update(mongo)
-      mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
-
-      assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
-
-      cal.roll(Calendar.MILLISECOND, 12);
-
-      val tX2 = new Timestamp(cal.getTimeInMillis)
-
-      mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
-
-      artists.update(mongo)
-      val shouldBeSome = artists.where(_.timeOfLastUpdate === tX2).headOption
+      val shouldBeSome = artists.where(a => a.firstName === mongoSantaMaria.firstName and a.timeOfLastUpdate === tX2).headOption
 
       if(shouldBeSome == None) error('testTimestampDownToMillis + " failed.")
 
       mongo = shouldBeSome.get
 
-      if(!dbAdapter.isInstanceOf[MySQLAdapter]) { // FIXME or investigate millisecond handling of each DB:
-        assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
+      if(!dbAdapter.isInstanceOf[MySQLAdapter]) {
+        assertEquals(tX2, mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
       }
       
       passed('testTimestampDownToMillis)
