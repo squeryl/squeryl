@@ -497,18 +497,23 @@ trait QueryDsl
     extends OneToManyRelation[O,M] {
 
     schema._addRelation(this)
-    
+
+    //we obtain the FieldMetaDatas from the 'via' function by creating an EqualityExpression AST and then extract the FieldMetaDatas from it,
+    // the FieldMetaData will serve to set fields (primary and foreign keys on the objects in the relation) 
     private val (_leftPkFmd, _rightFkFmd) = {
 
       var ee: Option[EqualityExpression] = None
-
+      
+      //we create a query for the sole purpose of extracting the equality (inside the relation's 'via' clause)
       from(leftTable,rightTable)((o,m) => {
         ee = Some(f(o,m))
         select(None)
       })
 
-      val ee_ = ee.get
-      
+      val ee_ = ee.get  //here we have the equality AST (_ee) contains a left and right node, SelectElementReference
+      //that refer to FieldSelectElement, who in turn refer to the FieldMetaData
+
+      // now the Tuple with the left and right FieldMetaData 
       (ee_.left.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData,
        ee_.right.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
     }
