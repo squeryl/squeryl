@@ -44,19 +44,7 @@ that are grouped in a org.squeryl.Schema singleton.
 	
 	val books = table[Book]
 	
-	val borrowals = table[Borrowal]
-	
-    def afterSelect(p: AnyRef) =
-      println("this is a callback that get's called when an object is selected from the "+
-	          "database (after being created and mapped from the result set)")
-
-    def afterSelect(p: Book) =
-      println("this callback overrides the previous because it is more specific (Book is a subtype of AnyRef)")
-	  
-	def beforeInsert(p: Book) = 
-	  println("The book " + p.title + " is about to be inserted")
-	  //available callbacks are : 
-	  //beforeInsert, afterInsert, beforeDelete, afterDelete, beforeUpdate, afterUpdate, afterSelect
+	val borrowals = table[Borrowal]	
   }
     
 ]]></script>
