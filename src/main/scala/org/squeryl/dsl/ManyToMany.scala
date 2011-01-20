@@ -58,6 +58,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
   def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
     relation.associate(m)
     _buffer.append(m)
+    m
   }
 
   def deleteAll: Int = {
@@ -81,6 +82,7 @@ class StatefulManyToOne[O <: KeyedEntity[_]](val relation: ManyToOne[O]) {
   def assign(o: O) = {
     relation.assign(o)
     _one = Some(o)
+    o
   }
 
   def delete = {
@@ -136,17 +138,21 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
    * Sets the foreign keys of the association object to the primary keys of the left and right side,
    * this method does not update the database, changes to the association object must be done for
    * the operation to be persisted. Alternatively the method 'associate(o, a)' will call this assign(o, a)
-   * and persist the changes.  
+   * and persist the changes.
+   *
+   * @return the 'a' parameter is returned
    */
-  def assign(o: O, a: A): Unit
+  def assign(o: O, a: A): A
 
   /**
    * @param a: the association object
    *
    * Calls assign(o,a) and persists the changes the database, by inserting or updating 'a', depending
    * on if it has been persisted or not.
+   *
+   * @return the 'a' parameter is returned
    */
-  def associate(o: O, a: A): Unit
+  def associate(o: O, a: A): A
 
   /**
    * Creates a new association object 'a' and calls assign(o,a)
@@ -204,6 +210,7 @@ class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: 
   def associate(o: O, a: A) = {
     relation.associate(o, a)
     _map.put(o, a)
+    a
   }
 
   def associate(o: O): A = {
@@ -238,21 +245,30 @@ trait OneToMany[M] extends Query[M] {
    * @param the object on the 'many side' to be associated with this
    *
    *  Sets the foreign key of 'm' to refer to the primary key of the 'one' instance
+   *
+   * @return the 'm' parameter is returned
    */
-  def assign(m: M): Unit
+  def assign(m: M): M
 
   /**
    * Calls 'assign(m)' and persists the changes the database, by inserting or updating 'm', depending
    * on if it has been persisted or not.
+   *
+   * @return the 'm' parameter is returned
    */
-  def associate(m: M)(implicit ev: M <:< KeyedEntity[_]): Unit
+  def associate(m: M)(implicit ev: M <:< KeyedEntity[_]): M
   
   def deleteAll: Int
 }
 
 trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
 
-  def assign(one: O): Unit
+  /**
+   * Assigns the foreign key with the value of the 'one' primary ky
+   *
+   * @return the 'one' parameter is returned
+   */
+  def assign(one: O): O
 
   def delete: Boolean
 }

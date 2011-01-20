@@ -389,12 +389,15 @@ trait QueryDsl
             outerQueryDsl.where(matchClause._1 and matchClause._2).select((r,a))
           })
 
-        def assign(o: R, a: A) =
+        def assign(o: R, a: A) = {
           _assignKeys(o, a.asInstanceOf[AnyRef])
+          a
+        }
         
-        def associate(o: R, a: A): Unit  = {
+        def associate(o: R, a: A): A  = {
           assign(o, a)
           thisTableOfA.insertOrUpdate(a)
+          a
         }
 
         def assign(o: R): A = {
@@ -454,12 +457,15 @@ trait QueryDsl
              outerQueryDsl.where(matchClause._1 and matchClause._2).select((l, a))
           })
 
-        def assign(o: L, a: A) =
+        def assign(o: L, a: A) = {
           _assignKeys(o, a.asInstanceOf[AnyRef])
+          a
+        }
         
-        def associate(o: L, a: A): Unit = {
+        def associate(o: L, a: A): A = {
           assign(o, a)
           thisTableOfA.insertOrUpdate(a)
+          a
         }
 
         def assign(o: L): A = {
@@ -548,6 +554,7 @@ trait QueryDsl
           
           val v = _leftPkFmd.get(l0)
           _rightFkFmd.set(m0, v)
+          m
         }
 
         def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
@@ -569,6 +576,7 @@ trait QueryDsl
 
           val v = _rightFkFmd.get(r)
           _leftPkFmd.set(o, v)
+          one
         }
 
         def delete =
