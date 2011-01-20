@@ -19,7 +19,7 @@ import java.sql.SQLException
 import java.sql.Timestamp
 import org.squeryl.tests.QueryTester
 import org.squeryl._
-import adapters.H2Adapter
+import adapters._
 import dsl.ast.BinaryOperatorNodeLogicalBoolean
 import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
 import java.util.{Date, Calendar}
@@ -67,7 +67,10 @@ class MusicDb extends Schema with QueryTester {
 
   val cds = table[Cd]
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 }
 
 class MusicDbTestRun extends QueryTester {
@@ -324,6 +327,8 @@ class MusicDbTestRun extends QueryTester {
     
     testTimestamp
 
+    testTimestampDownToMillis
+
     testConcatFunc
 
     testRegexFunctionSupport
@@ -498,24 +503,13 @@ class MusicDbTestRun extends QueryTester {
     import testInstance._
 
     var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+    // round to 0 second : 
+    mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
 
-    val t1 = mongo.timeOfLastUpdate
-
+    val tX1 = mongo.timeOfLastUpdate
+    
     val cal = Calendar.getInstance
-
-    cal.setTime(t1)
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-
-    val tX1 = new Timestamp(cal.getTimeInMillis)
-
-    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
-
-    artists.update(mongo)
-    mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
-
-    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
-
+    cal.setTime(mongo.timeOfLastUpdate)
     cal.roll(Calendar.SECOND, 12);
 
     val tX2 = new Timestamp(cal.getTimeInMillis)
@@ -540,6 +534,67 @@ class MusicDbTestRun extends QueryTester {
     passed('testTimestamp)
   }
 
+  private def _truncateTimestampInTimeOfLastUpdate(p: Person) = {
+    val t1 = p.timeOfLastUpdate
+
+    val cal = Calendar.getInstance
+
+    cal.setTime(t1)
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);    
+
+    p.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+    import testInstance._
+    artists.update(p)
+    //cal
+
+    val out = artists.where(_.firstName === mongoSantaMaria.firstName).single
+
+    assert(new Timestamp(cal.getTimeInMillis) == out.timeOfLastUpdate)
+
+    out
+  }
+
+  private def _rollTimestamp(t: Timestamp, partToRoll: Int, rollAmount: Int) = {
+    val cal = Calendar.getInstance
+    cal.setTime(t)
+    cal.roll(partToRoll, rollAmount);
+    new Timestamp(cal.getTimeInMillis)
+  }
+
+  def testTimestampDownToMillis = {
+
+    // Oracle : http://forums.oracle.com/forums/thread.jspa?threadID=239634
+    // MySql  : http://bugs.mysql.com/bug.php?id=8523
+    // MSSQL  : http://stackoverflow.com/questions/2620627/ms-sql-datetime-precision-problem
+    import testInstance._
+    
+    val dbAdapter = Session.currentSession.databaseAdapter
+    if(!dbAdapter.isInstanceOf[MSSQLServer] && !dbAdapter.isInstanceOf[OracleAdapter]) {// FIXME or investigate millisecond handling of each DB:
+
+      var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+      // round to 0 second :
+      mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
+
+      val tX2 = _rollTimestamp(mongo.timeOfLastUpdate, Calendar.MILLISECOND, 12)
+
+      mongo.timeOfLastUpdate = tX2
+
+      artists.update(mongo)
+      val shouldBeSome = artists.where(a => a.firstName === mongoSantaMaria.firstName and a.timeOfLastUpdate === tX2).headOption
+
+      if(shouldBeSome == None) error('testTimestampDownToMillis + " failed.")
+
+      mongo = shouldBeSome.get
+
+      if(!dbAdapter.isInstanceOf[MySQLAdapter]) {
+        assertEquals(tX2, mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
+      }
+      
+      passed('testTimestampDownToMillis)
+    }
+  }
+  
   def validateScalarQuery1 = {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))

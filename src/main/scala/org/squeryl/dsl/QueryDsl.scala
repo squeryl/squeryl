@@ -257,6 +257,18 @@ trait QueryDsl
       q.invokeYield(rsm, rs).measures
   }
 
+  implicit def boolean2booleanFieldEqualsTrue(b: BooleanType): LogicalBoolean =
+    new BinaryOperatorNodeLogicalBoolean(
+      createLeafNodeOfScalarBooleanType(b),
+      new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(true)),
+      "=")
+
+  implicit def optionBoolean2booleanFieldEqualsTrue(b: Option[BooleanType]): LogicalBoolean =
+    new BinaryOperatorNodeLogicalBoolean(
+      createLeafNodeOfScalarBooleanOptionType(b),
+      new ConstantExpressionNode[Option[BooleanType]](Some(mapBoolean2BooleanType(true))),
+      "=")
+
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 
   implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
@@ -377,12 +389,15 @@ trait QueryDsl
             outerQueryDsl.where(matchClause._1 and matchClause._2).select((r,a))
           })
 
-        def assign(o: R, a: A) =
+        def assign(o: R, a: A) = {
           _assignKeys(o, a.asInstanceOf[AnyRef])
+          a
+        }
         
-        def associate(o: R, a: A): Unit  = {
+        def associate(o: R, a: A): A  = {
           assign(o, a)
           thisTableOfA.insertOrUpdate(a)
+          a
         }
 
         def assign(o: R): A = {
@@ -442,12 +457,15 @@ trait QueryDsl
              outerQueryDsl.where(matchClause._1 and matchClause._2).select((l, a))
           })
 
-        def assign(o: L, a: A) =
+        def assign(o: L, a: A) = {
           _assignKeys(o, a.asInstanceOf[AnyRef])
+          a
+        }
         
-        def associate(o: L, a: A): Unit = {
+        def associate(o: L, a: A): A = {
           assign(o, a)
           thisTableOfA.insertOrUpdate(a)
+          a
         }
 
         def assign(o: L): A = {
@@ -497,18 +515,23 @@ trait QueryDsl
     extends OneToManyRelation[O,M] {
 
     schema._addRelation(this)
-    
+
+    //we obtain the FieldMetaDatas from the 'via' function by creating an EqualityExpression AST and then extract the FieldMetaDatas from it,
+    // the FieldMetaData will serve to set fields (primary and foreign keys on the objects in the relation) 
     private val (_leftPkFmd, _rightFkFmd) = {
 
       var ee: Option[EqualityExpression] = None
-
+      
+      //we create a query for the sole purpose of extracting the equality (inside the relation's 'via' clause)
       from(leftTable,rightTable)((o,m) => {
         ee = Some(f(o,m))
         select(None)
       })
 
-      val ee_ = ee.get
-      
+      val ee_ = ee.get  //here we have the equality AST (_ee) contains a left and right node, SelectElementReference
+      //that refer to FieldSelectElement, who in turn refer to the FieldMetaData
+
+      // now the Tuple with the left and right FieldMetaData 
       (ee_.left.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData,
        ee_.right.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
     }
@@ -531,6 +554,7 @@ trait QueryDsl
           
           val v = _leftPkFmd.get(l0)
           _rightFkFmd.set(m0, v)
+          m
         }
 
         def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
@@ -552,6 +576,7 @@ trait QueryDsl
 
           val v = _rightFkFmd.get(r)
           _leftPkFmd.set(o, v)
+          one
         }
 
         def delete =

@@ -16,7 +16,7 @@
 package org.squeryl.demos;
 
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.adapters.H2Adapter
+import org.squeryl.adapters.{H2Adapter, DerbyAdapter}
 import org.squeryl.{Query, Session, KeyedEntity, Schema}
 import java.sql.SQLException
 import org.squeryl.dsl.GroupWithMeasures
@@ -164,6 +164,15 @@ object KickTheTires {
       java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
       //Currently there are adapters for Oracle, Postgres, MySql and H2 :
       new H2Adapter
+    )
+    test(session)
+  }
+
+  def testWithDerby = {
+    Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
+    val session = Session.create(
+      java.sql.DriverManager.getConnection("jdbc:derby:memory:test;create=true", "app", ""),
+      new DerbyAdapter
     )
     test(session)
   }

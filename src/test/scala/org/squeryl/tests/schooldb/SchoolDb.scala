@@ -25,7 +25,7 @@ import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
-import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
+import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter, DerbyAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker}
 
 class SchoolDbObject extends KeyedEntity[Int] {
@@ -169,7 +169,10 @@ class SchoolDb extends Schema {
       None
 
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 }
 
 class SchoolDbTestRun extends QueryTester {
@@ -273,6 +276,8 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    testBoolean2LogicalBooleanConversion
+    
     if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter])
       testPartialUpdateWithInclusionOperator
     
@@ -513,13 +518,17 @@ class SchoolDbTestRun extends QueryTester {
     println('testOptionAndNonOptionMixInComputeTuple + " passed.")
   }
 
-  def testConcatWithOptionalCols =
-    if(!Session.currentSession.databaseAdapter.isInstanceOf[MSSQLServer]){
+  def testConcatWithOptionalCols = {
+    val dbAdapter = Session.currentSession.databaseAdapter
+    if(!dbAdapter.isInstanceOf[MSSQLServer] && !dbAdapter.isInstanceOf[DerbyAdapter]) {
+      // concat doesn't work in Derby with numeric fields.
+      // see: https://issues.apache.org/jira/browse/DERBY-1306
 
       val res = addressesOfStudentsOlderThan24.toList
 
       println('testConcatWithOptionalCols + " passed.")
     }
+  }
 
   def testScalarOptionQuery = {
     val avgAge:Option[Float] = avgStudentAge
@@ -1218,7 +1227,19 @@ class SchoolDbTestRun extends QueryTester {
 
     println('testNewOuterJoin2 + " passed.")
   }
-  
+
+  def testBoolean2LogicalBooleanConversion = {
+
+    val multilingualStudents = students.where(_.isMultilingual).map(_.id).toSet
+
+    println(multilingualStudents)
+    //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
+
+    assert(multilingualStudents == Set(xiao.id,gontran.id,gaitan.id))
+    
+    passed('testBoolean2LogicalBooleanConversion)
+  }
+
   def testNewLeftOuterJoin3 {
     import testInstance._
 

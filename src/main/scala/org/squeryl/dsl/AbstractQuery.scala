@@ -140,7 +140,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     var _hasNext = false;
 
     var rowCount = 0
-
+    
     def close {
       stmt.close
       rs.close

@@ -24,6 +24,7 @@ import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
 import org.squeryl.dsl.CompositeKey
+import org.squeryl.customtypes.CustomType
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -286,7 +287,14 @@ class FieldMetaData(
           v
         else {
           val f = customTypeFactory.get
-          f(v)
+
+          if(v != null && v.isInstanceOf[CustomType]) {
+            val r = v.asInstanceOf[CustomType]._1
+            f(if(r == null) null else r.asInstanceOf[AnyRef])
+          }
+          else {
+           f(v)
+          }
         }
 
       val actualValue =

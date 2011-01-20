@@ -27,6 +27,9 @@ class TestCustomTypesMode extends QueryTester {
 
   import hospitalDb._
 
+  drop
+  create
+
   val testObjects = new {
     
     val joseCuervo = patients.insert(new Patient(new FirstName("Jose"), Some(new Age(76)), Some(new WeightInKilograms(290.134))))
@@ -43,21 +46,42 @@ class TestCustomTypesMode extends QueryTester {
     )
 
   def testAll = {
-
+    
     validateQuery('simpleSelect, simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
     validateQuery('simpleSelect1, patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
 
-    drop
+    testOneToMany        
+  }
+
+  def testOneToMany = {
+
+    val jose = patients.where(_.age > 70).single
+    val pi = new PatientInfo(new Info("!!!!!"))
+
+    val pi0 = new PatientInfo(new Info("zzzz"))
+
+    jose.patientInfo.assign(pi0)
+    assert(jose.id.value == pi0.patientId.value)
+    patientInfo.insert(pi0)        
+
+    jose.patientInfo.associate(pi)
+
   }
 }
 
+object HospitalDb extends HospitalDb
+
 class HospitalDb extends Schema {
-
-  val patients = table[Patient]
+  import CustomTypesMode._
   
-  drop
-  create
+  val patients = table[Patient]
 
+  val patientInfo = table[PatientInfo]
+
+  val patienttoPatientInfo =
+      oneToManyRelation(patients, patientInfo).
+      via((p,pi) => p.id === pi.patientId)
+  
   override def drop = super.drop
 }
 
@@ -66,6 +90,17 @@ class Patient(var firstName: FirstName, var age: Option[Age], var weight: Option
   def this() = this(null, Some(new Age(1)),Some(new WeightInKilograms(1)))
 
   var id: IntField = null
+
+  lazy val patientInfo = HospitalDb.patienttoPatientInfo.left(this)
+}
+
+class PatientInfo(val info: Info) extends KeyedEntity[IntField] {
+
+  val patientId: IntField = null
+
+  val id: IntField = null
+
+  lazy val patient = HospitalDb.patienttoPatientInfo.right(this)
 }
 
 /**
@@ -100,4 +135,9 @@ class WeightInKilograms(v: Double) extends DoubleField(v) with Domain[Double] {
 class ReasonOfVisit(v: String) extends StringField(v) with Domain[String] {
   def validate(s:String) = assert(s.length > 1, "invalid visit reason : " + s)
   def label = "reason of visit"
+}
+
+class Info(v: String) extends StringField(v) with Domain[String] {
+  def validate(s:String) = {}
+  def label = "info"
 }
