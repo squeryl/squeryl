@@ -276,6 +276,8 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    testBoolean2LogicalBooleanConversion
+    
     if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter])
       testPartialUpdateWithInclusionOperator
     
@@ -1225,7 +1227,19 @@ class SchoolDbTestRun extends QueryTester {
 
     println('testNewOuterJoin2 + " passed.")
   }
-  
+
+  def testBoolean2LogicalBooleanConversion = {
+
+    val multilingualStudents = students.where(_.isMultilingual).map(_.id).toSet
+
+    println(multilingualStudents)
+    //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
+
+    assert(multilingualStudents == Set(xiao.id,gontran.id,gaitan.id))
+    
+    passed('testBoolean2LogicalBooleanConversion)
+  }
+
   def testNewLeftOuterJoin3 {
     import testInstance._
 

@@ -257,6 +257,18 @@ trait QueryDsl
       q.invokeYield(rsm, rs).measures
   }
 
+  implicit def boolean2booleanFieldEqualsTrue(b: BooleanType): LogicalBoolean =
+    new BinaryOperatorNodeLogicalBoolean(
+      createLeafNodeOfScalarBooleanType(b),
+      new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(true)),
+      "=")
+
+  implicit def optionBoolean2booleanFieldEqualsTrue(b: Option[BooleanType]): LogicalBoolean =
+    new BinaryOperatorNodeLogicalBoolean(
+      createLeafNodeOfScalarBooleanOptionType(b),
+      new ConstantExpressionNode[Option[BooleanType]](Some(mapBoolean2BooleanType(true))),
+      "=")
+
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 
   implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
