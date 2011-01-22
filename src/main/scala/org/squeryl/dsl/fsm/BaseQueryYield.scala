@@ -17,7 +17,7 @@ package org.squeryl.dsl.fsm
 
 import org.squeryl.dsl.ast._
 import org.squeryl.dsl._
-import boilerplate._
+import org.squeryl.dsl.boilerplate._
 import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
 

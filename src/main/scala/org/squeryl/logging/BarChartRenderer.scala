@@ -119,6 +119,7 @@ object BarChartRenderer {
         <div id="chart1" style="width: 1000px; height: 400px;"></div>
         <div id="chart2" style="width: 1000px; height: 400px;"></div>
         <div id="chart3" style="width: 1000px; height: 400px;"></div>
+        <div id="chart4" style="width: 1000px; height: 400px;"></div>
       </body>
     </html>
 

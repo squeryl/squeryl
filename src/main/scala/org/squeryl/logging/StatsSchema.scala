@@ -86,7 +86,7 @@ object StatsSchema extends Schema {
   def invocationStats =
     from(statementInvocations)((si) =>
       groupBy(si.statementHash, si.statementHashCollisionNumber)
-      compute(avg(si.executeTime), count, sum(si.executeTime), avg(si.rowCount))
+      compute(avg(si.executeTime), count, sum(si.executeTime), nvl(avg(si.rowCount),0))
     )
 
   import Measure._
@@ -94,7 +94,7 @@ object StatsSchema extends Schema {
   def topRankingStatements(topN: Int, measure: Measure) =
     from(invocationStats, statements)((si,s)=>
       where(si.key._1 === s.hash and si.key._2 === s.statementHashCollisionNumber)
-      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4.get))
+      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4))
       orderBy(measure match {
         case AvgExecTime => si.measures._1.desc
         case InvocationCount => si.measures._2.desc
