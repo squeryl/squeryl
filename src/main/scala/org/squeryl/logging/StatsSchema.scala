@@ -46,30 +46,33 @@ class StatementInvocation(
 
 object StatementHasher {
 
-  private case class StatementCaseClass4HashGeneration(sql: String, definingClass: String, lineNumber: Int)
+  private case class StatementCaseClass4HashGeneration(sql: String, definitionOrCallSite: String)
 
-  def hash(sql: String, definingClass: String, lineNumber: Int): Int =
-    StatementCaseClass4HashGeneration(sql, definingClass, lineNumber).hashCode
+  def hash(sql: String, definitionOrCallSite: String): Int =
+    StatementCaseClass4HashGeneration(sql, definitionOrCallSite).hashCode
 }
 
-class Statement(val sql: String, val definingClass: String, val lineNumber: Int, val hash: Int, var statementHashCollisionNumber: Int) extends KeyedEntity[CompositeKey2[Int,Int]] {
+class Statement(val sql: String, val definitionOrCallSite: String, val hash: Int, var statementHashCollisionNumber: Int) extends KeyedEntity[CompositeKey2[Int,Int]] {
 
-  def this(sql: String, definingClass: String, lineNumber: Int) = {
+  def this(sql: String, definitionOrCallSite: String) = {
     //TODO: support defining truncation rule in schena (on/declare)
-    this(sql, definingClass, lineNumber, StatementHasher.hash(sql, definingClass, lineNumber), 0)
+    this(sql, definitionOrCallSite, StatementHasher.hash(sql, definitionOrCallSite), 0)
   }
 
-  def this() = this("", "", 0, 0, 0)
+  def this() = this("", "", 0, 0)
 
   def id =
     new CompositeKey2(hash, statementHashCollisionNumber)
 }
 
-class StatLine(val statement: Statement, val avgExecTime: Double, val invocationCount: Long, val cumulativeExecutionTime: Long)
+class StatLine(val statement: Statement, val avgExecTime: Double, val invocationCount: Long, val cumulativeExecutionTime: Long, val avgRowCount: Float) {
+  def definitionSite =
+    statement.definitionOrCallSite
+}
 
 object Measure extends Enumeration {
    type Measure = Value
-   val AvgExecTime, InvocationCount = Value
+   val AvgExecTime, InvocationCount, CumulativeExecutionTime, AvgResultSetSize = Value
 }
 
 object StatsSchema extends Schema {
@@ -83,7 +86,7 @@ object StatsSchema extends Schema {
   def invocationStats =
     from(statementInvocations)((si) =>
       groupBy(si.statementHash, si.statementHashCollisionNumber)
-      compute(avg(si.executeTime), count, sum(si.executeTime))
+      compute(avg(si.executeTime), count, sum(si.executeTime), avg(si.rowCount))
     )
 
   import Measure._
@@ -91,37 +94,40 @@ object StatsSchema extends Schema {
   def topRankingStatements(topN: Int, measure: Measure) =
     from(invocationStats, statements)((si,s)=>
       where(si.key._1 === s.hash and si.key._2 === s.statementHashCollisionNumber)
-      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get))
+      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4.get))
       orderBy(measure match {
         case AvgExecTime => si.measures._1.desc
         case InvocationCount => si.measures._2.desc
+        case CumulativeExecutionTime => si.measures._3.desc
+        case AvgResultSetSize => si.measures._4.desc
       })
     )
     .page(0, topN)
 
   on(statements)(s=> declare(
     s.sql is(dbType("clob")),
-    s.definingClass is(dbType("varchar(512)"))
+    s.definitionOrCallSite is(dbType("varchar(512)"))
   ))  
 
-  def recordStatementInvocationution(sie: StatementInvocationEvent) = {
+  def recordStatementInvocation(sie: StatementInvocationEvent) = {
 
     val statementK = _lookupOrCreateStatementAndReturnKey(sie)
     val si = new StatementInvocation(sie, statementK.a1, statementK.a2)
-
     statementInvocations.insert(si)
+    si.id
   }
 
-  def recordResultSetIterationEnded(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
+  def recordEndOfIteration(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
 
-    val s = new Statement(se.jdbcStatement, se.definingClass.getName, -1)
-
-    val storedStatement = statements.lookup(s.id)
+    update(statementInvocations)(si =>
+      where(si.id === statementInvocationId)
+      set(si.iterationEndTime := Some(iterationEndTime), si.rowCount := Some(rowCount))
+    )
   }
 
   private def _lookupOrCreateStatementAndReturnKey(se: StatementInvocationEvent) = {
 
-    val s = new Statement(se.jdbcStatement, se.definingClass.getName, -1)
+    val s = new Statement(se.jdbcStatement, se.definitionOrCallSite)
 
     val storedStatement = statements.lookup(s.id)
 

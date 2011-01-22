@@ -15,7 +15,6 @@
  ***************************************************************************** */
 package org.squeryl.tests
 
-import _root_.org.squeryl.demos.MusicDb
 import _root_.org.squeryl.logging.LocalH2SinkStatisticsListener
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
@@ -46,7 +45,7 @@ object Tests extends QueryTester {
 
     TransactionsTests.allTests(() =>createH2TestConnection)
 
-    localH2SinkStatisticsListener.generateStatSummary(new java.io.File("D:/dev/profX.html"), 10)
+    localH2SinkStatisticsListener.generateStatSummary(new java.io.File("./profileOfH2Tests.html"), 10)
 
     //leakTest    
   }
@@ -147,7 +146,7 @@ object Tests extends QueryTester {
         (new TestCustomTypesMode).testAll
       }
 
-      org.squeryl.demos.KickTheTires.test(session)
+      org.squeryl.tests.demos.KickTheTires.test(session)
 
       if(!session.connection.getAutoCommit)
         session.connection.commit

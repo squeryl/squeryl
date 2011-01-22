@@ -35,11 +35,15 @@ class LocalH2SinkStatisticsListener(val h2Session: Session) extends StatisticsLi
   }
 
   def queryExecuted(se: StatementInvocationEvent) = using(h2Session) {
-    StatsSchema.recordStatementInvocationution(se)
+    val id = StatsSchema.recordStatementInvocation(se)
     h2Session.connection.commit
+    id
   }
 
-  def resultSetIterationEnded(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {}
+  def resultSetIterationEnded(invocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = using(h2Session) {
+    StatsSchema.recordEndOfIteration(invocationId, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean)
+    h2Session.connection.commit
+  }
 
   def updateExecuted(se: StatementInvocationEvent) = {}
 

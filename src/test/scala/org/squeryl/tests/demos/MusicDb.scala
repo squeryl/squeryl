@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************** */
-package org.squeryl.demos;
+package org.squeryl.tests.demos;
 
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.adapters.{H2Adapter, DerbyAdapter}

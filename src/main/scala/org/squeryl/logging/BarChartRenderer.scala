@@ -9,7 +9,7 @@ object BarChartRenderer {
   class Stat(val title: String, val xAxisLabel: String, val lines: Iterable[StatLine], measureFromLike: StatLine => String) {
 
     def queryLabelsJSArray =
-      lines.map(sl => "'" + sl.statement.definingClass + "'").mkString("[",",","]")
+      lines.map(sl => "'" + sl.statement.definitionOrCallSite + "'").mkString("[",",","]")
 
     def measuresJSArray =
       lines.map(measureFromLike(_)).mkString("[",",","]")
@@ -17,14 +17,31 @@ object BarChartRenderer {
 
   def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = {
 
-    val topAvgTime =
-      new Stat("Top "+n+" statements with longest avg", "avg time", StatsSchema.topRankingStatements(n, Measure.AvgExecTime), sl => sl.avgExecTime.toString)
 
-    val topCount =
-      new Stat("Top "+n+" most called statements", "invocation count", StatsSchema.topRankingStatements(n, Measure.InvocationCount), sl => sl.invocationCount.toString)
 
     val page =
-      BarChartRenderer.page(topAvgTime, topCount)
+      BarChartRenderer.page(
+        new Stat(
+          "Top "+n+" statements with longest avg",
+          "avg time",
+          StatsSchema.topRankingStatements(n, Measure.AvgExecTime),
+          sl => sl.avgExecTime.toString),
+        new Stat(
+          "Top "+n+" most called statements",
+          "invocation count",
+          StatsSchema.topRankingStatements(n, Measure.InvocationCount),
+          sl => sl.invocationCount.toString),
+        new Stat(
+          "Top "+n+" statements incurring most cummulative execution time",
+          "cummulative execution time",
+          StatsSchema.topRankingStatements(n, Measure.CumulativeExecutionTime),
+          sl => sl.cumulativeExecutionTime.toString),
+        new Stat(
+          "Top "+n+" statements with highest avg row count",
+          "avg row count",
+          StatsSchema.topRankingStatements(n, Measure.AvgResultSetSize),
+          sl => sl.avgRowCount.toString)
+      )
 
     val ps = new PrintStream(new FileOutputStream(staticHtmlFile))
     ps.print(page)
@@ -57,40 +74,51 @@ object BarChartRenderer {
     }
   """
 
-  def script(topAvgRuntimes: Stat, topMostInvoked: Stat) =
-      <script type="text/javascript">
+  def funcCalls(stats: Seq[Stat]) = {
+    val sb = new StringBuffer
+    var i = 0
+    for(s <- stats) {
+      i += 1
+      sb.append("drawBarGraph('chart")
+      sb.append(i)
+      sb.append("','")
+      sb.append(s.title)
+      sb.append("','")
+      sb.append(s.xAxisLabel)
+      sb.append("',")
+      sb.append(s.queryLabelsJSArray)
+      sb.append(",")
+      sb.append(s.measuresJSArray)
+      sb.append(");\n")
+    }
+    sb.toString
+   }
 
-        {Unparsed(drawFunc)}
 
-        function drawVisualization() {{
-          drawBarGraph('chart1', '{topAvgRuntimes.xAxisLabel}', '{topAvgRuntimes.title}',
-                       {topAvgRuntimes.queryLabelsJSArray},
-                       {topAvgRuntimes.measuresJSArray});
-
-          drawBarGraph('chart2', '{topMostInvoked.xAxisLabel}', '{topMostInvoked.title}',
-                       {topMostInvoked.queryLabelsJSArray},
-                       {topMostInvoked.measuresJSArray})
-        }}
-
-        google.setOnLoadCallback(drawVisualization);
-      </script>
-
-  def page(topAvgRuntimes: Stat, topMostInvoked: Stat) =
+  def page(stats: Stat*) =
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-        <title>
-          Google Visualization API Sample
-        </title>
+        <title>Performance profile of Squeryl queries</title>
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
           google.load('visualization', '1', {{packages: ['corechart']}});
         </script>
-        {script(topAvgRuntimes, topMostInvoked)}
+        <script type="text/javascript">
+
+          {Unparsed(drawFunc)}
+
+          function drawVisualization() {{
+            {Unparsed(funcCalls(stats))}
+          }}
+
+          google.setOnLoadCallback(drawVisualization);
+        </script>
       </head>
       <body style="font-family: Arial;border: 0 none;">
-        <div id="chart1" style="width: 600px; height: 400px;"></div>
-        <div id="chart2" style="width: 600px; height: 400px;"></div>
+        <div id="chart1" style="width: 1000px; height: 400px;"></div>
+        <div id="chart2" style="width: 1000px; height: 400px;"></div>
+        <div id="chart3" style="width: 1000px; height: 400px;"></div>
       </body>
     </html>
 

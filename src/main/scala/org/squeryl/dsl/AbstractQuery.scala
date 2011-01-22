@@ -43,7 +43,23 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     r
   }
 
-  private def _thisQueryClass = this.getClass
+  val definitionSite: Option[StackTraceElement] =
+    if(!isRoot) None
+    else Some(_deduceDefinitionSite)
+
+  private def _deduceDefinitionSite: StackTraceElement = {
+    val st = Thread.currentThread.getStackTrace
+    var i = 1
+    while(i < st.length) {
+      val e = st(i)
+      val cn = e.getClassName
+      if((cn.startsWith("org.squeryl.") && (!cn.startsWith("org.squeryl.tests."))) || cn.startsWith("scala."))
+        i = i + 1
+      else
+        return e
+    }
+    new StackTraceElement("unknown", "unknown", "unknown", -1)
+  }
 
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
@@ -128,10 +144,12 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
 
     //(_definingClass: Class[_], val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String)
-    lazy val statEx = new StatementInvocationEvent(_thisQueryClass, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
+    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
 
-    if(s.statisticsListener != None)
-      s.statisticsListener.get.queryExecuted(statEx)
+    val statementExecId =
+      if(s.statisticsListener != None)
+        s.statisticsListener.get.queryExecuted(statEx)
+      else "!"
 
     s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
     s._addResultSet(rs) // same for the result set
@@ -154,7 +172,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
         stmt.close
 
         if(s.statisticsListener != None) {
-          s.statisticsListener.get.resultSetIterationEnded(statEx, System.currentTimeMillis, rowCount, true)
+          s.statisticsListener.get.resultSetIterationEnded(statementExecId, System.currentTimeMillis, rowCount, true)
         }
       }
       

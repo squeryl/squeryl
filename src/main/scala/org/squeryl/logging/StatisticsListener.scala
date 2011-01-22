@@ -21,46 +21,16 @@ import org.squeryl.dsl.CompositeKey2
 import org.squeryl.{Schema, KeyedEntity}
 
 
-class StatementInvocationEvent(_definingClass: Class[_], val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
-
-
-  /**
-   * The use of this method is to allow to unambiguously link the statement execution the code
-   * that calls this statement.
-   *
-   * select, compute, groupBy statements always have closure, this is the class returned by this
-   * method for this kind of statements. For statements like Table[A] (.lookup, .delete, .update(a:A))
-   * the defining class is the A class within Table[A] (or View[A]).
-   */
-  def definingClass: Class[_] = _definingClass
-
- /**
-  * The use of this method is to allow to unambiguously link the statement execution the code
-  * that calls this statement.
-  */
-  
-  def callSite: StackTraceElement = {
-
-    val st = Thread.currentThread.getStackTrace
-    var i = 0
-    while(st.length < i) {
-      val e = st(i)
-      // TODO : make top level call in a method who's only purpose is to identify the call site in the user code ?
-      if(e.getClassName.startsWith("org.squeryl.") || e.getClassName.startsWith("scala."))
-        i = i + 1
-      else
-        return e
-    }
-
-    error("could not find stack element")
-  }
-}  
+class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
+  def definitionOrCallSite =
+    _definitionOrCallSite.toString
+}
 
 trait StatisticsListener {
 
-  def queryExecuted(se: StatementInvocationEvent): Unit
+  def queryExecuted(se: StatementInvocationEvent): String
 
-  def resultSetIterationEnded(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
+  def resultSetIterationEnded(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
 
   def updateExecuted(se: StatementInvocationEvent): Unit
 
