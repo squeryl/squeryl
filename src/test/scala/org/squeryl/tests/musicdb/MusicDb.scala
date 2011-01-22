@@ -312,7 +312,9 @@ class MusicDbTestRun extends QueryTester {
 
   def working = {
     import testInstance._
-
+    
+    val dbAdapter = Session.currentSession.databaseAdapter
+    
     testOuterJoinWithSubQuery
     
     testJoinWithCompute
@@ -346,8 +348,9 @@ class MusicDbTestRun extends QueryTester {
     testLoopInNestedInTransaction
 
     testBetweenOperator
-
-    //TEMP REMOVAL FOR MSSSQL : testPaginatedQuery1
+    
+    if(! dbAdapter.isInstanceOf[MSSQLServer])
+      testPaginatedQuery1
 
     testDynamicQuery1
 
