@@ -27,14 +27,14 @@ trait ComputeMeasuresSignaturesFromStartOrWhereState {
       () =>List(e1)
     )
 
-  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateStartOrWhereState[(T1,T2)] =
-    new MeasuresQueryYield[(T1,T2)](
+  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateStartOrWhereState[Product2[T1,T2]] =
+    new MeasuresQueryYield[Product2[T1,T2]](
       this,
       () =>List(e1, e2)
     )
 
-  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateStartOrWhereState[(T1,T2,T3)] =
-    new MeasuresQueryYield[(T1,T2,T3)](
+  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateStartOrWhereState[Product3[T1,T2,T3]] =
+    new MeasuresQueryYield[Product3[T1,T2,T3]](
       this,
       () =>List(e1, e2, e3)
     )

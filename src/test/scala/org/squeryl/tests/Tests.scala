@@ -45,7 +45,9 @@ object Tests extends QueryTester {
     //dumpSchemasForAllDatabases
 
     TransactionsTests.allTests(() =>createH2TestConnection)
-    
+
+    localH2SinkStatisticsListener.generateStatSummary(new java.io.File("D:/dev/profX.html"), 10)
+
     //leakTest    
   }
 
@@ -169,7 +171,9 @@ object Tests extends QueryTester {
   }
 
 
-  def createH2TestConnection: Session = createH2TestConnection(false)
+  def createH2TestConnection: Session = createH2TestConnection(true)
+
+  val localH2SinkStatisticsListener = LocalH2SinkStatisticsListener.initializeOverwrite("~/stats-test")
 
   def createH2TestConnection(withStatProfile: Boolean): Session = {
     Class.forName("org.h2.Driver");
@@ -178,7 +182,7 @@ object Tests extends QueryTester {
       java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
     //java.sql.DriverManager.getConnection("jdbc:h2:mem:", "", ""),
       new H2Adapter,
-      if(withStatProfile) Some(new LocalH2SinkStatisticsListener) else None  
+      Some(localH2SinkStatisticsListener)  
     )
   }
 

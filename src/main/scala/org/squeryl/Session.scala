@@ -104,13 +104,16 @@ object Session {
   def create(c: Connection, a: DatabaseAdapter) =
     new Session(c,a)  
 
+  def currentSessionOption: Option[Session] =
+    _currentSessionThreadLocal.get
+
   def currentSession: Session =
     if(SessionFactory.externalTransactionManagementAdapter != None) {
       val s = SessionFactory.externalTransactionManagementAdapter.get.apply
       s.bindToCurrentThread
       s
     }
-    else _currentSessionThreadLocal.get.getOrElse(
+    else currentSessionOption.getOrElse(
       error("no session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'"))
 
   def hasCurrentSession =

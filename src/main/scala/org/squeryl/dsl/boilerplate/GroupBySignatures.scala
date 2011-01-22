@@ -26,13 +26,13 @@ trait GroupBySignatures {
       ()=>List(e1)
     )
 
-  def groupBy[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): GroupByState[(T1,T2)] =
-    new GroupQueryYield[(T1,T2)](this,
+  def groupBy[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): GroupByState[Product2[T1,T2]] =
+    new GroupQueryYield[Product2[T1,T2]](this,
       ()=>List(e1, e2)
     )
 
-  def groupBy[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): GroupByState[(T1,T2,T3)] =
-    new GroupQueryYield[(T1,T2,T3)](this,
+  def groupBy[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): GroupByState[Product3[T1,T2,T3]] =
+    new GroupQueryYield[Product3[T1,T2,T3]](this,
       ()=>List(e1, e2, e3)
     )
 

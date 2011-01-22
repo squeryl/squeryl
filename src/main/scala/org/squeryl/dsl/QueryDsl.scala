@@ -35,16 +35,24 @@ trait QueryDsl
   def using[A](session: Session)(a: =>A): A =
     _using(session, a _)
 
-  private def _using[A](session: Session, a: ()=>A): A =
+  private def _using[A](session: Session, a: ()=>A): A = {
+    val s = Session.currentSessionOption
     try {
-      session.bindToCurrentThread
-      val r = a()
-      r
+      if(s != None) s.get.unbindFromCurrentThread
+      try {
+        session.bindToCurrentThread
+        val r = a()
+        r
+      }
+      finally {
+        session.unbindFromCurrentThread
+        session.cleanup
+      }
     }
     finally {
-      session.unbindFromCurrentThread
-      session.cleanup
+      if(s != None) s.get.bindToCurrentThread
     }
+  }
 
   /**
    * 'transaction' causes a new transaction to begin and commit after the block execution, or rollback

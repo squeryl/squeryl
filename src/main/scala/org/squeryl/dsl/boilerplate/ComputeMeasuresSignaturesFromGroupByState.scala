@@ -28,15 +28,15 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
       () =>List(e1)
     )
 
-  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateFromGroupByState[G,(T1,T2)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2)](
+  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateFromGroupByState[G,Product2[T1,T2]] =
+    new GroupWithMeasuresQueryYield[G,Product2[T1,T2]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2)
     )
 
-  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateFromGroupByState[G,(T1,T2,T3)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2,T3)](
+  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateFromGroupByState[G,Product3[T1,T2,T3]] =
+    new GroupWithMeasuresQueryYield[G,Product3[T1,T2,T3]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2, e3)
