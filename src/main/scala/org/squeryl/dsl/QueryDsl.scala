@@ -330,23 +330,10 @@ trait QueryDsl
         _.selectElement.origin.asInstanceOf[ViewExpressionNode[_]].view == v
       ).headOption != None
 
-    /**
-     * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
-     * and where ._2 is the foreign key of the association object/table
-     */
-    private def _splitEquality(ee: EqualityExpression) =
-      if(ee.left._fieldMetaData.parentMetaData.clasz == aClass) {
-        assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
-        (ee.right._fieldMetaData, ee.left._fieldMetaData)
-      }
-      else {
-        assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
-        (ee.left._fieldMetaData, ee.right._fieldMetaData)
-      }
 
-    private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr)
+    private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable)
 
-    private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr)
+    private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr, thisTable)
 
     val leftForeignKeyDeclaration =
       schema._createForeignKeyDeclaration(leftFkFmd.columnName, leftPkFmd.columnName)
@@ -540,8 +527,7 @@ trait QueryDsl
       //that refer to FieldSelectElement, who in turn refer to the FieldMetaData
 
       // now the Tuple with the left and right FieldMetaData 
-      (ee_.left.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData,
-       ee_.right.asInstanceOf[SelectElementReference[_]].selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
+      _splitEquality(ee.get, rightTable)
     }
 
     val foreignKeyDeclaration =
@@ -592,6 +578,20 @@ trait QueryDsl
       }
     }
   }
+
+  /**
+   * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
+   * and where ._2 is the foreign key of the association object/table
+   */
+  private def _splitEquality(ee: EqualityExpression, rightTable: Table[_]) =
+    if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT) {
+      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
+      (ee.right._fieldMetaData, ee.left._fieldMetaData)
+    }
+    else {
+      assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
+      (ee.left._fieldMetaData, ee.right._fieldMetaData)
+    }
 
   // Composite key syntactic sugar :
 
