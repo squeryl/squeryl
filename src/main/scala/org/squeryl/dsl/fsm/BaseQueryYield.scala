@@ -17,7 +17,7 @@ package org.squeryl.dsl.fsm
 
 import org.squeryl.dsl.ast._
 import org.squeryl.dsl._
-import org.squeryl.dsl.boilerplate.{STuple1, STuple3, STuple6, OrderBySignatures}
+import org.squeryl.dsl.boilerplate._
 import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
 
@@ -109,7 +109,7 @@ class GroupQueryYield[K] (
     val offset = 1
     val (m, nodes) = _createColumnToTupleMapper(q, groupByClauseClosure(), offset, true)
     rsm.groupKeysMapper = Some(m)
-    val st = new STuple6(nodes, m.outMappers).asInstanceOf[K]
+    val st = SampleTuple.create(nodes, m.outMappers).asInstanceOf[K]
     (nodes, new Group(st))
   }
 }
@@ -133,7 +133,7 @@ class MeasuresQueryYield[M](
     val offset = 1
     val (m, nodes) = _createColumnToTupleMapper(q, _computeByClauseClosure(), offset, false)
     rsm.groupMeasuresMapper = Some(m)
-    val st = new STuple6(nodes, m.outMappers).asInstanceOf[M]
+    val st = SampleTuple.create(nodes, m.outMappers).asInstanceOf[M]
     (nodes, new Measures(st))
   }
 }
@@ -185,8 +185,8 @@ extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
     rsm.groupKeysMapper = Some(km)
     rsm.groupMeasuresMapper = Some(mm)
 
-    val stK = new STuple3(knodes, km.outMappers).asInstanceOf[K]
-    val stM = new STuple3(mnodes, mm.outMappers).asInstanceOf[M]
+    val stK = SampleTuple.create(knodes, km.outMappers).asInstanceOf[K]
+    val stM = SampleTuple.create(mnodes, mm.outMappers).asInstanceOf[M]
 
     (List(knodes,mnodes).flatten,  new SampleGroupWithMeasures(stK, stM))
   }

@@ -33,6 +33,18 @@ class SampleTuple
   }
 }
 
+object SampleTuple {
+  def create(n: List[SelectElement], m: Array[OutMapper[_]]) =
+    m.length match {
+      case 1 => new STuple1[Any](n,m)
+      case 2 => new STuple2[Any,Any](n,m)
+      case 3 => new STuple3[Any,Any,Any](n,m)
+      case 4 => new STuple4[Any,Any,Any,Any](n,m)
+      case 5 => new STuple5[Any,Any,Any,Any,Any](n,m)
+      case 6 => new STuple6[Any,Any,Any,Any,Any,Any](n,m)
+    }
+}
+
 class STuple1[T1]
   (n: List[SelectElement], m: Array[OutMapper[_]])
     extends SampleTuple(n,m) {
@@ -41,30 +53,42 @@ class STuple1[T1]
 
 class STuple2[T1,T2]
   (n: List[SelectElement], m: Array[OutMapper[_]])
-    extends STuple1[T1](n,m) {
+    extends STuple1[T1](n,m) with Product2[T1,T2] {
   def _2 = _get[T2](2)
 }
 
 class STuple3[T1,T2,T3]
   (n: List[SelectElement], m: Array[OutMapper[_]])
-    extends STuple2[T1,T2](n,m) {
+    extends STuple2[T1,T2](n,m) with Product3[T1,T2,T3] {
   def _3 = _get[T3](3)
 }
 
 class STuple4[T1,T2,T3,T4]
   (n: List[SelectElement], m: Array[OutMapper[_]])
-    extends STuple3[T1,T2,T3](n,m) {
+    extends STuple3[T1,T2,T3](n,m) with Product4[T1,T2,T3,T4] {
   def _4 = _get[T4](4)
 }
 
 class STuple5[T1,T2,T3,T4,T5]
   (n: List[SelectElement], m: Array[OutMapper[_]])
-    extends STuple4[T1,T2,T3,T4](n,m) {
+    extends STuple4[T1,T2,T3,T4](n,m) with Product5[T1,T2,T3,T4,T5] {
   def _5 = _get[T5](5)
 }
 
 class STuple6[T1,T2,T3,T4,T5,T6]
   (n: List[SelectElement], m: Array[OutMapper[_]])
-    extends STuple5[T1,T2,T3,T4,T5](n,m) {
+    extends STuple5[T1,T2,T3,T4,T5](n,m) with Product6[T1,T2,T3,T4,T5,T6] {
   def _6 = _get[T6](6)
+}
+
+class STuple7[T1,T2,T3,T4,T5,T6,T7]
+  (n: List[SelectElement], m: Array[OutMapper[_]])
+    extends STuple6[T1,T2,T3,T4,T5,T6](n,m) with Product7[T1,T2,T3,T4,T5,T6,T7] {
+  def _7 = _get[T7](7)
+}
+
+class STuple8[T1,T2,T3,T4,T5,T6,T7,T8]
+  (n: List[SelectElement], m: Array[OutMapper[_]])
+    extends STuple7[T1,T2,T3,T4,T5,T6,T7](n,m) with Product8[T1,T2,T3,T4,T5,T6,T7,T8] {
+  def _8 = _get[T8](8)
 }

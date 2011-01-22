@@ -514,7 +514,7 @@ class SchoolDbTestRun extends QueryTester {
   }
 
   def testOptionAndNonOptionMixInComputeTuple = {
-    val t:(Option[Float],Option[Float],Option[Double], Long) = avgStudentAgeFunky
+    val t:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
     println('testOptionAndNonOptionMixInComputeTuple + " passed.")
   }
 
@@ -893,21 +893,21 @@ class SchoolDbTestRun extends QueryTester {
 
     try {
        q.single : GroupWithMeasures[
-       (Option[Boolean],
+       Product8[Option[Boolean],
         Float,
         Option[Float],
         Option[String],
         Option[Date],
         Option[Int],
         Option[Long],
-        Option[Double]),
-       (Option[Long],
+        Option[Double]],
+       Product7[Option[Long],
         Option[Float],
         Option[Double],
         Option[Date],
         Option[String],
         Option[Boolean],
-        Option[Date])
+        Option[Date]]
       ]
       passed('exerciseTypeSystem1)
     }

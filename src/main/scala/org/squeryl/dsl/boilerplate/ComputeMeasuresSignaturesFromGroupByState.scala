@@ -28,22 +28,22 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
       () =>List(e1)
     )
 
-  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateFromGroupByState[G,(T1,T2)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2)](
+  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateFromGroupByState[G,Product2[T1,T2]] =
+    new GroupWithMeasuresQueryYield[G,Product2[T1,T2]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2)
     )
 
-  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateFromGroupByState[G,(T1,T2,T3)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2,T3)](
+  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateFromGroupByState[G,Product3[T1,T2,T3]] =
+    new GroupWithMeasuresQueryYield[G,Product3[T1,T2,T3]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2, e3)
     )
 
-  def compute[T1,T2,T3,T4](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4]): ComputeStateFromGroupByState[G,(T1,T2,T3,T4)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2,T3,T4)](
+  def compute[T1,T2,T3,T4](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4]): ComputeStateFromGroupByState[G,Product4[T1,T2,T3,T4]] =
+    new GroupWithMeasuresQueryYield[G,Product4[T1,T2,T3,T4]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2, e3, e4)
@@ -51,8 +51,8 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
 
   def compute[T1,T2,T3,T4,T5]
     (e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4],
-     e5: =>TypedExpressionNode[T5]): ComputeStateFromGroupByState[G,(T1,T2,T3,T4,T5)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2,T3,T4,T5)](
+     e5: =>TypedExpressionNode[T5]): ComputeStateFromGroupByState[G,Product5[T1,T2,T3,T4,T5]] =
+    new GroupWithMeasuresQueryYield[G,Product5[T1,T2,T3,T4,T5]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2, e3, e4, e5)
@@ -60,8 +60,8 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
 
   def compute[T1,T2,T3,T4,T5,T6]
     (e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4],
-     e5: =>TypedExpressionNode[T5], e6: =>TypedExpressionNode[T6]): ComputeStateFromGroupByState[G,(T1,T2,T3,T4,T5,T6)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2,T3,T4,T5,T6)](
+     e5: =>TypedExpressionNode[T5], e6: =>TypedExpressionNode[T6]): ComputeStateFromGroupByState[G,Product6[T1,T2,T3,T4,T5,T6]] =
+    new GroupWithMeasuresQueryYield[G,Product6[T1,T2,T3,T4,T5,T6]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2, e3, e4, e5, e6)
@@ -69,8 +69,8 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
 
   def compute[T1,T2,T3,T4,T5,T6,T7]
     (e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4],
-     e5: =>TypedExpressionNode[T5], e6: =>TypedExpressionNode[T6], e7: =>TypedExpressionNode[T7]): ComputeStateFromGroupByState[G,(T1,T2,T3,T4,T5,T6,T7)] =
-    new GroupWithMeasuresQueryYield[G,(T1,T2,T3,T4,T5,T6,T7)](
+     e5: =>TypedExpressionNode[T5], e6: =>TypedExpressionNode[T6], e7: =>TypedExpressionNode[T7]): ComputeStateFromGroupByState[G,Product7[T1,T2,T3,T4,T5,T6,T7]] =
+    new GroupWithMeasuresQueryYield[G,Product7[T1,T2,T3,T4,T5,T6,T7]](
       this.queryElementzz,
       this.groupByClauseClosure,
       () =>List(e1, e2, e3, e4, e5, e6, e7)
