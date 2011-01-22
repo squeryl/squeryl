@@ -1092,6 +1092,26 @@ class SchoolDbTestRun extends QueryTester {
     val babaZula3 = professors.where(_.weightInBD === Some(261.1234561112: BigDecimal))
 
     assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
+
+    update(professors)(p=>
+      where(p.id === babaZula.id)
+      set(p.weightInBD := p.weightInBD plus 10 minus 5 times 4 div 2) // FIXME: mulitiplications aren't done first
+    )
+
+    val babaZula4 = professors.where(_.weightInBD === Some(532.2469122224: BigDecimal))
+
+    assertEquals(532.2469122224, babaZula4.single.weightInBD.get, 'testBigDecimal)
+    assertEquals(1, babaZula4.Count : Long, 'testBigDecimal)
+
+    update(professors)(p=>
+      where(p.id === babaZula.id)
+      set(p.yearlySalaryBD := p.yearlySalaryBD plus 10 minus 5 times 4 div 2) // FIXME: multiplications aren't done first
+    )
+
+    val babaZula5 = professors.where(_.yearlySalaryBD === 170)
+
+    assertEquals(170, babaZula5.single.yearlySalaryBD, 'testBigDecimal)
+    assertEquals(1, babaZula5.Count : Long, 'testBigDecimal)
   }
 
   def testYieldInspectionResidue = {
