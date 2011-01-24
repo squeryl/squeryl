@@ -102,6 +102,19 @@ Of course, like in SQL, a *join* can have a where clause :
       )
 ]]></script>
   
+  
+  
+If a join has N arguments, the 'on' function must take N-1 arguments,
+the i'th 'on' condition corresponds to the i'th table expression :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+join(T, A1, A2,... AN)((a1,a2,...,aN) =>
+  ...
+  on(...condition for a1...,...condition for a2...,......condition for aN..., )
+)
+]]></script>
+  
 h2. Outer Joins _(deprecated syntax)_ 
   
 A Left Outer Join is done by calling leftOuterJoin within the select clause,
