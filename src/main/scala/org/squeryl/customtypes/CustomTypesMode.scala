@@ -22,7 +22,9 @@ import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpre
 import org.squeryl.dsl._
 import java.sql.Timestamp
 
-trait CustomType extends Product1[Any] {
+trait CustomType[T] extends Product1[T] {
+  def value: T
+  def _1 = value
   def canEqual(a:Any) = false
 }
 
@@ -284,46 +286,24 @@ trait CustomTypesMode extends QueryDsl {
 object CustomTypesMode extends CustomTypesMode 
 
 
-class ByteField(val value: Byte) extends CustomType {
-  def _1: Any = value
-}
+class ByteField(val value: Byte) extends CustomType[Byte]
 
-class IntField(val value: Int) extends CustomType {
-  def _1: Any = value
-}
+class IntField(val value: Int) extends CustomType[Int]
 
-class StringField(val value: String) extends CustomType {
-  def _1: Any = value
-}
+class StringField(val value: String) extends CustomType[String]
 
-class DoubleField(val value: Double) extends CustomType {
-  def _1: Any = value
-}
+class DoubleField(val value: Double) extends CustomType[Double]
 
-class BigDecimalField(val value: BigDecimal) extends CustomType {
-  def _1: Any = value
-}
+class BigDecimalField(val value: BigDecimal) extends CustomType[BigDecimal]
 
-class FloatField(val value: Float) extends CustomType {
-  def _1: Any = value
-}
+class FloatField(val value: Float) extends CustomType[Float]
 
-class LongField(val value: Long) extends CustomType {
-  def _1: Any = value
-}
+class LongField(val value: Long) extends CustomType[Long]
 
-class BooleanField(val value: Boolean) extends CustomType {
-  def _1: Any = value
-}
+class BooleanField(val value: Boolean) extends CustomType[Boolean]
 
-class DateField(val value: Date) extends CustomType {
-  def _1: Any = value
-}
+class DateField(val value: Date) extends CustomType[Date]
 
-class TimestampField(val value: Timestamp) extends CustomType {
-  def _1: Any = value
-}
+class TimestampField(val value: Timestamp) extends CustomType[Timestamp]
 
-class BinaryField(val value: Array[Byte]) extends CustomType {
-  def _1: Any = value
-}
+class BinaryField(val value: Array[Byte]) extends CustomType[Array[Byte]]
