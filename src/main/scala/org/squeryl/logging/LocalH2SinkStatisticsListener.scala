@@ -30,20 +30,52 @@ object LocalH2SinkStatisticsListener {
 
 class LocalH2SinkStatisticsListener(val h2Session: Session) extends StatisticsListener {
 
-  def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = using(h2Session) {
+
+  private val _queue = new java.util.concurrent.ArrayBlockingQueue[()=>Unit](1024, false)
+
+  private val _worker = new Thread {
+
+    override def run() {
+      h2Session.bindToCurrentThread
+      while(true) {
+        val op = _queue.take
+        op()
+      }
+    }
+  }
+
+  _worker.start
+
+  private def _pushOp(op: =>Unit) =
+    _queue.put(op _)
+
+  def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = _pushOp {
     BarChartRenderer.generateStatSummary(staticHtmlFile, n)
   }
 
-  def queryExecuted(se: StatementInvocationEvent) = using(h2Session) {
-    val id = StatsSchema.recordStatementInvocation(se)
+  def queryExecuted(se: StatementInvocationEvent) =_pushOp {
+    StatsSchema.recordStatementInvocation(se)
     h2Session.connection.commit
-    id
   }
 
-  def resultSetIterationEnded(invocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = using(h2Session) {
+  def resultSetIterationEnded(invocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = _pushOp {
     StatsSchema.recordEndOfIteration(invocationId, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean)
     h2Session.connection.commit
   }
+
+//  def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = using(h2Session) {
+//    BarChartRenderer.generateStatSummary(staticHtmlFile, n)
+//  }
+//
+//  def queryExecuted(se: StatementInvocationEvent) = using(h2Session) {
+//    StatsSchema.recordStatementInvocation(se)
+//    h2Session.connection.commit
+//  }
+//
+//  def resultSetIterationEnded(invocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = using(h2Session) {
+//    StatsSchema.recordEndOfIteration(invocationId, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean)
+//    h2Session.connection.commit
+//  }
 
   def updateExecuted(se: StatementInvocationEvent) = {}
 

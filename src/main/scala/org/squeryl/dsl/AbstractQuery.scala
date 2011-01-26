@@ -143,13 +143,10 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
 
-    //(_definingClass: Class[_], val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String)
     lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
 
-    val statementExecId =
-      if(s.statisticsListener != None)
-        s.statisticsListener.get.queryExecuted(statEx)
-      else "!"
+    if(s.statisticsListener != None)
+      s.statisticsListener.get.queryExecuted(statEx)
 
     s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
     s._addResultSet(rs) // same for the result set
@@ -172,7 +169,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
         stmt.close
 
         if(s.statisticsListener != None) {
-          s.statisticsListener.get.resultSetIterationEnded(statementExecId, System.currentTimeMillis, rowCount, true)
+          s.statisticsListener.get.resultSetIterationEnded(statEx.uuid, System.currentTimeMillis, rowCount, true)
         }
       }
       

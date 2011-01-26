@@ -22,13 +22,20 @@ import org.squeryl.{Schema, KeyedEntity}
 
 
 class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
+
+  val uuid = {
+    val tmp = java.util.UUID.randomUUID
+    java.lang.Long.toHexString(tmp.getMostSignificantBits) + "-" +
+    java.lang.Long.toHexString(tmp.getLeastSignificantBits)
+  }
+
   def definitionOrCallSite =
     _definitionOrCallSite.toString
 }
 
 trait StatisticsListener {
 
-  def queryExecuted(se: StatementInvocationEvent): String
+  def queryExecuted(se: StatementInvocationEvent): Unit
 
   def resultSetIterationEnded(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
 

@@ -20,6 +20,9 @@ import org.squeryl.Schema
 import org.squeryl.dsl.CompositeKey2
 import org.squeryl.PrimitiveTypeMode._
 
+/**
+ * id is a UUID generatted by java.util.UUID
+ */
 class StatementInvocation(
   val id: String,
   val start: Long,
@@ -32,7 +35,7 @@ class StatementInvocation(
   val iterationEndTime: Option[Long]) extends KeyedEntity[String] {
 
   def this(se: StatementInvocationEvent, _statementHash: Int, _hCollision: Int) =
-    this(java.util.UUID.randomUUID.toString, se.start, se.end, _statementHash, _hCollision, 0, 0, None, None)
+    this(se.uuid, se.start, se.end, _statementHash, _hCollision, 0, 0, None, None)
 
   def this() =
     this(null, 0, 0, 0, 0, 0, 0, Some(0), Some(0))
