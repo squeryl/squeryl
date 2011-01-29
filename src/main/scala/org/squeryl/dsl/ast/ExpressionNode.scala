@@ -19,7 +19,7 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.dsl._
-import org.squeryl.{KeyedEntity, Schema, Session}
+import org.squeryl.{Query, KeyedEntity, Schema, Session}
 
 trait ExpressionNode {
 
@@ -266,6 +266,9 @@ trait TypedExpressionNode[T] extends ExpressionNode {
 
   def :=[B <% TypedExpressionNode[T]] (b: B) =
     new UpdateAssignment(_fieldMetaData, b : TypedExpressionNode[T])
+
+  def :=(q: Query[Measures[T]]) =
+    new UpdateAssignment(_fieldMetaData, q.ast)
 
   def defaultsTo[B <% TypedExpressionNode[T]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
     new DefaultValueAssignment(_fieldMetaData, value : TypedExpressionNode[T])

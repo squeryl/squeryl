@@ -560,7 +560,9 @@ trait DatabaseAdapter {
       sw.write(quoteName(col.columnName))
       sw.write(" = ")
       val v = z.element
+      sw.write("(")
       v.write(sw)
+      sw.write(")")
       if(!z.isLast) {
         sw.write(",")
         sw.nextLine
