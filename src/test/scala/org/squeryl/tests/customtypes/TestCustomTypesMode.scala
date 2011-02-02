@@ -49,6 +49,7 @@ class TestCustomTypesMode extends QueryTester {
     
     validateQuery('simpleSelect, simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
     validateQuery('simpleSelect1, patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
+    validateQuery('simpleSelect2, patients.where(_.age < 40), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
 
     testOneToMany        
   }
@@ -118,6 +119,9 @@ trait Domain[A] {
 }
 
 class Age(v: Int) extends IntField(v) with Domain[Int] {
+  // secondary constructor to show  #93
+  def this(s: String) = this(s.toInt)
+  
   def validate(a: Int) = assert(a > 0, "age must be positive, got " + a)
   def label = "age"
 }

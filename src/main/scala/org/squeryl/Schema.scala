@@ -414,6 +414,10 @@ trait Schema {
    */  
   protected def on[A](table: Table[A]) (declarations: A=>Seq[BaseColumnAttributeAssignment]) = {
 
+    if(table == null)
+      error("on function called with null argument in " + this.getClass.getName +
+            " tables must be initialized before declarations.")
+
     val colAss: Seq[BaseColumnAttributeAssignment] =
       Utils.mapSampleObject(table, declarations)
 

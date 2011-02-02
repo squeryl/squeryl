@@ -224,21 +224,28 @@ object FieldReferenceLinker {
 
   private def _populateSelectColsRecurse(visited: HashSet[Int] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
 
-    val idHashCode = System.identityHashCode(o)
-
-    if(o == null || o.getClass.getName.startsWith("java.") || visited.contains(idHashCode))
+    if(o == null)
       return
 
-    //visited.add(o)
+    val idHashCode = System.identityHashCode(o)
+
+    if(visited.contains(idHashCode))
+      return
+
+    val clazz = o.getClass
+    val clazzName = clazz.getName
+    if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib."))
+      return
+
     visited.add(idHashCode)
     
     _populateSelectCols(yi, q, o)
-    for(f <-o.getClass.getDeclaredFields) {
+    for(f <- clazz.getDeclaredFields) {
       f.setAccessible(true);
       val ob = f.get(o)
 
       // don't follow closures 
-      if(! f.getType.getName.startsWith("scala.Function"))
+      if(!(f.getType.getName.startsWith("scala.Function") || FieldMetaData.factory.hideFromYieldInspection(o, f)))
         _populateSelectColsRecurse(visited, yi, q, ob)
     }
   }

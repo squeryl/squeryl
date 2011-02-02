@@ -85,7 +85,7 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
 
   var id: Long = 0
   def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
-  override def toString = "Professor:" + id
+  override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
 
 
@@ -289,7 +289,11 @@ class SchoolDbTestRun extends QueryTester {
     testCountSignatures
     
     blobTest
-    
+
+    if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter]) {
+      testPartialUpdateWithSubQueryInSetClause
+    }
+
     testYieldInspectionResidue
 
 //    testNewLeftOuterJoin1Reverse
@@ -973,6 +977,35 @@ class SchoolDbTestRun extends QueryTester {
     )
 
     passed('testPartialUpdateWithInclusionOperator)
+  }
+
+
+  def testPartialUpdateWithSubQueryInSetClause = {
+    //loggerOn
+
+    val zarnitsyn = professors.insert(new Professor("zarnitsyn", 60.0F, Some(70.5F), 60.0F, Some(70.5F)))
+
+    val before = professors.where(p => p.id === tournesol.id).single.yearlySalary
+
+    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123)))
+
+    val c = update(professors)(p =>
+      where(p.id === tournesol.id)
+      set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123))))
+    )
+
+    val after = professors.where(p => p.id === tournesol.id).single.yearlySalary
+
+    assertEquals(expected, after, 'testPartialUpdateWithSubQueryInSetClause)
+
+    update(professors)(p =>
+      where(p.id === tournesol.id)
+      set(p.yearlySalary := 80.0F)
+    )
+
+    professors.delete(zarnitsyn.id)
+
+    passed('testPartialUpdateWithSubQueryInSetClause)
   }
 
   def testOptimisticCC1 = {    
