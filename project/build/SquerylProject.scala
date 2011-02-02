@@ -43,6 +43,8 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   
   val msSqlDriver = "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided"
 
+  val derbyDriver = "org.apache.derby" % "derby" % "10.7.1.1" % "provided"
+
   val snapshotsRepo = "snapshots-repo" at "http://www.scala-tools.org/repo-snapshots"
   
   //val specs = "org.scala-tools.testing" %% "specs" % "1.6.5" % "provided"

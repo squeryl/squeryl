@@ -16,7 +16,7 @@
 package org.squeryl.demos;
 
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.adapters.H2Adapter
+import org.squeryl.adapters.{H2Adapter, DerbyAdapter}
 import org.squeryl.{Query, Session, KeyedEntity, Schema}
 import java.sql.SQLException
 import org.squeryl.dsl.GroupWithMeasures
@@ -168,6 +168,15 @@ object KickTheTires {
     test(session)
   }
 
+  def testWithDerby = {
+    Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
+    val session = Session.create(
+      java.sql.DriverManager.getConnection("jdbc:derby:memory:test;create=true", "app", ""),
+      new DerbyAdapter
+    )
+    test(session)
+  }
+
   def test(session: Session) = using(session) {
 
     initSchema
@@ -204,8 +213,10 @@ object KickTheTires {
         select(s)
       )
 
-//    for(s <- songsFromThe60sInFunkAndLatinJazzPlaylist)
-//      println(s.title + " : " + s.year)
+    val songIds =
+      songsFromThe60sInFunkAndLatinJazzPlaylist.map(_.id).toSet
+
+    assert(songIds == funkAndLatinJazz.songsInPlaylistOrder.map(_.id).toSet)
 
     // Nesting in From clause :
     val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
@@ -216,8 +227,9 @@ object KickTheTires {
     
     // Left Outer Join :
     var ratingsForAllSongs =
-      from(songs, ratings)((s,r) =>
-          select((s, leftOuterJoin(r, s.id === r.songId)))
+      join(songs, ratings.leftOuter)((s,r) =>
+        select((s, r))
+        on(s.id === r.map(_.songId))
       )
 
 //    for(sr <- ratingsForAllSongs)

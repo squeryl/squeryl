@@ -59,7 +59,7 @@ object SchoolDb2 extends Schema {
 
   val courseAssignments =
     manyToManyRelation(professors, courses).
-    via[CourseAssignment]((p,c,a) => (p.id === a.professorId, a.courseId === c.id))
+    via[CourseAssignment]((p,c,a) => (a.professorId === p.id, a.courseId === c.id))
 
   val courseSubscriptions =
     manyToManyRelation(courses, students).
@@ -67,13 +67,16 @@ object SchoolDb2 extends Schema {
 
   val subjectToCourses =
     oneToManyRelation(subjects, courses).
-    via((s,c) => s.id === c.subjectId)
+    via((s,c) => c.subjectId === s.id)
 
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
     foreignKeyDeclaration.constrainReference
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 }
 
 class SchoolDb2MetableRelations extends QueryTester {

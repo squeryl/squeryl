@@ -16,14 +16,16 @@
 package org.squeryl.internals
 
 import java.lang.annotation.Annotation
-import java.lang.reflect.{Field, Method}
+import java.lang.reflect.{Field, Method, Constructor, InvocationTargetException}
 import java.sql.ResultSet
 import java.math.BigDecimal
+import scala.annotation.tailrec
 import org.squeryl.annotations.{ColumnBase, Column}
 import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
 import org.squeryl.dsl.CompositeKey
+import org.squeryl.customtypes.CustomType
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -276,17 +278,22 @@ class FieldMetaData(
   def set(target: AnyRef, v: AnyRef) = {
     try {
       val v0:AnyRef =
-        if(isEnumeration) {
-          if(v != null)
-            canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
-          else
-            null
-        }
+        if(v == null)
+          null
+        else if(isEnumeration)
+          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
         else if(customTypeFactory == None)
           v
         else {
           val f = customTypeFactory.get
-          f(v)
+
+          if(v.isInstanceOf[CustomType[_]]) {
+            val r = v.asInstanceOf[CustomType[_]]._1
+            f(if(r == null) null else r.asInstanceOf[AnyRef])
+          }
+          else {
+           f(v)
+          }
         }
 
       val actualValue =
@@ -327,6 +334,8 @@ class FieldMetaData(
 }
 
 trait FieldMetaDataFactory {
+
+  def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
 
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
@@ -465,21 +474,43 @@ object FieldMetaData {
    * default values for non nullable primitive types (int, long, etc...)
    */
   private def _createCustomTypeFactory(ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any]] = {
-    for(c <- typeOfField.getConstructors if c.getParameterTypes.length == 1) {
-      val pTypes = c.getParameterTypes
-      val dv = createDefaultValue(ownerClass, pTypes(0), None)
-      if(dv != null)
-        return  Some(
-          (i:AnyRef)=> {
-            if(i != null)
-              c.newInstance(i).asInstanceOf[Product1[Any]]
-            else
-              c.newInstance(dv).asInstanceOf[Product1[Any]]
-          }
-        )
-    }
+    // run through the given class hierarchy and return the first method
+    // which is called "value" and doesn't return java.lang.Object
+    @tailrec
+    def find(c: Class[_]): Option[Method] =
+     if(c != null)
+       c.getMethods.find(m => m.getName == "value" && m.getReturnType != classOf[java.lang.Object]) match {
+         case Some(m) => Some(m)
+         case None => find(c.getSuperclass)
+       }
+     else None
 
-    None
+     // invoke the given constructor and expose possible exceptions to the caller.
+    def invoke(c: Constructor[_], value: AnyRef) =
+      try {
+        c.newInstance(value).asInstanceOf[Product1[Any]]
+      } catch {
+        case ex: InvocationTargetException =>
+          throw ex.getTargetException
+      }
+
+    find(typeOfField) flatMap(m => {
+      val pType = m.getReturnType
+
+      assert(factory.isSupportedFieldType(pType),
+        "enclosed type %s of CustomType %s is not a supported field type!"
+        .format(pType.getName, typeOfField.getName))
+
+      val c = typeOfField.getConstructor(pType)
+      val defaultValue = createDefaultValue(ownerClass, pType, None)
+
+      if(defaultValue == null) None
+      else
+        Some((i: AnyRef) =>
+          if(i == null) invoke(c, defaultValue)
+          else invoke(c, i)
+        )
+    })
   }
 
   def defaultFieldLength(fieldType: Class[_], fmd: FieldMetaData) =

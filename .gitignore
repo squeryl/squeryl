@@ -13,3 +13,6 @@ project/boot/
 .idea/dictionaries/
 .idea/copyright/
 lib*
+derby.log
+
+

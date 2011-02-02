@@ -77,6 +77,10 @@ object Tests extends QueryTester {
     allTests("DB2", createDB2TestConnection _)
   }
 
+  def allTestsOnDerby = {
+    allTests("Derby", createDerbyTestConnection _)
+  }
+
   def allTestsOnAllDatabases = {
 
     allTests("MS Sql", createMSSqlTestConnection _)
@@ -92,6 +96,8 @@ object Tests extends QueryTester {
     allTests("H2", createH2TestConnection _)
 
     allTests("DB2", createDB2TestConnection _)
+
+    allTests("Derby", createDerbyTestConnection _)
   }
 
   def dumpResourceClosingPolicyOfAllDrivers = {
@@ -101,6 +107,7 @@ object Tests extends QueryTester {
     testConnectionClose(createMySQLTestConnection)
     testConnectionClose(createH2TestConnection)
     testConnectionClose(createDB2TestConnection)
+    testConnectionClose(createDerbyTestConnection)
   }
 
   def allTests(dbName: String, s: ()=>Session) = {
@@ -185,6 +192,14 @@ object Tests extends QueryTester {
     val c = java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/squeryl", "squeryl", "squeryl")
     c.setAutoCommit(false)
     Session.create(c, new PostgreSqlAdapter)
+  }
+
+  def createDerbyTestConnection = {
+    Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
+    Session.create(
+      java.sql.DriverManager.getConnection("jdbc:derby:memory:test;create=true", "app", ""),
+      new DerbyAdapter
+    )
   }
 
   def createMySQLTestConnection = {

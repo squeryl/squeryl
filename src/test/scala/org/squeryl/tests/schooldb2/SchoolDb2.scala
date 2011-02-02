@@ -127,7 +127,10 @@ class SchoolDb2 extends Schema {
   //when a course is deleted, all of the subscriptions will get deleted :
   courseSubscriptions.leftForeignKeyDeclaration.constrainReference(onDelete cascade)
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 
   val as = table[ASTConstructionInterferenceA]
   val bs = table[ASTConstructionInterferenceB]

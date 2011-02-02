@@ -560,7 +560,9 @@ trait DatabaseAdapter {
       sw.write(quoteName(col.columnName))
       sw.write(" = ")
       val v = z.element
+      sw.write("(")
       v.write(sw)
+      sw.write(")")
       if(!z.isLast) {
         sw.write(",")
         sw.nextLine
@@ -684,7 +686,6 @@ trait DatabaseAdapter {
 
   def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
     sw.write(quoteName(se.aliasComponent))
-
 
   def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
     //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)

@@ -25,7 +25,7 @@ import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import ast.TypedExpressionNode
 import org.squeryl._
-import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter}
+import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter, DerbyAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker}
 
 class SchoolDbObject extends KeyedEntity[Int] {
@@ -85,7 +85,7 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
 
   var id: Long = 0
   def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
-  override def toString = "Professor:" + id
+  override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
 
 
@@ -169,7 +169,10 @@ class SchoolDb extends Schema {
       None
 
 
-  override def drop = super.drop
+  override def drop = {
+    Session.cleanupResources
+    super.drop
+  }
 }
 
 class SchoolDbTestRun extends QueryTester {
@@ -273,9 +276,12 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
-    //testDeepNest1
+    testDeepNest1
     
-    //testDeepNest2
+    testDeepNest2
+
+    testBoolean2LogicalBooleanConversion
+    
 
     if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter])
       testPartialUpdateWithInclusionOperator
@@ -288,7 +294,11 @@ class SchoolDbTestRun extends QueryTester {
     testCountSignatures
     
     blobTest
-    
+
+    if(!Session.currentSession.databaseAdapter.isInstanceOf[MySQLAdapter]) {
+      testPartialUpdateWithSubQueryInSetClause
+    }
+
     testYieldInspectionResidue
 
 //    testNewLeftOuterJoin1Reverse
@@ -541,17 +551,21 @@ class SchoolDbTestRun extends QueryTester {
   }
 
   def testOptionAndNonOptionMixInComputeTuple = {
-    val t:(Option[Float],Option[Float],Option[Double], Long) = avgStudentAgeFunky
+    val t:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
     println('testOptionAndNonOptionMixInComputeTuple + " passed.")
   }
 
-  def testConcatWithOptionalCols =
-    if(!Session.currentSession.databaseAdapter.isInstanceOf[MSSQLServer]){
+  def testConcatWithOptionalCols = {
+    val dbAdapter = Session.currentSession.databaseAdapter
+    if(!dbAdapter.isInstanceOf[MSSQLServer] && !dbAdapter.isInstanceOf[DerbyAdapter]) {
+      // concat doesn't work in Derby with numeric fields.
+      // see: https://issues.apache.org/jira/browse/DERBY-1306
 
       val res = addressesOfStudentsOlderThan24.toList
 
       println('testConcatWithOptionalCols + " passed.")
     }
+  }
 
   def testScalarOptionQuery = {
     val avgAge:Option[Float] = avgStudentAge
@@ -916,21 +930,21 @@ class SchoolDbTestRun extends QueryTester {
 
     try {
        q.single : GroupWithMeasures[
-       (Option[Boolean],
+       Product8[Option[Boolean],
         Float,
         Option[Float],
         Option[String],
         Option[Date],
         Option[Int],
         Option[Long],
-        Option[Double]),
-       (Option[Long],
+        Option[Double]],
+       Product7[Option[Long],
         Option[Float],
         Option[Double],
         Option[Date],
         Option[String],
         Option[Boolean],
-        Option[Date])
+        Option[Date]]
       ]
       passed('exerciseTypeSystem1)
     }
@@ -996,6 +1010,35 @@ class SchoolDbTestRun extends QueryTester {
     )
 
     passed('testPartialUpdateWithInclusionOperator)
+  }
+
+
+  def testPartialUpdateWithSubQueryInSetClause = {
+    //loggerOn
+
+    val zarnitsyn = professors.insert(new Professor("zarnitsyn", 60.0F, Some(70.5F), 60.0F, Some(70.5F)))
+
+    val before = professors.where(p => p.id === tournesol.id).single.yearlySalary
+
+    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123)))
+
+    val c = update(professors)(p =>
+      where(p.id === tournesol.id)
+      set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123))))
+    )
+
+    val after = professors.where(p => p.id === tournesol.id).single.yearlySalary
+
+    assertEquals(expected, after, 'testPartialUpdateWithSubQueryInSetClause)
+
+    update(professors)(p =>
+      where(p.id === tournesol.id)
+      set(p.yearlySalary := 80.0F)
+    )
+
+    professors.delete(zarnitsyn.id)
+
+    passed('testPartialUpdateWithSubQueryInSetClause)
   }
 
   def testOptimisticCC1 = {    
@@ -1115,6 +1158,26 @@ class SchoolDbTestRun extends QueryTester {
     val babaZula3 = professors.where(_.weightInBD === Some(261.1234561112: BigDecimal))
 
     assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
+
+    update(professors)(p=>
+      where(p.id === babaZula.id)
+      set(p.weightInBD := p.weightInBD plus 10 minus 5 times 4 div 2) // FIXME: mulitiplications aren't done first
+    )
+
+    val babaZula4 = professors.where(_.weightInBD === Some(532.2469122224: BigDecimal))
+
+    assertEquals(532.2469122224, babaZula4.single.weightInBD.get, 'testBigDecimal)
+    assertEquals(1, babaZula4.Count : Long, 'testBigDecimal)
+
+    update(professors)(p=>
+      where(p.id === babaZula.id)
+      set(p.yearlySalaryBD := p.yearlySalaryBD plus 10 minus 5 times 4 div 2) // FIXME: multiplications aren't done first
+    )
+
+    val babaZula5 = professors.where(_.yearlySalaryBD === 170)
+
+    assertEquals(170, babaZula5.single.yearlySalaryBD, 'testBigDecimal)
+    assertEquals(1, babaZula5.Count : Long, 'testBigDecimal)
   }
 
   def testYieldInspectionResidue = {
@@ -1250,7 +1313,19 @@ class SchoolDbTestRun extends QueryTester {
 
     println('testNewOuterJoin2 + " passed.")
   }
-  
+
+  def testBoolean2LogicalBooleanConversion = {
+
+    val multilingualStudents = students.where(_.isMultilingual).map(_.id).toSet
+
+    println(multilingualStudents)
+    //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
+
+    assert(multilingualStudents == Set(xiao.id,gontran.id,gaitan.id))
+    
+    passed('testBoolean2LogicalBooleanConversion)
+  }
+
   def testNewLeftOuterJoin3 {
     import testInstance._
 

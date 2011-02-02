@@ -124,10 +124,16 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 
   def ===(b: NonNumericalExpression[A]) = new EqualityExpression(this, b)
   def <>(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
-  def > (b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
-  def >=(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
-  def < (b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
-  def <=(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
+
+  def > (b: NonNumericalExpression[A]) = gt(b)
+  def >=(b: NonNumericalExpression[A]) = gte(b)
+  def < (b: NonNumericalExpression[A]) =  lt(b)
+  def <=(b: NonNumericalExpression[A]) = lte(b)
+
+  def gt (b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+  def gte(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+  def lt (b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+  def lte(b: NonNumericalExpression[A]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
 
   def ||[B](e: TypedExpressionNode[B]) = new ConcatOp(this,e)
 
