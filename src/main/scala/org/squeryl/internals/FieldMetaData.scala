@@ -335,6 +335,8 @@ class FieldMetaData(
 
 trait FieldMetaDataFactory {
 
+  def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
+
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
   def isSupportedFieldType(c: Class[_]): Boolean =
