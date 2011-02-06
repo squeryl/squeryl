@@ -109,10 +109,10 @@ class MusicDbTestRun extends QueryTester {
     val expectedSongCountPerAlbum = List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
   }
 
-  val basicSelectUsingWhereOnQueryable =
+  def basicSelectUsingWhereOnQueryable =
     artists.where(a=> a.id === testInstance.mongoSantaMaria.id)
 
-  val basicSelectUsingWhereOnQueryableNested =
+  def basicSelectUsingWhereOnQueryableNested =
     basicSelectUsingWhereOnQueryable.where(a=> a.id === testInstance.mongoSantaMaria.id)
 
   lazy val poncho =
@@ -269,6 +269,15 @@ class MusicDbTestRun extends QueryTester {
       orderBy(a.lastName desc)
     ).distinct
 
+  def songsFeaturingPonchoNestedInWhereWithString =
+    from(songs, artists)((s,a) =>
+      where(
+        s.title in from(songs)(s => where(s.id === 123) select(s.title))
+      )
+      select(s)
+      orderBy(s.title asc)
+    )
+
   def countCds(cds: Queryable[Cd]) =
     from(cds)(c => compute(count))
 
@@ -312,7 +321,9 @@ class MusicDbTestRun extends QueryTester {
 
   def working = {
     import testInstance._
-    
+
+    testEnums
+
     val dbAdapter = Session.currentSession.databaseAdapter
     
     testOuterJoinWithSubQuery
@@ -787,6 +798,16 @@ class MusicDbTestRun extends QueryTester {
   
   def testEnums = {
 
+    val testAssemblaIssue9 =
+      from(songs)(s =>
+        where(s.genre in (
+           from(songs)(s2 => select(s2.genre))
+        ))
+        select(s.genre)
+      )
+
+    testAssemblaIssue9.map(_.id).toSet
+
     //val md = songs.posoMetaData.findFieldMetaDataForProperty("genre").get
     //val z = md.canonicalEnumerationValueFor(2)
 
@@ -848,11 +869,9 @@ class MusicDbTestRun extends QueryTester {
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(Some(Genre.Latin), wmm.secondaryGenre, "testEnum failed")    
+    assertEquals(Some(Genre.Latin), wmm.secondaryGenre, "testEnum failed")
 
     passed('testEnums)
-
-    //val q2 = songs.where(_.genre === Tempo.Allegro)
   }
 
   def testDynamicWhereClause1 = {

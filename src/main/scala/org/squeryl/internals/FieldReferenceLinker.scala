@@ -232,7 +232,7 @@ object FieldReferenceLinker {
 
     val clazz = o.getClass
     val clazzName = clazz.getName
-    if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib."))
+    if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib.") || clazzName.startsWith("scala.Enumeration"))
       return
 
     visited.add(idHashCode)
