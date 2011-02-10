@@ -175,7 +175,23 @@ trait QueryDsl
       (rA,rB)
     }
   }
-  
+
+
+  implicit def singleColumnQuery2RightHandSideOfIn[A](q: Query[A]) =
+    new RightHandSideOfIn[A](q.ast)
+
+  implicit def measureSingleColumnQuery2RightHandSideOfIn[A](q: Query[Measures[A]]) =
+    new RightHandSideOfIn[A](q.ast)
+
+  implicit def measureOptionSingleColumnQuery2RightHandSideOfIn[A](q: Query[Measures[Option[A]]]) =
+    new RightHandSideOfIn[A](q.ast)
+
+  implicit def groupSingleColumnQuery2RightHandSideOfIn[A](q: Query[Group[A]]) =
+    new RightHandSideOfIn[A](q.ast)
+
+  implicit def groupOptionSingleColumnQuery2RightHandSideOfIn[A](q: Query[Group[Option[A]]]) =
+    new RightHandSideOfIn[A](q.ast)
+
   trait SingleRowQuery[R] {
     self: Query[R] =>
   }

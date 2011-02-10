@@ -107,27 +107,18 @@ trait DslFactory
   // List Conversion implicits don't vary with the choice of
   // column/field types, so they don't need to be overridable factory methods :
 
-  //TODO: replace lists with NonNumerical and Numerical for type inference that is more SQL like  
-  implicit def traversableOfInt2ListInt(l: Traversable[IntType]) =
-    new ConstantExpressionNodeList[IntType](l) with ListInt
+  implicit def traversableOfNumercalExpressionList[A <% NumericalExpression[_]](l: Traversable[A]) =
+    new RightHandSideOfIn[NumericalExpression[A]](new ConstantExpressionNodeList[Any](l))
 
-  implicit def traversableOfDouble2ListDouble(l: Traversable[DoubleType]) =
-    new ConstantExpressionNodeList[DoubleType](l) with ListDouble
-
-  implicit def traversableOfBigDecimal2ListBigDecimal(l: Traversable[BigDecimalType]) =
-    new ConstantExpressionNodeList[BigDecimalType](l) with ListBigDecimal
-
-  implicit def traversableOfFloat2ListFloat(l: Traversable[FloatType]) =
-    new ConstantExpressionNodeList[FloatType](l) with ListFloat
-
-  implicit def traversableOfLong2ListLong(l: Traversable[LongType]) =
-    new ConstantExpressionNodeList[LongType](l) with ListLong
+// TODO : find out why this generalized conv for NonNumericals won't work (looks like a scalac bug...):
+//  implicit def traversableOfNonNumercalExpressionList[A <% NonNumericalExpression[_]](l: Traversable[A]) =
+//    new RightHandSideOfIn[NonNumericalExpression[A]](new ConstantExpressionNodeList[Any](l))
 
   implicit def traversableOfString2ListString(l: Traversable[StringType]) =
-    new ConstantExpressionNodeList[StringType](l) with ListString
+    new RightHandSideOfIn[StringType](new ConstantExpressionNodeList[StringType](l))
 
   implicit def traversableOfDate2ListDate(l: Traversable[DateType]) =
-    new ConstantExpressionNodeList[DateType](l) with ListDate
+    new RightHandSideOfIn[DateType](new ConstantExpressionNodeList[DateType](l))
 
   implicit def typedExpression2OrderByArg[E <% TypedExpressionNode[_]](e: E) = new OrderByArg(e)
 

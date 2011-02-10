@@ -20,7 +20,7 @@ import java.sql.Timestamp
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters._
-import dsl.ast.BinaryOperatorNodeLogicalBoolean
+import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
 import java.util.{Date, Calendar}
 
@@ -928,7 +928,39 @@ class MusicDbTestRun extends QueryTester {
     assertEquals(allArtists, q, 'testNotInTautology)
 
     passed('testNotInTautology)
-  }  
+  }
+
+  def testAggregateQueryOnRightHandSideOfInOperator = {
+
+    val q1 =
+      from(cds)(cd =>
+        compute(min(cd.id))
+      )
+
+    val r1 = cds.where(_.id in q1).single
+
+    assertEquals(congaBlue.id, r1.id, 'testAggregateQueryOnRightHandSideOfInOperator)
+
+    val q2 =
+      from(cds)(cd =>
+        compute(min(cd.title))
+      )
+
+    val r2 = cds.where(_.title in q2).single
+
+    assertEquals(besameMama.title, r2.title, 'testAggregateQueryOnRightHandSideOfInOperator)
+
+    // should compile (valid SQL even though phony...) :
+    artists.where(_.age in from(artists)(a=> compute(count)))
+
+    // should compile, since SQL allows comparing nullable cols against non nullable ones :
+    artists.where(_.id in from(artists)(a=> compute(max(a.age))))
+
+    //shouldn't compile :
+    //artists.where(_.age in from(artists)(a=> compute(max(a.name))))
+
+    passed('testAggregateQueryOnRightHandSideOfInOperator)
+  }
 
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {

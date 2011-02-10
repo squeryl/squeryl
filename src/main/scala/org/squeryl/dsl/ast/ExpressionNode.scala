@@ -92,37 +92,7 @@ trait ListExpressionNode extends ExpressionNode {
   def isEmpty: Boolean
 }
 
-trait ListNumerical extends ListExpressionNode
-
-
-trait ListDouble extends ListNumerical
-trait ListBigDecimal extends ListNumerical
-trait ListFloat  extends ListNumerical
-trait ListInt extends ListNumerical
-trait ListLong extends ListNumerical
-trait ListDate extends ListExpressionNode
-
-trait ListString extends ListExpressionNode {
-  override def quotesElement = true
-}
-
 class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=")
-
-class InListExpression(left: ExpressionNode, right: ListExpressionNode, inclusion: Boolean) extends BinaryOperatorNodeLogicalBoolean(left, right, if(inclusion) "in" else "not in") {
-
-  override def inhibited =
-    if(right.isEmpty)
-      (! inclusion)
-    else
-      super.inhibited
-
-  override def doWrite(sw: StatementWriter) =
-    if(inclusion  && right.isEmpty)
-      sw.write("(1 = 0)")
-    else
-      super.doWrite(sw)
-}
-
 
 class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String, rightArgInParent: Boolean = false)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
@@ -352,16 +322,18 @@ class ConstantExpressionNode[T](val value: T) extends ExpressionNode {
   override def toString = 'ConstantExpressionNode + ":" + value
 }
 
-class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode with ListExpressionNode {
+class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode {
 
   def isEmpty =
     value == Nil
 
   def doWrite(sw: StatementWriter) =
-    if(quotesElement)
-      sw.write(this.value.map(e=>"'" +e+"'").mkString("(",",",")"))
-    else
-      sw.write(this.value.mkString("(",",",")"))
+    if(sw.isForDisplay)
+      sw.write(this.value.map(e=>"'" +e+"'").mkString(","))
+    else {
+      sw.write(this.value.map(z => "?").mkString(","))
+      this.value.foreach(z => sw.addParam(z.asInstanceOf[AnyRef]))
+    }
 }
 
 class FunctionNode[A](val name: String, _mapper : Option[OutMapper[A]], val args: Iterable[ExpressionNode]) extends ExpressionNode {
@@ -547,4 +519,27 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode {
 
     new OrderByExpression(aCopy)
   }
+}
+
+class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None) extends ExpressionNode {
+  def toIn = new RightHandSideOfIn[A](ast, Some(true))
+  def toNotIn = new RightHandSideOfIn[A](ast, Some(false))
+
+  override def inhibited =
+    if(isConstantEmptyList) // not in Empty is always true, so we remove the condition
+      (! isIn.get)
+    else
+      super.inhibited
+
+  def isConstantEmptyList =
+    if(ast.isInstanceOf[ConstantExpressionNodeList[Any]]) {
+      ast.asInstanceOf[ConstantExpressionNodeList[Any]].isEmpty
+    }
+    else false
+
+  override def doWrite(sw: StatementWriter) =
+    if(isConstantEmptyList && isIn.get)
+      sw.write("1 = 0") // in Empty is always false
+    else
+      ast.doWrite(sw)
 }
