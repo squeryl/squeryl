@@ -55,7 +55,9 @@ class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId:
   def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
 }
 
-class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
+class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
+  override def toString = id+ ":" + title
+}
 
 class MusicDb extends Schema with QueryTester {
 
@@ -321,6 +323,10 @@ class MusicDbTestRun extends QueryTester {
 
   def working = {
     import testInstance._
+
+    testAggregateQueryOnRightHandSideOfInOperator
+
+    testAggregateComputeInSubQuery
 
     testEnums
 
@@ -947,8 +953,10 @@ class MusicDbTestRun extends QueryTester {
       )
 
     val r2 = cds.where(_.title in q2).single
-
-    assertEquals(besameMama.title, r2.title, 'testAggregateQueryOnRightHandSideOfInOperator)
+//    println(q2.statement)
+//    println(cds.toList)
+//    println(cds.where(_.title in q2).statement)
+    assertEquals(congaBlue.title, r2.title, 'testAggregateQueryOnRightHandSideOfInOperator)
 
     // should compile (valid SQL even though phony...) :
     artists.where(_.age in from(artists)(a=> compute(count)))
@@ -962,6 +970,39 @@ class MusicDbTestRun extends QueryTester {
     passed('testAggregateQueryOnRightHandSideOfInOperator)
   }
 
+  def testAggregateComputeInSubQuery = {
+
+    val q1 =
+      from(cds)(cd =>
+        compute(min(cd.id))
+      )
+
+    val q2 =
+      from(cds, q1)((cd, q)=>
+        where(cd.id === q.measures.get)
+        select(cd)
+      )
+
+    val r1 = q2.single
+
+    assertEquals(congaBlue.id, r1.id, 'testAggregateComputeInSubQuery)
+
+
+    val q3 =
+      from(cds)(cd =>
+        groupBy(cd.id)
+      )
+
+    val q4 =
+      from(cds, q3)((cd, q)=>
+        where(cd.id === q.key)
+        select(cd)
+      )
+    // should run without exception against the Db :
+    q4.toList
+
+    passed('testAggregateComputeInSubQuery)
+  }
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {
 //
