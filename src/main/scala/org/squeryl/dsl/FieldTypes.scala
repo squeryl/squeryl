@@ -106,8 +106,8 @@ trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
   def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
-  def in[B <% NumericalExpression[_]](e: RightHandSideOfIn[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.toIn, "in", true)
-  def notIn[B <% NumericalExpression[_]](e: RightHandSideOfIn[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.toNotIn, "not in", true)
+  def in[B <% NumericalExpression[_]](e: RightHandSideOfIn[B]) = new InclusionOperator(this, e.toIn)
+  def notIn[B <% NumericalExpression[_]](e: RightHandSideOfIn[B]) = new ExclusionOperator(this, e.toNotIn)
 
   def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
 
@@ -138,8 +138,8 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 
   def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
-  def in(e: RightHandSideOfIn[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.toIn, "in", true)
-  def notIn(e: RightHandSideOfIn[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.toNotIn, "not in", true)
+  def in(e: RightHandSideOfIn[A]) = new InclusionOperator(this, e.toIn)
+  def notIn(e: RightHandSideOfIn[A]) = new ExclusionOperator(this, e.toNotIn)
 
   def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
 

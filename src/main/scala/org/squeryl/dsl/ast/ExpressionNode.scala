@@ -94,6 +94,17 @@ trait ListExpressionNode extends ExpressionNode {
 
 class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=")
 
+class InclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "in", true) {
+
+  override def doWrite(sw: StatementWriter) =
+    if(right.isConstantEmptyList)
+      sw.write("(1 = 0)")
+    else
+      super.doWrite(sw)
+}
+
+class ExclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "not in", true)
+
 class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String, rightArgInParent: Boolean = false)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
 
