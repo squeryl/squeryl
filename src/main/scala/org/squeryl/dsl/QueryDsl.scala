@@ -644,4 +644,39 @@ trait QueryDsl
   implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8)) = new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
 
   implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9)) = new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
+
+
+  class Query2ToTree[A1,A2](x0: Query[Tuple2[A1,A2]]) {
+    def asTree: Map[A1,Iterable[A2]] =
+      x0.groupBy(x1 => x1._1).mapValues(x2 => x2.map(_._2))
+  }
+
+  class Query3ToTree[A1,A2,A3](x0: Query[Tuple3[A1,A2,A3]]) {
+    def asTree: Map[A1,Map[A2,Iterable[A3]]] =
+      x0.groupBy(x1 => x1._1).mapValues(x2 =>
+      x2.groupBy(x3 => x3._2).mapValues(x4 => x4.map(_._3)))
+  }
+
+  class Query4ToTree[A1,A2,A3,A4](x0: Query[Tuple4[A1,A2,A3,A4]]) {
+    def asTree: Map[A1,Map[A2,Map[A3,Iterable[A4]]]] =
+      x0.groupBy(x1 => x1._1).mapValues(x2 =>
+      x2.groupBy(x3 => x3._2).mapValues(x4 =>
+      x4.groupBy(x5 => x5._3).mapValues(x6 => x6.map(_._4))))
+  }
+
+  class Query5ToTree[A1,A2,A3,A4,A5](x0: Query[Tuple5[A1,A2,A3,A4,A5]]) {
+    def asTree: Map[A1,Map[A2,Map[A3,Map[A4,Iterable[A5]]]]] =
+      x0.groupBy(x1 => x1._1).mapValues(x2 =>
+      x2.groupBy(x3 => x3._2).mapValues(x4 =>
+      x4.groupBy(x5 => x5._3).mapValues(x6 =>
+      x6.groupBy(x7 => x7._4).mapValues(x8 => x8.map(_._5)))))
+  }
+
+  implicit def q2ToTree[A1,A2](q: Query[Tuple2[A1,A2]]) = new Query2ToTree[A1,A2](q)
+
+  implicit def q3ToTree[A1,A2,A3](q: Query[Tuple3[A1,A2,A3]]) = new Query3ToTree[A1,A2,A3](q)
+
+  implicit def q4ToTree[A1,A2,A3,A4](q: Query[Tuple4[A1,A2,A3,A4]]) = new Query4ToTree[A1,A2,A3,A4](q)
+
+  implicit def q5ToTree[A1,A2,A3,A4,A5](q: Query[Tuple5[A1,A2,A3,A4,A5]]) = new Query5ToTree(q)
 }

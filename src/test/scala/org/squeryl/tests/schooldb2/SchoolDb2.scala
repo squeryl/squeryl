@@ -190,6 +190,8 @@ class SchoolDb2Tests extends QueryTester {
     
     testCompositeEquality
 
+    testEagerRelationFetch
+
     testMany2ManyAssociationFromLeftSide
     testMany2ManyAssociationsFromRightSide
 
@@ -266,6 +268,33 @@ class SchoolDb2Tests extends QueryTester {
     assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
 
     passed('testMany2ManyAssociationsFromRightSide)
+  }
+
+  def testEagerRelationFetch = {
+
+    import seedData._
+
+    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
+
+    professeurTournesol.courses.associate(physicsCourse)
+    professeurTournesol.courses.associate(chemistryCourse)
+
+    val q =
+      from(professors,courseAssignments,courses)((p,a,c) =>
+        where(p.id === a.professorId and a.courseId === c.id)
+        select((p,a,c))
+      ).asTree
+
+    println("========================")
+    println(q)
+
+//    for(prof <- q) {
+//      for(courseAssignment <- prof._2)
+//        course <- courseAssignment._2)
+
+    professeurTournesol.courses.dissociateAll
+
+    passed('testEagerRelationFetch)
   }
 
   def testOneToMany = {
