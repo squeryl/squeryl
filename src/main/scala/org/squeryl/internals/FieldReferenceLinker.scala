@@ -99,23 +99,22 @@ object FieldReferenceLinker {
       if(!e.inhibited) {
         _utilizedFields.append(e)
         e.prepareColumnMapper(_utilizedFields.size)
-      }    
-    
-    def addOutGroupExpressionNodes(oen: Iterable[SelectElement]): Int = {
-
-//      if(! isOn)
-//        error("cannot call while not in yield inspection mode")
-
-//      val startIndex = _utilizedFields.size + 1
-//      for(e <- oen)
-//        _utilizedFields.append(e)
-//      startIndex
-      1
-    }
+      }
     
     def resultSetMapper = _resultSetMapper
 
+    private var _reentranceDepth = 0
+
+     def reentranceDepth = _reentranceDepth
+
+     def incrementReentranceDepth =
+       _reentranceDepth += 1
+
+     def decrementReentranceDepth =
+       _reentranceDepth -= 1
+
     def cleanUp = {
+      _reentranceDepth = 0
       _resultSetMapper = null
       queryExpressionNode = null
       _on = false
@@ -124,12 +123,14 @@ object FieldReferenceLinker {
     }
 
     def turnOn(q: QueryExpressionNode[_], rsm: ResultSetMapper) = {
+      _reentranceDepth = 0
       queryExpressionNode = q
       _on = true
       _resultSetMapper = rsm
     }
 
     def turnOffAndCollectOutExpressions: List[SelectElement] = {
+      _reentranceDepth = 0
       _resultSetMapper = null
       _on = false
       val res = _utilizedFields.toList
@@ -141,9 +142,6 @@ object FieldReferenceLinker {
   private val _yieldInspectionTL = new ThreadLocal[YieldInspection] {
     override def initialValue = new YieldInspection
   }
-
-  def addOutGroupExpressionNodes(oen: Iterable[SelectElement]) =
-    _yieldInspectionTL.get.addOutGroupExpressionNodes(oen)
 
   def putLastAccessedSelectElement(e: SelectElement) = {
     if(_yieldInspectionTL.get.isOn)
@@ -234,7 +232,7 @@ object FieldReferenceLinker {
 
     val clazz = o.getClass
     val clazzName = clazz.getName
-    if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib."))
+    if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib.") || clazzName.startsWith("scala.Enumeration"))
       return
 
     visited.add(idHashCode)
@@ -286,10 +284,24 @@ object FieldReferenceLinker {
 
       def intercept(o: Object, m: Method, args: Array[Object], proxy: MethodProxy): Object = {
 
-        lazy val fmd = fmd4Method(m)
-
+        val fmd = fmd4Method(m)
+        val yi = _yieldInspectionTL.get
         val isComposite =
           classOf[CompositeKey].isAssignableFrom(m.getReturnType)
+
+        try {
+          if(fmd != None && yi.isOn)
+            yi.incrementReentranceDepth
+
+          _intercept(o, m, args, proxy, fmd, yi, isComposite)
+        }
+        finally {
+          if(fmd != None && yi.isOn)
+            yi.decrementReentranceDepth
+        }
+      }
+
+      private def _intercept(o: Object, m: Method, args: Array[Object], proxy: MethodProxy, fmd: Option[FieldMetaData], yi: YieldInspection, isComposite: Boolean): Object = {
 
         if(isComposite)
           _compositeKeyMembers.set(Some(new ArrayBuffer[SelectElement]))
@@ -300,7 +312,6 @@ object FieldReferenceLinker {
           val ck = res.asInstanceOf[CompositeKey]
           ck._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper)))
           ck._propertyName = Some(m.getName)
-          //_compositeKey.set(Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper))))
           _compositeKeyMembers.set(None)
         }
 
@@ -308,9 +319,8 @@ object FieldReferenceLinker {
           res = "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
 
         if(fmd != None) {
-          val yi = _yieldInspectionTL.get
 
-          if(yi.isOn)
+          if(yi.isOn &&  yi.reentranceDepth == 1)
             yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
 
           if(_compositeKeyMembers.get == None)
@@ -318,8 +328,8 @@ object FieldReferenceLinker {
           else
             _compositeKeyMembers.get.get.append(viewExpressionNode.getOrCreateSelectElement(fmd.get))
         }
-        
+
         res
-      }          
+      }
   }
 }
