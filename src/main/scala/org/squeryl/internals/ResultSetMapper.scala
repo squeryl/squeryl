@@ -198,6 +198,15 @@ class ResultSetMapper extends ResultSetUtils {
       if(rs.getObject(c2fm.index) != null)
         return false
     }
+
+    //outMappers
+    for(col2TupleMapper <- List(groupKeysMapper, groupMeasuresMapper).filter(_ != None).map(_.get);
+        outMapper <- col2TupleMapper.outMappers) {
+
+      if(outMapper.isActive && rs.getObject(outMapper.index) != null)
+        return false
+    }
+
     // if we get here we have matched on a row wit all nulls OR we haven't matched,
     // this is an extreme corner case, we will return None, in reality we should
     // sometimes return a Some with all fields None
