@@ -437,10 +437,12 @@ object FieldMetaData {
           optionType <- (
             (annotations.toIterable collect { case a: OptionType => a }) ++
             Seq(field, getter, setter).flatMap(_.flatMap(m => Option(m.getAnnotation(classOf[OptionType]))))
-          ).headOption ;
-          dv <- Option(createDefaultValue(parentMetaData.clasz, optionType.value, colAnnotation))
-        ) 
-          v = dv
+          ).headOption 
+        ) {
+          v = Option(createDefaultValue(parentMetaData.clasz, optionType.value, colAnnotation))
+          if (v == None)
+            v = null
+        }
       }
 
       if(v == null)
