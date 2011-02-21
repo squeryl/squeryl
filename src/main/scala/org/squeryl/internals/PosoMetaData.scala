@@ -40,6 +40,11 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
             " must have a 0 param constructor or a constructor with only primitive types")).get
 
   /**
+   * Hack to mark the position of Option constructor arguments so that we later know which annotations to take for a given field 
+   */
+  private case class PositionalConstrArgHack(i: Int)
+
+  /**
    * @arg fieldsMetaData the metadata of the persistent fields of this Poso
    * @arg primaryKey None if this Poso is not a KeyedEntity[], Either[a persistedField, a composite key]  
    */
@@ -49,9 +54,9 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val setters = new ArrayBuffer[Method]
 
-    val sampleInstance4OptionTypeDeduction =
+    val (sampleInstance4OptionTypeDeduction, constructorAnnotations) =
       try {
-        constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];
+        (constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef], constructor._1.getParameterAnnotations)
       }
       catch {
         case e:IllegalArgumentException =>
@@ -104,6 +109,25 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       val setter =
         members.filter(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).
           map(m=> m.asInstanceOf[Method]).filter(m=> m.getParameterTypes.apply(0) != o).headOption
+
+      try {
+        ((getter, field) match {
+          case (Some(g), _) if g.getParameterTypes.isEmpty && g.getName != "clone" && g.getName != "hashCode" =>
+            Option(g.invoke(sampleInstance4OptionTypeDeduction))
+          case (_, Some(f)) =>
+            Option(f.get(sampleInstance4OptionTypeDeduction))
+          case _ =>
+            None
+        }) collect {
+          case Some(PositionalConstrArgHack(i)) =>
+            // As the position of the field in the constructor was marked during the creation of the sample,
+            // we know which constructor parameter annotations are relevant for this field :
+            a = a ++ constructorAnnotations(i)
+            // Discard the PositionalConstrArgHack value :
+            field.map(_.set(sampleInstance4OptionTypeDeduction, null))
+            setter.map(_.invoke(sampleInstance4OptionTypeDeduction, null))
+        }
+      } catch { case _ => }
 
       val property = (field, getter, setter, a)
 
@@ -190,7 +214,22 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     for(i <- 0 to params.length -1) {
       val v = FieldMetaData.createDefaultValue(clasz, params(i), None)
-      res(i) = v
+      if ((v == null || v == None) && params(i) == classOf[Option[_]]) {
+        try {
+          // Use default value if there's one defined
+          val d = c.getDeclaringClass.getMethod("init$default$" + (i + 1)).invoke(null)
+          if (d != None)
+            res(i) = d
+        } catch { case _ => }
+        
+        if (res(i) == null) {
+          // Mark the constructor argument position so that we later know which constructor arg annotation to take for a given field
+          res(i) = Some(PositionalConstrArgHack(i))
+        }
+        
+      }
+      else
+        res(i) = v
     }
 
     r.append((c, res))

@@ -430,6 +430,19 @@ object FieldMetaData {
           case e:Exception => null
         }
 
+      if (v == null) {
+        // Use the @OptionType(classOf[T]) annotation to infer the Option[T] fields' T parameter
+        import org.squeryl.annotations.OptionType
+        for (
+          optionType <- (
+            (annotations.toIterable collect { case a: OptionType => a }) ++
+            Seq(field, getter, setter).flatMap(_.flatMap(m => Option(m.getAnnotation(classOf[OptionType]))))
+          ).headOption ;
+          dv <- Option(createDefaultValue(parentMetaData.clasz, optionType.value, colAnnotation))
+        ) 
+          v = dv
+      }
+
       if(v == null)
         error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
 
