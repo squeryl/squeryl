@@ -60,7 +60,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       }
       catch {
         case e:IllegalArgumentException =>
-          throw new RuntimeException("invalid constructor choice " + constructor._1, e)
+          throw new RuntimeException("invalid constructor choice " + constructor._1 + " (args = " + constructor._2.map(v => v + ": " + Option(v).map(_.getClass.getName).getOrElse("null")).mkString(", ") + "; expected = " + constructor._1.getParameterTypes.map(_.getName).mkString(", ") + ")", e)
         case e:Exception =>
           throw new RuntimeException("exception occurred while invoking constructor : " + constructor._1, e)
       }

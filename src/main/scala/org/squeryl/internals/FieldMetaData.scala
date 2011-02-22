@@ -75,6 +75,7 @@ class FieldMetaData(
 
 
   private [squeryl] def _clearColumnAttributes = {
+    new RuntimeException("Clearing column attributes for " + this).printStackTrace
     _columnAttributes.clear
   }
 
@@ -430,15 +431,15 @@ object FieldMetaData {
           case e:Exception => null
         }
 
+      val allAnnotations = {
+        annotations.toIterable ++
+        Seq(field, getter, setter).flatMap(_.flatMap(m => Option(m.getAnnotations)))
+      }
+      
       if (v == null) {
         // Use the @OptionType(classOf[T]) annotation to infer the Option[T] fields' T parameter
-        import org.squeryl.annotations.OptionType
-        for (
-          optionType <- (
-            (annotations.toIterable collect { case a: OptionType => a }) ++
-            Seq(field, getter, setter).flatMap(_.flatMap(m => Option(m.getAnnotation(classOf[OptionType]))))
-          ).headOption 
-        ) {
+        for (optionType <- (allAnnotations collect { case a: org.squeryl.annotations.OptionType => a }).headOption) 
+        {
           v = Option(createDefaultValue(parentMetaData.clasz, optionType.value, colAnnotation))
           if (v == None)
             v = null
@@ -467,7 +468,7 @@ object FieldMetaData {
         else
           typeOfFieldOrTypeOfOption
 
-      new FieldMetaData(
+      val meta = new FieldMetaData(
         parentMetaData,
         name,
         typeOfFieldOrTypeOfOption,
@@ -480,6 +481,20 @@ object FieldMetaData {
         colAnnotation,
         isOptimisticCounter,
         constructorSuppliedDefaultValue)
+      
+      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.Indexed => a }).headOption)
+        meta._addColumnAttribute(Indexed(if (a.value == "") None else Option(a.value)))
+      
+      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.PrimaryKey => a }).headOption)
+        meta._addColumnAttribute(PrimaryKey())
+        
+      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.AutoIncremented => a }).headOption)
+        meta._addColumnAttribute(AutoIncremented(if (a.value == "") None else Option(a.value)))
+        
+      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.Unique => a }).headOption)
+        meta._addColumnAttribute(Unique())
+        
+      meta
     }
   }
 
@@ -555,7 +570,7 @@ object FieldMetaData {
     def handleStringType(fmd: Option[FieldMetaData])  = ""
     def handleBooleanType = new java.lang.Boolean(false)
     def handleDoubleType = new java.lang.Double(0.0)
-    def handleDateType = new java.util.Date()
+    def handleDateType = new java.sql.Date(0)
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
