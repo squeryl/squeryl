@@ -65,7 +65,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
         try {
           fmd.get(row.asInstanceOf[AnyRef]) match {
             case null => "null"
-            case v: String => "\"" + v.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"") + "\""
+            case v: String => "\"" + v.replaceAll("\\\\", "\\\\").replaceAll("\"", "\\\"") + "\""
             case v: java.lang.Long => v + "L"
             case v: java.lang.Float => v + "f"
             case v: java.lang.Short => v + ": Short"

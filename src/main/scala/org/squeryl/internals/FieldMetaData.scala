@@ -75,7 +75,6 @@ class FieldMetaData(
 
 
   private [squeryl] def _clearColumnAttributes = {
-    new RuntimeException("Clearing column attributes for " + this).printStackTrace
     _columnAttributes.clear
   }
 
@@ -482,14 +481,16 @@ object FieldMetaData {
         isOptimisticCounter,
         constructorSuppliedDefaultValue)
       
+      def strOpt(s: String) = if (s == "") None else Option(s)
+      
       for (a <- (allAnnotations collect { case a: org.squeryl.annotations.Indexed => a }).headOption)
-        meta._addColumnAttribute(Indexed(if (a.value == "") None else Option(a.value)))
+        meta._addColumnAttribute(Indexed(strOpt(a.value)))
       
       for (a <- (allAnnotations collect { case a: org.squeryl.annotations.PrimaryKey => a }).headOption)
         meta._addColumnAttribute(PrimaryKey())
         
       for (a <- (allAnnotations collect { case a: org.squeryl.annotations.AutoIncremented => a }).headOption)
-        meta._addColumnAttribute(AutoIncremented(if (a.value == "") None else Option(a.value)))
+        meta._addColumnAttribute(AutoIncremented(strOpt(a.value)))
         
       for (a <- (allAnnotations collect { case a: org.squeryl.annotations.Unique => a }).headOption)
         meta._addColumnAttribute(Unique())
