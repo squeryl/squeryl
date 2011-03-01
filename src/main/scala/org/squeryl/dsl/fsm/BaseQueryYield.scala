@@ -52,7 +52,7 @@ class BaseQueryYield[G]
     (m, nodes)
   }
 
-  protected var _havingClause: Option[()=>TypedExpressionNode[LogicalBoolean]] = None
+  protected var _havingClause: Option[()=>LogicalBoolean] = None
 
   //TODO: an array is probably more efficient, even if less 'lazy' :
   protected var _orderByExpressions: () => List[()=>ExpressionNode] = null

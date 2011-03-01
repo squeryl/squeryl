@@ -319,7 +319,9 @@ class SchoolDbTestRun extends QueryTester {
     testPartialUpdate1
     
     testOptimisticCC1
-    
+
+    testHavingClause
+
     testNVLFunction
     testDateOptionComparisonInWhereClause
     testDateComparisonInWhereClause
@@ -979,7 +981,16 @@ class SchoolDbTestRun extends QueryTester {
     passed('testPartialUpdateWithInclusionOperator)
   }
 
+  def testHavingClause = {
+    //The query here doesn't make much sense, we just test that valid SQL gets generated :
+    val q =
+      from(professors)(p=>
+        groupBy(p.id)
+        having(p.yearlySalary gt 75.0F)
+      ).toList
 
+    passed('testHavingClause)
+  }
   def testPartialUpdateWithSubQueryInSetClause = {
     //loggerOn
 

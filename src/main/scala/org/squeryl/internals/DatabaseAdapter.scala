@@ -137,7 +137,16 @@ trait DatabaseAdapter {
       }
       sw.pushPendingNextLine
     }
-    
+
+    if(! qen.havingClause.isEmpty) {
+      sw.write("Having")
+      sw.nextLine
+      sw.writeIndented {
+        sw.writeNodesWithSeparator(qen.havingClause.filter(e => ! e.inhibited), ",", true)
+      }
+      sw.pushPendingNextLine
+    }
+
     if(! qen.orderByClause.isEmpty && qen.parent == None) {
       sw.write("Order By")
       sw.nextLine
