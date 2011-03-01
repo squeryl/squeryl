@@ -60,7 +60,7 @@ trait WhereState
 }
 
 trait HavingState[G]
-    extends ComputeMeasuresSignaturesFromGroupByState[G] {
+    extends ComputeMeasuresSignaturesFromGroupByState[G]  {
   self: GroupQueryYield[G] =>
 }
 
@@ -76,7 +76,7 @@ trait GroupByState[K]
   with OrderBySignatures[Group[K]] {
   self: GroupQueryYield[K] =>
 
-  def having(b: =>TypedExpressionNode[LogicalBoolean]): HavingState[K] = {
+  def having(b: => LogicalBoolean) = {
     _havingClause = Some(b _)
     this
   }
