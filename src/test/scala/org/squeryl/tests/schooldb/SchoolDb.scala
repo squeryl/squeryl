@@ -327,6 +327,8 @@ class SchoolDbTestRun extends QueryTester {
     testDateComparisonInWhereClause
 
     testMetaData
+
+    testInOpWithStringList
     
     testInstance
     //logQueries = true
@@ -397,7 +399,20 @@ class SchoolDbTestRun extends QueryTester {
     passed('blobTest)
   }
 
-  def testLeftOuterJoin1 {
+  def testInOpWithStringList = {
+    import testInstance._
+    val r =
+      from(students)(s=>
+        where(s.name in Seq("Xiao", "Georgi"))
+        select(s.id)
+      ).toSet
+
+    assertEquals(Set(xiao.id,georgi.id), r, 'testInOpWithStringList)
+
+    passed('testInOpWithStringList)
+  }
+
+  def testLeftOuterJoin1 = {
     import testInstance._ 
 
     //loggerOn
