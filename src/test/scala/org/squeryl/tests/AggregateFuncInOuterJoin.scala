@@ -89,21 +89,26 @@ class LeftJoinTest extends SpecificationWithJUnit {
          on (m.id === sq.map(_.key))
        )
 
-     val res = transaction { mainquery.toList }
+     val res = transaction {
+       mainquery.map(e =>
+         if(e._2 == None) None
+         else e._2.get.measures
+       ).toSeq
+     }
 
      res.size must beEqualTo(12)
-     res(0)._2.get.measures must beEqualTo(Some(60))
-     res(1)._2 must beEqualTo(None)
-     res(2)._2 must beEqualTo(None)
-     res(3)._2 must beEqualTo(None)
-     res(4)._2 must beEqualTo(Some(14))
-     res(5)._2 must beEqualTo(None)
-     res(6)._2 must beEqualTo(None)
-     res(7)._2 must beEqualTo(None)
-     res(8)._2 must beEqualTo(None)
-     res(9)._2 must beEqualTo(None)
-     res(10)._2 must beEqualTo(None)
-     res(11)._2 must beEqualTo(None)
+     res(0) must beEqualTo(Some(60))
+     res(1) must beEqualTo(None)
+     res(2) must beEqualTo(None)
+     res(3) must beEqualTo(None)
+     res(4) must beEqualTo(Some(15))
+     res(5) must beEqualTo(None)
+     res(6) must beEqualTo(None)
+     res(7) must beEqualTo(None)
+     res(8) must beEqualTo(None)
+     res(9) must beEqualTo(None)
+     res(10) must beEqualTo(None)
+     res(11) must beEqualTo(None)
    }
  }
 
