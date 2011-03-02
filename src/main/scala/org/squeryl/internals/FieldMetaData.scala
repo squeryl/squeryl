@@ -430,21 +430,6 @@ object FieldMetaData {
           case e:Exception => null
         }
 
-      val allAnnotations = {
-        annotations.toIterable ++
-        Seq(field, getter, setter).flatMap(_.flatMap(m => Option(m.getAnnotations)))
-      }
-      
-      if (v == null) {
-        // Use the @OptionType(classOf[T]) annotation to infer the Option[T] fields' T parameter
-        for (optionType <- (allAnnotations collect { case a: org.squeryl.annotations.OptionType => a }).headOption) 
-        {
-          v = Option(createDefaultValue(parentMetaData.clasz, optionType.value, colAnnotation))
-          if (v == None)
-            v = null
-        }
-      }
-
       if(v == null)
         error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
 
@@ -467,7 +452,7 @@ object FieldMetaData {
         else
           typeOfFieldOrTypeOfOption
 
-      val meta = new FieldMetaData(
+      new FieldMetaData(
         parentMetaData,
         name,
         typeOfFieldOrTypeOfOption,
@@ -480,22 +465,6 @@ object FieldMetaData {
         colAnnotation,
         isOptimisticCounter,
         constructorSuppliedDefaultValue)
-      
-      def strOpt(s: String) = if (s == "") None else Option(s)
-      
-      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.Indexed => a }).headOption)
-        meta._addColumnAttribute(Indexed(strOpt(a.value)))
-      
-      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.PrimaryKey => a }).headOption)
-        meta._addColumnAttribute(PrimaryKey())
-        
-      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.AutoIncremented => a }).headOption)
-        meta._addColumnAttribute(AutoIncremented(strOpt(a.value)))
-        
-      for (a <- (allAnnotations collect { case a: org.squeryl.annotations.Unique => a }).headOption)
-        meta._addColumnAttribute(Unique())
-        
-      meta
     }
   }
 
@@ -571,7 +540,7 @@ object FieldMetaData {
     def handleStringType(fmd: Option[FieldMetaData])  = ""
     def handleBooleanType = new java.lang.Boolean(false)
     def handleDoubleType = new java.lang.Double(0.0)
-    def handleDateType = new java.sql.Date(0)
+    def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)

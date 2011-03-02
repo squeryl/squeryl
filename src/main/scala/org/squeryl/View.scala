@@ -56,30 +56,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   private [squeryl] def findFieldMetaDataForProperty(name: String) = posoMetaData.findFieldMetaDataForProperty(name)
 
   val posoMetaData = new PosoMetaData(classOfT, schema, this)
-  
-  def toString(row: T) = {
-    classOfT.getSimpleName + "(" +
-    posoMetaData.fieldsMetaData.map(fmd => {
-      fmd.nameOfProperty + " = " + 
-      ( 
-        try {
-          fmd.get(row.asInstanceOf[AnyRef]) match {
-            case null => "null"
-            case v: String => "\"" + v.replaceAll("\\\\", "\\\\").replaceAll("\"", "\\\"") + "\""
-            case v: java.lang.Long => v + "L"
-            case v: java.lang.Float => v + "f"
-            case v: java.lang.Short => v + ": Short"
-            case v: java.lang.Byte => v + ": Byte"
-            case v: java.lang.Character => "'" + v.toString.replaceAll("'", "\\'") + "'"
-            case v: java.sql.Timestamp => "new Timestamp(" + v.getTime + ") /* " + v + "*/"
-            case v: java.util.Date => "new Date(" + v.getTime + ") /* " + v + "*/"
-            case v => v.toString
-          }
-        } catch { case _ => "?" }
-      )
-    }).mkString(", ") + ")"
-  }
-  
+
   private [squeryl] def allFieldsMetaData: Iterable[FieldMetaData] = posoMetaData.fieldsMetaData
 
   private val _emptyArray = new Array[Object](0);
