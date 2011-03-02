@@ -61,9 +61,8 @@ The SQL will be :
     (title = ?)
 ]]></script>
 
-A partial update must have a where clause, otherwise
-you'll get a compilation error. This is to prevent you
-from updating all rows in a table by accident.
+A partial update must have a where clause, otherwise you'll get a compilation error. 
+This is to prevent you from updating all rows in a table by accident.
 
 To update all rows use the setAll function :
                  
