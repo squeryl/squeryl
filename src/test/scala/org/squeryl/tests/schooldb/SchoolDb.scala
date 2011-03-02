@@ -356,6 +356,8 @@ class SchoolDbTestRun extends QueryTester {
 
     testLikeOperator
     testNotOperator
+    
+    testUpdateSetAll
 
     drop
   }
@@ -1350,6 +1352,16 @@ class SchoolDbTestRun extends QueryTester {
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
     println('testNewOuterJoin3 + " passed.")
+  }
+  
+  def testUpdateSetAll {
+    import testInstance._
+    update(students)(s => setAll(s.age := Some(30)))
+    
+    val expected:Long = from(students)(s => compute(count))
+    val is:Long = from(students)(s => where(s.age === 30)compute(count))
+    
+    assert(expected == is, "expected :\n " + expected + "\ngot : \n " + is)
   }
 }
 

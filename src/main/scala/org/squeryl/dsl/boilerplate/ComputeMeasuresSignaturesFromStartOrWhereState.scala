@@ -19,7 +19,7 @@ import org.squeryl.dsl.fsm.{MeasuresQueryYield, QueryElements, ComputeStateStart
 import org.squeryl.dsl.ast.{TypedExpressionNode}
 
 trait ComputeMeasuresSignaturesFromStartOrWhereState {
-  self: QueryElements =>
+  self: QueryElements[_] =>
 
   def compute[T1](e1: =>TypedExpressionNode[T1]): ComputeStateStartOrWhereState[T1] =
     new MeasuresQueryYield[T1](
