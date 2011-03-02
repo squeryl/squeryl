@@ -17,17 +17,17 @@ package org.squeryl.dsl
 
 import ast._
 import boilerplate._
-import fsm.{QueryElements, StartState, WhereState}
+import fsm.{QueryElements, StartState, WhereState, Conditioned, Unconditioned}
 import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
 
 trait QueryDsl
   extends DslFactory
-  with WhereState
+  with WhereState[Unconditioned]
   with ComputeMeasuresSignaturesFromStartOrWhereState
   with StartState
-  with QueryElements
+  with QueryElements[Unconditioned]
   with JoinSignatures
   with FromSignatures {
   outerQueryDsl =>
@@ -116,11 +116,11 @@ trait QueryDsl
   
   implicit def __thisDsl:QueryDsl = this  
 
-  private class QueryElementsImpl(override val whereClause: Option[()=>LogicalBoolean])
-    extends QueryElements
+  private class QueryElementsImpl[Cond](override val whereClause: Option[()=>LogicalBoolean])
+    extends QueryElements[Cond]
 
-  def where(b: =>LogicalBoolean): WhereState =
-    new QueryElementsImpl(Some(b _))
+  def where(b: =>LogicalBoolean): WhereState[Conditioned] =
+    new QueryElementsImpl[Conditioned](Some(b _))
 
   def &[A](i: =>TypedExpressionNode[A]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
