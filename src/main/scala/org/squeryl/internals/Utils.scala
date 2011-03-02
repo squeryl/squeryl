@@ -53,7 +53,7 @@ object Utils {
     catch {case e:SQLException => {}}
 
 
-  private class DummyQueryElements(override val whereClause: Option[()=>LogicalBoolean]) extends QueryElements
+  private class DummyQueryElements[Cond](override val whereClause: Option[()=>LogicalBoolean]) extends QueryElements[Cond]
   
   
   private class DummyQuery[A,B](q: Queryable[A],f: A=>B, g: B=>Unit) extends Query1[A,Int](
