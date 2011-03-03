@@ -342,7 +342,7 @@ class ConstantExpressionNodeList[T](val value: Traversable[T]) extends Expressio
     if(sw.isForDisplay)
       sw.write(this.value.map(e=>"'" +e+"'").mkString(","))
     else {
-      sw.write(this.value.map(z => "?").mkString(","))
+      sw.write(this.value.toSeq.map(z => "?").mkString(","))
       this.value.foreach(z => sw.addParam(z.asInstanceOf[AnyRef]))
     }
 }
