@@ -324,6 +324,8 @@ class MusicDbTestRun extends QueryTester {
   def working = {
     import testInstance._
 
+    testTimestampPartialUpdate
+
     testAggregateQueryOnRightHandSideOfInOperator
 
     testAggregateComputeInSubQuery
@@ -580,6 +582,31 @@ class MusicDbTestRun extends QueryTester {
     cal.setTime(t)
     cal.roll(partToRoll, rollAmount);
     new Timestamp(cal.getTimeInMillis)
+  }
+
+  def testTimestampPartialUpdate = {
+    import testInstance._
+
+    var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+    // round to 0 second :
+    mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
+
+
+    val cal = Calendar.getInstance
+    cal.setTime(mongo.timeOfLastUpdate)
+    cal.roll(Calendar.SECOND, 12);
+
+    update(artists)(a=>
+      where(a.id === mongo.id)
+      set(a.timeOfLastUpdate := new Timestamp(cal.getTimeInMillis))
+    )
+
+    val res = artists.where(_.firstName === mongoSantaMaria.firstName).single.timeOfLastUpdate
+    //val res = mongo.timeOfLastUpdate
+
+    assertEquals(cal.getTime, res, 'testTimestampPartialUpdate)
+
+    passed('testTimestampPartialUpdate)
   }
 
   def testTimestampDownToMillis = {
