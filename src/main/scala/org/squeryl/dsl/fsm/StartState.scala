@@ -19,17 +19,19 @@ import org.squeryl.dsl._
 import ast.{TypedExpressionNode, LogicalBoolean, UpdateStatement, UpdateAssignment}
 import boilerplate.{ComputeMeasuresSignaturesFromStartOrWhereState, ComputeMeasuresSignaturesFromGroupByState, GroupBySignatures, OrderBySignatures}
 
+abstract sealed class Conditioned
+abstract sealed class Unconditioned
 
 trait StartState
   extends GroupBySignatures
   with ComputeMeasuresSignaturesFromStartOrWhereState {
-  self: QueryElements =>
+  self: QueryElements[_] =>
 
   def select[R](yieldClosure: =>R): SelectState[R]
 }
 
-trait QueryElements
-  extends WhereState
+trait QueryElements[Cond]
+  extends WhereState[Cond]
     with ComputeMeasuresSignaturesFromStartOrWhereState
     with StartState {
 
@@ -47,20 +49,23 @@ trait ComputeStateStartOrWhereState[M]
   self: MeasuresQueryYield[M] =>
 }
 
-trait WhereState
+trait WhereState[Cond]
   extends GroupBySignatures 
   with ComputeMeasuresSignaturesFromStartOrWhereState {
-  self: QueryElements =>
+  self: QueryElements[_] =>
 
   def select[R](yieldClosure: =>R): SelectState[R] =
     new BaseQueryYield[R](this, yieldClosure _)
 
-  def set(updateAssignments: UpdateAssignment*) =
-    new UpdateStatement(whereClause, updateAssignments )
+  def set(updateAssignments: UpdateAssignment*)(implicit cond: Cond =:= Conditioned) =
+    new UpdateStatement(whereClause, updateAssignments)
+  
+  def setAll(updateAssignments: UpdateAssignment*)(implicit cond: Cond =:= Unconditioned) =
+    new UpdateStatement(whereClause, updateAssignments)    
 }
 
 trait HavingState[G]
-    extends ComputeMeasuresSignaturesFromGroupByState[G] {
+    extends ComputeMeasuresSignaturesFromGroupByState[G]  {
   self: GroupQueryYield[G] =>
 }
 
@@ -76,7 +81,7 @@ trait GroupByState[K]
   with OrderBySignatures[Group[K]] {
   self: GroupQueryYield[K] =>
 
-  def having(b: =>TypedExpressionNode[LogicalBoolean]): HavingState[K] = {
+  def having(b: => LogicalBoolean) = {
     _havingClause = Some(b _)
     this
   }

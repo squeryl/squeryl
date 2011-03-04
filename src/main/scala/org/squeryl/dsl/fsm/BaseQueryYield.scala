@@ -23,7 +23,7 @@ import java.sql.ResultSet
 
 
 class BaseQueryYield[G]
-  (val queryElementzz: QueryElements, val selectClosure: ()=>G)
+  (val queryElementzz: QueryElements[_], val selectClosure: ()=>G)
   extends SelectState[G]
     with OrderBySignatures[G]
     with QueryYield[G] {
@@ -52,7 +52,7 @@ class BaseQueryYield[G]
     (m, nodes)
   }
 
-  protected var _havingClause: Option[()=>TypedExpressionNode[LogicalBoolean]] = None
+  protected var _havingClause: Option[()=>LogicalBoolean] = None
 
   //TODO: an array is probably more efficient, even if less 'lazy' :
   protected var _orderByExpressions: () => List[()=>ExpressionNode] = null
@@ -95,7 +95,7 @@ class BaseQueryYield[G]
 }
 
 class GroupQueryYield[K] (
-   _qe: QueryElements,
+   _qe: QueryElements[_],
    val groupByClauseClosure: ()=>List[TypedExpressionNode[_]]
   )
   extends BaseQueryYield[Group[K]](_qe, null)
@@ -130,7 +130,7 @@ class GroupQueryYield[K] (
 }
 
 class MeasuresQueryYield[M](
-   _qe: QueryElements,
+   _qe: QueryElements[_],
    _computeByClauseClosure: ()=>List[TypedExpressionNode[_]]
   )
   extends BaseQueryYield[Measures[M]](_qe, null)
@@ -161,7 +161,7 @@ class MeasuresQueryYield[M](
 }
 
 class GroupWithMeasuresQueryYield[K,M] (
-  _qe: QueryElements,
+  _qe: QueryElements[_],
   _groupByClauseClosure: ()=>List[TypedExpressionNode[_]],
   _computeClauseClosure: ()=>List[TypedExpressionNode[_]]
 )

@@ -324,12 +324,16 @@ class SchoolDbTestRun extends QueryTester {
     testPartialUpdate1
     
     testOptimisticCC1
-    
+
+    testHavingClause
+
     testNVLFunction
     testDateOptionComparisonInWhereClause
     testDateComparisonInWhereClause
 
     testMetaData
+
+    testInOpWithStringList
     
     testInstance
     //logQueries = true
@@ -357,6 +361,8 @@ class SchoolDbTestRun extends QueryTester {
 
     testLikeOperator
     testNotOperator
+    
+    testUpdateSetAll
 
     drop
   }
@@ -428,7 +434,20 @@ class SchoolDbTestRun extends QueryTester {
     passed('blobTest)
   }
 
-  def testLeftOuterJoin1 {
+  def testInOpWithStringList = {
+    import testInstance._
+    val r =
+      from(students)(s=>
+        where(s.name in Seq("Xiao", "Georgi"))
+        select(s.id)
+      ).toSet
+
+    assertEquals(Set(xiao.id,georgi.id), r, 'testInOpWithStringList)
+
+    passed('testInOpWithStringList)
+  }
+
+  def testLeftOuterJoin1 = {
     import testInstance._ 
 
     //loggerOn
@@ -1012,7 +1031,16 @@ class SchoolDbTestRun extends QueryTester {
     passed('testPartialUpdateWithInclusionOperator)
   }
 
+  def testHavingClause = {
+    //The query here doesn't make much sense, we just test that valid SQL gets generated :
+    val q =
+      from(professors)(p=>
+        groupBy(p.id)
+        having(p.yearlySalary gt 75.0F)
+      ).toList
 
+    passed('testHavingClause)
+  }
   def testPartialUpdateWithSubQueryInSetClause = {
     //loggerOn
 
@@ -1357,6 +1385,16 @@ class SchoolDbTestRun extends QueryTester {
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
     println('testNewOuterJoin3 + " passed.")
+  }
+  
+  def testUpdateSetAll {
+    import testInstance._
+    update(students)(s => setAll(s.age := Some(30)))
+    
+    val expected:Long = from(students)(s => compute(count))
+    val is:Long = from(students)(s => where(s.age === 30)compute(count))
+    
+    assert(expected == is, "expected :\n " + expected + "\ngot : \n " + is)
   }
 }
 
