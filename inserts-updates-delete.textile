@@ -61,7 +61,15 @@ The SQL will be :
     (title = ?)
 ]]></script>
 
+A partial update must have a where clause, otherwise you'll get a compilation error. 
+This is to prevent you from updating all rows in a table by accident.
 
+To update all rows use the setAll function :
+                 
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    update(songs)(s => setAll(s.year  := s.year.~ + 1))	
+]]></script>
+                 
 h2. Delete
 
 Delete is done either by key (when objects extend KeyedEntity[K]), or
