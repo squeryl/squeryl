@@ -20,7 +20,7 @@ import java.sql.Timestamp
 import org.squeryl.tests.QueryTester
 import org.squeryl._
 import adapters._
-import dsl.ast.BinaryOperatorNodeLogicalBoolean
+import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
 import java.util.{Date, Calendar}
 
@@ -55,7 +55,9 @@ class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId:
   def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
 }
 
-class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject
+class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
+  override def toString = id+ ":" + title
+}
 
 class MusicDb extends Schema with QueryTester {
 
@@ -109,10 +111,10 @@ class MusicDbTestRun extends QueryTester {
     val expectedSongCountPerAlbum = List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
   }
 
-  val basicSelectUsingWhereOnQueryable =
+  def basicSelectUsingWhereOnQueryable =
     artists.where(a=> a.id === testInstance.mongoSantaMaria.id)
 
-  val basicSelectUsingWhereOnQueryableNested =
+  def basicSelectUsingWhereOnQueryableNested =
     basicSelectUsingWhereOnQueryable.where(a=> a.id === testInstance.mongoSantaMaria.id)
 
   lazy val poncho =
@@ -269,6 +271,15 @@ class MusicDbTestRun extends QueryTester {
       orderBy(a.lastName desc)
     ).distinct
 
+  def songsFeaturingPonchoNestedInWhereWithString =
+    from(songs, artists)((s,a) =>
+      where(
+        s.title in from(songs)(s => where(s.id === 123) select(s.title))
+      )
+      select(s)
+      orderBy(s.title asc)
+    )
+
   def countCds(cds: Queryable[Cd]) =
     from(cds)(c => compute(count))
 
@@ -312,7 +323,15 @@ class MusicDbTestRun extends QueryTester {
 
   def working = {
     import testInstance._
-    
+
+    testTimestampPartialUpdate
+
+    testAggregateQueryOnRightHandSideOfInOperator
+
+    testAggregateComputeInSubQuery
+
+    testEnums
+
     val dbAdapter = Session.currentSession.databaseAdapter
     
     testOuterJoinWithSubQuery
@@ -565,6 +584,31 @@ class MusicDbTestRun extends QueryTester {
     new Timestamp(cal.getTimeInMillis)
   }
 
+  def testTimestampPartialUpdate = {
+    import testInstance._
+
+    var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
+    // round to 0 second :
+    mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
+
+
+    val cal = Calendar.getInstance
+    cal.setTime(mongo.timeOfLastUpdate)
+    cal.roll(Calendar.SECOND, 12);
+
+    update(artists)(a=>
+      where(a.id === mongo.id)
+      set(a.timeOfLastUpdate := new Timestamp(cal.getTimeInMillis))
+    )
+
+    val res = artists.where(_.firstName === mongoSantaMaria.firstName).single.timeOfLastUpdate
+    //val res = mongo.timeOfLastUpdate
+
+    assertEquals(cal.getTime, res, 'testTimestampPartialUpdate)
+
+    passed('testTimestampPartialUpdate)
+  }
+
   def testTimestampDownToMillis = {
 
     // Oracle : http://forums.oracle.com/forums/thread.jspa?threadID=239634
@@ -787,6 +831,16 @@ class MusicDbTestRun extends QueryTester {
   
   def testEnums = {
 
+    val testAssemblaIssue9 =
+      from(songs)(s =>
+        where(s.genre in (
+           from(songs)(s2 => select(s2.genre))
+        ))
+        select(s.genre)
+      )
+
+    testAssemblaIssue9.map(_.id).toSet
+
     //val md = songs.posoMetaData.findFieldMetaDataForProperty("genre").get
     //val z = md.canonicalEnumerationValueFor(2)
 
@@ -848,11 +902,9 @@ class MusicDbTestRun extends QueryTester {
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(Some(Genre.Latin), wmm.secondaryGenre, "testEnum failed")    
+    assertEquals(Some(Genre.Latin), wmm.secondaryGenre, "testEnum failed")
 
     passed('testEnums)
-
-    //val q2 = songs.where(_.genre === Tempo.Allegro)
   }
 
   def testDynamicWhereClause1 = {
@@ -909,8 +961,75 @@ class MusicDbTestRun extends QueryTester {
     assertEquals(allArtists, q, 'testNotInTautology)
 
     passed('testNotInTautology)
-  }  
+  }
 
+  def testAggregateQueryOnRightHandSideOfInOperator = {
+
+    val q1 =
+      from(cds)(cd =>
+        compute(min(cd.id))
+      )
+
+    val r1 = cds.where(_.id in q1).single
+
+    assertEquals(congaBlue.id, r1.id, 'testAggregateQueryOnRightHandSideOfInOperator)
+
+    val q2 =
+      from(cds)(cd =>
+        compute(min(cd.title))
+      )
+
+    val r2 = cds.where(_.title in q2).single
+//    println(q2.statement)
+//    println(cds.toList)
+//    println(cds.where(_.title in q2).statement)
+    assertEquals(congaBlue.title, r2.title, 'testAggregateQueryOnRightHandSideOfInOperator)
+
+    // should compile (valid SQL even though phony...) :
+    artists.where(_.age in from(artists)(a=> compute(count)))
+
+    // should compile, since SQL allows comparing nullable cols against non nullable ones :
+    artists.where(_.id in from(artists)(a=> compute(max(a.age))))
+
+    //shouldn't compile :
+    //artists.where(_.age in from(artists)(a=> compute(max(a.name))))
+
+    passed('testAggregateQueryOnRightHandSideOfInOperator)
+  }
+
+  def testAggregateComputeInSubQuery = {
+
+    val q1 =
+      from(cds)(cd =>
+        compute(min(cd.id))
+      )
+
+    val q2 =
+      from(cds, q1)((cd, q)=>
+        where(cd.id === q.measures.get)
+        select(cd)
+      )
+
+    val r1 = q2.single
+
+    assertEquals(congaBlue.id, r1.id, 'testAggregateComputeInSubQuery)
+
+
+    val q3 =
+      from(cds)(cd =>
+        groupBy(cd.id)
+      )
+
+    val q4 =
+      from(cds, q3)((cd, q)=>
+        where(cd.id === q.key)
+        select(cd)
+      )
+    // should run without exception against the Db :
+    q4.toList
+
+    passed('testAggregateComputeInSubQuery)
+  }
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {
 //

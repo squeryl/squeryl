@@ -72,6 +72,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get).toList,  
       whereClause.toList,
       groupByClause.toList,
+      havingClause.toList,
       orderByClause.toList      
     ).flatten
 

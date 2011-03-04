@@ -19,7 +19,7 @@ import org.squeryl.dsl.fsm.{GroupQueryYield, QueryElements, GroupByState}
 import org.squeryl.dsl.ast.{TypedExpressionNode}
 
 trait GroupBySignatures {
-  self: QueryElements =>
+  self: QueryElements[_] =>
 
   def groupBy[T1](e1: =>TypedExpressionNode[T1]): GroupByState[T1] =
     new GroupQueryYield[T1](this,

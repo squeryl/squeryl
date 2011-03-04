@@ -106,11 +106,8 @@ trait NumericalExpression[A] extends TypedExpressionNode[A] {
 
   def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
-  def in[B <% NumericalExpression[_]](e: Query[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in", true)
-  def notIn[B <% NumericalExpression[_]](e: Query[B]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in", true)
-
-  def in(l: ListNumerical) = new InListExpression(this, l, true)
-  def notIn(l: ListNumerical) = new InListExpression(this, l, false)
+  def in[B <% NumericalExpression[_]](e: RightHandSideOfIn[B]) = new InclusionOperator(this, e.toIn)
+  def notIn[B <% NumericalExpression[_]](e: RightHandSideOfIn[B]) = new ExclusionOperator(this, e.toNotIn)
 
   def between[B,C](b: NumericalExpression[B], c: NumericalExpression[C]) = new BetweenExpression(this, b, c)
 
@@ -141,8 +138,8 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
 
   def isNotNull = new PostfixOperatorNode("is not null", this) with LogicalBoolean
 
-  def in(e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "in", true)
-  def notIn(e: Query[A]) = new BinaryOperatorNodeLogicalBoolean(this, e.ast, "not in", true)
+  def in(e: RightHandSideOfIn[A]) = new InclusionOperator(this, e.toIn)
+  def notIn(e: RightHandSideOfIn[A]) = new ExclusionOperator(this, e.toNotIn)
 
   def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
 
@@ -165,10 +162,6 @@ trait EnumExpression[A] extends NonNumericalExpression[A] {
 trait StringExpression[A] extends NonNumericalExpression[A] {
   outer =>
   
-  def in(e: ListString) = new InListExpression(this, e, true)
-  def notIn(e: ListString) = new InListExpression(this, e, false)
-
-  //def between(lower: BaseScalarString, upper: BaseScalarString): LogicalBoolean = error("implement me") //new BinaryOperatorNode(this, lower, div) with LogicalBoolean
   def like(e: StringExpression[_])  = new BinaryOperatorNodeLogicalBoolean(this, e, "like")
 
   def regex(pattern: String) = new FunctionNode(pattern, this) with LogicalBoolean {
@@ -181,9 +174,6 @@ trait StringExpression[A] extends NonNumericalExpression[A] {
 }
 
 trait DateExpression[A] extends NonNumericalExpression[A] {
-
-  def in(e: ListDate) = new InListExpression(this, e, true)
-  def notIn(e: ListDate) = new InListExpression(this, e, false)
 
   def ~ = this
 }

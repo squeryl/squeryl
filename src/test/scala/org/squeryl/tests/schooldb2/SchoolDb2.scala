@@ -176,6 +176,9 @@ class SchoolDb2Tests extends QueryTester {
 
   def testAll = {
 
+    testInFromSeq
+    testInFromSet
+
     testIssue68
 
     val entry = entries.insert(Entry("An entry"))
@@ -412,6 +415,17 @@ class SchoolDb2Tests extends QueryTester {
 
     bs.deleteAll
     passed('testIssue68)
+  }
+
+  def testInFromSet = {
+    val set = Set("foo", "bar", "baz")
+    from(entries)(e => where(e.text.in(set))select(e)).toList
+    passed('testInFromSet)
+  }
+  def testInFromSeq = {
+    val set = Set("foo", "bar", "baz").toSeq
+    from(entries)(e => where(e.text.in(set))select(e)).toList
+    passed('testInFromSeq)
   }
 }
 
