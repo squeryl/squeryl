@@ -156,7 +156,7 @@
         <span class="name">ConstantExpressionNodeList</span>
         <span class="tparams">[<span name="T">T</span>]</span>
         
-        <span class="result"> extends ExpressionNode with ListExpressionNode</span>
+        <span class="result"> extends ExpressionNode</span>
       </span>
       </a></h4>
       
@@ -172,12 +172,37 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.DummyExpressionHolder">
+      <a id="DummyExpressionHolder:DummyExpressionHolder"></a>
+      <h4 class="signature"><a href="DummyExpressionHolder.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">DummyExpressionHolder</span>
+        
+        
+        <span class="result"> extends ExpressionNode</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Update, delete and insert statement are not built with AST nodes,
+(for example Table[].</p>
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.EqualityExpression">
       <a id="EqualityExpression:EqualityExpression"></a>
       <h4 class="signature"><a href="EqualityExpression.html">
       <span class="kind">class</span>
       <span class="symbol">
         <span class="name">EqualityExpression</span>
+        
+        
+        <span class="result"> extends BinaryOperatorNodeLogicalBoolean</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.ExclusionOperator">
+      <a id="ExclusionOperator:ExclusionOperator"></a>
+      <h4 class="signature"><a href="ExclusionOperator.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">ExclusionOperator</span>
         
         
         <span class="result"> extends BinaryOperatorNodeLogicalBoolean</span>
@@ -245,12 +270,12 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.InListExpression">
-      <a id="InListExpression:InListExpression"></a>
-      <h4 class="signature"><a href="InListExpression.html">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.InclusionOperator">
+      <a id="InclusionOperator:InclusionOperator"></a>
+      <h4 class="signature"><a href="InclusionOperator.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">InListExpression</span>
+        <span class="name">InclusionOperator</span>
         
         
         <span class="result"> extends BinaryOperatorNodeLogicalBoolean</span>
@@ -269,42 +294,6 @@
       </span>
       </a></h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListBigDecimal">
-      <a id="ListBigDecimal:ListBigDecimal"></a>
-      <h4 class="signature"><a href="ListBigDecimal.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListBigDecimal</span>
-        
-        
-        <span class="result"> extends ListNumerical</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListDate">
-      <a id="ListDate:ListDate"></a>
-      <h4 class="signature"><a href="ListDate.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListDate</span>
-        
-        
-        <span class="result"> extends ListExpressionNode</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListDouble">
-      <a id="ListDouble:ListDouble"></a>
-      <h4 class="signature"><a href="ListDouble.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListDouble</span>
-        
-        
-        <span class="result"> extends ListNumerical</span>
-      </span>
-      </a></h4>
-      
     </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListExpressionNode">
       <a id="ListExpressionNode:ListExpressionNode"></a>
       <h4 class="signature"><a href="ListExpressionNode.html">
@@ -314,66 +303,6 @@
         
         
         <span class="result"> extends ExpressionNode</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListFloat">
-      <a id="ListFloat:ListFloat"></a>
-      <h4 class="signature"><a href="ListFloat.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListFloat</span>
-        
-        
-        <span class="result"> extends ListNumerical</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListInt">
-      <a id="ListInt:ListInt"></a>
-      <h4 class="signature"><a href="ListInt.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListInt</span>
-        
-        
-        <span class="result"> extends ListNumerical</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListLong">
-      <a id="ListLong:ListLong"></a>
-      <h4 class="signature"><a href="ListLong.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListLong</span>
-        
-        
-        <span class="result"> extends ListNumerical</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListNumerical">
-      <a id="ListNumerical:ListNumerical"></a>
-      <h4 class="signature"><a href="ListNumerical.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListNumerical</span>
-        
-        
-        <span class="result"> extends ListExpressionNode</span>
-      </span>
-      </a></h4>
-      
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.ListString">
-      <a id="ListString:ListString"></a>
-      <h4 class="signature"><a href="ListString.html">
-      <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ListString</span>
-        
-        
-        <span class="result"> extends ListExpressionNode</span>
       </span>
       </a></h4>
       
@@ -482,6 +411,18 @@
         
         
         <span class="result"> extends ExpressionNode with UniqueIdInAliaseRequired</span>
+      </span>
+      </a></h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.RightHandSideOfIn">
+      <a id="RightHandSideOfIn:RightHandSideOfIn[A]"></a>
+      <h4 class="signature"><a href="RightHandSideOfIn.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">RightHandSideOfIn</span>
+        <span class="tparams">[<span name="A">A</span>]</span>
+        
+        <span class="result"> extends ExpressionNode</span>
       </span>
       </a></h4>
       

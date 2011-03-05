@@ -247,6 +247,23 @@
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#:=">
+      <a id=":=(Query[Measures[LongType]]):UpdateAssignment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">:=</span>
+        
+        <span class="params">(<span name="q">q: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<a href="Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[LongType]]</span>)</span>
+        <span class="result">: <a href="ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#:=">
       <a id=":=[B](B)((B) ⇒ TypedExpressionNode[LongType]):UpdateAssignment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -811,31 +828,14 @@ to verify that the behavior is consistent with the <code>equals</code> method.
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NumericalExpression#in">
-      <a id="in(ListNumerical):InListExpression"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">in</span>
-        
-        <span class="params">(<span name="l">l: <a href="ast/ListNumerical.html" class="extype" name="org.squeryl.dsl.ast.ListNumerical">ListNumerical</a></span>)</span>
-        <span class="result">: <a href="ast/InListExpression.html" class="extype" name="org.squeryl.dsl.ast.InListExpression">InListExpression</a></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>
-        </div></div>
-          
-    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NumericalExpression#in">
-      <a id="in[B](Query[B])((B) ⇒ org.squeryl.dsl.NumericalExpression[_]):BinaryOperatorNodeLogicalBoolean"></a>
+      <a id="in[B](RightHandSideOfIn[B])((B) ⇒ org.squeryl.dsl.NumericalExpression[_]):InclusionOperator"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">in</span>
         <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ org.squeryl.dsl.NumericalExpression[_]</span>)</span>
-        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="params">(<span name="e">e: <a href="ast/RightHandSideOfIn.html" class="extype" name="org.squeryl.dsl.ast.RightHandSideOfIn">RightHandSideOfIn</a>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ org.squeryl.dsl.NumericalExpression[_]</span>)</span>
+        <span class="result">: <a href="ast/InclusionOperator.html" class="extype" name="org.squeryl.dsl.ast.InclusionOperator">InclusionOperator</a></span>
       </span>
       </h4>
       
@@ -1082,31 +1082,14 @@ possible to check whether the contents of the list are of the requested typed.
           </div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NumericalExpression#notIn">
-      <a id="notIn(ListNumerical):InListExpression"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">notIn</span>
-        
-        <span class="params">(<span name="l">l: <a href="ast/ListNumerical.html" class="extype" name="org.squeryl.dsl.ast.ListNumerical">ListNumerical</a></span>)</span>
-        <span class="result">: <a href="ast/InListExpression.html" class="extype" name="org.squeryl.dsl.ast.InListExpression">InListExpression</a></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a href="NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>
-        </div></div>
-          
-    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NumericalExpression#notIn">
-      <a id="notIn[B](Query[B])((B) ⇒ org.squeryl.dsl.NumericalExpression[_]):BinaryOperatorNodeLogicalBoolean"></a>
+      <a id="notIn[B](RightHandSideOfIn[B])((B) ⇒ org.squeryl.dsl.NumericalExpression[_]):ExclusionOperator"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">notIn</span>
         <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ org.squeryl.dsl.NumericalExpression[_]</span>)</span>
-        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="params">(<span name="e">e: <a href="ast/RightHandSideOfIn.html" class="extype" name="org.squeryl.dsl.ast.RightHandSideOfIn">RightHandSideOfIn</a>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (B) ⇒ org.squeryl.dsl.NumericalExpression[_]</span>)</span>
+        <span class="result">: <a href="ast/ExclusionOperator.html" class="extype" name="org.squeryl.dsl.ast.ExclusionOperator">ExclusionOperator</a></span>
       </span>
       </h4>
       

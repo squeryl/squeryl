@@ -68,7 +68,7 @@
       <span class="symbol">
         <span class="name">BaseQueryYield</span>
         
-        <span class="params">(<span name="queryElementzz">queryElementzz: <a href="QueryElements.html" class="extype" name="org.squeryl.dsl.fsm.QueryElements">QueryElements</a></span>, <span name="selectClosure">selectClosure: () ⇒ G</span>)</span>
+        <span class="params">(<span name="queryElementzz">queryElementzz: org.squeryl.dsl.fsm.QueryElements[_]</span>, <span name="selectClosure">selectClosure: () ⇒ G</span>)</span>
         
       </span>
       </h4>
@@ -266,14 +266,14 @@
         </div></div>
           
     </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.fsm.BaseQueryYield#_havingClause">
-      <a id="_havingClause:Option[() ⇒ TypedExpressionNode[LogicalBoolean]]"></a>
+      <a id="_havingClause:Option[() ⇒ LogicalBoolean]"></a>
       <h4 class="signature">
       <span class="kind">var</span>
       <span class="symbol">
         <span class="name">_havingClause</span>
         
         
-        <span class="result">: <span class="extype" name="scala.Option">Option</span>[() ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a>]]</span>
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[() ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a>]</span>
       </span>
       </h4>
       
@@ -291,6 +291,23 @@
         
         
         <span class="result">: () ⇒ List[() ⇒ <a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: protected 
+        </div></div>
+          
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.fsm.BaseQueryYield#_sTuple1ToValue">
+      <a id="_sTuple1ToValue[B](B):B"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">_sTuple1ToValue</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="b">b: B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -926,14 +943,14 @@ possible to check whether the contents of the list are of the requested typed.
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.BaseQueryYield#queryElementzz">
-      <a id="queryElementzz:QueryElements"></a>
+      <a id="queryElementzz:org.squeryl.dsl.fsm.QueryElements[_]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
         <span class="name">queryElementzz</span>
         
         
-        <span class="result">: <a href="QueryElements.html" class="extype" name="org.squeryl.dsl.fsm.QueryElements">QueryElements</a></span>
+        <span class="result">: org.squeryl.dsl.fsm.QueryElements[_]</span>
       </span>
       </h4>
       

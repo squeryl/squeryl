@@ -17,12 +17,12 @@
       <p id="owner"><a href="../package.html" class="extype" name="org">org</a>.<a href="package.html" class="extype" name="org.squeryl">squeryl</a></p>
 
       <div id="definition">
-        <img src="../../lib/trait_big.png" />
+        <img src="../../lib/class_big.png" />
         <h1>Session</h1>
       </div>
 
       <h4 class="signature" id="signature">
-      <span class="kind">trait</span>
+      <span class="kind">class</span>
       <span class="symbol">
         <span class="name">Session</span>
         
@@ -59,7 +59,22 @@
             </div>
         </div>
 
+        <div class="members" id="constructors">
+              <h3>Instance constructors</h3>
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.Session#this">
+      <a id="this:Session"></a>
+      <h4 class="signature">
+      <span class="kind">new</span>
+      <span class="symbol">
+        <span class="name">Session</span>
         
+        <span class="params">(<span name="connection">connection: <span class="extype" name="java.sql.Connection">Connection</span></span>, <span name="databaseAdapter">databaseAdapter: <a href="internals/DatabaseAdapter.html" class="extype" name="org.squeryl.internals.DatabaseAdapter">DatabaseAdapter</a></span>, <span name="statisticsListener">statisticsListener: <span class="extype" name="scala.Option">Option</span>[<a href="logging/StatisticsListener.html" class="extype" name="org.squeryl.logging.StatisticsListener">StatisticsListener</a>] =<span class="symbol"></span></span>)</span>
+        
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -298,10 +313,10 @@ part of compilation it is not possible to check whether the contents of the list
       </span>
       </h4>
       
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.Session#connection">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Session#connection">
       <a id="connection:Connection"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol">
         <span class="name">connection</span>
         
@@ -310,15 +325,10 @@ part of compilation it is not possible to check whether the contents of the list
       </span>
       </h4>
       
-            
-            <div class="fullcomment"><div class="block">
-          attributes: abstract 
-        </div></div>
-          
-    </li><li visbl="pub" data-isabs="true" name="org.squeryl.Session#databaseAdapter">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Session#databaseAdapter">
       <a id="databaseAdapter:DatabaseAdapter"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol">
         <span class="name">databaseAdapter</span>
         
@@ -327,11 +337,6 @@ part of compilation it is not possible to check whether the contents of the list
       </span>
       </h4>
       
-            
-            <div class="fullcomment"><div class="block">
-          attributes: abstract 
-        </div></div>
-          
     </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -526,6 +531,18 @@ possible to check whether the contents of the list are of the requested typed.
       </span>
       </h4>
       
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Session#logUnclosedStatements">
+      <a id="logUnclosedStatements:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">var</span>
+      <span class="symbol">
+        <span class="name">logUnclosedStatements</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.Session#logger_=">
       <a id="logger_=((String) ⇒ Unit):Unit"></a>
       <h4 class="signature">
@@ -617,6 +634,18 @@ possible to check whether the contents of the list are of the requested typed.
         
         <span class="params">(<span name="f">f: (String) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span>
         <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Session#statisticsListener">
+      <a id="statisticsListener:Option[StatisticsListener]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">statisticsListener</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="logging/StatisticsListener.html" class="extype" name="org.squeryl.logging.StatisticsListener">StatisticsListener</a>]</span>
       </span>
       </h4>
       

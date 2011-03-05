@@ -641,6 +641,23 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#definitionSite">
+      <a id="definitionSite:Option[StackTraceElement]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">definitionSite</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
+        </div></div>
+          
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#distinct">
       <a id="distinct:AbstractQuery[R]"></a>
       <h4 class="signature">
@@ -1347,14 +1364,14 @@ possible to check whether the contents of the list are of the requested typed.
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#iterator">
-      <a id="iterator:Iterator[R]"></a>
+      <a id="iterator:Iterator[R] with Closeable"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">iterator</span>
         
         
-        <span class="result">: Iterator[R]</span>
+        <span class="result">: Iterator[R] with <span class="extype" name="java.io.Closeable">Closeable</span></span>
       </span>
       </h4>
       

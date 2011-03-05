@@ -168,6 +168,23 @@
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#:=">
+      <a id=":=(Query[Measures[A]]):UpdateAssignment"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">:=</span>
+        
+        <span class="params">(<span name="q">q: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<a href="Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[A]]</span>)</span>
+        <span class="result">: <a href="ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.ast.TypedExpressionNode#:=">
       <a id=":=[B](B)((B) ⇒ TypedExpressionNode[A]):UpdateAssignment"></a>
       <h4 class="signature">
       <span class="kind">def</span>
@@ -622,6 +639,40 @@ there are no more references to the object.</p><p>The details of when and if the
             
           </div>
           
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#gt">
+      <a id="gt(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">gt</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#gte">
+      <a id="gte(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">gte</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
+        </div></div>
+          
     </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -665,27 +716,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>
         </div></div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.StringExpression#in">
-      <a id="in(ListString):InListExpression"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">in</span>
-        
-        <span class="params">(<span name="e">e: <a href="ast/ListString.html" class="extype" name="org.squeryl.dsl.ast.ListString">ListString</a></span>)</span>
-        <span class="result">: <a href="ast/InListExpression.html" class="extype" name="org.squeryl.dsl.ast.InListExpression">InListExpression</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#in">
-      <a id="in(Query[A]):BinaryOperatorNodeLogicalBoolean"></a>
+      <a id="in(RightHandSideOfIn[A]):InclusionOperator"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">in</span>
         
-        <span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[A]</span>)</span>
-        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="params">(<span name="e">e: <a href="ast/RightHandSideOfIn.html" class="extype" name="org.squeryl.dsl.ast.RightHandSideOfIn">RightHandSideOfIn</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/InclusionOperator.html" class="extype" name="org.squeryl.dsl.ast.InclusionOperator">InclusionOperator</a></span>
       </span>
       </h4>
       
@@ -834,6 +873,40 @@ possible to check whether the contents of the list are of the requested typed.
       </span>
       </h4>
       
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#lt">
+      <a id="lt(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">lt</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#lte">
+      <a id="lte(NonNumericalExpression[A]):BinaryOperatorNodeLogicalBoolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">lte</span>
+        
+        <span class="params">(<span name="b">b: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>
+        </div></div>
+          
     </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.ast.TypedExpressionNode#mapper">
       <a id="mapper:OutMapper[A]"></a>
       <h4 class="signature">
@@ -877,27 +950,15 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.StringExpression#notIn">
-      <a id="notIn(ListString):InListExpression"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">notIn</span>
-        
-        <span class="params">(<span name="e">e: <a href="ast/ListString.html" class="extype" name="org.squeryl.dsl.ast.ListString">ListString</a></span>)</span>
-        <span class="result">: <a href="ast/InListExpression.html" class="extype" name="org.squeryl.dsl.ast.InListExpression">InListExpression</a></span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.NonNumericalExpression#notIn">
-      <a id="notIn(Query[A]):BinaryOperatorNodeLogicalBoolean"></a>
+      <a id="notIn(RightHandSideOfIn[A]):ExclusionOperator"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">notIn</span>
         
-        <span class="params">(<span name="e">e: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[A]</span>)</span>
-        <span class="result">: <a href="ast/BinaryOperatorNodeLogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean">BinaryOperatorNodeLogicalBoolean</a></span>
+        <span class="params">(<span name="e">e: <a href="ast/RightHandSideOfIn.html" class="extype" name="org.squeryl.dsl.ast.RightHandSideOfIn">RightHandSideOfIn</a>[A]</span>)</span>
+        <span class="result">: <a href="ast/ExclusionOperator.html" class="extype" name="org.squeryl.dsl.ast.ExclusionOperator">ExclusionOperator</a></span>
       </span>
       </h4>
       

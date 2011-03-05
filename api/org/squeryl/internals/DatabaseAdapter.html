@@ -33,7 +33,7 @@
       <div class="fullcomment" id="comment"><div class="block">
             linear super types: AnyRef, <span class="extype" name="scala.Any">Any</span>
           </div><div class="block">
-            known subclasses: <a href="../adapters/PostgreSqlAdapter.html" class="extype" name="org.squeryl.adapters.PostgreSqlAdapter">PostgreSqlAdapter</a>, <a href="../adapters/OracleAdapter.html" class="extype" name="org.squeryl.adapters.OracleAdapter">OracleAdapter</a>, <a href="../adapters/MySQLAdapter.html" class="extype" name="org.squeryl.adapters.MySQLAdapter">MySQLAdapter</a>, <a href="../adapters/MSSQLServer.html" class="extype" name="org.squeryl.adapters.MSSQLServer">MSSQLServer</a>, <a href="../adapters/H2Adapter.html" class="extype" name="org.squeryl.adapters.H2Adapter">H2Adapter</a>, <a href="../adapters/DB2Adapter.html" class="extype" name="org.squeryl.adapters.DB2Adapter">DB2Adapter</a>
+            known subclasses: <a href="../adapters/PostgreSqlAdapter.html" class="extype" name="org.squeryl.adapters.PostgreSqlAdapter">PostgreSqlAdapter</a>, <a href="../adapters/OracleAdapter.html" class="extype" name="org.squeryl.adapters.OracleAdapter">OracleAdapter</a>, <a href="../adapters/MySQLAdapter.html" class="extype" name="org.squeryl.adapters.MySQLAdapter">MySQLAdapter</a>, <a href="../adapters/MSSQLServer.html" class="extype" name="org.squeryl.adapters.MSSQLServer">MSSQLServer</a>, <a href="../adapters/H2Adapter.html" class="extype" name="org.squeryl.adapters.H2Adapter">H2Adapter</a>, <a href="../adapters/DerbyAdapter.html" class="extype" name="org.squeryl.adapters.DerbyAdapter">DerbyAdapter</a>, <a href="../adapters/DB2Adapter.html" class="extype" name="org.squeryl.adapters.DB2Adapter">DB2Adapter</a>
           </div></div>
 
       <div id="template">
@@ -1030,6 +1030,30 @@ if it's cause is a NOT NULL constraint violation
         
         <span class="params">(<span name="c">c: <span class="extype" name="java.sql.Connection">Connection</span></span>, <span name="sw">sw: <a href="StatementWriter.html" class="extype" name="org.squeryl.internals.StatementWriter">StatementWriter</a></span>, <span name="s">s: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>, <span name="session">session: <a href="../Session.html" class="extype" name="org.squeryl.Session">Session</a></span>)</span>
         <span class="result">: <span class="extype" name="java.sql.PreparedStatement">PreparedStatement</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#quoteIdentifier">
+      <a id="quoteIdentifier(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">quoteIdentifier</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.DatabaseAdapter#quoteName">
+      <a id="quoteName(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">quoteName</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       

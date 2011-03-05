@@ -25,13 +25,13 @@
       <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">QueryElements</span>
+        <span class="tparams">[<span name="Cond">Cond</span>]</span>
         
-        
-        <span class="result"> extends <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a> with <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a> with <a href="StartState.html" class="extype" name="org.squeryl.dsl.fsm.StartState">StartState</a></span>
+        <span class="result"> extends <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a>[Cond] with <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a> with <a href="StartState.html" class="extype" name="org.squeryl.dsl.fsm.StartState">StartState</a></span>
       </span>
       </h4>
       <div class="fullcomment" id="comment"><div class="block">
-            linear super types: <a href="StartState.html" class="extype" name="org.squeryl.dsl.fsm.StartState">StartState</a>, <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a>, <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a>, <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a>, AnyRef, <span class="extype" name="scala.Any">Any</span>
+            linear super types: <a href="StartState.html" class="extype" name="org.squeryl.dsl.fsm.StartState">StartState</a>, <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a>[Cond], <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a>, <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a>, AnyRef, <span class="extype" name="scala.Any">Any</span>
           </div><div class="block">
             known subclasses: <a href="../QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a>, <a href="../../customtypes/CustomTypesMode.html" class="extype" name="org.squeryl.customtypes.CustomTypesMode">CustomTypesMode</a>, <a href="../../customtypes/CustomTypesMode$.html" class="extype" name="org.squeryl.customtypes.CustomTypesMode">CustomTypesMode</a>, <a href="../../PrimitiveTypeMode.html" class="extype" name="org.squeryl.PrimitiveTypeMode">PrimitiveTypeMode</a>, <a href="../../PrimitiveTypeMode$.html" class="extype" name="org.squeryl.PrimitiveTypeMode">PrimitiveTypeMode</a>
           </div></div>
@@ -263,14 +263,14 @@ part of compilation it is not possible to check whether the contents of the list
           </div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute">
-      <a id="compute[T1, T2, T3, T4, T5, T6, T7](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7]):ComputeStateStartOrWhereState[(T1, T2, T3, T4, T5, T6, T7)]"></a>
+      <a id="compute[T1, T2, T3, T4, T5, T6, T7](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7]):ComputeStateStartOrWhereState[Product7[T1, T2, T3, T4, T5, T6, T7]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">compute</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T6]</span>, <span name="e7">e7: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T7]</span>)</span>
-        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[(T1, T2, T3, T4, T5, T6, T7)]</span>
+        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product7">Product7</span>[T1, T2, T3, T4, T5, T6, T7]]</span>
       </span>
       </h4>
       
@@ -280,14 +280,14 @@ part of compilation it is not possible to check whether the contents of the list
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute">
-      <a id="compute[T1, T2, T3, T4, T5, T6](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6]):ComputeStateStartOrWhereState[(T1, T2, T3, T4, T5, T6)]"></a>
+      <a id="compute[T1, T2, T3, T4, T5, T6](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6]):ComputeStateStartOrWhereState[Product6[T1, T2, T3, T4, T5, T6]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">compute</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T6]</span>)</span>
-        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[(T1, T2, T3, T4, T5, T6)]</span>
+        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product6">Product6</span>[T1, T2, T3, T4, T5, T6]]</span>
       </span>
       </h4>
       
@@ -297,14 +297,14 @@ part of compilation it is not possible to check whether the contents of the list
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute">
-      <a id="compute[T1, T2, T3, T4, T5](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5]):ComputeStateStartOrWhereState[(T1, T2, T3, T4, T5)]"></a>
+      <a id="compute[T1, T2, T3, T4, T5](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5]):ComputeStateStartOrWhereState[Product5[T1, T2, T3, T4, T5]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">compute</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>)</span>
-        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[(T1, T2, T3, T4, T5)]</span>
+        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product5">Product5</span>[T1, T2, T3, T4, T5]]</span>
       </span>
       </h4>
       
@@ -314,14 +314,14 @@ part of compilation it is not possible to check whether the contents of the list
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute">
-      <a id="compute[T1, T2, T3, T4](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4]):ComputeStateStartOrWhereState[(T1, T2, T3, T4)]"></a>
+      <a id="compute[T1, T2, T3, T4](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4]):ComputeStateStartOrWhereState[Product4[T1, T2, T3, T4]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">compute</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>)</span>
-        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[(T1, T2, T3, T4)]</span>
+        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product4">Product4</span>[T1, T2, T3, T4]]</span>
       </span>
       </h4>
       
@@ -331,14 +331,14 @@ part of compilation it is not possible to check whether the contents of the list
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute">
-      <a id="compute[T1, T2, T3](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3]):ComputeStateStartOrWhereState[(T1, T2, T3)]"></a>
+      <a id="compute[T1, T2, T3](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3]):ComputeStateStartOrWhereState[Product3[T1, T2, T3]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">compute</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>)</span>
-        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[(T1, T2, T3)]</span>
+        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product3">Product3</span>[T1, T2, T3]]</span>
       </span>
       </h4>
       
@@ -348,14 +348,14 @@ part of compilation it is not possible to check whether the contents of the list
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute">
-      <a id="compute[T1, T2](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2]):ComputeStateStartOrWhereState[(T1, T2)]"></a>
+      <a id="compute[T1, T2](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2]):ComputeStateStartOrWhereState[Product2[T1, T2]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">compute</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>)</span>
-        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[(T1, T2)]</span>
+        <span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product2">Product2</span>[T1, T2]]</span>
       </span>
       </h4>
       
@@ -500,14 +500,14 @@ there are no more references to the object.</p><p>The details of when and if the
           </div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2, T3, T4, T5, T6, T7, T8](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7],⇒ TypedExpressionNode[T8]):GroupByState[(T1, T2, T3, T4, T5, T6, T7, T8)]"></a>
+      <a id="groupBy[T1, T2, T3, T4, T5, T6, T7, T8](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7],⇒ TypedExpressionNode[T8]):GroupByState[Product8[T1, T2, T3, T4, T5, T6, T7, T8]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T6]</span>, <span name="e7">e7: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T7]</span>, <span name="e8">e8: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T8]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2, T3, T4, T5, T6, T7, T8)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product8">Product8</span>[T1, T2, T3, T4, T5, T6, T7, T8]]</span>
       </span>
       </h4>
       
@@ -517,14 +517,14 @@ there are no more references to the object.</p><p>The details of when and if the
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2, T3, T4, T5, T6, T7](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7]):GroupByState[(T1, T2, T3, T4, T5, T6, T7)]"></a>
+      <a id="groupBy[T1, T2, T3, T4, T5, T6, T7](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7]):GroupByState[Product7[T1, T2, T3, T4, T5, T6, T7]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T6]</span>, <span name="e7">e7: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T7]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2, T3, T4, T5, T6, T7)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product7">Product7</span>[T1, T2, T3, T4, T5, T6, T7]]</span>
       </span>
       </h4>
       
@@ -534,14 +534,14 @@ there are no more references to the object.</p><p>The details of when and if the
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2, T3, T4, T5, T6](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6]):GroupByState[(T1, T2, T3, T4, T5, T6)]"></a>
+      <a id="groupBy[T1, T2, T3, T4, T5, T6](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6]):GroupByState[Product6[T1, T2, T3, T4, T5, T6]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T6]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2, T3, T4, T5, T6)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product6">Product6</span>[T1, T2, T3, T4, T5, T6]]</span>
       </span>
       </h4>
       
@@ -551,14 +551,14 @@ there are no more references to the object.</p><p>The details of when and if the
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2, T3, T4, T5](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5]):GroupByState[(T1, T2, T3, T4, T5)]"></a>
+      <a id="groupBy[T1, T2, T3, T4, T5](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5]):GroupByState[Product5[T1, T2, T3, T4, T5]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T5]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2, T3, T4, T5)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product5">Product5</span>[T1, T2, T3, T4, T5]]</span>
       </span>
       </h4>
       
@@ -568,14 +568,14 @@ there are no more references to the object.</p><p>The details of when and if the
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2, T3, T4](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4]):GroupByState[(T1, T2, T3, T4)]"></a>
+      <a id="groupBy[T1, T2, T3, T4](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4]):GroupByState[Product4[T1, T2, T3, T4]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T4]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2, T3, T4)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product4">Product4</span>[T1, T2, T3, T4]]</span>
       </span>
       </h4>
       
@@ -585,14 +585,14 @@ there are no more references to the object.</p><p>The details of when and if the
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2, T3](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3]):GroupByState[(T1, T2, T3)]"></a>
+      <a id="groupBy[T1, T2, T3](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3]):GroupByState[Product3[T1, T2, T3]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T3]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2, T3)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product3">Product3</span>[T1, T2, T3]]</span>
       </span>
       </h4>
       
@@ -602,14 +602,14 @@ there are no more references to the object.</p><p>The details of when and if the
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy">
-      <a id="groupBy[T1, T2](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2]):GroupByState[(T1, T2)]"></a>
+      <a id="groupBy[T1, T2](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2]):GroupByState[Product2[T1, T2]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">groupBy</span>
         <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span>
         <span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[T2]</span>)</span>
-        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[(T1, T2)]</span>
+        <span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product2">Product2</span>[T1, T2]]</span>
       </span>
       </h4>
       
@@ -775,13 +775,30 @@ possible to check whether the contents of the list are of the requested typed.
         </div></div>
           
     </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.WhereState#set">
-      <a id="set(UpdateAssignment*):UpdateStatement"></a>
+      <a id="set(UpdateAssignment*)(=:=[Cond, Conditioned]):UpdateStatement"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
         <span class="name">set</span>
         
-        <span class="params">(<span name="updateAssignments">updateAssignments: <a href="../ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a>*</span>)</span>
+        <span class="params">(<span name="updateAssignments">updateAssignments: <a href="../ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cond">cond: <span class="extype" name="scala.Predef.=:=">=:=</span>[Cond, <a href="Conditioned.html" class="extype" name="org.squeryl.dsl.fsm.Conditioned">Conditioned</a>]</span>)</span>
+        <span class="result">: <a href="../ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.fsm.WhereState#setAll">
+      <a id="setAll(UpdateAssignment*)(=:=[Cond, Unconditioned]):UpdateStatement"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">setAll</span>
+        
+        <span class="params">(<span name="updateAssignments">updateAssignments: <a href="../ast/UpdateAssignment.html" class="extype" name="org.squeryl.dsl.ast.UpdateAssignment">UpdateAssignment</a>*</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cond">cond: <span class="extype" name="scala.Predef.=:=">=:=</span>[Cond, <a href="Unconditioned.html" class="extype" name="org.squeryl.dsl.fsm.Unconditioned">Unconditioned</a>]</span>)</span>
         <span class="result">: <a href="../ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>
       </span>
       </h4>
@@ -895,7 +912,7 @@ possible to check whether the contents of the list are of the requested typed.
         <div class="parent" name="org.squeryl.dsl.fsm.StartState">
               <h3>Inherited from <a href="StartState.html" class="extype" name="org.squeryl.dsl.fsm.StartState">StartState</a></h3>
             </div><div class="parent" name="org.squeryl.dsl.fsm.WhereState">
-              <h3>Inherited from <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a></h3>
+              <h3>Inherited from <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a>[Cond]</h3>
             </div><div class="parent" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">
               <h3>Inherited from <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></h3>
             </div><div class="parent" name="org.squeryl.dsl.boilerplate.GroupBySignatures">

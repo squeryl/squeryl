@@ -88,6 +88,23 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.Conditioned">
+      <a id="Conditioned:Conditioned"></a>
+      <h4 class="signature"><a href="Conditioned.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Conditioned</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: sealed abstract 
+        </div></div>
+          
     </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.GroupByState">
       <a id="GroupByState:GroupByState[K]"></a>
       <h4 class="signature"><a href="GroupByState.html">
@@ -149,14 +166,14 @@
       </a></h4>
       
     </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.QueryElements">
-      <a id="QueryElements:QueryElements"></a>
+      <a id="QueryElements:QueryElements[Cond]"></a>
       <h4 class="signature"><a href="QueryElements.html">
       <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">QueryElements</span>
+        <span class="tparams">[<span name="Cond">Cond</span>]</span>
         
-        
-        <span class="result"> extends WhereState with ComputeMeasuresSignaturesFromStartOrWhereState with StartState</span>
+        <span class="result"> extends WhereState[Cond] with ComputeMeasuresSignaturesFromStartOrWhereState with StartState</span>
       </span>
       </a></h4>
       
@@ -184,13 +201,30 @@
       </span>
       </a></h4>
       
+    </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.Unconditioned">
+      <a id="Unconditioned:Unconditioned"></a>
+      <h4 class="signature"><a href="Unconditioned.html">
+      <span class="kind">class</span>
+      <span class="symbol">
+        <span class="name">Unconditioned</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: sealed abstract 
+        </div></div>
+          
     </li><li visbl="pub" data-isabs="true" name="org.squeryl.dsl.fsm.WhereState">
-      <a id="WhereState:WhereState"></a>
+      <a id="WhereState:WhereState[Cond]"></a>
       <h4 class="signature"><a href="WhereState.html">
       <span class="kind">trait</span>
       <span class="symbol">
         <span class="name">WhereState</span>
-        
+        <span class="tparams">[<span name="Cond">Cond</span>]</span>
         
         <span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
       </span>
