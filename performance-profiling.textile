@@ -5,7 +5,7 @@ title: Performance profiling
 
 Performance statistics can be collected,
 
-"Example of a profile":/profileOfH2Tests.html
+This "example profile":/profileOfH2Tests.html has been collected during the an execution of the test suite.
 
 
 h3. Profiling load on a single VM
