@@ -246,3 +246,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     o
   }
 }
+
+class VersionedTable[A,B](n: String, c: Class[A], schema: Schema, _prefix: Option[String], val history: Table[B])
+  extends Table[A](n,c,schema, _prefix) {
+
+}
