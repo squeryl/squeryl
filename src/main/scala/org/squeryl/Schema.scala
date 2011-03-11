@@ -507,4 +507,16 @@ trait Schema {
   }
 
   def columns(fieldList: TypedExpressionNode[_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
+
+
+
+  def versionedTable[A, B <: Versioned]()(implicit mA: Manifest[A], mB: Manifest[B]) = {
+
+    val tableB = new Table[B](tableNameFromClass(mB.erasure), mB.erasure.asInstanceOf[Class[B]], thisSchema, None)
+    val tableA = new VersionedTable[A,B](tableNameFromClass(mA.erasure), mA.erasure.asInstanceOf[Class[A]], thisSchema, None, tableB)
+    _addTable(tableA)
+    _addTable(tableB)
+
+    tableA
+  }
 }

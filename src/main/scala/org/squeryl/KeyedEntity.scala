@@ -140,3 +140,19 @@ class ForeignKeyDeclaration(val idWithinSchema: Int, val foreignKeyColumnName: S
   def constrainReference(a1: ReferentialAction, a2: ReferentialAction)(implicit ev: Schema) =
     _referentialActions = Some((Some(a1), Some(a2)))
 }
+
+object HistoryEventType extends Enumeration {
+  type HistoryEventType = Value
+  val Created = Value(1, "Created")
+  val Updated = Value(2, "Updated")
+  val Deleted = Value(3, "Deleted")
+}
+
+/**
+ * Version tables must mix in this trait
+ */
+trait Versioned {
+  val transactionId: Long = 0
+  val historyEventType: HistoryEventType.Value
+  val versionNumber: Int = 0
+}
