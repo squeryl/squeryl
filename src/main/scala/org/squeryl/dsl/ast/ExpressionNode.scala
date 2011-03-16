@@ -529,7 +529,23 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode {
       aCopy.asc
 
     new OrderByExpression(aCopy)
-  }
+  }  
+}
+
+/**
+ * Update, delete and insert statement are not built with AST nodes,
+ * (for example Table[].update), although some portions of these statements
+ * (where clauses are sometimes built with it.
+ * The StatisticsListener needs to view every expression call as an AST,
+ * which is the reason for this class.
+ * AST are meant to be "non rendered", i.e. agnostic to specific DatabaseAdapter,
+ * this DummyExpressionHolder is an exception.  
+ * TODO: unify expression building to be completely AST based.
+ */
+class DummyExpressionHolder(val renderedExpression: String) extends ExpressionNode {
+
+  def doWrite(sw: StatementWriter) =
+    sw.write(renderedExpression)
 }
 
 class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None) extends ExpressionNode {

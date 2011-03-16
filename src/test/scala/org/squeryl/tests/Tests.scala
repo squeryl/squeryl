@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl.tests
 
-import _root_.org.squeryl.demos.MusicDb
+import _root_.org.squeryl.logging.LocalH2SinkStatisticsListener
 import _root_.org.squeryl.SessionFactory
 import customtypes.{TestCustomTypesMode}
 import musicdb.{MusicDbTestRun, MusicDb}
@@ -44,7 +44,10 @@ object Tests extends QueryTester {
     //dumpSchemasForAllDatabases
 
     TransactionsTests.allTests(() =>createH2TestConnection)
-    
+
+    localH2SinkStatisticsListener.generateStatSummary(new java.io.File("./profileOfH2Tests.html"), 10)
+    localH2SinkStatisticsListener.shutdown
+
     //leakTest    
   }
 
@@ -144,7 +147,7 @@ object Tests extends QueryTester {
         (new TestCustomTypesMode).testAll
       }
 
-      org.squeryl.demos.KickTheTires.test(session)
+      org.squeryl.tests.demos.KickTheTires.test(session)
 
       if(!session.connection.getAutoCommit)
         session.connection.commit
@@ -168,13 +171,18 @@ object Tests extends QueryTester {
   }
 
 
-  def createH2TestConnection = {
+  def createH2TestConnection: Session = createH2TestConnection(true)
+
+  val localH2SinkStatisticsListener = LocalH2SinkStatisticsListener.initializeOverwrite("stats-test")
+
+  def createH2TestConnection(withStatProfile: Boolean): Session = {
     Class.forName("org.h2.Driver");
 
-    Session.create(
+    new Session(
       java.sql.DriverManager.getConnection("jdbc:h2:~/test", "sa", ""),
     //java.sql.DriverManager.getConnection("jdbc:h2:mem:", "", ""),
-      new H2Adapter
+      new H2Adapter,
+      Some(localH2SinkStatisticsListener)  
     )
   }
 

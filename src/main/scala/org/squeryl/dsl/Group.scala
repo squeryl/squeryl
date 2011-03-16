@@ -26,4 +26,15 @@ class Measures[M](m: M) {
 class GroupWithMeasures[K,M](k: K, m: M) {
   def key = k
   def measures = m
+
+  override def toString = {
+    val sb = new StringBuffer
+    sb.append("GroupWithMeasures[")
+    sb.append("key=")
+    sb.append(key)
+    sb.append(",measures=")
+    sb.append(measures)
+    sb.append("]")
+    sb.toString
+  }
 }

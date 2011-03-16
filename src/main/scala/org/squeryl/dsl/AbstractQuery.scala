@@ -21,6 +21,7 @@ import java.sql.ResultSet
 import org.squeryl.internals._
 import org.squeryl.{View, Queryable, Session, Query}
 import collection.mutable.ArrayBuffer
+import org.squeryl.logging._
 import java.io.Closeable
 
 abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
@@ -50,6 +51,24 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
    * After this call, the query (and it's AST) becomes immutable by virtue of the unaccessibility
    * of it's public methods 
    */
+  val definitionSite: Option[StackTraceElement] =
+    if(!isRoot) None
+    else Some(_deduceDefinitionSite)
+
+  private def _deduceDefinitionSite: StackTraceElement = {
+    val st = Thread.currentThread.getStackTrace
+    var i = 1
+    while(i < st.length) {
+      val e = st(i)
+      val cn = e.getClassName
+      if((cn.startsWith("org.squeryl.") && (!cn.startsWith("org.squeryl.tests."))) || cn.startsWith("scala."))
+        i = i + 1
+      else
+        return e
+    }
+    new StackTraceElement("unknown", "unknown", "unknown", -1)
+  }
+
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
 
@@ -134,13 +153,22 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)
     val s = Session.currentSession
+    val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
+
+    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
+
+    if(s.statisticsListener != None)
+      s.statisticsListener.get.queryExecuted(statEx)
+
     s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
     s._addResultSet(rs) // same for the result set
     
     var _nextCalled = false;
     var _hasNext = false;
 
+    var rowCount = 0
+    
     def close {
       stmt.close
       rs.close
@@ -152,8 +180,13 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       if(!_hasNext) {// close it since we've completed the iteration
         Utils.close(rs)
         stmt.close
-      }
 
+        if(s.statisticsListener != None) {
+          s.statisticsListener.get.resultSetIterationEnded(statEx.uuid, System.currentTimeMillis, rowCount, true)
+        }
+      }
+      
+      rowCount = rowCount + 1
       _nextCalled = true
     }
 

@@ -19,6 +19,7 @@ import dsl.ast._
 import dsl.{QueryDsl}
 import internals.{FieldMetaData, NoOpOutMapper, FieldReferenceLinker, StatementWriter}
 import java.sql.{Statement}
+import logging.StackMarker
 import scala.reflect.Manifest
 
 private [squeryl] object DummySchema extends Schema
@@ -30,7 +31,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
   
-  def insert(t: T): T = {
+  def insert(t: T): T = StackMarker.lastSquerylStackFrame {
 
     val o = t.asInstanceOf[AnyRef]
     val sess = Session.currentSession
