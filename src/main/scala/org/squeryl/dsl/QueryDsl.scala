@@ -347,9 +347,9 @@ trait QueryDsl
       ).headOption != None
 
 
-    private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable)
+    private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable, false)
 
-    private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr, thisTable)
+    private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr, thisTable, false)
 
     val leftForeignKeyDeclaration =
       schema._createForeignKeyDeclaration(leftFkFmd.columnName, leftPkFmd.columnName)
@@ -527,6 +527,9 @@ trait QueryDsl
 
     schema._addRelation(this)
 
+    private def _isSelfReference =
+      leftTable == rightTable
+
     //we obtain the FieldMetaDatas from the 'via' function by creating an EqualityExpression AST and then extract the FieldMetaDatas from it,
     // the FieldMetaData will serve to set fields (primary and foreign keys on the objects in the relation) 
     private val (_leftPkFmd, _rightFkFmd) = {
@@ -543,7 +546,7 @@ trait QueryDsl
       //that refer to FieldSelectElement, who in turn refer to the FieldMetaData
 
       // now the Tuple with the left and right FieldMetaData 
-      _splitEquality(ee.get, rightTable)
+      _splitEquality(ee.get, rightTable, _isSelfReference)
     }
 
     val foreignKeyDeclaration =
@@ -599,15 +602,22 @@ trait QueryDsl
    * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
    * and where ._2 is the foreign key of the association object/table
    */
-  private def _splitEquality(ee: EqualityExpression, rightTable: Table[_]) =
+  private def _splitEquality(ee: EqualityExpression, rightTable: Table[_], isSelfReference: Boolean) = {
+
+    if(isSelfReference)
+      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity || ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
+
     if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT) {
-      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
+      if(!isSelfReference)
+        assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
       (ee.right._fieldMetaData, ee.left._fieldMetaData)
     }
     else {
-      assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
+      if(!isSelfReference)
+        assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
       (ee.left._fieldMetaData, ee.right._fieldMetaData)
     }
+  }
 
   // Composite key syntactic sugar :
 

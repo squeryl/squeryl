@@ -89,7 +89,7 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
 }
 
 
-class School(val addressId: Int, val name: String) extends KeyedEntity[Long] {
+class School(val addressId: Int, val name: String, val parentSchoolId: Long) extends KeyedEntity[Long] {
   var id: Long = 0
 }
 
@@ -144,6 +144,9 @@ class SchoolDb extends Schema {
   val courseAssigments = table[CourseAssignment]
 
   val schools = table[School]
+
+  val schoolHierarchy =
+    oneToManyRelation(schools, schools).via((parent, child) => parent.id === child.parentSchoolId)
 
   on(schools)(s => declare(
     s.name is(indexed("uniqueIndexName"), unique),
