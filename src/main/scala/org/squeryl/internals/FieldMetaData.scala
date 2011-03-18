@@ -16,7 +16,7 @@
 package org.squeryl.internals
 
 import java.lang.annotation.Annotation
-import java.lang.reflect.{Field, Method, Constructor, InvocationTargetException}
+import java.lang.reflect.{Field, Method, Constructor, InvocationTargetException, Type, ParameterizedType}
 import java.sql.ResultSet
 import java.math.BigDecimal
 import scala.annotation.tailrec
@@ -386,7 +386,7 @@ object FieldMetaData {
 
       val colAnnotation = annotations.find(a => a.isInstanceOf[ColumnBase]).map(a => a.asInstanceOf[ColumnBase])
 
-      var typeOfField =
+      var clsOfField =
         if(setter != None)
           setter.get.getParameterTypes.apply(0)
         else if(getter != None)
@@ -395,6 +395,12 @@ object FieldMetaData {
           field.get.getType
         else
           error("invalid field group")
+          
+      val typeOfField =
+        (setter.flatMap(_.getGenericParameterTypes.headOption)
+         .orElse(getter.map(_.getGenericReturnType))
+         .orElse(field.map(_.getType))
+         .getOrElse(error("invalid field group")))
 
       var v =
          if(sampleInstance4OptionTypeDeduction != null) {
@@ -403,7 +409,7 @@ object FieldMetaData {
            else if(getter != None)
              getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
            else
-             createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
+            createDefaultValue(parentMetaData.clasz, clsOfField, Some(typeOfField), colAnnotation)
          }
          else null
 
@@ -414,8 +420,8 @@ object FieldMetaData {
 
       var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
-      if(classOf[Product1[Any]].isAssignableFrom(typeOfField))
-        customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfField)
+      if(classOf[Product1[Any]].isAssignableFrom(clsOfField))
+        customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, clsOfField)
 
       if(customTypeFactory != None) {
         val f = customTypeFactory.get
@@ -424,7 +430,7 @@ object FieldMetaData {
 
       if(v == null)
         v = try {
-          createDefaultValue(parentMetaData.clasz, typeOfField, colAnnotation)
+          createDefaultValue(parentMetaData.clasz, clsOfField, Some(typeOfField), colAnnotation)
         }
         catch {
           case e:Exception => null
@@ -432,7 +438,7 @@ object FieldMetaData {
 
       if(v == null)
         error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
-
+     
       val isOption = v.isInstanceOf[Some[_]]
 
       val typeOfFieldOrTypeOfOption =
@@ -502,7 +508,7 @@ object FieldMetaData {
         .format(pType.getName, typeOfField.getName))
 
       val c = typeOfField.getConstructor(pType)
-      val defaultValue = createDefaultValue(ownerClass, pType, None)
+      val defaultValue = createDefaultValue(ownerClass, pType, None, None)
 
       if(defaultValue == null) None
       else
@@ -599,9 +605,25 @@ object FieldMetaData {
 //  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Array[Annotation]): Object =
 //    createDefaultValue(ownerCLass, p, optionFieldsInfo.find(a => a.isInstanceOf[Column]).map(a => a.asInstanceOf[Column]))
 
-  def createDefaultValue(ownerCLass: Class[_], p: Class[_], optionFieldsInfo: Option[Column]): Object = {
+  def createDefaultValue(ownerCLass: Class[_], p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
 
-    if(p.isAssignableFrom(classOf[Option[Any]])) {
+	if(p.isAssignableFrom(classOf[Option[Any]])) {
+		
+		t match {
+			case Some(pt: ParameterizedType) => {
+	    		pt.getActualTypeArguments.toList match{
+	    			case oType :: Nil => {
+	    				if(classOf[Class[_]].isInstance(oType)){
+	    					val deduced = createDefaultValue(ownerCLass, oType.asInstanceOf[Class[_]], None, optionFieldsInfo)
+	    					if(deduced != null)
+	    						return Some(deduced)
+	    				}
+	    			}
+	    			case _ => //do nothing
+	    		}
+			}
+			case _ => //do nothing
+		}
 
 //      if(optionFieldsInfo == None)
 //        error("Option[Option[]] fields in "+ownerCLass.getName+ " are not supported")
@@ -620,7 +642,7 @@ object FieldMetaData {
       if(classOf[Object].isAssignableFrom(optionFieldsInfo.get.optionType))
         error("cannot deduce type of Option[] in " + ownerCLass.getName)
 
-      Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, optionFieldsInfo))
+      Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, None, optionFieldsInfo))
     }
     else
       _defaultValueFactory.handleType(p, None)

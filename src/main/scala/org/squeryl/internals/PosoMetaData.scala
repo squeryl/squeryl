@@ -59,7 +59,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
         case e:Exception =>
           throw new RuntimeException("exception occurred while invoking constructor : " + constructor._1, e)
       }
-
+    
     val members = new ArrayBuffer[(Member,HashSet[Annotation])]
 
     _fillWithMembers(clasz, members)
@@ -189,7 +189,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     var res = new Array[Object](params.size)
 
     for(i <- 0 to params.length -1) {
-      val v = FieldMetaData.createDefaultValue(clasz, params(i), None)
+      val v = FieldMetaData.createDefaultValue(clasz, params(i), None, None)
       res(i) = v
     }
 
