@@ -693,9 +693,6 @@ trait DatabaseAdapter {
   def dropTable(t: Table[_]) =
     execFailSafeExecute(writeDropTable(t.prefixedName), e=> isTableDoesNotExistException(e))
 
-  def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
-    sw.write(quoteName(se.aliasComponent))
-
   def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
     //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)
     val sb = new StringBuilder(256)
@@ -775,4 +772,18 @@ trait DatabaseAdapter {
   def quoteIdentifier(s: String) = s
 
   def quoteName(s: String) = s.split('.').map(quoteIdentifier(_)).mkString(".")
+
+  def fieldAlias(n: QueryableExpressionNode, fse: FieldSelectElement) =
+    n.alias + "_" + fse.fieldMetaData.columnName
+
+  def aliasExport(parentOfTarget: QueryableExpressionNode, target: SelectElement) =
+    parentOfTarget.alias + "_" + target.aliasSegment
+
+  def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) = {
+    val a = se.aliasSegment
+//    if(a.length > 30)
+//      error("Oracle Bust : " + a)
+    sw.write(quoteName(a))
+  }
+
 }

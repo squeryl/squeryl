@@ -18,14 +18,19 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import java.sql.ResultSet
+import org.squeryl.Session
 
 /**
- * SelectElement are elements of a select list, they are either
+ * SelectElement are elements of a select list, for example they are a,b, and c in :
+ *
+ * select a,b,c from T
+ *
+ * they are either
  *  ValueSelectElement for composite expressions, i.e. select (x / 2) * y as Z from ....
  *  TupleSelectElement for group by or compute elements (TODO: document group by/compute)
  *  FieldSelectElement for table columns (that map to fields)
  *
- *  ExportSelectElement is a select element that refers to a SelectElement of an inner query.
+ *  ExportSelectElement for a select element that refers to a SelectElement of an inner query.
  *
  * SelectElementReference are nodes in any clause other than select (where, having, composite expression, order by, etc)
  *  that refer to a SelectElement  
@@ -56,13 +61,17 @@ trait SelectElement extends ExpressionNode {
 
   def alias: String
 
-  def aliasSuffix: String
-
-  def aliasComponent: String =
+  def aliasSegment: String =
     alias
 
   def actualSelectElement: SelectElement = this
 
+  /**
+   * Update, Insert, and Delete statements are always at the root of an AST, so they
+   * are never aliased, but then can have sub queries, ex.: update ... where x in (subquery).
+   * Name clashes are impossible since SelectElements of query are always aliased.
+   *
+   */
   def inhibitAliasOnSelectElementReference: Boolean = {
     var e:ExpressionNode = origin
 
@@ -108,7 +117,7 @@ trait SelectElement extends ExpressionNode {
   def createEnumerationMapper: OutMapper[Enumeration#Value] = new OutMapper[Enumeration#Value]() {
 
     def doMap(rs: ResultSet) = {
-      val fmd = this.asInstanceOf[FieldSelectElement].fieldMataData
+      val fmd = this.asInstanceOf[FieldSelectElement].fieldMetaData
       fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
     }
 
@@ -121,7 +130,7 @@ trait SelectElement extends ExpressionNode {
   def createEnumerationOptionMapper: OutMapper[Option[Enumeration#Value]] = new OutMapper[Option[Enumeration#Value]]() {
 
     def doMap(rs: ResultSet) = {
-      val fmd = this.asInstanceOf[FieldSelectElement].fieldMataData
+      val fmd = this.asInstanceOf[FieldSelectElement].fieldMetaData
       Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
     }
 
@@ -142,8 +151,7 @@ class TupleSelectElement
     else
       "c" + indexInTuple
 
-  def aliasSuffix = alias
-  
+
   var columnToTupleMapper: Option[ColumnToTupleMapper] = None
 
   def prepareColumnMapper(index: Int) = {}
@@ -163,19 +171,18 @@ class TupleSelectElement
 }
 
 class FieldSelectElement
-(val origin: ViewExpressionNode[_], val fieldMataData: FieldMetaData, val resultSetMapper: ResultSetMapper)
-  extends SelectElement {
+(val origin: ViewExpressionNode[_], val fieldMetaData: FieldMetaData, val resultSetMapper: ResultSetMapper)
+  extends SelectElement with UniqueIdInAliaseRequired {
 
   def alias =
     if(inhibitAliasOnSelectElementReference)
-      fieldMataData.columnName
+      fieldMetaData.columnName
     else
-      origin.alias + "." + fieldMataData.columnName
+      origin.alias + "." + fieldMetaData.columnName
 
-  def aliasSuffix = fieldMataData.columnName
-
-  override def aliasComponent: String =
-    origin.alias + "_" + fieldMataData.columnName
+  override def aliasSegment: String =
+    Session.currentSession.databaseAdapter.fieldAlias(origin, this)
+    //origin.alias + "_" + fieldMetaData.columnName
   
   val expression = new ExpressionNode {
     
@@ -184,7 +191,7 @@ class FieldSelectElement
   }
 
   def prepareColumnMapper(index: Int) =
-    columnMapper = Some(new ColumnToFieldMapper(index, fieldMataData, this))
+    columnMapper = Some(new ColumnToFieldMapper(index, fieldMetaData, this))
 
   private var columnMapper: Option[ColumnToFieldMapper] = None
 
@@ -196,11 +203,11 @@ class FieldSelectElement
     }
   
   def typeOfExpressionToString =
-    fieldMataData.displayType
+    fieldMetaData.displayType
   
   override def toString =
     'FieldSelectElement + ":" +
-       Utils.failSafeString(alias, fieldMataData.nameOfProperty)
+       Utils.failSafeString(alias, fieldMetaData.nameOfProperty)
 }
 
 class ValueSelectElement
@@ -208,8 +215,6 @@ class ValueSelectElement
      extends SelectElement with UniqueIdInAliaseRequired {
 
   def alias = "v" + uniqueId.get
-
-  def aliasSuffix = alias
 
   var yieldPusher: Option[YieldValuePusher] = None
 
@@ -302,8 +307,6 @@ class ExportedSelectElement
 
   def origin = selectElement.origin
 
-  def aliasSuffix = selectElement.aliasSuffix
-
   val expression = new ExpressionNode {
 
     def doWrite(sw: StatementWriter) =
@@ -314,25 +317,28 @@ class ExportedSelectElement
     'ExportedSelectElement + ":" + alias + ",(selectElement=" + selectElement + ")"
 
   def alias:String =
-    target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target.aliasComponent
+    target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target.aliasSegment
 
-  override def aliasComponent: String = {
-    target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target.aliasComponent
-  }
+  override def aliasSegment: String =
+    //target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target.aliasSegment
+    Session.currentSession.databaseAdapter.aliasExport(
+      target.parent.get.asInstanceOf[QueryableExpressionNode], target)
 
+  /**
+   * A root level query that has nested queries will have SelectElements that are
+   * ExportedSelectElement, the 'actualSelectElement' points directly to the refered AST node,
+   * while 'target' refers to it indirectly (see target)
+   */
   override def actualSelectElement: SelectElement =
-    if(selectElement.isInstanceOf[ExportedSelectElement])
-      selectElement.asInstanceOf[ExportedSelectElement].actualSelectElement
-    else
-      selectElement
+    selectElement.actualSelectElement
 
-//  override def doWrite(sw: StatementWriter) = {
-//    val p = path
-//    sw.write(sw.quoteName(p))
-//    sw.write(" as ")
-//    sw.write(sw.quoteName(p.replace('.','_')))
-//  }
-
+  /**
+   * target points to the selectElement that this ExportSelectElement refers to, who can
+   * also be an ExportSelectElement, whose target will point to its inner select element,
+   * recursively, until it becomes equal to the 'end' target, the actualSelectElement
+   * In other words :
+   *   exportSelectElement.target.target.,...,.target == exportSelectElement.actualSelectElement
+   */
   lazy val target: SelectElement = {
 
     val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
@@ -347,8 +353,7 @@ class ExportedSelectElement
             se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
         yield se
 
-      val r = q.headOption.getOrElse(error("!!!!!!!!!!!!!" + selectElement))
-      r
+      q.headOption.getOrElse(error("could not find the target of : " + selectElement))
     }
   }  
 }

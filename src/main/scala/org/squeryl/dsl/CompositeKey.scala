@@ -30,7 +30,7 @@ trait CompositeKey {
     if(_members == None)
       List.empty
     else
-      _members.get.map(_.selectElement.asInstanceOf[FieldSelectElement].fieldMataData)
+      _members.get.map(_.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData)
 
   protected def constantMembers: Iterable[ExpressionNode]
 

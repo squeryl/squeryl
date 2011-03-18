@@ -271,7 +271,7 @@ trait TypedExpressionNode[T] extends ExpressionNode {
 
     val fmd =
       try {
-        ser.selectElement.asInstanceOf[FieldSelectElement].fieldMataData
+        ser.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData
       }
       catch { // TODO: validate this at compile time with a scalac plugin
         case e:ClassCastException => {

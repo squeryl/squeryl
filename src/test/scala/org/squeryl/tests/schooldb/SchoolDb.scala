@@ -135,7 +135,7 @@ class SchoolDb extends Schema {
   
   val students = table[Student]
   
-  val addresses = table[Address]
+  val addresses = table[Address]("AddressexageratelyLongName")
 
   val courses = table[Course]
 
