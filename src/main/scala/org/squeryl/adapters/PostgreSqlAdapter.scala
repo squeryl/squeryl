@@ -32,6 +32,9 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
   override def binaryTypeDeclaration = "bytea"
 
+  override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
+    foreignKeyTable.name + "FK" + idWithinSchema
+
   override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
