@@ -151,7 +151,8 @@ class SchoolDb extends Schema {
   on(schools)(s => declare(
     s.name is(indexed("uniqueIndexName"), unique),
     s.name defaultsTo("no name"),
-    columns(s.name, s.addressId) are(indexed)
+    columns(s.name, s.addressId) are(indexed),
+    s.parentSchoolId is(indexed, unique)
     //_.addressId is(autoIncremented) currently only supported on KeyedEntity.id ... ! :(
   ))
 
@@ -1038,7 +1039,7 @@ class SchoolDbTestRun extends QueryTester {
     //The query here doesn't make much sense, we just test that valid SQL gets generated :
     val q =
       from(professors)(p=>
-        groupBy(p.id)
+        groupBy(p.id, p.yearlySalary)
         having(p.yearlySalary gt 75.0F)
       ).toList
 
