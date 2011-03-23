@@ -139,6 +139,9 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
   }
 }
 
+class ExistsExpression(query: ExpressionNode) extends PrefixOperatorNode(query, "exists", false) with LogicalBoolean
+class NotExistsExpression(query: ExpressionNode) extends PrefixOperatorNode(query, "not exists", false) with LogicalBoolean
+
 class BetweenExpression(first: ExpressionNode, second: ExpressionNode, third: ExpressionNode)
   extends TernaryOperatorNode(first, second, third, "between") with LogicalBoolean {
 
@@ -405,6 +408,26 @@ class BinaryOperatorNode
       sw.nextLine
     sw.write(" ")
     right.write(sw)
+    sw.write(")")
+  }
+}
+
+class PrefixOperatorNode
+ (val child: ExpressionNode, val operatorToken: String, val newLineAfterOperator: Boolean = false)
+  extends ExpressionNode {
+
+  override def children = List(child)
+
+  override def inhibited = child.inhibited
+
+  override def toString = 'PrefixOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
+
+  override def doWrite(sw: StatementWriter) = {
+    sw.write("(")
+    sw.write(operatorToken)
+    if(newLineAfterOperator)
+      sw.nextLine
+    child.write(sw)
     sw.write(")")
   }
 }
