@@ -368,6 +368,9 @@ class SchoolDbTestRun extends QueryTester {
     
     testUpdateSetAll
 
+    testExistsSmoketest
+    testNotExistsSmoketest
+
     drop
   }
 
@@ -1389,6 +1392,28 @@ class SchoolDbTestRun extends QueryTester {
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
     println('testNewOuterJoin3 + " passed.")
+  }
+
+  def testExistsSmoketest {
+    val studentsWithAddresses =
+      from(students)(s =>
+        where(exists(from(addresses)((a) => select(a.id))))
+          select(s)
+      )
+    studentsWithAddresses.toList
+
+    passed('testExistsSmoketest)
+  }
+
+  def testNotExistsSmoketest {
+    val studentsWithAddresses =
+      from(students)(s =>
+        where(notExists(from(addresses)((a) => select(a.id))))
+        select(s)
+      )
+    studentsWithAddresses.toList
+
+    passed('testNotExistsSmoketest)
   }
   
   def testUpdateSetAll {
