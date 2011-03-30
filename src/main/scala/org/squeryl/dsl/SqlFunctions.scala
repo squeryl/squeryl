@@ -56,9 +56,9 @@ trait SqlFunctions  {
 
   def lower[A](s: StringExpression[A]) = new FunctionNode("lower", Some(s.mapper), Seq(s)) with StringExpression[A]
 
-  def exists[A](query: Query[A]) = new ExistsExpression(query.ast)
+  def exists[A](query: Query[A]) = new ExistsExpression(query.ast, "exists")
 
-  def notExists[A](query: Query[A]) = new NotExistsExpression(query.ast)
+  def notExists[A](query: Query[A]) = new ExistsExpression(query.ast, "not exists")
 
   class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean)
     extends FunctionNode[LongType](

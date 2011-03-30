@@ -30,7 +30,7 @@ import org.squeryl.Session
  *  TupleSelectElement for group by or compute elements (TODO: document group by/compute)
  *  FieldSelectElement for table columns (that map to fields)
  *
- *  ExportSelectElement for a select element that refers to a SelectElement of an inner query.
+ *  ExportSelectElement for a select element that refers to a SelectElement of an inner or outer query.
  *
  * SelectElementReference are nodes in any clause other than select (where, having, composite expression, order by, etc)
  *  that refer to a SelectElement  
@@ -240,21 +240,20 @@ class ValueSelectElement
 
 /**
  * All nodes that refer to a SelectElement are SelectElementReference,
- * with the exception of SelectElement that refer to an inner query's SelectElement,
+ * with the exception of SelectElement that refer to an inner or outer query's SelectElement,
  * these are ExportedSelectElement
  */
 class SelectElementReference[A]
   (val selectElement: SelectElement)(implicit val mapper: OutMapper[A])
-    extends TypedExpressionNode[A]  {
+    extends TypedExpressionNode[A] {
 
   override def toString =
-    'SelectElementReference + ":" + Utils.failSafeString(_delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
+    'SelectElementReference + ":" + Utils.failSafeString(delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 
   override def inhibited =
     selectElement.inhibited
 
   private def _useSite: QueryExpressionNode[_] = {
-
     var e: ExpressionNode = this
 
     do {
@@ -266,7 +265,7 @@ class SelectElementReference[A]
     error("could not determine use site of "+ this)
   }
 
-  private lazy val _delegateAtUseSite =
+  lazy val delegateAtUseSite =
     if(selectElement.parent == None)
       selectElement
     else {
@@ -281,15 +280,17 @@ class SelectElementReference[A]
     }
 
   override def doWrite(sw: StatementWriter) =
-    sw.write(sw.quoteName(_delegateAtUseSite.alias))
+    sw.write(sw.quoteName(delegateAtUseSite.alias))
 }
 
 /**
- * SelectElement that refer to a SelectElement of an inner query 
+ * SelectElement that refer to a SelectElement of an inner or outer query
  */
 class ExportedSelectElement
   (val selectElement: SelectElement)
     extends SelectElement {
+
+  var outerScopes:List[QueryExpressionNode[_]] = Nil
 
   def resultSetMapper = selectElement.resultSetMapper
 
@@ -310,24 +311,30 @@ class ExportedSelectElement
   val expression = new ExpressionNode {
 
     def doWrite(sw: StatementWriter) =
-      sw.write(sw.quoteName(alias))
+    sw.write(sw.quoteName(alias))
   }
 
   override def toString =
     'ExportedSelectElement + ":" + alias + ",(selectElement=" + selectElement + ")"
 
   def alias:String =
-    target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target.aliasSegment
+    if (isDirectOuterReference)
+      selectElement.alias
+    else
+      target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "." + target.aliasSegment
 
   override def aliasSegment: String =
     //target.parent.get.asInstanceOf[QueryableExpressionNode].alias + "_" + target.aliasSegment
-    Session.currentSession.databaseAdapter.aliasExport(
-      target.parent.get.asInstanceOf[QueryableExpressionNode], target)
+    if (isDirectOuterReference)
+      selectElement.aliasSegment
+    else
+      Session.currentSession.databaseAdapter.aliasExport(
+        target.parent.get.asInstanceOf[QueryableExpressionNode], target)
 
   /**
-   * A root level query that has nested queries will have SelectElements that are
-   * ExportedSelectElement, the 'actualSelectElement' points directly to the refered AST node,
-   * while 'target' refers to it indirectly (see target)
+   * A root level query that has nested queries (or refers to queries in an outer scope) will
+   * have SelectElements that are ExportedSelectElement, the 'actualSelectElement' points directly
+   * to the refered AST node, while 'target' refers to it indirectly (see target)
    */
   override def actualSelectElement: SelectElement =
     selectElement.actualSelectElement
@@ -339,21 +346,38 @@ class ExportedSelectElement
    * In other words :
    *   exportSelectElement.target.target.,...,.target == exportSelectElement.actualSelectElement
    */
-  lazy val target: SelectElement = {
+  lazy val target: SelectElement = innerTarget.getOrElse(
+    outerTarget.getOrElse(error("could not find the target of : " + selectElement))
+  )
 
+  def needsOuterScope:Boolean = innerTarget.isEmpty && outerTarget.isEmpty && ! isDirectOuterReference
+
+  private def isDirectOuterReference: Boolean = outerScopes.exists((outer) => outer == selectElement.parentQueryable)
+
+  private def outerTarget: Option[SelectElement] = {
+    val q =
+      for (outer <- outerScopes;
+           subQuery <- outer.subQueries;
+           se <- subQuery.asInstanceOf[QueryExpressionElements].selectList
+             if se == selectElement || se.actualSelectElement == selectElement)
+      yield se
+
+    q.headOption
+  }
+
+  private def innerTarget: Option[SelectElement] = {
     val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
 
     if(selectElement.origin.parent.get == parentOfThis) {
-      selectElement
+      Some(selectElement)
     }
     else {
-
       val q =
         for(q <- parentOfThis.subQueries;
             se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
         yield se
 
-      q.headOption.getOrElse(error("could not find the target of : " + selectElement))
+      q.headOption
     }
-  }  
+  }
 }

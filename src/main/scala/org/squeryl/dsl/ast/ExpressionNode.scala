@@ -139,8 +139,8 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
   }
 }
 
-class ExistsExpression(query: ExpressionNode) extends PrefixOperatorNode(query, "exists", false) with LogicalBoolean
-class NotExistsExpression(query: ExpressionNode) extends PrefixOperatorNode(query, "not exists", false) with LogicalBoolean
+class ExistsExpression(val ast: ExpressionNode, val opType: String)
+  extends PrefixOperatorNode(ast, opType, false) with LogicalBoolean with NestedExpression
 
 class BetweenExpression(first: ExpressionNode, second: ExpressionNode, third: ExpressionNode)
   extends TernaryOperatorNode(first, second, third, "between") with LogicalBoolean {
@@ -571,7 +571,8 @@ class DummyExpressionHolder(val renderedExpression: String) extends ExpressionNo
     sw.write(renderedExpression)
 }
 
-class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None) extends ExpressionNode {
+class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None)
+    extends ExpressionNode with NestedExpression {
   def toIn = new RightHandSideOfIn[A](ast, Some(true))
   def toNotIn = new RightHandSideOfIn[A](ast, Some(false))
 
@@ -589,9 +590,29 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     }
     else false
 
+  override def children = List(ast)
+
   override def doWrite(sw: StatementWriter) =
     if(isConstantEmptyList && isIn.get)
       sw.write("1 = 0") // in Empty is always false
-    else
+    else {
       ast.doWrite(sw)
+    }
+}
+
+trait NestedExpression {
+  self: ExpressionNode =>
+
+  private [squeryl] def propagateOuterScope(query:QueryExpressionNode[_]) {
+    visitDescendants( (node, parent, depth) =>
+      node match {
+        case e:ExportedSelectElement if e.needsOuterScope => e.outerScopes = query :: e.outerScopes
+        case s:SelectElementReference[_] => s.delegateAtUseSite match {
+          case e:ExportedSelectElement if e.needsOuterScope => e.outerScopes = query :: e.outerScopes
+          case _ =>
+        }
+        case _ =>
+      }
+    )
+  }
 }
