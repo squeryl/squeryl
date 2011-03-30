@@ -82,6 +82,18 @@ trait ExpressionNode {
    */
   def visitDescendants(visitor: (ExpressionNode,Option[ExpressionNode],Int) => Unit) =
     _visitDescendants(this, None, 0, visitor)
+
+  private [squeryl] def useSite: QueryExpressionNode[_] = {
+    var e: ExpressionNode = this
+
+    do {
+      e = e.parent.get
+      if(e.isInstanceOf[QueryExpressionNode[_]])
+        return e.asInstanceOf[QueryExpressionNode[_]]
+    } while (e != None)
+
+    error("could not determine use site of "+ this)
+  }
 }
 
 
@@ -139,8 +151,14 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
   }
 }
 
-class ExistsExpression(query: ExpressionNode) extends PrefixOperatorNode(query, "exists", false) with LogicalBoolean
-class NotExistsExpression(query: ExpressionNode) extends PrefixOperatorNode(query, "not exists", false) with LogicalBoolean
+class ExistsExpression(val ast: ExpressionNode, val opType: String)
+  extends PrefixOperatorNode(ast, opType, false) with LogicalBoolean with NestedExpression {
+
+  override def doWrite(sw: StatementWriter) = {
+    propagateOuterScope
+    super.doWrite(sw)
+  }
+}
 
 class BetweenExpression(first: ExpressionNode, second: ExpressionNode, third: ExpressionNode)
   extends TernaryOperatorNode(first, second, third, "between") with LogicalBoolean {
@@ -571,7 +589,8 @@ class DummyExpressionHolder(val renderedExpression: String) extends ExpressionNo
     sw.write(renderedExpression)
 }
 
-class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None) extends ExpressionNode {
+class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None)
+    extends ExpressionNode with NestedExpression {
   def toIn = new RightHandSideOfIn[A](ast, Some(true))
   def toNotIn = new RightHandSideOfIn[A](ast, Some(false))
 
@@ -587,9 +606,30 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     }
     else false
 
+  override def children = List(ast)
+
   override def doWrite(sw: StatementWriter) =
     if(isConstantEmptyList && isIn.get)
       sw.write("1 = 0") // in Empty is always false
-    else
+    else {
+      propagateOuterScope
       ast.doWrite(sw)
+    }
+}
+
+trait NestedExpression {
+  self: ExpressionNode =>
+
+  protected def propagateOuterScope {
+    visitDescendants( (node, parent, depth) =>
+      node match {
+        case e:ExportedSelectElement if e.possibleOuterScopeRef => e.outerScopes = this :: e.outerScopes
+        case s:SelectElementReference[_] => s.delegateAtUseSite match {
+          case e:ExportedSelectElement if e.possibleOuterScopeRef => e.outerScopes = this :: e.outerScopes
+          case _ =>
+        }
+        case _ =>
+      }
+    )
+  }
 }
