@@ -107,7 +107,7 @@ trait DslFactory
   // List Conversion implicits don't vary with the choice of
   // column/field types, so they don't need to be overridable factory methods :
 
-  implicit def traversableOfNumercalExpressionList[A <% NumericalExpression[_]](l: Traversable[A]) =
+  implicit def traversableOfNumericalExpressionList[A <% NumericalExpression[_]](l: Traversable[A]) =
     new RightHandSideOfIn[NumericalExpression[A]](new ConstantExpressionNodeList[Any](l))
 
 // TODO : find out why this generalized conv for NonNumericals won't work (looks like a scalac bug...):
@@ -117,8 +117,14 @@ trait DslFactory
   implicit def traversableOfString2ListString(l: Traversable[StringType]) =
     new RightHandSideOfIn[StringType](new ConstantExpressionNodeList[StringType](l))
 
+  implicit def traversableOfString2OptionListString(l: Traversable[StringType]) =
+    new RightHandSideOfIn[Option[StringType]](new ConstantExpressionNodeList[StringType](l))
+
   implicit def traversableOfDate2ListDate(l: Traversable[DateType]) =
     new RightHandSideOfIn[DateType](new ConstantExpressionNodeList[DateType](l))
+
+  implicit def traversableOfDate2OptionListDate(l: Traversable[DateType]) =
+    new RightHandSideOfIn[Option[DateType]](new ConstantExpressionNodeList[DateType](l))
 
   implicit def typedExpression2OrderByArg[E <% TypedExpressionNode[_]](e: E) = new OrderByArg(e)
 
