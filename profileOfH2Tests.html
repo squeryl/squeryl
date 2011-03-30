@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"></meta>
+        <title>Performance profile of Squeryl queries</title>
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+          google.load('visualization', '1', {packages: ['corechart']});
+        </script>
+        <script type="text/javascript">
+
+          
+    function drawBarGraph(divId, chartTitle, statType, queryClasses, measure) {
+              var data = new google.visualization.DataTable();
+
+              data.addColumn('string', 'Z');
+              data.addColumn('number', statType);
+
+              data.addRows(queryClasses.length);
+
+              for (var j = 0; j < queryClasses.length; ++j) {
+                data.setValue(j, 0, queryClasses[j].toString());
+                data.setValue(j, 1, measure[j]);
+              }
+
+              var v = new google.visualization.BarChart(document.getElementById(divId))
+
+              v.draw(data,
+                       {title: chartTitle,
+                        width:600, height:400,
+                        vAxis: {title: "Queries"},
+                        hAxis: {title: statType}
+                       }
+                  );
+    }
+  
+
+          function drawVisualization() {
+            drawBarGraph('chart1','Top 10 statements with longest avg','avg time',['org.squeryl.tests.musicdb.MusicDbTestRun.songCountPerAlbumIdJoinedWithAlbumNested(MusicDb.scala:250)','org.squeryl.tests.schooldb.SchoolDbTestRun.testHavingClause(SchoolDb.scala:1041)','org.squeryl.tests.schooldb.SchoolDbTestRun.testDeepNest2(SchoolDb.scala:393)','org.squeryl.tests.musicdb.MusicDbTestRun.selfJoinNested4LevelPartialSelect(MusicDb.scala:183)','org.squeryl.tests.schooldb.SchoolDbTestRun.testBatchUpdate1(SchoolDb.scala:1158)','org.squeryl.tests.schooldb2.SchoolDb2Tests.testCompositeEquality(SchoolDb2.scala:351)','org.squeryl.tests.demos.KickTheTires$$anonfun$test$1.apply(MusicDb.scala:211)','org.squeryl.tests.musicdb.MusicDbTestRun.songCountPerAlbum(MusicDb.scala:208)','org.squeryl.tests.musicdb.MusicDbTestRun.selfJoinNested3Level(MusicDb.scala:180)','org.squeryl.tests.mutablerelations.Professor.courses(SchoolDbMutableRelations.scala:14)'],[31.0,29.0,15.0,9.0,5.0,5.0,2.0,2.0,2.0,2.0]);
+drawBarGraph('chart2','Top 10 most called statements','invocation count',['org.squeryl.tests.demos.Playlist.addSong(MusicDb.scala:79)','org.squeryl.tests.mutablerelations.Subject.courses(SchoolDbMutableRelations.scala:36)','org.squeryl.tests.mutablerelations.Course.subject(SchoolDbMutableRelations.scala:26)','org.squeryl.tests.musicdb.MusicDbTestRun._betweenArtists(MusicDb.scala:793)','org.squeryl.tests.musicdb.MusicDbTestRun.countCds2(MusicDb.scala:281)','org.squeryl.tests.musicdb.MusicDbTestRun$$anonfun$org$squeryl$tests$musicdb$MusicDbTestRun$$_innerTx$1.apply(MusicDb.scala:311)','org.squeryl.tests.musicdb.MusicDbTestRun._truncateTimestampInTimeOfLastUpdate(MusicDb.scala:576)','org.squeryl.tests.musicdb.MusicDbTestRun.testTimestamp(MusicDb.scala:551)','org.squeryl.tests.schooldb.SchoolDbTestRun.testPartialUpdate1(SchoolDb.scala:987)','org.squeryl.tests.schooldb2.SchoolDb2Tests.testCompositeEquality(SchoolDb2.scala:345)'],[12,6,6,3,3,3,3,3,3,3]);
+drawBarGraph('chart3','Top 10 statements incurring most cummulative execution time','cummulative execution time',['org.squeryl.tests.musicdb.MusicDbTestRun.songCountPerAlbumIdJoinedWithAlbumNested(MusicDb.scala:250)','org.squeryl.tests.schooldb.SchoolDbTestRun.testHavingClause(SchoolDb.scala:1041)','org.squeryl.tests.schooldb.SchoolDbTestRun.testDeepNest2(SchoolDb.scala:393)','org.squeryl.tests.schooldb2.SchoolDb2Tests.testCompositeEquality(SchoolDb2.scala:351)','org.squeryl.tests.demos.Playlist.addSong(MusicDb.scala:79)','org.squeryl.tests.schooldb.SchoolDbTestRun.testBatchUpdate1(SchoolDb.scala:1158)','org.squeryl.tests.musicdb.MusicDbTestRun.selfJoinNested4LevelPartialSelect(MusicDb.scala:183)','org.squeryl.tests.musicdb.MusicDbTestRun.selfJoinNested3Level(MusicDb.scala:180)','org.squeryl.tests.musicdb.MusicDbTestRun.testEnums(MusicDb.scala:886)','org.squeryl.tests.schooldb.SchoolDbTestRun.testBatchInserts1(SchoolDb.scala:1127)'],[31,29,15,10,9,9,9,2,2,2]);
+drawBarGraph('chart4','Top 10 statements with highest avg row count','avg row count',['org.squeryl.tests.schooldb.SchoolDbTestRun.addressesOfStudentsOlderThan24(SchoolDb.scala:270)','org.squeryl.tests.musicdb.MusicDbTestRun.testJoinWithCompute(MusicDb.scala:129)','org.squeryl.tests.schooldb.SchoolDbTestRun.testLeftOuterJoin2(SchoolDb.scala:487)','org.squeryl.tests.musicdb.MusicDbTestRun.testDynamicWhereClause1(MusicDb.scala:932)','org.squeryl.tests.musicdb.MusicDbTestRun.testOuterJoinWithSubQuery(MusicDb.scala:154)','org.squeryl.tests.schooldb.SchoolDbTestRun.testNewLeftOuterJoin3(SchoolDb.scala:1367)','org.squeryl.tests.musicdb.MusicDbTestRun.testDynamicWhereClause1(MusicDb.scala:914)','org.squeryl.tests.schooldb.SchoolDbTestRun.testNewLeftOuterJoin1(SchoolDb.scala:1271)','org.squeryl.tests.musicdb.MusicDbTestRun.dynamicWhereOnArtists(MusicDb.scala:940)','org.squeryl.tests.schooldb.SchoolDbTestRun.testNewLeftOuterJoin2(SchoolDb.scala:1327)'],[9.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0,5.0]);
+
+          }
+
+          google.setOnLoadCallback(drawVisualization);
+        </script>
+      </head>
+      <body style="font-family: Arial;border: 0 none;">
+        <div style="width: 1000px; height: 400px;" id="chart1"></div>
+        <div style="width: 1000px; height: 400px;" id="chart2"></div>
+        <div style="width: 1000px; height: 400px;" id="chart3"></div>
+        <div style="width: 1000px; height: 400px;" id="chart4"></div>
+      </body>
+    </html>

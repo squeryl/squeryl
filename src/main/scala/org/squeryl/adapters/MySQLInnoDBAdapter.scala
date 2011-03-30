@@ -27,6 +27,6 @@ class MySQLInnoDBAdapter extends MySQLAdapter {
     *   InnoDB MySQL tables support foreign key constraints,
     *   see http://dev.mysql.com/doc/refman/5.5/en/innodb-foreign-key-constraints.html
     */
-    override def supportsForeignKeyConstraints = false
+    override def supportsForeignKeyConstraints = true
     
 }
