@@ -368,8 +368,9 @@ class SchoolDbTestRun extends QueryTester {
     
     testUpdateSetAll
 
-    testExistsSmoketest
-    testNotExistsSmoketest
+    testExists
+    testNotExists
+    testVeryNestedExists
 
     drop
   }
@@ -1394,26 +1395,79 @@ class SchoolDbTestRun extends QueryTester {
     println('testNewOuterJoin3 + " passed.")
   }
 
-  def testExistsSmoketest {
-    val studentsWithAddresses =
+  def testExists {
+    val studentsWithAnAddress =
       from(students)(s =>
-        where(exists(from(addresses)((a) => select(a.id))))
+        where(exists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
           select(s)
       )
-    studentsWithAddresses.toList
 
-    passed('testExistsSmoketest)
+    val res = for (s <- studentsWithAnAddress) yield s.name
+    val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('testExists)
   }
 
-  def testNotExistsSmoketest {
-    val studentsWithAddresses =
+  def testNotExists {
+    val studentsWithNoAddress =
       from(students)(s =>
-        where(notExists(from(addresses)((a) => select(a.id))))
+        where(notExists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
         select(s)
       )
-    studentsWithAddresses.toList
+    val res = for (s <- studentsWithNoAddress) yield s.name
+    val expected = List("Gaitan")
 
-    passed('testNotExistsSmoketest)
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('testNotExists)
+  }
+
+  def testVeryNestedExists {
+    val qStudents = from(students) ((s) => select(s))
+    val qStudentsFromStudents = from(qStudents) ((s) => select(s))
+    val studentsWithAnAddress =
+      from(qStudentsFromStudents)(s =>
+        where(exists(from(addresses)((a) =>
+          where(s.addressId === a.id)
+          select(a))))
+        select(s))
+
+    val res = for (s <- studentsWithAnAddress) yield s.name
+    val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('testVeryNestedExists)
+
+  }
+
+  def testVeryVeryNestedExists {
+    // XXX This doesn't work s.addressId in s.addressId === a2.id is created
+    // as a direct ieldSelectElement, not ExportedSelectElement (however note that
+    // s.addressId in where(s.addressId in ... is created correctly (and then correctly
+    // resolved as an outer reference)
+    val qStudents = from(students) ((s) => select(s))
+    val qStudentsFromStudents = from(qStudents) ((s) => select(s))
+    val studentsWithAnAddress =
+      from(qStudentsFromStudents)(s =>
+        where(exists(from(addresses)((a) =>
+            where(s.addressId in
+              (from(addresses) ( (a2) =>
+                where(a2.id === a.id and s.addressId === a2.id)
+                select(a2.id))))
+            select(a.id))))
+          select(s)
+      )
+
+    val res = for (s <- studentsWithAnAddress) yield s.name
+    val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('testVeryVeryNestedExists)
+
   }
   
   def testUpdateSetAll {
