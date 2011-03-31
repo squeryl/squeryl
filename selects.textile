@@ -136,6 +136,44 @@ Where
 Doing a 3 level nested join is by no means necessary and serves
 no other purposes than demonstration.
 
+In addition to the in() operator, exists() and notExists() can be used in a
+where clause.  They correspond to EXISTS and NOT EXISTS in SQL.  Any query
+nested with in(), exists(), or notExists() can also refer to queries in an
+outer scope.
+
+For example:
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+    val studentsWithAnAddress =
+      from(students)(s =>
+        where(exists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
+          select(s)
+      )
+]]></script>
+
+The SQL generated for the above statement is :
+
+<script type="syntaxhighlighter" class="brush: sql"><![CDATA[
+Select
+  Student8.name as Student8_name,
+  Student8.age as Student8_age,
+  Student8.isMultilingual as Student8_isMultilingual,
+  Student8.lastName as Student8_lastName,
+  Student8.id as Student8_id,
+  Student8.addressId as Student8_addressId,
+  Student8.gender as Student8_gender
+From
+  Student Student8
+Where
+  (exists(Select
+     Address11.id as Address11_id
+   From
+     Address Address11
+   Where
+     (Student8.addressId = Address11.id)
+  ) )
+]]></script>
+
 h2. Select Distinct
 
 Calling the *.distinct* method on a Query[] creates a copy of it that has a 'distinct' select clause :
