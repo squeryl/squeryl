@@ -552,6 +552,8 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
   def toIn = new RightHandSideOfIn[A](ast, Some(true))
   def toNotIn = new RightHandSideOfIn[A](ast, Some(false))
 
+  override def children = List(ast)
+
   override def inhibited =
     if(isConstantEmptyList) // not in Empty is always true, so we remove the condition
       (! isIn.get)

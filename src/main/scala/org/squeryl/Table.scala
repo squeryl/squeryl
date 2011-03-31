@@ -196,7 +196,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     vxn.parent = Some(us)
 
     var idGen = 0
-    vxn.visitDescendants((node,parent,i) => {
+    us.visitDescendants((node,parent,i) => {
 
       if(node.parent == None)
         node.parent = parent

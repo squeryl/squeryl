@@ -593,9 +593,8 @@ trait DatabaseAdapter {
       sw.nextLine
       sw.write("Where")
       sw.nextLine
-      val whereClauseClosure = us.whereClause.get
       sw.writeIndented {
-        whereClauseClosure().write(sw)
+        us.whereClause.get.write(sw)
       }
     }
   }

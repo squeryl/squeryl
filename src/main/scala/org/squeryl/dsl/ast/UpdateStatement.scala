@@ -17,8 +17,14 @@ package org.squeryl.dsl.ast
 
 import org.squeryl.internals.StatementWriter
 
-class UpdateStatement(val whereClause: Option[()=>LogicalBoolean], uas: Seq[UpdateAssignment])
+class UpdateStatement(_whereClause: Option[()=>LogicalBoolean], uas: Seq[UpdateAssignment])
    extends ExpressionNode {
+
+  val whereClause: Option[LogicalBoolean] =
+    if(whereClause == None) None
+    else Some(whereClause.get.apply)
+
+  override def children = whereClause.toList
 
   def doWrite(sw: StatementWriter) = {}
 
