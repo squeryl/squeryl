@@ -360,6 +360,7 @@ trait Schema {
     def restrict = new ReferentialActionImpl("restrict", this)
     def cascade = new ReferentialActionImpl("cascade", this)
     def noAction = new ReferentialActionImpl("no action", this)
+    def setNull = new ReferentialActionImpl("set null", this)
   }
 
   class ReferentialActionImpl(token: String, ev: ReferentialEvent) extends ReferentialAction {
