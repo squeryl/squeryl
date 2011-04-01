@@ -590,8 +590,6 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     }
     else false
 
-  override def children = List(ast)
-
   override def doWrite(sw: StatementWriter) =
     if(isConstantEmptyList && isIn.get)
       sw.write("1 = 0") // in Empty is always false
