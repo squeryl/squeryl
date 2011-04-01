@@ -21,8 +21,7 @@ class UpdateStatement(_whereClause: Option[()=>LogicalBoolean], uas: Seq[UpdateA
    extends ExpressionNode {
 
   val whereClause: Option[LogicalBoolean] =
-    if(whereClause == None) None
-    else Some(whereClause.get.apply)
+    _whereClause.map(_.apply)
 
   override def children = whereClause.toList
 
