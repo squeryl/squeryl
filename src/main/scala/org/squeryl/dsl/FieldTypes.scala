@@ -45,6 +45,8 @@ trait FieldTypes {
 
   type EnumerationValueType
 
+  type UuidType
+
   type BinaryType
 
   protected implicit def sampleByte: ByteType
@@ -59,6 +61,7 @@ trait FieldTypes {
   protected implicit def sampleBigDecimal: BigDecimalType
   //protected implicit def sampleEnumerationValueType: EnumerationValueType
   protected implicit def sampleBinary: BinaryType
+  protected implicit def sampleUuid: UuidType
 
   protected implicit val sampleByteO = Some(sampleByte)
   protected implicit val sampleIntO = Some(sampleInt)
@@ -72,6 +75,7 @@ trait FieldTypes {
   protected implicit val sampleBigDecimalO = Some(sampleBigDecimal)
   //protected implicit val sampleEnumerationValueTypeO = Some(sampleEnumerationValueType)
   protected implicit val sampleBinaryO = Some(sampleBinary)
+  protected implicit val sampleUuidO = Some(sampleUuid)
 }
 
 
@@ -144,7 +148,7 @@ trait NonNumericalExpression[A] extends TypedExpressionNode[A] {
   def between(b: NonNumericalExpression[A], c: NonNumericalExpression[A]) = new BetweenExpression(this, b, c)
 
   def is(columnAttributes: AttributeValidOnNonNumericalColumn*)(implicit restrictUsageWithinSchema: Schema) =
-    new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)  
+    new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
 }
 
 trait BooleanExpression[A] extends NonNumericalExpression[A] {
@@ -167,7 +171,7 @@ trait StringExpression[A] extends NonNumericalExpression[A] {
   def regex(pattern: String) = new FunctionNode(pattern, this) with LogicalBoolean {
 
     override def doWrite(sw: StatementWriter) =
-      Session.currentSession.databaseAdapter.writeRegexExpression(outer, pattern, sw) 
+      Session.currentSession.databaseAdapter.writeRegexExpression(outer, pattern, sw)
   }
   
   def ~ = this
@@ -175,5 +179,9 @@ trait StringExpression[A] extends NonNumericalExpression[A] {
 
 trait DateExpression[A] extends NonNumericalExpression[A] {
 
+  def ~ = this
+}
+
+trait UuidExpression[A] extends NonNumericalExpression[A] {
   def ~ = this
 }

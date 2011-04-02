@@ -19,7 +19,7 @@ package org.squeryl
 import dsl.ast._
 import dsl._
 import internals.FieldReferenceLinker
-import java.util.Date
+import java.util.{ Date, UUID }
 import java.sql.Timestamp
 
 /**
@@ -62,6 +62,8 @@ trait PrimitiveTypeMode extends QueryDsl {
   type TimestampType = Timestamp
 
   type EnumerationValueType = Enumeration#Value
+
+  type UuidType = UUID
 
   type BinaryType = Array[Byte]
 
@@ -247,6 +249,22 @@ trait PrimitiveTypeMode extends QueryDsl {
         new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
     }
 
+  def createLeafNodeOfScalarUuidType(d: UUID) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[UUID](d) with UuidExpression[UUID]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[UUID](n) with UuidExpression[UUID]
+    }
+
+  def createLeafNodeOfScalarUuidOptionType(d: Option[UUID]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[UUID]](d) with UuidExpression[Option[UUID]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[UUID]](n) with UuidExpression[Option[UUID]]
+    }
+
   protected def mapByte2ByteType(i: Byte) = i
   protected def mapInt2IntType(i: Int) = i
   protected def mapString2StringType(s: String) = s
@@ -258,6 +276,10 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected def mapDate2DateType(b: Date) = b
   protected def mapTimestamp2TimestampType(b: Timestamp) = b
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
+  protected def mapObject2UuidType(u: AnyRef) = u match {
+    case u: UUID => u
+    case s: String => UUID.fromString(s)
+  }
   protected def mapBinary2BinaryType(d: Array[Byte]) = d
 
   protected implicit val sampleByte: ByteType = 0xF.byteValue
@@ -271,6 +293,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   protected implicit val sampleDate: DateType = new Date
   protected implicit def sampleTimestamp: TimestampType = new Timestamp(0)
   //protected implicit def sampleEnumerationValueType: EnumerationValueType = DummyEnum.DummyEnumerationValue
+  protected implicit val sampleUuid: UUID = UUID.fromString("00000000-0000-0000-0000-000000000000")
   protected implicit val sampleBinary: BinaryType = Array[Byte](0)
 }
 

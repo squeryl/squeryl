@@ -363,6 +363,7 @@ object FieldMetaData {
     def handleTimestampType = true
     def handleBinaryType = true
     def handleEnumerationValueType = true
+    def handleUuidType = true
     def handleUnknownType(c: Class[_]) =
       c.isAssignableFrom(classOf[Some[_]]) ||
       classOf[Product1[Any]].isAssignableFrom(c)
@@ -536,6 +537,7 @@ object FieldMetaData {
     def handleTimestampType = -1
     def handleBinaryType = 255
     def handleEnumerationValueType = 4
+    def handleUuidType = 36
     def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
   }
 
@@ -553,6 +555,7 @@ object FieldMetaData {
     def handleTimestampType = new java.sql.Timestamp(0)
     def handleBinaryType = new Array[Byte](0)
     def handleEnumerationValueType = DummyE.Z
+    def handleUuidType = java.util.UUID.fromString("00000000-0000-0000-0000-000000000000")
     def handleUnknownType(c: Class[_]) = null
   }
 
@@ -580,6 +583,7 @@ object FieldMetaData {
     val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
     val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
     val _binaryM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBytes(i))
+    val _uuidM = (rs:ResultSet, i:Int) => Session.currentSession.databaseAdapter.convertToUuidForJdbc(rs, i)
 
     def handleIntType = _intM
     def handleStringType  = _stringM
@@ -593,6 +597,7 @@ object FieldMetaData {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = _bigDecM
     def handleTimestampType = _timestampM
     def handleBinaryType = _binaryM
+    def handleUuidType = _uuidM
     def handleEnumerationValueType = _intM
 
     def handleUnknownType(c: Class[_]) =

@@ -29,6 +29,7 @@ trait FieldTypeHandler[T] {
   private def isTimestamp(t: Class[_]) = classOf[java.sql.Timestamp].isAssignableFrom(t)
   private def isBinary(t: Class[_]) = t.isAssignableFrom(classOf[Array[Byte]])
   private def isEnumerationValueType(t: Class[_]) = classOf[Enumeration#Value].isAssignableFrom(t)
+  private def isUuid(t: Class[_]) = t.isAssignableFrom(classOf[java.util.UUID])
 
   def handleType(t: Class[_], fmd: Option[FieldMetaData]) = {
 
@@ -54,6 +55,8 @@ trait FieldTypeHandler[T] {
         handleBinaryType
       else if(isEnumerationValueType(t))
         handleEnumerationValueType
+      else if (isUuid(t))
+        handleUuidType
       else
         handleUnknownType(t)
   }
@@ -70,6 +73,7 @@ trait FieldTypeHandler[T] {
   protected def handleTimestampType: T
   protected def handleBinaryType: T
   protected def handleEnumerationValueType: T
+  protected def handleUuidType: T
 
   protected def handleUnknownType(c: Class[_]) : T
 }

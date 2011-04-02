@@ -17,7 +17,7 @@ package org.squeryl.customtypes;
 
 
 import org.squeryl.internals.FieldReferenceLinker
-import java.util.Date
+import java.util.{Date, UUID}
 import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
 import org.squeryl.dsl._
 import java.sql.Timestamp
@@ -77,7 +77,9 @@ trait CustomTypesMode extends QueryDsl {
   type EnumerationValueType = Enumeration#Value
 
   type BinaryType = BinaryField
-  
+
+  type UuidType = UuidField
+
   protected def mapByte2ByteType(i: Byte) = new ByteField(i)
   protected def mapInt2IntType(i: Int) = new IntField(i)
   protected def mapString2StringType(s: String) = new StringField(s)
@@ -90,6 +92,10 @@ trait CustomTypesMode extends QueryDsl {
   protected def mapTimestamp2TimestampType(b: Timestamp) = new TimestampField(b)
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
   protected def mapBinary2BinaryType(d: Array[Byte]) = new BinaryField(d)
+  protected def mapObject2UuidType(u: AnyRef) = new UuidField(u match {
+    case u: UUID => u
+    case s: String => UUID.fromString(s)
+  })
 
   protected implicit val sampleByte: ByteType = new ByteField(0)
   protected implicit val sampleInt = new IntField(0)
@@ -102,8 +108,8 @@ trait CustomTypesMode extends QueryDsl {
   protected implicit val sampleDate = new DateField(new Date)
   protected implicit def sampleTimestamp = new TimestampField(new Timestamp(0))
   protected implicit val sampleBinary: BinaryType = new BinaryField(Array[Byte](0))
+  protected implicit val sampleUuid: UuidType= new UuidField(UUID.fromString("00000000-0000-0000-0000-000000000000"))
 
-  
   //TODO Scala bug report, implicit params should work here , but they don't ...
   def createLeafNodeOfScalarIntType(i: IntField) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
@@ -264,7 +270,23 @@ trait CustomTypesMode extends QueryDsl {
       case Some(n:SelectElement) =>
         new SelectElementReference[Option[TimestampType]](n) with DateExpression[Option[TimestampType]]
     }
-  
+
+  def createLeafNodeOfScalarUuidType(d: UuidField) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[UuidType](d) with UuidExpression[UuidType]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[UuidType](n) with UuidExpression[UuidType]
+    }
+
+  def createLeafNodeOfScalarUuidOptionType(d: Option[UuidField]) =
+    FieldReferenceLinker.takeLastAccessedFieldReference match {
+      case None =>
+        new ConstantExpressionNode[Option[UuidType]](d) with UuidExpression[Option[UuidType]]
+      case Some(n:SelectElement) =>
+        new SelectElementReference[Option[UuidType]](n) with UuidExpression[Option[UuidType]]
+    }
+
   def createLeafNodeOfScalarBinaryType(i: BinaryField) =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
@@ -307,3 +329,5 @@ class DateField(val value: Date) extends CustomType[Date]
 class TimestampField(val value: Timestamp) extends CustomType[Timestamp]
 
 class BinaryField(val value: Array[Byte]) extends CustomType[Array[Byte]]
+
+class UuidField(val value: UUID) extends CustomType[UUID]

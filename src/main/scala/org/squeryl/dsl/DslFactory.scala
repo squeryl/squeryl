@@ -54,7 +54,10 @@ trait DslFactory
 
   protected def createLeafNodeOfScalarTimestampType(d: TimestampType): DateExpression[TimestampType]
   protected def createLeafNodeOfScalarTimestampOptionType(d: Option[TimestampType]): DateExpression[Option[TimestampType]]
-  
+
+  protected def createLeafNodeOfScalarUuidType(d: UuidType): UuidExpression[UuidType]
+  protected def createLeafNodeOfScalarUuidOptionType(d: Option[UuidType]): UuidExpression[Option[UuidType]]
+
   protected def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[EnumerationValueType]
   protected def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[EnumerationValueType]]
 
@@ -101,6 +104,10 @@ trait DslFactory
 
   implicit def enum2OptionEnumNode[A <: Option[EnumerationValueType]](e: A): EnumExpression[Option[A]] =
     createLeafNodeOfEnumExpressionOptionType(e).asInstanceOf[EnumExpression[Option[A]]]
+
+  implicit def uuid2ScalarUuid(u: UuidType) = createLeafNodeOfScalarUuidType(u)
+
+  implicit def optionUuid2ScalarUuid(u: Option[UuidType]) = createLeafNodeOfScalarUuidOptionType(u)
 
   implicit def binary2ScalarBinary(b: BinaryType) = createLeafNodeOfScalarBinaryType(b)
 

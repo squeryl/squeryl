@@ -17,7 +17,7 @@ package org.squeryl.dsl
 
 import ast._
 import org.squeryl.internals._
-import java.util.Date
+import java.util.{Date, UUID}
 import java.sql.{Timestamp, ResultSet}
 
 class NumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper[A]) extends TypeConversion(e) with NumericalExpression[A]
@@ -447,7 +447,8 @@ trait TypeArithmetic extends FieldTypes {
   protected def mapBinary2BinaryType(b: Array[Byte]): BinaryType
   protected def mapDate2DateType(b: Date): DateType
   protected def mapTimestamp2TimestampType(b: Timestamp): TimestampType
-  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType    
+  protected def mapObject2UuidType(u: AnyRef): UuidType
+  //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
 
   protected implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
     def doMap(rs: ResultSet) = mapByte2ByteType(rs.getByte(index))
@@ -502,6 +503,10 @@ trait TypeArithmetic extends FieldTypes {
   protected implicit def createOutMapperTimestampType: OutMapper[TimestampType] = new OutMapper[TimestampType] {
     def doMap(rs: ResultSet) = mapTimestamp2TimestampType(rs.getTimestamp(index))
     def sample = sampleTimestamp
+  }
+  protected implicit def createOutMapperUuidType: OutMapper[UuidType] = new OutMapper[UuidType] {
+    def doMap(rs: ResultSet) = mapObject2UuidType(rs.getObject(index))
+    def sample = sampleUuid
   }
 //  protected implicit def createOutMapperEnumerationValueType: OutMapper[EnumerationValueType] = new OutMapper[EnumerationValueType] {
 //    def doMap(rs: ResultSet) = mapInt2EnumerationValueType(rs.getInt(index))
@@ -627,5 +632,16 @@ trait TypeArithmetic extends FieldTypes {
         Some(v)
     }
     def sample = Some(sampleTimestamp)
-  }  
+  }
+
+  protected implicit def createOutMapperUuidTypeOption: OutMapper[Option[UuidType]] = new OutMapper[Option[UuidType]] {
+    def doMap(rs: ResultSet) = {
+      val v = mapObject2UuidType(rs.getObject(index))
+      if(rs.wasNull)
+        None
+      else
+        Some(v)
+    }
+    def sample = Some(sampleUuid)
+  }
 }

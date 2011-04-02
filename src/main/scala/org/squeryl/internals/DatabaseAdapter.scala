@@ -20,6 +20,7 @@ import org.squeryl._
 import dsl.CompositeKey
 import org.squeryl.{Schema, Session, Table}
 import java.sql._
+import java.util.UUID
 
 trait DatabaseAdapter {
 
@@ -214,7 +215,8 @@ trait DatabaseAdapter {
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
-  
+  def uuidTypeDeclaration = "char(36)"
+
   private val _declarationHandler = new FieldTypeHandler[String] {
 
     def handleIntType = intTypeDeclaration
@@ -554,6 +556,8 @@ trait DatabaseAdapter {
    */
   def convertToBooleanForJdbc(rs: ResultSet, i:Int): Boolean = rs.getBoolean(i)
 
+  def convertFromUuidForJdbc(u: UUID): AnyRef = u.toString
+  def convertToUuidForJdbc(rs: ResultSet, i:Int): UUID = UUID.fromString(rs.getString(i))
 
   def writeUpdate(t: Table[_], us: UpdateStatement, sw : StatementWriter) = {
 
