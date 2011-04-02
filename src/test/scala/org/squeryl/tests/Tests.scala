@@ -135,6 +135,10 @@ object Tests extends QueryTester {
       (new SchoolDbTestRun).test1
     }
 
+    transaction {
+      (new UuidTests).testAll
+    }
+
     inTransaction {
       inTransaction {
         (new MusicDbTestRun).test1
