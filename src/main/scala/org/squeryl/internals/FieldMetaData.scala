@@ -583,7 +583,7 @@ object FieldMetaData {
     val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
     val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
     val _binaryM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBytes(i))
-    val _uuidM = (rs:ResultSet, i:Int) => Session.currentSession.databaseAdapter.convertToUuidForJdbc(rs, i)
+    val _uuidM = (rs:ResultSet, i:Int) => if (rs.wasNull) null else Session.currentSession.databaseAdapter.convertToUuidForJdbc(rs, i)
 
     def handleIntType = _intM
     def handleStringType  = _stringM
