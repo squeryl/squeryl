@@ -432,7 +432,8 @@ trait DatabaseAdapter {
        v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
     else if(v.isInstanceOf[scala.Enumeration#Value])
        v = v.asInstanceOf[scala.Enumeration#Value].id.asInstanceOf[AnyRef]
-
+    else if(v.isInstanceOf[java.util.UUID])
+       v = convertFromUuidForJdbc(v.asInstanceOf[UUID])
     v
   }
 
