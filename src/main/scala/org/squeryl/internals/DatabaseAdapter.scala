@@ -558,8 +558,11 @@ trait DatabaseAdapter {
    */
   def convertToBooleanForJdbc(rs: ResultSet, i:Int): Boolean = rs.getBoolean(i)
 
-  def convertFromUuidForJdbc(u: UUID): AnyRef = u.toString
-  def convertToUuidForJdbc(rs: ResultSet, i:Int): UUID = UUID.fromString(rs.getString(i))
+  def convertFromUuidForJdbc(u: UUID): AnyRef =
+    u.toString
+
+  def convertToUuidForJdbc(rs: ResultSet, i:Int): UUID =
+    UUID.fromString(rs.getString(i))
 
   def writeUpdate(t: Table[_], us: UpdateStatement, sw : StatementWriter) = {
 
@@ -627,7 +630,13 @@ trait DatabaseAdapter {
     foreignKeyConstraintName(foreingKeyTable, idWithinSchema)
 
   def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
-    foreignKeyTable.prefixedName + "FK" + idWithinSchema
+    foreignKeyTable.name + "FK" + idWithinSchema
+
+  def viewAlias(vn: ViewExpressionNode[_]) =
+     if(vn.view.prefix != None)
+       vn.view.prefix.get + "_" + vn.view.name + vn.uniqueId.get
+     else
+       vn.view.name + vn.uniqueId.get
 
   @deprecated("Use writeForeignKeyDeclaration instead")
   def writeForeingKeyDeclaration(

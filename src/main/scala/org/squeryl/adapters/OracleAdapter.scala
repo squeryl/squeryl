@@ -237,6 +237,8 @@ class OracleAdapter extends DatabaseAdapter {
     //parentOfTarget.alias + "_" + target.aliasSegment
     "f" + target.actualSelectElement.id
 
+  override def viewAlias(vn: ViewExpressionNode[_]) =
+    "t" + vn.uniqueId.get
 }
 
 

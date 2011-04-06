@@ -64,10 +64,7 @@ class ViewExpressionNode[U](val view: View[U])
   val resultSetMapper = new ResultSetMapper
 
   def alias =
-    if(view.prefix != None)
-      view.prefix.get + "_" + view.name + uniqueId.get
-    else
-      view.name + uniqueId.get
+    Session.currentSession.databaseAdapter.viewAlias(this)
 
   def owns(aSample: AnyRef) = aSample eq sample.asInstanceOf[AnyRef]
 

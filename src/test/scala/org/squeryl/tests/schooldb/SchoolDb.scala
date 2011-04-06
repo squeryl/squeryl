@@ -145,8 +145,10 @@ class SchoolDb extends Schema {
 
   val schools = table[School]
 
-  val schoolHierarchy =
-    oneToManyRelation(schools, schools).via((parent, child) => parent.id === child.parentSchoolId)
+// uncomment to test : when http://www.assembla.com/spaces/squeryl/tickets/14-assertion-fails-on-self-referring-onetomanyrelationship
+//  an unverted constraint gets created, unless expr. is inverted : child.parentSchoolId === parent.id
+//  val schoolHierarchy =
+//    oneToManyRelation(schools, schools).via((parent, child) => parent.id === child.parentSchoolId)
 
   on(schools)(s => declare(
     s.name is(indexed("uniqueIndexName"), unique),

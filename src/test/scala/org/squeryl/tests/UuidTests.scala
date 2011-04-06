@@ -42,7 +42,17 @@ class UuidTests extends QueryTester {
 
   import UuidTests._
 
-  def prepare() = TestSchema.create
+  def prepare() = {
+    try {
+      TestSchema.drop
+    }
+    catch {
+      case e:Exception => {}
+    }
+
+    TestSchema.create
+  }
+
   def cleanup() = TestSchema.drop
   def dumpSchema() = TestSchema.printDdl
 
