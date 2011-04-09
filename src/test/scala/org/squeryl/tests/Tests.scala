@@ -31,7 +31,7 @@ object Tests extends QueryTester {
 
   def main(args : Array[String]) : Unit = {
     //dumpSchemasForAllDatabases
-    //allTestsOnAllDatabases
+    allTestsOnAllDatabases
 
     //allTests("PosgreSQL", createPostgreSqlTestConnection _)
     
@@ -39,7 +39,7 @@ object Tests extends QueryTester {
     
     //org.squeryl.demos.KickTheTires.testWithH2
 
-    allTestsOnH2
+    //allTestsOnH2
 
     //dumpSchemasForAllDatabases
 
@@ -118,7 +118,7 @@ object Tests extends QueryTester {
     println("Will run test suite with " + dbName)
     
     // tests that need no Db Session :
-    (new AnnotationTests).testMetaData
+//    (new AnnotationTests).testMetaData
 
     // tests that do :
 

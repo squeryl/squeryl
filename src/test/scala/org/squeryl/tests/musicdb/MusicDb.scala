@@ -978,7 +978,7 @@ class MusicDbTestRun extends QueryTester {
 
     val q2 =
       from(cds)(cd =>
-        compute(min(cd.title))
+        compute(minNN(cd.title))
       )
 
     val r2 = cds.where(_.title in q2).single

@@ -37,8 +37,8 @@ trait SqlFunctions  {
   def varSample[A](e: NumericalExpression[A])          = new  UnaryAgregateFloatOp[A](e, "var_samp")
 
 
-  def max[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
-  def min[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")
+  def maxNN[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
+  def minNN[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")
 
   def count: CountFunction = count()
 
@@ -48,7 +48,7 @@ trait SqlFunctions  {
 
   def nvl[A,B](a: NumericalExpression[Option[A]], b: NumericalExpression[B]) = new NvlFunctionNumerical[A,B](a.asInstanceOf[NumericalExpression[A]],b)
 
-  def nvl[A](a: NonNumericalExpression[Option[A]], b: NonNumericalExpression[A]) = new NvlFunctionNonNumerical[Option[A],A](a,b)
+  def nvlNN[A](a: NonNumericalExpression[Option[A]], b: NonNumericalExpression[A]) = new NvlFunctionNonNumerical[Option[A],A](a,b)
 
   def not(b: LogicalBoolean) = new FunctionNode("not", b) with LogicalBoolean
 

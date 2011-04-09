@@ -76,7 +76,7 @@ class CourseAssignment(var courseId: Int, var professorId: Long)
 class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[String], var appNumber: Option[Int], var appNumberSuffix: Option[String])
   extends SchoolDbObject {
 
-  //def this() = this(null,0, Some(""),Some(0), Some(""))
+  def this() = this(null,0, Some(""),Some(0), Some(""))
 
   override def toString = "rue " + streetName 
 }
@@ -84,7 +84,7 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
 class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float], var yearlySalaryBD: BigDecimal, var weightInBD: Option[BigDecimal]) extends KeyedEntity[Long] {
 
   var id: Long = 0
-  //def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
+  def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
 
@@ -950,10 +950,10 @@ class SchoolDbTestRun extends QueryTester {
           min(p.id) : TypedExpressionNode[Option[Long]],
           avg(ca.id) : TypedExpressionNode[Option[Float]],
           avg(c.meaninglessLongOption) : TypedExpressionNode[Option[Double]],
-          max(c.finalExamDate) : TypedExpressionNode[Option[Date]],
-          min(a.numberSuffix) : TypedExpressionNode[Option[String]],
-          max(s.isMultilingual) : TypedExpressionNode[Option[Boolean]],
-          min(c.startDate)  : TypedExpressionNode[Option[Date]]
+          maxNN(c.finalExamDate) : TypedExpressionNode[Option[Date]],
+          minNN(a.numberSuffix) : TypedExpressionNode[Option[String]],
+          maxNN(s.isMultilingual) : TypedExpressionNode[Option[Boolean]],
+          minNN(c.startDate)  : TypedExpressionNode[Option[Date]]
         )
       )                              
 
