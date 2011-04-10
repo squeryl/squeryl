@@ -84,7 +84,7 @@ object ASTTests {
 
 //  case class Subz[U](q: Queryable[U]) extends Queryable[Queryable[U]] {
 //    def name = q.name
-//    private[squeryl] def give(rsm: ResultSetMapper) = error("!!!")
+//    private[squeryl] def give(rsm: ResultSetMapper) = sys.error("!!!")
 //    var whereClause: ()=>ScalarBoolean = null
 //    def Where(b: =>ScalarBoolean) = {
 //      whereClause = b _

@@ -418,7 +418,7 @@ object TypeArithmetic {
 
     (t1.length, t1.isFloat) match {
       case (1, false) => tByteO
-      case (1, true) => error("!!!")
+      case (1, true) => sys.error("!!!")
       case (4, false)  => tIntO
       case (4, true)  => tFloatO
       case (8, false)  => tLongO
@@ -427,7 +427,7 @@ object TypeArithmetic {
   }
   
   def invalidTypeCombination(t1: TypeDescription,t2: TypeDescription) =
-    error("invalidTypeCombination(" + t1 + "," + t2)
+    sys.error("invalidTypeCombination(" + t1 + "," + t2)
   
   def mainz(args : Array[String]) : Unit = {
 

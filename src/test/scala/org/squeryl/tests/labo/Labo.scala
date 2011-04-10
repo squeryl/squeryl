@@ -148,7 +148,7 @@ object Labo {
 //  z(b) // since this it allowed
 //}
 //
-//  //val a0:A = error("")
+//  //val a0:A = sys.error("")
 //
 //  //val b:B = a0
 }

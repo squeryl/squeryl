@@ -22,11 +22,11 @@ object CallByNameErasure {
   class C
 
   def costlyConstructionOfB: B = {
-    error("please wait... cloning the internet")
+    sys.error("please wait... cloning the internet")
   }
 
   def costlyConstructionOfC: C = {
-    error("please wait... downloading the internet")
+    sys.error("please wait... downloading the internet")
   }
 
   private implicit val b:B = new B
@@ -41,8 +41,8 @@ object CallByNameErasure {
     m(costlyConstructionOfC)
   }
 
-//  def m(i: ()=>Int) = error("")
-//  def m(i: String) = error("")
+//  def m(i: ()=>Int) = sys.error("")
+//  def m(i: String) = sys.error("")
 
   //def z(i: Option[Int]) = {}
   //def z(i: Option[Double]) = {}
@@ -50,8 +50,8 @@ object CallByNameErasure {
 //  def z1[T <: Int](i: Option[T]) = {}
 //  def z1_[T <: Double](i: Option[T]) = {}
 
-//  def m(i: =>B) = error("")
-//  def m(i: =>C) = error("")
+//  def m(i: =>B) = sys.error("")
+//  def m(i: =>C) = sys.error("")
 //  class LazyB(b: ()=>B)
 //  class LazyC(c: ()=>C)
 //

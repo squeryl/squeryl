@@ -96,13 +96,13 @@ class AnnotationTests {
     val _isPersistedFmd = descendantOfKeyedObjects.posoMetaData.findFieldMetaDataForProperty("_isPersisted")
 
     if(_isPersistedFmd != None)
-      error('testMetaData + " failed, @transient annotation of field _isPersisted was not effective.")
+      sys.error('testMetaData + " failed, @transient annotation of field _isPersisted was not effective.")
     
     if(descendantOfKeyedObjects.findFieldMetaDataForProperty("id") == None)
-      error("PosoMetaData has failed to build immutable field 'id'.")
+      sys.error("PosoMetaData has failed to build immutable field 'id'.")
 
     if(nailCutters.findFieldMetaDataForProperty("id") == None)
-      error("PosoMetaData has failed to build immutable field 'id'.")
+      sys.error("PosoMetaData has failed to build immutable field 'id'.")
     
     val brandNameMD = toasters.findFieldMetaDataForProperty("brandName").get
     assert(brandNameMD.columnName == "BRAND_NAME", "expected 'BRAND_NAME' got " + brandNameMD.columnName)

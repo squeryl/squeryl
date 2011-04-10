@@ -357,7 +357,7 @@ class SchoolDb2Tests extends QueryTester {
   private def _existsAndEquals(oca: Option[CourseAssignment], ca: CourseAssignment) = {
 
     if(oca == None)
-      error("query returned no rows")
+      sys.error("query returned no rows")
 
     assertEquals(ca.id, oca.get.id, 'testCompositeEquality)
   }
@@ -393,7 +393,7 @@ class SchoolDb2Tests extends QueryTester {
     }
 
     if(! exceptionThrown)
-      error('testUniquenessConstraint + " failed, unique constraint violation occured")
+      sys.error('testUniquenessConstraint + " failed, unique constraint violation occured")
 
     assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
 

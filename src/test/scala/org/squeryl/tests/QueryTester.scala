@@ -52,7 +52,7 @@ trait QueryTester {
 
   def assertEquals[E](expected:E, actual:E, msg:String): Unit =
     if(expected != actual)
-      error("expected " + expected + " got " + actual)
+      sys.error("expected " + expected + " got " + actual)
 
   def validateQuery[R,S](name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
     validateQuery[R,S](logQueries, name, q, mapFunc, expected)
@@ -80,7 +80,7 @@ trait QueryTester {
         "query : " + name + " failed,\n" +
         "expected " + expected + " got " + r + " \n query " + name +
         " was : \n" + q
-      error(msg)
+      sys.error(msg)
     }
     
     if(validateFirstAndExit >= 0)
