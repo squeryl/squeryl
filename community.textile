@@ -4,7 +4,7 @@ title: Community
 headtitle: Community - 
 ---
 
-h2. The people behind Squeryl
+h2. The Squeryl Team
 
 h3. Founder
 
@@ -12,22 +12,23 @@ h3. Founder
 
 h3. Commiters
 
-*  Alec Wysoker
+*  David Whitaker
 *  Marco Rico Gomez
-*  Olivier Chafik
+*  Peter Brant
 
 h3. Contributors 
 
 *  Antti Tuppurainen
 *  Christian Maslen
 *  David Flemström
+*  David Wysoker
 *  Mitsutoshi Aoe
 *  Rémy Roy
 *  Michael Bayne
 *  Ross Mellgren
 *  Yuen Ho Wong
-*  Peter Brant
 *  Michael Gottshalk
+*  Joonas Javanainen
 
 h2. Follow latest news on Twitter <a href="http://www.twitter.com/_squeryl"><img src="http://twitter-badges.s3.amazonaws.com/follow_bird-b.png" alt="Follow _squeryl on Twitter"/></a>
 
@@ -41,11 +42,7 @@ Brainstorming, constructive criticism happens in the "Discussion Group":http://g
 
 Implementation details are discussed in the "contributor's group":http://groups.google.com/group/squeryl-contributors
 
-Issues and bugs should be submited in the "GitHub issue tracker":http://github.com/max-l/Squeryl/issues
-
-h2. Help us take Squeryl to the next level
-
-There are still some cool featurs to implement, check out the "roadmap":http://squeryl.org/roadmap.html
+Issues and bugs should be submited in "Assembla issue tracking":http://www.assembla.com/spaces/squeryl/tickets
 
 
 The GitHub repo : 

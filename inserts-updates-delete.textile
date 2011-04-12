@@ -49,8 +49,6 @@ There are two forms of updates :
     )	
 ]]></script>
 
-(The explanation for the '~' in s.year.~ is "here":./getting-started.html#disambiguate)
-
 The SQL will be : 
 
 <script type="syntaxhighlighter" class="brush: sql"><![CDATA[
