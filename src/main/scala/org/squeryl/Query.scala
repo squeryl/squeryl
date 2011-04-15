@@ -47,6 +47,14 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
   }
 
 
+  override def headOption = {
+    val i = iterator
+    if(i.hasNext)
+      Some(i.next)
+    else
+      None
+  }
+
   def distinct: Query[R]
 
   def union(q: Query[R]): Query[R] = error("not implemented")
