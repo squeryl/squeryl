@@ -232,13 +232,13 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       val ojq = q.asInstanceOf[OuterJoinedQueryable[U]]
       val sq = createSubQueryable[U](ojq.queryable)
       sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
-      new SubQueryable(ojq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
+      new SubQueryable(sq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
     }
     else if(q.isInstanceOf[InnerJoinedQueryable[U]]) {
       val ijq = q.asInstanceOf[InnerJoinedQueryable[U]]
       val sq = createSubQueryable[U](ijq.queryable)
       sq.node.joinKind = Some((ijq.leftRightOrFull, "inner"))
-      new SubQueryable(ijq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
+      new SubQueryable(sq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
     }
     else if(q.isInstanceOf[DelegateQuery[U]]) {
       createSubQueryable(q.asInstanceOf[DelegateQuery[U]].q)
