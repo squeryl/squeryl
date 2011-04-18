@@ -1,9 +1,8 @@
 ---
 layout: manual
 title: Stateful Relations
+headtitle: Stateful Relations - 
 ---
-
-*Note*: stateful relations are a beta feature, supported only as of version 0.9.4beta4
 
 h3. Declaring Stateful Relations
 

@@ -1,19 +1,21 @@
 ---
 layout: manual
 title: Dynamically varying Queries
+headtitle: Dynamic Queries - 
 ---
 
 <a name='DynamicQuery'></a>
 
 h2. Dynamic Queries
 
- It is often necessary to create queries with a from clause that varies
-depending on values known only at runtime.
+It is often necessary to create queries that varies depending on values known only at runtime.
+
+h3. Dynamically excluding tables (or sub queries) from a Query
 
 The method *inhibitWhen(b: Boolean)* available on *org.squeryl.Queryable[A]* 
 is meant to be called in a from clause, it will turn a Table[A] or (sub) Query[A]
 into a Queryable[Option[A]] and remove the queryable from the query
-*and all expression containing this queryable.
+*and* all expression referencing this queryable.
 
 Example :
 
@@ -55,3 +57,6 @@ table disappears from the generated SQL base on the input of *inhibitWhen* :
 	  a.id = b.authorId
 ]]></script>
 
+
+<a name='dyn-where-clause'></a>
+{% include feature-dyn-where-clause.html%}

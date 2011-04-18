@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Schema Definition
+headtitle: Schema Definition - 
 ---
 
 h2. Defining a Schema
@@ -13,7 +14,10 @@ that are grouped in a org.squeryl.Schema singleton.
 
   class Author(val id: Long, 
                val firstName: String, 
-			   val lastName: String)
+			   val lastName: String,
+			   val email: Option[String]) {
+	def this() = this(0,"","",Some(""))		   
+  }
   
   // fields can be mutable or immutable 
   
@@ -26,17 +30,76 @@ that are grouped in a org.squeryl.Schema singleton.
 	def this() = this(0,"",0,Some(0L))
   }
   
+  class Borrowal(val id: Long
+                 val bookId: Long
+                 val borrowerAccountId: Long
+                 val scheduledToReturnOn: Date,
+                 val returnedOn: Option[Timestamp],
+                 val numberOfPhonecallsForNonReturn: Int)
+  
   object Library extends Schema {
   
     //When the table name doesn't match the class name, it is specified here :
     val authors = table[Author]("AUTHORS")
 	
 	val books = table[Book]
+	
+	val borrowals = table[Borrowal]	
   }
+    
+]]></script>
+
+h3. Columns attributes
+
+Columns and group of columns can have attributes declared via the on/declare syntax. Inside the example schema defined above, we could influence the DDL generation with the following declarations :  
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+object Library extends Schema {
+...
+...    
+  on(borrowals)(b => declare(
+    b.numberOfPhonecallsForNonReturn defaultsTo(0),
+    b.borrowerAccountId is(indexed),
+    columns(b.scheduledToReturnOn, b.borrowerAccountId) are(indexed)
+  ))
+  
+  on(authors)(s => declare(
+    s.email      is(unique,indexed("idxEmailAddresses")), //indexes can be named explicitely
+    s.firstName  is(indexed),
+    s.lastName   is(indexed, dbType("varchar(255)")), // the default column type can be overriden     
+    columns(s.firstName, s.lastName) are(indexed) 
+  ))
+}  
   
 ]]></script>
 
-The org.squeryl.Schema trait can create the Schema or dump the definition to a file.
+Of course, not all combinations of column attributes make sense, the valid combinations are : 
+
+|_.  				  |_. non numeric column  |_. numeric column  |_. column group     |
+| *indexed*           | Y                     | Y                 | Y                  |
+| *unique*            | Y                     | Y                 | Y                  |
+| *autoIncremented*   | N                     | Y                 | N                  |
+| *defaultsTo*        | Y                     | Y                 | N                  |
+
+
+* "Note*: the uniqueness of KeyedEntity[].id columns is not overridable, it always gets declared as 'primaryKey' 
+
+h3. Schema generation (DDL) 
+
+Schema.create will connect to the database and create all tables, constraints, indexes, etc. While this is usefull for devellopment phases, when a system has been in production long enough it is often more convenient to generate the schema, and evolve it manually. 
+
+Use Schema.printDdl to print your schema :  
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  def printDdl: Unit = printDdl(println(_))
+
+  def printDdl(pw: PrintWriter): Unit = printDdl(pw.println(_))
+  
+  def printDdl(pw: String => Unit): Unit = {...}
+  
+]]></script>
 
 h2. Mapping fields to Columns
 
@@ -66,6 +129,46 @@ and Option[] fields are nullable.
   imposed by the JVM prevents from reflecting on the Option[] type parameter.
   This constraint could be relaxed in a future version by a compiler plugin
   that would _tell_ Squeryl the erased type information.
+
+
+h3. Correspondance of field types to database column types
+
+|_. Java/JDBC  |_. Oracle    |_. PostgreSql     |_. DB2       |_. MySql    |_. H2       |_. MS SQL  |_. Derby    |
+| int          | number      | integer          | int         | int        | int        | int       | integer    |
+| long         | number      | bigint           | bigint      | bigint     | bigint     | bigint    | bigint     |
+| float        | float       | real             | real        | float      | real       | real      | real       |
+| double       | real        | double precision | double      | double     | double     | float     | double     |
+| BigDecimal   | decimal     | numeric          | decimal     | decimal    | decimal    | decimal   | decimal    |
+| String       | varchar2(x) | varchar(x)       | varchar(x)  | varchar(x) | varchar(x) | varchar(x)| varchar(x) |
+| Date         | date        | date             | date        | date       | date       | date      | date       |
+| Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  | datetime  | timestamp  |
+| byte[]       | blob        | bytea            | blob        | blob       | binary     | varbinary | blob(1M)   |
+| boolean      | number(1)   | boolean          | char(1)     | boolean    | boolean    | bit       | char(1)    |
+
+
+h3. Enumerations
+
+Enumerations are persisted by 'int' columns
+
+* Explicitely specifying the index values in Enumerations is *strongly recomended*     
+
+* Classes with an Enumeration field *require* a zero arg constructor that gives a default value to all enumeration fields
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+object Tempo extends Enumeration {
+  type Tempo = Value
+  val Largo = Value(1, "Largo")
+  val Allegro = Value(2, "Allegro")
+  val Presto = Value(3, "Presto")
+}
+
+class Song(name: String, tempo: Tempo) {
+  def this() = this("",Tempo.Largo)
+}
+  
+]]></script>
+
   
 h2. Choosing between primitive or custom types
 

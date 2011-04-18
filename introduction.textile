@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Introduction
+headtitle: Introduction - 
 ---
 
 h3. With all the Java ORMs available, why was Squeryl written ?
@@ -9,11 +10,11 @@ Squeryl is a departure from standard Java ORMs, we hope that the following argum
 
 JPA was designed to provide the maximum functionality and expressiveness within the constraints of the Java language. All of them escape the language with a string based query language (JPA-QL, JDOQL, HQL, etc...) for situations where their imperative APIs aren't sufficient or yields poor performance. Squeryl does everything with a single language : Scala
 
-Squeryl will have achieved something if one _never_ has to send a query as a string to a database. 
+Squeryl will have achieved something if one _never_ has to define a database a query as a raw string.
 
 h3. HQL, JDOQL and JPA-QL queries are merely strings, and are therefore fragile
 
-When a project has tens of thousands of lines of code, making changes to the ORM's schema requires extensive impact analysis, one must browse through all string (whatever-QL) queries and verify if they are affected. With Squeryl statements, the compiler will list all breaking changes, IDEs will also help you with the refactoring.
+When a project has tens of thousands of lines of code, making changes to the ORM's schema requires extensive impact analysis, one must browse through all string (whatever-QL) queries and verify if they are affected. With Squeryl statements, the compiler will list all breaking changes, and an IDEs can help you with the refactoring.
 
 Here is a comparison of a Squeryl and a JPA version of the same query : 
 

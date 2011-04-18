@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.Table</title>
+          <title>org.squeryl.Table</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../lib/jquery.js"></script>
           
       <link href="../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../lib/template.js"></script>
       <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="type" onload="windowTitle();">
 
       <p id="owner"><a href="../package.html" class="extype" name="org">org</a>.<a href="package.html" class="extype" name="org.squeryl">squeryl</a></p>
 
@@ -23,49 +24,71 @@
       <h4 class="signature" id="signature">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Table</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="View.html" class="extype" name="org.squeryl.View">View</a>[T]</span>
+        <span class="name">Table</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        
+        <span class="result"> extends <a href="View.html" class="extype" name="org.squeryl.View">View</a>[T]</span>
       </span>
       </h4>
       <div class="fullcomment" id="comment"><div class="block">
+            linear super types: <a href="View.html" class="extype" name="org.squeryl.View">View</a>[T], <a href="Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T], AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div><div class="block">
             known subclasses: <a href="dsl/QueryDsl$ManyToManyRelationImpl.html" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a>
           </div></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="org.squeryl.View">View</li><li class="in" name="org.squeryl.Queryable">Queryable</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.Table">Table</li><li class="in" name="org.squeryl.View">View</li><li class="in" name="org.squeryl.Queryable">Queryable</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
-        
+
         <div class="members" id="constructors">
               <h3>Instance constructors</h3>
-              <ol><li visbl="pub" name="org.squeryl.Table#this">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.Table#this">
+      <a id="this:Table[T]"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol">
-        <span class="name">Table</span><span class="params">(<span name="n">n: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[T]</span>)</span>
+        <span class="name">Table</span>
+        
+        <span class="params">(<span name="n">n: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[T]</span>)</span>
+        
       </span>
       </h4>
       
     </li></ol>
-            </div>        
+            </div>
+
         
-        
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=">
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -76,11 +99,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#!=">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -94,14 +121,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef###">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -112,11 +142,15 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: T0</span>
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -127,11 +161,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -142,11 +180,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -160,14 +202,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -181,14 +226,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="org.squeryl.View#_setPersisted">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.View#_setPersisted">
+      <a id="_setPersisted:(T) ⇒ Unit"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">_setPersisted</span><span class="result">: (T) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">_setPersisted</span>
+        
+        
+        <span class="result">: (T) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -199,11 +247,15 @@
           definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -218,14 +270,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="scala.AnyRef#clone">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -239,38 +294,53 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.Table#delete">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#delete">
+      <a id="delete[K](K)(&lt;:&lt;[T, KeyedEntity[K]],QueryDsl):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">delete</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: K</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, <a href="KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[K]]</span>, <span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">delete</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="k">k: K</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, <a href="KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[K]]</span>, <span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#delete">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#delete">
+      <a id="delete(Query[T]):Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">delete</span><span class="params">(<span name="q">q: <a href="Query.html" class="extype" name="org.squeryl.Query">Query</a>[T]</span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">delete</span>
+        
+        <span class="params">(<span name="q">q: <a href="Query.html" class="extype" name="org.squeryl.Query">Query</a>[T]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#deleteWhere">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#deleteWhere">
+      <a id="deleteWhere((T) ⇒ LogicalBoolean)(QueryDsl):Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">deleteWhere</span><span class="params">(<span name="whereClause">whereClause: (T) ⇒ <a href="dsl/ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">deleteWhere</span>
+        
+        <span class="params">(<span name="whereClause">whereClause: (T) ⇒ <a href="dsl/ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#eq">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -297,14 +367,17 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#equals">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -326,14 +399,17 @@ scala.Int
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="scala.AnyRef#finalize">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -348,22 +424,29 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.Table#forceUpdate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#forceUpdate">
+      <a id="forceUpdate(Iterable[T])(&lt;:&lt;[T, org.squeryl.KeyedEntity[_]]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">forceUpdate</span><span class="params">(<span name="o">o: <span class="extype" name="scala.collection.Iterable">Iterable</span>[T]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">forceUpdate</span>
+        
+        <span class="params">(<span name="o">o: Iterable[T]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#forceUpdate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#forceUpdate">
+      <a id="forceUpdate(T)(&lt;:&lt;[T, org.squeryl.KeyedEntity[_]]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">forceUpdate</span><span class="params">(<span name="o">o: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">forceUpdate</span>
+        
+        <span class="params">(<span name="o">o: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -374,14 +457,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#getClass">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       
@@ -395,14 +481,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#hashCode">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -418,46 +507,65 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.Table#insert">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#insert">
+      <a id="insert(Iterable[T]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">insert</span><span class="params">(<span name="e">e: <span class="extype" name="scala.collection.Iterable">Iterable</span>[T]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">insert</span>
+        
+        <span class="params">(<span name="e">e: Iterable[T]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#insert">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#insert">
+      <a id="insert(Query[T]):Nothing"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">insert</span><span class="params">(<span name="t">t: <a href="Query.html" class="extype" name="org.squeryl.Query">Query</a>[T]</span>)</span><span class="result">: <span class="extype" name="scala.Nothing">Nothing</span></span>
+        <span class="name">insert</span>
+        
+        <span class="params">(<span name="t">t: <a href="Query.html" class="extype" name="org.squeryl.Query">Query</a>[T]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Nothing">Nothing</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#insert">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#insert">
+      <a id="insert(T):T"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">insert</span><span class="params">(<span name="t">t: T</span>)</span><span class="result">: T</span>
+        <span class="name">insert</span>
+        
+        <span class="params">(<span name="t">t: T</span>)</span>
+        <span class="result">: T</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#insertOrUpdate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#insertOrUpdate">
+      <a id="insertOrUpdate(T)(&lt;:&lt;[T, org.squeryl.KeyedEntity[_]]):T"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">insertOrUpdate</span><span class="params">(<span name="o">o: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: T</span>
+        <span class="name">insertOrUpdate</span>
+        
+        <span class="params">(<span name="o">o: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span>
+        <span class="result">: T</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -473,14 +581,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.View#lookup">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.View#lookup">
+      <a id="lookup[K](K)(&lt;:&lt;[T, KeyedEntity[K]],QueryDsl):Option[T]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">lookup</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: K</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, <a href="KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[K]]</span>, <span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[T]</span>
+        <span class="name">lookup</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="k">k: K</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, <a href="KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[K]]</span>, <span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[T]</span>
       </span>
       </h4>
       
@@ -489,11 +600,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.View#name">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.View#name">
+      <a id="name:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">name</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">name</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -502,11 +617,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a> → <a href="Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#ne">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -520,14 +639,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notify">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -540,14 +662,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -560,14 +685,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.View#posoMetaData">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.View#posoMetaData">
+      <a id="posoMetaData:PosoMetaData[T]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">posoMetaData</span><span class="result">: <a href="internals/PosoMetaData.html" class="extype" name="org.squeryl.internals.PosoMetaData">PosoMetaData</a>[T]</span>
+        <span class="name">posoMetaData</span>
+        
+        
+        <span class="result">: <a href="internals/PosoMetaData.html" class="extype" name="org.squeryl.internals.PosoMetaData">PosoMetaData</a>[T]</span>
       </span>
       </h4>
       
@@ -576,19 +704,85 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.Table#schema">
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol">
-        <span class="name">schema</span><span class="result">: <a href="Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="scala.AnyRef#synchronized">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.View#prefix">
+      <a id="prefix:Option[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: T0</span>)</span><span class="result">: T0</span>
+        <span class="name">prefix</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[String]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.View#prefixedName">
+      <a id="prefixedName:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">prefixedName</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.View#prefixedPrefixedName">
+      <a id="prefixedPrefixedName(String):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">prefixedPrefixedName</span>
+        
+        <span class="params">(<span name="s">s: String</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Suppose you have : prefix.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Suppose you have : prefix.MyTable
+myTable.prefixedPrefixedName(&quot;z&quot;) will yield : prefix.zMyTable
+used for creating names for objects derived from a table, ex.: a sequence
+</p></div><div class="block">
+          definition classes: <a href="View.html" class="extype" name="org.squeryl.View">View</a>
+        </div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#schema">
+      <a id="schema:Schema"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">schema</span>
+        
+        
+        <span class="result">: <a href="Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -599,11 +793,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#toString">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#toString">
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -615,68 +813,53 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.Table#update">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#update">
+      <a id="update((T) ⇒ UpdateStatement):Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="s">s: (T) ⇒ <a href="dsl/ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">update</span>
+        
+        <span class="params">(<span name="s">s: (T) ⇒ <a href="dsl/ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#update">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#update">
+      <a id="update(Iterable[T])(&lt;:&lt;[T, org.squeryl.KeyedEntity[_]]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="o">o: <span class="extype" name="scala.collection.Iterable">Iterable</span>[T]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">update</span>
+        
+        <span class="params">(<span name="o">o: Iterable[T]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.Table#update">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Table#update">
+      <a id="update(T)(&lt;:&lt;[T, org.squeryl.KeyedEntity[_]]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">update</span><span class="params">(<span name="o">o: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">update</span>
+        
+        <span class="params">(<span name="o">o: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[T, org.squeryl.KeyedEntity[_]]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          attributes: final 
-        </div><div class="block">
-          definition classes: AnyRef
-        </div></div>
-          
-    </li><li visbl="pub" name="scala.AnyRef#wait">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          attributes: final 
-        </div><div class="block">
-          definition classes: AnyRef
-        </div></div>
-          
-    </li><li visbl="pub" name="scala.AnyRef#wait">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -687,11 +870,53 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.Queryable#where">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">where</span><span class="params">(<span name="whereClauseFunctor">whereClauseFunctor: (T) ⇒ <a href="dsl/ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <a href="Query.html" class="extype" name="org.squeryl.Query">Query</a>[T]</span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          attributes: final 
+        </div><div class="block">
+          definition classes: AnyRef
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Queryable#where">
+      <a id="where((T) ⇒ LogicalBoolean)(QueryDsl):Query[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">where</span>
+        
+        <span class="params">(<span name="whereClauseFunctor">whereClauseFunctor: (T) ⇒ <a href="dsl/ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span>
+        <span class="result">: <a href="Query.html" class="extype" name="org.squeryl.Query">Query</a>[T]</span>
       </span>
       </h4>
       
@@ -702,7 +927,17 @@ possible to check whether the contents of the list are of the requested typed.
           
     </li></ol>
             </div>
-                
+
+        <div class="parent" name="org.squeryl.View">
+              <h3>Inherited from <a href="View.html" class="extype" name="org.squeryl.View">View</a>[T]</h3>
+            </div><div class="parent" name="org.squeryl.Queryable">
+              <h3>Inherited from <a href="Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
       </div>
       
       <div id="tooltip"></div>

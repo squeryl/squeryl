@@ -1,26 +1,36 @@
 ---
 layout: manual
 title: Getting Started
+headtitle: Getting Started - 
 ---
 
 h2. Requirements 
 
 You will need 
 
-* The Scala runtime jar, version 2.8.0 (final)
+* The Scala runtime jar, version 2.8.1 (2.8.0 should also work)
 * The Squeryl jar found "here":http://github.com/max-l/Squeryl/downloads
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
 
-h3. The recommended version is 0.9.4beta8
+h3. The recommended version is 0.9.4-RC6
 
 Squeryl is available on the Maven repo @ http://nexus.scala-tools.org/
 
-the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/squeryl_2.8.0/0.9.4beta8/squeryl_2.8.0-0.9.4beta8.pom
+the "POM file":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/squeryl_2.8.1/0.9.4-RC6/squeryl_2.8.1-0.9.4-RC6.pom
  
 * groupId : *org.squeryl*
-* artifactId: *squeryl_2.8.0*
-* version *0.9.4beta8*
+* artifactId: *squeryl_2.8.1*
+* version *0.9.4-RC6*
+
+<pre>
+import sbt._
+
+class Project(info: ProjectInfo) extends DefaultProject(info) {
+	
+   val squeryl = "org.squeryl" % "squeryl_2.8.1" % "0.9.4-RC6"
+}
+</pre>
 
 For building with SBT, read "this":http://github.com/max-l/Squeryl/blob/master/readme.txt
 

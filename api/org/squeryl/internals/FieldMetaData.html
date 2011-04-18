@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.internals.FieldMetaData</title>
+          <title>org.squeryl.internals.FieldMetaData</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
       <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="type" onload="windowTitle();">
 
       <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="package.html" class="extype" name="org.squeryl.internals">internals</a></p>
 
@@ -23,49 +24,71 @@
       <h4 class="signature" id="signature">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">FieldMetaData</span><span class="result"> extends AnyRef</span>
+        <span class="name">FieldMetaData</span>
+        
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       <div class="fullcomment" id="comment"><div class="block">
             go to: <a href="FieldMetaData$.html">companion</a>
+          </div><div class="block">
+            linear super types: AnyRef, <span class="extype" name="scala.Any">Any</span>
           </div></div>
-      
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.internals.FieldMetaData">FieldMetaData</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
-        
+
         <div class="members" id="constructors">
               <h3>Instance constructors</h3>
-              <ol><li visbl="pub" name="org.squeryl.internals.FieldMetaData#this">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#this">
+      <a id="this:FieldMetaData"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol">
-        <span class="name">FieldMetaData</span><span class="params">(<span name="parentMetaData">parentMetaData: org.squeryl.internals.PosoMetaData[_]</span>, <span name="nameOfProperty">nameOfProperty: <span class="extype" name="java.lang.String">String</span></span>, <span name="fieldType">fieldType: java.lang.Class[_]</span>, <span name="wrappedFieldType">wrappedFieldType: java.lang.Class[_]</span>, <span name="customTypeFactory">customTypeFactory: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>, <span name="isOption">isOption: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="getter">getter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="setter">setter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="field">field: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Field">Field</span>]</span>, <span name="columnAnnotation">columnAnnotation: <span class="extype" name="scala.Option">Option</span>[org.squeryl.annotations.ColumnBase @scala.annotation.target.field]</span>, <span name="isOptimisticCounter">isOptimisticCounter: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">FieldMetaData</span>
+        
+        <span class="params">(<span name="parentMetaData">parentMetaData: org.squeryl.internals.PosoMetaData[_]</span>, <span name="nameOfProperty">nameOfProperty: String</span>, <span name="fieldType">fieldType: Class[_]</span>, <span name="wrappedFieldType">wrappedFieldType: Class[_]</span>, <span name="customTypeFactory">customTypeFactory: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>, <span name="isOption">isOption: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="getter">getter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="setter">setter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="field">field: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.reflect.Field">Field</span>]</span>, <span name="columnAnnotation">columnAnnotation: <span class="extype" name="scala.Option">Option</span>[Column]</span>, <span name="isOptimisticCounter">isOptimisticCounter: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="sampleValue">sampleValue: AnyRef</span>)</span>
+        
       </span>
       </h4>
       
     </li></ol>
-            </div>        
+            </div>
+
         
-        
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=">
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -76,11 +99,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#!=">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -94,14 +121,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef###">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -112,11 +142,15 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: T0</span>
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -127,11 +161,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -142,11 +180,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -160,14 +202,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -181,14 +226,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -203,14 +251,29 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="scala.AnyRef#clone">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#canonicalEnumerationValueFor">
+      <a id="canonicalEnumerationValueFor(Int):Value"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="name">canonicalEnumerationValueFor</span>
+        
+        <span class="params">(<span name="id">id: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Enumeration.Value">Value</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -224,14 +287,29 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#columnName">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#columnAttributes">
+      <a id="columnAttributes:Iterable[ColumnAttribute]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">columnName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">columnAttributes</span>
+        
+        
+        <span class="result">: Iterable[<a href="ColumnAttribute.html" class="extype" name="org.squeryl.internals.ColumnAttribute">ColumnAttribute</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#columnName">
+      <a id="columnName:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">columnName</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -242,30 +320,82 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#customTypeFactory">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#customTypeFactory">
+      <a id="customTypeFactory:Option[(AnyRef) ⇒ Product1[Any]]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">customTypeFactory</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>
+        <span class="name">customTypeFactory</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[(AnyRef) ⇒ <span class="extype" name="scala.Product1">Product1</span>[<span class="extype" name="scala.Any">Any</span>]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#displayType">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#declaredAsPrimaryKeyInSchema">
+      <a id="declaredAsPrimaryKeyInSchema:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">displayType</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">declaredAsPrimaryKeyInSchema</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#eq">
+            <p class="shortcomment cmt">When true, will cause Schema generation to declare as PrimaryKey, Note that for
+KeyedEntity[]s,  declaredAsPrimaryKeyInSchema is always true, and the cannot be made otherwise,
+the inverse is not true, a field can be declared as primary key in the Shema without it being the
+id of a KeyedEntity[], ex.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>When true, will cause Schema generation to declare as PrimaryKey, Note that for
+KeyedEntity[]s,  declaredAsPrimaryKeyInSchema is always true, and the cannot be made otherwise,
+the inverse is not true, a field can be declared as primary key in the Shema without it being the
+id of a KeyedEntity[], ex. :</p><p><pre>on(myTable)(t =&gt;declare(
+  myField.is(primaryKey)  // myField doesn't need to be a KeyedEntity.id
+))</pre></p><p><pre>on(myKeyedEntityTable)(t =&gt;declare(
+  id.is(autoIncremented)  // omiting primaryKey here has no effect, it is equivalent as id.is(primaryKey,autoIncremented)
+))</pre></p></div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#defaultValue">
+      <a id="defaultValue:Option[org.squeryl.dsl.ast.ConstantExpressionNode[_]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">defaultValue</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[org.squeryl.dsl.ast.ConstantExpressionNode[_]]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#displayType">
+      <a id="displayType:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">displayType</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -292,14 +422,17 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#equals">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -321,22 +454,51 @@ scala.Int
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#fieldType">
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol">
-        <span class="name">fieldType</span><span class="result">: java.lang.Class[_]</span>
-      </span>
-      </h4>
-      
-    </li><li visbl="prt" name="scala.AnyRef#finalize">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#explicitDbTypeDeclaration">
+      <a id="explicitDbTypeDeclaration:Option[String]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">explicitDbTypeDeclaration</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[String]</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">The db column type declaration overriden in the schema, if None, it means that it is the default value for
+the adapter (see Correspondance of field types to database column types http://squeryl.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>The db column type declaration overriden in the schema, if None, it means that it is the default value for
+the adapter (see Correspondance of field types to database column types http://squeryl.org/schema-definition.html)
+</p></div>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#fieldType">
+      <a id="fieldType:Class[_]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">fieldType</span>
+        
+        
+        <span class="result">: Class[_]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -351,32 +513,38 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#get">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#get">
+      <a id="get(AnyRef):AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="o">o: AnyRef</span>)</span><span class="result">: AnyRef</span>
+        <span class="name">get</span>
+        
+        <span class="params">(<span name="o">o: AnyRef</span>)</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
-            <p class="shortcomment cmt">gets the value of the field from the object.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>gets the value of the field from the object.
+            <p class="shortcomment cmt"> gets the value of the field from the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p> gets the value of the field from the object.
 Note that it will unwrap Option[] and return null instead of None, i.e.
 if converts None and Some to null and some.get respectively</p></div>
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#getClass">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       
@@ -390,14 +558,17 @@ if converts None and Some to null and some.get respectively</p></div>
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#hashCode">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -413,30 +584,65 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isAutoIncremented">
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol">
-        <span class="name">isAutoIncremented</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isCustomType">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isAutoIncremented">
+      <a id="isAutoIncremented:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isCustomType</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isAutoIncremented</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isCustomType">
+      <a id="isCustomType:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isCustomType</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isEnumeration">
+      <a id="isEnumeration:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isEnumeration</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isIdFieldOfKeyedEntity">
+      <a id="isIdFieldOfKeyedEntity:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isIdFieldOfKeyedEntity</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -452,50 +658,57 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isOptimisticCounter">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isOptimisticCounter">
+      <a id="isOptimisticCounter:Boolean"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">isOptimisticCounter</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isOptimisticCounter</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isOption">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isOption">
+      <a id="isOption:Boolean"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">isOption</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isOption</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isPrimaryKey">
-      <h4 class="signature">
-      <span class="kind">lazy val</span>
-      <span class="symbol">
-        <span class="name">isPrimaryKey</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#isStringType">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#isStringType">
+      <a id="isStringType:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isStringType</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isStringType</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#length">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#length">
+      <a id="length:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">length</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-            <p class="shortcomment cmt">no summary matey</p>
+            <p class="shortcomment cmt"></p>
             <div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the length defined in org.squeryl.annotations.Column.length
 if it is defined, or the default length for Java primitive types.
 The unit of the length is dependent on the type, the convention is
@@ -508,22 +721,29 @@ the most appropriate column type
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#nameOfProperty">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#nameOfProperty">
+      <a id="nameOfProperty:String"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">nameOfProperty</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">nameOfProperty</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#ne">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -537,14 +757,17 @@ the most appropriate column type
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notify">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -557,14 +780,17 @@ the most appropriate column type
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -577,46 +803,89 @@ the most appropriate column type
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#parentMetaData">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#parentMetaData">
+      <a id="parentMetaData:org.squeryl.internals.PosoMetaData[_]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">parentMetaData</span><span class="result">: org.squeryl.internals.PosoMetaData[_]</span>
+        <span class="name">parentMetaData</span>
+        
+        
+        <span class="result">: org.squeryl.internals.PosoMetaData[_]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#resultSetHandler">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#resultSetHandler">
+      <a id="resultSetHandler:(ResultSet, Int) ⇒ AnyRef"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">resultSetHandler</span><span class="result">: (<span class="extype" name="java.sql.ResultSet">ResultSet</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ AnyRef</span>
+        <span class="name">resultSetHandler</span>
+        
+        
+        <span class="result">: (<span class="extype" name="java.sql.ResultSet">ResultSet</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ AnyRef</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#scale">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#sampleValue">
+      <a id="sampleValue:AnyRef"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
+      <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">scale</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">sampleValue</span>
+        
+        
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#schema">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#scale">
+      <a id="scale:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">schema</span><span class="result">: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
+        <span class="name">scale</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#set">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#schema">
+      <a id="schema:Schema"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">set</span><span class="params">(<span name="target">target: AnyRef</span>, <span name="v">v: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">schema</span>
+        
+        
+        <span class="result">: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#sequenceName">
+      <a id="sequenceName:String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">sequenceName</span>
+        
+        
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#set">
+      <a id="set(AnyRef,AnyRef):Unit"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">set</span>
+        
+        <span class="params">(<span name="target">target: AnyRef</span>, <span name="v">v: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -628,22 +897,29 @@ if the field is an Option[], (if isOption).
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#setFromResultSet">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#setFromResultSet">
+      <a id="setFromResultSet(AnyRef,ResultSet,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">setFromResultSet</span><span class="params">(<span name="target">target: AnyRef</span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>, <span name="index">index: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setFromResultSet</span>
+        
+        <span class="params">(<span name="target">target: AnyRef</span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>, <span name="index">index: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#synchronized">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: T0</span>)</span><span class="result">: T0</span>
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -654,11 +930,15 @@ if the field is an Option[], (if isOption).
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#toString">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#toString">
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -670,14 +950,17 @@ if the field is an Option[], (if isOption).
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -688,11 +971,15 @@ if the field is an Option[], (if isOption).
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -703,11 +990,15 @@ if the field is an Option[], (if isOption).
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -718,17 +1009,27 @@ if the field is an Option[], (if isOption).
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.internals.FieldMetaData#wrappedFieldType">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.internals.FieldMetaData#wrappedFieldType">
+      <a id="wrappedFieldType:Class[_]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">wrappedFieldType</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">wrappedFieldType</span>
+        
+        
+        <span class="result">: Class[_]</span>
       </span>
       </h4>
       
     </li></ol>
             </div>
-                
+
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
       </div>
       
       <div id="tooltip"></div>

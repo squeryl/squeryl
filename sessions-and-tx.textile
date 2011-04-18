@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Sessions and Transactions
+headtitle: Sessions and Transactions - 
 ---
 
 h2. Bootstrap with org.squeryl.SessionFactory

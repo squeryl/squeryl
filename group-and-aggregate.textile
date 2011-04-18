@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Group and Aggregate Queries
+headtitle: Group and Aggregate Queries - 
 ---
 
 Group and Aggregate queries, unlike Select queries do not return arbitrary types, but the types : 
@@ -40,16 +41,18 @@ Here is an example, the following Squeryl statement :
     from(artists, songs)((a,s) =>
       where(a.id === s.artistId)
       groupBy(a.id)
-      compute(count)
+      compute(countDistinct(s.id))
     )
 ]]></script>
+
+* Note : countDistinct takes zero to many arguments, zero arguments translates into 'count(distinct *)', 
 
 Translates into this SQL statement :
 
 <script type="syntaxhighlighter" class="brush: sql"><![CDATA[
   Select
     Artist1.id as g0,
-    count(*) as c0
+    count(distinct Song2.id) as c0
   From
     Artist Artist1,
     Song Song2

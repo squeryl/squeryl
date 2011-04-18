@@ -1,9 +1,8 @@
 ---
 layout: manual
 title: Composite Keys
+headtitle: Composite Keys -
 ---
-
-*Note*: composite keys are a beta feature, supported as of commit 932ac571574586883db3 in the Git repository.
 
 
 h3. Declaring composite keys for self documentation and fulfilling KeyedEntity's contract 
@@ -30,6 +29,8 @@ composite key or a tuple that is compatible, i.e. that has the same type paramet
 * CompositeKey3[String,Long,float] is compatible with Tuple3(String,Long,Float)
 
 * CompositeKey2[Long,Int] is *not* compatible with Tuple2(Long,Long)
+
+*Note* CompositeKeys cannot be used as binding expressions in relations (see : "issue 80":https://github.com/max-l/Squeryl/issues/issue/80)
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 

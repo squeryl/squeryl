@@ -1,6 +1,7 @@
 ---
 layout: default
 title: <div class='zquote'>A Scala ORM and DSL for talking with Databases with minimum verbosity and maximum type safety</div>
+headtitle:
 ---
 
 
@@ -34,6 +35,14 @@ Write as declaratively as SQL, only with less boilerplate. SQL's declarativeness
 
 <div class='span-24 last'>
   <div class='espace'></div>
+  <div class='ligne'></div>
+</div>
+
+
+<div class='span-24 last'>
+<p class='nav' align='center'>&nbsp;
+<a href='release-notes.html'>- Release 0.9.4-RC6 -</a>
+</p>
 </div>
 
 
@@ -43,7 +52,6 @@ Write as declaratively as SQL, only with less boilerplate. SQL's declarativeness
 <div class='span-24 last'>
   <div class='espace'></div>
 </div>
-
 
 <div class='span-6'>
 h3. <a href='introduction.html'>Introduction</a>
@@ -58,8 +66,10 @@ h3. <a href='community.html'>Community</a>
 h3. <a href='vision.html'>Vision</a>
 </div>
 
+
 </div>
 	       
+
 
 
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>

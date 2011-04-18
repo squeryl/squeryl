@@ -1,9 +1,8 @@
 ---
 layout: manual
 title: Relations
+headtitle: Relations - 
 ---
-
-*Note*: relations are a beta feature, supported only as of version 0.9.4beta, that corresponds to the 'relations' branch in the Git repository.
 
 h3. Stateful vs Stateless relations
 
@@ -84,9 +83,9 @@ The association table can have other fields besides the _left_ and _right_ forei
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
 class CourseSubscription(val courseId: Int, val studentId: Int, val grade: Float) extends KeyedEntity[CompositeKey2[Int,Int]] {
-
-	def id = compositeKey(courseId, studentId)
+  def id = compositeKey(courseId, studentId)
 }
+
 
 object SchoolDb extends Schema {
 
@@ -280,4 +279,3 @@ Relations are lazy, and are subject to the "N+1 problem":http://stackoverflow.co
 where  |Rk|  is the number of rows in the Rk part of the relation  
 
 In such a case, a single query is clearly preferable since it will fetch all objects in a single database round trip.  
-

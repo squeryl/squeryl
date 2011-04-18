@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Performance Tuning
+headtitle: Performance Tuning - 
 ---
 
 h2. Caching : Your Mileage _will_ vary

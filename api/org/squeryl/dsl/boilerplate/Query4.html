@@ -2,16 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.squeryl.dsl.boilerplate.Query4</title>
+          <title>org.squeryl.dsl.boilerplate.Query4</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
           
       <link href="../../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="type">
+        <body class="type" onload="windowTitle();">
 
       <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a>.<a href="package.html" class="extype" name="org.squeryl.dsl.boilerplate">boilerplate</a></p>
 
@@ -23,45 +24,67 @@
       <h4 class="signature" id="signature">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">Query4</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="result"> extends <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
+        <span class="name">Query4</span>
+        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span>
+        
+        <span class="result"> extends <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
-      
+      <div class="fullcomment" id="comment"><div class="block">
+            linear super types: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R], <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R], <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.IterableLike">IterableLike</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]], <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.collection.Traversable">Traversable</span>[R], <span class="extype" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>], <span class="extype" name="scala.collection.TraversableLike">TraversableLike</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]], <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[R], <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]], <span class="extype" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]], AnyRef, <span class="extype" name="scala.Any">Any</span>
+          </div></div>
+
       <div id="template">
 
         <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          <div id="order">
+                <span class="filtertype">Ordering</span>
+                <ol><li class="alpha in">Alphabetic</li><li class="inherit out">By inheritance</li></ol>
+              </div>
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</li><li class="in" name="org.squeryl.Query">Query</li><li class="in" name="org.squeryl.Queryable">Queryable</li><li class="in" name="scala.collection.Iterable">Iterable</li><li class="in" name="scala.collection.IterableLike">IterableLike</li><li class="in" name="scala.Equals">Equals</li><li class="in" name="scala.collection.Traversable">Traversable</li><li class="in" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</li><li class="in" name="scala.collection.TraversableLike">TraversableLike</li><li class="in" name="scala.collection.TraversableOnce">TraversableOnce</li><li class="in" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="org.squeryl.dsl.boilerplate.Query4">Query4</li><li class="in" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</li><li class="in" name="org.squeryl.Query">Query</li><li class="in" name="org.squeryl.Queryable">Queryable</li><li class="in" name="scala.collection.Iterable">Iterable</li><li class="in" name="scala.collection.IterableLike">IterableLike</li><li class="in" name="scala.Equals">Equals</li><li class="in" name="scala.collection.Traversable">Traversable</li><li class="in" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</li><li class="in" name="scala.collection.TraversableLike">TraversableLike</li><li class="in" name="scala.collection.TraversableOnce">TraversableOnce</li><li class="in" name="scala.collection.generic.FilterMonadic">FilterMonadic</li><li class="in" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-          </div>
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
+            </div>
+          <div id="impl">
+              <span class="filtertype">Impl.</span>
+              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+            </div>
         </div>
-        
+
         <div class="members" id="constructors">
               <h3>Instance constructors</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#this">
+              <ol><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#this">
+      <a id="this:Query4[T1, T2, T3, T4, R]"></a>
       <h4 class="signature">
       <span class="kind">new</span>
       <span class="symbol">
-        <span class="name">Query4</span><span class="params">(<span name="t1">t1: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T1]</span>, <span name="t2">t2: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T2]</span>, <span name="t3">t3: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T3]</span>, <span name="t4">t4: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T4]</span>, <span name="f">f: (T1, T2, T3, T4) ⇒ <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[R]</span>, <span name="isRoot">isRoot: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">Query4</span>
+        
+        <span class="params">(<span name="t1">t1: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T1]</span>, <span name="t2">t2: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T2]</span>, <span name="t3">t3: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T3]</span>, <span name="t4">t4: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[T4]</span>, <span name="f">f: (T1, T2, T3, T4) ⇒ <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[R]</span>, <span name="isRoot">isRoot: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        
       </span>
       </h4>
       
     </li></ol>
-            </div>        
-        
-        <div class="members" id="types">
+            </div>
+
+        <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="prt" name="scala.collection.TraversableLike#Self">
+              <ol><li visbl="prt" data-isabs="false" name="scala.collection.TraversableLike#Self">
+      <a id="Self:Self"></a>
       <h4 class="signature">
       <span class="kind">type</span>
       <span class="symbol">
-        <span class="name">Self</span><span class="result"> = <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">Self</span>
+        
+        
+        <span class="result"> = <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -72,11 +95,15 @@
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.AbstractQuery.SubQueryable">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.AbstractQuery.SubQueryable">
+      <a id="SubQueryable:SubQueryable[U]"></a>
       <h4 class="signature"><a href="../AbstractQuery$SubQueryable.html">
       <span class="kind">class</span>
       <span class="symbol">
-        <span class="name">SubQueryable</span><span class="tparams">[<span name="U">U</span>]</span><span class="result"> extends AnyRef</span>
+        <span class="name">SubQueryable</span>
+        <span class="tparams">[<span name="U">U</span>]</span>
+        
+        <span class="result"> extends AnyRef</span>
       </span>
       </a></h4>
       
@@ -87,14 +114,18 @@
           
     </li></ol>
             </div>
-        
-        <div class="members" id="values">
+
+        <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=">
+              <ol><li visbl="pub" data-isabs="false" name="scala.AnyRef#!=">
+      <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -105,11 +136,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#!=">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#!=">
+      <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">!=</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -123,14 +158,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef###">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef###">
+      <a id="##():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">##</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -141,11 +179,15 @@
           definition classes: AnyRef → Any
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$asInstanceOf">
+      <a id="$asInstanceOf[T0]():T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: T0</span>
+        <span class="name">$asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -156,11 +198,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#$isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#$isInstanceOf">
+      <a id="$isInstanceOf[T0]():Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">$isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">$isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -171,11 +217,15 @@
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#++">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#++">
+      <a id="++[B&gt;:A, That](TraversableOnce[B])(CanBuildFrom[Iterable[R], B, That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">++</span><span class="tparams">[<span name="B">B &gt;: R</span>, <span name="That">That</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span><span class="result">: That</span>
+        <span class="name">++</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="that">that: <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -184,11 +234,15 @@
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#/:">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#/:">
+      <a id="/:[B](B)((B, R) ⇒ B):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">/:</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span><span class="result">: B</span>
+        <span class="name">/:</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -197,11 +251,15 @@
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#:\">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#:\">
+      <a id=":\[B](B)((R, B) ⇒ B):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">:\</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span><span class="result">: B</span>
+        <span class="name">:\</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -210,11 +268,15 @@
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#==">
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -228,14 +290,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.Any#==">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#==">
+      <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">==</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -249,14 +314,17 @@
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#addString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#addString">
+      <a id="addString(StringBuilder):StringBuilder"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">addString</span><span class="params">(<span name="b">b: <span class="extype" name="scala.collection.mutable.StringBuilder">StringBuilder</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.mutable.StringBuilder">StringBuilder</span></span>
+        <span class="name">addString</span>
+        
+        <span class="params">(<span name="b">b: StringBuilder</span>)</span>
+        <span class="result">: StringBuilder</span>
       </span>
       </h4>
       
@@ -265,11 +333,15 @@
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#addString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#addString">
+      <a id="addString(StringBuilder,String):StringBuilder"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">addString</span><span class="params">(<span name="b">b: <span class="extype" name="scala.collection.mutable.StringBuilder">StringBuilder</span></span>, <span name="sep">sep: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.mutable.StringBuilder">StringBuilder</span></span>
+        <span class="name">addString</span>
+        
+        <span class="params">(<span name="b">b: StringBuilder</span>, <span name="sep">sep: String</span>)</span>
+        <span class="result">: StringBuilder</span>
       </span>
       </h4>
       
@@ -278,11 +350,15 @@
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#addString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#addString">
+      <a id="addString(StringBuilder,String,String,String):StringBuilder"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">addString</span><span class="params">(<span name="b">b: <span class="extype" name="scala.collection.mutable.StringBuilder">StringBuilder</span></span>, <span name="start">start: <span class="extype" name="java.lang.String">String</span></span>, <span name="sep">sep: <span class="extype" name="java.lang.String">String</span></span>, <span name="end">end: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.mutable.StringBuilder">StringBuilder</span></span>
+        <span class="name">addString</span>
+        
+        <span class="params">(<span name="b">b: StringBuilder</span>, <span name="start">start: String</span>, <span name="sep">sep: String</span>, <span name="end">end: String</span>)</span>
+        <span class="result">: StringBuilder</span>
       </span>
       </h4>
       
@@ -291,11 +367,15 @@
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#asInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#asInstanceOf">
+      <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+        <span class="name">asInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -310,14 +390,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#ast">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#ast">
+      <a id="ast:QueryExpressionNode[R]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">ast</span><span class="result">: <a href="../ast/QueryExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionNode">QueryExpressionNode</a>[R]</span>
+        <span class="name">ast</span>
+        
+        
+        <span class="result">: <a href="../ast/QueryExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionNode">QueryExpressionNode</a>[R]</span>
       </span>
       </h4>
       
@@ -326,11 +409,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="" class="extype" name="org.squeryl.dsl.boilerplate.Query4">Query4</a> → <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.AbstractQuery#buildAst">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#buildAst">
+      <a id="buildAst(QueryYield[R],Query4.this.SubQueryable[_]*):QueryExpressionNode[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">buildAst</span><span class="params">(<span name="qy">qy: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[R]</span>, <span name="subQueryables">subQueryables: Query4.this.SubQueryable[_]*</span>)</span><span class="result">: <a href="../ast/QueryExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionNode">QueryExpressionNode</a>[R]</span>
+        <span class="name">buildAst</span>
+        
+        <span class="params">(<span name="qy">qy: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[R]</span>, <span name="subQueryables">subQueryables: Query4.this.SubQueryable[_]*</span>)</span>
+        <span class="result">: <a href="../ast/QueryExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionNode">QueryExpressionNode</a>[R]</span>
       </span>
       </h4>
       
@@ -341,11 +428,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#canEqual">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#canEqual">
+      <a id="canEqual(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">canEqual</span><span class="params">(<span name="that">that: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">canEqual</span>
+        
+        <span class="params">(<span name="that">that: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -354,11 +445,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: IterableLike → Equals
         </div></div>
           
-    </li><li visbl="prt" name="scala.AnyRef#clone">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
+      <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+        <span class="name">clone</span>
+        
+        <span class="params">()</span>
+        <span class="result">: AnyRef</span>
       </span>
       </h4>
       
@@ -372,14 +467,17 @@ part of compilation it is not possible to check whether the contents of the list
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#collect">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#collect">
+      <a id="collect[B, That](PartialFunction[R, B])(CanBuildFrom[Iterable[R], B, That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">collect</span><span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="pf">pf: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[R, B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span><span class="result">: That</span>
+        <span class="name">collect</span>
+        <span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="pf">pf: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[R, B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -388,11 +486,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.Iterable#companion">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.Iterable#companion">
+      <a id="companion:GenericCompanion[Iterable]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">companion</span><span class="result">: <span class="extype" name="scala.collection.generic.GenericCompanion">GenericCompanion</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[A][A]]</span>
+        <span class="name">companion</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.generic.GenericCompanion">GenericCompanion</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>]</span>
       </span>
       </h4>
       
@@ -401,11 +503,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: Iterable → Traversable → GenericTraversableTemplate
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#copy">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#copy">
+      <a id="copy(Boolean):AbstractQuery[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">copy</span><span class="params">(<span name="asRoot">asRoot: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
+        <span class="name">copy</span>
+        
+        <span class="params">(<span name="asRoot">asRoot: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
       </span>
       </h4>
       
@@ -414,11 +520,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#copyToArray">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#copyToArray">
+      <a id="copyToArray[B&gt;:A](Array[B],Int,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">copyToArray</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[B]</span>, <span name="start">start: <span class="extype" name="scala.Int">Int</span></span>, <span name="len">len: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">copyToArray</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[B]</span>, <span name="start">start: <span class="extype" name="scala.Int">Int</span></span>, <span name="len">len: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -427,11 +537,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#copyToArray">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#copyToArray">
+      <a id="copyToArray[B&gt;:A](Array[B]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">copyToArray</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[B]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">copyToArray</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[B]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -440,11 +554,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#copyToArray">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#copyToArray">
+      <a id="copyToArray[B&gt;:A](Array[B],Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">copyToArray</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[B]</span>, <span name="start">start: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">copyToArray</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="xs">xs: <span class="extype" name="scala.Array">Array</span>[B]</span>, <span name="start">start: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -453,11 +571,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#copyToBuffer">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#copyToBuffer">
+      <a id="copyToBuffer[B&gt;:A](Buffer[B]):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">copyToBuffer</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[B]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">copyToBuffer</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="dest">dest: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[B]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -466,11 +588,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#count">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#count">
+      <a id="count((R) ⇒ Boolean):Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">count</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">count</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -479,11 +605,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#createCopy">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#createCopy">
+      <a id="createCopy(Boolean):Query4[T1, T2, T3, T4, R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">createCopy</span><span class="params">(<span name="root">root: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <a href="" class="extype" name="org.squeryl.dsl.boilerplate.Query4">Query4</a>[T1, T2, T3, T4, R]</span>
+        <span class="name">createCopy</span>
+        
+        <span class="params">(<span name="root">root: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <a href="" class="extype" name="org.squeryl.dsl.boilerplate.Query4">Query4</a>[T1, T2, T3, T4, R]</span>
       </span>
       </h4>
       
@@ -492,11 +622,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="" class="extype" name="org.squeryl.dsl.boilerplate.Query4">Query4</a> → <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="prt" name="org.squeryl.dsl.AbstractQuery#createSubQueryable">
+    </li><li visbl="prt" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#createSubQueryable">
+      <a id="createSubQueryable[U](Queryable[U]):SubQueryable[U]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">createSubQueryable</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="q">q: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[U]</span>)</span><span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[U]</span>
+        <span class="name">createSubQueryable</span>
+        <span class="tparams">[<span name="U">U</span>]</span>
+        <span class="params">(<span name="q">q: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[U]</span>)</span>
+        <span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[U]</span>
       </span>
       </h4>
       
@@ -507,11 +641,32 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#distinct">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#definitionSite">
+      <a id="definitionSite:Option[StackTraceElement]"></a>
+      <h4 class="signature">
+      <span class="kind">val</span>
+      <span class="symbol">
+        <span class="name">definitionSite</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#distinct">
+      <a id="distinct:AbstractQuery[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">distinct</span><span class="result">: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
+        <span class="name">distinct</span>
+        
+        
+        <span class="result">: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
       </span>
       </h4>
       
@@ -520,11 +675,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#drop">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#drop">
+      <a id="drop(Int):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">drop</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">drop</span>
+        
+        <span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -533,11 +692,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#dropRight">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#dropRight">
+      <a id="dropRight(Int):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">dropRight</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">dropRight</span>
+        
+        <span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -546,11 +709,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#dropWhile">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#dropWhile">
+      <a id="dropWhile((R) ⇒ Boolean):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">dropWhile</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">dropWhile</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -559,11 +726,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#dumpAst">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#dumpAst">
+      <a id="dumpAst:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">dumpAst</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">dumpAst</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -572,11 +743,15 @@ part of compilation it is not possible to check whether the contents of the list
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#elements">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#elements">
+      <a id="elements:Iterator[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name deprecated">elements</span><span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[R]</span>
+        <span class="name deprecated">elements</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[R]</span>
       </span>
       </h4>
       
@@ -587,11 +762,15 @@ part of compilation it is not possible to check whether the contents of the list
           <li><p>use <code>iterator' instead</code></p></li>
         </ol></div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#eq">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#eq">
+      <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -618,14 +797,17 @@ should be equal to each other (<code>o1 == o2</code>) and they should hash to th
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#equals">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#equals">
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">equals</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -647,14 +829,17 @@ scala.Int
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#exists">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#exists">
+      <a id="exists((R) ⇒ Boolean):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">exists</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">exists</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -663,11 +848,15 @@ scala.Int
           definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#filter">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#filter">
+      <a id="filter((R) ⇒ Boolean):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">filter</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -676,11 +865,15 @@ scala.Int
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#filterNot">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#filterNot">
+      <a id="filterNot((R) ⇒ Boolean):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">filterNot</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">filterNot</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -689,11 +882,15 @@ scala.Int
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="prt" name="scala.AnyRef#finalize">
+    </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#finalize">
+      <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">finalize</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -708,14 +905,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#find">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#find">
+      <a id="find((R) ⇒ Boolean):Option[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">find</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
+        <span class="name">find</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
       </span>
       </h4>
       
@@ -724,11 +924,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#first">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#first">
+      <a id="first:R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name deprecated">first</span><span class="result">: R</span>
+        <span class="name deprecated">first</span>
+        
+        
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -739,11 +943,15 @@ there are no more references to the object.</p><p>The details of when and if the
           <li><p>use <code>head' instead</code></p></li>
         </ol></div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#firstOption">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#firstOption">
+      <a id="firstOption:Option[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name deprecated">firstOption</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
+        <span class="name deprecated">firstOption</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
       </span>
       </h4>
       
@@ -754,24 +962,32 @@ there are no more references to the object.</p><p>The details of when and if the
           <li><p>use <code>headOption' instead</code></p></li>
         </ol></div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#flatMap">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#flatMap">
+      <a id="flatMap[B, That]((R) ⇒ Traversable[B])(CanBuildFrom[Iterable[R], B, That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="f">f: (R) ⇒ <span class="extype" name="scala.collection.Traversable">Traversable</span>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span><span class="result">: That</span>
+        <span class="name">flatMap</span>
+        <span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="f">f: (R) ⇒ <span class="extype" name="scala.collection.Traversable">Traversable</span>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#flatten">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.generic.GenericTraversableTemplate#flatten">
+      <a id="flatten[B]((R) ⇒ Traversable[B]):Iterable[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">flatten</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="asTraversable">asTraversable: (R) ⇒ <span class="extype" name="scala.collection.Traversable">Traversable</span>[B]</span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>
+        <span class="name">flatten</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="asTraversable">asTraversable: (R) ⇒ <span class="extype" name="scala.collection.Traversable">Traversable</span>[B]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>
       </span>
       </h4>
       
@@ -780,11 +996,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: GenericTraversableTemplate
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#foldLeft">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#foldLeft">
+      <a id="foldLeft[B](B)((B, R) ⇒ B):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">foldLeft</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span><span class="result">: B</span>
+        <span class="name">foldLeft</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -793,11 +1013,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#foldRight">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#foldRight">
+      <a id="foldRight[B](B)((R, B) ⇒ B):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">foldRight</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span><span class="result">: B</span>
+        <span class="name">foldRight</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -806,11 +1030,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: IterableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#forUpdate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#forUpdate">
+      <a id="forUpdate:AbstractQuery[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">forUpdate</span><span class="result">: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
+        <span class="name">forUpdate</span>
+        
+        
+        <span class="result">: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</span>
       </span>
       </h4>
       
@@ -819,11 +1047,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#forall">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#forall">
+      <a id="forall((R) ⇒ Boolean):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">forall</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">forall</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -832,24 +1064,32 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#foreach">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#foreach">
+      <a id="foreach[U]((R) ⇒ U):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">foreach</span><span class="tparams">[<span name="U">U</span>]</span><span class="params">(<span name="f">f: (R) ⇒ U</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">foreach</span>
+        <span class="tparams">[<span name="U">U</span>]</span>
+        <span class="params">(<span name="f">f: (R) ⇒ U</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: IterableLike → TraversableLike → TraversableOnce
+          definition classes: IterableLike → TraversableLike → TraversableOnce → FilterMonadic
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#genericBuilder">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.generic.GenericTraversableTemplate#genericBuilder">
+      <a id="genericBuilder[B]:Builder[B, Iterable[B]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">genericBuilder</span><span class="tparams">[<span name="B">B</span>]</span><span class="result">: <span class="extype" name="scala.collection.mutable.Builder">Builder</span>[B, <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]]</span>
+        <span class="name">genericBuilder</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.collection.mutable.Builder">Builder</span>[B, <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]]</span>
       </span>
       </h4>
       
@@ -858,11 +1098,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: GenericTraversableTemplate
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#getClass">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#getClass">
+      <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+        <span class="name">getClass</span>
+        
+        <span class="params">()</span>
+        <span class="result">: java.lang.Class[_]</span>
       </span>
       </h4>
       
@@ -876,14 +1120,17 @@ there are no more references to the object.</p><p>The details of when and if the
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#give">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#give">
+      <a id="give(ResultSetMapper,ResultSet):R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">give</span><span class="params">(<span name="rsm">rsm: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>)</span><span class="result">: R</span>
+        <span class="name">give</span>
+        
+        <span class="params">(<span name="rsm">rsm: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>)</span>
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -892,11 +1139,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#groupBy">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#groupBy">
+      <a id="groupBy[K]((R) ⇒ K):Map[K, Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">groupBy</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="f">f: (R) ⇒ K</span>)</span><span class="result">: <span class="extype" name="scala.collection.Map">Map</span>[K, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">groupBy</span>
+        <span class="tparams">[<span name="K">K</span>]</span>
+        <span class="params">(<span name="f">f: (R) ⇒ K</span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[K, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -905,11 +1156,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#grouped">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#grouped">
+      <a id="grouped(Int):Iterator[Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">grouped</span><span class="params">(<span name="size">size: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">grouped</span>
+        
+        <span class="params">(<span name="size">size: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -918,11 +1173,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#hasDefiniteSize">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#hasDefiniteSize">
+      <a id="hasDefiniteSize:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hasDefiniteSize</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">hasDefiniteSize</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -931,11 +1190,15 @@ there are no more references to the object.</p><p>The details of when and if the
           definition classes: TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#hashCode">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#hashCode">
+      <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">hashCode</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -951,14 +1214,17 @@ to verify that the behavior is consistent with the <code>equals</code> method.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#head">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#head">
+      <a id="head:R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">head</span><span class="result">: R</span>
+        <span class="name">head</span>
+        
+        
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -967,11 +1233,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#headOption">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#headOption">
+      <a id="headOption:Option[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">headOption</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
+        <span class="name">headOption</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
       </span>
       </h4>
       
@@ -980,11 +1250,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#init">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#init">
+      <a id="init:Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">init</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">init</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -993,11 +1267,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#invokeYield">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#invokeYield">
+      <a id="invokeYield(ResultSetMapper,ResultSet):R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">invokeYield</span><span class="params">(<span name="rsm">rsm: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>)</span><span class="result">: R</span>
+        <span class="name">invokeYield</span>
+        
+        <span class="params">(<span name="rsm">rsm: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>)</span>
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -1006,11 +1284,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="" class="extype" name="org.squeryl.dsl.boilerplate.Query4">Query4</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#isEmpty">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#isEmpty">
+      <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isEmpty</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1019,11 +1301,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: IterableLike → TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#isForUpdate">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#isForUpdate">
+      <a id="isForUpdate:Boolean"></a>
       <h4 class="signature">
       <span class="kind">var</span>
       <span class="symbol">
-        <span class="name">isForUpdate</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isForUpdate</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1032,11 +1318,15 @@ to verify that the behavior is consistent with the <code>equals</code> method.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.Any#isInstanceOf">
+    </li><li visbl="pub" data-isabs="false" name="scala.Any#isInstanceOf">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isInstanceOf</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1052,14 +1342,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#isTraversableAgain">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#isTraversableAgain">
+      <a id="isTraversableAgain:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">isTraversableAgain</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isTraversableAgain</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1070,11 +1363,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#iterator">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#iterator">
+      <a id="iterator:Iterator[R] with Closeable"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">iterator</span><span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[R]</span>
+        <span class="name">iterator</span>
+        
+        
+        <span class="result">: Iterator[R] with <span class="extype" name="java.io.Closeable">Closeable</span></span>
       </span>
       </h4>
       
@@ -1083,11 +1380,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#last">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#last">
+      <a id="last:R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">last</span><span class="result">: R</span>
+        <span class="name">last</span>
+        
+        
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -1096,11 +1397,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#lastOption">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#lastOption">
+      <a id="lastOption:Option[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">lastOption</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
+        <span class="name">lastOption</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[R]</span>
       </span>
       </h4>
       
@@ -1109,24 +1414,32 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#map">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#map">
+      <a id="map[B, That]((R) ⇒ B)(CanBuildFrom[Iterable[R], B, That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="f">f: (R) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span><span class="result">: That</span>
+        <span class="name">map</span>
+        <span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="f">f: (R) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#max">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#max">
+      <a id="max[B&gt;:A](Ordering[B]):R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">max</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="cmp">cmp: <span class="extype" name="scala.math.Ordering">Ordering</span>[B]</span>)</span><span class="result">: R</span>
+        <span class="name">max</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="cmp">cmp: Ordering[B]</span>)</span>
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -1135,11 +1448,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#min">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#min">
+      <a id="min[B&gt;:A](Ordering[B]):R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">min</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="cmp">cmp: <span class="extype" name="scala.math.Ordering">Ordering</span>[B]</span>)</span><span class="result">: R</span>
+        <span class="name">min</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="cmp">cmp: Ordering[B]</span>)</span>
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -1148,11 +1465,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.Query#minus">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Query#minus">
+      <a id="minus(Query[R]):Query[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">minus</span><span class="params">(<span name="q">q: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>)</span><span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
+        <span class="name">minus</span>
+        
+        <span class="params">(<span name="q">q: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>)</span>
+        <span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
       </span>
       </h4>
       
@@ -1161,11 +1482,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#mkString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#mkString">
+      <a id="mkString:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">mkString</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">mkString</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -1174,11 +1499,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#mkString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#mkString">
+      <a id="mkString(String):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">mkString</span><span class="params">(<span name="sep">sep: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">mkString</span>
+        
+        <span class="params">(<span name="sep">sep: String</span>)</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -1187,11 +1516,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#mkString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#mkString">
+      <a id="mkString(String,String,String):String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">mkString</span><span class="params">(<span name="start">start: <span class="extype" name="java.lang.String">String</span></span>, <span name="sep">sep: <span class="extype" name="java.lang.String">String</span></span>, <span name="end">end: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">mkString</span>
+        
+        <span class="params">(<span name="start">start: String</span>, <span name="sep">sep: String</span>, <span name="end">end: String</span>)</span>
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -1200,11 +1533,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#name">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#name">
+      <a id="name:String"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">name</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">name</span>
+        
+        
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -1213,11 +1550,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#ne">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#ne">
+      <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span>
+        
+        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1231,14 +1572,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="prt" name="scala.collection.generic.GenericTraversableTemplate#newBuilder">
+    </li><li visbl="prt" data-isabs="false" name="scala.collection.generic.GenericTraversableTemplate#newBuilder">
+      <a id="newBuilder:Builder[R, Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">newBuilder</span><span class="result">: <span class="extype" name="scala.collection.mutable.Builder">Builder</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">newBuilder</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.mutable.Builder">Builder</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -1249,11 +1593,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: GenericTraversableTemplate → HasNewBuilder
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#nonEmpty">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#nonEmpty">
+      <a id="nonEmpty:Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">nonEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">nonEmpty</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1262,11 +1610,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notify">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notify">
+      <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notify</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -1279,14 +1631,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#notifyAll">
+      <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">notifyAll</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -1299,14 +1654,17 @@ possible to check whether the contents of the list are of the requested typed.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#page">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#page">
+      <a id="page(Int,Int):Query[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">page</span><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Int">Int</span></span>, <span name="pageLength">pageLength: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
+        <span class="name">page</span>
+        
+        <span class="params">(<span name="offset">offset: <span class="extype" name="scala.Int">Int</span></span>, <span name="pageLength">pageLength: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
       </span>
       </h4>
       
@@ -1315,11 +1673,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a> → <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#page">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#page">
+      <a id="page:Option[(Int, Int)]"></a>
       <h4 class="signature">
       <span class="kind">var</span>
       <span class="symbol">
-        <span class="name">page</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)]</span>
+        <span class="name">page</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)]</span>
       </span>
       </h4>
       
@@ -1328,11 +1690,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#partition">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#partition">
+      <a id="partition((R) ⇒ Boolean):(Iterable[R], Iterable[R])"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">partition</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R])</span>
+        <span class="name">partition</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R])</span>
       </span>
       </h4>
       
@@ -1341,11 +1707,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#product">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#product">
+      <a id="product[B&gt;:A](Numeric[B]):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">product</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="num">num: <span class="extype" name="scala.math.Numeric">Numeric</span>[B]</span>)</span><span class="result">: B</span>
+        <span class="name">product</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="num">num: Numeric[B]</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -1354,11 +1724,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#projection">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#projection">
+      <a id="projection:IterableView[R, Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name deprecated">projection</span><span class="result">: <span class="extype" name="scala.collection.IterableView">IterableView</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name deprecated">projection</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.IterableView">IterableView</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -1369,11 +1743,15 @@ possible to check whether the contents of the list are of the requested typed.
           <li><p>use <code>view' instead</code></p></li>
         </ol></div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#reduceLeft">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#reduceLeft">
+      <a id="reduceLeft[B&gt;:A]((B, R) ⇒ B):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">reduceLeft</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span><span class="result">: B</span>
+        <span class="name">reduceLeft</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -1382,11 +1760,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#reduceLeftOption">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#reduceLeftOption">
+      <a id="reduceLeftOption[B&gt;:A]((B, R) ⇒ B):Option[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">reduceLeftOption</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[B]</span>
+        <span class="name">reduceLeftOption</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[B]</span>
       </span>
       </h4>
       
@@ -1395,11 +1777,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#reduceRight">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#reduceRight">
+      <a id="reduceRight[B&gt;:A]((R, B) ⇒ B):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">reduceRight</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span><span class="result">: B</span>
+        <span class="name">reduceRight</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -1408,11 +1794,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: IterableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#reduceRightOption">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#reduceRightOption">
+      <a id="reduceRightOption[B&gt;:A]((R, B) ⇒ B):Option[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">reduceRightOption</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[B]</span>
+        <span class="name">reduceRightOption</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Option">Option</span>[B]</span>
       </span>
       </h4>
       
@@ -1421,11 +1811,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#repr">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#repr">
+      <a id="repr:Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">repr</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">repr</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1434,11 +1828,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#resultSetMapper">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#resultSetMapper">
+      <a id="resultSetMapper:ResultSetMapper"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">resultSetMapper</span><span class="result">: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>
+        <span class="name">resultSetMapper</span>
+        
+        
+        <span class="result">: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>
       </span>
       </h4>
       
@@ -1447,11 +1845,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="prt" name="scala.collection.TraversableOnce#reversed">
+    </li><li visbl="prt" data-isabs="false" name="scala.collection.TraversableOnce#reversed">
+      <a id="reversed:List[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">reversed</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[R]</span>
+        <span class="name">reversed</span>
+        
+        
+        <span class="result">: List[R]</span>
       </span>
       </h4>
       
@@ -1462,11 +1864,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#sameElements">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#sameElements">
+      <a id="sameElements[B&gt;:A](Iterable[B]):Boolean"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sameElements</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">sameElements</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="that">that: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1475,11 +1881,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#scanLeft">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#scanLeft">
+      <a id="scanLeft[B, That](B)((B, R) ⇒ B)(CanBuildFrom[Iterable[R], B, That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">scanLeft</span><span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span><span class="result">: That</span>
+        <span class="name">scanLeft</span>
+        <span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (B, R) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -1488,11 +1898,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#scanRight">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#scanRight">
+      <a id="scanRight[B, That](B)((R, B) ⇒ B)(CanBuildFrom[Iterable[R], B, That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">scanRight</span><span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span><span class="result">: That</span>
+        <span class="name">scanRight</span>
+        <span class="tparams">[<span name="B">B</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="z">z: B</span>)</span><span class="params">(<span name="op">op: (R, B) ⇒ B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], B, That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -1501,11 +1915,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#selectDistinct">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#selectDistinct">
+      <a id="selectDistinct:Boolean"></a>
       <h4 class="signature">
       <span class="kind">var</span>
       <span class="symbol">
-        <span class="name">selectDistinct</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">selectDistinct</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -1514,11 +1932,15 @@ possible to check whether the contents of the list are of the requested typed.
           definition classes: <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.Query#single">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Query#single">
+      <a id="single:R"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">single</span><span class="result">: R</span>
+        <span class="name">single</span>
+        
+        
+        <span class="result">: R</span>
       </span>
       </h4>
       
@@ -1531,14 +1953,17 @@ if the query returns no row or more than one row.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#size">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#size">
+      <a id="size:Int"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">size</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">size</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
@@ -1547,11 +1972,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#slice">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#slice">
+      <a id="slice(Int,Int):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">slice</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Int">Int</span></span>, <span name="until">until: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">slice</span>
+        
+        <span class="params">(<span name="from">from: <span class="extype" name="scala.Int">Int</span></span>, <span name="until">until: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1560,11 +1989,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#sliding">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#sliding">
+      <a id="sliding[B&gt;:A](Int,Int):Iterator[Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sliding</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="size">size: <span class="extype" name="scala.Int">Int</span></span>, <span name="step">step: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">sliding</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="size">size: <span class="extype" name="scala.Int">Int</span></span>, <span name="step">step: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -1573,11 +2006,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#sliding">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#sliding">
+      <a id="sliding[B&gt;:A](Int):Iterator[Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sliding</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span name="size">size: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">sliding</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span name="size">size: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -1586,11 +2023,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#span">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#span">
+      <a id="span((R) ⇒ Boolean):(Iterable[R], Iterable[R])"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">span</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R])</span>
+        <span class="name">span</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R])</span>
       </span>
       </h4>
       
@@ -1599,11 +2040,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#splitAt">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#splitAt">
+      <a id="splitAt(Int):(Iterable[R], Iterable[R])"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">splitAt</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R])</span>
+        <span class="name">splitAt</span>
+        
+        <span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], <span class="extype" name="scala.collection.Iterable">Iterable</span>[R])</span>
       </span>
       </h4>
       
@@ -1612,43 +2057,63 @@ if the query returns no row or more than one row.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#sq1">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#sq1">
+      <a id="sq1:SubQueryable[T1]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">sq1</span><span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T1]</span>
+        <span class="name">sq1</span>
+        
+        
+        <span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T1]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#sq2">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#sq2">
+      <a id="sq2:SubQueryable[T2]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">sq2</span><span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T2]</span>
+        <span class="name">sq2</span>
+        
+        
+        <span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T2]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#sq3">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#sq3">
+      <a id="sq3:SubQueryable[T3]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">sq3</span><span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T3]</span>
+        <span class="name">sq3</span>
+        
+        
+        <span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T3]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.Query4#sq4">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.boilerplate.Query4#sq4">
+      <a id="sq4:SubQueryable[T4]"></a>
       <h4 class="signature">
       <span class="kind">val</span>
       <span class="symbol">
-        <span class="name">sq4</span><span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T4]</span>
+        <span class="name">sq4</span>
+        
+        
+        <span class="result">: <a href="../AbstractQuery$SubQueryable.html" class="extype" name="org.squeryl.dsl.AbstractQuery.SubQueryable">SubQueryable</a>[T4]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#statement">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#statement">
+      <a id="statement:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">statement</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">statement</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -1660,14 +2125,17 @@ if the query returns no row or more than one row.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#stringPrefix">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#stringPrefix">
+      <a id="stringPrefix:String"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">stringPrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">stringPrefix</span>
+        
+        
+        <span class="result">: String</span>
       </span>
       </h4>
       
@@ -1676,11 +2144,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#sum">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#sum">
+      <a id="sum[B&gt;:A](Numeric[B]):B"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">sum</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="num">num: <span class="extype" name="scala.math.Numeric">Numeric</span>[B]</span>)</span><span class="result">: B</span>
+        <span class="name">sum</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="num">num: Numeric[B]</span>)</span>
+        <span class="result">: B</span>
       </span>
       </h4>
       
@@ -1689,11 +2161,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#synchronized">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#synchronized">
+      <a id="synchronized[T0](T0):T0"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: T0</span>)</span><span class="result">: T0</span>
+        <span class="name">synchronized</span>
+        <span class="tparams">[<span name="T0">T0</span>]</span>
+        <span class="params">(<span name="arg0">arg0: T0</span>)</span>
+        <span class="result">: T0</span>
       </span>
       </h4>
       
@@ -1704,11 +2180,15 @@ if the query returns no row or more than one row.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#tail">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#tail">
+      <a id="tail:Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">tail</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">tail</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1717,11 +2197,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#take">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#take">
+      <a id="take(Int):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">take</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">take</span>
+        
+        <span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1730,11 +2214,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#takeRight">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#takeRight">
+      <a id="takeRight(Int):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">takeRight</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">takeRight</span>
+        
+        <span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1743,11 +2231,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#takeWhile">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#takeWhile">
+      <a id="takeWhile((R) ⇒ Boolean):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">takeWhile</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">takeWhile</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1756,11 +2248,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="prt" name="scala.collection.IterableLike#thisCollection">
+    </li><li visbl="prt" data-isabs="false" name="scala.collection.IterableLike#thisCollection">
+      <a id="thisCollection:Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">thisCollection</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">thisCollection</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1771,11 +2267,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toArray">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#toArray">
+      <a id="toArray[B&gt;:A](ClassManifest[B]):Array[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toArray</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.ClassManifest">ClassManifest</span>[B]</span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[B]</span>
+        <span class="name">toArray</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: ClassManifest[B]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.Array">Array</span>[B]</span>
       </span>
       </h4>
       
@@ -1784,11 +2284,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toBuffer">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#toBuffer">
+      <a id="toBuffer[B&gt;:A]:Buffer[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toBuffer</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="result">: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[B]</span>
+        <span class="name">toBuffer</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.collection.mutable.Buffer">Buffer</span>[B]</span>
       </span>
       </h4>
       
@@ -1797,11 +2301,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="prt" name="scala.collection.IterableLike#toCollection">
+    </li><li visbl="prt" data-isabs="false" name="scala.collection.IterableLike#toCollection">
+      <a id="toCollection(Iterable[R]):Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toCollection</span><span class="params">(<span name="repr">repr: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">toCollection</span>
+        
+        <span class="params">(<span name="repr">repr: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1812,11 +2320,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toIndexedSeq">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#toIndexedSeq">
+      <a id="toIndexedSeq[B&gt;:A]:IndexedSeq[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toIndexedSeq</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[B]</span>
+        <span class="name">toIndexedSeq</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[B]</span>
       </span>
       </h4>
       
@@ -1825,11 +2337,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#toIterable">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#toIterable">
+      <a id="toIterable:Iterable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toIterable</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
+        <span class="name">toIterable</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</span>
       </span>
       </h4>
       
@@ -1838,11 +2354,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#toIterator">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#toIterator">
+      <a id="toIterator:Iterator[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toIterator</span><span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[R]</span>
+        <span class="name">toIterator</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Iterator">Iterator</span>[R]</span>
       </span>
       </h4>
       
@@ -1851,11 +2371,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toList">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#toList">
+      <a id="toList:List[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toList</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[R]</span>
+        <span class="name">toList</span>
+        
+        
+        <span class="result">: List[R]</span>
       </span>
       </h4>
       
@@ -1864,11 +2388,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toMap">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#toMap">
+      <a id="toMap[T, U](&lt;:&lt;[R, (T, U)]):Map[T, U]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toMap</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[R, (T, U)]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[T, U]</span>
+        <span class="name">toMap</span>
+        <span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[R, (T, U)]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.immutable.Map">Map</span>[T, U]</span>
       </span>
       </h4>
       
@@ -1877,37 +2405,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toSeq">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#toSeq">
+      <a id="toSeq:Seq[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toSeq</span><span class="result">: <span class="extype" name="scala.collection.Seq">Seq</span>[R]</span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: TraversableOnce
-        </div></div>
-          
-    </li><li visbl="pub" name="scala.collection.TraversableOnce#toSet">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">toSet</span><span class="tparams">[<span name="B">B &gt;: R</span>]</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[B]</span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: TraversableOnce
-        </div></div>
-          
-    </li><li visbl="pub" name="scala.collection.IterableLike#toStream">
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol">
-        <span class="name">toStream</span><span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[R]</span>
+        <span class="name">toSeq</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Seq">Seq</span>[R]</span>
       </span>
       </h4>
       
@@ -1916,11 +2422,49 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.dsl.AbstractQuery#toString">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableOnce#toSet">
+      <a id="toSet[B&gt;:A]:Set[B]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toSet</span>
+        <span class="tparams">[<span name="B">B &gt;: A</span>]</span>
+        
+        <span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[B]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: TraversableOnce
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#toStream">
+      <a id="toStream:Stream[R]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">toStream</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.immutable.Stream">Stream</span>[R]</span>
+      </span>
+      </h4>
+      
+            
+            <div class="fullcomment"><div class="block">
+          definition classes: IterableLike → TraversableLike → TraversableOnce
+        </div></div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.dsl.AbstractQuery#toString">
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">toString</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -1932,14 +2476,17 @@ if the query returns no row or more than one row.
             
             
             
-            
           </div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#toTraversable">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#toTraversable">
+      <a id="toTraversable:Traversable[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">toTraversable</span><span class="result">: <span class="extype" name="scala.collection.Traversable">Traversable</span>[R]</span>
+        <span class="name">toTraversable</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.Traversable">Traversable</span>[R]</span>
       </span>
       </h4>
       
@@ -1948,11 +2495,15 @@ if the query returns no row or more than one row.
           definition classes: TraversableLike → TraversableOnce
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#transpose">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.generic.GenericTraversableTemplate#transpose">
+      <a id="transpose[B]((R) ⇒ Traversable[B]):Iterable[Iterable[B]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">transpose</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="asTraversable">asTraversable: (R) ⇒ <span class="extype" name="scala.collection.Traversable">Traversable</span>[B]</span>)</span><span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[B]]</span>
+        <span class="name">transpose</span>
+        <span class="tparams">[<span name="B">B</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="asTraversable">asTraversable: (R) ⇒ <span class="extype" name="scala.collection.Traversable">Traversable</span>[B]</span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.Iterable">Iterable</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[B]]</span>
       </span>
       </h4>
       
@@ -1961,11 +2512,15 @@ if the query returns no row or more than one row.
           definition classes: GenericTraversableTemplate
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.Query#union">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Query#union">
+      <a id="union(Query[R]):Query[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">union</span><span class="params">(<span name="q">q: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>)</span><span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
+        <span class="name">union</span>
+        
+        <span class="params">(<span name="q">q: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>)</span>
+        <span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
       </span>
       </h4>
       
@@ -1974,11 +2529,15 @@ if the query returns no row or more than one row.
           definition classes: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.generic.GenericTraversableTemplate#unzip">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.generic.GenericTraversableTemplate#unzip">
+      <a id="unzip[A1, A2]((R) ⇒ (A1, A2)):(Iterable[A1], Iterable[A2])"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">unzip</span><span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="asPair">asPair: (R) ⇒ (A1, A2)</span>)</span><span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[A1], <span class="extype" name="scala.collection.Iterable">Iterable</span>[A2])</span>
+        <span class="name">unzip</span>
+        <span class="tparams">[<span name="A1">A1</span>, <span name="A2">A2</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="asPair">asPair: (R) ⇒ (A1, A2)</span>)</span>
+        <span class="result">: (<span class="extype" name="scala.collection.Iterable">Iterable</span>[A1], <span class="extype" name="scala.collection.Iterable">Iterable</span>[A2])</span>
       </span>
       </h4>
       
@@ -1987,11 +2546,15 @@ if the query returns no row or more than one row.
           definition classes: GenericTraversableTemplate
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#view">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#view">
+      <a id="view(Int,Int):IterableView[R, Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">view</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Int">Int</span></span>, <span name="until">until: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.IterableView">IterableView</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">view</span>
+        
+        <span class="params">(<span name="from">from: <span class="extype" name="scala.Int">Int</span></span>, <span name="until">until: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.IterableView">IterableView</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -2000,11 +2563,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#view">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#view">
+      <a id="view:IterableView[R, Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">view</span><span class="result">: <span class="extype" name="scala.collection.IterableView">IterableView</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
+        <span class="name">view</span>
+        
+        
+        <span class="result">: <span class="extype" name="scala.collection.IterableView">IterableView</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
@@ -2013,11 +2580,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike → TraversableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">()</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -2028,11 +2599,15 @@ if the query returns no row or more than one row.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -2043,11 +2618,15 @@ if the query returns no row or more than one row.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="scala.AnyRef#wait">
+    </li><li visbl="pub" data-isabs="false" name="scala.AnyRef#wait">
+      <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">wait</span>
+        
+        <span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       
@@ -2058,11 +2637,15 @@ if the query returns no row or more than one row.
           definition classes: AnyRef
         </div></div>
           
-    </li><li visbl="pub" name="org.squeryl.Queryable#where">
+    </li><li visbl="pub" data-isabs="false" name="org.squeryl.Queryable#where">
+      <a id="where((R) ⇒ LogicalBoolean)(QueryDsl):Query[R]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">where</span><span class="params">(<span name="whereClauseFunctor">whereClauseFunctor: (R) ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="../QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
+        <span class="name">where</span>
+        
+        <span class="params">(<span name="whereClauseFunctor">whereClauseFunctor: (R) ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="../QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span>
+        <span class="result">: <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</span>
       </span>
       </h4>
       
@@ -2071,24 +2654,32 @@ if the query returns no row or more than one row.
           definition classes: <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.TraversableLike#withFilter">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.TraversableLike#withFilter">
+      <a id="withFilter((R) ⇒ Boolean):FilterMonadic[R, Iterable[R]]"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">withFilter</span><span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.TraversableLike.WithFilter">WithFilter</span></span>
+        <span class="name">withFilter</span>
+        
+        <span class="params">(<span name="p">p: (R) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="result">: <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</span>
       </span>
       </h4>
       
             
             <div class="fullcomment"><div class="block">
-          definition classes: TraversableLike
+          definition classes: TraversableLike → FilterMonadic
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#zip">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#zip">
+      <a id="zip[A1&gt;:A, B, That](Iterable[B])(CanBuildFrom[Iterable[R], (A1, B), That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">zip</span><span class="tparams">[<span name="A1">A1 &gt;: R</span>, <span name="B">B</span>, <span name="That">That</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], (A1, B), That]</span>)</span><span class="result">: That</span>
+        <span class="name">zip</span>
+        <span class="tparams">[<span name="A1">A1 &gt;: A</span>, <span name="B">B</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="that">that: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], (A1, B), That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -2097,11 +2688,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#zipAll">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#zipAll">
+      <a id="zipAll[B, A1&gt;:A, That](Iterable[B],A1,B)(CanBuildFrom[Iterable[R], (A1, B), That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">zipAll</span><span class="tparams">[<span name="B">B</span>, <span name="A1">A1 &gt;: R</span>, <span name="That">That</span>]</span><span class="params">(<span name="that">that: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>, <span name="thisElem">thisElem: A1</span>, <span name="thatElem">thatElem: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], (A1, B), That]</span>)</span><span class="result">: That</span>
+        <span class="name">zipAll</span>
+        <span class="tparams">[<span name="B">B</span>, <span name="A1">A1 &gt;: A</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span name="that">that: <span class="extype" name="scala.collection.Iterable">Iterable</span>[B]</span>, <span name="thisElem">thisElem: A1</span>, <span name="thatElem">thatElem: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], (A1, B), That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -2110,11 +2705,15 @@ if the query returns no row or more than one row.
           definition classes: IterableLike
         </div></div>
           
-    </li><li visbl="pub" name="scala.collection.IterableLike#zipWithIndex">
+    </li><li visbl="pub" data-isabs="false" name="scala.collection.IterableLike#zipWithIndex">
+      <a id="zipWithIndex[A1&gt;:A, That](CanBuildFrom[Iterable[R], (A1, Int), That]):That"></a>
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">zipWithIndex</span><span class="tparams">[<span name="A1">A1 &gt;: R</span>, <span name="That">That</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], (A1, <span class="extype" name="scala.Int">Int</span>), That]</span>)</span><span class="result">: That</span>
+        <span class="name">zipWithIndex</span>
+        <span class="tparams">[<span name="A1">A1 &gt;: A</span>, <span name="That">That</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="bf">bf: <span class="extype" name="scala.collection.generic.CanBuildFrom">CanBuildFrom</span>[<span class="extype" name="scala.collection.Iterable">Iterable</span>[R], (A1, <span class="extype" name="scala.Int">Int</span>), That]</span>)</span>
+        <span class="result">: That</span>
       </span>
       </h4>
       
@@ -2125,7 +2724,37 @@ if the query returns no row or more than one row.
           
     </li></ol>
             </div>
-                
+
+        <div class="parent" name="org.squeryl.dsl.AbstractQuery">
+              <h3>Inherited from <a href="../AbstractQuery.html" class="extype" name="org.squeryl.dsl.AbstractQuery">AbstractQuery</a>[R]</h3>
+            </div><div class="parent" name="org.squeryl.Query">
+              <h3>Inherited from <a href="../../Query.html" class="extype" name="org.squeryl.Query">Query</a>[R]</h3>
+            </div><div class="parent" name="org.squeryl.Queryable">
+              <h3>Inherited from <a href="../../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[R]</h3>
+            </div><div class="parent" name="scala.collection.Iterable">
+              <h3>Inherited from <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]</h3>
+            </div><div class="parent" name="scala.collection.IterableLike">
+              <h3>Inherited from <span class="extype" name="scala.collection.IterableLike">IterableLike</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.collection.Traversable">
+              <h3>Inherited from <span class="extype" name="scala.collection.Traversable">Traversable</span>[R]</h3>
+            </div><div class="parent" name="scala.collection.generic.GenericTraversableTemplate">
+              <h3>Inherited from <span class="extype" name="scala.collection.generic.GenericTraversableTemplate">GenericTraversableTemplate</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>]</h3>
+            </div><div class="parent" name="scala.collection.TraversableLike">
+              <h3>Inherited from <span class="extype" name="scala.collection.TraversableLike">TraversableLike</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</h3>
+            </div><div class="parent" name="scala.collection.TraversableOnce">
+              <h3>Inherited from <span class="extype" name="scala.collection.TraversableOnce">TraversableOnce</span>[R]</h3>
+            </div><div class="parent" name="scala.collection.generic.FilterMonadic">
+              <h3>Inherited from <span class="extype" name="scala.collection.generic.FilterMonadic">FilterMonadic</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</h3>
+            </div><div class="parent" name="scala.collection.generic.HasNewBuilder">
+              <h3>Inherited from <span class="extype" name="scala.collection.generic.HasNewBuilder">HasNewBuilder</span>[R, <span class="extype" name="scala.collection.Iterable">Iterable</span>[R]]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from AnyRef</h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+
       </div>
       
       <div id="tooltip"></div>

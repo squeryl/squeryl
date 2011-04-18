@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Result Set Pagination
+headtitle: Pagination - 
 ---
 
 Paginated queries are supported via the *page(offset:Int, pageLength:Int)* method on all org.squeryl.Query[A]

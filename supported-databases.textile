@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Supported Databases
+headtitle: Supported Databases - 
 ---
 
 The databases currently supported are :
@@ -13,6 +14,11 @@ The databases currently supported are :
 
 * H2
 
+* DB2
+
+* MSSQL (_note: query pagination is not yet supported_)   
+
+* Derby
 
 Supporting an additional database is pretty easy, have a
 look at the existing adapters in the package : <notextile><a target = 'none' href='http://github.com/max-l/Squeryl/tree/master/src/main/scala/org/squeryl/adapters/'>org.squeryl.adapters</a></notextile>

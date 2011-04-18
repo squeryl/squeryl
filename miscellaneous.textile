@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: <br/>
+headtitle: Misc - 
 ---
 
 h2. Logging the generated SQL

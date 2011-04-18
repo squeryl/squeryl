@@ -1,6 +1,7 @@
 ---
 layout: manual
 title: Optimistic Concurrency Control
+headtitle: Optimistic Concurrency Control - 
 ---
 
 h2. The org.squeryl.Optimistic trait
