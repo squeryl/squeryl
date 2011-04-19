@@ -128,6 +128,8 @@ object Tests extends QueryTester {
 
     transaction {
 
+      NestedLeftOuterJoinTest.doIt
+
       (new SchoolDb2MetableRelations).testAll
       
       (new SchoolDb2Tests).testAll
