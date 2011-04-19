@@ -281,12 +281,14 @@ trait QueryDsl
       q.invokeYield(rsm, rs).measures
   }
 
+  @deprecated("please use aBooleanField === true")
   implicit def boolean2booleanFieldEqualsTrue(b: BooleanType): LogicalBoolean =
     new BinaryOperatorNodeLogicalBoolean(
       createLeafNodeOfScalarBooleanType(b),
       new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(true)),
       "=")
 
+  @deprecated("please use aBooleanField === true")
   implicit def optionBoolean2booleanFieldEqualsTrue(b: Option[BooleanType]): LogicalBoolean =
     new BinaryOperatorNodeLogicalBoolean(
       createLeafNodeOfScalarBooleanOptionType(b),
