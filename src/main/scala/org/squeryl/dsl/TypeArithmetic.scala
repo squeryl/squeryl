@@ -379,22 +379,28 @@ trait TypeArithmetic extends FieldTypes {
   implicit def unaryOpConv3(op: UnaryFloatOp[LongType]) = new NumericalTypeConversion[DoubleType](op)
   implicit def unaryOpConv4(op: UnaryFloatOp[FloatType]) = new NumericalTypeConversion[FloatType](op)
   implicit def unaryOpConv5(op: UnaryFloatOp[DoubleType]) = new NumericalTypeConversion[DoubleType](op)
+  implicit def unaryOpConv5bd(op: UnaryFloatOp[BigDecimalType]) = new NumericalTypeConversion[BigDecimalType](op)
   implicit def unaryOpConv6(op: UnaryFloatOp[Option[ByteType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv7(op: UnaryFloatOp[Option[IntType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv8(op: UnaryFloatOp[Option[LongType]]) = new NumericalTypeConversion[Option[DoubleType]](op)
   implicit def unaryOpConv9(op: UnaryFloatOp[Option[FloatType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv10(op: UnaryFloatOp[Option[DoubleType]]) = new NumericalTypeConversion[Option[DoubleType]](op)
+  implicit def unaryOpConv11(op: UnaryFloatOp[Option[BigDecimalType]]) = new NumericalTypeConversion[Option[BigDecimalType]](op)
+
   // conversions for unary ops like Avg, Stdev :
   implicit def unaryOpConv1(op: UnaryAgregateFloatOp[ByteType]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv2(op: UnaryAgregateFloatOp[IntType]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv3(op: UnaryAgregateFloatOp[LongType]) = new NumericalTypeConversion[Option[DoubleType]](op)
   implicit def unaryOpConv4(op: UnaryAgregateFloatOp[FloatType]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv5(op: UnaryAgregateFloatOp[DoubleType]) = new NumericalTypeConversion[Option[DoubleType]](op)
+  implicit def unaryOpConv5bd(op: UnaryAgregateFloatOp[BigDecimalType]) = new NumericalTypeConversion[Option[BigDecimalType]](op)
   implicit def unaryOpConv6(op: UnaryAgregateFloatOp[Option[ByteType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv7(op: UnaryAgregateFloatOp[Option[IntType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv8(op: UnaryAgregateFloatOp[Option[LongType]]) = new NumericalTypeConversion[Option[DoubleType]](op)
   implicit def unaryOpConv9(op: UnaryAgregateFloatOp[Option[FloatType]]) = new NumericalTypeConversion[Option[FloatType]](op)
   implicit def unaryOpConv10(op: UnaryAgregateFloatOp[Option[DoubleType]]) = new NumericalTypeConversion[Option[DoubleType]](op)
+  implicit def unaryOpConv11(op: UnaryAgregateFloatOp[Option[BigDecimalType]]) = new NumericalTypeConversion[Option[BigDecimalType]](op)
+  
   // conversions for unary ops like Min, Max :
   implicit def unaryOpConv1(op: UnaryAgregateLengthNeutralOp[ByteType]) = new NumericalTypeConversion[Option[ByteType]](op)
   implicit def unaryOpConv2(op: UnaryAgregateLengthNeutralOp[IntType]) = new NumericalTypeConversion[Option[IntType]](op)

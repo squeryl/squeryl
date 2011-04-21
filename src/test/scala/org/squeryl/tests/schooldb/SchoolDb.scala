@@ -1394,6 +1394,35 @@ class SchoolDbTestRun extends QueryTester {
     passed('testBoolean2LogicalBooleanConversion)
   }
 
+  def testAvgBigDecimal = {
+
+    val avgSalary: Option[BigDecimal] =
+      from(professors)(p=>
+        compute(avg(p.yearlySalaryBD))
+      )
+
+    val avgWeight: Option[BigDecimal] =
+      from(professors)(p=>
+        compute(avg(p.weightInBD))
+      )
+
+
+    val expectedAvgSal_ = professors.map(_.yearlySalaryBD.doubleValue)
+
+    val expectedAvgSal = expectedAvgSal_.sum / expectedAvgSal_.size
+
+    val expectedAvgWeight_ = professors.map(_.weightInBD).filter(_ != None).map(_.get)
+
+    val expectedAvgWeight = expectedAvgWeight_.sum / expectedAvgWeight_.size
+
+
+    assert((expectedAvgSal - avgSalary.get.doubleValue) < 0.01, 'testAvgBigDecimal)
+    assert((expectedAvgWeight - avgWeight.get.doubleValue) < 0.01, 'testAvgBigDecimal)
+
+
+    passed('testAvgBigDecimal)
+  }
+
   def testNewLeftOuterJoin3 {
     import testInstance._
 
