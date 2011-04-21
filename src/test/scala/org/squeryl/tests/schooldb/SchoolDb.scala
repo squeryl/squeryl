@@ -328,7 +328,9 @@ class SchoolDbTestRun extends QueryTester {
     testBatchInserts1
     
     testPartialUpdate1
-    
+
+    testIsNotNullWithInhibition
+
     testOptimisticCC1
 
     testHavingClause
@@ -1250,6 +1252,34 @@ class SchoolDbTestRun extends QueryTester {
 
     assertEquals(5, res.id,'testInWithCompute)
     //println("------------->" + res.id)
+    passed('testInWithCompute)
+  }
+
+  def testIsNotNullWithInhibition = {
+
+    val q =
+      from(students)(s =>
+        where(s.id.isNull.inhibitWhen(true)) // should return all students
+        select(s)
+      )
+
+    println(q.statement)
+    println(q.dumpAst)
+
+    val allStuents = students.map(_.id).toSet
+    val allStudentsQ = q.map(_.id).toSet
+
+    assertEquals(allStuents, allStudentsQ, 'testIsNotNullWithInhibition)
+
+
+    val q2 =
+      from(students)(s =>
+        where(s.id.isNull.inhibitWhen(false)) // should return all students
+        select(s)
+      )
+
+    assertEquals(0, q2.size, 'testIsNotNullWithInhibition)
+
     passed('testInWithCompute)
   }
 

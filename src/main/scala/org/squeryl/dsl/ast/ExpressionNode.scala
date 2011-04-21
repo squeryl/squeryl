@@ -27,7 +27,7 @@ trait ExpressionNode {
 
   def id = Integer.toHexString(System.identityHashCode(this))
 
-  def inhibited = false
+  def inhibited = _inhibitedByWhen
   
   def inhibitedFlagForAstDump =
     if(inhibited) "!" else ""
@@ -82,6 +82,22 @@ trait ExpressionNode {
    */
   def visitDescendants(visitor: (ExpressionNode,Option[ExpressionNode],Int) => Unit) =
     _visitDescendants(this, None, 0, visitor)
+
+  protected var _inhibitedByWhen = false
+
+  def inhibitWhen(inhibited: Boolean): this.type = {
+    _inhibitedByWhen = inhibited
+    this
+  }
+
+  def ? : this.type = {
+    if(! this.isInstanceOf[ConstantExpressionNode[_]])
+      error("the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument")
+
+    val c = this.asInstanceOf[ConstantExpressionNode[_]]
+
+    inhibitWhen(c.value == None)
+  }
 }
 
 
@@ -283,25 +299,6 @@ trait TypedExpressionNode[T] extends ExpressionNode {
       }
     fmd
   }
-
-  private var _inhibitedByWhen = false
-
-  override def inhibited =
-    super.inhibited || _inhibitedByWhen
-
-  def inhibitWhen(inhibited: Boolean): this.type = {
-    _inhibitedByWhen = inhibited
-    this
-  }
-
-  def ? : this.type = {
-    if(! this.isInstanceOf[ConstantExpressionNode[_]])
-      error("the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument")
-
-    val c = this.asInstanceOf[ConstantExpressionNode[_]]
-
-    inhibitWhen(c.value == None)
-  }  
 }
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {
