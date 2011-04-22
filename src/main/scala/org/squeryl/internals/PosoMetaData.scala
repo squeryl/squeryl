@@ -131,8 +131,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
               clasz.getMethod("idField")
 
           assert(pkMethod != null, "method id or idField should exist in class " + clasz.getName)
-          assert(classOf[CompositeKey].isAssignableFrom(pkMethod.getReturnType),
-            " expected return type of CompositeKey on method " + pkMethod.getName + " in " + clasz.getName)
 
           Some(pkMethod)
         }

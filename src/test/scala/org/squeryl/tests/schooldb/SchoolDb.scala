@@ -88,6 +88,9 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
 
+case class PostalCode(code: String) extends KeyedEntity[String] {
+  def id = code
+}
 
 class School(val addressId: Int, val name: String, val parentSchoolId: Long) extends KeyedEntity[Long] {
   var id: Long = 0
@@ -144,6 +147,8 @@ class SchoolDb extends Schema {
   val courseAssigments = table[CourseAssignment]
 
   val schools = table[School]
+
+  val postalCodes = table[PostalCode]
 
 // uncomment to test : when http://www.assembla.com/spaces/squeryl/tickets/14-assertion-fails-on-self-referring-onetomanyrelationship
 //  an unverted constraint gets created, unless expr. is inverted : child.parentSchoolId === parent.id
@@ -282,6 +287,8 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    testKeyedEntityIdRenaming
+
     testDeepNest1
     
     testDeepNest2
@@ -392,7 +399,14 @@ class SchoolDbTestRun extends QueryTester {
 
     passed('testDeepNest)
   }
-  
+
+  def testKeyedEntityIdRenaming = {
+
+    postalCodes.insert(PostalCode("J0B-2C0"))
+
+    passed('testKeyedEntityIdRenaming)
+  }
+
   def testDeepNest2 = {
     import testInstance._
 
