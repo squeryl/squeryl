@@ -144,6 +144,8 @@ h3. Correspondance of field types to database column types
 | Timestamp    | date        | timestamp        | timestamp   | datetime   | timestamp  | datetime  | timestamp  |
 | byte[]       | blob        | bytea            | blob        | blob       | binary     | varbinary | blob(1M)   |
 | boolean      | number(1)   | boolean          | char(1)     | boolean    | boolean    | bit       | char(1)    |
+| UUID         | char(36)    | uuid             | char(36)    | char(36)   | uuid       | char(36)  | char(36)   |
+
 
 
 h3. Enumerations
