@@ -6,7 +6,7 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   
   override def managedStyle = ManagedStyle.Maven
   
-  val publishTo = "Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"
+  val publishTo = "Scala Tools Nexus" at "file://nexus.scala-tools.org/content/repositories/releases/"
   
   override def packageSrcJar = defaultJarPath("-sources.jar")
   
@@ -52,5 +52,7 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   val specs = "org.scala-tools.testing" % "specs_2.8.0" % "1.6.5" % "provided"  
   
   val junit = "junit" % "junit" % "4.8.2" % "provided"
+  
+  val scalatest = "org.scalatest" % "scalatest" % "1.3" % "provided"
 
 }
