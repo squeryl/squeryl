@@ -466,7 +466,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = sampleInt
   }
 
-  protected implicit def createOutMapperStringType: OutMapper[StringType] = new OutMapper[StringType] {
+  implicit def createOutMapperStringType: OutMapper[StringType] = new OutMapper[StringType] {
     def doMap(rs: ResultSet) = mapString2StringType(rs.getString(index))
     def sample = sampleString
   }
@@ -574,7 +574,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleFloat)
   }
 
-  protected implicit def createOutMapperStringTypeOption: OutMapper[Option[StringType]] = new OutMapper[Option[StringType]] {
+  implicit def createOutMapperStringTypeOption: OutMapper[Option[StringType]] = new OutMapper[Option[StringType]] {
     def doMap(rs: ResultSet) = {
       val v = mapString2StringType(rs.getString(index))
       if(rs.wasNull)

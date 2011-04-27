@@ -52,9 +52,9 @@ trait SqlFunctions  {
 
   def not(b: LogicalBoolean) = new FunctionNode("not", b) with LogicalBoolean
 
-  def upper[A](s: StringExpression[A]) = new FunctionNode("upper", Some(s.mapper), Seq(s)) with StringExpression[A]
+  def upper[A](s: StringExpression[A])(implicit m: OutMapper[A]) = new FunctionNode("upper", Some(m), Seq(s)) with StringExpression[A]
 
-  def lower[A](s: StringExpression[A]) = new FunctionNode("lower", Some(s.mapper), Seq(s)) with StringExpression[A]
+  def lower[A](s: StringExpression[A])(implicit m: OutMapper[A]) = new FunctionNode("lower", Some(m), Seq(s)) with StringExpression[A]
 
   def exists[A](query: Query[A]) = new ExistsExpression(query.copy(false).ast, "exists")
 

@@ -287,6 +287,8 @@ class SchoolDbTestRun extends QueryTester {
 
   def test1 = {
 
+    testServerSideFunctionCall
+
     testKeyedEntityIdRenaming
 
     testDeepNest1
@@ -471,6 +473,20 @@ class SchoolDbTestRun extends QueryTester {
     assertEquals(Set(xiao.id,georgi.id), r, 'testInOpWithStringList)
 
     passed('testInOpWithStringList)
+  }
+
+  def testServerSideFunctionCall = {
+
+    val s =
+      from(students)(s =>
+        where(lower(s.name) === lower("GONtran"))
+        select((&(lower(s.name)), &(upper("zaza"))))
+      ).single
+
+    assertEquals("gontran", s._1, 'testServerSideFunctionCall)
+    assertEquals("ZAZA", s._2, 'testServerSideFunctionCall)
+
+    passed('testServerSideFunctionCall)
   }
 
   def testLeftOuterJoin1 = {
