@@ -161,7 +161,7 @@ trait Schema {
    * database instances, the method is protected in order to make it a little
    * less 'accessible'
    */
-  protected def drop: Unit = {
+  def drop: Unit = {
 
     if(_dbAdapter.supportsForeignKeyConstraints)
       _dropForeignKeyConstraints
