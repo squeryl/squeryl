@@ -415,11 +415,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     validateQuery('countCds, countCds(cds), (m:Measures[Long]) => m.measures, List(2))
 
     validateQuery('countCds2, countCds2(cds), identity[Long], List(2))
-
-    validateScalarQuery1
-
-    validateScalarQueryConversion1
-
   }
 
 
@@ -637,19 +632,17 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     }
   }
   
-  def validateScalarQuery1 = {
+  test("validateScalarQuery1") {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))
 
-    println("validateScalarQuery1 passed.")
   }
 
-  def validateScalarQueryConversion1 = {
+  test("validateScalarQueryConversion1") {
     
     val d:Option[Double] = avgSongCountForAllArtists
     //println("d=" + d)
     assert(d.get == 1.0, "expected " + 1.0 +"got "  +d)
-    println("validateScalarQueryConversion1 passed.")
   }
 
   test("Update1"){
@@ -660,7 +653,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     artists.update(ac)
     ac = artists.where(a=> a.id === alainCaron.id).single
     assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
-    println('testUpdate1 + " passed.")
+    passed('testUpdate1 )
   }
 
   test("KeyedEntityImplicitLookup"){
@@ -924,8 +917,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val z1 = from(artists)(a => select(&(nvl(a.age,a.age)))).toList : List[Option[Int]]
 
     val z2 = from(artists)(a => select(&(nvl(a.age,0)))).toList : List[Int]
-
-    println(z1)
   }
 
   def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =

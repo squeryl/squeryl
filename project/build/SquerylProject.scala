@@ -46,11 +46,7 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   val derbyDriver = "org.apache.derby" % "derby" % "10.7.1.1" % "provided"
 
   val snapshotsRepo = "snapshots-repo" at "http://www.scala-tools.org/repo-snapshots"
-  
-  //val specs = "org.scala-tools.testing" %% "specs" % "1.6.5" % "provided"
-  
-  val specs = "org.scala-tools.testing" % "specs_2.8.0" % "1.6.5" % "provided"  
-  
+    
   val junit = "junit" % "junit" % "4.8.2" % "provided"
   
   val scalatest = "org.scalatest" % "scalatest" % "1.3" % "provided"

@@ -320,7 +320,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 
     assert(expected == res, "expected :\n " + expected + "\ngot :\n " + res)
 
-    println('testFullOuterJoin1 + " passed.")
+    passed('testFullOuterJoin1 )
   }
   test("NewLeftOuterJoin1Reverse")  {
     val testInstance = sharedTestInstance; import testInstance._
@@ -347,7 +347,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
-    println('testNewOuterJoin1 + " passed.")
+    passed('testNewOuterJoin1 )
   }
 }
 
@@ -378,23 +378,26 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
         compute(countDistinct(cs.courseId))
       )
 
-    assertEquals(4L, q: Long, 'testCountSignatures)
+    //assertEquals(4L, q: Long, 'testCountSignatures)
+    (q:Long) should equal(4L)
 
     val q2 =
       from(courseSubscriptions)(cs =>
         compute(count(cs.courseId))
       )
 
-    assertEquals(5L, q2: Long, 'testCountSignatures)
+    //assertEquals(5L, q2: Long, 'testCountSignatures)
+    (q2:Long) should equal(5L)
 
     val q3 =
       from(courseSubscriptions)(cs =>
         compute(count)
       )
 
-    assertEquals(5L, q3: Long, 'testCountSignatures)
+    //assertEquals(5L, q3: Long, 'testCountSignatures)
+    (q3:Long) should equal(5L)
 
-    passed('testCountSignatures)
+    //passed('testCountSignatures)
   }
 
   def avgStudentAge =
@@ -627,7 +630,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
-    println('testOuterJoin1 + " passed.")
+    passed('testOuterJoin1 )
   }
 
   test("LeftOuterJoin2") {
@@ -684,7 +687,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
     assert(expected sameElements res, "expected :\n " + expected + "\ngot : \n " + res)
 
-    println('testOuterJoinMixed1 + " passed.")
+    passed('testOuterJoinMixed1 )
   }
 
 
@@ -702,12 +705,26 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
     val pk = addresses.posoMetaData.primaryKey.get.left.get
     assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
 
-    println('testMetaData + " passed.")
+    passed('testMetaData )
   }
 
   test("OptionAndNonOptionMixInComputeTuple"){
     val t:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
-    println('testOptionAndNonOptionMixInComputeTuple + " passed.")
+    passed('testOptionAndNonOptionMixInComputeTuple)
+  }
+
+  test("testServerSideFunctionCall") {
+
+    val s =
+      from(students)(s =>
+        where(lower(s.name) === lower("GONtran"))
+        select((&(lower(s.name)), &(upper("zaza"))))
+      ).single
+
+    assertEquals("gontran", s._1, 'testServerSideFunctionCall)
+    assertEquals("ZAZA", s._2, 'testServerSideFunctionCall)
+
+    passed('testServerSideFunctionCall)
   }
 
   test("ConcatWithOptionalCols"){
@@ -718,14 +735,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
       val res = addressesOfStudentsOlderThan24.toList
 
-      println('testConcatWithOptionalCols + " passed.")
+      passed('testConcatWithOptionalCols )
     }
   }
 
   test("ScalarOptionQuery"){
     val avgAge:Option[Float] = avgStudentAge
     //println("avgAge = " + avgAge)
-    println('testScalarOptionQuery + " passed.")
+    passed('testScalarOptionQuery )
   }
 
   test("LikeOperator"){
@@ -771,7 +788,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
     assert(mandarinCourse.startDate == feb2011,
       'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse.startDate)
 
-    println('testDateTypeMapping + " passed.")
+    passed('testDateTypeMapping )
   }
 
   test("DateOptionMapping"){
@@ -821,7 +838,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
     assert(groupTh.finalExamDate == Some(may2009),
       'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
 
-    println('testDateOptionMapping + " passed.")
+    passed('testDateOptionMapping )
   }
 
   test("DateComparisonInWhereClause"){
@@ -850,7 +867,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
     assert(expected == result,
       'testDateComparisonInWhereClause + " expected " + expected + " got " + result)
 
-    println('testDateComparisonInWhereClause + " passed.")
+    passed('testDateComparisonInWhereClause )
   }
 
   test("DateOptionComparisonInWhereClause"){
@@ -898,7 +915,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
     assert(expected == result3,
       'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result3)
 
-    println('testDateOptionComparisonInWhereClause + " passed.")
+    passed('testDateOptionComparisonInWhereClause )
   }
 
   test("NVLFunction"){
@@ -922,7 +939,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
     assert(expected == result,
       'testNVLFunction + " expected " + expected + " got " + result)
 
-    println('testNVLFunction + " passed.")
+    passed('testNVLFunction )
   }
 
   test("LongTypeMapping"){
@@ -1339,9 +1356,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
         select(s)
       )
 
-    println(q.statement)
-    println(q.dumpAst)
-
     val allStuents = students.map(_.id).toSet
     val allStudentsQ = q.map(_.id).toSet
 
@@ -1400,7 +1414,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
-    println('testNewOuterJoin1 + " passed.")
+    passed('testNewOuterJoin1 )
   }
 
 
@@ -1430,7 +1444,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
-    println('testNewOuterJoin2 + " passed.")
+    passed('testNewOuterJoin2 )
   }
 
   test("Boolean2LogicalBooleanConversion") {
@@ -1438,7 +1452,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
     val multilingualStudents = students.where(_.isMultilingual).map(_.id).toSet
 
-    println(multilingualStudents)
+    //println(multilingualStudents)
     //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
 
     assert(multilingualStudents == Set(xiao.id,gontran.id,gaitan.id))
@@ -1495,8 +1509,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
        yield (t._1.id, t._2.map(a=>a.id), t._3.courseId)).toList
 
 
-    println(res)
-
     val expected = List(
       (xiao.id,Some(oneHutchissonStreet.id),1),
       (georgi.id,Some(oneHutchissonStreet.id),2),
@@ -1506,7 +1518,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
-    println('testNewOuterJoin3 + " passed.")
+    passed('testNewOuterJoin3 )
   }
 
   test("Exists")  {

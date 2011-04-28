@@ -71,7 +71,7 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
     tracker: Tracker): Unit = {
 
     if(!notIgnored || ignoredTests.find(_ == testName).isDefined){
-      reporter(TestIgnored(new Ordinal(0), suiteName, Some(this.getClass.getName),testName))
+      //reporter(TestIgnored(new Ordinal(0), suiteName, Some(this.getClass.getName),testName))
       return
     }
     super.runTest(testName, reporter, stopper, configMap, tracker)

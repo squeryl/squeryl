@@ -12,10 +12,6 @@ abstract class ConnectionClosingTest extends DbTestBase {
 
     session.connection.close
 
-    println("When " + session.connection.getClass.getName + " closes :")
-    println("statement is closed ? --> " + stmt.isClosed)
-    println("resultSet is closed ? --> " + rs.isClosed)
-
     stmt.isClosed should equal(false)
     rs.isClosed should equal(false)
   }

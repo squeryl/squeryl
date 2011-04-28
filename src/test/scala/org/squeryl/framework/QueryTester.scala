@@ -73,5 +73,5 @@ trait QueryTester { self : ShouldMatchers =>
       validateFirstAndExit += 1
   }
 
-  def passed(s: Symbol) = println(s + " passed.")
+  def passed(s: Symbol) = {} //println(s )
 }
