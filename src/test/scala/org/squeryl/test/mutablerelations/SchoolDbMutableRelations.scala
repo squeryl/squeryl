@@ -204,7 +204,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
       else if(s0.id == chemistry.id)
         assertEquals(2, sCnt, 'testOneToMany)
       else
-        error("unknown subject : " + s0)
+        sys.error("unknown subject : " + s0)
     }
 
     assertEquals(5, cnt, 'testOneToMany)

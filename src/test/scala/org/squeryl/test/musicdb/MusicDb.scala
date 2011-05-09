@@ -620,7 +620,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       artists.update(mongo)
       val shouldBeSome = artists.where(a => a.firstName === mongoSantaMaria.firstName and a.timeOfLastUpdate === tX2).headOption
 
-      if(shouldBeSome == None) error('testTimestampDownToMillis + " failed.")
+      if(shouldBeSome == None) sys.error('testTimestampDownToMillis + " failed.")
 
       mongo = shouldBeSome.get
 

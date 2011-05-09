@@ -48,7 +48,7 @@ class FieldMetaData(
 
   def canonicalEnumerationValueFor(id: Int) =
     if(sampleValue == null) {
-      error("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
+      sys.error("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
     }
     else {
 
@@ -90,7 +90,7 @@ class FieldMetaData(
   def sequenceName: String = {
 
     val ai = _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
-      getOrElse(error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
+      getOrElse(sys.error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
         asInstanceOf[AutoIncremented]
 
     if(ai.nameOfSequence != None) {
@@ -121,7 +121,7 @@ class FieldMetaData(
     schema.defaultColumnAttributesForKeyedEntityId(wrappedFieldType).foreach(ca => {
 
       if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
-        error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
+        sys.error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
           " all KeyedEntity tables, while class " + parentMetaData.clasz.getName +
           "\n has it's id field of type " + fieldType.getName + ", that is neither an Int or a Long, \n the only two types that can " +
           "be auto incremented")
@@ -263,7 +263,7 @@ class FieldMetaData(
         res
     }
     catch {
-      case e: IllegalArgumentException => error(wrappedFieldType.getName + " used on " + o.getClass.getName)
+      case e: IllegalArgumentException => sys.error(wrappedFieldType.getName + " used on " + o.getClass.getName)
     }
 
   def setFromResultSet(target: AnyRef, rs: ResultSet, index: Int) = {
@@ -313,7 +313,7 @@ class FieldMetaData(
     catch {
       case e: IllegalArgumentException => {
         val typeOfV = if(v == null) "null" else v.getClass.getName
-        error(
+        sys.error(
           this + " was invoked with value '" + v + "' of type " + typeOfV + " on object of type " + target.getClass.getName + " \n" + e)
       }
     }
@@ -395,13 +395,13 @@ object FieldMetaData {
         else if(field != None)
           field.get.getType
         else
-          error("invalid field group")
+          sys.error("invalid field group")
           
       val typeOfField =
         (setter.flatMap(_.getGenericParameterTypes.headOption)
          .orElse(getter.map(_.getGenericReturnType))
          .orElse(field.map(_.getType))
-         .getOrElse(error("invalid field group")))
+         .getOrElse(sys.error("invalid field group")))
 
       var v =
          if(sampleInstance4OptionTypeDeduction != null) {
@@ -438,7 +438,7 @@ object FieldMetaData {
         }
 
       if(v == null)
-        error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
+        sys.error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
      
       val isOption = v.isInstanceOf[Some[_]]
 
@@ -538,7 +538,7 @@ object FieldMetaData {
     def handleBinaryType = 255
     def handleEnumerationValueType = 4
     def handleUuidType = 36
-    def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
+    def handleUnknownType(c: Class[_]) = sys.error("Cannot assign field length for " + c.getName)
   }
 
   private val _defaultValueFactory = new FieldTypeHandler[AnyRef] {
@@ -605,7 +605,7 @@ object FieldMetaData {
     def handleEnumerationValueType = _intM
 
     def handleUnknownType(c: Class[_]) =
-      error("field type " + c.getName + " is not supported")
+      sys.error("field type " + c.getName + " is not supported")
   }
 
   def resultSetHandlerFor(c: Class[_]) =
@@ -635,7 +635,7 @@ object FieldMetaData {
 		}
 
 //      if(optionFieldsInfo == None)
-//        error("Option[Option[]] fields in "+ownerCLass.getName+ " are not supported")
+//        sys.error("Option[Option[]] fields in "+ownerCLass.getName+ " are not supported")
 //
 //      if(optionFieldsInfo.size == 0)
 //        return null
@@ -649,7 +649,7 @@ object FieldMetaData {
         return null
 
       if(classOf[Object].isAssignableFrom(optionFieldsInfo.get.optionType))
-        error("cannot deduce type of Option[] in " + ownerCLass.getName)
+        sys.error("cannot deduce type of Option[] in " + ownerCLass.getName)
 
       Some(createDefaultValue(ownerCLass, optionFieldsInfo.get.optionType, None, optionFieldsInfo))
     }

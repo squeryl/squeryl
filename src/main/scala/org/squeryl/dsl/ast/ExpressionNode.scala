@@ -311,7 +311,7 @@ class ConstantExpressionNode[T](val value: T) extends ExpressionNode {
 
   private def needsQuote = value.isInstanceOf[String]
 
-  def mapper: OutMapper[T] = error("outMapper should not be used on " + 'ConstantExpressionNode)
+  def mapper: OutMapper[T] = sys.error("outMapper should not be used on " + 'ConstantExpressionNode)
 
   def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {
@@ -351,7 +351,7 @@ class FunctionNode[A](val name: String, _mapper : Option[OutMapper[A]], val args
 
   def this(name: String, args: ExpressionNode*) = this(name, None, args)
 
-  def mapper: OutMapper[A] = _mapper.getOrElse(error("no mapper available"))
+  def mapper: OutMapper[A] = _mapper.getOrElse(sys.error("no mapper available"))
 
   def doWrite(sw: StatementWriter) = {
 

@@ -49,6 +49,6 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
     
   val junit = "junit" % "junit" % "4.8.2" % "provided"
   
-  val scalatest = "org.scalatest" % "scalatest" % "1.3" % "provided"
+  val scalatest = "org.scalatest" % "scalatest_2.9.0.RC3" % "1.4.RC3" % "provided"
 
 }
