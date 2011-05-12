@@ -4,7 +4,7 @@
     <facet type="scala" name="Scala">
       <configuration>
         <option name="compilerLibraryLevel" value="Global" />
-        <option name="compilerLibraryName" value="Scala2.9.0-RC4" />
+        <option name="compilerLibraryName" value="Scala2.9.0" />
       </configuration>
     </facet>
   </component>
@@ -19,16 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/ojdbc14.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.9.0.RC4/provided/scalatest_2.9.0.RC3-1.4.RC3.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib_managed/scala_2.9.0/provided/scalatest_2.9.0.RC3-1.4.RC3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
