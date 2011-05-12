@@ -85,7 +85,7 @@ object SessionFactory {
    * external framework. In this case Session.cleanupResources *needs* to be called when connections
    * are closed, otherwise statement of resultset leaks can occur. 
    */
-  var externalTransactionManagementAdapter: Option[()=>Session] = None
+  var externalTransactionManagementAdapter: Option[()=>Option[Session]] = None
 
   def newSession: Session =
       concreteFactory.getOrElse(
@@ -111,18 +111,17 @@ object Session {
     new Session(c,a)  
 
   def currentSessionOption: Option[Session] = {
-    val s = _currentSessionThreadLocal.get
-    if (s == null) None else Some(s)
+    Option(_currentSessionThreadLocal.get) orElse {
+      SessionFactory.externalTransactionManagementAdapter flatMap { _.apply() }
+    }
   }
 
   def currentSession: Session =
     if(SessionFactory.externalTransactionManagementAdapter != None) {
-      val s = SessionFactory.externalTransactionManagementAdapter.get.apply
-      s.bindToCurrentThread
-      s
+      SessionFactory.externalTransactionManagementAdapter.get.apply getOrElse org.squeryl.internals.Utils.throwError("SessionFactory.externalTransactionManagementAdapter was unable to supply a Session for the current scope")
     }
     else currentSessionOption.getOrElse(
-      org.squeryl.internals.Utils.throwError("no session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'"))
+      org.squeryl.internals.Utils.throwError("No session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'\n Usually this error occurs when a statement is executed outside of a transaction/inTrasaction block"))
 
   def hasCurrentSession =
     currentSessionOption != None
