@@ -61,7 +61,7 @@ class LocalH2SinkStatisticsListener(val h2Session: Session) extends StatisticsLi
       _queue.put(op _)
     }
     else
-      sys.error('LocalH2SinkStatisticsListener + " has been shutdown.")
+      error('LocalH2SinkStatisticsListener + " has been shutdown.")
 
   def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = _pushOp {
     BarChartRenderer.generateStatSummary(staticHtmlFile, n)

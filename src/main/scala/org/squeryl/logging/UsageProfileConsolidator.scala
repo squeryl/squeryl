@@ -32,7 +32,7 @@ object UsageProfileConsolidator {
 
       val notExists = src.filterNot(_.exists)
       if(notExists.size > 0)
-        sys.error("Files don't exist : \n" + notExists.mkString(",\n"))
+        error("Files don't exist : \n" + notExists.mkString(",\n"))
 
 
       Class.forName("org.h2.Driver");

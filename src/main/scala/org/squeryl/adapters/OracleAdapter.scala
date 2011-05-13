@@ -166,7 +166,7 @@ class OracleAdapter extends DatabaseAdapter {
 
   def paddingPossibilities(start: String, padLength: Int): Iterable[String] =
     if(padLength < 0)
-      sys.error("padLength must be positive, was given : " + padLength)
+      error("padLength must be positive, was given : " + padLength)
     else if(padLength == 0)
       Seq(start)
     else if(padLength == 1)
@@ -201,7 +201,7 @@ class OracleAdapter extends DatabaseAdapter {
     }
     catch {
       case e:CouldNotShrinkIdentifierException =>
-        sys.error("could not make a unique identifier with '" + s + "'")
+        error("could not make a unique identifier with '" + s + "'")
     }
 
   def shrinkTo30AndPreserveUniquenessInScope(identifier: String, scope: HashSet[String]) =

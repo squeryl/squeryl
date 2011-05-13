@@ -121,7 +121,7 @@ trait SelectElement extends ExpressionNode {
       fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
     }
 
-    def sample = sys.error("!")
+    def sample = error("!")
   }
 
   /**
@@ -134,7 +134,7 @@ trait SelectElement extends ExpressionNode {
       Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
     }
 
-    def sample = sys.error("!")
+    def sample = error("!")
   }
 }
 
@@ -142,7 +142,7 @@ class TupleSelectElement
  (val origin: QueryExpressionNode[_], val expression: ExpressionNode, indexInTuple: Int, isGroupTuple: Boolean)
     extends SelectElement {
 
-  def resultSetMapper: ResultSetMapper = sys.error("refactor me")
+  def resultSetMapper: ResultSetMapper = error("refactor me")
 
   //TODO: normalize ?
   def alias =
@@ -262,7 +262,7 @@ class SelectElementReference[A]
         return e.asInstanceOf[QueryExpressionNode[_]]
     } while (e != None)
 
-    sys.error("could not determine use site of "+ this)
+    error("could not determine use site of "+ this)
   }
 
   lazy val delegateAtUseSite =
@@ -347,7 +347,7 @@ class ExportedSelectElement
    *   exportSelectElement.target.target.,...,.target == exportSelectElement.actualSelectElement
    */
   lazy val target: SelectElement = innerTarget.getOrElse(
-    outerTarget.getOrElse(sys.error("could not find the target of : " + selectElement))
+    outerTarget.getOrElse(error("could not find the target of : " + selectElement))
   )
 
   def needsOuterScope:Boolean = innerTarget.isEmpty && outerTarget.isEmpty && ! isDirectOuterReference

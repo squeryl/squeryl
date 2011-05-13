@@ -201,7 +201,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       if(!_nextCalled)
         _next
       if(!_hasNext)
-        sys.error("next called with no rows available")
+        error("next called with no rows available")
       _nextCalled = false
 
       if(s.isLoggingEnabled)

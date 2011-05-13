@@ -233,7 +233,7 @@ trait DatabaseAdapter {
     def handleUuidType = uuidTypeDeclaration
     def handleEnumerationValueType = intTypeDeclaration
     def handleUnknownType(c: Class[_]) =
-      sys.error("don't know how to map field type " + c.getName)
+      error("don't know how to map field type " + c.getName)
   }
   
   def databaseTypeFor(fmd: FieldMetaData) =
@@ -512,7 +512,7 @@ trait DatabaseAdapter {
     sw.nextLine
     sw.indent
     
-    t.posoMetaData.primaryKey.getOrElse(sys.error("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
+    t.posoMetaData.primaryKey.getOrElse(error("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
       pkMd => sw.write(quoteName(pkMd.columnName), " = ", writeValue(o_, pkMd, sw)),
       pkGetter => {
         val astOfQuery4WhereClause = Utils.createQuery4WhereClause(t, (t0:T) =>
@@ -796,7 +796,7 @@ trait DatabaseAdapter {
   def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) = {
     val a = se.aliasSegment
 //    if(a.length > 30)
-//      sys.error("Oracle Bust : " + a)
+//      error("Oracle Bust : " + a)
     sw.write(quoteName(a))
   }
 

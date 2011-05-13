@@ -1193,7 +1193,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase{
       case e:StaleUpdateException => ex = Some(e)
     }
 
-    ex.getOrElse(sys.error("StaleUpdateException should have get thrown on concurrent update test."))
+    ex.getOrElse(error("StaleUpdateException should have get thrown on concurrent update test."))
 
     val expectedVersionNumber = ht.occVersionNumberZ + 1
 

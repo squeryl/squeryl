@@ -227,7 +227,7 @@ trait QueryDsl
 
     def statement: String = _inner.statement
 
-    // Paginating a Count query makes no sense perhaps an sys.error() would be more appropriate here:
+    // Paginating a Count query makes no sense perhaps an error() would be more appropriate here:
     def page(offset:Int, length:Int) = this      
 
     def distinct = this
@@ -263,7 +263,7 @@ trait QueryDsl
     
     def dumpAst = q.dumpAst
 
-    // TODO: think about this : Paginating a Count query makes no sense perhaps an sys.error() would be more appropriate here.
+    // TODO: think about this : Paginating a Count query makes no sense perhaps an error() would be more appropriate here.
     def page(offset:Int, length:Int) = this
     
     def statement: String = q.statement

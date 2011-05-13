@@ -89,7 +89,7 @@ object SessionFactory {
 
   def newSession: Session =
       concreteFactory.getOrElse(
-        sys.error("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
+        error("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
               "function for creating new org.squeryl.Session, before transaction can be used.\n" +
               "Alternatively SessionFactory.externalTransactionManagementAdapter can initialized, please refer to the documentation.")
       ).apply        
@@ -114,7 +114,7 @@ object Session {
       s
     }
     else currentSessionOption.getOrElse(
-      sys.error("no session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'"))
+      error("no session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'"))
 
   def hasCurrentSession =
     _currentSessionThreadLocal.get != None
