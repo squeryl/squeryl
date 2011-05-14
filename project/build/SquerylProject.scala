@@ -4,9 +4,23 @@ import sbt._
 
 class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   
-  override def managedStyle = ManagedStyle.Maven
+  val snapshot = systemOptional("snapshot", false).value
   
-  val publishTo = "Scala Tools Nexus" at "file://nexus.scala-tools.org/content/repositories/releases/"
+  override def version = {
+    super.version match{
+      case BasicVersion(major, minor, micro, extra) if snapshot =>
+        BasicVersion(major, minor, micro, Some("SNAPSHOT"))
+      case other => other
+    }
+  }
+  
+  val publishTo = 
+    if(snapshot)
+      "Scala Tools Snapshots" at "http://nexus.scala-tools.org/content/repositories/snapshots/"
+    else
+      "Scala Tools Release" at "http://nexus.scala-tools.org/content/repositories/releases/"
+  
+  override def managedStyle = ManagedStyle.Maven
   
   override def packageSrcJar = defaultJarPath("-sources.jar")
   
