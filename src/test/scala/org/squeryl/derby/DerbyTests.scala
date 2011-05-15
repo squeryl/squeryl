@@ -31,7 +31,12 @@ class Derby_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Derby_C
 class Derby_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Derby_Connection
 class Derby_TransactionTests extends TransactionTests with Derby_Connection
 class Derby_SchoolDb2 extends schooldb2.SchoolDb2Tests with Derby_Connection
-class Derby_SchoolDb extends schooldb.SchoolDbTestRun with Derby_Connection
+class Derby_SchoolDb extends schooldb.SchoolDbTestRun with Derby_Connection {
+  /* FIXME: https://issues.apache.org/jira/browse/DERBY-4998
+   * Because of a derby bug we ignore the BigDecimal test cases until it's fixed.
+   */
+  override val ignoredTests = List("BigDecimal")
+}
 class Derby_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Derby_Connection
 class Derby_KickTheTires extends demo.KickTheTires with Derby_Connection
 class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection
