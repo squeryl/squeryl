@@ -23,7 +23,6 @@ import java.sql.SQLException
 class DerbyAdapter extends DatabaseAdapter {
 
   override def intTypeDeclaration = "integer"
-  override def booleanTypeDeclaration = "char(1)"
   override def binaryTypeDeclaration = "blob(1M)"
 
   override def isFullOuterJoinSupported = false
