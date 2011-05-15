@@ -472,7 +472,7 @@ trait Schema {
       case caa:ColumnAttributeAssignment => {
         for(ca <- caa.columnAttributes if ca.isInstanceOf[AutoIncremented] && !(caa.left.isIdFieldOfKeyedEntity))
           error("Field " + caa.left.nameOfProperty + " of table " + table.name +
-                " is declared as autoIncrementeded, auto increment is currently only supported on KeyedEntity[A].id")
+                " is declared as autoIncremented, auto increment is currently only supported on KeyedEntity[A].id")
       }
       case dva:Any => {}
     }
