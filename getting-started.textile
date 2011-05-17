@@ -4,24 +4,41 @@ title: Getting Started
 headtitle: Getting Started - 
 ---
 
-h2. The recommended version is 0.9.4-RC7
+h3. The recommended version is 0.9.4-RC7
 
-supported Scala versions are Scala2.9.0, Scala2.8.1 and Scala2.8.0
+Supported Scala versions are Scala2.9.0, Scala2.8.1 and Scala2.8.0
 
 h2. SBT
-After having setup your project to use SBT (see http://code.google.com/p/simple-build-tool/wiki/Setup)
+
+After having setup your project to use SBT (see "how to setup SBT":http://code.google.com/p/simple-build-tool/wiki/Setup)
 Declare the Squeryl dependency in the SBT project definiition
-<pre>
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 import sbt._
 
 class YourProject(info: ProjectInfo) extends DefaultProject(info) {
 	
-   val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7"
+  val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7"
+   
+  //In this example, we declare a dependency on all common databases, 
+  //in real life, there will likely be only one needed
+  val posgresDriver = "postgresql" % "postgresql" % "8.4-701.jdbc4"
+  val h2 = "com.h2database" % "h2" % "1.2.127"
+  val mysqlDriver = "mysql" % "mysql-connector-java" % "5.1.10"
+  val posgresDriver = "postgresql" % "postgresql" % "8.4-701.jdbc4"
+  val msSqlDriver = "net.sourceforge.jtds" % "jtds" % "1.2.4"
+  val derbyDriver = "org.apache.derby" % "derby" % "10.7.1.1"
 }
-</pre>
+]]></script>
+   
+_*Note*_ : _The Oracle driver is not available via SBT/Maven, you will have to downloaded manually._
+
+The remaining steps are :
 
 # "Bootstrap the session factory":http://squeryl.org/sessions-and-tx.html
-# "define a schema":http://squeryl.org/schema-definition.html
+# "Define, and initialise a schema":http://squeryl.org/schema-definition.html
+
+You should now be ready to insert, update, delete data, and of course run queries.
 
 h3. Maven
 
@@ -31,7 +48,7 @@ If for some reason you can't use SBT and must use Maven, you will find the Squer
 * artifactId: *squeryl_2.9.0*
 * version *0.9.4-RC7*
 
-h2. Manual dependency management
+h3. Manual dependency management
 
 If you want to manage your dependencies without SBT or Maven, you will need the following jars :
 
