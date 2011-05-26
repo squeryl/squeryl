@@ -49,7 +49,7 @@ class MusicDbObject extends KeyedEntity[Int] {
 }
 
 class Person(var firstName:String, var lastName: String, val age: Option[Int]) extends MusicDbObject{
-  def this() = this("", "", Some(0))
+  def this() = this("", "", None)
 }
 
 class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject {
