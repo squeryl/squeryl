@@ -40,10 +40,12 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
     </licenses>
 	
   /**
-   * CGLIB is Squeryl's only dependency
+   * The following jars are the only runtime dependencies of Squeryl
    */
   
   val cglib = "cglib" % "cglib-nodep" % "2.2"
+
+  val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString 
 
   /**
    * The following jars are for running the automated tests

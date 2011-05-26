@@ -187,7 +187,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     var res = new Array[Object](params.size)
 
     for(i <- 0 to params.length -1) {
-      val v = FieldMetaData.createDefaultValue(clasz, params(i), None, None)
+      val v = FieldMetaData.createDefaultValue(c, params(i), None, None)
       res(i) = v
     }
 
