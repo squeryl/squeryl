@@ -11,6 +11,8 @@ that are grouped in a org.squeryl.Schema singleton.
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   import org.squeryl.PrimitiveTypeMode._
+  import org.squery.Schema
+  import org.squeryl.annotations.Column
 
   class Author(val id: Long, 
                val firstName: String, 
