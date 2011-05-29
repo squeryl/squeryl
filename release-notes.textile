@@ -7,6 +7,26 @@ headtitle: Releases -
 
 For upcoming features, have a look at "Squeryl's Roadmap":roadmap.html 
 
+h3. 0.9.4 Final
+
+* http://www.assembla.com/spaces/squeryl/tickets/52-missing-implicit-for-compute%28min%28atimestamp%29%29 
+* http://www.assembla.com/spaces/squeryl/tickets/49-allow-specifying-the-name-of-manytomany-relations 
+ 
+h3. 0.9.4-RC7
+
+* #8    columns get duplicated in the select clause on Posos that have reentrant property accessors
+* #9    An enumerations in a subquery within an 'in' operator, causes the outter query to contain the enumeration in the select clause
+* #35   Add support for EXISTS / NOT EXISTS
+* #32   UUID support
+* #14   Assertion fails on self referring OneToManyRelationship
+* #34   LeftOuter join does not work in some orderings of the from/join clause
+* #40   Nested JOINs aren't mapped correctly
+* #10   avg() not supporting BigDecimal type on RC4
+* #27   inhibitWhen cannot be used with isNotNull
+* #46   def id' on non composite KeyedEntity backed by another field causes assertion failure
+* #48   Constant nodes sould have a mapper, or select(&lower("aConstant")) should work
+* #1    Convert all tests to ScalaTest
+
 h3. 0.9.4-RC6
 
 *    Tool for consolidating multiple stats DBs
