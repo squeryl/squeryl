@@ -574,6 +574,15 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     new Timestamp(cal.getTimeInMillis)
   }
 
+  test("TestTimestampImplicit"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val t: Option[Timestamp] =
+      from(artists)(a=>
+        compute(min(a.timeOfLastUpdate))
+      )
+  }
+
   ignore("TimestampPartialUpdate"){
     val testInstance = sharedTestInstance; import testInstance._
 
