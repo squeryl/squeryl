@@ -4,9 +4,9 @@ title: Getting Started
 headtitle: Getting Started - 
 ---
 
-h3. The recommended version is 0.9.4-RC7
+h3. The recommended version is 0.9.4
 
-Supported Scala versions are Scala2.9.0, Scala2.8.1 and Scala2.8.0
+Supported Scala versions are Scala2.9.0-1, Scala2.9.0, Scala2.8.1 and Scala2.8.0
 
 h2. SBT
 

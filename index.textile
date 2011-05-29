@@ -41,7 +41,7 @@ Write as declaratively as SQL, only with less boilerplate. SQL's declarativeness
 
 <div class='span-24 last'>
 <p class='nav' align='center'>&nbsp;
-<a href='release-notes.html'>- Release 0.9.4-RC7 -</a>
+<a href='release-notes.html'>- Release 0.9.4 -</a>
 </p>
 </div>
 
