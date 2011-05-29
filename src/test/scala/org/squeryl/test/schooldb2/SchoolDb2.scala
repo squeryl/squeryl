@@ -106,7 +106,7 @@ class SchoolDb2 extends Schema {
   val subjects = table[Subject]
 
   val courseAssignments =
-    manyToManyRelation(professors, courses).
+    manyToManyRelation(professors, courses, "CourseAssignmentZ").
     via[CourseAssignment]((p,c,a) => (p.id === a.professorId, a.courseId === c.id))
 
   val courseSubscriptions =
