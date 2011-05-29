@@ -4,7 +4,7 @@
     <facet type="scala" name="Scala">
       <configuration>
         <option name="compilerLibraryLevel" value="Global" />
-        <option name="compilerLibraryName" value="Scala2.9.0" />
+        <option name="compilerLibraryName" value="Scala2.9.0-1" />
       </configuration>
     </facet>
   </component>
@@ -24,7 +24,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="Scala2.9.0" level="application" />
+    <orderEntry type="library" exported="" name="Scala2.9.0-1" level="application" />
   </component>
 </module>
 
