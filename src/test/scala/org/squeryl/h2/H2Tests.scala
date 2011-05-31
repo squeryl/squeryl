@@ -36,8 +36,6 @@ class H2_TestCustomTypesMode extends customtypes.TestCustomTypesMode with H2_Con
 class H2_KickTheTires extends demo.KickTheTires with H2_Connection
 class H2_MusicDb extends musicdb.MusicDbTestRun with H2_Connection
 class H2_LeftJoinTest extends LeftJoinTest with H2_Connection
-class H2_ConnectionClosing extends ConnectionClosingTest with H2_Connection
-
-
-
-
+class H2_ConnectionClosing extends ConnectionClosingTest with H2_Connection {
+  def dbSpecificSelectNow: String = "select now()"
+}

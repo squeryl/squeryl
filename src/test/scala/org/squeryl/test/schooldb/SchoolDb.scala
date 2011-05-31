@@ -173,13 +173,13 @@ class SchoolDb extends Schema {
     e.tempo.defaultsTo(Tempo.Largo)
   ))
 
-//  // disable the override, since the above is good for Oracle only, this is not a usage demo, but
-//  // a necessary hack to test the dbType override mechanism and still allow the test suite can run on all database :
-//  override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_])  =
-//    if(fieldMetaData.nameOfProperty == "yearlySalary" && Session.currentSession.databaseAdapter.isInstanceOf[OracleAdapter])
-//      Some("float")
-//    else
-//      None
+  // disable the override, since the above is good for Oracle only, this is not a usage demo, but
+  // a necessary hack to test the dbType override mechanism and still allow the test suite can run on all database :
+  override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_])  =
+    if(fieldMetaData.nameOfProperty == "yearlySalary" && Session.currentSession.databaseAdapter.isInstanceOf[OracleAdapter])
+      Some("float")
+    else
+      None
 
 
   override def drop = {

@@ -422,10 +422,12 @@ trait TypeArithmetic extends FieldTypes {
   implicit def unaryOpConv14(op: UnaryAgregateLengthNeutralOp[Option[StringType]]) = new DateTypeConversion[Option[StringType]](op)
   implicit def unaryOpConv15(op: UnaryAgregateLengthNeutralOp[BooleanType]) = new BooleanTypeConversion[Option[BooleanType]](op)
   implicit def unaryOpConv16(op: UnaryAgregateLengthNeutralOp[Option[BooleanType]]) = new BooleanTypeConversion[Option[BooleanType]](op)
+  implicit def unaryOpConv17(op: UnaryAgregateLengthNeutralOp[TimestampType]) = new DateTypeConversion[Option[TimestampType]](op)(createOutMapperTimestampTypeOption)
+  implicit def unaryOpConv18(op: UnaryAgregateLengthNeutralOp[Option[TimestampType]]) = new DateTypeConversion[Option[TimestampType]](op)(createOutMapperTimestampTypeOption)
 
   implicit def nvl1(e: NvlFunctionNonNumerical[Option[DateType],DateType]) = new DateTypeConversion[DateType](e)
   implicit def nvl2(e: NvlFunctionNonNumerical[Option[StringType],StringType]) = new StringTypeConversion[StringType](e)
-  implicit def nvl2(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
+  implicit def nvl3(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
 
   implicit def e2concat1[A1,A2](e: ConcatOp[A1,A2]) = new StringTypeConversion[StringType](e)(createOutMapperStringType)
   implicit def e2concat2[A1,A2](e: ConcatOp[A1,Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
