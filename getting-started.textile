@@ -40,6 +40,22 @@ The remaining steps are :
 
 You should now be ready to insert, update, delete data, and of course run queries.
 
+You can use this example as a template to get started :
+
+"http://github.com/pbrant/squeryl_sbt_minimal_example":http://github.com/pbrant/squeryl_sbt_minimal_example
+
+<script type="syntaxhighlighter" class="brush: shell"><![CDATA[
+git clone https://github.com/pbrant/squeryl_sbt_minimal_example
+cd squeryl_sbt_minimal_example
+squeryl_sbt_minimal_example>sbt
+....
+[info]    using ExampleProject with sbt 0.7.7 and Scala 2.7.7
+squeryl_sbt_minimal_example>update
+.....
+squeryl_sbt_minimal_example>compile
+squeryl_sbt_minimal_example>run
+]]></script>
+
 h3. Maven
 
 If for some reason you can't use SBT and must use Maven, you will find the Squeryl artifacts hosted "here":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/
