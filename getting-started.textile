@@ -18,7 +18,7 @@ import sbt._
 
 class YourProject(info: ProjectInfo) extends DefaultProject(info) {
 	
-  val squeryl = "org.squeryl" %% "squeryl" % "0.9.4-RC7"
+  val squeryl = "org.squeryl" %% "squeryl" % "0.9.4"
    
   //In this example, we declare a dependency on all common databases, 
   //in real life, there will likely be only one needed
@@ -61,14 +61,14 @@ h3. Maven
 If for some reason you can't use SBT and must use Maven, you will find the Squeryl artifacts hosted "here":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/
  
 * groupId : *org.squeryl*
-* artifactId: *squeryl_2.9.0*
-* version *0.9.4-RC7*
+* artifactId: *squeryl_2.9.0-1*
+* version *0.9.4*
 
 h3. Manual dependency management
 
 If you want to manage your dependencies without SBT or Maven, you will need the following jars :
 
-* The Scala runtime jar, version 2.9.0 (2.8.1, or 2.8.0)
+* The Scala runtime jar, version 2.9.0-1 (or 2.9.0, 2.8.1, 2.8.0)
 * The Squeryl jar found "here":http://github.com/max-l/Squeryl/downloads
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
