@@ -89,7 +89,7 @@ Of course, not all combinations of column attributes make sense, the valid combi
 
 h3. Schema generation (DDL) 
 
-Schema.create will connect to the database and create all tables, constraints, indexes, etc. While this is usefull for devellopment phases, when a system has been in production long enough it is often more convenient to generate the schema, and evolve it manually. 
+Schema.create will connect to the database and create all tables, constraints, indexes, etc. While this is usefull for development phases, when a system has been in production long enough it is often more convenient to generate the schema, and evolve it manually. 
 
 Use Schema.printDdl to print your schema :  
 
