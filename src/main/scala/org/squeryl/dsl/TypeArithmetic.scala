@@ -458,12 +458,12 @@ trait TypeArithmetic extends FieldTypes {
   protected def mapObject2UuidType(u: AnyRef): UuidType
   //protected def mapInt2EnumerationValueType(b: Int): EnumerationValueType
 
-  protected implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
+  implicit def createOutMapperByteType: OutMapper[ByteType] = new OutMapper[ByteType] {
     def doMap(rs: ResultSet) = mapByte2ByteType(rs.getByte(index))
     def sample = sampleByte
   }
   
-  protected implicit def createOutMapperIntType: OutMapper[IntType] = new OutMapper[IntType] {
+  implicit def createOutMapperIntType: OutMapper[IntType] = new OutMapper[IntType] {
     def doMap(rs: ResultSet) = mapInt2IntType(rs.getInt(index))
     def sample = sampleInt
   }
@@ -473,55 +473,55 @@ trait TypeArithmetic extends FieldTypes {
     def sample = sampleString
   }
 
-  protected implicit def createOutMapperDoubleType: OutMapper[DoubleType] = new OutMapper[DoubleType] {
+  implicit def createOutMapperDoubleType: OutMapper[DoubleType] = new OutMapper[DoubleType] {
     def doMap(rs: ResultSet) = mapDouble2DoubleType(rs.getDouble(index))
     def sample = sampleDouble
   }
 
-  protected implicit def createOutMapperBigDecimalType: OutMapper[BigDecimalType] = new OutMapper[BigDecimalType] {
+  implicit def createOutMapperBigDecimalType: OutMapper[BigDecimalType] = new OutMapper[BigDecimalType] {
     def doMap(rs: ResultSet) = mapBigDecimal2BigDecimalType(new BigDecimal(rs.getBigDecimal(index)))
     def sample = sampleBigDecimal
   }
 
-  protected implicit def createOutMapperFloatType: OutMapper[FloatType] = new OutMapper[FloatType] {
+  implicit def createOutMapperFloatType: OutMapper[FloatType] = new OutMapper[FloatType] {
     def doMap(rs: ResultSet) = mapFloat2FloatType(rs.getFloat(index))
     def sample = sampleFloat
   }
 
-  protected implicit def createOutMapperLongType: OutMapper[LongType] = new OutMapper[LongType] {
+  implicit def createOutMapperLongType: OutMapper[LongType] = new OutMapper[LongType] {
     def doMap(rs: ResultSet) = mapLong2LongType(rs.getLong(index))
     def sample = sampleLong
   }
 
-  protected implicit def createOutMapperBooleanType: OutMapper[BooleanType] = new OutMapper[BooleanType] {
+  implicit def createOutMapperBooleanType: OutMapper[BooleanType] = new OutMapper[BooleanType] {
     def doMap(rs: ResultSet) = mapBoolean2BooleanType(rs.getBoolean(index))
     def sample = sampleBoolean
   }
 
-  protected implicit def createOutMapperBinaryType: OutMapper[BinaryType] = new OutMapper[BinaryType] {
+  implicit def createOutMapperBinaryType: OutMapper[BinaryType] = new OutMapper[BinaryType] {
     def doMap(rs: ResultSet) = mapBinary2BinaryType(rs.getBytes(index))
     def sample = sampleBinary
   }
 
-  protected implicit def createOutMapperDateType: OutMapper[DateType] = new OutMapper[DateType] {
+  implicit def createOutMapperDateType: OutMapper[DateType] = new OutMapper[DateType] {
     def doMap(rs: ResultSet) = mapDate2DateType(rs.getDate(index))
     def sample = sampleDate
   }
 
-  protected implicit def createOutMapperTimestampType: OutMapper[TimestampType] = new OutMapper[TimestampType] {
+  implicit def createOutMapperTimestampType: OutMapper[TimestampType] = new OutMapper[TimestampType] {
     def doMap(rs: ResultSet) = mapTimestamp2TimestampType(rs.getTimestamp(index))
     def sample = sampleTimestamp
   }
-  protected implicit def createOutMapperUuidType: OutMapper[UuidType] = new OutMapper[UuidType] {
+  implicit def createOutMapperUuidType: OutMapper[UuidType] = new OutMapper[UuidType] {
     def doMap(rs: ResultSet) = mapObject2UuidType(rs.getObject(index))
     def sample = sampleUuid
   }
-//  protected implicit def createOutMapperEnumerationValueType: OutMapper[EnumerationValueType] = new OutMapper[EnumerationValueType] {
+//  implicit def createOutMapperEnumerationValueType: OutMapper[EnumerationValueType] = new OutMapper[EnumerationValueType] {
 //    def doMap(rs: ResultSet) = mapInt2EnumerationValueType(rs.getInt(index))
 //    def sample = sampleEnumerationValueType
 //  }
 
-  protected implicit def createOutMapperByteTypeOption: OutMapper[Option[ByteType]] = new OutMapper[Option[ByteType]] {
+  implicit def createOutMapperByteTypeOption: OutMapper[Option[ByteType]] = new OutMapper[Option[ByteType]] {
     def doMap(rs: ResultSet) = {
       val v = mapByte2ByteType(rs.getByte(index))
       if(rs.wasNull)
@@ -532,7 +532,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleByte)
   }
 
-  protected implicit def createOutMapperIntTypeOption: OutMapper[Option[IntType]] = new OutMapper[Option[IntType]] {
+  implicit def createOutMapperIntTypeOption: OutMapper[Option[IntType]] = new OutMapper[Option[IntType]] {
     def doMap(rs: ResultSet) = {
       val v = mapInt2IntType(rs.getInt(index))
       if(rs.wasNull)
@@ -543,7 +543,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleInt)
   }
 
-  protected implicit def createOutMapperDoubleTypeOption: OutMapper[Option[DoubleType]] = new OutMapper[Option[DoubleType]] {
+  implicit def createOutMapperDoubleTypeOption: OutMapper[Option[DoubleType]] = new OutMapper[Option[DoubleType]] {
     def doMap(rs: ResultSet) = {
       val v = mapDouble2DoubleType(rs.getDouble(index))
       if(rs.wasNull)
@@ -554,7 +554,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleDouble)
   }
 
-  protected implicit def createOutMapperBigDecimalTypeOption: OutMapper[Option[BigDecimalType]] = new OutMapper[Option[BigDecimalType]] {
+  implicit def createOutMapperBigDecimalTypeOption: OutMapper[Option[BigDecimalType]] = new OutMapper[Option[BigDecimalType]] {
     def doMap(rs: ResultSet) = {
       val v = mapBigDecimal2BigDecimalType(new BigDecimal(rs.getBigDecimal(index)))
       if(rs.wasNull)
@@ -565,7 +565,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleBigDecimal)
   }
 
-  protected implicit def createOutMapperFloatTypeOption: OutMapper[Option[FloatType]] = new OutMapper[Option[FloatType]] {
+  implicit def createOutMapperFloatTypeOption: OutMapper[Option[FloatType]] = new OutMapper[Option[FloatType]] {
     def doMap(rs: ResultSet) = {
       val v = mapFloat2FloatType(rs.getFloat(index))
       if(rs.wasNull)
@@ -587,7 +587,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleString)
   }
 
-  protected implicit def createOutMapperLongTypeOption: OutMapper[Option[LongType]] = new OutMapper[Option[LongType]] {
+  implicit def createOutMapperLongTypeOption: OutMapper[Option[LongType]] = new OutMapper[Option[LongType]] {
     def doMap(rs: ResultSet) = {
       val v = mapLong2LongType(rs.getLong(index))
       if(rs.wasNull)
@@ -598,7 +598,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleLong)
   }
 
-  protected implicit def createOutMapperBooleanTypeOption: OutMapper[Option[BooleanType]] = new OutMapper[Option[BooleanType]] {
+  implicit def createOutMapperBooleanTypeOption: OutMapper[Option[BooleanType]] = new OutMapper[Option[BooleanType]] {
     def doMap(rs: ResultSet) = {
       val v = mapBoolean2BooleanType(rs.getBoolean(index))
       if(rs.wasNull)
@@ -609,7 +609,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleBoolean)
   }
 
-  protected implicit def createOutMapperBinaryTypeOption: OutMapper[Option[BinaryType]] = new OutMapper[Option[BinaryType]] {
+  implicit def createOutMapperBinaryTypeOption: OutMapper[Option[BinaryType]] = new OutMapper[Option[BinaryType]] {
     def doMap(rs: ResultSet) = {
       val v = mapBinary2BinaryType(rs.getBytes(index))
       if(rs.wasNull)
@@ -620,7 +620,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleBinary)
   }
 
-  protected implicit def createOutMapperDateTypeOption: OutMapper[Option[DateType]] = new OutMapper[Option[DateType]] {
+  implicit def createOutMapperDateTypeOption: OutMapper[Option[DateType]] = new OutMapper[Option[DateType]] {
     def doMap(rs: ResultSet) = {
       val v = mapDate2DateType(rs.getDate(index))
       if(rs.wasNull)
@@ -631,7 +631,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleDate)
   }
 
-  protected implicit def createOutMapperTimestampTypeOption: OutMapper[Option[TimestampType]] = new OutMapper[Option[TimestampType]] {
+  implicit def createOutMapperTimestampTypeOption: OutMapper[Option[TimestampType]] = new OutMapper[Option[TimestampType]] {
     def doMap(rs: ResultSet) = {
       val v = mapTimestamp2TimestampType(rs.getTimestamp(index))
       if(rs.wasNull)
@@ -642,7 +642,7 @@ trait TypeArithmetic extends FieldTypes {
     def sample = Some(sampleTimestamp)
   }
 
-  protected implicit def createOutMapperUuidTypeOption: OutMapper[Option[UuidType]] = new OutMapper[Option[UuidType]] {
+  implicit def createOutMapperUuidTypeOption: OutMapper[Option[UuidType]] = new OutMapper[Option[UuidType]] {
     def doMap(rs: ResultSet) = {
       val v = mapObject2UuidType(rs.getObject(index))
       if(rs.wasNull)
