@@ -28,6 +28,8 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   def this(n:String)(implicit manifestT: Manifest[T]) =
     this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None)
 
+  private [squeryl] var _callbacks: PosoLifecycleEventListener = NoOpPosoLifecycleEventListener
+
   def name = schema.tableNameFromClassName(_name)
 
   def prefix: Option[String] =
@@ -75,7 +77,10 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   
   private [squeryl] def give(resultSetMapper: ResultSetMapper, resultSet: ResultSet) : T  = {
 
-    val o = _createInstanceOfRowObject
+    var o = _callbacks.create
+
+    if(o == null)
+      o = _createInstanceOfRowObject
     
     resultSetMapper.map(o, resultSet);
     val t = o.asInstanceOf[T]
