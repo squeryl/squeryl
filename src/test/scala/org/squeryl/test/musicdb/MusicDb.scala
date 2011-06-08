@@ -20,9 +20,10 @@ import java.sql.Timestamp
 
 import org.squeryl._
 import adapters._
-import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
-import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
+import dsl._
+import ast.{FunctionNode, RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
+import internals.OutMapper
 import java.util.{Date, Calendar}
 
 object Genre extends Enumeration {
@@ -640,7 +641,27 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       passed('testTimestampDownToMillis)
     }
   }
-  
+
+
+  class ToChar(d: DateExpression[Timestamp],e: StringExpression[String], m: OutMapper[String])
+  extends FunctionNode[String]("FORMATDATETIME",Some(m), Seq(d,e)) with StringExpression[String]
+
+  def toChar(d: DateExpression[Timestamp],e: StringExpression[String])(implicit m: OutMapper[String]) =
+    new ToChar(d,e,m)
+
+  test("test2ArgFunction") {
+    val testInstance = sharedTestInstance; import testInstance._
+    Session.currentSession.setLogger(println(_))
+
+    val q =
+      from(artists)(a =>
+        where(a.firstName === mongoSantaMaria.firstName)
+        select(&(toChar(a.timeOfLastUpdate,"EEE, d MMM yyyy HH:mm:ss z")))
+      )
+
+    println(q.toList)
+  }
+
   test("validateScalarQuery1") {
     val cdCount: Long = countCds2(cds)
     assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))
