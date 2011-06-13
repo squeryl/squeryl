@@ -1131,10 +1131,35 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       from(professors)(p=>
         groupBy(p.id, p.yearlySalary)
         having(p.yearlySalary gt 75.0F)
-      ).toList
+      )
+
+    assert(q.statement.indexOf("Having") != -1)
+    q.toList
 
     passed('testHavingClause)
   }
+
+  test("HavingClause2",SingleTestRun) {
+    //The query here doesn't make much sense, we just test that valid SQL gets generated :
+    val q =
+      from(professors)(p=> {
+        val v1 = groupBy(p.id, p.yearlySalary)
+
+        val v2 = v1.having(p.yearlySalary gt 75.0F)
+
+
+        val v3 = v2.compute(avg(p.yearlySalary))
+
+        v3
+      }
+      )
+    q.toList
+
+
+    println(q.statement)
+    assert(q.statement.indexOf("Having") != -1)
+  }
+
   test("PartialUpdateWithSubQueryInSetClause") {
     val testInstance = sharedTestInstance; import testInstance._
 

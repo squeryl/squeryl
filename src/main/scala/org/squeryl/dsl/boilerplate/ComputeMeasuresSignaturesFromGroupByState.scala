@@ -25,6 +25,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,T1](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1)
     )
 
@@ -32,6 +33,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,Product2[T1,T2]](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1, e2)
     )
 
@@ -39,6 +41,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,Product3[T1,T2,T3]](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1, e2, e3)
     )
 
@@ -46,6 +49,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,Product4[T1,T2,T3,T4]](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1, e2, e3, e4)
     )
 
@@ -55,6 +59,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,Product5[T1,T2,T3,T4,T5]](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1, e2, e3, e4, e5)
     )
 
@@ -64,6 +69,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,Product6[T1,T2,T3,T4,T5,T6]](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1, e2, e3, e4, e5, e6)
     )
 
@@ -73,6 +79,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     new GroupWithMeasuresQueryYield[G,Product7[T1,T2,T3,T4,T5,T6,T7]](
       this.queryElementzz,
       this.groupByClauseClosure,
+      this.unevaluatedHavingClause,
       () =>List(e1, e2, e3, e4, e5, e6, e7)
     )
 }
