@@ -24,7 +24,7 @@ import java.sql.SQLException
 import java.io.PrintWriter
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 
-trait Schema extends DelayedInit {
+trait Schema {
 
   protected implicit def thisSchema = this
 
@@ -512,18 +512,33 @@ trait Schema extends DelayedInit {
 
   def callbacks: Seq[LifecycleEvent] = Nil
 
-  def delayedInit(body: => Unit) = {
+////2.9.x approach for LyfeCycle events :
+//  def delayedInit(body: => Unit) = {
+//
+//    body
+//
+//    (for(cb <- callbacks; t <- cb.target) yield (t, cb))
+//    .groupBy(_._1)
+//    .mapValues(_.map(_._2))
+//    .foreach(
+//     (t:Tuple2[View[_],Seq[LifecycleEvent]]) => {
+//       t._1._callbacks = new LifecycleEventInvoker(t._2, t._1)
+//     }
+//    )
+//  }
 
-    body
-
-    (for(cb <- callbacks; t <- cb.target) yield (t, cb))
-    .groupBy(_._1)
-    .mapValues(_.map(_._2))
-    .foreach(
-     (t:Tuple2[View[_],Seq[LifecycleEvent]]) => {
-       t._1._callbacks = new LifecycleEventInvoker(t._2, t._1)
-     }
-    )
+////2.8.x approach for LyfeCycle events :
+  private [squeryl] lazy val _callbacks: Map[View[_],LifecycleEventInvoker] = {
+    val m =
+      (for(cb <- callbacks; t <- cb.target) yield (t, cb))
+      .groupBy(_._1)
+      .mapValues(_.map(_._2))
+      .map(
+       (t:Tuple2[View[_],Seq[LifecycleEvent]]) => {
+         (t._1, new LifecycleEventInvoker(t._2, t._1)): (View[_],LifecycleEventInvoker)
+       })
+      .toMap
+    m
   }
 
   import internals.PosoLifecycleEvent._
