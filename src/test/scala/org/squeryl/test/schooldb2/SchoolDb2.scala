@@ -7,6 +7,7 @@ import dsl.{OneToMany, CompositeKey2}
 import java.sql.{Savepoint}
 
 import org.squeryl.framework._
+import test.schooldb.SingleTestRun
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -428,6 +429,45 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val set = Set("foo", "bar", "baz").toSeq
     from(entries)(e => where(e.text.in(set))select(e)).toList
     passed('testInFromSeq)
+  }
+
+
+  test("testTupleXtoNestedMapConversion", SingleTestRun) {
+    val seedData = seedDataDef
+    import seedData._
+
+    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
+
+    professeurTournesol.courses.associate(physicsCourse)
+    professeurTournesol.courses.associate(chemistryCourse)
+
+    val q =
+      from(professors,courseAssignments,courses)((p,a,c) =>
+        where(p.id === a.professorId and a.courseId === c.id)
+        select((p,a,c))
+      ).asTree
+
+    println("========================")
+    println(q)
+
+
+//    val profT = q.find(
+//      //t:(Professor,Map[CourseAssignment,Iterable[Course]]) =>
+//      _._1.id == professeurTournesol.id
+//    )
+//
+//    assert(professeurTournesol, profT.get._1.id)
+
+    val z =
+      for(prof <- q; courseAssignment <- prof._2; course <- courseAssignment._2)
+        yield (prof._1.lastName, courseAssignment._1.professorId +":"+courseAssignment._1.courseId, course.id)
+
+    println(z.toList)
+
+    professeurTournesol.courses.dissociateAll
+
+    passed('testEagerRelationFetch)
+
   }
 }
 
