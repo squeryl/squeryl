@@ -1465,7 +1465,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("Boolean2LogicalBooleanConversion") {
     val testInstance = sharedTestInstance; import testInstance._
 
-    val multilingualStudents = students.where(_.isMultilingual).map(_.id).toSet
+    val multilingualStudents = students.where(_.isMultilingual === Some(true)).map(_.id).toSet
 
     //println(multilingualStudents)
     //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
