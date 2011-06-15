@@ -17,7 +17,6 @@ package org.squeryl.dsl.ast
 
 import org.squeryl.internals._
 import org.squeryl.dsl.{QueryYield, AbstractQuery}
-import org.squeryl.adapters.H2Adapter
 
 class QueryExpressionNode[R](_query: AbstractQuery[R],
                              _queryYield:QueryYield[R],
@@ -43,6 +42,23 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   private var _selectList: Iterable[SelectElement] = Iterable.empty
 
   private var _sample: Option[AnyRef] = None
+
+  private def _isPrimitiveType(o: AnyRef) =
+    FieldMetaData._isSupportedFieldType.handleType(o.getClass, None)
+
+  def isUseableAsSubquery: Boolean =
+    _sample match {
+      case None => error("method cannot be called before initialization")
+      case Some(p:Product) =>
+        if(p.getClass.getName.startsWith("scala.Tuple")) {
+          val z = (for(i <- 0 to (p.productArity - 1)) yield p.productElement(i))
+          ! z.exists(o => _isPrimitiveType(o.asInstanceOf[AnyRef]))
+        }
+        else
+          true
+      case Some(a:AnyRef) => ! _isPrimitiveType(a)
+    }
+
 
   def sample:AnyRef = _sample.get
 

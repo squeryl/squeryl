@@ -93,8 +93,12 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
         views.append(sq.node.asInstanceOf[ViewExpressionNode[_]])
 
     for(sq <- subQueryables)
-      if(sq.isQuery)
-        subQueries.append(sq.node.asInstanceOf[QueryExpressionNode[_]])
+      if(sq.isQuery) {
+        val z = sq.node.asInstanceOf[QueryExpressionNode[_]]
+        if(! z.isUseableAsSubquery)
+          error("Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html")
+        subQueries.append(z)
+      }
     
     val qen = new QueryExpressionNode[R](this, qy, subQueries, views)
     val (sl,d) = qy.invokeYieldForAst(qen, resultSetMapper)
