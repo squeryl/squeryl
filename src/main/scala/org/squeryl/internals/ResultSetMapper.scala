@@ -86,7 +86,7 @@ object NoOpOutMapper extends OutMapper[Any] {
 
   def doMap(rs: ResultSet) = sample
 
-  def sample = error(" cannot use NoOpOutMapper")
+  def sample = org.squeryl.internals.Utils.throwError(" cannot use NoOpOutMapper")
 
   override def typeOfExpressionToString = "NoOpOutMapper"  
 }
@@ -94,7 +94,7 @@ object NoOpOutMapper extends OutMapper[Any] {
 class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, selectElement: SelectElement)  {
 
   if(index <= 0)
-    error("invalid Jdbc index " + index)
+    org.squeryl.internals.Utils.throwError("invalid Jdbc index " + index)
 
   def map(obj: AnyRef, rs: ResultSet): Unit = {
 
@@ -135,7 +135,7 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
       case 6 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs))
       case 7 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs))
       //TODO: implement tuples results of size up to 22
-      case z:Any => error("tuples of size "+size+" and greater are not supported")
+      case z:Any => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
     }
     
     res.asInstanceOf[T]

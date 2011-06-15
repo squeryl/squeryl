@@ -159,7 +159,7 @@ object FieldReferenceLinker {
   private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case Some(n:SelectElement) => new SelectElementReference(n)(NoOpOutMapper)
-      case None => error("Thread local does not have a last accessed field... this is a severe bug !")
+      case None => org.squeryl.internals.Utils.throwError("Thread local does not have a last accessed field... this is a severe bug !")
   }
 
   def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(e: Any, c: Any): LogicalBoolean = {
@@ -204,7 +204,7 @@ object FieldReferenceLinker {
         }
 
       if(res0 == null)
-        error("query " + q + " yielded null")
+        org.squeryl.internals.Utils.throwError("query " + q + " yielded null")
 
       val visitedSet = new HashSet[Int]
       //val visitedSet = new HashSet[AnyRef]
@@ -261,7 +261,7 @@ object FieldReferenceLinker {
   def findOwnerOfSample(s: Any): Option[QueryableExpressionNode] =
 // TODO: could we enforce that Query[AnyVal] are not nested in some other way ?   
 //    if(s.isInstanceOf[AnyVal])
-//      error("A query that returns a AnyVal cannot be nested " + Utils.failSafeString(FieldReferenceLinker.inspectedQueryExpressionNode.toString))
+//      org.squeryl.internals.Utils.throwError("A query that returns a AnyVal cannot be nested " + Utils.failSafeString(FieldReferenceLinker.inspectedQueryExpressionNode.toString))
 //    else
      _findQENThatOwns(s.asInstanceOf[AnyRef], FieldReferenceLinker.inspectedQueryExpressionNode)
 

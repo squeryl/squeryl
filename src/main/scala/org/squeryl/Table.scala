@@ -55,7 +55,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
       if(cnt != 1)
-        error("failed to insert")
+        org.squeryl.internals.Utils.throwError("failed to insert")
 
       posoMetaData.primaryKey match {
         case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
@@ -85,7 +85,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     r
   }
 
-  def insert(t: Query[T]) = error("not implemented")
+  def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
 
   def insert(e: Iterable[T]):Unit =
     _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented), true, false)
@@ -198,7 +198,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
            ") has become stale, it cannot be updated under optimistic concurrency control")
       }
       else
-        error("failed to update")
+        org.squeryl.internals.Utils.throwError("failed to update")
     }
 
     _callbacks.afterUpdate(o0.asInstanceOf[AnyRef])
@@ -206,7 +206,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
 
-    val pkMd = posoMetaData.primaryKey.getOrElse(error("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
+    val pkMd = posoMetaData.primaryKey.getOrElse(org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
 
     val fmds = List(
       posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter).toList,

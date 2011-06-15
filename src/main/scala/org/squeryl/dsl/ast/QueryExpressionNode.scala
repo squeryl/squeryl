@@ -48,7 +48,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def isUseableAsSubquery: Boolean =
     _sample match {
-      case None => error("method cannot be called before initialization")
+      case None => org.squeryl.internals.Utils.throwError("method cannot be called before initialization")
       case Some(p:Product) =>
         if(p.getClass.getName.startsWith("scala.Tuple")) {
           val z = (for(i <- 0 to (p.productArity - 1)) yield p.productElement(i))
@@ -65,7 +65,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   def owns(aSample: AnyRef) = 
     _sample != None && _sample.get.eq(aSample)
   
-  def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) = error("implement me")
+  def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) = org.squeryl.internals.Utils.throwError("implement me")
 
   override def toString = {
     val sb = new StringBuffer

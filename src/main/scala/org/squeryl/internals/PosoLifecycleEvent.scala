@@ -26,7 +26,7 @@ class LifecycleEventInvoker(i:Iterable[LifecycleEvent], owner: View[_]) extends 
   private val _factory: AnyRef=>AnyRef = {
 
     val f = i.filter(_.e == Create).map(_.callback)
-    if(f.size > 1) error(owner.name + " has more than one factory defined.")
+    if(f.size > 1) org.squeryl.internals.Utils.throwError(owner.name + " has more than one factory defined.")
     f.headOption.getOrElse((r:AnyRef) => {null})
   }
 

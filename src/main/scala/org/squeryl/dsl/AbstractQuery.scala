@@ -96,7 +96,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       if(sq.isQuery) {
         val z = sq.node.asInstanceOf[QueryExpressionNode[_]]
         if(! z.isUseableAsSubquery)
-          error("Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html")
+          org.squeryl.internals.Utils.throwError("Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html")
         subQueries.append(z)
       }
     
@@ -205,7 +205,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       if(!_nextCalled)
         _next
       if(!_hasNext)
-        error("next called with no rows available")
+        org.squeryl.internals.Utils.throwError("next called with no rows available")
       _nextCalled = false
 
       if(s.isLoggingEnabled)

@@ -44,7 +44,7 @@ object SampleTuple {
       case 6 => new STuple6[Any,Any,Any,Any,Any,Any](n,m)
       case 7 => new STuple7[Any,Any,Any,Any,Any,Any,Any](n,m)
       case 8 => new STuple8[Any,Any,Any,Any,Any,Any,Any,Any](n,m)
-      case _ => error("Tuple9 is not supported, please send a request for supporting up to Product22")
+      case _ => org.squeryl.internals.Utils.throwError("Tuple9 is not supported, please send a request for supporting up to Product22")
     }
 }
 

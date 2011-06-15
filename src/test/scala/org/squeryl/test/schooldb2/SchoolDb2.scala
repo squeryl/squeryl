@@ -359,7 +359,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   private def _existsAndEquals(oca: Option[CourseAssignment], ca: CourseAssignment) = {
 
     if(oca == None)
-      error("query returned no rows")
+      org.squeryl.internals.Utils.throwError("query returned no rows")
 
     assertEquals(ca.id, oca.get.id, 'testCompositeEquality)
   }
@@ -395,7 +395,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     }
 
     if(! exceptionThrown)
-      error('testUniquenessConstraint + " failed, unique constraint violation occured")
+      org.squeryl.internals.Utils.throwError('testUniquenessConstraint + " failed, unique constraint violation occured")
 
     assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
 

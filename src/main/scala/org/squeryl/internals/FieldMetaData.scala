@@ -53,7 +53,7 @@ class FieldMetaData(
 
   def canonicalEnumerationValueFor(id: Int) =
     if(sampleValue == null) {
-      error("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
+      org.squeryl.internals.Utils.throwError("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
     }
     else {
 
@@ -95,7 +95,7 @@ class FieldMetaData(
   def sequenceName: String = {
 
     val ai = _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
-      getOrElse(error(this + " is not declared as autoIncremented, hence it has no sequenceName")).
+      getOrElse(org.squeryl.internals.Utils.throwError(this + " is not declared as autoIncremented, hence it has no sequenceName")).
         asInstanceOf[AutoIncremented]
 
     if(ai.nameOfSequence != None) {
@@ -126,7 +126,7 @@ class FieldMetaData(
     schema.defaultColumnAttributesForKeyedEntityId(wrappedFieldType).foreach(ca => {
 
       if(ca.isInstanceOf[AutoIncremented] && ! (wrappedFieldType.isAssignableFrom(classOf[java.lang.Long]) || wrappedFieldType.isAssignableFrom(classOf[java.lang.Integer])))
-        error("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
+        org.squeryl.internals.Utils.throwError("Schema " + schema.getClass.getName + " has method defaultColumnAttributesForKeyedEntityId returning AutoIncremented \nfor " +
           " all KeyedEntity tables, while class " + parentMetaData.clasz.getName +
           "\n has it's id field of type " + fieldType.getName + ", that is neither an Int or a Long, \n the only two types that can " +
           "be auto incremented")
@@ -268,7 +268,7 @@ class FieldMetaData(
         res
     }
     catch {
-      case e: IllegalArgumentException => error(wrappedFieldType.getName + " used on " + o.getClass.getName)
+      case e: IllegalArgumentException => org.squeryl.internals.Utils.throwError(wrappedFieldType.getName + " used on " + o.getClass.getName)
     }
 
   def setFromResultSet(target: AnyRef, rs: ResultSet, index: Int) = {
@@ -318,7 +318,7 @@ class FieldMetaData(
     catch {
       case e: IllegalArgumentException => {
         val typeOfV = if(v == null) "null" else v.getClass.getName
-        error(
+        org.squeryl.internals.Utils.throwError(
           this + " was invoked with value '" + v + "' of type " + typeOfV + " on object of type " + target.getClass.getName + " \n" + e)
       }
     }
@@ -399,7 +399,7 @@ object FieldMetaData {
         (setter.map(s => (s: Member, s.getParameterTypes.head, s.getGenericParameterTypes.head))
           .orElse(getter.map(g => (g: Member, g.getReturnType, g.getGenericReturnType)))
           .orElse(field.map(f => (f: Member, f.getType, f.getType)))
-          .getOrElse(error("invalid field group")))
+          .getOrElse(org.squeryl.internals.Utils.throwError("invalid field group")))
 
       /*
        * Look for a value in the sample type.  If one exists and
@@ -444,7 +444,7 @@ object FieldMetaData {
         }
 
       if(v == null)
-        error("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
+        org.squeryl.internals.Utils.throwError("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
      
       val isOption = v.isInstanceOf[Some[_]]
 
@@ -544,7 +544,7 @@ object FieldMetaData {
     def handleBinaryType = 255
     def handleEnumerationValueType = 4
     def handleUuidType = 36
-    def handleUnknownType(c: Class[_]) = error("Cannot assign field length for " + c.getName)
+    def handleUnknownType(c: Class[_]) = org.squeryl.internals.Utils.throwError("Cannot assign field length for " + c.getName)
   }
 
   private val _defaultValueFactory = new FieldTypeHandler[AnyRef] {
@@ -611,7 +611,7 @@ object FieldMetaData {
     def handleEnumerationValueType = _intM
 
     def handleUnknownType(c: Class[_]) =
-      error("field type " + c.getName + " is not supported")
+      org.squeryl.internals.Utils.throwError("field type " + c.getName + " is not supported")
   }
 
   def resultSetHandlerFor(c: Class[_]) =

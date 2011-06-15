@@ -36,7 +36,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
   val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
   
   val constructor =
-    _const.headOption.orElse(error(clasz.getName +
+    _const.headOption.orElse(org.squeryl.internals.Utils.throwError(clasz.getName +
             " must have a 0 param constructor or a constructor with only primitive types")).get
 
   /**
@@ -181,7 +181,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       val cn = clasz.getName
       val test = params(0).getName + "$" + clasz.getSimpleName
       if(cn == test)
-        error("inner classes are not supported, except when outer class is a singleton (object)\ninner class is : " + cn)
+        org.squeryl.internals.Utils.throwError("inner classes are not supported, except when outer class is a singleton (object)\ninner class is : " + cn)
     }
 
     var res = new Array[Object](params.size)
@@ -195,7 +195,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
   }
 
   private def _noOptionalColumnDeclared =
-    error("class " + clasz.getName + " has an Option[] member with no Column annotation with optionType declared.")
+    org.squeryl.internals.Utils.throwError("class " + clasz.getName + " has an Option[] member with no Column annotation with optionType declared.")
 
   //def createSamplePoso[T](vxn: ViewExpressionNode[T], classOfT: Class[T]): T = {
     //Enhancer.create(classOfT, new PosoPropertyAccessInterceptor(vxn)).asInstanceOf[T]

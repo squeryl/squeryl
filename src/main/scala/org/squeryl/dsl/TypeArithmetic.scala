@@ -46,12 +46,12 @@ class NonNumericalTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutM
  *   NonNumericalExpression[Option[A]]) --> NonNumericalExpression[A]
  */
 class NonNumericalInputOnlyTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with NonNumericalExpression[A] {
-   override def mapper: OutMapper[A] = error(
+   override def mapper: OutMapper[A] = org.squeryl.internals.Utils.throwError(
       "Bug ! implicit conversion 'emulateSqlTyping1' is not supposed to get triggered in AST nodes participating in ResulSet extraction")
 }
 
 class NumericalInputOnlyTypeConversion[A](e: ExpressionNode) extends TypeConversion(e) with NumericalExpression[A] {
-   override def mapper: OutMapper[A] = error(
+   override def mapper: OutMapper[A] = org.squeryl.internals.Utils.throwError(
       "Bug ! implicit conversion 'emulateSqlTyping1' is not supposed to get triggered in AST nodes participating in ResulSet extraction")
 }
 
