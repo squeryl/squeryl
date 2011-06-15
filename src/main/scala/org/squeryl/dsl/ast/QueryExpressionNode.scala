@@ -26,13 +26,8 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     with QueryableExpressionNode {
 
   def tableExpressions: Iterable[QueryableExpressionNode] = 
-    List(views.filter(v => ! v.isOuterJoinedDEPRECATED && ! v.inhibited),
-         subQueries.filter(v => ! v.isOuterJoinedDEPRECATED && ! v.inhibited)).flatten
-
-  def outerJoinExpressionsDEPRECATED: Iterable[OuterJoinExpression] =
-    List(views.filter(v => v.isOuterJoinedDEPRECATED && ! v.inhibited),
-         subQueries.filter(v => v.isOuterJoinedDEPRECATED && ! v.inhibited))
-            .flatten.map(v => v.outerJoinExpression.get)
+    List(views.filter(v => ! v.inhibited),
+         subQueries.filter(v => ! v.inhibited)).flatten
 
   def isJoinForm = _queryYield.joinExpressions != Nil
 
@@ -74,7 +69,6 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       sb.append("root:")
     sb.append(id)
     sb.append("]")
-    dumpOuterJoinInfoForAst(sb)
     sb.append(":rsm="+_query.resultSetMapper)
     sb.toString
   }
@@ -84,7 +78,6 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       selectList.toList,
       views.toList,
       subQueries.toList,
-      outerJoinExpressionsDEPRECATED.map(oje => oje.matchExpression),
       tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get).toList,  
       whereClause.toList,
       groupByClause.toList,

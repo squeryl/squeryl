@@ -29,9 +29,6 @@ trait OneToManyRelation[O <: KeyedEntity[_],M] extends Relation[O,M] {
 
   def foreignKeyDeclaration: ForeignKeyDeclaration
 
-  @deprecated("Use foreignKeyDeclaration instead")
-  final def foreingKeyDeclaration = foreignKeyDeclaration
-  
   def left(leftSide: O): OneToMany[M]
 
   def leftStateful(leftSide: O) = new StatefulOneToMany[M](left(leftSide))
@@ -99,13 +96,7 @@ trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEnt
 
   def leftForeignKeyDeclaration: ForeignKeyDeclaration
 
-  @deprecated("Use leftForeignKeyDeclaration instead")
-  final def leftForeingKeyDeclaration = leftForeignKeyDeclaration
-
   def rightForeignKeyDeclaration: ForeignKeyDeclaration
-  
-  @deprecated("Use rightForeignKeyDeclaration instead")
-  final def rightForeingKeyDeclaration = rightForeignKeyDeclaration
 
   def left(leftSide: L): ManyToMany[R,A]
 

@@ -71,11 +71,6 @@ trait Schema {
     res
   }
 
-  @deprecated("will be removed in a future version, use findTablesFor instead.")
-  def findTableFor[A](a: A): Option[Table[A]] = {
-    val c = a.asInstanceOf[AnyRef].getClass
-    _tables.find(_.posoMetaData.clasz == c).asInstanceOf[Option[Table[A]]]
-  }
 
   def findTablesFor[A](a: A): Iterable[Table[A]] = {
     val c = a.asInstanceOf[AnyRef].getClass
@@ -382,10 +377,6 @@ trait Schema {
 
   def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
     foreignKeyDeclaration.constrainReference
-
-  @deprecated("Use applyDefaultForeignKeyPolicy instead")
-  final def applyDefaultForeingKeyPolicy(foreingKeyDeclaration: ForeignKeyDeclaration) =
-    applyDefaultForeignKeyPolicy(foreingKeyDeclaration)
 
   /**
    * @return a Tuple2 with (LengthOfDecimal, Scale) that will determine the storage

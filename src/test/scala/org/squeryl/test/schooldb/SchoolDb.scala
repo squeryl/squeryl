@@ -333,35 +333,8 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
   import org.squeryl.PrimitiveTypeMode._
   import schema._
 
-  def fullOuterJoinStudentAddresses =
-    from(students, addresses)((s,a) =>
-      select(fullOuterJoin(s, a, s.addressId === a.id))
-      orderBy(s.id)
-    )
 
-  test("FullOuterJoin1") {
-    val testInstance = sharedTestInstance; import testInstance._
 
-    //println(fullOuterJoinStudentAddresses.dumpAst)
-    //println(fullOuterJoinStudentAddresses)
-
-    val res =
-      (for(t <- fullOuterJoinStudentAddresses)
-       yield (t._1.map(s=>s.id), t._2.map(a=>a.id))).toList
-
-    val expected = List(
-      (Some(xiao.id),Some(oneHutchissonStreet.id)),
-      (Some(georgi.id),Some(oneHutchissonStreet.id)),
-      (Some(pratap.id),Some(oneTwoThreePieIXStreet.id)),
-      (Some(gontran.id),Some(oneHutchissonStreet.id)),
-      (Some(gaitan.id),None),
-      (None,Some(twoHutchissonStreet.id))
-    )
-
-    assert(expected == res, "expected :\n " + expected + "\ngot :\n " + res)
-
-    passed('testFullOuterJoin1 )
-  }
   test("NewLeftOuterJoin1Reverse")  {
     val testInstance = sharedTestInstance; import testInstance._
 
@@ -585,93 +558,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(professors.map(System.identityHashCode(_)).toSet == professorsCreatedWithFactory.toSet)
   }
-
-
-
-  test("LeftOuterJoin1"){
-    val testInstance = sharedTestInstance; import testInstance._
-
-    //loggerOn
-
-    val leftOuterJoinStudentAddresses =
-      from(students, addresses)((s,a) =>
-        select((s,leftOuterJoin(a, s.addressId === a.id)))
-        orderBy(s.id)
-      )
-
-    val res =
-      (for(t <- leftOuterJoinStudentAddresses)
-       yield (t._1.id, t._2.map(a=>a.id))).toList
-
-    val expected = List(
-      (xiao.id,Some(oneHutchissonStreet.id)),
-      (georgi.id,Some(oneHutchissonStreet.id)),
-      (pratap.id,Some(oneTwoThreePieIXStreet.id)),
-      (gontran.id,Some(oneHutchissonStreet.id)),
-      (gaitan.id,None))
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testOuterJoin1 )
-  }
-
-  test("LeftOuterJoin2") {
-    val testInstance = sharedTestInstance; import testInstance._
-
-    //loggerOn
-
-    val leftOuterJoinStudentAddresses =
-      from(students, addresses, addresses)((s,a,a2) =>
-        select((s,leftOuterJoin(a, s.addressId === a.id), leftOuterJoin(a2, s.addressId === a2.id)))
-        orderBy(s.id)
-      )
-
-    val res =
-      (for(t <- leftOuterJoinStudentAddresses)
-       yield (t._1.id, t._2.map(a=>a.id), t._3.map(a=>a.id))).toList
-
-    val expected = List(
-      (xiao.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
-      (georgi.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
-      (pratap.id,Some(oneTwoThreePieIXStreet.id),Some(oneTwoThreePieIXStreet.id)),
-      (gontran.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
-      (gaitan.id,None,None))
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testOuterJoin2)
-  }
-
-
-
-  test("OuterJoinMixed1") {
-    val testInstance = sharedTestInstance; import testInstance._
-
-    //Creates a situation with two implicit inner joins and one outer join
-    val studentsWithCoursesInFeb2010OuterJoinAdresses =
-      from(students, courses, courseSubscriptions, addresses)((student, course, subscription, address) =>
-        where(student.id === subscription.studentId and
-              subscription.courseId === course.id and
-              course.startDate === feb2010).
-        select((student, course, leftOuterJoin(address, student.addressId === address.id))).
-        orderBy(student.id)
-      )
-
-    val res: Seq[(Int, Int, Option[Int])] = studentsWithCoursesInFeb2010OuterJoinAdresses.map({
-      case (student, course, address) =>
-        (student.id, course.id, address.map(_.id))
-    })(collection.breakOut)
-
-    val expected = Seq(
-      (pratap.id, counterpoint.id, Some(oneTwoThreePieIXStreet.id)),
-      (gaitan.id, mandarin.id,     None)
-    )
-
-    assert(expected sameElements res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testOuterJoinMixed1 )
-  }
-
 
 
   test("MetaData"){

@@ -471,19 +471,8 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
   // this 'old' join syntax will become deprecated : 
   var outerJoinExpression: Option[OuterJoinExpression] = None
 
-  def isOuterJoinedDEPRECATED = outerJoinExpression != None
-
   var isRightJoined = false
-  
-  def dumpOuterJoinInfoForAst(sb: StringBuffer) =
-    if(isOuterJoinedDEPRECATED) {
-      val oje = outerJoinExpression.get
-      sb.append(oje.leftRightOrFull)
-      sb.append("OuterJoin(")
-      sb.append(oje.matchExpression.writeToString)
-      sb.append(")")
-    }
-  
+
   def isChild(q: QueryableExpressionNode): Boolean  
 
   def owns(aSample: AnyRef): Boolean

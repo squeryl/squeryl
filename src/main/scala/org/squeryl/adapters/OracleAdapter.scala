@@ -101,16 +101,6 @@ class OracleAdapter extends DatabaseAdapter {
   override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
 
-  override def writeOuterJoinDEPRECATED(oje: OuterJoinExpression, sw: StatementWriter) = {
-    sw.write(oje.leftRightOrFull)
-    sw.write(" outer join ")
-    oje.queryableExpressionNode.write(sw)
-    sw.write(" ")
-    sw.write(oje.queryableExpressionNode.alias)
-    sw.write(" on ")
-    oje.matchExpression.write(sw)
-  }
-
   override def writeJoin(queryableExpressionNode: QueryableExpressionNode, sw: StatementWriter) = {
     sw.write(queryableExpressionNode.joinKind.get._1)
     sw.write(" ")

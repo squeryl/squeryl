@@ -133,58 +133,6 @@ trait QueryDsl
   def &[A](i: =>TypedExpressionNode[A]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
 
-  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
-  def leftOuterJoin[A](a: A, matchClause: =>ExpressionNode): Option[A] = {
-    val im = FieldReferenceLinker.isYieldInspectionMode
-
-    if(im) {
-      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
-      val oje = new OuterJoinExpression(joinedTableOrSubquery,"left", matchClause)
-      joinedTableOrSubquery.outerJoinExpression = Some(oje)
-      Some(a)
-    }
-    else if(a.isInstanceOf[net.sf.cglib.proxy.Factory])
-      None
-    else
-      Some(a)  
-  }
-
-  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
-  def rightOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],B) = {
-    val im = FieldReferenceLinker.isYieldInspectionMode
-
-    if(im) {
-      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
-      val oje = new OuterJoinExpression(joinedTableOrSubquery,"right", matchClause)
-      joinedTableOrSubquery.outerJoinExpression = Some(oje)
-      (Some(a), b)
-    }
-    else {
-      val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
-      (rA,b)
-    }
-  }
-
-  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
-  def fullOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],Option[B]) = {
-    val im = FieldReferenceLinker.isYieldInspectionMode
-
-    if(im) {
-      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
-      val oje = new OuterJoinExpression(joinedTableOrSubquery,"full", matchClause)
-      joinedTableOrSubquery.outerJoinExpression = Some(oje)
-      val parentQuery = FieldReferenceLinker.inspectedQueryExpressionNode
-      parentQuery.tableExpressions.head.isRightJoined = true
-      (Some(a), Some(b))
-    }
-    else {
-      val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
-      val rB = if(b.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(b)
-      (rA,rB)
-    }
-  }
-
-
   implicit def singleColumnQuery2RightHandSideOfIn[A](q: Query[A]) =
     new RightHandSideOfIn[A](q.copy(false).ast)
 

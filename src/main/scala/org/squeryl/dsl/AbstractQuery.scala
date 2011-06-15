@@ -277,7 +277,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
         else
           queryable.give(resultSetMapper, rs)
       }
-      else if((node.isRightJoined || node.isOuterJoinedDEPRECATED) && resultSetMapper.isNoneInOuterJoin(rs))
+      else if((node.isRightJoined) && resultSetMapper.isNoneInOuterJoin(rs))
         sample
       else
         queryable.give(resultSetMapper, rs)
