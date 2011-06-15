@@ -41,8 +41,6 @@ trait Person
 class Student(var name: String, var lastName: String, var age: Option[Int], var gender: Int, var addressId: Option[Int], var isMultilingual: Option[Boolean])
   extends SchoolDbObject with Person {
 
-  def this() = this("","",Some(0),0, Some(0), Some(false))
-
   override def toString = "Student:" + id + ":" + name
 }
 
@@ -55,7 +53,6 @@ case class Course(var name: String, var startDate: Date, var finalExamDate: Opti
 
   def occVersionNumberZ = occVersionNumber
 
-  def this() = this("", null, Some(new Date), 0, Some(0), false)
   override def toString = "Course:" + id + ":" + name
 
   var rawData = {
@@ -68,21 +65,17 @@ case class Course(var name: String, var startDate: Date, var finalExamDate: Opti
 class CourseSubscription(var courseId: Int, var studentId: Int)
   extends SchoolDbObject {
 
-  def this() = this(0,0)
   override def toString = "CourseSubscription:" + id
 }
 
 class CourseAssignment(var courseId: Int, var professorId: Long)
   extends SchoolDbObject {
 
-  def this() = this(0,0)
   override def toString = "CourseAssignment:" + id
 }
 
 class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[String], var appNumber: Option[Int], var appNumberSuffix: Option[String])
   extends SchoolDbObject {
-
-  def this() = this(null,0, Some(""),Some(0), Some(""))
 
   override def toString = "rue " + streetName 
 }
@@ -90,7 +83,6 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
 class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float], var yearlySalaryBD: BigDecimal, var weightInBD: Option[BigDecimal]) extends KeyedEntity[Long] with Person {
 
   var id: Long = 0
-  def this() = this("", 0.0F, Some(0.0F), 80.0F, Some(0))
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
 
