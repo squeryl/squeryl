@@ -1453,7 +1453,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       from(qStudentsFromStudents)(s =>
         where(exists(from(addresses)((a) =>
           where(s.addressId === a.id)
-          select(a))))
+          select(a.id))))
         select(s))
 
     val res = for (s <- studentsWithAnAddress) yield s.name
