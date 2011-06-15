@@ -67,3 +67,15 @@ h3. Solution : Return the row object (the instance of A in table[A])
  from(t)(x => where(x.aField in (nonNestablePeopleQuery1)) select(x))   
  
 ]]></script>
+
+h2.  +, -, * and / operators can cause an ambiguity in PrimitiveTypeMode
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  // Not OK  :
+  val q1 = people.where(p=> p.age + 1 > 40)
+   
+  // OK :
+  val q2 = people.where(p=> p.age plus 1 gt 40)
+    
+]]></script>
