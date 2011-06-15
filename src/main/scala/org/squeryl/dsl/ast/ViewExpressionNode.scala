@@ -83,7 +83,6 @@ class ViewExpressionNode[U](val view: View[U])
     sb.append('ViewExpressionNode +"[")
     sb.append(sample)
     sb.append("]:")
-    dumpOuterJoinInfoForAst(sb)
     sb.append("rsm=")
     sb.append(resultSetMapper)
     sb.toString

@@ -17,10 +17,12 @@ package org.squeryl;
 
 import dsl.ast._
 import dsl.{QueryDsl}
-import internals.{FieldMetaData, NoOpOutMapper, FieldReferenceLinker, StatementWriter}
+import internals._
 import java.sql.{Statement}
 import logging.StackMarker
 import scala.reflect.Manifest
+import collection.mutable.ArrayBuffer
+import javax.swing.UIDefaults.LazyValue
 
 private [squeryl] object DummySchema extends Schema
 
@@ -30,10 +32,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None)  
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
-  
+
   def insert(t: T): T = StackMarker.lastSquerylStackFrame {
 
-    val o = t.asInstanceOf[AnyRef]
+    val o = _callbacks.beforeInsert(t.asInstanceOf[AnyRef])
     val sess = Session.currentSession
     val sw = new StatementWriter(_dbAdapter)
     _dbAdapter.writeInsert(t, this, sw)
@@ -53,7 +55,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
       if(cnt != 1)
-        error("failed to insert")
+        org.squeryl.internals.Utils.throwError("failed to insert")
 
       posoMetaData.primaryKey match {
         case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
@@ -76,12 +78,14 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       st.close
     }
     
-    _setPersisted(t)
-    
-    t
+    val r = _callbacks.afterInsert(o).asInstanceOf[T]
+
+    _setPersisted(r)
+
+    r
   }
 
-  def insert(t: Query[T]) = error("not implemented")
+  def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
 
   def insert(e: Iterable[T]):Unit =
     _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented), true, false)
@@ -99,13 +103,21 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       val sess = Session.currentSession
       val dba = _dbAdapter
       val sw = new StatementWriter(dba)
+      val forAfterUpdateOrInsert = new ArrayBuffer[AnyRef]
 
-      if(isInsert)
-        dba.writeInsert(e0, this, sw)
-      else
-        dba.writeUpdate(e0, this, sw, checkOCC)
+      if(isInsert) {
+        val z = _callbacks.beforeInsert(e0.asInstanceOf[AnyRef])
+        _callbacks.beforeInsert(z)
+        dba.writeInsert(z.asInstanceOf[T], this, sw)
+      }
+      else {
+        val z = _callbacks.beforeUpdate(e0.asInstanceOf[AnyRef])
+        _callbacks.beforeUpdate(z)
+        dba.writeUpdate(z.asInstanceOf[T], this, sw, checkOCC)
+      }
       
       val st = sess.connection.prepareStatement(sw.statement)
+
       try {
         dba.prepareStatement(sess.connection, sw, st, sess)
         st.addBatch
@@ -113,9 +125,17 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         var updateCount = 1
 
         while(it.hasNext) {
-          val eN = it.next.asInstanceOf[AnyRef]
+          val eN0 = it.next.asInstanceOf[AnyRef]
+          val eN =
+            if(isInsert)
+              _callbacks.beforeInsert(eN0)
+            else
+              _callbacks.beforeUpdate(eN0)
+
+          forAfterUpdateOrInsert.append(eN)
+
           var idx = 1
-          val f = fmds.foreach(fmd => {
+          fmds.foreach(fmd => {
             st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
             idx += 1
           })
@@ -136,6 +156,13 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       finally {
         st.close
       }
+
+      for(a <- forAfterUpdateOrInsert)
+        if(isInsert)
+          _callbacks.afterInsert(a)
+        else
+          _callbacks.afterUpdate(a)
+
     }
   }
 
@@ -158,7 +185,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
-    dba.writeUpdate(o, this, sw, checkOCC)
+    val o0 = _callbacks.beforeUpdate(o.asInstanceOf[AnyRef]).asInstanceOf[T]
+    dba.writeUpdate(o0, this, sw, checkOCC)
 
     val cnt  = dba.executeUpdateAndCloseStatement(Session.currentSession, sw)
 
@@ -170,13 +198,15 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
            ") has become stale, it cannot be updated under optimistic concurrency control")
       }
       else
-        error("failed to update")
+        org.squeryl.internals.Utils.throwError("failed to update")
     }
+
+    _callbacks.afterUpdate(o0.asInstanceOf[AnyRef])
   }
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
 
-    val pkMd = posoMetaData.primaryKey.getOrElse(error("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
+    val pkMd = posoMetaData.primaryKey.getOrElse(org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
 
     val fmds = List(
       posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter).toList,
@@ -235,7 +265,18 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(a.id, k)
     } select(a))
 
+    lazy val z = q.headOption
+
+    if(_callbacks.hasBeforeDelete) {
+      z.map(x => _callbacks.beforeDelete(x.asInstanceOf[AnyRef]))
+    }
+
     val deleteCount = this.delete(q)
+
+    if(_callbacks.hasAfterDelete) {
+      z.map(x => _callbacks.afterDelete(x.asInstanceOf[AnyRef]))
+    }
+
     assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
     deleteCount == 1
   }

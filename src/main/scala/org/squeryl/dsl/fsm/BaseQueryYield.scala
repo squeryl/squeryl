@@ -54,6 +54,8 @@ class BaseQueryYield[G]
 
   protected var _havingClause: Option[()=>LogicalBoolean] = None
 
+  def unevaluatedHavingClause = _havingClause
+
   //TODO: an array is probably more efficient, even if less 'lazy' :
   protected var _orderByExpressions: () => List[()=>ExpressionNode] = null
 
@@ -163,6 +165,7 @@ class MeasuresQueryYield[M](
 class GroupWithMeasuresQueryYield[K,M] (
   _qe: QueryElements[_],
   _groupByClauseClosure: ()=>List[TypedExpressionNode[_]],
+  _having: Option[()=>LogicalBoolean],
   _computeClauseClosure: ()=>List[TypedExpressionNode[_]]
 )
 extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
@@ -178,6 +181,12 @@ extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
 
     override def measures = _sTuple1ToValue(m)
   }
+
+  override def havingClause =
+    if(_having != None)
+      _having.map(c=>c())
+    else
+      super.havingClause
 
    override def queryElements =
     (whereClause, havingClause, _groupByClauseClosure().map(e => e), orderByClause)

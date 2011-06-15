@@ -49,7 +49,7 @@ class MusicDbObject extends KeyedEntity[Int] {
 }
 
 class Person(var firstName:String, var lastName: String, val age: Option[Int]) extends MusicDbObject{
-  def this() = this("", "", Some(0))
+  def this() = this("", "", None)
 }
 
 class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject {
@@ -574,6 +574,15 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     new Timestamp(cal.getTimeInMillis)
   }
 
+  test("TestTimestampImplicit"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val t: Option[Timestamp] =
+      from(artists)(a=>
+        compute(min(a.timeOfLastUpdate))
+      )
+  }
+
   ignore("TimestampPartialUpdate"){
     val testInstance = sharedTestInstance; import testInstance._
 
@@ -620,7 +629,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       artists.update(mongo)
       val shouldBeSome = artists.where(a => a.firstName === mongoSantaMaria.firstName and a.timeOfLastUpdate === tX2).headOption
 
-      if(shouldBeSome == None) error('testTimestampDownToMillis + " failed.")
+      if(shouldBeSome == None) org.squeryl.internals.Utils.throwError('testTimestampDownToMillis + " failed.")
 
       mongo = shouldBeSome.get
 

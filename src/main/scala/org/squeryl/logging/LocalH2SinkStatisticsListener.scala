@@ -61,7 +61,7 @@ class LocalH2SinkStatisticsListener(val h2Session: Session) extends StatisticsLi
       _queue.put(op _)
     }
     else
-      error('LocalH2SinkStatisticsListener + " has been shutdown.")
+      org.squeryl.internals.Utils.throwError('LocalH2SinkStatisticsListener + " has been shutdown.")
 
   def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = _pushOp {
     BarChartRenderer.generateStatSummary(staticHtmlFile, n)

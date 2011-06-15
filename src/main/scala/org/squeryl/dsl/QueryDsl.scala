@@ -133,58 +133,6 @@ trait QueryDsl
   def &[A](i: =>TypedExpressionNode[A]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
 
-  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
-  def leftOuterJoin[A](a: A, matchClause: =>ExpressionNode): Option[A] = {
-    val im = FieldReferenceLinker.isYieldInspectionMode
-
-    if(im) {
-      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
-      val oje = new OuterJoinExpression(joinedTableOrSubquery,"left", matchClause)
-      joinedTableOrSubquery.outerJoinExpression = Some(oje)
-      Some(a)
-    }
-    else if(a.isInstanceOf[net.sf.cglib.proxy.Factory])
-      None
-    else
-      Some(a)  
-  }
-
-  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
-  def rightOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],B) = {
-    val im = FieldReferenceLinker.isYieldInspectionMode
-
-    if(im) {
-      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
-      val oje = new OuterJoinExpression(joinedTableOrSubquery,"right", matchClause)
-      joinedTableOrSubquery.outerJoinExpression = Some(oje)
-      (Some(a), b)
-    }
-    else {
-      val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
-      (rA,b)
-    }
-  }
-
-  @deprecated("use the new 'join' keyword instead http://squeryl.org/joins.html")
-  def fullOuterJoin[A,B](a: A, b: B, matchClause: =>ExpressionNode): (Option[A],Option[B]) = {
-    val im = FieldReferenceLinker.isYieldInspectionMode
-
-    if(im) {
-      val joinedTableOrSubquery = FieldReferenceLinker.findOwnerOfSample(a).get
-      val oje = new OuterJoinExpression(joinedTableOrSubquery,"full", matchClause)
-      joinedTableOrSubquery.outerJoinExpression = Some(oje)
-      val parentQuery = FieldReferenceLinker.inspectedQueryExpressionNode
-      parentQuery.tableExpressions.head.isRightJoined = true
-      (Some(a), Some(b))
-    }
-    else {
-      val rA = if(a.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(a)
-      val rB = if(b.isInstanceOf[net.sf.cglib.proxy.Factory]) None else Some(b)
-      (rA,rB)
-    }
-  }
-
-
   implicit def singleColumnQuery2RightHandSideOfIn[A](q: Query[A]) =
     new RightHandSideOfIn[A](q.copy(false).ast)
 
@@ -227,7 +175,7 @@ trait QueryDsl
 
     def statement: String = _inner.statement
 
-    // Paginating a Count query makes no sense perhaps an error() would be more appropriate here:
+    // Paginating a Count query makes no sense perhaps an org.squeryl.internals.Utils.throwError() would be more appropriate here:
     def page(offset:Int, length:Int) = this      
 
     def distinct = this
@@ -263,7 +211,7 @@ trait QueryDsl
     
     def dumpAst = q.dumpAst
 
-    // TODO: think about this : Paginating a Count query makes no sense perhaps an error() would be more appropriate here.
+    // TODO: think about this : Paginating a Count query makes no sense perhaps an org.squeryl.internals.Utils.throwError() would be more appropriate here.
     def page(offset:Int, length:Int) = this
     
     def statement: String = q.statement
@@ -281,39 +229,27 @@ trait QueryDsl
       q.invokeYield(rsm, rs).measures
   }
 
-  @deprecated("please use aBooleanField === true")
-  implicit def boolean2booleanFieldEqualsTrue(b: BooleanType): LogicalBoolean =
-    new BinaryOperatorNodeLogicalBoolean(
-      createLeafNodeOfScalarBooleanType(b),
-      new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(true)),
-      "=")
-
-  @deprecated("please use aBooleanField === true")
-  implicit def optionBoolean2booleanFieldEqualsTrue(b: Option[BooleanType]): LogicalBoolean =
-    new BinaryOperatorNodeLogicalBoolean(
-      createLeafNodeOfScalarBooleanOptionType(b),
-      new ConstantExpressionNode[Option[BooleanType]](Some(mapBoolean2BooleanType(true))),
-      "=")
-
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 
   implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
 
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
-  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r)
+  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r,None)
 
-  class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R]) {
+  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R], nameOfMiddleTable: String) = new ManyToManyRelationBuilder(l,r,Some(nameOfMiddleTable))
+
+  class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R], nameOverride: Option[String]) {
 
     def via[A <: KeyedEntity[_]](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]],f,schema)
+      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride)
       schema._addTable(m2m)
       m2m
     }
   }
 
-  class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema)
-    extends Table[A](schema.tableNameFromClass(aClass), aClass, schema, None) with ManyToManyRelation[L,R,A] {
+  class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema, nameOverride: Option[String])
+    extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
 
     def thisTable = thisTableOfA

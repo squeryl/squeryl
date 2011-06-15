@@ -66,7 +66,7 @@ trait QueryTester { self : ShouldMatchers =>
 //        "query : " + name + " failed,\n" +
 //        "expected " + expected + " got " + r + " \n query " + name +
 //        " was : \n" + q
-//      error(msg)
+//      org.squeryl.internals.Utils.org.squeryl.internals.Utils.throwError(msg)
 //    }
 
     if(validateFirstAndExit >= 0)
@@ -75,3 +75,7 @@ trait QueryTester { self : ShouldMatchers =>
 
   def passed(s: Symbol) = {} //println(s )
 }
+
+
+
+object SingleTestRun extends org.scalatest.Tag("SingleTestRun")

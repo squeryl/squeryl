@@ -40,10 +40,12 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
     </licenses>
 	
   /**
-   * CGLIB is Squeryl's only dependency
+   * The following jars are the only runtime dependencies of Squeryl
    */
   
   val cglib = "cglib" % "cglib-nodep" % "2.2"
+
+  val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString 
 
   /**
    * The following jars are for running the automated tests
@@ -64,7 +66,9 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   val junit = "junit" % "junit" % "4.8.2" % "provided"
   
   val scalatest = 
-    if(!crossScalaVersionString.startsWith("2.8")) 
+    if(crossScalaVersionString.startsWith("2.9.0-1")) 
+      "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"  
+    else if(!crossScalaVersionString.startsWith("2.8")) 
       "org.scalatest" %% "scalatest" % "1.4.1" % "provided"
     else
       "org.scalatest" % "scalatest_2.8.0" % "1.3.1.RC2" % "provided"

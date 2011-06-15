@@ -101,16 +101,6 @@ class OracleAdapter extends DatabaseAdapter {
   override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
 
-  override def writeOuterJoinDEPRECATED(oje: OuterJoinExpression, sw: StatementWriter) = {
-    sw.write(oje.leftRightOrFull)
-    sw.write(" outer join ")
-    oje.queryableExpressionNode.write(sw)
-    sw.write(" ")
-    sw.write(oje.queryableExpressionNode.alias)
-    sw.write(" on ")
-    oje.matchExpression.write(sw)
-  }
-
   override def writeJoin(queryableExpressionNode: QueryableExpressionNode, sw: StatementWriter) = {
     sw.write(queryableExpressionNode.joinKind.get._1)
     sw.write(" ")
@@ -166,7 +156,7 @@ class OracleAdapter extends DatabaseAdapter {
 
   def paddingPossibilities(start: String, padLength: Int): Iterable[String] =
     if(padLength < 0)
-      error("padLength must be positive, was given : " + padLength)
+      org.squeryl.internals.Utils.throwError("padLength must be positive, was given : " + padLength)
     else if(padLength == 0)
       Seq(start)
     else if(padLength == 1)
@@ -201,7 +191,7 @@ class OracleAdapter extends DatabaseAdapter {
     }
     catch {
       case e:CouldNotShrinkIdentifierException =>
-        error("could not make a unique identifier with '" + s + "'")
+        org.squeryl.internals.Utils.throwError("could not make a unique identifier with '" + s + "'")
     }
 
   def shrinkTo30AndPreserveUniquenessInScope(identifier: String, scope: HashSet[String]) =

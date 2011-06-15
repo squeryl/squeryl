@@ -121,7 +121,7 @@ trait SelectElement extends ExpressionNode {
       fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
     }
 
-    def sample = error("!")
+    def sample = org.squeryl.internals.Utils.throwError("!")
   }
 
   /**
@@ -134,7 +134,7 @@ trait SelectElement extends ExpressionNode {
       Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
     }
 
-    def sample = error("!")
+    def sample = org.squeryl.internals.Utils.throwError("!")
   }
 }
 
@@ -142,7 +142,7 @@ class TupleSelectElement
  (val origin: QueryExpressionNode[_], val expression: ExpressionNode, indexInTuple: Int, isGroupTuple: Boolean)
     extends SelectElement {
 
-  def resultSetMapper: ResultSetMapper = error("refactor me")
+  def resultSetMapper: ResultSetMapper = org.squeryl.internals.Utils.throwError("refactor me")
 
   //TODO: normalize ?
   def alias =
@@ -262,7 +262,7 @@ class SelectElementReference[A]
         return e.asInstanceOf[QueryExpressionNode[_]]
     } while (e != None)
 
-    error("could not determine use site of "+ this)
+    org.squeryl.internals.Utils.throwError("could not determine use site of "+ this)
   }
 
   lazy val delegateAtUseSite =
@@ -347,7 +347,7 @@ class ExportedSelectElement
    *   exportSelectElement.target.target.,...,.target == exportSelectElement.actualSelectElement
    */
   lazy val target: SelectElement = innerTarget.getOrElse(
-    outerTarget.getOrElse(error("could not find the target of : " + selectElement))
+    outerTarget.getOrElse(org.squeryl.internals.Utils.throwError("could not find the target of : " + selectElement))
   )
 
   def needsOuterScope:Boolean = innerTarget.isEmpty && outerTarget.isEmpty && ! isDirectOuterReference
@@ -365,19 +365,22 @@ class ExportedSelectElement
     q.headOption
   }
 
-  private def innerTarget: Option[SelectElement] = {
-    val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
-
-    if(selectElement.origin.parent.get == parentOfThis) {
-      Some(selectElement)
-    }
+  private def innerTarget: Option[SelectElement] =
+    if(parent == None)
+      return None
     else {
-      val q =
-        for(q <- parentOfThis.subQueries;
-            se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
-        yield se
+      val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
 
-      q.headOption
+      if(selectElement.origin.parent.get == parentOfThis) {
+        Some(selectElement)
+      }
+      else {
+        val q =
+          for(q <- parentOfThis.subQueries;
+              se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
+          yield se
+
+        q.headOption
+      }
     }
-  }
 }
