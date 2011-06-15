@@ -365,19 +365,22 @@ class ExportedSelectElement
     q.headOption
   }
 
-  private def innerTarget: Option[SelectElement] = {
-    val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
-
-    if(selectElement.origin.parent.get == parentOfThis) {
-      Some(selectElement)
-    }
+  private def innerTarget: Option[SelectElement] =
+    if(parent == None)
+      return None
     else {
-      val q =
-        for(q <- parentOfThis.subQueries;
-            se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
-        yield se
+      val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
 
-      q.headOption
+      if(selectElement.origin.parent.get == parentOfThis) {
+        Some(selectElement)
+      }
+      else {
+        val q =
+          for(q <- parentOfThis.subQueries;
+              se <- q.asInstanceOf[QueryExpressionElements].selectList if se == selectElement || se.actualSelectElement == selectElement)
+          yield se
+
+        q.headOption
+      }
     }
-  }
 }
