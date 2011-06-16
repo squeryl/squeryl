@@ -42,11 +42,5 @@ class Derby_KickTheTires extends demo.KickTheTires with Derby_Connection
 class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection
 class Derby_LeftJoinTest extends LeftJoinTest with Derby_Connection
 
-// TODO: Does this test makes sense?
-//class Derby_ConnectionClosing extends ConnectionClosingTest with Derby_Connection {
-//  def dbSpecificSelectNow = "values CURRENT_TIMESTAMP"
-//}
-
-
 
 
