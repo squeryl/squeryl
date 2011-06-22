@@ -2,6 +2,7 @@ package org.squeryl.h2
 
 import org.squeryl.test._
 
+import customtypes.DeepNestWithCustomTypes
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.H2Adapter
 
@@ -39,3 +40,5 @@ class H2_LeftJoinTest extends LeftJoinTest with H2_Connection
 class H2_ConnectionClosing extends ConnectionClosingTest with H2_Connection {
   def dbSpecificSelectNow: String = "select now()"
 }
+
+class H2_DeepNestWithCustomTypes extends DeepNestWithCustomTypes with H2_Connection

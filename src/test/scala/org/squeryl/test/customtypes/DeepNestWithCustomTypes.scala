@@ -17,17 +17,19 @@
 package org.squeryl.test.customtypes
 
 import org.squeryl._
+import customtypes._
 import org.squeryl.KeyedEntity
-import org.squeryl.dsl.CompositeKey2
+import org.squeryl.dsl._
 import org.squeryl.framework.{RunTestsInsideTransaction, QueryTester, SchemaTester}
 import org.squeryl.customtypes.CustomTypesMode._
+import org.squeryl.annotations._
 import reflect.BeanProperty
 
 
 abstract class DeepNestWithCustomTypes extends SchemaTester with QueryTester with RunTestsInsideTransaction {
 
   def q1(tp: TipoProducto) =
-   from(SisTallerDB.condiciones_ValoresDeCaracteristicas)(
+   from(DeepNestWithCustomTypesSchema.condiciones_ValoresDeCaracteristicas)(
      cv => where(cv.idCondicion === condicion.id and
        cv.idFamiliaProductos === tp.idFamiliaProductos and
        notExists(q2(tp, cv)))
@@ -35,7 +37,7 @@ abstract class DeepNestWithCustomTypes extends SchemaTester with QueryTester wit
    )
 
   def q2(tp: TipoProducto, cv: Condiciones_ValoresDeCaracteristicas) =
-   from(SisTallerDB.tiposProducto_valoresDeCaracteristicas)(
+   from(DeepNestWithCustomTypesSchema.tiposProducto_valoresDeCaracteristicas)(
      tpv => where(tpv.idTipoProducto === tp.id and
        tpv.caracteristica === cv.caracteristica and
        (tpv.valor notIn(q3(tpv, cv))))
@@ -44,7 +46,7 @@ abstract class DeepNestWithCustomTypes extends SchemaTester with QueryTester wit
 
   def q3(tpv: TiposProducto_ValoresDeCaracteristicas, cv:
   Condiciones_ValoresDeCaracteristicas) =
-   from(SisTallerDB.condiciones_ValoresDeCaracteristicas)(
+   from(DeepNestWithCustomTypesSchema.condiciones_ValoresDeCaracteristicas)(
      cv2 => where(cv2.idCondicion === condicion.id and
        cv2.caracteristica === tpv.caracteristica and
        cv2.idFamiliaProductos === cv.idFamiliaProductos)
@@ -72,16 +74,16 @@ class TiposProducto_ValoresDeCaracteristicas(var idTipoProducto: IntField, var c
 
 class TipoProducto(@Column("idTipoProducto") var id: IntField,
                   var idFamiliaProductos: IntField,
-                  @BeanProperty var nombre: Nombre,
-                  @BeanProperty var descripcion: Descripcion,
-                  @BeanProperty var codigo: Abreviatura,
-                  var familiaProductos: FamiliaProductos,
+                  @BeanProperty var nombre: IntField,
+                  @BeanProperty var descripcion: StringField,
+                  @BeanProperty var codigo: StringField,
+                  //var familiaProductos: FamiliaProductos,
                   @BeanProperty var composicion: StringField,
-                  @BeanProperty var valoresCaracteristicas: List[Caracteristica],
+                  //@BeanProperty var valoresCaracteristicas: List[Caracteristica],
                   @BeanProperty var activo: Boolean)
- extends ManagedKey[IntField] {
+ extends KeyedEntity[IntField] {
 
- def this() = this(-1, -1, Nombre.empty, Descripcion.empty, Abreviatura.empty, null, StringField("SIMPLE"), Nil, true)
+ def this() = this(-1, -1, Nombre.empty, Descripcion.empty, Abreviatura.empty, StringField("SIMPLE"), true)
 
  override def toString = nombre.toString
 
@@ -98,6 +100,15 @@ class TipoProducto(@Column("idTipoProducto") var id: IntField,
 // }
 }
 
+
+class Condiciones_ValoresDeCaracteristicas(var idCondicion: IntField, var idFamiliaProductos: IntField, var caracteristica: StringField, var valor: StringField)
+  extends KeyedEntity[CompositeKey4[IntField, IntField, StringField, StringField]] {
+
+ def id = compositeKey(idCondicion, idFamiliaProductos, caracteristica, valor)
+
+ def this() = this(-1, -1, "", "")
+
+}
 
 object DeepNestWithCustomTypesSchema extends Schema {
 
