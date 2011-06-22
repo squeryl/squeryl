@@ -21,6 +21,7 @@ import fsm.{QueryElements, StartState, WhereState, Conditioned, Unconditioned}
 import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
+import collection.mutable.ArrayBuffer
 
 trait QueryDsl
   extends DslFactory
@@ -600,4 +601,66 @@ trait QueryDsl
   implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8)) = new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
 
   implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9)) = new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
+
+  // Case statements :
+
+  class CaseOnChoiceOfNumericalValues[A](e: NumericalExpression[A]) {
+    def when[B,C](expr: NumericalExpression[B], r: TypedExpressionNode[C]) = {}
+  }
+
+  class CaseOnChoiceOfNonNumericalValues[A](e: NonNumericalExpression[A]) {
+    def when[B,C](expr: NonNumericalExpression[B], r: TypedExpressionNode[C]) = {}
+  }
+
+  class CaseOnConditionChainStart {
+    def when[A](condition: LogicalBoolean, r: NumericalExpression[A]) = new CaseOnConditionChainNumerical[A](condition, r, None)
+    def when[A](condition: LogicalBoolean, r: NonNumericalExpression[A]) = new CaseOnConditionChainNonNumerical[A](condition, r, None)
+  }
+
+  class CaseOnConditionChainNumericalTermination[A](val mapper: OutMapper[A] ,val otherwise : NumericalExpression[_], prev: CaseOnConditionChainNumerical[_]) extends ExpressionNode with NumericalExpression[A] {
+
+    def doWrite(sw: StatementWriter) = {
+
+      val conds = new ArrayBuffer[LogicalBoolean]
+      val exprs = new ArrayBuffer[TypedExpressionNode[_]]
+
+      var p: Option[CaseOnConditionChainNumerical[_]] = Some(prev)
+
+      while(p != None) {
+        exprs.prepend(p.get.e)
+        conds.prepend(p.get.cond)
+        p = p.get.previous
+      }
+
+      assert(conds.size == exprs.size)
+
+      val cases = conds.zip(exprs)
+
+      sw.databaseAdapter.writeCaseStatement(None, cases, otherwise, sw)
+    }
+  }
+
+  class CaseOnConditionChainNumerical[A](val cond: LogicalBoolean, val e: NumericalExpression[_], val previous: Option[CaseOnConditionChainNumerical[_]]) {
+
+    def when[B,C](condition: LogicalBoolean, r: NumericalExpression[B])(implicit ev: BinaryAMSOp[A,B] => NumericalExpression[C]) =
+      new CaseOnConditionChainNumerical[C](condition, r, Some(this))
+
+    def otherwise[B,C](r: NumericalExpression[B])(implicit ev: BinaryAMSOp[A,B] => NumericalExpression[C]) = {
+
+      val bo = new BinaryAMSOp[A,B](e.asInstanceOf[NumericalExpression[A]], r,"!CaseOnConditionChainNumerical!") : NumericalExpression[C]
+      new CaseOnConditionChainNumericalTermination(bo.mapper, r, this)
+    }
+
+  }
+
+  class CaseOnConditionChainNonNumerical[A](val cond: LogicalBoolean, val e: NonNumericalExpression[A], previous: Option[CaseOnConditionChainNonNumerical[_]]) {
+    def when(expr: LogicalBoolean, r: NonNumericalExpression[A]) = {}
+  }
+
+  def caseOf[A](expr: NumericalExpression[A]) = new CaseOnChoiceOfNumericalValues(expr)
+
+  def caseOf[A](expr: NonNumericalExpression[A]) = new CaseOnChoiceOfNonNumericalValues(expr)
+
+  def caseOf = new CaseOnConditionChainStart
+
 }

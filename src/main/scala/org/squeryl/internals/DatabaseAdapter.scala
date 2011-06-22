@@ -168,7 +168,7 @@ trait DatabaseAdapter {
   }
 
   def intTypeDeclaration = "int"
-  def stringTypeDeclaration = "varchar(255)"  
+  def stringTypeDeclaration = "varchar"
   def stringTypeDeclaration(length:Int) = "varchar("+length+")"
   def booleanTypeDeclaration = "boolean"
   def doubleTypeDeclaration = "double"
@@ -185,13 +185,23 @@ trait DatabaseAdapter {
 
     def handleIntType = intTypeDeclaration
     def handleStringType  = stringTypeDeclaration
-    def handleStringType(fmd: Option[FieldMetaData]) = stringTypeDeclaration(fmd.get.length)
+    def handleStringType(fmd: Option[FieldMetaData]) =
+      fmd match {
+        case Some(x) => stringTypeDeclaration(x.length)
+        case None => stringTypeDeclaration
+      }
+
     def handleBooleanType = booleanTypeDeclaration
     def handleDoubleType = doubleTypeDeclaration
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
-    def handleBigDecimalType(fmd: Option[FieldMetaData]) = bigDecimalTypeDeclaration(fmd.get.length, fmd.get.scale)
+    def handleBigDecimalType(fmd: Option[FieldMetaData]) =
+      fmd match {
+        case Some(x) => bigDecimalTypeDeclaration(x.length, x.scale)
+        case None => bigDecimalTypeDeclaration
+      }
+
     def handleTimestampType = timestampTypeDeclaration
     def handleBinaryType = binaryTypeDeclaration
     def handleUuidType = uuidTypeDeclaration
@@ -744,4 +754,39 @@ trait DatabaseAdapter {
     sw.write(quoteName(a))
   }
 
+  def databaseTypeFor(c: Class[_]) =
+    _declarationHandler.handleType(c, None)
+
+  def writeCastInvocation(e: TypedExpressionNode[_], sw: StatementWriter) = {
+    sw.write("cast(")
+    e.write(sw)
+
+    val dbSpecificType = databaseTypeFor(e.mapper.jdbcClass)
+
+    sw.write(" as ")
+    sw.write(dbSpecificType)
+    sw.write(")")
+  }
+
+  def writeCaseStatement(toMatch: Option[ExpressionNode], cases: Iterable[(ExpressionNode, TypedExpressionNode[_])], otherwise: TypedExpressionNode[_], sw: StatementWriter) = {
+
+    sw.write("(case")
+    toMatch.foreach(_.write(sw))
+    sw.indent
+    sw.nextLine
+
+    for(c <- cases) {
+      sw.write("when ")
+      c._1.write(sw)
+      sw.write(" then ")
+      writeCastInvocation(c._2, sw)
+      sw.nextLine
+    }
+
+    sw.write("else ")
+    writeCastInvocation(otherwise,sw)
+    sw.nextLine
+    sw.unindent
+    sw.write("end)")
+  }
 }

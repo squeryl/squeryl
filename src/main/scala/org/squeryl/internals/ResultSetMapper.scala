@@ -52,13 +52,19 @@ trait OutMapper[T] extends ResultSetUtils {
 
   override def toString =
     "$OM(" + index + "," +
-    sample.asInstanceOf[AnyRef].getClass.getSimpleName + ")" +
+    jdbcClass.getSimpleName + ")" +
     (if(isActive) "*" else "")
 
   var index: Int = -1
 
   var isActive = false
-  
+
+  def jdbcClass =
+    sample match {
+      case Some(x:AnyRef) => x.getClass
+      case x:AnyRef  => x.getClass
+    }
+
   def map(rs: ResultSet): T =
     if(isActive)
       try {

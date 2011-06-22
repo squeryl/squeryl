@@ -24,7 +24,7 @@ import org.squeryl.{Session, Table}
 class PostgreSqlAdapter extends DatabaseAdapter {
 
   override def intTypeDeclaration = "integer"
-  override def stringTypeDeclaration = "varchar(255)"
+  override def stringTypeDeclaration = "varchar"
   override def stringTypeDeclaration(length:Int) = "varchar("+length+")"
   override def booleanTypeDeclaration = "boolean"
   override def doubleTypeDeclaration = "double precision"

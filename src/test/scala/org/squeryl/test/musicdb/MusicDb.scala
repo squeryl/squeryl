@@ -937,8 +937,161 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         select(a)
       )
 
+  test("testSQLCaseNumerical1") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+
+    val ps =
+      Session.currentSession.connection.prepareStatement(
+        "Select " +
+        "  (case" +
+        "    when (a.streetname = ?) then cast(? as int)" +
+        "    when (a.streetname = ?) then cast(? as int)" +
+        "    else cast(? as int)" +
+        "    end) as v3 " +
+        "From" +
+        "  address a")
+
+    ps.setString(1,"z")
+    ps.setInt(2,1)
+    ps.setString(3,"q")
+    ps.setInt(4,2)
+    ps.setInt(5,3)
+
+    ps.execute()
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", herbyHancock.id)
+             when(a.firstName === "Poncho", ponchoSanchez.id)
+             when(a.firstName === "Mongo", mongoSantaMaria.id)
+             otherwise(-12345L))
+          ))
+      )
+
+    q : Query[(String,Int,Long)]
+
+    val list = q.toList
+
+    val (trio, other) = list.partition(_._3 != -12345)
+
+    assert(other.size == 2)
+
+    assert(other.map(_._3).toSet == Set(-12345L))
+    assert(trio.size == 3)
+
+    val f = trio.filter(x => x._2 != x._3)
+
+    assert(f == Nil)
+  }
+
+  test("testSQLCaseNumerical2") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", herbyHancock.id)
+             when(a.firstName === "Poncho", BigDecimal(ponchoSanchez.id))
+             when(a.firstName === "Mongo", mongoSantaMaria.id)
+             otherwise(-12345L))
+          ))
+      )
+
+    q : Query[(String,Int,BigDecimal)]
+
+    val list = q.toList
+
+    val (trio, other) = list.partition(_._3 != -12345)
+
+    assert(other.size == 2)
+
+    assert(other.map(_._3).toSet == Set(-12345L))
+    assert(trio.size == 3)
+
+    val f = trio.filter(x => x._2 != x._3)
+
+    assert(f == Nil)
+  }
+
+  test("testSQLCaseNumerical3") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    //val noDouble = Option[Double] = None
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", herbyHancock.id : Double)
+             when(a.firstName === "Poncho", None : Option[Float])
+             when(a.firstName === "Mongo", mongoSantaMaria.id)
+             otherwise(-12345L))
+          ))
+      )
+
+    q : Query[(String,Int,Option[Double])]
+
+    val list = q.toList
+
+    val (trio, other) = list.partition(_._3 != Some(-12345))
+
+    assert(other.size == 2)
+
+    assert(other.map(_._3).toSet == Set(Some(-12345D)))
+    assert(trio.size == 3)
+
+    assert(trio.find(_._3 == None).get._1 == "Poncho")
+
+    assert(trio.map(_._1).toSet == Set("Herby", "Poncho", "Mongo"))
+  }
+
+//  test("testSQLCaseString1") {
+//
+//    val testInstance = sharedTestInstance; import testInstance._
+//
+//    val q =
+//      from(artists)(a =>
+//        select((
+//          &(a.firstName),
+//          &(caseOf
+//             when(a.firstName === "Herby", "!Herby!")
+//             when(a.firstName === "Poncho", "!Poncho!")
+//             when(a.firstName === "Mongo", "!Mongo!")
+//             otherwise("!Z!"))
+//          ))
+//      )
+//
+//    q : Query[(String,String)]
+//
+//    val list = q.toList
+//
+//    val (trio, other) = list.partition(_._3 != -12345)
+//
+//    assert(other.size == 2)
+//
+//    assert(other.map(_._3).toSet == Set(-12345L))
+//    assert(trio.size == 3)
+//
+//    val f = trio.filter(x => x._2 != x._3)
+//
+//    assert(f == Nil)
+//  }
+
   test("InTautology"){
-    
+
     val q = artists.where(_.firstName in Nil).toList
 
     assertEquals(Nil, q, 'testInTautology)
