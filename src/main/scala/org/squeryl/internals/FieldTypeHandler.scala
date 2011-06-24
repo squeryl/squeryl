@@ -72,7 +72,7 @@ trait FieldTypeHandler[T] {
   protected def handleBigDecimalType(fmd: Option[FieldMetaData]): T
   protected def handleTimestampType: T
   protected def handleBinaryType: T
-  protected def handleEnumerationValueType: T
+  protected def handleEnumerationValueType : T
   protected def handleUuidType: T
 
   protected def handleUnknownType(c: Class[_]) : T

@@ -52,9 +52,7 @@ class Person(var firstName:String, var lastName: String, val age: Option[Int]) e
   def this() = this("", "", None)
 }
 
-class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject {
-  def this() = this("", 0, 0, 0, Genre.Bluegrass, Some(Genre.Rock))
-}
+class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId: Int, var genre: Genre, var secondaryGenre: Option[Genre]) extends MusicDbObject
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
   override def toString = id+ ":" + title

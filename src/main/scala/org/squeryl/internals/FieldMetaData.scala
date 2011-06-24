@@ -15,6 +15,7 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
+import java.lang.reflect.Modifier
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Method, Constructor, InvocationTargetException, Type, ParameterizedType}
 import java.sql.ResultSet
@@ -419,8 +420,6 @@ object FieldMetaData {
       if(v != null && v == None) // can't deduce the type from None keep trying
         v = null
 
-      val constructorSuppliedDefaultValue = v
-
       var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
       if(classOf[Product1[Any]].isAssignableFrom(clsOfField))
@@ -431,20 +430,19 @@ object FieldMetaData {
         v = f(null) // this creates a dummy (sample) field
       }
 
-      if(v == null)
+      if(v == null){
         /*
          * If we have not yet been able to deduce the value of the field, delegate to createDefaultValue
          * in order to do so.
          */
-        v = try {
-          createDefaultValue(member, clsOfField, Some(typeOfField), colAnnotation)
-        }
-        catch {
-          case e:Exception => null
-        }
+         v = createDefaultValue(member, clsOfField, Some(typeOfField), colAnnotation)
+      }
 
+      /*
+       * If we still haven't been able to deduce it, it's time to give up
+       */
       if(v == null)
-        org.squeryl.internals.Utils.throwError("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
+        org.squeryl.internals.Utils.throwError("Could not deduce type of field '" + name + "' of class " + parentMetaData.clasz.getName)
      
       val isOption = v.isInstanceOf[Some[_]]
 
@@ -477,7 +475,7 @@ object FieldMetaData {
         field,
         colAnnotation,
         isOptimisticCounter,
-        constructorSuppliedDefaultValue)
+        v)
     }
   }
 
@@ -560,7 +558,7 @@ object FieldMetaData {
     def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleTimestampType = new java.sql.Timestamp(0)
     def handleBinaryType = new Array[Byte](0)
-    def handleEnumerationValueType = DummyE.Z
+    def handleEnumerationValueType = DummyE.Z 
     def handleUuidType = java.util.UUID.fromString("00000000-0000-0000-0000-000000000000")
     def handleUnknownType(c: Class[_]) = null
   }
@@ -616,96 +614,135 @@ object FieldMetaData {
 
   def resultSetHandlerFor(c: Class[_]) =
     _mapper.handleType(c, None)
-
-
-  def optionTypeFromScalaSig(member: Member): Class[_] = {
-    val scalaSigAnnotation = member.getDeclaringClass().getAnnotation(classOf[scala.reflect.ScalaSignature])
-    if (scalaSigAnnotation != null) {
-      val pickled = scalaSigAnnotation.bytes
-      val bytes = pickled.getBytes
-      var used = ByteCodecs.decode(bytes)
-      val scalaSig = ScalaSigAttributeParsers.parse(ByteCode(bytes.take(used)))
-      val baos = new ByteArrayOutputStream
-      val stream = new PrintStream(baos)
-      val syms = scalaSig.topLevelClasses ::: scalaSig.topLevelObjects
-      syms.head.parent match {
-        case Some(p) if (p.name != "<empty>") => {
-          val path = p.path
-          stream.print("package ");
-          stream.print(path);
-          stream.print("\n")
-        }
-        case _ =>
-      }
-      // Print classes
-      val printer = new ScalaSigPrinter(stream, true)
-      for (c <- syms) {
-        printer.printSymbol(c)
-      }
-      val fullSig = baos.toString
-      val matcher = """(val|var) %s : scala.Option\[scala\.(\w+)\]?""".format(member.getName).r.pattern.matcher(fullSig)
-      if (matcher.find) {
-        matcher.group(2) match {
-          case "Int" => classOf[scala.Int]
-          case "Short" => classOf[scala.Short]
-          case "Long" => classOf[scala.Long]
-          case "Double" => classOf[scala.Double]
-          case "Float" => classOf[scala.Float]
-          case "Boolean" => classOf[scala.Boolean]
-          case "Byte" => classOf[scala.Byte]
-          case "Char" => classOf[scala.Char]
-          case _ => null //Unknown scala primitive type?
-        }
-      } else
-        null //Pattern was not found anywhere in the signature
-    } else {
-      null //No ScalaSignature annotation available
+    
+  private def extractScalaDefinition(member: Member): Option[String] = {
+    if(classOf[Constructor[_]].isInstance(member)){
+      None //Can't get information from the constructor because we can't get the parameter name from the member
+    } else{
+	    val scalaSigAnnotation = member.getDeclaringClass().getAnnotation(classOf[scala.reflect.ScalaSignature])
+	    if (scalaSigAnnotation != null) {
+	      val pickled = scalaSigAnnotation.bytes
+	      val bytes = pickled.getBytes
+	      var used = ByteCodecs.decode(bytes)
+	      val scalaSig = ScalaSigAttributeParsers.parse(ByteCode(bytes.take(used)))
+	      val baos = new ByteArrayOutputStream
+	      val stream = new PrintStream(baos)
+	      val syms = scalaSig.topLevelClasses ::: scalaSig.topLevelObjects
+	      syms.head.parent match {
+	        case Some(p) if (p.name != "<empty>") => {
+	          val path = p.path
+	          stream.print("package ");
+	          stream.print(path);
+	          stream.print("\n")
+	        }
+	        case _ =>
+	      }
+	      // Print classes
+	      val printer = new ScalaSigPrinter(stream, true)
+	      for (c <- syms) {
+	        printer.printSymbol(c)
+	      }
+	      val fullSig = baos.toString
+	      //println(fullSig)
+	      val matcher = """(val|var) %s : (.+) =""".format(member.getName).r.pattern.matcher(fullSig)
+	      if (matcher.find) Some(matcher.group(2)) else None
+	    } else None //No @ScalaSignature annotation found
     }
   }
 
-  def createDefaultValue(member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
-    if (p.isAssignableFrom(classOf[Option[Any]])) {
+  private val OptionPattern = """scala\.Option\[(.+)\]""".r
+    
+  private def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
+  	extractScalaDefinition(member).flatMap(extracted => extracted match {
+      case OptionPattern("scala.Int") => Some(classOf[scala.Int])
+      case OptionPattern("scala.Short") => Some(classOf[scala.Short])
+      case OptionPattern("scala.Long") => Some(classOf[scala.Long])
+      case OptionPattern("scala.Double") => Some(classOf[scala.Double])
+      case OptionPattern("scala.Float") => Some(classOf[scala.Float])
+      case OptionPattern("scala.Boolean") => Some(classOf[scala.Boolean])
+      case OptionPattern("scala.Byte") => Some(classOf[scala.Byte])
+      case OptionPattern("scala.Char") => Some(classOf[scala.Char])
+      case OptionPattern(other) => try { Some(Class.forName(other)) } catch{ case e => None }
+      case other => error("Type does not appear to be an Option: " + other) 
+    })
+  }
+  
+  /**
+   * Uses the @ScalaSignature and reflection to deduce the class name of the Enumeration object, 
+   * retrieve it * and return the head of it's "values" Set
+   */
+  private def createDefaultEnumerationValue(member: Member): Enumeration#Value = {
+    extractScalaDefinition(member).map(enumValueString => {
       /*
-       * First we'll look at the annotation if it exists as it's the lowest cost.
+       * If it's an option, use the inner definition
        */
-       optionFieldsInfo.flatMap(ann => 
-         if(ann.optionType != classOf[Object])
-           Some(createDefaultValue(member, ann.optionType, None, None))
-          else None).orElse{
+      val optionDefinitionRemoved = 
+        enumValueString match {
+          case OptionPattern(enumInside) => enumInside
+          case _ => enumValueString
+        }
+      val enumString = optionDefinitionRemoved.substring(0, optionDefinitionRemoved.lastIndexOf('.')) + "$"
+      val enumClass = Class.forName(enumString)
+      val enum = enumClass.getField("MODULE$").get(enumClass).asInstanceOf[Enumeration]
+      enum.values.head
+    }) getOrElse null
+  }
+  
+  private def createDefaultOptionValue(member: Member, generic: Option[Type], column: Option[Column]): Option[_] = {
+      /*
+	   * First we'll look at the annotation if it exists as it's the lowest cost.
+	   */
+	   column.flatMap(ann => 
+	     if(ann.optionType != classOf[Object])
+	       Some(createDefaultValue(member, ann.optionType, None, None))
+	      else None).orElse{
 	      /*
 	       * Next we'll try the Java generic type.  This will fail if the generic parameter is a primitive as
 	       * we'll see Object instead of scala.X
 	       */
-	      t match {
+	      generic match {
 	        case Some(pt: ParameterizedType) => {
 	          pt.getActualTypeArguments.toList match {
 	            case oType :: Nil => {
 	              if(classOf[Class[_]].isInstance(oType)) {
 	                /*
-	                 * Primitive types are seen by Java reflection as classOf[Object], 
-	                 * if that's what we find then we need to get the real value from @ScalaSignature
+	                 * Primitive types are seen by Java reflection as classOf[Object] and Enumerations show
+	                 * up as the base scala.Enumeration#Value type.
+	                 * Ff that's what we find then we need to get the real value from @ScalaSignature
 	                 */
-	                val trueType = if (classOf[Object] == oType) optionTypeFromScalaSig(member) else oType.asInstanceOf[Class[_]]
-	                if (trueType != null) {
-	                  val deduced = createDefaultValue(member, trueType, None, optionFieldsInfo)
+	                val trueType = 
+	                  if (classOf[Object] == oType){ 
+	                    optionTypeFromScalaSig(member)
+	                  } else {
+	                    Some(oType.asInstanceOf[Class[_]])
+	                  }
+	                if (trueType != None) {
+	                  val deduced = createDefaultValue(member, trueType.get, None, column)
 	                  if (deduced != null)
 	                    Some(deduced)
 	                  else
-	                    None //Couldn't create default for type param
+	                    null //Couldn't create default for type param
 	                } else{
-	                  None //Looks like a primitive, but we weren't able to determine which
+	                  null //Looks like a primitive, but we weren't able to determine which
 	                }
 	              } else{
-	            	  None //Type parameter is not a Class
+	            	  null //Type parameter is not a Class
 	              }
 	            }
-	            case _ => None //Not a single type parameter
+	            case _ => null //Not a single type parameter
 	          }
 	        }
-	        case _ => None //Not a parameterized type
+	        case _ => null //Not a parameterized type
 	      } 
-      }
-    } else
-      _defaultValueFactory.handleType(p, None)
+	  }
+  }
+
+  def createDefaultValue(member: Member, clazz: Class[_], generic: Option[Type], column: Option[Column]): Object = {
+    if (clazz.isAssignableFrom(classOf[Option[Any]])) {
+      createDefaultOptionValue(member, generic, column)
+    } else if(clazz eq classOf[Enumeration#Value]){
+      createDefaultEnumerationValue(member)
+    }else
+      _defaultValueFactory.handleType(clazz, None)
   }
 }
