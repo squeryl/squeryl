@@ -201,8 +201,17 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     //Enhancer.create(classOfT, new PosoPropertyAccessInterceptor(vxn)).asInstanceOf[T]
   //}
 
-  def createSample(cb: Callback) =
-    FieldReferenceLinker.executeAndRestoreLastAccessedFieldReference(_builder(cb))
+  def createSample(cb: Callback) = {
+    val s = FieldReferenceLinker.executeAndRestoreLastAccessedFieldReference(_builder(cb))
+
+    // initialize Enums with a sample value
+    val sRef = s.asInstanceOf[AnyRef]
+    for(fmd <- fieldsMetaData if fmd.isEnumeration && fmd.get(sRef) == null) {
+      fmd.set(sRef, fmd.sampleValue)
+    }
+
+    s
+  }
 
   private val _builder: (Callback) => T = {
 

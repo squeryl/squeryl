@@ -286,8 +286,14 @@ class FieldMetaData(
       val v0:AnyRef =
         if(v == null)
           null
-        else if(isEnumeration)
-          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
+        else if(isEnumeration) {
+          v match {
+            case i:java.lang.Integer => canonicalEnumerationValueFor(i.intValue)
+            case Some(i:java.lang.Integer) => canonicalEnumerationValueFor(i.intValue)
+            case e:Enumeration#Value => e
+            case Some(e:Enumeration#Value) => e
+          }
+        }
         else if(customTypeFactory == None)
           v
         else {
@@ -663,7 +669,7 @@ object FieldMetaData {
       case OptionPattern("scala.Byte") => Some(classOf[scala.Byte])
       case OptionPattern("scala.Char") => Some(classOf[scala.Char])
       case OptionPattern(other) => try { Some(Class.forName(other)) } catch{ case e => None }
-      case other => error("Type does not appear to be an Option: " + other) 
+      case other => Utils.throwError("Type does not appear to be an Option: " + other)
     })
   }
   

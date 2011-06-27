@@ -828,7 +828,13 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testAssemblaIssue9 =
       from(songs)(s =>
         where(s.genre in (
-           from(songs)(s2 => select(s2.genre))
+           from(songs)(s2 =>
+             select {
+               val g = s2.genre
+               assert(g != null)
+               g
+             }
+           )
         ))
         select(s.genre)
       )
