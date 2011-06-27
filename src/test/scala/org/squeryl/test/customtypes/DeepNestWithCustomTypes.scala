@@ -1,18 +1,18 @@
 /*******************************************************************************
- * Copyright 2010 Maxime Lévesque
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************** */
+* Copyright 2010 Maxime Lévesque
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+***************************************************************************** */
 
 package org.squeryl.test.customtypes
 
@@ -28,9 +28,11 @@ import reflect.BeanProperty
 
 abstract class DeepNestWithCustomTypes extends SchemaTester with QueryTester with RunTestsInsideTransaction {
 
+  def schema = DeepNestWithCustomTypesSchema
+
   def q1(tp: TipoProducto) =
    from(DeepNestWithCustomTypesSchema.condiciones_ValoresDeCaracteristicas)(
-     cv => where(cv.idCondicion === condicion.id and
+     cv => where(cv.idCondicion === 74 and
        cv.idFamiliaProductos === tp.idFamiliaProductos and
        notExists(q2(tp, cv)))
        select (cv)
@@ -47,14 +49,14 @@ abstract class DeepNestWithCustomTypes extends SchemaTester with QueryTester wit
   def q3(tpv: TiposProducto_ValoresDeCaracteristicas, cv:
   Condiciones_ValoresDeCaracteristicas) =
    from(DeepNestWithCustomTypesSchema.condiciones_ValoresDeCaracteristicas)(
-     cv2 => where(cv2.idCondicion === condicion.id and
+     cv2 => where(cv2.idCondicion === 74 and
        cv2.caracteristica === tpv.caracteristica and
        cv2.idFamiliaProductos === cv.idFamiliaProductos)
        select(cv2.valor))
 
   test("CrashTest") {
     val q0 =
-     from(table)(
+     from(DeepNestWithCustomTypesSchema.tiposProducto)(
        tp =>
          where(exists(q1(tp)))
            select(tp.id.value)
@@ -68,22 +70,20 @@ class TiposProducto_ValoresDeCaracteristicas(var idTipoProducto: IntField, var c
   extends KeyedEntity[CompositeKey2[IntField, StringField]] {
 
  def id = compositeKey(idTipoProducto, caracteristica)
- def this() = this(-1, "", "")
+ def this() = this(new IntField(-1), new StringField(""), new StringField(""))
 }
 
 
 class TipoProducto(@Column("idTipoProducto") var id: IntField,
                   var idFamiliaProductos: IntField,
-                  @BeanProperty var nombre: IntField,
+                  @BeanProperty var nombre: StringField,
                   @BeanProperty var descripcion: StringField,
                   @BeanProperty var codigo: StringField,
-                  //var familiaProductos: FamiliaProductos,
                   @BeanProperty var composicion: StringField,
-                  //@BeanProperty var valoresCaracteristicas: List[Caracteristica],
                   @BeanProperty var activo: Boolean)
  extends KeyedEntity[IntField] {
 
- def this() = this(-1, -1, Nombre.empty, Descripcion.empty, Abreviatura.empty, StringField("SIMPLE"), true)
+ def this() = this(new IntField(-1), new IntField(-1), new StringField(""), new StringField(""), new StringField(""), new StringField("SIMPLE"), true)
 
  override def toString = nombre.toString
 
@@ -91,13 +91,6 @@ class TipoProducto(@Column("idTipoProducto") var id: IntField,
    case t: TipoProducto => t.id == id
    case _ => false
  }
-
- def getFamiliaProductos = familiaProductos
-
-// def setFamiliaProductos(fp: FamiliaProductos) {
-//   idFamiliaProductos = Option(fp).map(_.id).orNull
-//   familiaProductos = fp
-// }
 }
 
 
@@ -106,7 +99,7 @@ class Condiciones_ValoresDeCaracteristicas(var idCondicion: IntField, var idFami
 
  def id = compositeKey(idCondicion, idFamiliaProductos, caracteristica, valor)
 
- def this() = this(-1, -1, "", "")
+ def this() = this(new IntField(-1), new IntField(-1), new StringField(""), new StringField(""))
 
 }
 
