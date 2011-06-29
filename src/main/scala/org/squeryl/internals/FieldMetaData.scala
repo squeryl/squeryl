@@ -260,7 +260,7 @@ class FieldMetaData(
           _getFromField(o)
 
       if(isOption) {
-        if(res == None)
+        if((res == None) || (res == null))
           null
         else
           res.asInstanceOf[Option[_]].get.asInstanceOf[AnyRef]

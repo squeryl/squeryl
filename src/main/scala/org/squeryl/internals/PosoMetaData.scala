@@ -24,6 +24,7 @@ import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
 import org.squeryl._
 import dsl.CompositeKey
+import scala.Array
 
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: View[T]) {
 
@@ -34,9 +35,9 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
      fieldsMetaData.find(fmd => fmd.nameOfProperty == name)
 
   val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
-  
-  val constructor =
-    _const.headOption.orElse(org.squeryl.internals.Utils.throwError(clasz.getName +
+
+  val constructor: (Constructor[_],Array[Object]) =
+    _listOfConstructorsSortedByArgCount.headOption.orElse(org.squeryl.internals.Utils.throwError(clasz.getName +
             " must have a 0 param constructor or a constructor with only primitive types")).get
 
   /**
@@ -155,25 +156,16 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
   if(isOptimistic)
     assert(optimisticCounter != None)
 
-  def _const = {
+  private def _listOfConstructorsSortedByArgCount = {
 
-    val r = new ArrayBuffer[(Constructor[_],Array[Object])]
+    val r =
+      for(ct <- clasz.getConstructors)
+        yield (ct, _tryToCreateParamArrayForConstructor(ct))
 
-//    for(ct <- clasz.getConstructors)
-//      println("CT: " + ct.getParameterTypes.map(c=>c.getName).mkString(","))
-    
-    for(ct <- clasz.getConstructors)
-      _tryToCreateParamArray(r, ct)
-
-    r.sortWith(
-      (a:(Constructor[_],Array[Object]),
-       b:(Constructor[_],Array[Object])) => a._2.length < b._2.length
-    )
+    r.sortBy(_._2.length)
   }
 
-  def _tryToCreateParamArray(
-    r: ArrayBuffer[(Constructor[_],Array[Object])],
-    c: Constructor[_]): Unit = {
+  private def _tryToCreateParamArrayForConstructor(c: Constructor[_]): Array[Object] = {
 
     val params: Array[Class[_]] = c.getParameterTypes
 
@@ -191,15 +183,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       res(i) = v
     }
 
-    r.append((c, res))
+    res
   }
-
-  private def _noOptionalColumnDeclared =
-    org.squeryl.internals.Utils.throwError("class " + clasz.getName + " has an Option[] member with no Column annotation with optionType declared.")
-
-  //def createSamplePoso[T](vxn: ViewExpressionNode[T], classOfT: Class[T]): T = {
-    //Enhancer.create(classOfT, new PosoPropertyAccessInterceptor(vxn)).asInstanceOf[T]
-  //}
 
   def createSample(cb: Callback) = {
     val s = FieldReferenceLinker.executeAndRestoreLastAccessedFieldReference(_builder(cb))
