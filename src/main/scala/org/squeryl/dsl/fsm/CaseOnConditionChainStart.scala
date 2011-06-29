@@ -19,14 +19,21 @@ package org.squeryl.dsl.fsm
 import org.squeryl.internals.{StatementWriter, OutMapper}
 import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.{TypedExpressionNode, ExpressionNode, LogicalBoolean}
-import org.squeryl.dsl.{BinaryAMSOp, NonNumericalExpression, NumericalExpression}
+import org.squeryl.dsl.{NonNumericalCoalesce, BinaryAMSOp, NonNumericalExpression, NumericalExpression}
 
 class CaseOnConditionChainStart {
 
-  def when[A](condition: LogicalBoolean, r: NumericalExpression[A]) = new CaseOnConditionChainNumerical[A](condition, r, None)
+  def when[A](condition: LogicalBoolean, r: NumericalExpression[A]) = new CaseOnConditionChainNumerical[A](condition, r, None, None)
 
-  def when[A](condition: LogicalBoolean, r: NonNumericalExpression[A]) = new CaseOnConditionChainNonNumerical[A](condition, r, None)
+  def when[A](condition: LogicalBoolean, r: NonNumericalExpression[A]) = new CaseOnConditionChainNonNumerical[A](condition, r, None, None)
 }
+
+//class CaseOnExpressionToMatchStart[A] {
+//
+//  def when[B](m: NumericalExpression[A], r: NumericalExpression[B]) = new CaseOnConditionChainNumerical[A](condition, r, None, None)
+//
+//  def when[B](m: NonNumericalExpression[A], r: NonNumericalExpression[B]) = new CaseOnConditionChainNonNumerical[A](condition, r, None, None)
+//}
 
 class CaseOnConditionChainTermination[A](val mapper: OutMapper[A], val otherwise : TypedExpressionNode[_], prev: CaseOnConditionChain) extends ExpressionNode {
 
@@ -54,6 +61,10 @@ class CaseOnConditionChainTermination[A](val mapper: OutMapper[A], val otherwise
 class CaseOnConditionChainNumericalTermination[A](m: OutMapper[A], o : TypedExpressionNode[_], p: CaseOnConditionChain)
   extends CaseOnConditionChainTermination[A](m, o, p) with NumericalExpression[A]
 
+class CaseOnConditionChainNonNumericalTermination[A](m: OutMapper[A], o : TypedExpressionNode[_], p: CaseOnConditionChain)
+  extends CaseOnConditionChainTermination[A](m, o, p) with NonNumericalExpression[A]
+
+
 trait CaseOnConditionChain {
 
   def whenArg: ExpressionNode
@@ -61,9 +72,11 @@ trait CaseOnConditionChain {
   def thenArg: TypedExpressionNode[_]
 
   def previous: Option[CaseOnConditionChain]
+
+  def expressionToMatch: Option[TypedExpressionNode[_]]
 }
 
-class CaseOnConditionChainNumerical[A](val whenArg: LogicalBoolean, val thenArg: NumericalExpression[_], val previous: Option[CaseOnConditionChainNumerical[_]])
+class CaseOnConditionChainNumerical[A](val whenArg: LogicalBoolean, val thenArg: NumericalExpression[_], val previous: Option[CaseOnConditionChainNumerical[_]], val expressionToMatch: Option[TypedExpressionNode[_]] = None)
   extends CaseOnConditionChain {
 
   def when[B,C](condition: LogicalBoolean, r: NumericalExpression[B])(implicit ev: BinaryAMSOp[A,B] => NumericalExpression[C]) =
@@ -77,6 +90,16 @@ class CaseOnConditionChainNumerical[A](val whenArg: LogicalBoolean, val thenArg:
 
 }
 
-class CaseOnConditionChainNonNumerical[A](val cond: LogicalBoolean, val e: NonNumericalExpression[A], previous: Option[CaseOnConditionChainNonNumerical[_]]) {
-  def when(expr: LogicalBoolean, r: NonNumericalExpression[A]) = {}
+class CaseOnConditionChainNonNumerical[A](val whenArg: LogicalBoolean, val thenArg: NonNumericalExpression[_], val previous: Option[CaseOnConditionChainNonNumerical[_]], val expressionToMatch: Option[TypedExpressionNode[_]] = None)
+  extends CaseOnConditionChain {
+
+  def when[B,C](expr: LogicalBoolean, r: NonNumericalExpression[B])(implicit ev: NonNumericalCoalesce[A,B] => NonNumericalExpression[C]) =
+    new CaseOnConditionChainNonNumerical[C](expr, r, Some(this))
+
+
+  def otherwise[B,C](r: NonNumericalExpression[B])(implicit ev: NonNumericalCoalesce[A,B] => NonNumericalExpression[C]) = {
+
+    val nnC = new NonNumericalCoalesce[A,B](thenArg.asInstanceOf[NonNumericalExpression[A]], r, "!CaseOnConditionChainNonNumerical") : NonNumericalExpression[C]
+    new CaseOnConditionChainNonNumericalTermination(nnC.mapper, r, this)
+  }
 }

@@ -436,9 +436,9 @@ trait TypeArithmetic extends FieldTypes {
 
   //Conversions for non numerical case statements and coalesce like functions :
   implicit def nnCoalesce1[A](e: NonNumericalCoalesce[A,A]) = new NonNumericalTypeConversion[A](e)(e.a1.mapper)
-  implicit def nnCoalesce2[A](e: NonNumericalCoalesce[A,Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
-  implicit def nnCoalesce3[A](e: NonNumericalCoalesce[Option[A],A]) = new NonNumericalTypeConversion[Option[A]](e)(e.a1.mapper)
-  implicit def nnCoalesce4[A](e: NonNumericalCoalesce[Option[A],Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(e.a2.mapper)
+  implicit def nnCoalesce2[A](e: NonNumericalCoalesce[A,Option[A]])(implicit f: OutMapper[Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(f)
+  implicit def nnCoalesce3[A](e: NonNumericalCoalesce[Option[A],A])(implicit f: OutMapper[Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(f)
+  implicit def nnCoalesce4[A](e: NonNumericalCoalesce[Option[A],Option[A]])(implicit f: OutMapper[Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(f)
 
   implicit def emulateSqlTyping1[A](e: NonNumericalExpression[Option[A]]): NonNumericalExpression[A] = new NonNumericalInputOnlyTypeConversion(e)
 

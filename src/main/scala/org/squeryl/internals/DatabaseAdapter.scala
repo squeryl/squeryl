@@ -770,7 +770,7 @@ trait DatabaseAdapter {
 
   def writeCaseStatement(toMatch: Option[ExpressionNode], cases: Iterable[(ExpressionNode, TypedExpressionNode[_])], otherwise: TypedExpressionNode[_], sw: StatementWriter) = {
 
-    sw.write("(case")
+    sw.write("(case ")
     toMatch.foreach(_.write(sw))
     sw.indent
     sw.nextLine
