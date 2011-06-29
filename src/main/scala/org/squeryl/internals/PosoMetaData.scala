@@ -36,7 +36,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
   val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
 
-  val constructor: (Constructor[_],Array[Object]) =
+  val (constructor, sampleConstructorArgArray): (Constructor[Any],Array[Object]) =
     _listOfConstructorsSortedByArgCount.headOption.orElse(org.squeryl.internals.Utils.throwError(clasz.getName +
             " must have a 0 param constructor or a constructor with only primitive types")).get
 
@@ -48,17 +48,15 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val isImplicitMode = _isImplicitMode
 
-    val setters = new ArrayBuffer[Method]
-
     val sampleInstance4OptionTypeDeduction =
       try {
-        constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];
+        constructor.newInstance(sampleConstructorArgArray :_*).asInstanceOf[AnyRef];
       }
       catch {
         case e:IllegalArgumentException =>
-          throw new RuntimeException("invalid constructor choice " + constructor._1, e)
+          throw new RuntimeException("invalid constructor choice " + constructor, e)
         case e:Exception =>
-          throw new RuntimeException("exception occurred while invoking constructor : " + constructor._1, e)
+          throw new RuntimeException("exception occurred while invoking constructor : " + constructor, e)
       }
     
     val members = new ArrayBuffer[(Member,HashSet[Annotation])]
@@ -203,8 +201,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val e = new Enhancer
     e.setSuperclass(clasz)
-    val pc: Array[Class[_]] = constructor._1.getParameterTypes
-    val args:Array[Object] = constructor._2
+    val pc: Array[Class[_]] = constructor.getParameterTypes
     e.setUseFactory(true)
 
     (callB:Callback) => {
@@ -213,9 +210,9 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       cb(0) = callB
       e.setCallback(callB)
       //TODO : are we creating am unnecessary instance ?  
-      val fac = e.create(pc , constructor._2).asInstanceOf[Factory]
+      val fac = e.create(pc , sampleConstructorArgArray).asInstanceOf[Factory]
 
-      fac.newInstance(pc, constructor._2, cb).asInstanceOf[T]
+      fac.newInstance(pc, sampleConstructorArgArray, cb).asInstanceOf[T]
     }
   }
 

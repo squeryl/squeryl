@@ -386,8 +386,7 @@ object FieldMetaData {
 
     def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef =
       () => {
-        val c = posoMetaData.constructor
-        c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
+        posoMetaData.constructor.newInstance(posoMetaData.sampleConstructorArgArray :_*).asInstanceOf[AnyRef];
       }
     
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
