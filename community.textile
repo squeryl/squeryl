@@ -5,6 +5,7 @@ headtitle: Community -
 ---
 h2. Blogs
 
+* "Squeryl with Java Experiment":http://lunajs.blogspot.com/2011/06/squeryl-with-java-experiment.html
 * "Scala ORM with Squeryl - A simple getting started guide":http://blog.xebia.com/2011/06/scala-orm-with-squeryl/
 * "Getting Started – Scala Persistence with Squeryl":http://srirangan.net/2011-03-getting-started-%E2%80%93-scala-persistence-with-squeryl
 * "Scalatra, MySQL and Star Wars Droids":http://www.7sudos.com/blog/scalatra-mysql-and-star-wars-droids
