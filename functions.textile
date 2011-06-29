@@ -14,7 +14,7 @@ h2. Operators
 
 h4. Boolean :
 
-not, isNull, isNotNull, between, ===, <, lt, >, gt, <=, lte, <=, gte, <>, regex(String)
+not, isNull, isNotNull, between, ===, <, lt, >, gt, <=, lte, <=, gte, <>, exists, notExists, in, notIn
 
 h4. Math :
 
@@ -22,7 +22,7 @@ plus, +, minus, -, times, *, div, /
 
 h4. String : 
 
- || (concatenation)
+ || (concatenation), lower, upper, like, regex
 
 h2. Aggregate Functions
 
