@@ -3,6 +3,15 @@ layout: default
 title: Community
 headtitle: Community - 
 ---
+h2. Blogs
+
+* "Scala ORM with Squeryl - A simple getting started guide":http://blog.xebia.com/2011/06/scala-orm-with-squeryl/
+* "Getting Started – Scala Persistence with Squeryl":http://srirangan.net/2011-03-getting-started-%E2%80%93-scala-persistence-with-squeryl
+* "Scalatra, MySQL and Star Wars Droids":http://www.7sudos.com/blog/scalatra-mysql-and-star-wars-droids
+* "Interview with Maxime Lévesque":http://nikolajlindberg.blogspot.com/2010/09/interview-with-maxime-levesque-author.html
+* "What's in your stack ?":http://php.jglobal.com/blog/?p=1215
+* "I have settled on a new platform for webapps":http://www.alvarocarrasco.com/2010/12/i-have-settled-on-new-platform-for.html
+
 
 h2. The Squeryl Team
 
