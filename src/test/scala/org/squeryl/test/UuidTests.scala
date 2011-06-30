@@ -48,6 +48,8 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction{
     uuidAsProperty.insert(testObject)
 
     testObject.uuid should equal(uuidAsProperty.where(_.id === testObject.id).single.uuid)
+
+    testObject.uuid should equal(uuidAsProperty.where(_.uuid in List(testObject.uuid)).single.uuid)
   }
 
   test("UuidAsId") {
@@ -57,6 +59,8 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction{
     uuidAsId.insert(testObject)
 
     testObject.id should equal(uuidAsId.where(_.id === testObject.id).single.id)
+
+    testObject.id should equal(uuidAsId.where(_.id in List(testObject.id)).single.id)
 
     val lookup = uuidAsId.lookup(testObject.id)
     lookup.get.id should equal(testObject.id)
