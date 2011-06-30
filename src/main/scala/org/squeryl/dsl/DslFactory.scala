@@ -124,6 +124,9 @@ trait DslFactory
   implicit def traversableOfString2ListString(l: Traversable[StringType]) =
     new RightHandSideOfIn[StringType](new ConstantExpressionNodeList[StringType](l))
 
+  implicit def traversableOfUuid2ListUuid(l: Traversable[UuidType]) =
+    new RightHandSideOfIn[UuidType](new ConstantExpressionNodeList[UuidType](l))
+
   implicit def traversableOfString2OptionListString(l: Traversable[StringType]) =
     new RightHandSideOfIn[Option[StringType]](new ConstantExpressionNodeList[StringType](l))
 
@@ -132,6 +135,9 @@ trait DslFactory
 
   implicit def traversableOfDate2OptionListDate(l: Traversable[DateType]) =
     new RightHandSideOfIn[Option[DateType]](new ConstantExpressionNodeList[DateType](l))
+
+  implicit def traversableOfUuidOptionList(l: Traversable[UuidType]) =
+    new RightHandSideOfIn[Option[UuidType]](new ConstantExpressionNodeList[UuidType](l))
 
   implicit def typedExpression2OrderByArg[E <% TypedExpressionNode[_]](e: E) = new OrderByArg(e)
 
