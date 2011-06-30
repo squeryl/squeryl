@@ -26,6 +26,7 @@ trait H2_Connection extends DBConnector{
   }
 }
 
+class H2_SubQueryTests extends SubQueryTests with H2_Connection
 class H2_UuidTests extends UuidTests with H2_Connection
 class H2_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with H2_Connection
 class H2_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with H2_Connection

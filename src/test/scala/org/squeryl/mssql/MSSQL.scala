@@ -23,6 +23,7 @@ trait MSSQL_Connection extends DBConnector{
   }
 }
 
+class MSSQL_SubQueryTests extends SubQueryTests with MSSQL_Connection
 class MSSQL_UuidTests extends UuidTests with MSSQL_Connection
 class MSSQL_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with MSSQL_Connection
 class MSSQL_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with MSSQL_Connection

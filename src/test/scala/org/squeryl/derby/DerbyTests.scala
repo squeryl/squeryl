@@ -26,6 +26,7 @@ trait Derby_Connection extends DBConnector{
   }
 }
 
+class Derby_SubQueryTests extends SubQueryTests with Derby_Connection
 class Derby_UuidTests extends UuidTests with Derby_Connection
 class Derby_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Derby_Connection
 class Derby_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Derby_Connection

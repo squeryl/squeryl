@@ -28,6 +28,7 @@ trait Oracle_Connection extends DBConnector{
   }
 }
 
+class Oracle_SubQueryTests extends SubQueryTests with Oracle_Connection
 class Oracle_UuidTests extends UuidTests with Oracle_Connection
 //class Oracle_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Oracle_Connection
 class Oracle_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Oracle_Connection
