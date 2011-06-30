@@ -443,8 +443,11 @@ object FieldMetaData {
           case e:Exception => null
         }
 
-      if(v == null)
-        org.squeryl.internals.Utils.throwError("Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName)
+      if(v == null){
+        var errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
+        if(!detectScalapOnClasspath()) errorMessage += "scalap option deduction not enabled. See: http://squeryl.org/scalap.html for more information."
+        org.squeryl.internals.Utils.throwError(errorMessage)
+      }
      
       val isOption = v.isInstanceOf[Some[_]]
 
@@ -617,6 +620,16 @@ object FieldMetaData {
   def resultSetHandlerFor(c: Class[_]) =
     _mapper.handleType(c, None)
 
+  def detectScalapOnClasspath(): Boolean = {
+    try {
+      Class.forName("scala.tools.scalap.scalax.rules.scalasig.ByteCode")
+      true
+    }catch{
+      case cnfe : ClassNotFoundException =>
+        false
+
+    }
+  }
 
   def optionTypeFromScalaSig(member: Member): Class[_] = {
     val scalaSigAnnotation = member.getDeclaringClass().getAnnotation(classOf[scala.reflect.ScalaSignature])
@@ -685,7 +698,7 @@ object FieldMetaData {
 	                 * Primitive types are seen by Java reflection as classOf[Object], 
 	                 * if that's what we find then we need to get the real value from @ScalaSignature
 	                 */
-	                val trueType = if (classOf[Object] == oType) optionTypeFromScalaSig(member) else oType.asInstanceOf[Class[_]]
+	                val trueType = if (classOf[Object] == oType && detectScalapOnClasspath()) optionTypeFromScalaSig(member) else oType.asInstanceOf[Class[_]]
 	                if (trueType != null) {
 	                  val deduced = createDefaultValue(member, trueType, None, optionFieldsInfo)
 	                  if (deduced != null)
