@@ -238,6 +238,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       val ojq = q.asInstanceOf[OuterJoinedQueryable[U]]
       val sq = createSubQueryable[U](ojq.queryable)
       sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
+      sq.node.inhibited = ojq.inhibited
       new SubQueryable(sq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
     }
     else if(q.isInstanceOf[InnerJoinedQueryable[U]]) {
