@@ -1024,6 +1024,43 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     passed('testAggregateComputeInSubQuery)
   }
+  
+  test("OptionalOuterJoin"){
+    val testInstance = sharedTestInstance; import testInstance._
+    /*
+     * First we'll verify some preconditions Hossam must 
+     * exist and have no CDs and Poncho must be related to at
+     * least 2 CDs
+     */
+    val hossam = join(artists, cds.leftOuter)((a,c) => 
+      where(a.id === hossamRamzy.id)
+      select((a, c))
+      on(a.id === c.map(_.mainArtist))).toList
+    hossam.size should be (1)
+    hossam.head._2 should be (None)
+    join(artists, cds)((a,c) => 
+      where(a.id === ponchoSanchez.id)
+      select((a, c))
+      on(a.id === c.mainArtist)).toList.size should be > (1)
+    /*
+     * Since we know the hossam exists, a proper left outer join
+     * should return at least 1 result
+     */ 
+    val query1 = join(artists, cds.leftOuter.inhibitWhen(false))((a, c) =>
+      where(a.id === hossamRamzy.id)
+      select((a,c)) 
+      on(c.map(_.mainArtist) === a.id))
+    query1.toList.size should be > (0)
+    /*
+     * Properly inhibiting the left outer should result in one row even though
+     * we know that at least 2 cds exist
+     */
+    val query2 = join(artists, cds.leftOuter.inhibitWhen(true))((a, c) =>
+      where(a.id === ponchoSanchez.id)
+      select((a,c)) 
+      on(c.map(_.mainArtist) === a.id))
+    query2.toList.size should be (1)
+  }
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {
 //
