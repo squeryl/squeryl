@@ -111,6 +111,8 @@ trait DslFactory
 
   implicit def binary2ScalarBinary(b: BinaryType) = createLeafNodeOfScalarBinaryType(b)
 
+  implicit def binaryOption2ScalarBinaryOption(b: Option[BinaryType]) = createLeafNodeOfScalarBinaryOptionType(b)
+  
   // List Conversion implicits don't vary with the choice of
   // column/field types, so they don't need to be overridable factory methods :
 
