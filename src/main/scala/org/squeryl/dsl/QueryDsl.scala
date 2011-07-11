@@ -17,7 +17,7 @@ package org.squeryl.dsl
 
 import ast._
 import boilerplate._
-import fsm.{QueryElements, StartState, WhereState, Conditioned, Unconditioned, CaseOnConditionChainStart}
+import fsm._
 import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
@@ -604,19 +604,10 @@ trait QueryDsl
 
   // Case statements :
 
-  class CaseOnChoiceOfNumericalValues[A](e: NumericalExpression[A]) {
-    def when[B,C](expr: NumericalExpression[B], r: TypedExpressionNode[C]) = {}
-  }
+  def caseOf[A](expr: NumericalExpression[A]) = new CaseOfNumericalExpressionMatchStart(expr)
 
-  class CaseOnChoiceOfNonNumericalValues[A](e: NonNumericalExpression[A]) {
-    def when[B,C](expr: NonNumericalExpression[B], r: TypedExpressionNode[C]) = {}
-  }
+  def caseOf[A](expr: NonNumericalExpression[A]) = new CaseOfNonNumericalExpressionMatchStart(expr)
 
-
-  def caseOf[A](expr: NumericalExpression[A]) = new CaseOnChoiceOfNumericalValues(expr)
-
-  def caseOf[A](expr: NonNumericalExpression[A]) = new CaseOnChoiceOfNonNumericalValues(expr)
-
-  def caseOf = new CaseOnConditionChainStart
+  def caseOf = new CaseOfConditionChainStart
 
 }

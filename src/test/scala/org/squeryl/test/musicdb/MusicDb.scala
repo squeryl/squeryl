@@ -20,8 +20,8 @@ import java.sql.Timestamp
 
 import org.squeryl._
 import adapters._
+import dsl._
 import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
-import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
 import framework._
 import java.util.{Date, Calendar}
 
@@ -906,7 +906,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   test("DynamicWhereClause1"){
     val testInstance = sharedTestInstance; import testInstance._
     val allArtists = artists.toList
-    
+
     val q1 = dynamicWhereOnArtists(None, None)
 
     assertEquals(allArtists.map(_.id).toSet, q1.map(_.id).toSet, 'testDynamicWhereClause1)
@@ -1080,7 +1080,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     _validateSQLCaseNonNumericalResult(q.toList)
   }
 
-  private def _validateSQLCaseNonNumericalResult(list : List[(String,Int,String)]) = {
+  private def _validateSQLCaseNonNumericalResult(list : Iterable[(String,Int,String)]) = {
     val (trio, other) = list.partition(_._3 != "Z")
 
     assert(other.size == 2)
@@ -1137,6 +1137,131 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val q = q0.map((z:(String,Int,Option[String])) => (z._1, z._2, z._3.getOrElse("HerbyA")))
 
     _validateSQLCaseNonNumericalResult(q.toList)
+  }
+
+  test("testSQLMatchCaseNonNumerical2NonNumerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.firstName)
+              when("Herby", a.firstName  || "A")
+              when("Poncho", a.firstName  || "B")
+              when("Mongo", a.firstName || "C")
+              otherwise("Z")
+          )
+        ))
+      )
+
+    q : Query[(String,Int,String)]
+
+    _validateSQLCaseNonNumericalResult(q.toList)
+  }
+
+  test("testSQLMatchCaseNonNumerical2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.firstName)
+              when("Herby", BigDecimal(1))
+              when("Poncho", 2)
+              when("Mongo", 3)
+              otherwise(4)
+          )
+        ))
+      )
+
+    q : Query[(String,Int,BigDecimal)]
+
+    val z = q.map(x => (x._1, x._2, x._3.intValue)).map(x =>
+     (x._1,
+      x._2,
+      x._3 match {
+        case 1 => "HerbyA"
+        case 2 => "PonchoB"
+        case 3 => "MongoC"
+        case 4 => "Z"
+      }))
+
+    _validateSQLCaseNonNumericalResult(z)
+  }
+
+  test("testSQLMatchCaseNumerical2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+    val option2: Option[Int] = Some(2)
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.id)
+              when(herbyHancock.id, BigDecimal(1))
+              when(ponchoSanchez.id, option2)
+              when(mongoSantaMaria.id, 3)
+              otherwise(4)
+          )
+        ))
+      )
+
+    q : Query[(String,Int,Option[BigDecimal])]
+
+    val z = q.map(x => (x._1, x._2, x._3.get.intValue)).map(x =>
+     (x._1,
+      x._2,
+      x._3 match {
+        case 1 => "HerbyA"
+        case 2 => "PonchoB"
+        case 3 => "MongoC"
+        case 4 => "Z"
+      }))
+
+    _validateSQLCaseNonNumericalResult(z)
+  }
+
+  test("testSQLMatchCaseNumericalWithOption2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+    val option2: Option[Int] = Some(2)
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.id)
+              when(herbyHancock.id, BigDecimal(1))
+              when(None : Option[Int], -3)
+              when(ponchoSanchez.id, option2)
+              when(mongoSantaMaria.id, 3)
+              otherwise(4)
+          )
+        ))
+      )
+
+    q : Query[(String,Int,Option[BigDecimal])]
+
+    val z = q.map(x => (x._1, x._2, x._3.get.intValue)).map(x =>
+     (x._1,
+      x._2,
+      x._3 match {
+        case 1 => "HerbyA"
+        case 2 => "PonchoB"
+        case 3 => "MongoC"
+        case 4 => "Z"
+      }))
+
+    _validateSQLCaseNonNumericalResult(z)
   }
 
   test("InTautology"){
