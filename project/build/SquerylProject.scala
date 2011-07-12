@@ -1,8 +1,9 @@
 
 import sbt._
 
+import com.weiglewilczek.bnd4sbt.BNDPlugin
 
-class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
+class SquerylProject(info: ProjectInfo) extends DefaultProject(info) with BNDPlugin{
   
   val snapshot = systemOptional("snapshot", false).value
   
@@ -45,7 +46,7 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   
   val cglib = "cglib" % "cglib-nodep" % "2.2"
 
-  val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString 
+  val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString  % "provided"
 
   /**
    * The following jars are for running the automated tests
@@ -73,4 +74,20 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
     else
       "org.scalatest" % "scalatest_2.8.0" % "1.3.1.RC2" % "provided"
 
+   // we need to explictly include the scala package we use because a "scala.*" wildcard it will include
+   // the scala.tools.scalap package we are explictly trying to not import in all cases
+   override def bndImportPackage =
+     "scala" ::
+     "scala.collection.*" ::
+     "scala.reflect.*" ::
+     "scala.runtime.*" ::
+     "scala.math" ::
+     "scala.util.matching" ::
+     "scala.xml" ::
+     "net.sf.cglib.proxy.*"  :: Nil
+   override def bndDynamicImportPackage = "scala.tools.scalap.scalax.rules.scalasig.*;resolution=optional" :: Nil
+   override def bndExportPackage = "org.squeryl.*" :: Nil
+   override def bndNoUses = true
+   override def bndPrivatePackage = Nil
+   override def bndBundleName = "Squeryl ORM"
 }
