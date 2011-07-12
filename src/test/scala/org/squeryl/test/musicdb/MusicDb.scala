@@ -942,24 +942,24 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testInstance = sharedTestInstance; import testInstance._
 
 
-    val ps =
-      Session.currentSession.connection.prepareStatement(
-        "Select " +
-        "  (case" +
-        "    when (a.streetname = ?) then cast(? as int)" +
-        "    when (a.streetname = ?) then cast(? as int)" +
-        "    else cast(? as int)" +
-        "    end) as v3 " +
-        "From" +
-        "  address a")
-
-    ps.setString(1,"z")
-    ps.setInt(2,1)
-    ps.setString(3,"q")
-    ps.setInt(4,2)
-    ps.setInt(5,3)
-
-    ps.execute()
+//    val ps =
+//      Session.currentSession.connection.prepareStatement(
+//        "Select " +
+//        "  (case" +
+//        "    when (a.streetname = ?) then cast(? as int)" +
+//        "    when (a.streetname = ?) then cast(? as int)" +
+//        "    else cast(? as int)" +
+//        "    end) as v3 " +
+//        "From" +
+//        "  address a")
+//
+//    ps.setString(1,"z")
+//    ps.setInt(2,1)
+//    ps.setString(3,"q")
+//    ps.setInt(4,2)
+//    ps.setInt(5,3)
+//
+//    ps.execute()
 
     val q =
       from(artists)(a =>
