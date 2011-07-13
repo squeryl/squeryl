@@ -27,7 +27,7 @@ import org.squeryl.internals.{FieldMetaData, StatementWriter, DatabaseAdapter}
 class OracleAdapter extends DatabaseAdapter {
 
   override def intTypeDeclaration = "number"
-  override def stringTypeDeclaration = "varchar2(255)"
+  override def stringTypeDeclaration = "varchar2"
   override def stringTypeDeclaration(length:Int) = "varchar2("+length+")"
   override def booleanTypeDeclaration = "number(1)"
   override def doubleTypeDeclaration = "double precision"

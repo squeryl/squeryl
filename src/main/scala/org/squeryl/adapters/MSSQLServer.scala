@@ -25,7 +25,7 @@ class MSSQLServer extends DatabaseAdapter {
   override def isFullOuterJoinSupported = false
 
   override def intTypeDeclaration = "int"
-  override def stringTypeDeclaration = "varchar(255)"
+  override def stringTypeDeclaration = "varchar"
   override def stringTypeDeclaration(length:Int) = "varchar("+length+")"
   override def booleanTypeDeclaration = "bit"
   override def doubleTypeDeclaration = "float"

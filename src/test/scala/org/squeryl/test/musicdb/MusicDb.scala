@@ -20,8 +20,8 @@ import java.sql.Timestamp
 
 import org.squeryl._
 import adapters._
+import dsl._
 import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
-import dsl.{EnumExpression, StringExpression, Measures, GroupWithMeasures}
 import framework._
 import java.util.{Date, Calendar}
 
@@ -906,7 +906,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   test("DynamicWhereClause1"){
     val testInstance = sharedTestInstance; import testInstance._
     val allArtists = artists.toList
-    
+
     val q1 = dynamicWhereOnArtists(None, None)
 
     assertEquals(allArtists.map(_.id).toSet, q1.map(_.id).toSet, 'testDynamicWhereClause1)
@@ -937,8 +937,335 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         select(a)
       )
 
+  test("testSQLCaseNumerical1") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+
+//    val ps =
+//      Session.currentSession.connection.prepareStatement(
+//        "Select " +
+//        "  (case" +
+//        "    when (a.streetname = ?) then cast(? as int)" +
+//        "    when (a.streetname = ?) then cast(? as int)" +
+//        "    else cast(? as int)" +
+//        "    end) as v3 " +
+//        "From" +
+//        "  address a")
+//
+//    ps.setString(1,"z")
+//    ps.setInt(2,1)
+//    ps.setString(3,"q")
+//    ps.setInt(4,2)
+//    ps.setInt(5,3)
+//
+//    ps.execute()
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", herbyHancock.id)
+             when(a.firstName === "Poncho", ponchoSanchez.id)
+             when(a.firstName === "Mongo", mongoSantaMaria.id)
+             otherwise(-12345L))
+          ))
+      )
+
+    q : Query[(String,Int,Long)]
+
+    val list = q.toList
+
+    val (trio, other) = list.partition(_._3 != -12345)
+
+    assert(other.size == 2)
+
+    assert(other.map(_._3).toSet == Set(-12345L))
+    assert(trio.size == 3)
+
+    val f = trio.filter(x => x._2 != x._3)
+
+    assert(f == Nil)
+  }
+
+  test("testSQLCaseNumerical2") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", herbyHancock.id)
+             when(a.firstName === "Poncho", BigDecimal(ponchoSanchez.id))
+             when(a.firstName === "Mongo", mongoSantaMaria.id)
+             otherwise(-12345L))
+          ))
+      )
+
+    q : Query[(String,Int,BigDecimal)]
+
+    val list = q.toList
+
+    val (trio, other) = list.partition(_._3 != -12345)
+
+    assert(other.size == 2)
+
+    assert(other.map(_._3).toSet == Set(-12345L))
+    assert(trio.size == 3)
+
+    val f = trio.filter(x => x._2 != x._3)
+
+    assert(f == Nil)
+  }
+
+  test("testSQLCaseNumerical3") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    //val noDouble = Option[Double] = None
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", herbyHancock.id : Double)
+             when(a.firstName === "Poncho", None : Option[Float])
+             when(a.firstName === "Mongo", mongoSantaMaria.id)
+             otherwise(-12345L))
+          ))
+      )
+
+    q : Query[(String,Int,Option[Double])]
+
+    val list = q.toList
+
+    val (trio, other) = list.partition(_._3 != Some(-12345))
+
+    assert(other.size == 2)
+
+    assert(other.map(_._3).toSet == Set(Some(-12345D)))
+    assert(trio.size == 3)
+
+    assert(trio.find(_._3 == None).get._1 == "Poncho")
+
+    assert(trio.map(_._1).toSet == Set("Herby", "Poncho", "Mongo"))
+  }
+
+  test("testSQLCaseNonNumerical1") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", a.firstName || "A")
+             when(a.firstName === "Poncho", a.firstName  || "B")
+             when(a.firstName === "Mongo", a.firstName || "C")
+             otherwise("Z"))
+          ))
+      )
+
+    q : Query[(String,Int,String)]
+
+    _validateSQLCaseNonNumericalResult(q.toList)
+  }
+
+  private def _validateSQLCaseNonNumericalResult(list : Iterable[(String,Int,String)]) = {
+    val (trio, other) = list.partition(_._3 != "Z")
+
+    assert(other.size == 2)
+    assert(trio.size == 3)
+
+    assert(other.map(_._3).toSet == Set("Z"))
+
+    assert(trio.map(_._3).toSet == Set("HerbyA", "PonchoB", "MongoC"))
+  }
+
+  test("testSQLCaseNonNumerical2") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q0 =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", (Some(a.firstName): Option[String]) || "A")
+             when(a.firstName === "Poncho", a.firstName  || "B")
+             when(a.firstName === "Mongo", a.firstName || "C")
+             otherwise("Z"))
+          ))
+      )
+
+    q0 : Query[(String,Int,Option[String])]
+
+    val q = q0.map((z:(String,Int,Option[String])) => (z._1, z._2, z._3.get))
+
+    _validateSQLCaseNonNumericalResult(q.toList)
+  }
+
+  test("testSQLCaseNonNumerical3") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q0 =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf
+             when(a.firstName === "Herby", None : Option[String])
+             when(a.firstName === "Poncho", a.firstName  || "B")
+             when(a.firstName === "Mongo", a.firstName || "C")
+             otherwise("Z"))
+          ))
+      )
+
+    q0 : Query[(String,Int,Option[String])]
+
+    val q = q0.map((z:(String,Int,Option[String])) => (z._1, z._2, z._3.getOrElse("HerbyA")))
+
+    _validateSQLCaseNonNumericalResult(q.toList)
+  }
+
+  test("testSQLMatchCaseNonNumerical2NonNumerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.firstName)
+              when("Herby", a.firstName  || "A")
+              when("Poncho", a.firstName  || "B")
+              when("Mongo", a.firstName || "C")
+              otherwise("Z")
+          )
+        ))
+      )
+
+    q : Query[(String,Int,String)]
+
+    _validateSQLCaseNonNumericalResult(q.toList)
+  }
+
+  test("testSQLMatchCaseNonNumerical2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.firstName)
+              when("Herby", BigDecimal(1))
+              when("Poncho", 2)
+              when("Mongo", 3)
+              otherwise(4)
+          )
+        ))
+      )
+
+    q : Query[(String,Int,BigDecimal)]
+
+    val z = q.map(x => (x._1, x._2, x._3.intValue)).map(x =>
+     (x._1,
+      x._2,
+      x._3 match {
+        case 1 => "HerbyA"
+        case 2 => "PonchoB"
+        case 3 => "MongoC"
+        case 4 => "Z"
+      }))
+
+    _validateSQLCaseNonNumericalResult(z)
+  }
+
+  test("testSQLMatchCaseNumerical2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+    val option2: Option[Int] = Some(2)
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.id)
+              when(herbyHancock.id, BigDecimal(1))
+              when(ponchoSanchez.id, option2)
+              when(mongoSantaMaria.id, 3)
+              otherwise(4)
+          )
+        ))
+      )
+
+    q : Query[(String,Int,Option[BigDecimal])]
+
+    val z = q.map(x => (x._1, x._2, x._3.get.intValue)).map(x =>
+     (x._1,
+      x._2,
+      x._3 match {
+        case 1 => "HerbyA"
+        case 2 => "PonchoB"
+        case 3 => "MongoC"
+        case 4 => "Z"
+      }))
+
+    _validateSQLCaseNonNumericalResult(z)
+  }
+
+  test("testSQLMatchCaseNumericalWithOption2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+    val option2: Option[Int] = Some(2)
+
+    val q =
+      from(artists)(a =>
+        select((
+          &(a.firstName),
+          &(a.id),
+          &(caseOf(a.id)
+              when(herbyHancock.id, BigDecimal(1))
+              when(None : Option[Int], -3)
+              when(ponchoSanchez.id, option2)
+              when(mongoSantaMaria.id, 3)
+              otherwise(4)
+          )
+        ))
+      )
+
+    q : Query[(String,Int,Option[BigDecimal])]
+
+    val z = q.map(x => (x._1, x._2, x._3.get.intValue)).map(x =>
+     (x._1,
+      x._2,
+      x._3 match {
+        case 1 => "HerbyA"
+        case 2 => "PonchoB"
+        case 3 => "MongoC"
+        case 4 => "Z"
+      }))
+
+    _validateSQLCaseNonNumericalResult(z)
+  }
+
   test("InTautology"){
-    
+
     val q = artists.where(_.firstName in Nil).toList
 
     assertEquals(Nil, q, 'testInTautology)

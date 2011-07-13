@@ -17,10 +17,11 @@ package org.squeryl.dsl
 
 import ast._
 import boilerplate._
-import fsm.{QueryElements, StartState, WhereState, Conditioned, Unconditioned}
+import fsm._
 import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
+import collection.mutable.ArrayBuffer
 
 trait QueryDsl
   extends DslFactory
@@ -600,4 +601,13 @@ trait QueryDsl
   implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8)) = new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
 
   implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9)) = new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
+
+  // Case statements :
+
+  def caseOf[A](expr: NumericalExpression[A]) = new CaseOfNumericalExpressionMatchStart(expr)
+
+  def caseOf[A](expr: NonNumericalExpression[A]) = new CaseOfNonNumericalExpressionMatchStart(expr)
+
+  def caseOf = new CaseOfConditionChainStart
+
 }

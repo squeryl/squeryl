@@ -39,7 +39,22 @@ class Derby_SchoolDb extends schooldb.SchoolDbTestRun with Derby_Connection {
 }
 class Derby_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Derby_Connection
 class Derby_KickTheTires extends demo.KickTheTires with Derby_Connection
-class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection
+class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection {
+
+  override val ignoredTests = List(
+    "testSQLCaseNumerical1",
+    "testSQLCaseNumerical2",
+    "testSQLCaseNumerical3",
+    "testSQLCaseNonNumerical1",
+    "testSQLCaseNonNumerical2",
+    "testSQLCaseNonNumerical3",
+    "testSQLMatchCaseNonNumerical2NonNumerical",
+    "testSQLMatchCaseNonNumerical2Numerical",
+    "testSQLMatchCaseNumerical2Numerical",
+    "testSQLMatchCaseNumericalWithOption2Numerical"
+  )
+}
+
 class Derby_LeftJoinTest extends LeftJoinTest with Derby_Connection
 
 

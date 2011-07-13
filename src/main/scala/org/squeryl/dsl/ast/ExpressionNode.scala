@@ -20,6 +20,8 @@ import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.dsl._
 import org.squeryl.{Query, KeyedEntity, Schema, Session}
+import javax.management.RuntimeErrorException
+import java.sql.ResultSet
 
 trait ExpressionNode {
 
@@ -305,13 +307,16 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
   def doWrite(sw: StatementWriter) = sw.write(token)
 }
 
-class ConstantExpressionNode[T](val value: T) extends ExpressionNode {
 
-  //def this(v:T) = this(v, false)
+class UntypedConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]])
+
+class ConstantExpressionNode[T] protected (val value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
+
+  def this(v: T)(implicit m: OutMapper[T]) = this(v,Some(m))
 
   private def needsQuote = value.isInstanceOf[String]
 
-  def mapper: OutMapper[T] = org.squeryl.internals.Utils.throwError("outMapper should not be used on " + 'ConstantExpressionNode)
+  def mapper = _mapper.getOrElse(Utils.throwError("No OutMapper !"))
 
   def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {

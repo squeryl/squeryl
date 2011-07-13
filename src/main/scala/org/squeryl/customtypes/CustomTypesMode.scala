@@ -16,11 +16,12 @@
 package org.squeryl.customtypes;
 
 
-import org.squeryl.internals.FieldReferenceLinker
 import java.util.{Date, UUID}
 import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
 import org.squeryl.dsl._
 import java.sql.Timestamp
+import org.squeryl.internals.{OutMapper, FieldReferenceLinker}
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.IntType
 
 trait CustomType[T] extends Product1[T] {
   def value: T
@@ -31,28 +32,28 @@ trait CustomType[T] extends Product1[T] {
 trait CustomTypesMode extends QueryDsl {
 
   implicit def createConstantNodeOfScalarIntType(i: Int) =
-    new ConstantExpressionNode[Int](i) with NumericalExpression[Int]
+    new ConstantExpressionNode[IntType](mapInt2IntType(i)) with NumericalExpression[IntType]
 
   implicit def createConstantNodeOfScalarStringType(s: String) =
-    new ConstantExpressionNode[String](s) with StringExpression[String]
+    new ConstantExpressionNode[StringType](mapString2StringType(s)) with StringExpression[StringType]
 
   implicit def createConstantNodeOfScalarDoubleType(i: Double) =
-    new ConstantExpressionNode[Double](i) with NumericalExpression[Double]
+    new ConstantExpressionNode[DoubleType](mapDouble2DoubleType(i)) with NumericalExpression[DoubleType]
 
   implicit def createConstantNodeOfScalarBigDecimalType(i: BigDecimal) =
-    new ConstantExpressionNode[BigDecimal](i) with NumericalExpression[BigDecimal]
+    new ConstantExpressionNode[BigDecimalType](mapBigDecimal2BigDecimalType(i)) with NumericalExpression[BigDecimalType]
 
   implicit def createConstantNodeOfScalarFloatType(i: Float) =
-    new ConstantExpressionNode[Float](i) with NumericalExpression[Float]
+    new ConstantExpressionNode[FloatType](mapFloat2FloatType(i)) with NumericalExpression[FloatType]
 
   implicit def createConstantNodeOfScalarLongType(i: Long) =
-    new ConstantExpressionNode[Long](i) with NumericalExpression[Long]
+    new ConstantExpressionNode[LongType](mapLong2LongType(i)) with NumericalExpression[LongType]
 
   implicit def createConstantNodeOfScalarBooleanType(i: Boolean) =
-    new ConstantExpressionNode[Boolean](i) with NonNumericalExpression[Boolean]
+    new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(i)) with NonNumericalExpression[BooleanType]
 
   implicit def createConstantNodeOfScalarBinaryType(i: Array[Byte]) =
-    new ConstantExpressionNode[Array[Byte]](i) with BinaryExpression[Array[Byte]]
+    new ConstantExpressionNode[BinaryType](mapBinary2BinaryType(i)) with BinaryExpression[BinaryType]
 
   type ByteType = ByteField
 
@@ -242,7 +243,7 @@ trait CustomTypesMode extends QueryDsl {
   def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Enumeration#Value](e) with EnumExpression[Enumeration#Value]
+        new ConstantExpressionNode[Enumeration#Value](e, None : Option[OutMapper[Enumeration#Value]]) with EnumExpression[Enumeration#Value]
       case Some(n:SelectElement) =>
         new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
     }
@@ -250,7 +251,7 @@ trait CustomTypesMode extends QueryDsl {
   def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[Enumeration#Value]] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Option[Enumeration#Value]](e) with EnumExpression[Option[Enumeration#Value]]
+        new ConstantExpressionNode[Option[Enumeration#Value]](e, None : Option[OutMapper[Option[Enumeration#Value]]]) with EnumExpression[Option[Enumeration#Value]]
       case Some(n:SelectElement) =>
         new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
     }
