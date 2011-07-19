@@ -50,7 +50,7 @@ class MusicDbObject extends KeyedEntity[Int] {
 
 @SerialVersionUID(7397250327804824253L)
 class Person(var firstName:String, var lastName: String, val age: Option[Int], val created: Option[Timestamp] = None) 
-  extends MusicDbObject with Serializable {
+  extends MusicDbObject with java.io.Serializable {
   def this() = this("", "", None)
 }
 
