@@ -48,7 +48,8 @@ class MusicDbObject extends KeyedEntity[Int] {
   var timeOfLastUpdate = new Timestamp(System.currentTimeMillis)
 }
 
-class Person(var firstName:String, var lastName: String, val age: Option[Int]) extends MusicDbObject{
+@SerialVersionUID(7397250327804824253L)
+class Person(var firstName:String, var lastName: String, val age: Option[Int]) extends MusicDbObject with Serializable {
   def this() = this("", "", None)
 }
 

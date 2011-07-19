@@ -19,7 +19,7 @@ package org.squeryl.internals
 import java.lang.Class
 import java.lang.annotation.Annotation
 import net.sf.cglib.proxy.{Factory, Callback, Enhancer}
-import java.lang.reflect.{Member, Constructor, Method, Field}
+import java.lang.reflect.{Member, Constructor, Method, Field, Modifier}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
 import org.squeryl._
@@ -239,6 +239,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       return false    
 
     val hasAField = property._1 != None
+	
+	val isAStaticField = property._1.map(f => Modifier.isStatic(f.getModifiers)).getOrElse(false)
 
     val hasGetter = property._2 != None &&
       ! classOf[java.lang.Void].isAssignableFrom(property._2.get.getReturnType) &&
@@ -268,7 +270,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     }
 
     (hasAField, hasGetter, hasSetter) match {
-      case (true,  false, false) => true
+      case (true,  false, false) => !isAStaticField
       case (false, true,  true)  => true
       case (true,  true,  true)  => true
       case (true,  true, false)  => true
