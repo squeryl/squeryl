@@ -49,7 +49,8 @@ class MusicDbObject extends KeyedEntity[Int] {
 }
 
 @SerialVersionUID(7397250327804824253L)
-class Person(var firstName:String, var lastName: String, val age: Option[Int]) extends MusicDbObject with Serializable {
+class Person(var firstName:String, var lastName: String, val age: Option[Int], val created: Option[Timestamp] = None) 
+  extends MusicDbObject with Serializable {
   def this() = this("", "", None)
 }
 
@@ -80,7 +81,7 @@ class MusicDb extends Schema {
 class TestData(schema : MusicDb){
   import schema._
   val herbyHancock = artists.insert(new Person("Herby", "Hancock", Some(68)))
-  val ponchoSanchez = artists.insert(new Person("Poncho", "Sanchez", None))
+  val ponchoSanchez = artists.insert(new Person("Poncho", "Sanchez", None, Some(new Timestamp(5))))
   val mongoSantaMaria = artists.insert(new Person("Mongo", "Santa Maria", None))
   val alainCaron = artists.insert(new Person("Alain", "Caron", None))
   val hossamRamzy = artists.insert(new Person("Hossam", "Ramzy", None))
@@ -640,6 +641,11 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       
       passed('testTimestampDownToMillis)
     }
+  }
+
+  test("nvl followed by >= on Timestamp") {
+    val timestamp = new Timestamp(0L)
+    from(artists)(a => select(nvl(a.created, new Timestamp(10L)) >= timestamp)).size should be >= 0
   }
   
   test("validateScalarQuery1") {

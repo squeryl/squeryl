@@ -426,6 +426,7 @@ trait TypeArithmetic extends FieldTypes {
   implicit def unaryOpConv18(op: UnaryAgregateLengthNeutralOp[Option[TimestampType]]) = new DateTypeConversion[Option[TimestampType]](op)(createOutMapperTimestampTypeOption)
 
   implicit def nvl1(e: NvlFunctionNonNumerical[Option[DateType],DateType]) = new DateTypeConversion[DateType](e)
+  implicit def nvl4(e: NvlFunctionNonNumerical[Option[TimestampType], TimestampType]) = new DateTypeConversion[TimestampType](e)
   implicit def nvl2(e: NvlFunctionNonNumerical[Option[StringType],StringType]) = new StringTypeConversion[StringType](e)
   implicit def nvl3(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
 
