@@ -90,4 +90,14 @@ object Utils {
   def throwError(msg: String): Nothing = {
     throw new RuntimeException(msg)
   }
+
+
+  def enumerationForValue(v: Enumeration#Value): Enumeration = {
+
+    val m = v.getClass.getField("$outer")
+
+    val enu = m.get(v).asInstanceOf[Enumeration]
+
+    enu
+  }
 }

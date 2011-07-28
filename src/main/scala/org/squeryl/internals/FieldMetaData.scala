@@ -58,14 +58,12 @@ class FieldMetaData(
     else {
 
       val svE =
-        if(sampleValue.isInstanceOf[Option[_]])
+        if(isOption)
           sampleValue.asInstanceOf[Option[Enumeration#Value]].get
         else
           sampleValue.asInstanceOf[Enumeration#Value]
-      
-      val m = svE.getClass.getField("$outer")
 
-      val enu = m.get(svE).asInstanceOf[Enumeration]
+      val enu = Utils.enumerationForValue(svE)
 
       val r = enu.values.find(_.id == id).get
 

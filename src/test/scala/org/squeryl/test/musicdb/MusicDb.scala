@@ -23,6 +23,7 @@ import adapters._
 import dsl._
 import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
+import fsm.CaseOfNonNumericalExpressionMatchYieldingNonNumerical
 import java.util.{Date, Calendar}
 
 object Genre extends Enumeration {
@@ -1269,6 +1270,85 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       }))
 
     _validateSQLCaseNonNumericalResult(z)
+  }
+
+  test("testSQLMatchCaseEnemerationWitEnemeration") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(songs)(s =>
+        select((
+          &(caseOf(s.genre)
+              when(Jazz, Jazz)
+              when(Rock, Rock)
+              otherwise(RenaissancePolyphony)
+          )
+        ))
+      )
+      
+    val s = q.groupBy(t => t).mapValues(_.size).toSet
+
+    assert(s == Set((Jazz,2), (RenaissancePolyphony,1)))
+  }
+
+//  test("testSQLMatchCaseEnemerationWithOptionEnemeration") {
+//
+//    val testInstance = sharedTestInstance; import testInstance._
+//
+//    val x: Option[Genre.Value] = None
+//
+//    val q =
+//      from(songs)(s =>
+//        select((
+//          &({
+//
+//            val e1 = caseOf(s.genre)
+//            val e2 = e1.when(Jazz, Jazz) : CaseOfNonNumericalExpressionMatchYieldingNonNumerical[Genre.Value, Genre.Value]
+//
+//            //val e3 = e2.when(Rock, x) : CaseOfNonNumericalExpressionMatchYieldingNonNumerical[Genre.Value, Genre.Value]
+//
+//            val e4 = e2.otherwise(RenaissancePolyphony)
+//
+//            e4
+//          })
+//        ))
+//      )
+//
+//    val s = q.groupBy(t => t).mapValues(_.size).toSet
+//
+//    assert(s == Set((Some(Jazz),2), (None,1)))
+//
+//    val zz = new ZZ(Jazz)
+//
+//    zz.when(x)
+//  }
+//
+//
+//  class ZZ[T](val thenArg: NonNumericalExpression[T]) {
+//
+//    def when[U,V](r: NonNumericalExpression[U])(implicit ev2: NonNumericalCoalesce[T,U] => NonNumericalExpression[V]) = {}
+//  }
+
+
+  test("testSQLMatchCaseEnemerationWithOption2Numerical") {
+
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(songs)(s =>
+        select((
+          &(caseOf(s.genre)
+              when(Jazz, 1)
+              when(Rock, 2)
+              otherwise(-1)
+          )
+        ))
+      )
+
+    val s = q.groupBy(t => t).mapValues(_.size).toSet
+
+    assert(s == Set((1,2), (-1,1)))
   }
 
   test("InTautology"){
