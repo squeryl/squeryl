@@ -380,7 +380,7 @@ object FieldMetaData {
         val c = posoMetaData.constructor
         c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
       }
-    
+
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 
       val field  = property._1
@@ -441,12 +441,18 @@ object FieldMetaData {
           case e:Exception => null
         }
 
-      if(v == null){
+      val deductionFailed =
+        v match {
+          case Some(None) => true
+          case a:Any  => (v == null)
+        }
+
+      if(deductionFailed) {
         var errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
         if(!detectScalapOnClasspath()) errorMessage += "scalap option deduction not enabled. See: http://squeryl.org/scalap.html for more information."
         org.squeryl.internals.Utils.throwError(errorMessage)
       }
-     
+
       val isOption = v.isInstanceOf[Some[_]]
 
       val typeOfFieldOrTypeOfOption =
@@ -465,6 +471,7 @@ object FieldMetaData {
         }
         else
           typeOfFieldOrTypeOfOption
+
 
       new FieldMetaData(
         parentMetaData,

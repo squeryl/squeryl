@@ -46,7 +46,7 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) with BNDPlu
   
   val cglib = "cglib" % "cglib-nodep" % "2.2"
 
-  val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString  % "provided"
+  val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString
 
   /**
    * The following jars are for running the automated tests
