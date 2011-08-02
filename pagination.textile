@@ -13,6 +13,7 @@ Example :
     def searchForBooks(title : String, offset: Int, pageLength: Int) =
       from(books)(b =>
 	    where(b => b.title like title)
+		select(b)
 		orderBy(b.title asc)
 	  ).page(offset, pageLength)
       
