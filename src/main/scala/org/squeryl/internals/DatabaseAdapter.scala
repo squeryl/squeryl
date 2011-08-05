@@ -375,10 +375,12 @@ trait DatabaseAdapter {
     st.executeUpdate
   }
 
+  protected def getInsertableFields(fmd : Iterable[FieldMetaData]) = fmd.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable )
+
   def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
 
     val o_ = o.asInstanceOf[AnyRef]    
-    val f = t.posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable )
+    val f = getInsertableFields(t.posoMetaData.fieldsMetaData)
 
     sw.write("insert into ");
     sw.write(quoteName(t.prefixedName));
