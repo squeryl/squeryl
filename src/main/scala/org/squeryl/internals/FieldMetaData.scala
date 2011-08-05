@@ -31,6 +31,7 @@ import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteC
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.lang.reflect.Member
+import com.sun.corba.se.spi.activation._ActivatorImplBase
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -241,6 +242,18 @@ class FieldMetaData(
 
   def isAutoIncremented =
     columnAttributes.exists(_.isInstanceOf[AutoIncremented])
+
+  /**
+   * Inserts will only set values for a column if isInsertable is true
+   */
+  def isInsertable =
+    !columnAttributes.exists(_.isInstanceOf[Uninsertable])
+
+  /**
+   * Updates will only set values for a column if isUpdatable is true
+   */
+  def isUpdatable =
+    !columnAttributes.exists(_.isInstanceOf[Unupdatable])
 
   /**
    *  gets the value of the field from the object.

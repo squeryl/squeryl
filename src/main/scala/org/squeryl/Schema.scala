@@ -491,6 +491,10 @@ trait Schema {
 
   protected def dbType(declaration: String) = DBType(declaration)
 
+  protected def uninsertable = Uninsertable()
+
+  protected def unupdatable = Unupdatable()
+
   class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
 
     def are(columnAttributes: AttributeValidOnMultipleColumn*) =
