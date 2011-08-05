@@ -31,7 +31,6 @@ import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteC
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.lang.reflect.Member
-import com.sun.corba.se.spi.activation._ActivatorImplBase
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
