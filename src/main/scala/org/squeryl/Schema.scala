@@ -595,10 +595,22 @@ trait Schema {
    */
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
     
-    def save =
+    private def _performAction(action: (Table[A]) => Unit) =
       _tableTypes get (m.erasure) map { table: Table[_] =>
-        queryDsl.inTransaction(table.asInstanceOf[Table[A]].insert(a))
+        queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
       }
+    
+    /**
+     * Same as {{{table.insert(a)}}}
+     */
+    def save =
+      _performAction(_.insert(a))
+
+    /**
+     * Same as {{{table.update(a)}}}
+     */  
+    def update(implicit ev: A <:< KeyedEntity[_]) =
+      _performAction(_.update(a))
       
   }
 
