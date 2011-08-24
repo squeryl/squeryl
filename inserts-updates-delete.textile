@@ -123,3 +123,35 @@ The advantage of this is obviously making 1 trip to the DB versus N trips (given
  
 ]]></script>
     
+
+h2. Active Record pattern
+
+Another option available for inserting objects is through the use of the
+convenience save method. This method allows the entity to be persisted
+without the invocation of the insert method of the respective table :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    import MusicDb._
+
+    new Artist("Herby Hancock").save
+]]></script>
+
+In the same manner, Updates can also be done with the usage of the
+Active Record pattern :
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    import MusicDb._
+
+    watermelonMan.title = "The Watermelon Man"
+	  watermelonMan.year = watermelonMan.year + 1
+	  watermelonMan.update
+]]></script>
+
+It's important to note that the contents of the Schema object were imported
+before the usage of those convenience methods.
+
+While this makes your code look smaller and less cluttered, it may not work
+correctly when dealing with some specific corner cases, like a class that has a
+common structure and is mapped to two or more different tables.
