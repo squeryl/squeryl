@@ -15,7 +15,6 @@
  ***************************************************************************** */
 package org.squeryl
 
-
 import dsl._
 import ast._
 import internals._
@@ -406,7 +405,6 @@ trait Schema {
   /**
    * protected since table declarations must only be done inside a Schema
    */
-
   protected def declare[B](a: BaseColumnAttributeAssignment*) = a
 
   /**
@@ -582,16 +580,25 @@ trait Schema {
   protected def factoryFor[A](table: Table[A]) =
     new PosoFactoryPercursorTable[A](table)
 
+  /**
+   * Creates a ActiveRecord instance for the given the object. That allows the user
+   * to save the given object using the Active Record pattern.
+   *
+   * @return a instance of ActiveRecord associated to the given object.
+   */
   implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: Manifest[A]) =
     new ActiveRecord(a, queryDsl, m)
 
+  /**
+   * Active Record pattern implementation. Enables the user to insert an object in its
+   * existent table with a convenient {{{save}}} method.
+   */
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
     
-    def save = {
+    def save =
       _tableTypes get (m.erasure) map { table: Table[_] =>
         queryDsl.inTransaction(table.asInstanceOf[Table[A]].insert(a))
       }
-    }
       
   }
 
