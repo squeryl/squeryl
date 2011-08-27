@@ -243,6 +243,18 @@ class FieldMetaData(
     columnAttributes.exists(_.isInstanceOf[AutoIncremented])
 
   /**
+   * Inserts will only set values for a column if isInsertable is true
+   */
+  def isInsertable =
+    !columnAttributes.exists(_.isInstanceOf[Uninsertable])
+
+  /**
+   * Updates will only set values for a column if isUpdatable is true
+   */
+  def isUpdatable =
+    !columnAttributes.exists(_.isInstanceOf[Unupdatable])
+
+  /**
    *  gets the value of the field from the object.
    * Note that it will unwrap Option[] and return null instead of None, i.e.
    * if converts None and Some to null and some.get respectively 

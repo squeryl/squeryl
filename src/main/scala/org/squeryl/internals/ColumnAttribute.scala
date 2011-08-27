@@ -50,3 +50,17 @@ case class PrimaryKey() extends ColumnAttribute
 case class DBType(val declaration: String) extends ColumnAttribute
   with AttributeValidOnNonNumericalColumn
   with AttributeValidOnNumericalColumn
+
+/**
+ * Flag column as not accepting values on INSERT
+ */
+case class Uninsertable() extends ColumnAttribute
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnNonNumericalColumn
+/**
+ * Flag column as not accepting values on UPDATE
+ */
+case class Unupdatable() extends ColumnAttribute
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnNonNumericalColumn
+
