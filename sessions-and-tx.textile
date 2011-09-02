@@ -34,7 +34,7 @@ After the initialization of SessionFactory.concreteFactory, the *transaction* an
 	   authors.where(a=> a.lastName === "Pouchkine")
 	   
 	   //when in a transaction, the current session can be obtained with :
-	   val s = Squeryl.currentSession
+	   val s = Session.currentSession
 	}
 ]]></script>
 
