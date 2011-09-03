@@ -64,7 +64,7 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) {
   val junit = "junit" % "junit" % "4.8.2" % "provided"
   
   val scalatest = 
-    if(crossScalaVersionString.startsWith("2.9.0-1")) 
+    if(crossScalaVersionString.startsWith("2.9.0-1") || crossScalaVersionString.startsWith("2.9.1")) 
       "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"  
     else if(!crossScalaVersionString.startsWith("2.8")) 
       "org.scalatest" %% "scalatest" % "1.4.1" % "provided"
