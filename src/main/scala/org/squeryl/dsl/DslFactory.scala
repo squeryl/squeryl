@@ -119,6 +119,9 @@ trait DslFactory
   implicit def traversableOfNumericalExpressionList[A <% NumericalExpression[_]](l: Traversable[A]) =
     new RightHandSideOfIn[NumericalExpression[A]](new ConstantExpressionNodeList[Any](l))
 
+  implicit def traversableOfEnumerationValue2ListEnumerationValue[E <: Enumeration#Value](l: Traversable[E]) = 
+    new RightHandSideOfIn[E](new ConstantExpressionNodeList[E](l)) 
+
 // TODO : find out why this generalized conv for NonNumericals won't work (looks like a scalac bug...):
 //  implicit def traversableOfNonNumercalExpressionList[A <% NonNumericalExpression[_]](l: Traversable[A]) =
 //    new RightHandSideOfIn[NonNumericalExpression[A]](new ConstantExpressionNodeList[Any](l))
