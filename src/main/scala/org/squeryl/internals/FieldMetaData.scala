@@ -58,14 +58,12 @@ class FieldMetaData(
     else {
 
       val svE =
-        if(sampleValue.isInstanceOf[Option[_]])
+        if(isOption)
           sampleValue.asInstanceOf[Option[Enumeration#Value]].get
         else
           sampleValue.asInstanceOf[Enumeration#Value]
-      
-      val m = svE.getClass.getField("$outer")
 
-      val enu = m.get(svE).asInstanceOf[Enumeration]
+      val enu = Utils.enumerationForValue(svE)
 
       val r = enu.values.find(_.id == id).get
 
@@ -245,6 +243,18 @@ class FieldMetaData(
     columnAttributes.exists(_.isInstanceOf[AutoIncremented])
 
   /**
+   * Inserts will only set values for a column if isInsertable is true
+   */
+  def isInsertable =
+    !columnAttributes.exists(_.isInstanceOf[Uninsertable])
+
+  /**
+   * Updates will only set values for a column if isUpdatable is true
+   */
+  def isUpdatable =
+    !columnAttributes.exists(_.isInstanceOf[Unupdatable])
+
+  /**
    *  gets the value of the field from the object.
    * Note that it will unwrap Option[] and return null instead of None, i.e.
    * if converts None and Some to null and some.get respectively 
@@ -382,7 +392,7 @@ object FieldMetaData {
         val c = posoMetaData.constructor
         c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
       }
-    
+
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 
       val field  = property._1
@@ -443,12 +453,18 @@ object FieldMetaData {
           case e:Exception => null
         }
 
-      if(v == null){
+      val deductionFailed =
+        v match {
+          case Some(None) => true
+          case a:Any  => (v == null)
+        }
+
+      if(deductionFailed) {
         var errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
         if(!detectScalapOnClasspath()) errorMessage += "scalap option deduction not enabled. See: http://squeryl.org/scalap.html for more information."
         org.squeryl.internals.Utils.throwError(errorMessage)
       }
-     
+
       val isOption = v.isInstanceOf[Some[_]]
 
       val typeOfFieldOrTypeOfOption =
@@ -467,6 +483,7 @@ object FieldMetaData {
         }
         else
           typeOfFieldOrTypeOfOption
+
 
       new FieldMetaData(
         parentMetaData,

@@ -61,7 +61,7 @@ class DB2Adapter extends DatabaseAdapter {
       return
     }
 
-    val f = t.posoMetaData.fieldsMetaData.filter(fmd => fmd != autoIncPK.get)
+    val f = getInsertableFields(t.posoMetaData.fieldsMetaData)
 
     val colNames = List(autoIncPK.get) ::: f.toList
     val colVals = List("next value for " + sequenceName(t)) ::: f.map(fmd => writeValue(o_, fmd, sw)).toList

@@ -15,7 +15,6 @@
  ***************************************************************************** */
 package org.squeryl
 
-
 import dsl._
 import ast._
 import internals._
@@ -32,6 +31,8 @@ trait Schema {
    * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
    */
   private val _tables = new ArrayBuffer[Table[_]] 
+  
+  private val _tableTypes = new HashMap[Class[_], Table[_]]
 
   private val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
 
@@ -329,19 +330,26 @@ trait Schema {
     table(tableNameFromClass(manifestT.erasure))(manifestT)
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this, None)
+    val typeT = manifestT.erasure.asInstanceOf[Class[T]]
+    val t = new Table[T](name, typeT, this, None)
     _addTable(t)
+    _addTableType(typeT, t)
     t
   }
 
   protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val t = new Table[T](name, manifestT.erasure.asInstanceOf[Class[T]], this, Some(prefix))
+    val typeT = manifestT.erasure.asInstanceOf[Class[T]]
+    val t = new Table[T](name, typeT, this, Some(prefix))
     _addTable(t)
+    _addTableType(typeT, t)
     t
   }
 
   private [squeryl] def _addTable(t:Table[_]) =
     _tables.append(t)
+    
+  private [squeryl] def _addTableType(typeT: Class[_], t: Table[_]) =
+    _tableTypes += ((typeT, t))
   
   protected def view[T]()(implicit manifestT: Manifest[T]): View[T] =
     view(tableNameFromClass(manifestT.erasure))(manifestT)
@@ -397,7 +405,6 @@ trait Schema {
   /**
    * protected since table declarations must only be done inside a Schema
    */
-
   protected def declare[B](a: BaseColumnAttributeAssignment*) = a
 
   /**
@@ -491,6 +498,10 @@ trait Schema {
 
   protected def dbType(declaration: String) = DBType(declaration)
 
+  protected def uninsertable = Uninsertable()
+
+  protected def unupdatable = Unupdatable()
+
   class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
 
     def are(columnAttributes: AttributeValidOnMultipleColumn*) =
@@ -572,5 +583,39 @@ trait Schema {
 
   protected def factoryFor[A](table: Table[A]) =
     new PosoFactoryPercursorTable[A](table)
+
+  /**
+   * Creates a ActiveRecord instance for the given the object. That allows the user
+   * to save the given object using the Active Record pattern.
+   *
+   * @return a instance of ActiveRecord associated to the given object.
+   */
+  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: Manifest[A]) =
+    new ActiveRecord(a, queryDsl, m)
+
+  /**
+   * Active Record pattern implementation. Enables the user to insert an object in its
+   * existent table with a convenient {{{save}}} method.
+   */
+  class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
+    
+    private def _performAction(action: (Table[A]) => Unit) =
+      _tableTypes get (m.erasure) map { table: Table[_] =>
+        queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
+      }
+    
+    /**
+     * Same as {{{table.insert(a)}}}
+     */
+    def save =
+      _performAction(_.insert(a))
+
+    /**
+     * Same as {{{table.update(a)}}}
+     */  
+    def update(implicit ev: A <:< KeyedEntity[_]) =
+      _performAction(_.update(a))
+      
+  }
 
 }

@@ -5,9 +5,9 @@ organization := "org.squeryl"
 
 version := "0.9.5-Beta"
 
-scalaVersion := "2.9.0-1"
+scalaVersion := "2.9.1"
 
-crossScalaVersions := Seq("2.9.0-1","2.9.0","2.8.1","2.8.0")
+crossScalaVersions := Seq("2.9.1","2.9.0-1","2.9.0","2.8.1","2.8.0")
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "2.2",
@@ -22,9 +22,11 @@ libraryDependencies ++= Seq(
 libraryDependencies <+= scalaVersion("org.scala-lang" % "scalap" % _ % "provided")
   
 libraryDependencies <+= scalaVersion(sv=> sv match {
+     case "2.9.1" => 
+	   "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"
      case "2.9.0-1" => 
 	   "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"	 
-	 case v:String =>
+     case v:String =>
 	   if(! v.startsWith("2.8")) 
 	     "org.scalatest" % v % "scalatest" % "1.4.1" % "provided"
 	   else

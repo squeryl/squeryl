@@ -653,4 +653,40 @@ trait TypeArithmetic extends FieldTypes {
     }
     def sample = Some(sampleUuid)
   }
+
+  protected def outMapperFromEnumValue(e: Enumeration#Value) = {
+
+    val enu = Utils.enumerationForValue(e)
+
+    new OutMapper[Enumeration#Value]() {
+
+      def doMap(rs: ResultSet) = {
+        val enumIdx = rs.getInt(this.index)
+        enu.values.find(_.id == enumIdx).get
+      }
+
+      def sample = e
+    }
+  }
+
+  /**
+   * If given None, this function will be unable to create an OutMapper, so will return None
+   */
+  protected def outMapperOptionFromOptionEnumValue(e: Option[Enumeration#Value]) =
+    if(e == None)
+      None
+    else {
+
+      val enu = Utils.enumerationForValue(e.get)
+
+      Some(new OutMapper[Option[Enumeration#Value]]() {
+
+        def doMap(rs: ResultSet) = {
+          val enumIdx = rs.getInt(this.index)
+          Some(enu.values.find(_.id == enumIdx).get)
+        }
+
+        def sample = e
+      })
+    }
 }

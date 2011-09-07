@@ -71,7 +71,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
       return
     }
 
-    val f = t.posoMetaData.fieldsMetaData.filter(fmd => fmd != autoIncPK.get)
+    val f = getInsertableFields(t.posoMetaData.fieldsMetaData)
 
     val colNames = List(autoIncPK.get) ::: f.toList
     val colVals = List("nextval('" + quoteName(autoIncPK.get.sequenceName) + "')") ::: f.map(fmd => writeValue(o_, fmd, sw)).toList

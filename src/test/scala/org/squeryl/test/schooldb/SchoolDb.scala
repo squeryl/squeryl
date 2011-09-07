@@ -492,7 +492,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     c.rawData(0) = 3
 
-    courses.update(c)
+    c.update
 
     c = courses.where(_.id === counterpoint.id).single
 
@@ -648,7 +648,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     mandarinCourse.startDate = feb2011
 
-    courses.update(mandarinCourse)
+    mandarinCourse.update
 
     val mandarinCourse2011 =
       courses.where(c => c.id === mandarin.id).single
@@ -672,7 +672,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     // test date update :
     groupTh.finalExamDate = Some(feb2011)
 
-    courses.update(groupTh)
+    groupTh.update
 
     groupTh =
       courses.where(c => c.id === groupTheory.id).single
@@ -685,7 +685,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     groupTh.finalExamDate = None
 
-    courses.update(groupTh)
+    groupTh.update
 
     groupTh =
       courses.where(c => c.id === groupTheory.id).single
@@ -698,7 +698,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     groupTh.finalExamDate = Some(may2009)
 
-    courses.update(groupTh)
+    groupTh.update
 
     groupTh =
       courses.where(c => c.id === groupTheory.id).single
@@ -821,7 +821,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     ht.meaninglessLong = -3
     ht.meaninglessLongOption = None
 
-    courses.update(ht)
+    ht.update
 
     ht = courses.where(c => c.id === heatTransfer.id).single
 
@@ -830,7 +830,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     ht.meaninglessLongOption = Some(4321)
 
-    courses.update(ht)
+    ht.update
 
     ht = courses.where(c => c.id === heatTransfer.id).single
 
@@ -838,7 +838,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     ht.meaninglessLongOption = Some(1234)
 
-    courses.update(ht)
+    ht.update
 
     assert(ht.meaninglessLongOption == Some(1234), "expected Some(1234), got " + ht.meaninglessLongOption)
 
@@ -888,17 +888,17 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
 
     g.isMultilingual = None
-    students.update(g)
+    g.update
     g = students.where(s => s.id === gontran.id).single
     assert(g.isMultilingual == None, "expected None, got " + g.isMultilingual)
 
     g.isMultilingual = Some(false)
-    students.update(g)
+    g.update
     g = students.where(s => s.id === gontran.id).single
     assert(! g.isMultilingual.get, "expected Some(false), got " + g.isMultilingual)
 
     g.isMultilingual = Some(true)
-    students.update(g)
+    g.update
     g = students.where(s => s.id === gontran.id).single
     assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
 
@@ -915,13 +915,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     t.yearlySalary = 90.5F
     t.weight = Some(75.7F)
-    professors.update(t)
+    t.update
     t = professors.where(p => p.id === tournesol.id).single
     assert(t.yearlySalary == 90.5, "expected 90.5, got " + t.yearlySalary)
     assert(t.weight == Some(75.7F), "expected Some(75.7), got " + t.weight)
 
     t.weight = None
-    professors.update(t)
+    t.update
     t = professors.where(p => p.id === tournesol.id).single
     assert(t.weight == None, "expected None, got " + t.weight)
 
@@ -1075,12 +1075,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     transaction {
       var ht2 = courses.where(c => c.id === heatTransfer.id).single
-      courses.update(ht2)
+      ht2.update
     }
 
     var ex: Option[StaleUpdateException] = None
     try {
-      courses.update(ht)
+      ht.update
     }
     catch {
       case e:StaleUpdateException => ex = Some(e)
