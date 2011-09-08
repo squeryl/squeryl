@@ -24,9 +24,8 @@ import org.squeryl.dsl.CompositeKey
 object FieldReferenceLinker {
 
   def pushExpressionOrCollectValue[T](e: ()=>TypedExpressionNode[T]): T = {
-
-    val yi = _yieldInspectionTL.get
-    if(yi.isOn) {
+    if (isYieldInspectionMode) {
+      val yi = _yieldInspectionTL.get
       val expr = yi.callWithoutReentrance(e)
       yi.addSelectElement(new ValueSelectElement(expr, yi.resultSetMapper, expr.mapper, yi.queryExpressionNode))
       val r = expr.sample
@@ -34,33 +33,51 @@ object FieldReferenceLinker {
     }
     else {
       val r = _yieldValues.get.remove(0).asInstanceOf[T]
+      if (_yieldValues.get.size == 0) {
+        _yieldValues.remove()
+      }
       r
     }
   }
 
-  def pushYieldValue(v:AnyRef) = _yieldValues.get.append(v)
+  def pushYieldValue(v:AnyRef) = {
+    var a = _yieldValues.get
+    if (a == null) {
+      a = new ArrayBuffer[AnyRef]
+      _yieldValues.set(a)
+    }
+    a.append(v)
+  }
 
-  def isYieldInspectionMode = _yieldInspectionTL.get.isOn
+  def isYieldInspectionMode = {
+    val yi = _yieldInspectionTL.get
+    if (yi != null) {
+      yi.isOn
+    } else {
+      _yieldInspectionTL.remove()
+      false
+    }
+  }
 
   def inspectedQueryExpressionNode = _yieldInspectionTL.get.queryExpressionNode
   
-  private val _yieldValues = new ThreadLocal[ArrayBuffer[AnyRef]] {
-    override def initialValue = new ArrayBuffer[AnyRef]
-  }
+  private val _yieldValues = new ThreadLocal[ArrayBuffer[AnyRef]]
   
-  private val __lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]] {
-    override def initialValue = None
-  }
+  private val __lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]]
 
-  private [squeryl] def _lastAccessedFieldReference: Option[SelectElement] =
-    __lastAccessedFieldReference.get
+  private [squeryl] def _lastAccessedFieldReference: Option[SelectElement] = {
+    val fr = __lastAccessedFieldReference.get
+    if (fr == null) None else fr
+  }
 
   private [squeryl] def _lastAccessedFieldReference_=(se: Option[SelectElement]) =
-    __lastAccessedFieldReference.set(se)
+    if (se == None) {
+      __lastAccessedFieldReference.remove()
+    } else {
+      __lastAccessedFieldReference.set(se)
+    }
   
-  private val _compositeKeyMembers = new ThreadLocal[Option[ArrayBuffer[SelectElement]]] {
-    override def initialValue = None
-  }
+  private val _compositeKeyMembers = new ThreadLocal[Option[ArrayBuffer[SelectElement]]]
 
   /**
    * _lastAccessedFieldReference is unique per thread, AST construction can be nested and can interfere with
@@ -113,15 +130,6 @@ object FieldReferenceLinker {
      def decrementReentranceDepth =
        _reentranceDepth -= 1
 
-    def cleanUp = {
-      _reentranceDepth = 0
-      _resultSetMapper = null
-      queryExpressionNode = null
-      _on = false
-      _utilizedFields.clear
-      _lastAccessedFieldReference = None
-    }
-
     def turnOn(q: QueryExpressionNode[_], rsm: ResultSetMapper) = {
       _reentranceDepth = 0
       queryExpressionNode = q
@@ -129,24 +137,17 @@ object FieldReferenceLinker {
       _resultSetMapper = rsm
     }
 
-    def turnOffAndCollectOutExpressions: List[SelectElement] = {
-      _reentranceDepth = 0
-      _resultSetMapper = null
-      _on = false
-      val res = _utilizedFields.toList
-      _utilizedFields.clear
-      res
+    def outExpressions: List[SelectElement] = {
+      _utilizedFields.toList
     }
   }
   
-  private val _yieldInspectionTL = new ThreadLocal[YieldInspection] {
-    override def initialValue = new YieldInspection
-  }
+  private val _yieldInspectionTL = new ThreadLocal[YieldInspection]
 
   def putLastAccessedSelectElement(e: SelectElement) = {
-    if(_yieldInspectionTL.get.isOn)
+    if (isYieldInspectionMode) {
       _yieldInspectionTL.get.addSelectElement(new ExportedSelectElement(e))
-    else
+    } else
     _lastAccessedFieldReference = Some(e)
   }
 
@@ -189,7 +190,8 @@ object FieldReferenceLinker {
 
   def determineColumnsUtilizedInYeldInvocation(q: QueryExpressionNode[_], rsm: ResultSetMapper, selectClosure: ()=>AnyRef) = {
     
-    val yi = _yieldInspectionTL.get
+    val yi = new YieldInspection
+      _yieldInspectionTL.set(yi)
     var result:(List[SelectElement],AnyRef) = null
     try {
       yi.turnOn(q, rsm)
@@ -211,11 +213,10 @@ object FieldReferenceLinker {
       
       _populateSelectColsRecurse(visitedSet, yi, q, res0)
 
-      result = (yi.turnOffAndCollectOutExpressions, res0)
+      result = (yi.outExpressions, res0)
     }
     finally {
-      if(result == null)
-        yi.cleanUp
+      _yieldInspectionTL.remove()      
     }
     result
   }
@@ -285,18 +286,18 @@ object FieldReferenceLinker {
       def intercept(o: Object, m: Method, args: Array[Object], proxy: MethodProxy): Object = {
 
         val fmd = fmd4Method(m)
-        val yi = _yieldInspectionTL.get
+        val yi = if (isYieldInspectionMode) _yieldInspectionTL.get else null
         val isComposite =
           classOf[CompositeKey].isAssignableFrom(m.getReturnType)
 
         try {
-          if(fmd != None && yi.isOn)
+          if(fmd != None && yi != null)
             yi.incrementReentranceDepth
 
           _intercept(o, m, args, proxy, fmd, yi, isComposite)
         }
         finally {
-          if(fmd != None && yi.isOn)
+          if(fmd != None && yi != null)
             yi.decrementReentranceDepth
         }
       }
@@ -312,7 +313,7 @@ object FieldReferenceLinker {
           val ck = res.asInstanceOf[CompositeKey]
           ck._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any](_)(NoOpOutMapper)))
           ck._propertyName = Some(m.getName)
-          _compositeKeyMembers.set(None)
+          _compositeKeyMembers.remove()
         }
 
         if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
@@ -320,12 +321,13 @@ object FieldReferenceLinker {
 
         if(fmd != None) {
 
-          if(yi.isOn &&  yi.reentranceDepth == 1)
+          if(yi != null &&  yi.reentranceDepth == 1)
             yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))
 
-          if(_compositeKeyMembers.get == None)
+          if(_compositeKeyMembers.get == null) {
+            _compositeKeyMembers.remove()
             _lastAccessedFieldReference = Some(viewExpressionNode.getOrCreateSelectElement(fmd.get));
-          else
+          } else
             _compositeKeyMembers.get.get.append(viewExpressionNode.getOrCreateSelectElement(fmd.get))
         }
 
