@@ -11,7 +11,7 @@ You can define :
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
   class SHA1(e: StringExpression[String], m:OutMapper[String]) 
-    extends FunctionNode[String]("sha1", Some(m), e) with StringExpression[String]
+    extends FunctionNode[String]("sha1", Some(m), Seq(e)) with StringExpression[String]
 
   def sha1(e: StringExpression[String])(implicit m:OutMapper[String]) = new SHA1(e,m)
   
@@ -60,7 +60,7 @@ Where :
   }
     
   class SHA1(e: StringExpression[String]) 
-    extends FunctionNode[String]("sha1", Some(m1), e) with StringExpression[String]
+    extends FunctionNode[String]("sha1", Some(m1), Seq(e)) with StringExpression[String]
 
   def sha1(e: StringExpression[String]) = new SHA1(e,m)
   
