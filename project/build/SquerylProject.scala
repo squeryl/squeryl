@@ -46,6 +46,12 @@ class SquerylProject(info: ProjectInfo) extends DefaultProject(info) with BNDPlu
   
   val cglib = "cglib" % "cglib-nodep" % "2.2"
 
+  /*
+   * Necessary to avoid scala-compiler.jar from being filtered out of
+   * scalap's transitive dependencies
+   */
+  override def filterScalaJars = false
+
   val scalap = "org.scala-lang" % "scalap" % crossScalaVersionString
 
   /**
