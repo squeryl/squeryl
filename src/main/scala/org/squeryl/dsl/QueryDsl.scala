@@ -111,6 +111,7 @@ trait QueryDsl
       }
       catch {
         case e:SQLException => {
+          Utils.close(c)
           if(txOk) throw e // if an exception occured b4 the commit/rollback we don't want to obscure the original exception 
         }
       }
