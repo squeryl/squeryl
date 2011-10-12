@@ -55,6 +55,9 @@ trait QueryDsl
     }
   }
 
+   def transaction[A](s: Session)(a: =>A) = 
+     _executeTransactionWithin(s, a _)
+   
   /**
    * 'transaction' causes a new transaction to begin and commit after the block execution, or rollback
    * if an exception occurs. Invoking a transaction always cause a new one to
