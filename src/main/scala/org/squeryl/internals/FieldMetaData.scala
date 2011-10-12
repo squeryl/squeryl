@@ -658,10 +658,6 @@ object FieldMetaData {
       val stream = new PrintStream(baos)
       val printer = new ScalaSigPrinter(stream, true)
       for (c <- syms) {
-        println("%s <-> %s == %s".format(
-            c.path, 
-            member.getDeclaringClass().getName(), 
-            (c.path == member.getDeclaringClass().getName())))
         if(c.path == member.getDeclaringClass().getName())
         	printer.printSymbol(c)
       }
