@@ -501,6 +501,8 @@ trait Schema {
   protected def uninsertable = Uninsertable()
 
   protected def unupdatable = Unupdatable()
+  
+  protected def named(name: String) = Named(name)
 
   class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
 

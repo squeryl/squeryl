@@ -184,8 +184,10 @@ class FieldMetaData(
    * The name of the database column
    */
   def columnName =
-    if(columnAnnotation == None)
-      parentMetaData.schema.columnNameFromPropertyName(nameOfProperty)
+    if(columnAnnotation == None) {
+      val nameDefinedInSchema = _columnAttributes.find(_.isInstanceOf[Named]).map(_.asInstanceOf[Named].name)      
+      parentMetaData.schema.columnNameFromPropertyName(nameDefinedInSchema.getOrElse(nameOfProperty))
+    }
     else {
       val ca = columnAnnotation.get
       var res = ca.name
