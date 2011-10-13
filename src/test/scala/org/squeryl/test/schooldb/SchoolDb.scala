@@ -473,7 +473,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testDeepNest)
   }
 
-  test("assertColumnName") {
+  test("assertColumnNameChangeWithDeclareSyntax") {
     val st = Session.currentSession.connection.createStatement()
     val r = st.execute("select the_Last_Name from t_professor")                                                        
     // this should not blow up...
