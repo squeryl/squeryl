@@ -550,14 +550,13 @@ trait QueryDsl
     if(isSelfReference)
       assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity || ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
 
-    if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT) {
-      if(!isSelfReference)
-        assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
+    if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT &&
+       (!isSelfReference || (isSelfReference && ee.right._fieldMetaData.isIdFieldOfKeyedEntity)) ) {
+      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
       (ee.right._fieldMetaData, ee.left._fieldMetaData)
     }
     else {
-      if(!isSelfReference)
-        assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
+      assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
       (ee.left._fieldMetaData, ee.right._fieldMetaData)
     }
   }
