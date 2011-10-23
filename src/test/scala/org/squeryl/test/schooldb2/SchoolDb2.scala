@@ -14,7 +14,7 @@ trait SchoolDb2Object extends KeyedEntity[Long] {
 
 object SchoolDb2 extends SchoolDb2
 
-class Professor(val lastName: String) extends SchoolDb2Object {
+class Professor(val lastName: String, var bossId: Option[Long]=None) extends SchoolDb2Object {
 
   lazy val courses = SchoolDb2.courseAssignments.left(this)
 }
@@ -116,6 +116,10 @@ class SchoolDb2 extends Schema {
   val subjectToCourses =
     oneToManyRelation(subjects, courses).
     via((s,c) => s.id === c.subjectId)
+    
+  val bossToProfessors =
+    oneToManyRelation(professors, professors).
+    via((boss,p) => boss.id === p.bossId)
 
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
