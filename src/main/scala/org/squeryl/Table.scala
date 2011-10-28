@@ -22,7 +22,6 @@ import java.sql.{Statement}
 import logging.StackMarker
 import scala.reflect.Manifest
 import collection.mutable.ArrayBuffer
-import javax.swing.UIDefaults.LazyValue
 
 private [squeryl] object DummySchema extends Schema
 
@@ -40,7 +39,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val sw = new StatementWriter(_dbAdapter)
     _dbAdapter.writeInsert(t, this, sw)
 
-    val st =
+    val st = sess._cacheOrCreatePreparedStatement(this.name + ".insert") {
       (_dbAdapter.supportsAutoIncrementInColumnDeclaration, posoMetaData.primaryKey) match {
         case (true, a:Any) => sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
         case (false, Some(Left(pk:FieldMetaData))) => {
@@ -49,35 +48,31 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
           sess.connection.prepareStatement(sw.statement, autoIncPk)
         }
         case a:Any => sess.connection.prepareStatement(sw.statement)
-      }        
-
-    try {
-      val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
-
-      if(cnt != 1)
-        org.squeryl.internals.Utils.throwError("failed to insert")
-
-      posoMetaData.primaryKey match {
-        case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
-          val rs = st.getGeneratedKeys
-          try {
-            assert(rs.next,
-              "getGeneratedKeys returned no rows for the auto incremented\n"+
-              " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
-              " column might not be defined as auto increment")
-            pk.setFromResultSet(o, rs, 1)
-          }
-          finally {
-            rs.close
-          }
-        }
-        case a:Any =>{}
       }
     }
-    finally {
-      st.close
+
+    val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
+
+    if(cnt != 1)
+      org.squeryl.internals.Utils.throwError("failed to insert")
+
+    posoMetaData.primaryKey match {
+      case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
+        val rs = st.getGeneratedKeys
+        try {
+          assert(rs.next,
+            "getGeneratedKeys returned no rows for the auto incremented\n"+
+              " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
+              " column might not be defined as auto increment")
+          pk.setFromResultSet(o, rs, 1)
+        }
+        finally {
+          rs.close()
+        }
+      }
+      case a:Any =>{}
     }
-    
+
     val r = _callbacks.afterInsert(o).asInstanceOf[T]
 
     _setPersisted(r)
@@ -99,7 +94,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     if(it.hasNext) {
 
-      val e0 = it.next
+      val e0 = it.next()
       val sess = Session.currentSession
       val dba = _dbAdapter
       val sw = new StatementWriter(dba)
@@ -116,45 +111,46 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         dba.writeUpdate(z.asInstanceOf[T], this, sw, checkOCC)
       }
       
-      val st = sess.connection.prepareStatement(sw.statement)
-
-      try {
-        dba.prepareStatement(sess.connection, sw, st, sess)
-        st.addBatch
-
-        var updateCount = 1
-
-        while(it.hasNext) {
-          val eN0 = it.next.asInstanceOf[AnyRef]
-          val eN =
-            if(isInsert)
-              _callbacks.beforeInsert(eN0)
-            else
-              _callbacks.beforeUpdate(eN0)
-
-          forAfterUpdateOrInsert.append(eN)
-
-          var idx = 1
-          fmds.foreach(fmd => {
-            st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
-            idx += 1
-          })
-          st.addBatch
-          updateCount += 1
-        }
-
-        val execResults = st.executeBatch
-
-        if(checkOCC)
-          for(b <- execResults)
-            if(b == 0) {
-              val updateOrInsert = if(isInsert) "insert" else "update"
-              throw new StaleUpdateException(
-                "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
-            }
+      val statementName = this.name + "." + (if (isInsert) "insert" else "update")
+      
+      val st = sess._cacheOrCreatePreparedStatement(statementName) {
+        sess.connection.prepareStatement(sw.statement)
       }
-      finally {
-        st.close
+
+        dba.prepareStatement(sess.connection, sw, st, sess)
+        st.addBatch()
+
+      var updateCount = 1
+
+      while(it.hasNext) {
+        val eN0 = it.next().asInstanceOf[AnyRef]
+        val eN =
+          if(isInsert)
+            _callbacks.beforeInsert(eN0)
+          else
+            _callbacks.beforeUpdate(eN0)
+
+        forAfterUpdateOrInsert.append(eN)
+
+        var idx = 1
+        fmds.foreach(fmd => {
+          st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
+          idx += 1
+        })
+        st.addBatch()
+        updateCount += 1
+      }
+
+      val execResults = st.executeBatch
+
+      if(checkOCC) {
+        for(b <- execResults) {
+          if(b == 0) {
+            val updateOrInsert = if(isInsert) "insert" else "update"
+            throw new StaleUpdateException(
+              "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
+          }
+        }
       }
 
       for(a <- forAfterUpdateOrInsert)
