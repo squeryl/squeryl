@@ -831,7 +831,36 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 //      }).start
 //    }
 //  }
-  
+
+  test("Enums IN"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val gs = List(Jazz, Rock)
+    val mainstream = from(songs)(s =>
+      where(s.genre in (gs))
+      select(s)
+    )
+    assertEquals(mainstream.size, 
+                 songs.where(s => s.genre === gs(0) or s.genre === gs(1)).size, 
+                 "expected 2 Jazz/Rock pieces")
+  }
+
+  /* TODO: this test should compile, but it doesn't.
+   * 
+  test("Enums Inhibit"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    def listSongs(genreFilter: Option[Genre]) =
+      from(songs)(s =>
+        where(s.genre === genreFilter.?)
+        select(s)
+      )
+    assertEquals(listSongs(Some(Jazz)).size, 
+                 songs.where(s => s.genre === Jazz).size, 
+                 "expected all Jazz pieces")
+    assertEquals(listSongs(None).size, songs.size, "expected all songs")
+  }
+  */
   
   test("Enums"){
     val testInstance = sharedTestInstance; import testInstance._

@@ -64,3 +64,7 @@ case class Unupdatable() extends ColumnAttribute
         with AttributeValidOnNumericalColumn
         with AttributeValidOnNonNumericalColumn
 
+
+case class Named(name: String) extends ColumnAttribute
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnNonNumericalColumn        

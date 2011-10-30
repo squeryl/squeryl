@@ -151,7 +151,7 @@ class SchoolDb extends Schema {
   val schools = table[School]
 
   val postalCodes = table[PostalCode]
-
+  
 // uncomment to test : when http://www.assembla.com/spaces/squeryl/tickets/14-assertion-fails-on-self-referring-onetomanyrelationship
 //  an unverted constraint gets created, unless expr. is inverted : child.parentSchoolId === parent.id
 //  val schoolHierarchy =
@@ -166,6 +166,10 @@ class SchoolDb extends Schema {
     //_.addressId is(autoIncremented) currently only supported on KeyedEntity.id ... ! :(
   ))
 
+  on(professors)(p => declare(
+    p.lastName is(named("theLastName"))
+  ))
+  
   on(professors)(p => declare(
     p.yearlySalary is(dbType("real"))
   ))
@@ -260,6 +264,7 @@ class TestInstance(schema : SchoolDb){
 
   val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
 }
+
 
 abstract class TypeSystemExerciseTests extends SchoolDbTestBase{
 
@@ -468,6 +473,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testDeepNest)
   }
 
+  test("assertColumnNameChangeWithDeclareSyntax") {
+    val st = Session.currentSession.connection.createStatement()
+    val r = st.execute("select the_Last_Name from t_professor")                                                        
+    // this should not blow up...
+  }
+  
   test("OptionStringInWhereClause"){
     val testInstance = sharedTestInstance; import testInstance._
 
@@ -519,7 +530,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     passed('testInOpWithStringList)
   }
-
+  
   test("lifecycleCallbacks", SingleTestRun) {
 
 

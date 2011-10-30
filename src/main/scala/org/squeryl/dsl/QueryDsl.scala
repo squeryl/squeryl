@@ -55,6 +55,9 @@ trait QueryDsl
     }
   }
 
+   def transaction[A](s: Session)(a: =>A) = 
+     _executeTransactionWithin(s, a _)
+   
   /**
    * 'transaction' causes a new transaction to begin and commit after the block execution, or rollback
    * if an exception occurs. Invoking a transaction always cause a new one to
@@ -111,6 +114,7 @@ trait QueryDsl
       }
       catch {
         case e:SQLException => {
+          Utils.close(c)
           if(txOk) throw e // if an exception occured b4 the commit/rollback we don't want to obscure the original exception 
         }
       }
@@ -546,14 +550,13 @@ trait QueryDsl
     if(isSelfReference)
       assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity || ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
 
-    if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT) {
-      if(!isSelfReference)
-        assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
+    if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT &&
+       (!isSelfReference || (isSelfReference && ee.right._fieldMetaData.isIdFieldOfKeyedEntity)) ) {
+      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
       (ee.right._fieldMetaData, ee.left._fieldMetaData)
     }
     else {
-      if(!isSelfReference)
-        assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
+      assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
       (ee.left._fieldMetaData, ee.right._fieldMetaData)
     }
   }

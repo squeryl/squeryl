@@ -25,13 +25,14 @@ trait RunTestsInsideTransaction extends DbTestBase {
         super.runTest(testName, reporter, stopper, configMap, tracker)
 
         // we abort the transaction if we get to here, so changes get rolled back
-        throw TransactionAbortException
+        throwExceptionToAbort        
       }
     } catch {
       case TransactionAbortException =>
     }
-  }
-
+    
+    def throwExceptionToAbort: Unit = throw TransactionAbortException
+  }   
 
 }
 

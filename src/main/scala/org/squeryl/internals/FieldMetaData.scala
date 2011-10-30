@@ -31,6 +31,7 @@ import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteC
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.lang.reflect.Member
+import scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -183,8 +184,10 @@ class FieldMetaData(
    * The name of the database column
    */
   def columnName =
-    if(columnAnnotation == None)
-      parentMetaData.schema.columnNameFromPropertyName(nameOfProperty)
+    if(columnAnnotation == None) {
+      val nameDefinedInSchema = _columnAttributes.find(_.isInstanceOf[Named]).map(_.asInstanceOf[Named].name)      
+      parentMetaData.schema.columnNameFromPropertyName(nameDefinedInSchema.getOrElse(nameOfProperty))
+    }
     else {
       val ca = columnAnnotation.get
       var res = ca.name
@@ -648,48 +651,34 @@ object FieldMetaData {
     }
   }
 
-  def optionTypeFromScalaSig(member: Member): Class[_] = {
-    val scalaSigAnnotation = member.getDeclaringClass().getAnnotation(classOf[scala.reflect.ScalaSignature])
-    if (scalaSigAnnotation != null) {
-      val pickled = scalaSigAnnotation.bytes
-      val bytes = pickled.getBytes
-      var used = ByteCodecs.decode(bytes)
-      val scalaSig = ScalaSigAttributeParsers.parse(ByteCode(bytes.take(used)))
+  def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
+    val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
+    scalaSigOption flatMap { scalaSig =>
+      val syms = scalaSig.topLevelClasses
+      // Print classes
       val baos = new ByteArrayOutputStream
       val stream = new PrintStream(baos)
-      val syms = scalaSig.topLevelClasses ::: scalaSig.topLevelObjects
-      syms.head.parent match {
-        case Some(p) if (p.name != "<empty>") => {
-          val path = p.path
-          stream.print("package ");
-          stream.print(path);
-          stream.print("\n")
-        }
-        case _ =>
-      }
-      // Print classes
       val printer = new ScalaSigPrinter(stream, true)
       for (c <- syms) {
-        printer.printSymbol(c)
+        if(c.path == member.getDeclaringClass().getName())
+        	printer.printSymbol(c)
       }
       val fullSig = baos.toString
-      val matcher = """(val|var) %s : scala.Option\[scala\.(\w+)\]?""".format(member.getName).r.pattern.matcher(fullSig)
+      val matcher = """\s%s : scala.Option\[scala\.(\w+)\]?""".format(member.getName).r.pattern.matcher(fullSig)
       if (matcher.find) {
-        matcher.group(2) match {
-          case "Int" => classOf[scala.Int]
-          case "Short" => classOf[scala.Short]
-          case "Long" => classOf[scala.Long]
-          case "Double" => classOf[scala.Double]
-          case "Float" => classOf[scala.Float]
-          case "Boolean" => classOf[scala.Boolean]
-          case "Byte" => classOf[scala.Byte]
-          case "Char" => classOf[scala.Char]
-          case _ => null //Unknown scala primitive type?
+        matcher.group(1) match {
+          case "Int" => Some(classOf[scala.Int])
+          case "Short" => Some(classOf[scala.Short])
+          case "Long" => Some(classOf[scala.Long])
+          case "Double" => Some(classOf[scala.Double])
+          case "Float" => Some(classOf[scala.Float])
+          case "Boolean" => Some(classOf[scala.Boolean])
+          case "Byte" => Some(classOf[scala.Byte])
+          case "Char" => Some(classOf[scala.Char])
+          case _ => None //Unknown scala primitive type?
         }
       } else
-        null //Pattern was not found anywhere in the signature
-    } else {
-      null //No ScalaSignature annotation available
+        None //Pattern was not found anywhere in the signature
     }
   }
 
@@ -715,15 +704,15 @@ object FieldMetaData {
 	                 * Primitive types are seen by Java reflection as classOf[Object], 
 	                 * if that's what we find then we need to get the real value from @ScalaSignature
 	                 */
-	                val trueType = if (classOf[Object] == oType && detectScalapOnClasspath()) optionTypeFromScalaSig(member) else oType.asInstanceOf[Class[_]]
-	                if (trueType != null) {
+	                val trueTypeOption = 
+	                  if (classOf[Object] == oType && detectScalapOnClasspath()) optionTypeFromScalaSig(member) 
+	                  else Some(oType.asInstanceOf[Class[_]])
+	                trueTypeOption flatMap { trueType =>
 	                  val deduced = createDefaultValue(member, trueType, None, optionFieldsInfo)
 	                  if (deduced != null)
 	                    Some(deduced)
 	                  else
 	                    None //Couldn't create default for type param
-	                } else{
-	                  None //Looks like a primitive, but we weren't able to determine which
 	                }
 	              } else{
 	            	  None //Type parameter is not a Class

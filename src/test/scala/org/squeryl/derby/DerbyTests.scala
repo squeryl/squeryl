@@ -35,7 +35,7 @@ class Derby_SchoolDb extends schooldb.SchoolDbTestRun with Derby_Connection {
   /* FIXME: https://issues.apache.org/jira/browse/DERBY-4998
    * Because of a derby bug we ignore the BigDecimal test cases until it's fixed.
    */
-  override val ignoredTests = List("BigDecimal")
+  override val ignoredTests = List("BigDecimal","assertColumnNameChangeWithDeclareSyntax")
 }
 class Derby_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Derby_Connection
 class Derby_KickTheTires extends demo.KickTheTires with Derby_Connection
@@ -53,7 +53,7 @@ class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection {
     "testSQLMatchCaseNumerical2Numerical",
     "testSQLMatchCaseNumericalWithOption2Numerical",
     "testSQLMatchCaseEnemerationWitEnemeration",
-    "testSQLMatchCaseEnemerationWithOption2Numerical"
+    "testSQLMatchCaseEnemerationWithOption2Numerical"    
   )
 }
 
