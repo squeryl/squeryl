@@ -3,7 +3,15 @@ name := "squeryl"
 
 organization := "org.squeryl"
 
-version := "0.9.5-Beta"
+version := "0.9.5"
+
+version <<= version { v => 
+  val snapshot = Option(System.getProperty("snapshot")) == Some("true")
+  if(snapshot)
+    v + "-SNAPSHOT"
+  else
+    v
+}
 
 scalaVersion := "2.9.1"
 
@@ -21,16 +29,11 @@ libraryDependencies ++= Seq(
 
 libraryDependencies <+= scalaVersion("org.scala-lang" % "scalap" % _ % "provided")
   
-libraryDependencies <+= scalaVersion(sv=> sv match {
-     case "2.9.1" => 
-	   "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"
-     case "2.9.0-1" => 
-	   "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"	 
-     case v:String =>
-	   if(! v.startsWith("2.8")) 
-	     "org.scalatest" % v % "scalatest" % "1.4.1" % "provided"
-	   else
-	     "org.scalatest" % "scalatest_2.8.0" % "1.3.1.RC2" % "provided"
+libraryDependencies <+= scalaVersion(sv => sv match {
+     case _ if sv startsWith "2.9" => 
+	   "org.scalatest" % "scalatest_2.9.1" % "1.6.1" % "test"
+     case _ =>
+	   "org.scalatest" % "scalatest_2.8.2" % "1.5.1" % "test"
   })
 
 retrieveManaged := true  
