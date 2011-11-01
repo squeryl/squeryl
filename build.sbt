@@ -3,11 +3,19 @@ name := "squeryl"
 
 organization := "org.squeryl"
 
-version := "0.9.5-Beta"
+version := "0.9.5"
 
-scalaVersion := "2.9.0-1"
+version <<= version { v => 
+  val snapshot = Option(System.getProperty("snapshot")) == Some("true")
+  if(snapshot)
+    v + "-SNAPSHOT"
+  else
+    v
+}
 
-crossScalaVersions := Seq("2.9.0-1","2.9.0","2.8.1","2.8.0")
+scalaVersion := "2.9.1"
+
+crossScalaVersions := Seq("2.9.1","2.9.0-1","2.9.0","2.8.1","2.8.0")
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "2.2",
@@ -21,14 +29,12 @@ libraryDependencies ++= Seq(
 
 libraryDependencies <+= scalaVersion("org.scala-lang" % "scalap" % _ % "provided")
   
-libraryDependencies <+= scalaVersion(sv=> sv match {
-     case "2.9.0-1" => 
-	   "org.scalatest" % "scalatest_2.9.0" % "1.4.1" % "provided"	 
-	 case v:String =>
-	   if(! v.startsWith("2.8")) 
-	     "org.scalatest" % v % "scalatest" % "1.4.1" % "provided"
-	   else
-	     "org.scalatest" % "scalatest_2.8.0" % "1.3.1.RC2" % "provided"
+
+libraryDependencies <+= scalaVersion(sv => sv match {
+     case _ if sv startsWith "2.9" => 
+	   "org.scalatest" % "scalatest_2.9.1" % "1.6.1" % "test"
+     case _ =>
+	   "org.scalatest" % "scalatest_2.8.2" % "1.5.1" % "test"
   })
 
 retrieveManaged := true  
@@ -37,11 +43,12 @@ parallelExecution := false
 
 publishMavenStyle := true
 
-publishTo <<= version { (v: String) =>
-  if(v endsWith "-SNAPSHOT")
-    Some(ScalaToolsSnapshots)
+publishTo <<= (version) { version: String =>
+  val nexus = "http://nexus.scala-tools.org/content/repositories/"
+  if (version.trim.endsWith("SNAPSHOT")) 
+    Some("Scala Tools Snapshots" at nexus + "snapshots/") 
   else
-    Some(ScalaToolsReleases)
+    Some("Scala Tools Releases" at nexus + "releases/")
 }
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
