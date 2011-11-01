@@ -1524,4 +1524,33 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 //
 //  tempo === Latin
 //
+  
+  //test("testReParametrizableStatement", SingleTestRun) {
+  test("testReParametrizableStatement") {
+    import org.squeryl.PrimitiveTypeMode._
+	
+	    
+	val s = new ReParametrizableStatement {
+	    
+	  private val lastName = varArgNN("")
+	    
+	  private val findByLastName = define(artists.where(_.lastName === lastName))
+	    
+	  def apply(s: String) = {
+	  	lastName.value = s
+	    findByLastName.head
+	   }	    
+	}
+    
+    val ramzy = s("Ramzy")
+    
+    assert(ramzy.firstName == "Hossam")
+    
+    val sanchez = s("Sanchez")
+    
+    assert(sanchez.firstName == "Poncho")
+  }
 }
+
+
+

@@ -310,7 +310,8 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 
 class UntypedConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]])
 
-class ConstantExpressionNode[T] protected (val value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
+//TODO: should be renamed StatementArgument ? ... not really a constant
+class ConstantExpressionNode[T] protected (var value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
 
   def this(v: T)(implicit m: OutMapper[T]) = this(v,Some(m))
 
@@ -318,6 +319,8 @@ class ConstantExpressionNode[T] protected (val value: T, _mapper: Option[OutMapp
 
   def mapper = _mapper.getOrElse(Utils.throwError("No OutMapper !"))
 
+  private [squeryl] var isVarArg = false
+  
   def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {
       if(value == null)
@@ -330,9 +333,12 @@ class ConstantExpressionNode[T] protected (val value: T, _mapper: Option[OutMapp
       else
         sw.write(value.toString)
     }
-    else {
+    else {      
       sw.write("?")
-      sw.addParam(value.asInstanceOf[AnyRef])
+      if(isVarArg)
+        sw.addParam(this)
+      else
+        sw.addParam(value.asInstanceOf[AnyRef])
     }
   }
   override def toString = 'ConstantExpressionNode + ":" + value

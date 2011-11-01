@@ -6,6 +6,9 @@ import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.H2Adapter
 
 import org.squeryl.Session
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+import org.scalatest.FunSuite
 
 trait H2_Connection extends DBConnector{
   def connectToDb() : Option[() => Session] = {
@@ -34,8 +37,13 @@ class H2_SchoolDb2 extends schooldb2.SchoolDb2Tests with H2_Connection
 class H2_SchoolDb extends schooldb.SchoolDbTestRun with H2_Connection
 class H2_TestCustomTypesMode extends customtypes.TestCustomTypesMode with H2_Connection
 class H2_KickTheTires extends demo.KickTheTires with H2_Connection
+
+
+@RunWith(classOf[JUnitRunner])
 class H2_MusicDb extends musicdb.MusicDbTestRun with H2_Connection
+
 class H2_LeftJoinTest extends LeftJoinTest with H2_Connection
+
 class H2_ConnectionClosing extends ConnectionClosingTest with H2_Connection {
   def dbSpecificSelectNow: String = "select now()"
 }
