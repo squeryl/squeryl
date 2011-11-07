@@ -1531,8 +1531,11 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 	
 	    
 	val s = new ReParametrizableStatement {
-	    
-	  private val lastName = varArgNN("")
+
+      private val lastName = varArg("")
+      private val intArg = varArg(0)
+      
+	  //private val lastName = varArgNN("")
 	    
 	  private val findByLastName = define(artists.where(_.lastName === lastName))
 	    

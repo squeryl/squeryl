@@ -12,24 +12,19 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 
 trait ReParametrizableStatement {
-  
-  
-  protected def varArgN[A,B <% NumericalExpression[A]](b: B) = {
     
-    val c = b : NumericalExpression[A]
-    val r = c.asInstanceOf[ConstantExpressionNode[A] with NumericalExpression[A]]
+  protected def varArg[A](e: NumericalExpression[A]) = {
+    
+    val r = e.asInstanceOf[ConstantExpressionNode[A] with NumericalExpression[A]]
     r.isVarArg = true
     r
   }
   
-  protected def varArgNN[A,B <% NonNumericalExpression[A]](b: B) = {
-    
-    val c = b : NonNumericalExpression[A]
-    
-    val r = c.asInstanceOf[ConstantExpressionNode[A] with NonNumericalExpression[A]]
+  protected def varArg[A](e: NonNumericalExpression[A]) = {
+    val r = e.asInstanceOf[ConstantExpressionNode[A] with NonNumericalExpression[A]]
     r.isVarArg = true
-    r
-  }      
+    r    
+  }         
   
   def define[R](q: Query[R]): Iterable[R] = new Iterable[R] {
     
