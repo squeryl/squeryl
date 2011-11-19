@@ -41,7 +41,7 @@ class MSSQLServer extends DatabaseAdapter {
   
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)
+    var res = "  " + quoteIdentifier(fmd.columnName) + " " + databaseTypeFor(fmd)
     if(!fmd.isOption)
       res += " not null"
 
@@ -150,4 +150,5 @@ class MSSQLServer extends DatabaseAdapter {
   }
   
   override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = {}
+  override def quoteIdentifier(s: String) = "[" + s + "]"
 }
