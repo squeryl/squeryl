@@ -30,6 +30,13 @@ abstract class TransactionTests extends DbTestBase{
       throwExc(except)
     }
   }
+  
+  def returnInTransaction: Int =  
+    transaction {
+      val foo1 = FooSchema.foos.insert(new Foo("test"))
+      return 1
+    }
+
 
   test("No exception in transaction"){
     transaction {
@@ -61,7 +68,7 @@ abstract class TransactionTests extends DbTestBase{
 
       doSomething(false)
       // fails with "no session exception"
-      FooSchema.foos.where(f => f.value === "test").size //should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size ==1) //should equal(1)
     }
   }
 
@@ -80,4 +87,16 @@ abstract class TransactionTests extends DbTestBase{
       assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
     }
   }
+  
+  test("Returning inside transaction block"){
+    transaction {
+      FooSchema.reset
+    }
+    returnInTransaction
+    transaction{
+      // works!
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+    }
+  }
+  
 }
