@@ -710,7 +710,7 @@ trait DatabaseAdapter {
 
     sb.append("index ")
 
-    val tableName = columnDefs.head.parentMetaData.viewOrTable.name
+    val tableName = columnDefs.head.parentMetaData.viewOrTable.prefixedName
 
     if(name != None)
       sb.append(quoteName(name.get))
