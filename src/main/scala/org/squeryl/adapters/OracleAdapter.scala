@@ -33,7 +33,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "number"
   override def binaryTypeDeclaration = "blob"
-  override def timestampTypeDeclaration = "date"
+  override def timestampTypeDeclaration = "timestamp"
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
