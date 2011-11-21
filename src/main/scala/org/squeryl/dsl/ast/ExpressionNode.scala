@@ -114,10 +114,12 @@ class EqualityExpression(override val left: TypedExpressionNode[_], override val
   
   override def doWrite(sw: StatementWriter) =     
     right match {
-      case c: ConstantExpressionNode[_] => if(c.value == None) {
-        left.write(sw)
-        sw.write(" is null")
-      }
+      case c: ConstantExpressionNode[_] => 
+        if(c.value == None) {
+          left.write(sw)
+          sw.write(" is null")
+        }
+        else super.doWrite(sw)
       case _ => super.doWrite(sw)
     }
   
