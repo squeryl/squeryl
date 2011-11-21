@@ -28,6 +28,7 @@ import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter, De
 import internals.{FieldMetaData, FieldReferenceLinker}
 import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
+import org.squeryl.internals.StatementWriter
 
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
@@ -531,7 +532,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testInOpWithStringList)
   }
   
-  test("lifecycleCallbacks", SingleTestRun) {
+  test("lifecycleCallbacks") {
 
 
     beforeInsertsOfPerson.clear
@@ -634,6 +635,32 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
 
     validateQuery('testLikeOperator, q, identity[Int], List(gaitan.id,georgi.id,gontran.id))
+    
+  }
+  
+    
+  test("isNull and === None comparison", SingleTestRun){  
+    val z1 =
+      from(students)(s=>
+        where({
+          s.isMultilingual === None          
+          })
+        select(s.id)
+      )
+    
+    val z2 =
+      from(students)(s=>
+        where({
+          val a = s.isMultilingual.isNull
+          a
+          })
+        select(s.id)
+      )
+                
+      val r1 = z1.toSet
+      val r2 = z2.toSet
+      
+    assertEquals(r1, r2, "result of isNull and === None differ")      
   }
 
 //  test("NotOperator"){
@@ -1028,7 +1055,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testHavingClause)
   }
 
-  test("HavingClause2",SingleTestRun) {
+  test("HavingClause2") {
     //The query here doesn't make much sense, we just test that valid SQL gets generated :
     val q =
       from(professors)(p=> {
