@@ -22,6 +22,7 @@ import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
 import collection.mutable.ArrayBuffer
+import scala.runtime.NonLocalReturnControl
 
 trait QueryDsl
   extends DslFactory
@@ -104,6 +105,13 @@ trait QueryDsl
       val res = _using(s, a)
       txOk = true
       res
+    }
+    catch {
+      case e:NonLocalReturnControl[A] => 
+      {
+        txOk = true
+        throw e
+      }
     }
     finally {
       try {
