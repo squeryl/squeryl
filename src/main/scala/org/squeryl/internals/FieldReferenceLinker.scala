@@ -239,7 +239,7 @@ object FieldReferenceLinker {
     visited.add(idHashCode)
     
     _populateSelectCols(yi, q, o)
-    for(f <- clazz.getDeclaredFields) {
+    for(f <- clazz.getDeclaredFields) { // todo: cache getDeclaredFields
       f.setAccessible(true);
       val ob = f.get(o)
 

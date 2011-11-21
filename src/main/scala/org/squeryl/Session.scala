@@ -17,9 +17,8 @@ package org.squeryl
 
 import logging.StatisticsListener
 import org.squeryl.internals._
-import collection.mutable.ArrayBuffer
-import java.sql.{SQLException, ResultSet, Statement, Connection}
-
+import java.sql._
+import collection.mutable.{HashMap, ArrayBuffer}
 
 class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, val statisticsListener: Option[StatisticsListener] = None) {
 
@@ -39,15 +38,38 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
 
   var logUnclosedStatements = false
 
+  /** Prepared statement cache, keyed by string for the sake of getting a prototype going. */
+  private val _preparedStatements = new HashMap[String, PreparedStatement]
+
   private val _statements = new ArrayBuffer[Statement]
 
   private val _resultSets = new ArrayBuffer[ResultSet]
+
+  private [squeryl] def _cachePreparedStatement(id: String, ps: PreparedStatement) = _preparedStatements += (id -> ps)
+  
+  private [squeryl] def _fetchCachedPreparedStatement(id: String): Option[PreparedStatement] = {
+    _preparedStatements get id flatMap {
+      case ps if ps.isClosed =>              // if the prepared statement is closed
+        _preparedStatements remove id   // evict it from the cache
+        None                            // and return None
+      case ps => Some(ps)               // otherwise, return it
+    }
+  }
+
+  private [squeryl] def _cacheOrCreatePreparedStatement(id: String)(psByName: => PreparedStatement) = _fetchCachedPreparedStatement(id) getOrElse {
+    val ps = psByName
+    _cachePreparedStatement(id, ps)
+    ps
+  }
 
   private [squeryl] def _addStatement(s: Statement) = _statements.append(s)
 
   private [squeryl] def _addResultSet(rs: ResultSet) = _resultSets.append(rs)
 
   def cleanup = {
+    _preparedStatements.values.foreach(Utils close _)
+    _preparedStatements.clear()
+
     _statements.foreach(s => {
       if (logUnclosedStatements && isLoggingEnabled && !s.isClosed) {
         val stackTrace = Thread.currentThread.getStackTrace.map("at " + _).mkString("\n")
@@ -55,14 +77,15 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
       }
       Utils.close(s)
     })
-    _statements.clear
+
+    _statements.clear()
     _resultSets.foreach(rs => Utils.close(rs))
-    _resultSets.clear
+    _resultSets.clear()
   }
 
   def close = {
     cleanup
-    connection.close
+    connection.close()
   }
 }
 
@@ -89,10 +112,10 @@ object SessionFactory {
 
   def newSession: Session =
       concreteFactory.getOrElse(
-        org.squeryl.internals.Utils.throwError("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
-              "function for creating new org.squeryl.Session, before transaction can be used.\n" +
-              "Alternatively SessionFactory.externalTransactionManagementAdapter can initialized, please refer to the documentation.")
-      ).apply        
+        org.squeryl.internals.Utils.throwError("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n" +
+          "function for creating new org.squeryl.Session, before transaction can be used.\n" +
+          "Alternatively SessionFactory.externalTransactionManagementAdapter can initialized, please refer to the documentation.")
+      ).apply()
 }
 
 object Session {
@@ -117,7 +140,7 @@ object Session {
 
   def currentSession: Session =
     if(SessionFactory.externalTransactionManagementAdapter != None) {
-      val s = SessionFactory.externalTransactionManagementAdapter.get.apply
+      val s = SessionFactory.externalTransactionManagementAdapter.get.apply()
       s.bindToCurrentThread
       s
     }
