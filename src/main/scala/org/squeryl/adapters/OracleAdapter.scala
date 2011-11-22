@@ -229,6 +229,23 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def viewAlias(vn: ViewExpressionNode[_]) =
     "t" + vn.uniqueId.get
+    
+  override def writeCastInvocation(e: TypedExpressionNode[_], sw: StatementWriter) = {
+    sw.write("cast(")
+    e.write(sw)
+
+    val dbSpecificType = databaseTypeFor(e.mapper.jdbcClass)
+
+    sw.write(" as ")
+    
+    if(dbSpecificType == stringTypeDeclaration)
+      sw.write(stringTypeDeclaration(1024))
+    else
+      sw.write(dbSpecificType)
+      
+    sw.write(")")
+  }
+    
 }
 
 
