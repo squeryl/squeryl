@@ -50,7 +50,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     override def addParam(p: AnyRef) = outer.addParam(p)
   }
 
-  def params: Iterable[AnyRef] = _paramList
+  def paramsZ: Iterable[AnyRef] = _paramList
 
   private val _stringBuilder = new StringBuilder(256)
 

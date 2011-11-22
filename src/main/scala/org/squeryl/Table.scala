@@ -119,7 +119,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       val st = sess.connection.prepareStatement(sw.statement)
 
       try {
-        dba.prepareStatement(sess.connection, sw, st, sess)
+        dba.fillParamsInto(dba.convertParamsForJdbc(sw.paramsZ), st)
         st.addBatch
 
         var updateCount = 1
