@@ -126,7 +126,7 @@ class SchoolDb extends Schema {
   override val name = None
 
   override def columnNameFromPropertyName(n:String) =
-    NamingConventionTransforms.camelCase2underScore(n)
+    NamingConventionTransforms.snakify(n)
 
   /**
    * Let's illustrate the support for crappy table naming convention !
@@ -1544,7 +1544,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
 object Issue14Schema extends Schema{
   override def columnNameFromPropertyName(n:String) =
-    NamingConventionTransforms.camelCase2underScore(n)
+    NamingConventionTransforms.snakify(n)
 
 
   val professors = table[Professor]("issue14")
