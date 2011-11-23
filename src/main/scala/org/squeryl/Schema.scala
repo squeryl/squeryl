@@ -84,7 +84,7 @@ trait Schema {
 
   object NamingConventionTransforms {
     
-    @deprecated("use snakify() instead", "0.9.5beta")
+    @deprecated("use snakify() instead as of 0.9.5beta")
     def camelCase2underScore(name: String) =
       name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
       
