@@ -84,9 +84,12 @@ trait Schema {
 
   object NamingConventionTransforms {
     
+    @deprecated("use snakify() instead", "0.9.5beta")
     def camelCase2underScore(name: String) =
+      name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
+      
+    def snakify(name: String) =
       name.replaceAll("^([^A-Za-z_])", "_$1").replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase
-      //name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
   }
 
   def columnNameFromPropertyName(propertyName: String) = propertyName

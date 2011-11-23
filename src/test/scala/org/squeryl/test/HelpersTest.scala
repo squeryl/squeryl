@@ -8,7 +8,7 @@ class NamingConventionTransformsTest extends FunSuite with ShouldMatchers {
 
   object FooSchema extends Schema
   
-  def snakify(name: String) = FooSchema.NamingConventionTransforms.camelCase2underScore(name)
+  def snakify(name: String) = FooSchema.NamingConventionTransforms.snakify(name)
   
   test("replace CamelCase with underscore") {
     assert(snakify("MyTableName") == "my_table_name")
