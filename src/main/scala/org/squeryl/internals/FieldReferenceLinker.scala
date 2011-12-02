@@ -176,7 +176,7 @@ object FieldReferenceLinker {
 
     new BinaryOperatorNodeLogicalBoolean(
       fr,
-      new UntypedConstantExpressionNode[Any](c),
+      new InputOnlyConstantExpressionNode[Any](c),
       "=")
   }
   

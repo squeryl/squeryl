@@ -43,6 +43,10 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
   extends SchoolDbObject with Person {
 
   override def toString = "Student:" + id + ":" + name
+  
+  import org.squeryl.PrimitiveTypeMode._
+  
+  def dummyKey = compositeKey(age, addressId)
 }
 
 case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date],
@@ -1349,6 +1353,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
 
+  test("#62 CompositeKey with Option members generate sql with = null instead of is null")  {
+    
+    val testInstance = sharedTestInstance; import testInstance._
+    // this should not blow up :
+    val q = students.where(_.dummyKey === (None: Option[Int], None: Option[Int]))
+    println(q.statement)
+    q.toList
+  }
 
   test("NewLeftOuterJoin2")  {
     val testInstance = sharedTestInstance; import testInstance._

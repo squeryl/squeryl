@@ -243,7 +243,7 @@ trait CustomTypesMode extends QueryDsl {
   def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantExpressionNode[Enumeration#Value](e, Some(outMapperFromEnumValue(e))) with EnumExpression[Enumeration#Value]
+        new ConstantExpressionNode[Enumeration#Value](e)(outMapperFromEnumValue(e)) with EnumExpression[Enumeration#Value]
       case Some(n:SelectElement) =>
         new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
     }

@@ -32,32 +32,19 @@ trait CompositeKey {
     else
       _members.get.map(_.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData)
 
-  protected def constantMembers: Iterable[ExpressionNode]
+  protected def constantMembers: Iterable[TypedExpressionNode[_]]
 
-  protected def members: Iterable[ExpressionNode] =
+  protected def members: Iterable[TypedExpressionNode[_]] =
     _members.getOrElse(constantMembers)
 
   private [squeryl] def buildEquality(ck: CompositeKey): LogicalBoolean = {
+      
+    val equalities = (members zip ck.members).map(t => new EqualityExpression(t._1, t._2))
 
-    val it1 = members.iterator
-    val it2 = ck.members.iterator
+    val head = equalities.head
+    val tail = equalities.tail
 
-    // the type system guaranties that it1 and it2 have the same length
-
-    val equalities = new ArrayBuffer[LogicalBoolean]
-
-    while(it1.hasNext) {
-      val n1 = it1.next
-      val n2 = it2.next
-      val e = new BinaryOperatorNodeLogicalBoolean(n1, n2, "=")
-      equalities.append(e)
-    }
-
-    val first = equalities.remove(1)
-
-    val r = equalities.foldLeft(first)((b,a) => new BinaryOperatorNodeLogicalBoolean(a, b, "and"))
-
-    r
+    tail.foldLeft(equalities.head : LogicalBoolean)((a,b) => new BinaryOperatorNodeLogicalBoolean(a, b, "and"))
   }
 
   def is(attributes: AttributeValidOnMultipleColumn*) = new CompositeKeyAttributeAssignment(this, attributes)  
@@ -71,9 +58,9 @@ case class CompositeKey2[A1,A2](val a1:A1, val a2: A2) extends CompositeKey {
   def ===(ck: Tuple2[A1,A2]) =
     buildEquality(new CompositeKey2(ck._1, ck._2))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2)
   )
 
 }
@@ -86,10 +73,10 @@ case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3) extends Co
   def ===(ck: Tuple3[A1,A2,A3]) =
     buildEquality(new CompositeKey3(ck._1, ck._2, ck._3))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3)
   )
 }
 
@@ -101,11 +88,11 @@ case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4:
   def ===(ck: Tuple4[A1,A2,A3,A4]) =
     buildEquality(new CompositeKey4(ck._1, ck._2, ck._3, ck._4))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3),
-    new UntypedConstantExpressionNode[A4](a4)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3),
+    new InputOnlyConstantExpressionNode[A4](a4)
   )
 }
 
@@ -118,12 +105,12 @@ case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val 
   def ===(ck: Tuple5[A1,A2,A3,A4,A5]) =
     buildEquality(new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3),
-    new UntypedConstantExpressionNode[A4](a4),
-    new UntypedConstantExpressionNode[A5](a5)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3),
+    new InputOnlyConstantExpressionNode[A4](a4),
+    new InputOnlyConstantExpressionNode[A5](a5)
   )
 }
 case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6) extends CompositeKey {
@@ -134,13 +121,13 @@ case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, v
   def ===(ck: Tuple6[A1,A2,A3,A4,A5,A6]) =
     buildEquality(new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3),
-    new UntypedConstantExpressionNode[A4](a4),
-    new UntypedConstantExpressionNode[A5](a5),
-    new UntypedConstantExpressionNode[A6](a6)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3),
+    new InputOnlyConstantExpressionNode[A4](a4),
+    new InputOnlyConstantExpressionNode[A5](a5),
+    new InputOnlyConstantExpressionNode[A6](a6)
   )
 }
 
@@ -152,14 +139,14 @@ case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3
   def ===(ck: Tuple7[A1,A2,A3,A4,A5,A6,A7]) =
     buildEquality(new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3),
-    new UntypedConstantExpressionNode[A4](a4),
-    new UntypedConstantExpressionNode[A5](a5),
-    new UntypedConstantExpressionNode[A6](a6),
-    new UntypedConstantExpressionNode[A7](a7)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3),
+    new InputOnlyConstantExpressionNode[A4](a4),
+    new InputOnlyConstantExpressionNode[A5](a5),
+    new InputOnlyConstantExpressionNode[A6](a6),
+    new InputOnlyConstantExpressionNode[A7](a7)
   )
 }
 
@@ -171,15 +158,15 @@ case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3:
   def ===(ck: Tuple8[A1,A2,A3,A4,A5,A6,A7,A8]) =
     buildEquality(new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7,ck._8))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3),
-    new UntypedConstantExpressionNode[A4](a4),
-    new UntypedConstantExpressionNode[A5](a5),
-    new UntypedConstantExpressionNode[A6](a6),
-    new UntypedConstantExpressionNode[A7](a7),
-    new UntypedConstantExpressionNode[A8](a8)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3),
+    new InputOnlyConstantExpressionNode[A4](a4),
+    new InputOnlyConstantExpressionNode[A5](a5),
+    new InputOnlyConstantExpressionNode[A6](a6),
+    new InputOnlyConstantExpressionNode[A7](a7),
+    new InputOnlyConstantExpressionNode[A8](a8)
   )
 }
 
@@ -191,15 +178,15 @@ case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val 
   def ===(ck: Tuple9[A1,A2,A3,A4,A5,A6,A7,A8,A9]) =
     buildEquality(new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7,ck._8,ck._9))
 
-  protected def constantMembers: Iterable[ExpressionNode] = List(
-    new UntypedConstantExpressionNode[A1](a1),
-    new UntypedConstantExpressionNode[A2](a2),
-    new UntypedConstantExpressionNode[A3](a3),
-    new UntypedConstantExpressionNode[A4](a4),
-    new UntypedConstantExpressionNode[A5](a5),
-    new UntypedConstantExpressionNode[A6](a6),
-    new UntypedConstantExpressionNode[A7](a7),
-    new UntypedConstantExpressionNode[A8](a8),
-    new UntypedConstantExpressionNode[A9](a9)
+  protected def constantMembers: Iterable[TypedExpressionNode[_]] = List(
+    new InputOnlyConstantExpressionNode[A1](a1),
+    new InputOnlyConstantExpressionNode[A2](a2),
+    new InputOnlyConstantExpressionNode[A3](a3),
+    new InputOnlyConstantExpressionNode[A4](a4),
+    new InputOnlyConstantExpressionNode[A5](a5),
+    new InputOnlyConstantExpressionNode[A6](a6),
+    new InputOnlyConstantExpressionNode[A7](a7),
+    new InputOnlyConstantExpressionNode[A8](a8),
+    new InputOnlyConstantExpressionNode[A9](a9)
   )
 }

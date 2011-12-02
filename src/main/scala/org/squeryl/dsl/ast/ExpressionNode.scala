@@ -321,9 +321,9 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 }
 
 
-class UntypedConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]])
+class InputOnlyConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]]) with TypedExpressionNode[T]
 
-class ConstantExpressionNode[T] protected (val value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
+class ConstantExpressionNode[T] (val value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
 
   def this(v: T)(implicit m: OutMapper[T]) = this(v,Some(m))
 
