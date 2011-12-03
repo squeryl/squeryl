@@ -226,7 +226,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       
       new SubQueryable(v, vxn.sample, vxn.resultSetMapper, false, vxn)
     }
-    else if(q.isInstanceOf[OptionalQueryable[U]]) {
+    else if(q.isInstanceOf[OptionalQueryable[_]]) {
       val oqr = q.asInstanceOf[OptionalQueryable[U]]
       val sq = createSubQueryable[U](oqr.queryable)
       sq.node.inhibited = oqr.inhibited
@@ -234,20 +234,20 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       oqCopy.inhibited = oqr.inhibited
       new SubQueryable(oqCopy.asInstanceOf[Queryable[U]], Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
     }
-    else if(q.isInstanceOf[OuterJoinedQueryable[U]]) {
+    else if(q.isInstanceOf[OuterJoinedQueryable[_]]) {
       val ojq = q.asInstanceOf[OuterJoinedQueryable[U]]
       val sq = createSubQueryable[U](ojq.queryable)
       sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
       sq.node.inhibited = ojq.inhibited
       new SubQueryable(sq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
     }
-    else if(q.isInstanceOf[InnerJoinedQueryable[U]]) {
+    else if(q.isInstanceOf[InnerJoinedQueryable[_]]) {
       val ijq = q.asInstanceOf[InnerJoinedQueryable[U]]
       val sq = createSubQueryable[U](ijq.queryable)
       sq.node.joinKind = Some((ijq.leftRightOrFull, "inner"))
       new SubQueryable(sq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
     }
-    else if(q.isInstanceOf[DelegateQuery[U]]) {
+    else if(q.isInstanceOf[DelegateQuery[_]]) {
       createSubQueryable(q.asInstanceOf[DelegateQuery[U]].q)
     }      
     else {

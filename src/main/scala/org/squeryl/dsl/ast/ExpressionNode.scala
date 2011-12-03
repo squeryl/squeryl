@@ -589,8 +589,8 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
       super.inhibited
 
   def isConstantEmptyList =
-    if(ast.isInstanceOf[ConstantExpressionNodeList[Any]]) {
-      ast.asInstanceOf[ConstantExpressionNodeList[Any]].isEmpty
+    if(ast.isInstanceOf[ConstantExpressionNodeList[_]]) {
+      ast.asInstanceOf[ConstantExpressionNodeList[_]].isEmpty
     }
     else false
 

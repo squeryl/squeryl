@@ -107,7 +107,7 @@ trait QueryDsl
       res
     }
     catch {
-      case e:NonLocalReturnControl[A] => 
+      case e:NonLocalReturnControl[_] => 
       {
         txOk = true
         throw e
