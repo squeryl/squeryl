@@ -36,7 +36,7 @@ class Postgresql_SchoolDb2 extends schooldb2.SchoolDb2Tests with Postgresql_Conn
 class Postgresql_SchoolDb extends schooldb.SchoolDbTestRun with Postgresql_Connection{
   override val ignoredTests = List("blobTest", "OuterJoinMixed1", "assertColumnNameChangeWithDeclareSyntax")
 }
-class Postgresql_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Postgresql_Connection
+//class Postgresql_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Postgresql_Connection
 class Postgresql_KickTheTires extends demo.KickTheTires with Postgresql_Connection
 class Postgresql_MusicDb extends musicdb.MusicDbTestRun with Postgresql_Connection
 class Postgresql_LeftJoinTest extends LeftJoinTest with Postgresql_Connection

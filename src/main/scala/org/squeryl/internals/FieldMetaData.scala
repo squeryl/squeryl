@@ -25,7 +25,7 @@ import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
 import org.squeryl.dsl.CompositeKey
-import org.squeryl.customtypes.CustomType
+//import org.squeryl.customtypes.CustomType
 import scala.reflect.generic.ByteCodecs
 import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteCode, ScalaSigPrinter}
 import java.io.ByteArrayOutputStream
@@ -305,13 +305,13 @@ class FieldMetaData(
         else {
           val f = customTypeFactory.get
 
-          if(v.isInstanceOf[CustomType[_]]) {
-            val r = v.asInstanceOf[CustomType[_]]._1
-            f(if(r == null) null else r.asInstanceOf[AnyRef])
-          }
-          else {
+//          if(v.isInstanceOf[CustomType[_]]) {
+//            val r = v.asInstanceOf[CustomType[_]]._1
+//            f(if(r == null) null else r.asInstanceOf[AnyRef])
+//          }          
+//          else {
            f(v)
-          }
+//          }
         }
 
       val actualValue =

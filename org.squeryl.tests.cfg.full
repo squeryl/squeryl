@@ -1,7 +1,7 @@
 
-h2.connectionString=jdbc:h2:~/test
-h2.user=sa
-h2.password=
+#h2.connectionString=jdbc:h2:~/test
+#h2.user=sa
+#h2.password=
 
 #postgresql.connectionString=jdbc:postgresql://localhost:5432/squeryl
 #postgresql.user=squeryl
@@ -19,8 +19,8 @@ h2.password=
 #db2.password=squeryl
 
 
-#oracle.connectionString=jdbc:oracle:thin:@localhost:1521:xe
-#oracle.user=squeryl
-#oracle.password=squeryl
+oracle.connectionString=jdbc:oracle:thin:@localhost:1521:xe
+oracle.user=squeryl
+oracle.password=squeryl
 
 #mssql.connectionString=jdbc:jtds:sqlserver://localhost:1433/squeryl;instance=SQLEXPRESS;user=sa;password=zaza;prepareSQL=1

@@ -37,7 +37,7 @@ class Derby_SchoolDb extends schooldb.SchoolDbTestRun with Derby_Connection {
    */
   override val ignoredTests = List("BigDecimal","assertColumnNameChangeWithDeclareSyntax")
 }
-class Derby_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Derby_Connection
+//class Derby_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Derby_Connection
 class Derby_KickTheTires extends demo.KickTheTires with Derby_Connection
 class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection {
 

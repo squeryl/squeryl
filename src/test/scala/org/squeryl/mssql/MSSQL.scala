@@ -31,7 +31,7 @@ class MSSQL_SchoolDb2 extends schooldb2.SchoolDb2Tests with MSSQL_Connection
 class MSSQL_SchoolDb extends schooldb.SchoolDbTestRun with MSSQL_Connection {
   override val ignoredTests = List("OuterJoinMixed1")
 }
-class MSSQL_TestCustomTypesMode extends customtypes.TestCustomTypesMode with MSSQL_Connection
+//class MSSQL_TestCustomTypesMode extends customtypes.TestCustomTypesMode with MSSQL_Connection
 class MSSQL_KickTheTires extends demo.KickTheTires with MSSQL_Connection
 class MSSQL_MusicDb extends musicdb.MusicDbTestRun with MSSQL_Connection {
   override val ignoredTests = List("PaginatedQuery1", "OuterJoinMixed1")

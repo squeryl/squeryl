@@ -20,6 +20,9 @@ import org.squeryl.customtypes._
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
 
+/*
+
+ 
 abstract class TestCustomTypesMode extends SchemaTester with QueryTester with RunTestsInsideTransaction {
 
   val schema = new HospitalDb
@@ -146,3 +149,6 @@ class Info(v: String) extends StringField(v) with Domain[String] {
   def validate(s:String) = {}
   def label = "info"
 }
+
+
+*/

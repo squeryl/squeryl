@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************** */
 package org.squeryl.customtypes;
-
+/*
 
 import java.util.{Date, UUID}
 import org.squeryl.dsl.ast.{SelectElement, SelectElementReference, ConstantExpressionNode}
@@ -332,3 +332,5 @@ class TimestampField(val value: Timestamp) extends CustomType[Timestamp]
 class BinaryField(val value: Array[Byte]) extends CustomType[Array[Byte]]
 
 class UuidField(val value: UUID) extends CustomType[UUID]
+
+*/
