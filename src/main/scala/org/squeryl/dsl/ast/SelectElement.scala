@@ -19,6 +19,7 @@ import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import java.sql.ResultSet
 import org.squeryl.Session
+import org.squeryl.dsl.TypedExpression
 
 /**
  * SelectElement are elements of a select list, for example they are a,b, and c in :
@@ -243,10 +244,13 @@ class ValueSelectElement
  * with the exception of SelectElement that refer to an inner or outer query's SelectElement,
  * these are ExportedSelectElement
  */
-class SelectElementReference[A]
-  (val selectElement: SelectElement)(implicit val mapper: OutMapper[A])
-    extends TypedExpressionNode[A] {
+class SelectElementReference[A,T]
+  (val selectElement: SelectElement)
+    extends TypedExpression[A,T] {
 
+  def value: A = sys.error("!")
+  def mapper: OutMapper[A] = sys.error("!")
+  
   override def toString =
     'SelectElementReference + ":" + Utils.failSafeString(delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 

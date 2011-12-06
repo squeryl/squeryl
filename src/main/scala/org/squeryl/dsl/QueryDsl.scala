@@ -143,9 +143,9 @@ trait QueryDsl
   def where(b: =>LogicalBoolean): WhereState[Conditioned] =
     new QueryElementsImpl[Conditioned](Some(b _))
 
-  def &[A](i: =>TypedExpressionNode[A]): A =
+  def &[A,T](i: =>TypedExpression[A,T]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
-
+/*
   implicit def singleColumnQuery2RightHandSideOfIn[A](q: Query[A]) =
     new RightHandSideOfIn[A](q.copy(false).ast)
 
@@ -160,7 +160,7 @@ trait QueryDsl
 
   implicit def groupOptionSingleColumnQuery2RightHandSideOfIn[A](q: Query[Group[Option[A]]]) =
     new RightHandSideOfIn[A](q.copy(false).ast)
-
+*/
   trait SingleRowQuery[R] {
     self: Query[R] =>
   }
@@ -175,16 +175,43 @@ trait QueryDsl
 
   implicit def countQueryableToIntTypeQuery[R](q: Queryable[R]) = new CountSubQueryableQuery(q)
 
+  def count: CountFunction = count()
+
+  def count(e: TypedExpressionNode[_]*) = new CountFunction(e, false)
+
+  def countDistinct(e: TypedExpressionNode[_]*) = new CountFunction(e, true)
+  
+  class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean)
+    extends FunctionNode[Long](
+      "count",
+      sys.error("implement me"),
+      if(_args == Nil) Seq(new TokenExpressionNode("*")) else _args
+    )
+    with TypedExpression[Long,TLong] {
+    
+    override def doWrite(sw: StatementWriter) = {
+
+      sw.write(name)
+      sw.write("(")
+
+      if(isDistinct)
+        sw.write("distinct ")
+
+      sw.writeNodesWithSeparator(args, ",", false)
+      sw.write(")")
+    }
+  }
+  
   private def _countFunc = count
   
-  class CountSubQueryableQuery(q: Queryable[_]) extends Query[LongType] with ScalarQuery[LongType] {
+  class CountSubQueryableQuery(q: Queryable[_]) extends Query[Long] with ScalarQuery[Long] {
 
-    private val _inner:Query[Measures[LongType]] =
+    private val _inner:Query[Measures[Long]] =
       from(q)(r => compute(_countFunc))
 
     def iterator = _inner.map(m => m.measures).iterator
 
-    def Count: ScalarQuery[LongType] = this
+    def Count: ScalarQuery[Long] = this
 
     def statement: String = _inner.statement
 
@@ -293,7 +320,7 @@ trait QueryDsl
     }
 
     private def _viewReferedInExpression(v: View[_], ee: EqualityExpression) =
-      ee.filterDescendantsOfType[SelectElementReference[Any]].filter(
+      ee.filterDescendantsOfType[SelectElementReference[Any,Any]].filter(
         _.selectElement.origin.asInstanceOf[ViewExpressionNode[_]].view == v
       ).headOption != None
 
@@ -553,7 +580,7 @@ trait QueryDsl
    * returns a (FieldMetaData, FieldMetaData) where ._1 is the id of the KeyedEntity on the left or right side,
    * and where ._2 is the foreign key of the association object/table
    */
-  private def _splitEquality(ee: EqualityExpression, rightTable: Table[_], isSelfReference: Boolean) = {
+  private def _splitEquality(ee: EqualityExpression, rightTable: Table[_], isSelfReference: Boolean):(FieldMetaData,FieldMetaData) = {
 
     if(isSelfReference)
       assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity || ee.left._fieldMetaData.isIdFieldOfKeyedEntity)

@@ -30,10 +30,14 @@ class BooleanTypeConversion[A](e: ExpressionNode)(implicit val mapper: OutMapper
 
 class BinaryAMSOp[A1,A2](a1: NumericalExpression[A1], a2: NumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
-class ConcatOp[A1,A2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||") {
+/*
+ * TODO: RERFACTOR Z
+ */
+class ConcatOp[A1,A2,T1,T2](a1: TypedExpressionNode[A1], a2: TypedExpressionNode[A2]) extends BinaryOperatorNode(a1,a2, "||") {
   override def doWrite(sw: StatementWriter) =
-      sw.databaseAdapter.writeConcatOperator(a1, a2, sw)
+      sw.databaseAdapter.writeConcatOperator(a1, a2, sw)   
 }
+
 
 class NonNumericalCoalesce[A1,A2](val a1: NonNumericalExpression[A1], val a2: NonNumericalExpression[A2], op: String) extends BinaryOperatorNode(a1,a2, op)
 
@@ -429,12 +433,12 @@ trait TypeArithmetic extends FieldTypes {
   implicit def nvl4(e: NvlFunctionNonNumerical[Option[TimestampType], TimestampType]) = new DateTypeConversion[TimestampType](e)
   implicit def nvl2(e: NvlFunctionNonNumerical[Option[StringType],StringType]) = new StringTypeConversion[StringType](e)
   implicit def nvl3(e: NvlFunctionNonNumerical[Option[BooleanType],BooleanType]) = new BooleanTypeConversion[BooleanType](e)
-
+/*
   implicit def e2concat1[A1,A2](e: ConcatOp[A1,A2]) = new StringTypeConversion[StringType](e)(createOutMapperStringType)
   implicit def e2concat2[A1,A2](e: ConcatOp[A1,Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
   implicit def e2concat3[A1,A2](e: ConcatOp[Option[A1],A2]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
   implicit def e2concat4[A1,A2](e: ConcatOp[Option[A1],Option[A2]]) = new StringTypeConversion[Option[StringType]](e)(createOutMapperStringTypeOption)
-
+*/
   //Conversions for non numerical case statements and coalesce like functions :
   implicit def nnCoalesce1[A](e: NonNumericalCoalesce[A,A]) = new NonNumericalTypeConversion[A](e)(e.a1.mapper)
   implicit def nnCoalesce2[A](e: NonNumericalCoalesce[A,Option[A]])(implicit f: OutMapper[Option[A]]) = new NonNumericalTypeConversion[Option[A]](e)(f)

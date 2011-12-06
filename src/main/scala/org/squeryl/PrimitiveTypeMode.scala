@@ -41,229 +41,248 @@ object PrimitiveTypeMode extends PrimitiveTypeMode
 
 trait PrimitiveTypeMode extends QueryDsl {
 
-  type ByteType = Byte
+  // =========================== Non Numerical =========================== 
+  
+  implicit val stringTEF = new TypedExpressionFactory[String,TString] {
+    //def create(v: String) = new ConstantTypedExpression[String,TString](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[String,TString](v,this)
+    def sample = "": String
+  }
+    
+  implicit def stringToTE(s: String) = stringTEF.create(s)
+  
+  implicit val optionStringTEF = new TypedExpressionFactory[Option[String],TOptionString] with DeOptionizer[String, TString, Option[String], TOptionString]{
+    //def create(v: Option[String]) = new ConstantTypedExpression[Option[String],TOptionString](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[String],TOptionString](v,this)
+    def sample = Option("")
+    def deOptionizer = stringTEF
+  }
+  
+  implicit def optionStringToTE(s: Option[String]) = optionStringTEF.create(s)  
 
-  type IntType = Int
+  implicit val dateTEF = new TypedExpressionFactory[Date,TDate] {
+    //def create(v: Date) = new ConstantTypedExpression[Date,TDate](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Date,TDate](v,this)
+    def sample = new Date
+  }
+  
+  implicit def dateToTE(s: Date) = dateTEF.create(s)  
 
-  type StringType = String
+  implicit val optionDateTEF = new TypedExpressionFactory[Option[Date],TOptionDate] with DeOptionizer[Date, TDate, Option[Date], TOptionDate] {
+    //def create(v: Option[Date]) = new ConstantTypedExpression[Option[Date],TOptionDate](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Date],TOptionDate](v,this)
+    def sample = Option(new Date)
+    def deOptionizer = dateTEF
+  }
+  
+  implicit def optionDateToTE(s: Option[Date]) = optionDateTEF.create(s)    
+  
+  
+  implicit val timestampTEF = new TypedExpressionFactory[Timestamp,TTimestamp] {
+    //def create(v: Timestamp) = new ConstantTypedExpression[Timestamp,TTimestamp](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Timestamp,TTimestamp](v,this)
+    val sample = new Timestamp(0)
+  }
+  
+  implicit def timestampToTE(s: Timestamp) = timestampTEF.create(s)  
 
-  type DoubleType = Double
+  implicit val optionTimestampTEF = new TypedExpressionFactory[Option[Timestamp],TOptionTimestamp] with DeOptionizer[Timestamp, TTimestamp, Option[Timestamp], TOptionTimestamp] {
+    //def create(v: Option[Timestamp]) = new ConstantTypedExpression[Option[Timestamp],TOptionTimestamp](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Timestamp],TOptionTimestamp](v,this)
+    val sample = Option(new Timestamp(0))
+    def deOptionizer = timestampTEF
+  }
+  
+  implicit def optionTimestampToTE(s: Option[Timestamp]) = optionTimestampTEF.create(s)    
+  
+  implicit val booleanTEF = new TypedExpressionFactory[Boolean,TBoolean] {
+    //def create(v: Boolean) = new ConstantTypedExpression[Boolean,TBoolean](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Boolean,TBoolean](v,this)
+    def sample = true
+  }
+    
+  implicit def booleanToTE(s: Boolean) = booleanTEF.create(s)
+  
+  implicit val optionBooleanTEF = new TypedExpressionFactory[Option[Boolean],TOptionBoolean] with DeOptionizer[Boolean, TBoolean, Option[Boolean], TOptionBoolean] {
+    //def create(v: Option[Boolean]) = new ConstantTypedExpression[Option[Boolean],TOptionBoolean](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Boolean],TOptionBoolean](v,this)
+    def sample = Option(true)
+    def deOptionizer = booleanTEF
+  }
+  
+  implicit def optionBooleanToTE(s: Option[Boolean]) = optionBooleanTEF.create(s)  
 
-  type BigDecimalType = BigDecimal
+  implicit val uuidTEF = new TypedExpressionFactory[UUID,TUUID] {
+    //def create(v: UUID) = new ConstantTypedExpression[UUID,TUUID](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[UUID,TUUID](v,this)
+    def sample = UUID.randomUUID
+  }
+    
+  implicit def uuidToTE(s: UUID) = uuidTEF.create(s)
+  
+  implicit val optionUUIDTEF = new TypedExpressionFactory[Option[UUID],TOptionUUID] with DeOptionizer[UUID, TUUID, Option[UUID], TOptionUUID] {
+    //def create(v: Option[UUID]) = new ConstantTypedExpression[Option[UUID],TOptionUUID](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[UUID],TOptionUUID](v,this)
+    def sample = Option(UUID.randomUUID)
+    def deOptionizer = uuidTEF
+  }
+  
+  implicit def optionUUIDToTE(s: Option[UUID]) = optionUUIDTEF.create(s)  
+  
+  implicit val binaryTEF = new TypedExpressionFactory[Array[Byte],TByteArray] {
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Array[Byte],TByteArray](v,this)
+    def sample = Array(0: Byte)         
+  }
+    
+  implicit def binaryToTE(s: Array[Byte]) = binaryTEF.create(s)
+  
+  implicit val optionByteArrayTEF = new TypedExpressionFactory[Option[Array[Byte]],TOptionByteArray] with DeOptionizer[Array[Byte], TByteArray, Option[Array[Byte]], TOptionByteArray] {
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Array[Byte]],TOptionByteArray](v,this)
+    def sample = Option(Array(0: Byte))
+    def deOptionizer = binaryTEF
+  }
+  
+  implicit def optionByteArrayToTE(s: Option[Array[Byte]]) = optionByteArrayTEF.create(s)  
+  
+  implicit def enumValueTEF[A <: Enumeration#Value] = new TypedExpressionFactory[A,TEnumValue[A]] {
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[A,TEnumValue[A]](v,this)
+    def sample: A = sys.error("!")
+  }
+  
+  implicit def enumValueToTE[A <: Enumeration#Value](e: A) = enumValueTEF.create(e)
+  
+  implicit def optionEnumValueTEF[A <: Enumeration#Value] = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
+    //def create(v: Option[A]) = new ConstantTypedExpression[Option[A],TOptionEnumValue[A]](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[A],TOptionEnumValue[A]](v,this)
+    def sample: Option[A] = sys.error("!")
+    def deOptionizer = enumValueTEF[A]
+  }
 
-  type FloatType = Float
+  implicit def optionEnumcValueToTE[A <: Enumeration#Value](e: Option[A]) = optionEnumValueTEF.create(e)
+  
+  // =========================== Numerical Integral =========================== 
 
-  type LongType = Long
+  implicit val byteTEF = new IntegralTypedExpressionFactory[Byte,TByte,Float,TFloat] {
+    //def create(v: Byte) = new ConstantTypedExpression[Byte,TByte](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Byte,TByte](v,this)
+    def sample = 1: Byte
+    def floatifyer = floatTEF
+  }
+  
+  implicit def byteToTE(f: Byte) = byteTEF.create(f)  
 
-  type BooleanType = Boolean
+  implicit val optionByteTEF = new IntegralTypedExpressionFactory[Option[Byte],TOptionByte, Option[Float], TOptionFloat] with DeOptionizer[Byte, TByte, Option[Byte], TOptionByte] {
+    //def create(v: Option[Byte]) = new ConstantTypedExpression[Option[Byte],TOptionByte](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Byte],TOptionByte](v,this)
+    def deOptionizer = byteTEF
+    def sample = Option(0 : Byte)
+    def floatifyer = optionFloatTEF
+  }
+  
+  implicit def optionByteToTE(f: Option[Byte]) = optionByteTEF.create(f)  
+  
+  private def takeLastAccessedFieldReference[A,T](a: A) =
+      FieldReferenceLinker.takeLastAccessedFieldReference match {
+        case None =>
+          new ConstantTypedExpression[A,T](a)
+        case Some(n:SelectElement) =>
+          new SelectElementReference[A,T](n)
+      }  
+  
+  implicit val intTEF = new IntegralTypedExpressionFactory[Int,TInt,Float,TFloat] {
+    //def create(v: Int) = takeLastAccessedFieldReference[Int,TInt](v)     
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Int,TInt](v,this)
+    def sample = 1
+    def floatifyer = floatTEF
+  }  
+    
+  implicit def intToTE(f: Int) = intTEF.create(f)  
 
-  type DateType = Date
+  implicit val optionIntTEF = new IntegralTypedExpressionFactory[Option[Int],TOptionInt,Option[Float],TOptionFloat] with DeOptionizer[Int,TInt,Option[Int],TOptionInt] {
+    //def create(v: Option[Int]) = takeLastAccessedFieldReference[Option[Int],TOptionInt](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Int],TOptionInt](v,this)
+    def deOptionizer = intTEF
+    def sample = Option(0)
+    def floatifyer = optionFloatTEF
+  }
 
-  type TimestampType = Timestamp
+  implicit def optionIntToTE(f: Option[Int]) = optionIntTEF.create(f)
+  
+  implicit val longTEF = new IntegralTypedExpressionFactory[Long,TLong,Double,TDouble] {
+    //def create(v: Long) = takeLastAccessedFieldReference[Long,TOption](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Long,TLong](v,this)
+    def sample = 1L
+    def floatifyer = doubleTEF
+  }
+  
+  implicit def longToTE(f: Long) = longTEF.create(f)
 
-  type EnumerationValueType = Enumeration#Value
+  implicit val optionLongTEF = new IntegralTypedExpressionFactory[Option[Long],TOptionLong,Option[Double],TOptionDouble] with DeOptionizer[Long,TLong,Option[Long],TOptionLong] {
+    //def create(v: Option[Long]) = new ConstantTypedExpression[Option[Long],TOptionLong](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Long],TOptionLong](v,this)
+    def deOptionizer = longTEF
+    def sample = Option(0L)
+    def floatifyer = optionDoubleTEF
+  }
+  
+  implicit def optionLongToTE(f: Option[Long]) = optionLongTEF.create(f)  
+  
+  // =========================== Numerical Floating Point =========================== 
+  
+  implicit val floatTEF = new FloatTypedExpressionFactory[Float,TFloat] {
+    //def create(v: Float) = new ConstantTypedExpression[Float,TFloat](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Float,TFloat](v,this)
+    def sample = 1F
+  }
+    
+  implicit def floatToTE(f: Float) = floatTEF.create(f)
+  
+  implicit val optionFloatTEF = new FloatTypedExpressionFactory[Option[Float],TOptionFloat] with DeOptionizer[Float,TFloat,Option[Float],TOptionFloat] {
+    //def create(v: Option[Float]) = new ConstantTypedExpression[Option[Float],TOptionFloat](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Float],TOptionFloat](v,this)
+    def deOptionizer = floatTEF
+    def sample = Option(0F)
+  }
 
-  type UuidType = UUID
+  implicit def optionFloatToTE(f: Option[Float]) = optionFloatTEF.create(f)
+  
+  implicit val doubleTEF = new FloatTypedExpressionFactory[Double,TDouble] {
+    //def create(v: Double) = new ConstantTypedExpression[Double,TDouble](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Double,TDouble](v,this)
+    def sample = 1D
+  }
 
-  type BinaryType = Array[Byte]
+  implicit def doubleToTE(f: Double) = doubleTEF.create(f)    
+  
+  implicit val optionDoubleTEF = new FloatTypedExpressionFactory[Option[Double],TOptionDouble] with DeOptionizer[Double,TDouble,Option[Double],TOptionDouble] {
+    //def create(v: Option[Double]) = new ConstantTypedExpression[Option[Double],TOptionDouble](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[Double],TOptionDouble](v,this)
+    def deOptionizer = doubleTEF
+    def sample = Option(0D)
+  }
+  
+  implicit def optionDoubleToTE(f: Option[Double]) = optionDoubleTEF.create(f)
+  
+  implicit val bigDecimalTEF = new FloatTypedExpressionFactory[BigDecimal,TBigDecimal] {
+    //def create(v: BigDecimal) = new ConstantTypedExpression[BigDecimal,TBigDecimal](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[BigDecimal,TBigDecimal](v,this)
+    def sample = BigDecimal(1)
+  }
+
+  implicit def bigDecimalToTE(f: BigDecimal) = bigDecimalTEF.create(f)
+  
+  implicit val optionBigDecimalTEF = new FloatTypedExpressionFactory[Option[BigDecimal],TOptionBigDecimal] with DeOptionizer[BigDecimal,TBigDecimal,Option[BigDecimal],TOptionBigDecimal] {
+    //def create(v: Option[BigDecimal]) = new ConstantTypedExpression[Option[BigDecimal],TOptionBigDecimal](v)
+    def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[Option[BigDecimal],TOptionBigDecimal](v,this)
+    def deOptionizer = bigDecimalTEF
+    def sample = Option(BigDecimal(0))
+  }
+    
+  implicit def optionBigDecimalToTE(f: Option[BigDecimal]) = optionBigDecimalTEF.create(f)
+  
 
   //TODO: consider spliting createLeafNodeOfScalarIntType in two factory methods : createConstantOfXXXType and createReferenceOfXXXType 
   
-  def createLeafNodeOfScalarIntType(i: IntType) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Int](i) with NumericalExpression[IntType]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[IntType](n) with NumericalExpression[IntType]
-    }
-
-  def createLeafNodeOfScalarIntOptionType(i: Option[IntType]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Int]](i) with NumericalExpression[Option[IntType]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Int]](n) with NumericalExpression[Option[Int]]
-    }
-
-  def createLeafNodeOfScalarStringType(s: String) = {
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[String](s) with StringExpression[String]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[String](n) with StringExpression[String]
-    }
-  }
-
-  def createLeafNodeOfScalarStringOptionType(s: Option[StringType]) = {
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[String]](s) with StringExpression[Option[String]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[String]](n) with StringExpression[Option[String]]
-    }
-  }
-
-  def createLeafNodeOfScalarDoubleType(i: Double) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Double](i) with NumericalExpression[Double]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Double](n) with  NumericalExpression[Double]
-    }
-
-  def createLeafNodeOfScalarDoubleOptionType(i: Option[Double]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Double]](i) with NumericalExpression[Option[Double]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Double]](n) with NumericalExpression[Option[Double]]
-    }
-
-
-  def createLeafNodeOfScalarBigDecimalType(i: BigDecimal) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[BigDecimal](i) with NumericalExpression[BigDecimal]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[BigDecimal](n) with  NumericalExpression[BigDecimal]
-    }
-
-  def createLeafNodeOfScalarBigDecimalOptionType(i: Option[BigDecimal]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[BigDecimal]](i) with NumericalExpression[Option[BigDecimal]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[BigDecimal]](n) with NumericalExpression[Option[BigDecimal]]
-    }
-
-
-  def createLeafNodeOfScalarFloatType(i: Float) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Float](i) with NumericalExpression[Float]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Float](n) with  NumericalExpression[Float]
-    }
-
-  def createLeafNodeOfScalarFloatOptionType(i: Option[Float]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Float]](i) with NumericalExpression[Option[Float]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Float]](n) with  NumericalExpression[Option[Float]]
-    }
-
-  def createLeafNodeOfScalarLongType(i: Long) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Long](i) with NumericalExpression[Long]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Long](n) with  NumericalExpression[Long]
-    }
-
-  def createLeafNodeOfScalarLongOptionType(l: Option[LongType]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Long]](l) with NumericalExpression[Option[Long]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Long]](n) with NumericalExpression[Option[Long]]
-    }
-
-  def createLeafNodeOfScalarBooleanType(i: Boolean) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Boolean](i) with BooleanExpression[Boolean]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Boolean](n) with  BooleanExpression[Boolean]
-    }
-
-  def createLeafNodeOfScalarBooleanOptionType(b: Option[BooleanType]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Boolean]](b) with BooleanExpression[Option[Boolean]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Boolean]](n) with BooleanExpression[Option[Boolean]]
-    }
-
-  def createLeafNodeOfScalarBinaryType(i: BinaryType) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[BinaryType](i) with BinaryExpression[BinaryType]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[BinaryType](n) with BinaryExpression[BinaryType]
-    }
-
-  def createLeafNodeOfScalarBinaryOptionType(i: Option[BinaryType]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[BinaryType]](i) with BinaryExpression[Option[BinaryType]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[BinaryType]](n) with BinaryExpression[Option[BinaryType]]
-    }
-
-  def createLeafNodeOfScalarDateType(i: Date) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Date](new java.sql.Date(i.getTime)) with DateExpression[Date]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Date](n) with DateExpression[Date]
-    }
-
-  def createLeafNodeOfScalarDateOptionType(b: Option[DateType]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Date]](b) with DateExpression[Option[Date]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Date]](n) with  DateExpression[Option[Date]]
-    }
-
-  def createLeafNodeOfScalarTimestampType(d: Timestamp) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Timestamp](d) with DateExpression[Timestamp]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Timestamp](n) with DateExpression[Timestamp]
-    }
-
-  def createLeafNodeOfScalarTimestampOptionType(d: Option[Timestamp]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Timestamp]](d) with DateExpression[Option[Timestamp]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Timestamp]](n) with DateExpression[Option[Timestamp]]
-    }
-
-  def createLeafNodeOfEnumExpressionType[A](e: EnumerationValueType): EnumExpression[Enumeration#Value] =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Enumeration#Value](e)(outMapperFromEnumValue(e)) with EnumExpression[Enumeration#Value]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
-    }
-
-  def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[Enumeration#Value]] =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[Enumeration#Value]](e, outMapperOptionFromOptionEnumValue(e)) with EnumExpression[Option[Enumeration#Value]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
-    }
-
-  def createLeafNodeOfScalarUuidType(d: UUID) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[UUID](d) with UuidExpression[UUID]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[UUID](n) with UuidExpression[UUID]
-    }
-
-  def createLeafNodeOfScalarUuidOptionType(d: Option[UUID]) =
-    FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case None =>
-        new ConstantExpressionNode[Option[UUID]](d) with UuidExpression[Option[UUID]]
-      case Some(n:SelectElement) =>
-        new SelectElementReference[Option[UUID]](n) with UuidExpression[Option[UUID]]
-    }
 
   protected def mapByte2ByteType(i: Byte) = i
   protected def mapInt2IntType(i: Int) = i
@@ -282,19 +301,6 @@ trait PrimitiveTypeMode extends QueryDsl {
   }
   protected def mapBinary2BinaryType(d: Array[Byte]) = d
 
-  protected implicit val sampleByte: ByteType = 0xF.byteValue
-  protected implicit val sampleInt: IntType = 0
-  protected implicit val sampleString: StringType = ""
-  protected implicit val sampleDouble: DoubleType = 0.0
-  protected implicit val sampleBigDecimal: BigDecimalType = 0.0
-  protected implicit val sampleFloat: FloatType = 0.0F
-  protected implicit val sampleLong: LongType = 0
-  protected implicit val sampleBoolean: BooleanType = false
-  protected implicit val sampleDate: DateType = new Date
-  protected implicit def sampleTimestamp: TimestampType = new Timestamp(0)
-  //protected implicit def sampleEnumerationValueType: EnumerationValueType = DummyEnum.DummyEnumerationValue
-  protected implicit val sampleUuid: UUID = UUID.fromString("00000000-0000-0000-0000-000000000000")
-  protected implicit val sampleBinary: BinaryType = Array[Byte](0)
 }
 
 object DummyEnum extends Enumeration {

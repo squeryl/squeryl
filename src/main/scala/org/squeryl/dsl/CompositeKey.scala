@@ -22,7 +22,7 @@ import org.squeryl.internals.{AttributeValidOnMultipleColumn, ColumnAttribute, F
 
 trait CompositeKey {
 
-  private [squeryl] var _members: Option[Seq[SelectElementReference[Any]]] = None
+  private [squeryl] var _members: Option[Seq[SelectElementReference[_,_]]] = None
 
   private [squeryl] var _propertyName: Option[String] = None
 

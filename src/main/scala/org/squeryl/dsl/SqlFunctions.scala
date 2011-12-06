@@ -40,12 +40,6 @@ trait SqlFunctions  {
   def max[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "max")
   def min[A](e: NonNumericalExpression[A])      = new  UnaryAgregateLengthNeutralOp[A](e, "min")
 
-  def count: CountFunction = count()
-
-  def count(e: TypedExpressionNode[_]*) = new CountFunction(e, false)
-
-  def countDistinct(e: TypedExpressionNode[_]*) = new CountFunction(e, true)
-
   def nvl[A,B](a: NumericalExpression[Option[A]], b: NumericalExpression[B]) = new NvlFunctionNumerical[A,B](a.asInstanceOf[NumericalExpression[A]],b)
 
   def nvl[A](a: NonNumericalExpression[Option[A]], b: NonNumericalExpression[A]) = new NvlFunctionNonNumerical[Option[A],A](a,b)
@@ -60,24 +54,4 @@ trait SqlFunctions  {
 
   def notExists[A](query: Query[A]) = new ExistsExpression(query.copy(false).ast, "not exists")
 
-  class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean)
-    extends FunctionNode[LongType](
-      "count",
-      Some(createOutMapperLongType) : Option[OutMapper[LongType]],
-      if(_args == Nil) Seq(new TokenExpressionNode("*")) else _args
-    )
-    with NumericalExpression[LongType] {
-
-    override def doWrite(sw: StatementWriter) = {
-
-      sw.write(name)
-      sw.write("(")
-
-      if(isDistinct)
-        sw.write("distinct ")
-
-      sw.writeNodesWithSeparator(args, ",", false)
-      sw.write(")")
-    }
-  }
 }

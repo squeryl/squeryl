@@ -295,7 +295,7 @@ trait TypedExpressionNode[T] extends ExpressionNode {
   private [squeryl] def _fieldMetaData = {
     val ser =
       try {
-        this.asInstanceOf[SelectElementReference[_]]
+        this.asInstanceOf[SelectElementReference[_,_]]
       }
       catch { // TODO: validate this at compile time with a scalac plugin
         case e:ClassCastException => {
@@ -367,6 +367,8 @@ class ConstantExpressionNodeList[T](val value: Traversable[T]) extends Expressio
 
 class FunctionNode[A](val name: String, _mapper : Option[OutMapper[A]], val args: Iterable[ExpressionNode]) extends ExpressionNode {
 
+  def value: A = sys.error("!")
+  
   def this(name: String, args: ExpressionNode*) = this(name, None, args)
 
   def mapper: OutMapper[A] = _mapper.getOrElse(org.squeryl.internals.Utils.throwError("no mapper available"))
@@ -609,7 +611,7 @@ trait NestedExpression {
     visitDescendants( (node, parent, depth) =>
       node match {
         case e:ExportedSelectElement if e.needsOuterScope => e.outerScopes = query :: e.outerScopes
-        case s:SelectElementReference[_] => s.delegateAtUseSite match {
+        case s:SelectElementReference[_,_] => s.delegateAtUseSite match {
           case e:ExportedSelectElement if e.needsOuterScope => e.outerScopes = query :: e.outerScopes
           case _ =>
         }
