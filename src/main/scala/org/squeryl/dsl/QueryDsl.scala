@@ -184,7 +184,7 @@ trait QueryDsl
   class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean)
     extends FunctionNode[Long](
       "count",
-      sys.error("implement me"),
+      Some(PrimitiveTypeMode.longTEF.createOutMapper),
       if(_args == Nil) Seq(new TokenExpressionNode("*")) else _args
     )
     with TypedExpression[Long,TLong] {

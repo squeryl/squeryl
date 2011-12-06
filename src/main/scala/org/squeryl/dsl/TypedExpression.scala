@@ -24,6 +24,7 @@ import org.squeryl.Schema
 import org.squeryl.internals.AttributeValidOnNumericalColumn
 import org.squeryl.Query
 import java.util.Date
+import java.sql.ResultSet
 import org.squeryl.internals.Utils
 
 sealed trait TNumeric
@@ -211,13 +212,14 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 class ConstantTypedExpression[A1,T1](a: A1) extends ConstantExpressionNode[A1](a, None) with TypedExpression[A1,T1]
 
 class TypedExpressionConversion[A1,T1](val e: TypedExpression[_,_], bf: TypedExpressionFactory[A1,T1]) extends TypedExpression[A1,T1] {
+
   def value = bf.sample
   
-  def mapper: OutMapper[A1] = sys.error("!")
+  def mapper: OutMapper[A1] = bf.createOutMapper
   
   override def inhibited = e.inhibited
 
-  override def doWrite(sw: StatementWriter)= e.doWrite((sw))
+  override def doWrite(sw: StatementWriter) = e.doWrite((sw))
 
   override def children = e.children  
 }
@@ -233,8 +235,8 @@ trait FloatTypedExpressionFactory[A1,T1] extends TypedExpressionFactory[A1,T1] w
 }
 
 trait TypedExpressionFactory[A,T] {
-
-  
+ outer =>
+     
   def create(a: A) : TypedExpression[A,T] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
@@ -246,6 +248,14 @@ trait TypedExpressionFactory[A,T] {
   def convert(v: TypedExpression[_,_]): TypedExpressionConversion[A,T]
   def sample: A
   def sampleB = create(sample)
+  def doMap(rs: ResultSet, i: Int): A
+  
+  def createOutMapper: OutMapper[A] = new OutMapper[A] {
+    
+    def doMap(rs: ResultSet): A = outer.doMap(rs, index)    
+
+    def sample:A = outer.sample
+  }  
 }
 
 trait IntegralTypedExpressionFactory[A1,T1,A2,T2] 
@@ -260,6 +270,25 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] {
   self: TypedExpressionFactory[A2,T2] =>
     
   def deOptionizer: TypedExpressionFactory[A1,T1]
+  
+  def doMap(rs: ResultSet, i: Int): A2 = Utils.throwError(
+      "doMap should never get called on" + this.getClass.getName)
+  
+  override def createOutMapper: OutMapper[A2] = new OutMapper[A2] {
+    def doMap(rs: ResultSet): A2 = {
+          
+      val v = deOptionizer.doMap(rs,index)
+      val r = 
+        if(rs.wasNull)
+          None
+        else
+          Option(v)
+          
+      r.asInstanceOf[A2]
+    }
+    
+    def sample:A2 = Option(deOptionizer.sample).asInstanceOf[A2]
+  }
 }
 
 class ConcatOp[A1,A2,T1,T2](a1: TypedExpression[A1,T1], a2: TypedExpression[A2,T2]) extends BinaryOperatorNode(a1,a2, "||") {
