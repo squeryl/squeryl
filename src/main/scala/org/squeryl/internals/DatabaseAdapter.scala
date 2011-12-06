@@ -16,6 +16,7 @@
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
+import org.squeryl.dsl._
 import org.squeryl._
 import dsl.CompositeKey
 import org.squeryl.{Schema, Session, Table}
@@ -761,7 +762,7 @@ trait DatabaseAdapter {
   def databaseTypeFor(c: Class[_]) =
     _declarationHandler.handleType(c, None)
 
-  def writeCastInvocation(e: TypedExpressionNode[_], sw: StatementWriter) = {
+  def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {
     sw.write("cast(")
     e.write(sw)
 
@@ -772,7 +773,7 @@ trait DatabaseAdapter {
     sw.write(")")
   }
 
-  def writeCaseStatement(toMatch: Option[ExpressionNode], cases: Iterable[(ExpressionNode, TypedExpressionNode[_])], otherwise: TypedExpressionNode[_], sw: StatementWriter) = {
+  def writeCaseStatement(toMatch: Option[ExpressionNode], cases: Iterable[(ExpressionNode, TypedExpression[_,_])], otherwise: TypedExpression[_,_], sw: StatementWriter) = {
 
     sw.write("(case ")
     toMatch.foreach(_.write(sw))

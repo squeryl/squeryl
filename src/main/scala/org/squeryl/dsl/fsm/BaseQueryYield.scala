@@ -28,7 +28,7 @@ class BaseQueryYield[G]
     with OrderBySignatures[G]
     with QueryYield[G] {
 
-  protected def _createColumnToTupleMapper(origin: QueryExpressionNode[_], agregateArgs: List[TypedExpressionNode[_]], offsetInResultSet:Int, isForGroup:Boolean) = {
+  protected def _createColumnToTupleMapper(origin: QueryExpressionNode[_], agregateArgs: List[TypedExpression[_,_]], offsetInResultSet:Int, isForGroup:Boolean) = {
 
     var i = -1;
     val nodes = agregateArgs.map(e => { i += 1; new TupleSelectElement(origin, e, i, isForGroup)})
@@ -98,7 +98,7 @@ class BaseQueryYield[G]
 
 class GroupQueryYield[K] (
    _qe: QueryElements[_],
-   val groupByClauseClosure: ()=>List[TypedExpressionNode[_]]
+   val groupByClauseClosure: ()=>List[TypedExpression[_,_]]
   )
   extends BaseQueryYield[Group[K]](_qe, null)
     with GroupByState[K]
@@ -133,7 +133,7 @@ class GroupQueryYield[K] (
 
 class MeasuresQueryYield[M](
    _qe: QueryElements[_],
-   _computeByClauseClosure: ()=>List[TypedExpressionNode[_]]
+   _computeByClauseClosure: ()=>List[TypedExpression[_,_]]
   )
   extends BaseQueryYield[Measures[M]](_qe, null)
     with OrderBySignatures[Measures[M]]
@@ -164,9 +164,9 @@ class MeasuresQueryYield[M](
 
 class GroupWithMeasuresQueryYield[K,M] (
   _qe: QueryElements[_],
-  _groupByClauseClosure: ()=>List[TypedExpressionNode[_]],
+  _groupByClauseClosure: ()=>List[TypedExpression[_,_]],
   _having: Option[()=>LogicalBoolean],
-  _computeClauseClosure: ()=>List[TypedExpressionNode[_]]
+  _computeClauseClosure: ()=>List[TypedExpression[_,_]]
 )
 extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
   with ComputeStateFromGroupByState[K,M]

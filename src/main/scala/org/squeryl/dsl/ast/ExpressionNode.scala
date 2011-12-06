@@ -110,7 +110,7 @@ trait ListExpressionNode extends ExpressionNode {
   def isEmpty: Boolean
 }
 
-class EqualityExpression(override val left: TypedExpressionNode[_], override val right: TypedExpressionNode[_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=") {
+class EqualityExpression(override val left: TypedExpression[_,_], override val right: TypedExpression[_,_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=") {
   
   override def doWrite(sw: StatementWriter) =     
     right match {
@@ -262,7 +262,7 @@ class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: S
   def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity 
 }
 
-class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpressionNode[_])
+class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpression[_,_])
   extends BaseColumnAttributeAssignment {
 
   def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity
@@ -273,55 +273,12 @@ class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpression
 }
 
 
-trait TypedExpressionNode[T] extends ExpressionNode {
-
-  def sample:T = mapper.sample
-
-  def mapper: OutMapper[T]
-
-  def :=[B <% TypedExpressionNode[T]] (b: B) =
-    new UpdateAssignment(_fieldMetaData, b : TypedExpressionNode[T])
-
-  def :=(q: Query[Measures[T]]) =
-    new UpdateAssignment(_fieldMetaData, q.ast)
-
-  def defaultsTo[B <% TypedExpressionNode[T]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
-    new DefaultValueAssignment(_fieldMetaData, value : TypedExpressionNode[T])
-
-  /**
-   * TODO: make safer with compiler plugin
-   * Not type safe ! a TypedExpressionNode[T] might not be a SelectElementReference[_] that refers to a FieldSelectElement...   
-   */
-  private [squeryl] def _fieldMetaData = {
-    val ser =
-      try {
-        this.asInstanceOf[SelectElementReference[_,_]]
-      }
-      catch { // TODO: validate this at compile time with a scalac plugin
-        case e:ClassCastException => {
-            throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
-        }
-      }
-
-    val fmd =
-      try {
-        ser.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData
-      }
-      catch { // TODO: validate this at compile time with a scalac plugin
-        case e:ClassCastException => {
-          throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
-        }
-      }
-    fmd
-  }
-}
-
 class TokenExpressionNode(val token: String) extends ExpressionNode {
   def doWrite(sw: StatementWriter) = sw.write(token)
 }
 
 
-class InputOnlyConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]]) with TypedExpressionNode[T]
+class InputOnlyConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]]) with TypedExpression[T,Any]
 
 class ConstantExpressionNode[T] (val value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
 

@@ -21,7 +21,7 @@ import java.sql.ResultSet
 import java.math.BigDecimal
 import scala.annotation.tailrec
 import org.squeryl.annotations.{ColumnBase, Column}
-import org.squeryl.dsl.ast.{ConstantExpressionNode, TypedExpressionNode}
+import org.squeryl.dsl.ast.ConstantExpressionNode
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
 import org.squeryl.dsl.CompositeKey

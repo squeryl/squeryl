@@ -56,7 +56,7 @@ trait DslFactory {
   implicit def traversableOfUuidOptionList(l: Traversable[UuidType]) =
     new RightHandSideOfIn[Option[UuidType]](new ConstantExpressionNodeList[UuidType](l))
 */
-  implicit def typedExpression2OrderByArg[E <% TypedExpressionNode[_]](e: E) = new OrderByArg(e)
+  implicit def typedExpression2OrderByArg[E <% TypedExpression[_,_]](e: E) = new OrderByArg(e)
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
 

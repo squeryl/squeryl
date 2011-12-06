@@ -177,9 +177,9 @@ trait QueryDsl
 
   def count: CountFunction = count()
 
-  def count(e: TypedExpressionNode[_]*) = new CountFunction(e, false)
+  def count(e: TypedExpression[_,_]*) = new CountFunction(e, false)
 
-  def countDistinct(e: TypedExpressionNode[_]*) = new CountFunction(e, true)
+  def countDistinct(e: TypedExpression[_,_]*) = new CountFunction(e, true)
   
   class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean)
     extends FunctionNode[Long](
@@ -641,11 +641,11 @@ trait QueryDsl
   implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9)) = new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
 
   // Case statements :
-
+/*
   def caseOf[A](expr: NumericalExpression[A]) = new CaseOfNumericalExpressionMatchStart(expr)
 
   def caseOf[A](expr: NonNumericalExpression[A]) = new CaseOfNonNumericalExpressionMatchStart(expr)
 
   def caseOf = new CaseOfConditionChainStart
-
+*/
 }

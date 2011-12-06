@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************** */
 package org.squeryl.dsl.fsm
-
+/*
 import org.squeryl.dsl.{BinaryAMSOp, NonNumericalCoalesce, NonNumericalExpression, NumericalExpression}
 import org.squeryl.dsl.ast.TypedExpressionNode
 
@@ -73,3 +73,4 @@ class CaseOfNonNumericalExpressionMatchYieldingNonNumerical[A,T](
   }
 }
 
+*/

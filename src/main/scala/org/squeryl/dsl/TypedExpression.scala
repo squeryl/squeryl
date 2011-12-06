@@ -23,8 +23,8 @@ import org.squeryl.Session
 import org.squeryl.Schema
 import org.squeryl.internals.AttributeValidOnNumericalColumn
 import org.squeryl.Query
-
 import java.util.Date
+import org.squeryl.internals.Utils
 
 sealed trait TNumeric
 sealed trait TOptionBigDecimal extends TNumeric
@@ -78,8 +78,7 @@ sealed trait TOptionUUID
 sealed class CanCompare[-A1,-A2]
 
 
-
-trait TypedExpression[A1,T1] extends TypedExpressionNode[A1] {
+trait TypedExpression[A1,T1] extends ExpressionNode {
   outer =>
     
   def plus[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
@@ -166,7 +165,48 @@ trait TypedExpression[A1,T1] extends TypedExpressionNode[A1] {
   def notIn[A2,T2](t: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = sys.error("!")
   
   def ~ = this
+
+  def sample:A1 = mapper.sample
+
+  def mapper: OutMapper[A1]
+
+  def :=[B <% TypedExpression[A1,_]] (b: B) =
+    new UpdateAssignment(_fieldMetaData, b : TypedExpression[A1,_])
+
+  def :=(q: Query[Measures[A1]]) =
+    new UpdateAssignment(_fieldMetaData, q.ast)
+
+  def defaultsTo[B <% TypedExpression[A1,_]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
+    new DefaultValueAssignment(_fieldMetaData, value : TypedExpression[A1,_])
+
+  /**
+   * TODO: make safer with compiler plugin
+   * Not type safe ! a TypedExpressionNode[T] might not be a SelectElementReference[_] that refers to a FieldSelectElement...   
+   */
+  private [squeryl] def _fieldMetaData = {
+    val ser =
+      try {
+        this.asInstanceOf[SelectElementReference[_,_]]
+      }
+      catch { // TODO: validate this at compile time with a scalac plugin
+        case e:ClassCastException => {
+            throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
+        }
+      }
+
+    val fmd =
+      try {
+        ser.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData
+      }
+      catch { // TODO: validate this at compile time with a scalac plugin
+        case e:ClassCastException => {
+          throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
+        }
+      }
+    fmd
+  }
 }
+
 
 class ConstantTypedExpression[A1,T1](a: A1) extends ConstantExpressionNode[A1](a, None) with TypedExpression[A1,T1]
 
@@ -220,4 +260,9 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] {
   self: TypedExpressionFactory[A2,T2] =>
     
   def deOptionizer: TypedExpressionFactory[A1,T1]
+}
+
+class ConcatOp[A1,A2,T1,T2](a1: TypedExpression[A1,T1], a2: TypedExpression[A2,T2]) extends BinaryOperatorNode(a1,a2, "||") {
+  override def doWrite(sw: StatementWriter) =
+      sw.databaseAdapter.writeConcatOperator(a1, a2, sw)   
 }

@@ -15,7 +15,7 @@
  ***************************************************************************** */
 
 package org.squeryl.dsl.fsm
-
+/*
 import org.squeryl.internals.{StatementWriter, OutMapper}
 import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.{TypedExpressionNode, ExpressionNode, LogicalBoolean}
@@ -55,3 +55,5 @@ class CaseOfConditionChainNonNumerical[A](val whenArg: LogicalBoolean, val thenA
     new CaseOfChainNonNumericalTermination(nnC.mapper, r, this)
   }
 }
+
+*/

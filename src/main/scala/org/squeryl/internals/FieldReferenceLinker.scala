@@ -20,10 +20,11 @@ import net.sf.cglib.proxy._
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast._
 import org.squeryl.dsl.CompositeKey
+import org.squeryl.dsl.TypedExpression
 
 object FieldReferenceLinker {
 
-  def pushExpressionOrCollectValue[T](e: ()=>TypedExpressionNode[T]): T = {
+  def pushExpressionOrCollectValue[T](e: ()=>TypedExpression[T,_]): T = {
     if (isYieldInspectionMode) {
       val yi = _yieldInspectionTL.get
       val expr = yi.callWithoutReentrance(e)

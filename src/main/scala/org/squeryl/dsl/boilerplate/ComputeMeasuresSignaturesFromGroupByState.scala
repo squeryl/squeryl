@@ -16,12 +16,12 @@
 package org.squeryl.dsl.boilerplate
 
 import org.squeryl.dsl.fsm._
-import org.squeryl.dsl.ast.{TypedExpressionNode}
+import org.squeryl.dsl.TypedExpression
 
 trait ComputeMeasuresSignaturesFromGroupByState[G] {
   self: GroupQueryYield[G] =>
 
-  def compute[T1](e1: =>TypedExpressionNode[T1]): ComputeStateFromGroupByState[G,T1] =
+  def compute[T1](e1: =>TypedExpression[T1,_]): ComputeStateFromGroupByState[G,T1] =
     new GroupWithMeasuresQueryYield[G,T1](
       this.queryElementzz,
       this.groupByClauseClosure,
@@ -29,7 +29,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
       () =>List(e1)
     )
 
-  def compute[T1,T2](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2]): ComputeStateFromGroupByState[G,Product2[T1,T2]] =
+  def compute[T1,T2](e1: =>TypedExpression[T1,_], e2: =>TypedExpression[T2,_]): ComputeStateFromGroupByState[G,Product2[T1,T2]] =
     new GroupWithMeasuresQueryYield[G,Product2[T1,T2]](
       this.queryElementzz,
       this.groupByClauseClosure,
@@ -37,7 +37,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
       () =>List(e1, e2)
     )
 
-  def compute[T1,T2,T3](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3]): ComputeStateFromGroupByState[G,Product3[T1,T2,T3]] =
+  def compute[T1,T2,T3](e1: =>TypedExpression[T1,_], e2: =>TypedExpression[T2,_], e3: =>TypedExpression[T3,_]): ComputeStateFromGroupByState[G,Product3[T1,T2,T3]] =
     new GroupWithMeasuresQueryYield[G,Product3[T1,T2,T3]](
       this.queryElementzz,
       this.groupByClauseClosure,
@@ -45,7 +45,7 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
       () =>List(e1, e2, e3)
     )
 
-  def compute[T1,T2,T3,T4](e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4]): ComputeStateFromGroupByState[G,Product4[T1,T2,T3,T4]] =
+  def compute[T1,T2,T3,T4](e1: =>TypedExpression[T1,_], e2: =>TypedExpression[T2,_], e3: =>TypedExpression[T3,_], e4: =>TypedExpression[T4,_]): ComputeStateFromGroupByState[G,Product4[T1,T2,T3,T4]] =
     new GroupWithMeasuresQueryYield[G,Product4[T1,T2,T3,T4]](
       this.queryElementzz,
       this.groupByClauseClosure,
@@ -54,8 +54,8 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     )
 
   def compute[T1,T2,T3,T4,T5]
-    (e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4],
-     e5: =>TypedExpressionNode[T5]): ComputeStateFromGroupByState[G,Product5[T1,T2,T3,T4,T5]] =
+    (e1: =>TypedExpression[T1,_], e2: =>TypedExpression[T2,_], e3: =>TypedExpression[T3,_], e4: =>TypedExpression[T4,_],
+     e5: =>TypedExpression[T5,_]): ComputeStateFromGroupByState[G,Product5[T1,T2,T3,T4,T5]] =
     new GroupWithMeasuresQueryYield[G,Product5[T1,T2,T3,T4,T5]](
       this.queryElementzz,
       this.groupByClauseClosure,
@@ -64,8 +64,8 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     )
 
   def compute[T1,T2,T3,T4,T5,T6]
-    (e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4],
-     e5: =>TypedExpressionNode[T5], e6: =>TypedExpressionNode[T6]): ComputeStateFromGroupByState[G,Product6[T1,T2,T3,T4,T5,T6]] =
+    (e1: =>TypedExpression[T1,_], e2: =>TypedExpression[T2,_], e3: =>TypedExpression[T3,_], e4: =>TypedExpression[T4,_],
+     e5: =>TypedExpression[T5,_], e6: =>TypedExpression[T6,_]): ComputeStateFromGroupByState[G,Product6[T1,T2,T3,T4,T5,T6]] =
     new GroupWithMeasuresQueryYield[G,Product6[T1,T2,T3,T4,T5,T6]](
       this.queryElementzz,
       this.groupByClauseClosure,
@@ -74,8 +74,8 @@ trait ComputeMeasuresSignaturesFromGroupByState[G] {
     )
 
   def compute[T1,T2,T3,T4,T5,T6,T7]
-    (e1: =>TypedExpressionNode[T1], e2: =>TypedExpressionNode[T2], e3: =>TypedExpressionNode[T3], e4: =>TypedExpressionNode[T4],
-     e5: =>TypedExpressionNode[T5], e6: =>TypedExpressionNode[T6], e7: =>TypedExpressionNode[T7]): ComputeStateFromGroupByState[G,Product7[T1,T2,T3,T4,T5,T6,T7]] =
+    (e1: =>TypedExpression[T1,_], e2: =>TypedExpression[T2,_], e3: =>TypedExpression[T3,_], e4: =>TypedExpression[T4,_],
+     e5: =>TypedExpression[T5,_], e6: =>TypedExpression[T6,_], e7: =>TypedExpression[T7,_]): ComputeStateFromGroupByState[G,Product7[T1,T2,T3,T4,T5,T6,T7]] =
     new GroupWithMeasuresQueryYield[G,Product7[T1,T2,T3,T4,T5,T6,T7]](
       this.queryElementzz,
       this.groupByClauseClosure,

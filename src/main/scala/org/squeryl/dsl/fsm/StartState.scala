@@ -16,7 +16,7 @@
 package org.squeryl.dsl.fsm
 
 import org.squeryl.dsl._
-import ast.{TypedExpressionNode, LogicalBoolean, UpdateStatement, UpdateAssignment}
+import ast.{LogicalBoolean, UpdateStatement, UpdateAssignment}
 import boilerplate.{ComputeMeasuresSignaturesFromStartOrWhereState, ComputeMeasuresSignaturesFromGroupByState, GroupBySignatures, OrderBySignatures}
 
 abstract sealed class Conditioned

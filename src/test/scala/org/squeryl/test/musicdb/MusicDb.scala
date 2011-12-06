@@ -23,7 +23,6 @@ import adapters._
 import dsl._
 import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
-import fsm.CaseOfNonNumericalExpressionMatchYieldingNonNumerical
 import java.util.{Date, Calendar}
 
 object Genre extends Enumeration {

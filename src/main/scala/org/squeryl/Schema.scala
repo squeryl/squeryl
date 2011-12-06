@@ -514,7 +514,7 @@ trait Schema {
       new ColumnGroupAttributeAssignment(cols, columnAttributes)
   }
 
-  def columns(fieldList: TypedExpressionNode[_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
+  def columns(fieldList: TypedExpression[_,_]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
 
   // POSO Life Cycle Callbacks :
 

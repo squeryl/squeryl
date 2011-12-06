@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************** */
 package org.squeryl.dsl.fsm
-
+/*
 import org.squeryl.dsl.ast.{TypedExpressionNode, ExpressionNode}
 import org.squeryl.internals.{StatementWriter, OutMapper}
 import collection.mutable.ArrayBuffer
@@ -69,3 +69,5 @@ class CaseOfChainNumericalTermination[A](m: OutMapper[A], o : TypedExpressionNod
 
 class CaseOfChainNonNumericalTermination[A](m: OutMapper[A], o : TypedExpressionNode[_], p: CaseOfChain)
   extends CaseOfChainTermination[A](m, o, p) with NonNumericalExpression[A]
+
+*/

@@ -17,6 +17,7 @@ package org.squeryl.adapters
 
 import org.squeryl.{Session, Table}
 import org.squeryl.dsl.ast._
+import org.squeryl.dsl._
 import java.sql.SQLException
 import collection.Set
 import collection.immutable.List
@@ -230,7 +231,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def viewAlias(vn: ViewExpressionNode[_]) =
     "t" + vn.uniqueId.get
     
-  override def writeCastInvocation(e: TypedExpressionNode[_], sw: StatementWriter) = {
+  override def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {
     sw.write("cast(")
     e.write(sw)
 
