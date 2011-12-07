@@ -21,17 +21,16 @@ import java.sql.ResultSet
 import java.math.BigDecimal
 import scala.annotation.tailrec
 import org.squeryl.annotations.{ColumnBase, Column}
-import org.squeryl.dsl.ast.ConstantExpressionNode
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
 import org.squeryl.dsl.CompositeKey
-//import org.squeryl.customtypes.CustomType
 import scala.reflect.generic.ByteCodecs
 import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteCode, ScalaSigPrinter}
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.lang.reflect.Member
 import scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser
+import org.squeryl.dsl.ast.ConstantTypedExpression
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -134,11 +133,11 @@ class FieldMetaData(
     })
   }
 
-  private [squeryl] var _defaultValue: Option[ConstantExpressionNode[_]] = None
+  private [squeryl] var _defaultValue: Option[ConstantTypedExpression[_,_]] = None
 
   def columnAttributes: Iterable[ColumnAttribute] = _columnAttributes
 
-  def defaultValue: Option[ConstantExpressionNode[_]] = _defaultValue
+  def defaultValue: Option[ConstantTypedExpression[_,_]] = _defaultValue
 
   /**
    * The db column type declaration overriden in the schema, if None, it means that it is the default value for

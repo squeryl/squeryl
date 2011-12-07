@@ -16,6 +16,7 @@
 package org.squeryl.adapters
 
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.{Session, Table}
 import java.sql.SQLException
 import org.squeryl.dsl.ast._
@@ -74,7 +75,7 @@ class DB2Adapter extends DatabaseAdapter {
     sw.write(colVals.mkString("(", ",", ")"));
   }
 
-  override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
+  override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
 
   override def isTableDoesNotExistException(e: SQLException) = {
@@ -127,8 +128,8 @@ class DB2Adapter extends DatabaseAdapter {
   }
 
   private def _writeConcatOperand(e: ExpressionNode, sw: StatementWriter) = {
-    if (e.isInstanceOf[ConstantExpressionNode[_]]) {
-      val c = e.asInstanceOf[ConstantExpressionNode[Any]]
+    if (e.isInstanceOf[ConstantTypedExpression[_,_]]) {
+      val c = e.asInstanceOf[ConstantTypedExpression[Any,Any]]
       sw.write("cast(")
       e.write(sw)
       sw.write(" as varchar(")

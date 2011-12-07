@@ -363,13 +363,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     from(students)(s =>
       compute(avg(s.age), avg(s.age) + 3, avg(s.age) / count, count + 6)
     )
-/* REFACTOR Z
+
   def addressesOfStudentsOlderThan24 =
     from(students, addresses)((s,a) =>
       where((24 lt s.age) and (24 lt s.age))
       select(&(a.numberz || " " || a.streetName || " " || a.appNumber))
     )
-*/
+
   test("DeepNest1"){
     val testInstance = sharedTestInstance; import testInstance._
 
@@ -541,7 +541,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     passed('testServerSideFunctionCall)
   }
-/* REFACTOR Z
+
   test("ConcatWithOptionalCols"){
     val dbAdapter = Session.currentSession.databaseAdapter
     if(!dbAdapter.isInstanceOf[MSSQLServer] && !dbAdapter.isInstanceOf[DerbyAdapter]) {
@@ -553,7 +553,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       passed('testConcatWithOptionalCols )
     }
   }
-*/
+
   test("ScalarOptionQuery"){
     val avgAge:Option[Float] = avgStudentAge
     //println("avgAge = " + avgAge)
@@ -574,7 +574,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
     
-  test("isNull and === None comparison", SingleTestRun){  
+  test("isNull and === None comparison"){  
     val z1 =
       from(students)(s=>
         where({

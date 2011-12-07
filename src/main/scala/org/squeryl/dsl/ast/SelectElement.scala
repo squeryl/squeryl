@@ -245,12 +245,9 @@ class ValueSelectElement
  * these are ExportedSelectElement
  */
 class SelectElementReference[A,T]
-  (val selectElement: SelectElement)
+  (val selectElement: SelectElement, val mapper: OutMapper[A])
     extends TypedExpression[A,T] {
-
-  def value: A = sys.error("!")
-  def mapper: OutMapper[A] = sys.error("!")
-  
+    
   override def toString =
     'SelectElementReference + ":" + Utils.failSafeString(delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 

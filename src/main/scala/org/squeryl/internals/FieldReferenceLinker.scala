@@ -160,7 +160,7 @@ object FieldReferenceLinker {
 
   private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_,_] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
-      case Some(n:SelectElement) => new SelectElementReference(n)
+      case Some(n:SelectElement) => new SelectElementReference(n,NoOpOutMapper)
       case None => org.squeryl.internals.Utils.throwError("Thread local does not have a last accessed field... this is a severe bug !")
   }
 
@@ -177,7 +177,7 @@ object FieldReferenceLinker {
 
     new BinaryOperatorNodeLogicalBoolean(
       fr,
-      new InputOnlyConstantExpressionNode[Any](c),
+      new InputOnlyConstantExpressionNode(c),
       "=")
   }
   
@@ -308,7 +308,7 @@ object FieldReferenceLinker {
 
         if(isComposite) {
           val ck = res.asInstanceOf[CompositeKey]
-          ck._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any,Any](_)))
+          ck._members = Some(_compositeKeyMembers.get.get.map(new SelectElementReference[Any,Any](_,NoOpOutMapper)))
           ck._propertyName = Some(m.getName)
           _compositeKeyMembers.remove()
         }

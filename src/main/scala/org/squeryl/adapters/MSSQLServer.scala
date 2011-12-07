@@ -65,7 +65,7 @@ class MSSQLServer extends DatabaseAdapter {
       sw.pushPendingNextLine
     }
   
-  override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
+  override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " + ", false)
 
   override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {

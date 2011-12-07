@@ -116,7 +116,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
          (implicit f:  TypedExpressionFactory[A3,T3], 
                    tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(e)
                    
-  def value: A1
+  def value: A1 = sys.error("!!!!!!!!!")
   
   def ===[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
   def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
@@ -143,11 +143,8 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
   def like[A2,T2 <: TOptionString](s: TypedExpression[A2,T2])(implicit ev: CanCompare[T1,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "like")
   
   def ||[A2,T2](e: TypedExpression[A2,T2]) = new ConcatOp[A1,A2,T1,T2](this, e)
-  
-//  def ||[A2,T2](e: TypedExpression[A2,T2])(implicit ev: TOption <:< (T1 with T2)) = new ConcatOp[A1,A2,T1,T2](this, e)  
-//  def ||[A2,T2](e: TypedExpression[A2,T2])(implicit ev: T1 <:< TNonOption, ev2: T2 <:< TNonOption) = new ConcatOp[A1,A2,T1,T2](this, e)
-  
-  def regex(pattern: String) = new FunctionNode[Boolean](pattern, None: Option[OutMapper[Boolean]], Seq(this)) with LogicalBoolean {
+    
+  def regex(pattern: String) = new FunctionNode(pattern, Seq(this)) with LogicalBoolean {
 
     override def doWrite(sw: StatementWriter) =
       Session.currentSession.databaseAdapter.writeRegexExpression(outer, pattern, sw)
@@ -157,13 +154,17 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
     new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
   
   
-  def in[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = sys.error("!") 
+  def in[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =  
+    new InclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toIn)  
   
-  def in[A2,T2](t: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = sys.error("!")
+  def in[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =
+    new InclusionOperator(this, new RightHandSideOfIn(q.copy(false).ast))
   
-  def notIn[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = sys.error("!") 
+  def notIn[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =  
+    new ExclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toNotIn)
   
-  def notIn[A2,T2](t: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = sys.error("!")
+  def notIn[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =
+    new ExclusionOperator(this, new RightHandSideOfIn(q.copy(false).ast))
   
   def ~ = this
 
@@ -209,11 +210,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 }
 
 
-class ConstantTypedExpression[A1,T1](a: A1) extends ConstantExpressionNode[A1](a, None) with TypedExpression[A1,T1]
-
 class TypedExpressionConversion[A1,T1](val e: TypedExpression[_,_], bf: TypedExpressionFactory[A1,T1]) extends TypedExpression[A1,T1] {
-
-  def value = bf.sample
   
   def mapper: OutMapper[A1] = bf.createOutMapper
   
@@ -240,12 +237,12 @@ trait TypedExpressionFactory[A,T] {
   def create(a: A) : TypedExpression[A,T] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantTypedExpression[A,T](a)
+        new ConstantTypedExpression[A,T](a, createOutMapper)
       case Some(n:SelectElement) =>
-        new SelectElementReference[A,T](n)
+        new SelectElementReference[A,T](n, createOutMapper)
     }
   
-  def convert(v: TypedExpression[_,_]): TypedExpressionConversion[A,T]
+  def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[A,T](v,this)
   def sample: A
   def sampleB = create(sample)
   def doMap(rs: ResultSet, i: Int): A
@@ -271,6 +268,8 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] {
     
   def deOptionizer: TypedExpressionFactory[A1,T1]
   
+  def sample = Option(deOptionizer.sample) 
+  
   def doMap(rs: ResultSet, i: Int): A2 = Utils.throwError(
       "doMap should never get called on" + this.getClass.getName)
   
@@ -291,7 +290,17 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] {
   }
 }
 
-class ConcatOp[A1,A2,T1,T2](a1: TypedExpression[A1,T1], a2: TypedExpression[A2,T2]) extends BinaryOperatorNode(a1,a2, "||") {
+class ConcatOp[A1,A2,T1,T2](val a1: TypedExpression[A1,T1], val a2: TypedExpression[A2,T2]) extends BinaryOperatorNode(a1,a2, "||") {
   override def doWrite(sw: StatementWriter) =
       sw.databaseAdapter.writeConcatOperator(a1, a2, sw)   
+}
+
+
+class NvlNode[A,T](e1: TypedExpression[_,_], e2: TypedExpression[A,T]) 
+  extends BinaryOperatorNode(e1,e2,"nvl", false) with TypedExpression[A,T] {
+
+   def mapper = e2.mapper
+
+   override def doWrite(sw: StatementWriter) =
+    sw.databaseAdapter.writeNvlCall(left, right, sw)         
 }

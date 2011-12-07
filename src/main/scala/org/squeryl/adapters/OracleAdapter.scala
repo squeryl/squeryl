@@ -99,7 +99,7 @@ class OracleAdapter extends DatabaseAdapter {
     sw.write(colVals.mkString("(",",",")"));
   }
 
-  override def writeConcatFunctionCall(fn: FunctionNode[_], sw: StatementWriter) =
+  override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
 
   override def writeJoin(queryableExpressionNode: QueryableExpressionNode, sw: StatementWriter) = {

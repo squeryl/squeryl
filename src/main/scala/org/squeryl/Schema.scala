@@ -430,11 +430,11 @@ trait Schema {
     for(ca <- colAss) ca match {
       case dva:DefaultValueAssignment    => {
 
-        if(! dva.value.isInstanceOf[ConstantExpressionNode[_]])
+        if(! dva.value.isInstanceOf[ConstantTypedExpression[_,_]])
           org.squeryl.internals.Utils.throwError("error in declaration of column "+ table.prefixedName + "." + dva.left.nameOfProperty + ", " +
                 "only constant expressions are supported in 'defaultsTo' declaration")
 
-        dva.left._defaultValue = Some(dva.value.asInstanceOf[ConstantExpressionNode[_]])
+        dva.left._defaultValue = Some(dva.value.asInstanceOf[ConstantTypedExpression[_,_]])
       }
       case caa:ColumnAttributeAssignment => {
 

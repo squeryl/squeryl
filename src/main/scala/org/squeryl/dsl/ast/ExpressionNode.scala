@@ -93,10 +93,10 @@ trait ExpressionNode {
   }
 
   def ? : this.type = {
-    if(! this.isInstanceOf[ConstantExpressionNode[_]])
+    if(! this.isInstanceOf[ConstantTypedExpression[_,_]])
       org.squeryl.internals.Utils.throwError("the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument")
 
-    val c = this.asInstanceOf[ConstantExpressionNode[_]]
+    val c = this.asInstanceOf[ConstantTypedExpression[_,_]]
 
     inhibitWhen(c.value == None)
   }
@@ -114,7 +114,7 @@ class EqualityExpression(override val left: TypedExpression[_,_], override val r
   
   override def doWrite(sw: StatementWriter) =     
     right match {
-      case c: ConstantExpressionNode[_] => 
+      case c: ConstantTypedExpression[_,_] => 
         if(c.value == None) {
           left.write(sw)
           sw.write(" is null")
@@ -186,7 +186,7 @@ class BetweenExpression(first: ExpressionNode, second: ExpressionNode, third: Ex
 }
 
 class TernaryOperatorNode(val first: ExpressionNode, val second: ExpressionNode, val third: ExpressionNode, op: String)
-  extends FunctionNode(op, None, List(first, second, third)) with LogicalBoolean {
+  extends FunctionNode(op, Seq(first, second, third)) with LogicalBoolean {
 
   override def inhibited =
     first.inhibited || second.inhibited || third.inhibited
@@ -278,15 +278,11 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 }
 
 
-class InputOnlyConstantExpressionNode[T](v: T) extends ConstantExpressionNode[T](v, None : Option[OutMapper[T]]) with TypedExpression[T,Any]
+class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, NoOpOutMapper)
 
-class ConstantExpressionNode[T] (val value: T, _mapper: Option[OutMapper[T]]) extends ExpressionNode {
-
-  def this(v: T)(implicit m: OutMapper[T]) = this(v,Some(m))
+class ConstantTypedExpression[A1,T1](override val value: A1, override val mapper: OutMapper[A1]) extends TypedExpression[A1,T1] {
 
   private def needsQuote = value.isInstanceOf[String]
-
-  def mapper = _mapper.getOrElse(Utils.throwError("No OutMapper !"))
 
   def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {
@@ -305,7 +301,7 @@ class ConstantExpressionNode[T] (val value: T, _mapper: Option[OutMapper[T]]) ex
       sw.addParam(value.asInstanceOf[AnyRef])
     }
   }
-  override def toString = 'ConstantExpressionNode + ":" + value
+  override def toString = 'ConstantTypedExpression + ":" + value
 }
 
 class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode {
@@ -322,14 +318,8 @@ class ConstantExpressionNodeList[T](val value: Traversable[T]) extends Expressio
     }
 }
 
-class FunctionNode[A](val name: String, _mapper : Option[OutMapper[A]], val args: Iterable[ExpressionNode]) extends ExpressionNode {
-
-  def value: A = sys.error("!")
-  
-  def this(name: String, args: ExpressionNode*) = this(name, None, args)
-
-  def mapper: OutMapper[A] = _mapper.getOrElse(org.squeryl.internals.Utils.throwError("no mapper available"))
-
+class FunctionNode(val name: String, val args: Seq[ExpressionNode]) extends ExpressionNode {
+        
   def doWrite(sw: StatementWriter) = {
 
     sw.write(name)

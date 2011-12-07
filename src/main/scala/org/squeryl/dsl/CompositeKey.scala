@@ -59,8 +59,8 @@ case class CompositeKey2[A1,A2](val a1:A1, val a2: A2) extends CompositeKey {
     buildEquality(new CompositeKey2(ck._1, ck._2))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2)
   )
 
 }
@@ -74,9 +74,9 @@ case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3) extends Co
     buildEquality(new CompositeKey3(ck._1, ck._2, ck._3))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3)
   )
 }
 
@@ -89,10 +89,10 @@ case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4:
     buildEquality(new CompositeKey4(ck._1, ck._2, ck._3, ck._4))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3),
-    new InputOnlyConstantExpressionNode[A4](a4)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3),
+    new InputOnlyConstantExpressionNode(a4)
   )
 }
 
@@ -106,11 +106,11 @@ case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val 
     buildEquality(new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3),
-    new InputOnlyConstantExpressionNode[A4](a4),
-    new InputOnlyConstantExpressionNode[A5](a5)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3),
+    new InputOnlyConstantExpressionNode(a4),
+    new InputOnlyConstantExpressionNode(a5)
   )
 }
 case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6) extends CompositeKey {
@@ -122,12 +122,12 @@ case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, v
     buildEquality(new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3),
-    new InputOnlyConstantExpressionNode[A4](a4),
-    new InputOnlyConstantExpressionNode[A5](a5),
-    new InputOnlyConstantExpressionNode[A6](a6)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3),
+    new InputOnlyConstantExpressionNode(a4),
+    new InputOnlyConstantExpressionNode(a5),
+    new InputOnlyConstantExpressionNode(a6)
   )
 }
 
@@ -140,13 +140,13 @@ case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3
     buildEquality(new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3),
-    new InputOnlyConstantExpressionNode[A4](a4),
-    new InputOnlyConstantExpressionNode[A5](a5),
-    new InputOnlyConstantExpressionNode[A6](a6),
-    new InputOnlyConstantExpressionNode[A7](a7)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3),
+    new InputOnlyConstantExpressionNode(a4),
+    new InputOnlyConstantExpressionNode(a5),
+    new InputOnlyConstantExpressionNode(a6),
+    new InputOnlyConstantExpressionNode(a7)
   )
 }
 
@@ -159,14 +159,14 @@ case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3:
     buildEquality(new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7,ck._8))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3),
-    new InputOnlyConstantExpressionNode[A4](a4),
-    new InputOnlyConstantExpressionNode[A5](a5),
-    new InputOnlyConstantExpressionNode[A6](a6),
-    new InputOnlyConstantExpressionNode[A7](a7),
-    new InputOnlyConstantExpressionNode[A8](a8)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3),
+    new InputOnlyConstantExpressionNode(a4),
+    new InputOnlyConstantExpressionNode(a5),
+    new InputOnlyConstantExpressionNode(a6),
+    new InputOnlyConstantExpressionNode(a7),
+    new InputOnlyConstantExpressionNode(a8)
   )
 }
 
@@ -179,14 +179,14 @@ case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val 
     buildEquality(new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7,ck._8,ck._9))
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode[A1](a1),
-    new InputOnlyConstantExpressionNode[A2](a2),
-    new InputOnlyConstantExpressionNode[A3](a3),
-    new InputOnlyConstantExpressionNode[A4](a4),
-    new InputOnlyConstantExpressionNode[A5](a5),
-    new InputOnlyConstantExpressionNode[A6](a6),
-    new InputOnlyConstantExpressionNode[A7](a7),
-    new InputOnlyConstantExpressionNode[A8](a8),
-    new InputOnlyConstantExpressionNode[A9](a9)
+    new InputOnlyConstantExpressionNode(a1),
+    new InputOnlyConstantExpressionNode(a2),
+    new InputOnlyConstantExpressionNode(a3),
+    new InputOnlyConstantExpressionNode(a4),
+    new InputOnlyConstantExpressionNode(a5),
+    new InputOnlyConstantExpressionNode(a6),
+    new InputOnlyConstantExpressionNode(a7),
+    new InputOnlyConstantExpressionNode(a8),
+    new InputOnlyConstantExpressionNode(a9)
   )
 }
