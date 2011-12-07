@@ -280,7 +280,7 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 
 class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, NoOpOutMapper)
 
-class ConstantTypedExpression[A1,T1](override val value: A1, override val mapper: OutMapper[A1]) extends TypedExpression[A1,T1] {
+class ConstantTypedExpression[A1,T1](val value: A1, override val mapper: OutMapper[A1]) extends TypedExpression[A1,T1] {
 
   private def needsQuote = value.isInstanceOf[String]
 

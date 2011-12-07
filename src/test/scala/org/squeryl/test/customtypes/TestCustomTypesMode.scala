@@ -16,7 +16,6 @@ package org.squeryl.test.customtypes
  * limitations under the License.
  ***************************************************************************** */
 import java.sql.SQLException
-import org.squeryl.customtypes._
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
 

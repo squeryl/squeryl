@@ -580,7 +580,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         where({
           //TODO: REFACTOR Z
           s.isMultilingual === (None :Option[Boolean])
-          })
+        })
         select(s.id)
       )
     
@@ -696,13 +696,15 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val jan2010 = dateFormat.parse("2010-01-01")
     val mar2010 = dateFormat.parse("2010-03-01")
 
-    val mandarinAndCounterpointCourses =
+    val mandarinAndCounterpointCourses0 =
       from(courses)(c=>
         where(c.startDate > jan2010 and c.startDate < mar2010)
         select(c)
         orderBy(c.startDate asc, c.id asc)
-      ).toList
-
+      )
+    
+    val mandarinAndCounterpointCourses = mandarinAndCounterpointCourses0.toList
+    
     val expected = List(counterpoint.id,  mandarin.id)
     val result = mandarinAndCounterpointCourses.map(c=>c.id)
 
@@ -921,7 +923,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
 
 
-  test("PartialUpdate1") {
+  test("PartialUpdate1", SingleTestRun) {
     val testInstance = sharedTestInstance; import testInstance._
 
     val initialHT = courses.where(c => c.id === heatTransfer.id).single
@@ -1007,8 +1009,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
     q.toList
 
-
-    println(q.statement)
     assert(q.statement.indexOf("Having") != -1)
   }
 
@@ -1199,7 +1199,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         compute(min(s2.age))
       )
 
-
     val q2 = (z0 : Query[Measures[Option[Int]]] ):  Query[Option[Int]]
 
     val q3 =
@@ -1290,7 +1289,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val testInstance = sharedTestInstance; import testInstance._
     // this should not blow up :
     val q = students.where(_.dummyKey === (None: Option[Int], None: Option[Int]))
-    println(q.statement)
+
     q.toList
   }
 

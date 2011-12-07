@@ -153,22 +153,20 @@ trait QueryDsl
     
   def max[T2 >: TOption, T1 <: T2, A1, A2]
          (b: TypedExpression[A1,T1])
-         (implicit bs: TypedExpressionFactory[A2,T2]) = bs.convert(b)
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("max", Seq(b)))
 
   def min[T2 >: TOption, T1 <: T2, A1, A2]
          (b: TypedExpression[A1,T1])
-         (implicit bs: TypedExpressionFactory[A2,T2]) =            
-           
-           bs.convert(b)
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("min", Seq(b)))
 
   def avg[T2 >: TOptionFloat, T1 <: T2, A1, A2]
          (b: TypedExpression[A1,T1])
-         (implicit bs: TypedExpressionFactory[A2,T2]) = bs.convert(b)
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("avg", Seq(b)))
 
   def sum[T2 >: TOption, T1 >: TNumericLowerTypeBound <: T2, A1, A2]
          (b: TypedExpression[A1,T1])
-         (implicit bs: TypedExpressionFactory[A2,T2]) = bs.convert(b)
-         
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("sum", Seq(b)))
+
   def nvl[T4 <: TNonOption,
           T1 >: TOption,
           T3 >: T1,
@@ -180,13 +178,11 @@ trait QueryDsl
   
   def not(b: LogicalBoolean) = new FunctionNode("not", Seq(b)) with LogicalBoolean
 
-  def upper[A1,T1](s: TypedExpression[A1,T1]) = new FunctionNode("upper", Seq(s)) with TypedExpression[A1,T1] {
-    def mapper = s.mapper
-  }
+  def upper[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1], ev2: T1 <:< TOptionString) = 
+    f.convert(new FunctionNode("upper", Seq(s)))
   
-  def lower[A1,T1](s: TypedExpression[A1,T1]) = new FunctionNode("lower", Seq(s)) with TypedExpression[A1,T1] {
-    def mapper = s.mapper
-  }
+  def lower[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1], ev2: T1 <:< TOptionString) = 
+    f.convert(new FunctionNode("lower", Seq(s)))
 
   def exists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false).ast, "exists")
 
@@ -200,17 +196,16 @@ trait QueryDsl
   implicit val uuidComparisonEvidence      = new CanCompare[TOptionUUID, TOptionUUID]
   implicit def enumComparisonEvidence[A]   = new CanCompare[TEnumValue[A],TEnumValue[A]]
   
-  implicit def cco1[A1,A2,T1,T2](co: ConcatOp[A1,A2,T1,T2]): TypedExpression[String,TString] = 
+  implicit def concatenationConversion[A1,A2,T1,T2](co: ConcatOp[A1,A2,T1,T2]): TypedExpression[String,TString] = 
     new ConcatOperationNode[String,TString](co.a1, co.a2, PrimitiveTypeMode.stringTEF.createOutMapper)
-  
-  
-  implicit def cco2[A1,A2,T1,T2](co: ConcatOp[Option[A1],A2,T1,T2]): TypedExpression[Option[String],TOptionString] = 
+    
+  implicit def concatenationConversionWithOption1[A1,A2,T1,T2](co: ConcatOp[Option[A1],A2,T1,T2]): TypedExpression[Option[String],TOptionString] = 
     new ConcatOperationNode[Option[String],TOptionString](co.a1, co.a2, PrimitiveTypeMode.optionStringTEF.createOutMapper)
   
-  implicit def cco3[A1,A2,T1,T2](co: ConcatOp[A1,Option[A2],T1,T2]): TypedExpression[Option[String],TOptionString] = 
+  implicit def concatenationConversionWithOption2[A1,A2,T1,T2](co: ConcatOp[A1,Option[A2],T1,T2]): TypedExpression[Option[String],TOptionString] = 
     new ConcatOperationNode[Option[String],TOptionString](co.a1, co.a2, PrimitiveTypeMode.optionStringTEF.createOutMapper)
   
-  implicit def cco4[A1,A2,T1,T2](co: ConcatOp[Option[A1],Option[A2],T1,T2]): TypedExpression[Option[String],TOptionString] = 
+  implicit def concatenationConversionWithOption3[A1,A2,T1,T2](co: ConcatOp[Option[A1],Option[A2],T1,T2]): TypedExpression[Option[String],TOptionString] = 
     new ConcatOperationNode[Option[String],TOptionString](co.a1, co.a2, PrimitiveTypeMode.optionStringTEF.createOutMapper)
   
   class ConcatOperationNode[A,T](e1: ExpressionNode, e2: ExpressionNode, val mapper: OutMapper[A]) extends BinaryOperatorNode(e1,e2, "||", false) with TypedExpression[A,T] {

@@ -84,52 +84,52 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
     
   def plus[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
-         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(e)
+         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(new BinaryOperatorNode(this, e, "+"))
 
   def times[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
-         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(e)
+         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(new BinaryOperatorNode(this, e, "*"))
 
   def minus[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
-         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(e)
+         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(new BinaryOperatorNode(this, e, "-"))
 
   def div[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3, A4, T4]
          (e: TypedExpression[A2,T2])
          (implicit f:  TypedExpressionFactory[A3,T3], 
-                   tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(e)
+                   tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
 
   def +[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
-         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(e)
+         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = plus(e)
 
   def *[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
-         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(e)
+         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = times(e)
 
   def -[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
-         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = f.convert(e)
+         (implicit f: TypedExpressionFactory[A3,T3]) : TypedExpression[A3,T3] = minus(e)
 
   def /[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3, A4, T4]
          (e: TypedExpression[A2,T2])
          (implicit f:  TypedExpressionFactory[A3,T3], 
-                   tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(e)
+                   tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
                    
-  def value: A1 = sys.error("!!!!!!!!!")
+  //def value: A1 = sys.error("!!!!!!!!!")
   
   def ===[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
+  def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
   
-  def gt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def lt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def gte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def lte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
+  def gt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+  def lt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+  def gte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+  def lte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
   
-  def >[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def <[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def >=[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def <=[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
+  def >[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = gt(b)
+  def <[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = lt(b)
+  def >=[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = gte(b)
+  def <=[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = lte(b)
   
   //TODO: add T1 <:< TOption to isNull and isNotNull 
   def isNull= new PostfixOperatorNode("is null", this) with LogicalBoolean
@@ -172,14 +172,14 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 
   def mapper: OutMapper[A1]
 
-  def :=[B <% TypedExpression[A1,_]] (b: B) =
-    new UpdateAssignment(_fieldMetaData, b : TypedExpression[A1,_])
+  def :=[B <% TypedExpression[A1,T1]] (b: B) =     
+    new UpdateAssignment(_fieldMetaData, b : TypedExpression[A1,T1])  
 
   def :=(q: Query[Measures[A1]]) =
     new UpdateAssignment(_fieldMetaData, q.ast)
 
-  def defaultsTo[B <% TypedExpression[A1,_]](value: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
-    new DefaultValueAssignment(_fieldMetaData, value : TypedExpression[A1,_])
+  def defaultsTo[B <% TypedExpression[A1,T1]](b: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
+    new DefaultValueAssignment(_fieldMetaData, b : TypedExpression[A1,T1])
 
   /**
    * TODO: make safer with compiler plugin
@@ -210,7 +210,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 }
 
 
-class TypedExpressionConversion[A1,T1](val e: TypedExpression[_,_], bf: TypedExpressionFactory[A1,T1]) extends TypedExpression[A1,T1] {
+class TypedExpressionConversion[A1,T1](val e: ExpressionNode, bf: TypedExpressionFactory[A1,T1]) extends TypedExpression[A1,T1] {
   
   def mapper: OutMapper[A1] = bf.createOutMapper
   
@@ -222,13 +222,13 @@ class TypedExpressionConversion[A1,T1](val e: TypedExpression[_,_], bf: TypedExp
 }
 
 trait Floatifier[T1,A2,T2] {
-  def floatify(v: TypedExpression[_,_]): TypedExpressionConversion[A2,T2]
+  def floatify(v: ExpressionNode): TypedExpressionConversion[A2,T2]
 }
 
 trait IdentityFloatifier[A1,T1] extends Floatifier[T1,A1,T1]
 
 trait FloatTypedExpressionFactory[A1,T1] extends TypedExpressionFactory[A1,T1] with IdentityFloatifier[A1,T1] {
-  def floatify(v: TypedExpression[_,_]): TypedExpressionConversion[A1,T1] = convert(v)
+  def floatify(v: ExpressionNode): TypedExpressionConversion[A1,T1] = convert(v)
 }
 
 trait TypedExpressionFactory[A,T] {
@@ -241,10 +241,15 @@ trait TypedExpressionFactory[A,T] {
       case Some(n:SelectElement) =>
         new SelectElementReference[A,T](n, createOutMapper)
     }
+  /**
+   * Converts the argument into a TypedExpression[A,T], the resulting expression
+   * is meant to be equivalent in terms of SQL generation, the conversion is only
+   * at the type level
+   */
+  def convert(v: ExpressionNode) = new TypedExpressionConversion[A,T](v,this)
   
-  def convert(v: TypedExpression[_,_]) = new TypedExpressionConversion[A,T](v,this)
   def sample: A
-  def sampleB = create(sample)
+
   def doMap(rs: ResultSet, i: Int): A
   
   def createOutMapper: OutMapper[A] = new OutMapper[A] {
@@ -258,7 +263,7 @@ trait TypedExpressionFactory[A,T] {
 trait IntegralTypedExpressionFactory[A1,T1,A2,T2] 
   extends TypedExpressionFactory[A1,T1] with Floatifier[T1,A2,T2] {
   
-  def floatify(v: TypedExpression[_,_]): TypedExpressionConversion[A2,T2] = floatifyer.convert(v)
+  def floatify(v: ExpressionNode): TypedExpressionConversion[A2,T2] = floatifyer.convert(v)
   def floatifyer: TypedExpressionFactory[A2,T2]
 }
 

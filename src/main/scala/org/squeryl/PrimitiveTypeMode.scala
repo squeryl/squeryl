@@ -133,8 +133,6 @@ trait PrimitiveTypeMode extends QueryDsl {
   implicit def optionEnumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
     val deOptionizer = enumValueTEF[A](ev)
   }
-
-  //TODO: test where(anEnum === None)
   
   object DummyEnum extends Enumeration {
     type DummyEnum = Value
@@ -220,7 +218,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit val bigDecimalTEF = new FloatTypedExpressionFactory[BigDecimal,TBigDecimal] {
     val sample = BigDecimal(1)
-    def doMap(rs: ResultSet, i: Int) = rs.getBigDecimal(i)
+    def doMap(rs: ResultSet, i: Int) = BigDecimal(rs.getBigDecimal(i))
   }
 
   implicit def bigDecimalToTE(f: BigDecimal) = bigDecimalTEF.create(f)
