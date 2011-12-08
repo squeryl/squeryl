@@ -51,9 +51,11 @@ object ResultSetUtils extends ResultSetUtils
 trait OutMapper[T] extends ResultSetUtils {
 
   override def toString =
-    "$OM(" + index + "," +
-    jdbcClass.getSimpleName + ")" +
-    (if(isActive) "*" else "")
+    Utils.failSafeString(
+      "$OM(" + index + "," +
+      jdbcClass.getSimpleName + ")" +
+      (if(isActive) "*" else "")
+    )
 
   var index: Int = -1
 
@@ -72,7 +74,9 @@ trait OutMapper[T] extends ResultSetUtils {
       }
       catch {
         case e:Exception => throw new RuntimeException(
-          "Exception while mapping column with OutMapper:\n" + this + "\nand resultSet :\n" + dumpRow(rs))
+            "Exception while mapping column with OutMapper:\n" + this + 
+            "\nand resultSet :\n" + Utils.failSafeString(dumpRow(rs)), 
+            e)
       }
     else
       sample
