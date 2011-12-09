@@ -186,23 +186,12 @@ trait DatabaseAdapter {
 
     def handleIntType = intTypeDeclaration
     def handleStringType  = stringTypeDeclaration
-    def handleStringType(fmd: Option[FieldMetaData]) =
-      fmd match {
-        case Some(x) => stringTypeDeclaration(x.length)
-        case None => stringTypeDeclaration
-      }
-
     def handleBooleanType = booleanTypeDeclaration
     def handleDoubleType = doubleTypeDeclaration
     def handleDateType = dateTypeDeclaration
     def handleLongType = longTypeDeclaration
     def handleFloatType = floatTypeDeclaration
-    def handleBigDecimalType(fmd: Option[FieldMetaData]) =
-      fmd match {
-        case Some(x) => bigDecimalTypeDeclaration(x.length, x.scale)
-        case None => bigDecimalTypeDeclaration
-      }
-
+    def handleBigDecimalType = bigDecimalTypeDeclaration
     def handleTimestampType = timestampTypeDeclaration
     def handleBinaryType = binaryTypeDeclaration
     def handleUuidType = uuidTypeDeclaration
@@ -214,7 +203,12 @@ trait DatabaseAdapter {
   def databaseTypeFor(fmd: FieldMetaData) =
     fmd.explicitDbTypeDeclaration.getOrElse(
       fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse(
-        _declarationHandler.handleType(fmd.wrappedFieldType, Some(fmd))
+          if(classOf[String].isAssignableFrom(fmd.wrappedFieldType))
+            stringTypeDeclaration(fmd.length)
+          else if(classOf[BigDecimal].isAssignableFrom(fmd.wrappedFieldType))
+            bigDecimalTypeDeclaration(fmd.length, fmd.scale)
+          else
+            _declarationHandler.handleType(fmd.wrappedFieldType)                 
       )
     )
 
@@ -760,7 +754,7 @@ trait DatabaseAdapter {
   }
 
   def databaseTypeFor(c: Class[_]) =
-    _declarationHandler.handleType(c, None)
+    _declarationHandler.handleType(c)
 
   def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {
     sw.write("cast(")

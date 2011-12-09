@@ -14,33 +14,50 @@
  * limitations under the License.
  ***************************************************************************** */
 package org.squeryl.internals
+import scala.collection.mutable.HashMap
+import scala.collection.mutable.ArrayBuffer
+
+object Zaza {
+  
+  def main(args: Array[String]) {
+    println(classOf[Int].getName)
+    println(classOf[Int].getCanonicalName)
+  } 
+}
+
+
+class FieldMapperz {
+
+  def nativeJdbcTypeFor(c: Class[_]): Class[_] = null
+}
 
 
 trait FieldTypeHandler[T] {
 
-  private def isInt(t: Class[_]) = t.isAssignableFrom(classOf[Int]) || t.isAssignableFrom(classOf[java.lang.Integer])
-  private def isLong(t: Class[_]) = t.isAssignableFrom(classOf[Long]) || t.isAssignableFrom(classOf[java.lang.Long])
-  private def isString(t: Class[_]) = t.isAssignableFrom(classOf[java.lang.String])
-  private def isBoolean(t: Class[_]) = t.isAssignableFrom(classOf[Boolean]) || t.isAssignableFrom(classOf[java.lang.Boolean])
-  private def isDouble(t: Class[_]) = t.isAssignableFrom(classOf[Double]) || t.isAssignableFrom(classOf[java.lang.Double])
-  private def isFloat(t: Class[_]) = t.isAssignableFrom(classOf[Float]) || t.isAssignableFrom(classOf[java.lang.Float])
+  private def isInt(t: Class[_]) = classOf[Int].isAssignableFrom(t) || classOf[java.lang.Integer].isAssignableFrom(t)
+  private def isLong(t: Class[_]) = classOf[Long].isAssignableFrom(t) || classOf[java.lang.Long].isAssignableFrom(t)
+  private def isBoolean(t: Class[_]) = classOf[Boolean].isAssignableFrom(t) || classOf[java.lang.Boolean].isAssignableFrom(t)
+  private def isDouble(t: Class[_]) = classOf[Double].isAssignableFrom(t) || classOf[java.lang.Double].isAssignableFrom(t)
+  private def isFloat(t: Class[_]) = classOf[Float].isAssignableFrom(t) || classOf[java.lang.Float].isAssignableFrom(t)
+  
+  private def isString(t: Class[_]) = classOf[java.lang.String].isAssignableFrom(t)
   private def isDate(t: Class[_]) = classOf[java.util.Date].isAssignableFrom(t)
-  private def isBigDecimal(t: Class[_]) = t.isAssignableFrom(classOf[scala.math.BigDecimal]) || t.isAssignableFrom(classOf[java.math.BigDecimal])
+  private def isBigDecimal(t: Class[_]) = classOf[scala.math.BigDecimal].isAssignableFrom(t)
   private def isTimestamp(t: Class[_]) = classOf[java.sql.Timestamp].isAssignableFrom(t)
-  private def isBinary(t: Class[_]) = t.isAssignableFrom(classOf[Array[Byte]])
+  private def isBinary(t: Class[_]) = classOf[Array[Byte]].isAssignableFrom(t)
   private def isEnumerationValueType(t: Class[_]) = classOf[Enumeration#Value].isAssignableFrom(t)
-  private def isUuid(t: Class[_]) = t.isAssignableFrom(classOf[java.util.UUID])
-
-  def handleType(t: Class[_], fmd: Option[FieldMetaData]) = {
+  private def isUuid(t: Class[_]) = classOf[java.util.UUID].isAssignableFrom(t)
+  
+  def handleType(t: Class[_]) = {
 
       if(isBigDecimal(t))
-        handleBigDecimalType(fmd)
+        handleBigDecimalType
       else if(isInt(t))
         handleIntType
       else if(isLong(t))
         handleLongType
       else if(isString(t))
-        handleStringType(fmd)
+        handleStringType
       else if(isBoolean(t))
         handleBooleanType
       else if(isDouble(t))
@@ -63,13 +80,12 @@ trait FieldTypeHandler[T] {
 
   protected def handleIntType : T
   protected def handleStringType : T
-  protected def handleStringType(fmd: Option[FieldMetaData]) : T
   protected def handleBooleanType : T
   protected def handleDoubleType : T
   protected def handleDateType: T
   protected def handleLongType: T
   protected def handleFloatType: T
-  protected def handleBigDecimalType(fmd: Option[FieldMetaData]): T
+  protected def handleBigDecimalType: T
   protected def handleTimestampType: T
   protected def handleBinaryType: T
   protected def handleEnumerationValueType: T

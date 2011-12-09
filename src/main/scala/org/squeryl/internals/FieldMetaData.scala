@@ -357,7 +357,7 @@ trait FieldMetaDataFactory {
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
   def isSupportedFieldType(c: Class[_]): Boolean =
-    FieldMetaData._isSupportedFieldType.handleType(c, None)
+    FieldMetaData._isSupportedFieldType.handleType(c)
 
   def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
@@ -370,13 +370,12 @@ object FieldMetaData {
 
     def handleIntType = true
     def handleStringType  = true
-    def handleStringType(fmd: Option[FieldMetaData]) = true
     def handleBooleanType = true
     def handleDoubleType = true
     def handleDateType = true
     def handleLongType = true
     def handleFloatType = true
-    def handleBigDecimalType(fmd: Option[FieldMetaData]) = true
+    def handleBigDecimalType = true
     def handleTimestampType = true
     def handleBinaryType = true
     def handleEnumerationValueType = true
@@ -548,20 +547,25 @@ object FieldMetaData {
     })
   }
 
-  def defaultFieldLength(fieldType: Class[_], fmd: FieldMetaData) =
-    _defaultFieldLengthAssigner.handleType(fieldType, Some(fmd))
+  def defaultFieldLength(fieldType: Class[_], fmd: FieldMetaData) = {
+    if(classOf[String].isAssignableFrom(fieldType))
+      fmd.schema.defaultLengthOfString      
+    else if(classOf[BigDecimal].isAssignableFrom(fieldType))
+      fmd.schema.defaultSizeOfBigDecimal._1
+    else
+      _defaultFieldLengthAssigner.handleType(fieldType)
+  }
 
   private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
 
     def handleIntType = 4
     def handleStringType  = 255
-    def handleStringType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultLengthOfString
     def handleBooleanType = 1
     def handleDoubleType = 8
     def handleDateType = -1
     def handleLongType = 8
     def handleFloatType = 4
-    def handleBigDecimalType(fmd: Option[FieldMetaData]) = fmd.get.schema.defaultSizeOfBigDecimal._1
+    def handleBigDecimalType = -1
     def handleTimestampType = -1
     def handleBinaryType = 255
     def handleEnumerationValueType = 4
@@ -573,13 +577,12 @@ object FieldMetaData {
 
     def handleIntType = new java.lang.Integer(0)
     def handleStringType  = ""
-    def handleStringType(fmd: Option[FieldMetaData])  = ""
     def handleBooleanType = new java.lang.Boolean(false)
     def handleDoubleType = new java.lang.Double(0.0)
     def handleDateType = new java.util.Date()
     def handleLongType = new java.lang.Long(0)
     def handleFloatType = new java.lang.Float(0)
-    def handleBigDecimalType(fmd: Option[FieldMetaData]) = new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
+    def handleBigDecimalType= new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
     def handleTimestampType = new java.sql.Timestamp(0)
     def handleBinaryType = new Array[Byte](0)
     def handleEnumerationValueType = DummyE.Z
@@ -619,14 +622,12 @@ object FieldMetaData {
 
     def handleIntType = _intM
     def handleStringType  = _stringM
-    def handleStringType(fmd: Option[FieldMetaData])  = _stringM
     def handleBooleanType = _booleanM
     def handleDoubleType = _doubleM
     def handleDateType = _dateM
     def handleFloatType = _floatM
     def handleLongType = _longM
     def handleBigDecimalType = _bigDecM
-    def handleBigDecimalType(fmd: Option[FieldMetaData]) = _bigDecM
     def handleTimestampType = _timestampM
     def handleBinaryType = _binaryM
     def handleUuidType = _uuidM
@@ -637,7 +638,7 @@ object FieldMetaData {
   }
 
   def resultSetHandlerFor(c: Class[_]) =
-    _mapper.handleType(c, None)
+    _mapper.handleType(c)
 
   def detectScalapOnClasspath(): Boolean = {
     try {
@@ -724,6 +725,6 @@ object FieldMetaData {
 	      } 
       }
     } else
-      _defaultValueFactory.handleType(p, None)
+      _defaultValueFactory.handleType(p)
   }
 }
