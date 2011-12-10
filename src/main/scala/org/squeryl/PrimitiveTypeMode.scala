@@ -31,8 +31,9 @@ trait PrimitiveTypeMode extends QueryDsl {
 
   // =========================== Non Numerical =========================== 
   
-  implicit val stringTEF = new TypedExpressionFactory[String,TString] {
+  implicit val stringTEF = new TypedExpressionFactory[String,TString] with PrimitiveJdbcMapper[String] {
     val sample = "": String
+    val defaultColumnLength = 128
     def doMap(rs: ResultSet, i: Int) = rs.getString(i)
   }
     
@@ -44,8 +45,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionStringToTE(s: Option[String]) = optionStringTEF.create(s)  
 
-  implicit val dateTEF = new TypedExpressionFactory[Date,TDate] {
+  implicit val dateTEF = new TypedExpressionFactory[Date,TDate] with PrimitiveJdbcMapper[Date] {
     val sample = new Date
+    val defaultColumnLength = -1
     def doMap(rs: ResultSet, i: Int) = rs.getDate(i)
   }
   
@@ -58,8 +60,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   implicit def optionDateToTE(s: Option[Date]) = optionDateTEF.create(s)    
   
   
-  implicit val timestampTEF = new TypedExpressionFactory[Timestamp,TTimestamp] {
+  implicit val timestampTEF = new TypedExpressionFactory[Timestamp,TTimestamp] with PrimitiveJdbcMapper[Timestamp] {
     val sample = new Timestamp(0)
+    val defaultColumnLength = -1
     def doMap(rs: ResultSet, i: Int) = rs.getTimestamp(i)
   }
   
@@ -71,8 +74,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionTimestampToTE(s: Option[Timestamp]) = optionTimestampTEF.create(s)    
   
-  implicit val booleanTEF = new TypedExpressionFactory[Boolean,TBoolean] {
+  implicit val booleanTEF = new TypedExpressionFactory[Boolean,TBoolean] with PrimitiveJdbcMapper[Boolean] {
     val sample = true
+    val defaultColumnLength = 1
     def doMap(rs: ResultSet, i: Int) = rs.getBoolean(i)
   }
     
@@ -84,8 +88,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionBooleanToTE(s: Option[Boolean]) = optionBooleanTEF.create(s)  
 
-  implicit val uuidTEF = new TypedExpressionFactory[UUID,TUUID] {
-    val sample = UUID.randomUUID
+  implicit val uuidTEF = new TypedExpressionFactory[UUID,TUUID] with PrimitiveJdbcMapper[UUID] {
+    val sample = java.util.UUID.fromString("00000000-0000-0000-0000-000000000000")
+    val defaultColumnLength = 36 
     def doMap(rs: ResultSet, i: Int) = {
       val v = rs.getObject(i)
       v match {
@@ -103,8 +108,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionUUIDToTE(s: Option[UUID]) = optionUUIDTEF.create(s)  
   
-  implicit val binaryTEF = new TypedExpressionFactory[Array[Byte],TByteArray] {
+  implicit val binaryTEF = new TypedExpressionFactory[Array[Byte],TByteArray] with PrimitiveJdbcMapper[Array[Byte]] {
     val sample = Array(0: Byte)   
+    val defaultColumnLength = 255
     def doMap(rs: ResultSet, i: Int) = rs.getBytes(i)
   }
     
@@ -116,16 +122,13 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionByteArrayToTE(s: Option[Array[Byte]]) = optionByteArrayTEF.create(s)  
   
-  def enumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new TypedExpressionFactory[A,TEnumValue[A]] {
+  def enumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new NonPrimitiveJdbcMapper[Int,A,TEnumValue[A]] {
     //TODO: avoid isInstanceOf
     val sample: A = ev.asInstanceOf[A]
-    
+    val defaultColumnLength = 4
     val enu = Utils.enumerationForValue(ev)
-    
-    def doMap(rs: ResultSet, i: Int) = {
-      val enumIdx = rs.getInt(i)      
-      enu.values.find(_.id == enumIdx).get.asInstanceOf[A]
-    }
+    def convertFromJdbc(v: Int): A = 
+      enu.values.find(_.id == v).get.asInstanceOf[A]
   }
   
   implicit def enumValueToTE[A <: Enumeration#Value](e: A) = enumValueTEF(e).create(e)
@@ -143,8 +146,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   // =========================== Numerical Integral =========================== 
 
-  implicit val byteTEF = new IntegralTypedExpressionFactory[Byte,TByte,Float,TFloat] {
+  implicit val byteTEF = new IntegralTypedExpressionFactory[Byte,TByte,Float,TFloat] with PrimitiveJdbcMapper[Byte] {
     val sample = 1: Byte
+    val defaultColumnLength = 1
     val floatifyer = floatTEF
     def doMap(rs: ResultSet, i: Int) = rs.getByte(i)
   }
@@ -158,8 +162,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionByteToTE(f: Option[Byte]) = optionByteTEF.create(f)  
     
-  implicit val intTEF = new IntegralTypedExpressionFactory[Int,TInt,Float,TFloat] {
+  implicit val intTEF = new IntegralTypedExpressionFactory[Int,TInt,Float,TFloat] with PrimitiveJdbcMapper[Int] {
     val sample = 1
+    val defaultColumnLength = 4
     val floatifyer = floatTEF
     def doMap(rs: ResultSet, i: Int) = rs.getInt(i)
   }  
@@ -173,8 +178,9 @@ trait PrimitiveTypeMode extends QueryDsl {
 
   implicit def optionIntToTE(f: Option[Int]) = optionIntTEF.create(f)
   
-  implicit val longTEF = new IntegralTypedExpressionFactory[Long,TLong,Double,TDouble] {
+  implicit val longTEF = new IntegralTypedExpressionFactory[Long,TLong,Double,TDouble] with PrimitiveJdbcMapper[Long] {
     val sample = 1L
+    val defaultColumnLength = 8
     val floatifyer = doubleTEF
     def doMap(rs: ResultSet, i: Int) = rs.getLong(i)
   }
@@ -190,8 +196,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   // =========================== Numerical Floating Point =========================== 
   
-  implicit val floatTEF = new FloatTypedExpressionFactory[Float,TFloat] {
+  implicit val floatTEF = new FloatTypedExpressionFactory[Float,TFloat] with PrimitiveJdbcMapper[Float] {
     val sample = 1F
+    val defaultColumnLength = 4
     def doMap(rs: ResultSet, i: Int) = rs.getFloat(i)
   }
     
@@ -203,8 +210,9 @@ trait PrimitiveTypeMode extends QueryDsl {
 
   implicit def optionFloatToTE(f: Option[Float]) = optionFloatTEF.create(f)
   
-  implicit val doubleTEF = new FloatTypedExpressionFactory[Double,TDouble] {
+  implicit val doubleTEF = new FloatTypedExpressionFactory[Double,TDouble] with PrimitiveJdbcMapper[Double] {
     val sample = 1D
+    val defaultColumnLength = 8
     def doMap(rs: ResultSet, i: Int) = rs.getDouble(i)
   }
 
@@ -216,8 +224,9 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   implicit def optionDoubleToTE(f: Option[Double]) = optionDoubleTEF.create(f)
   
-  implicit val bigDecimalTEF = new FloatTypedExpressionFactory[BigDecimal,TBigDecimal] {
+  implicit val bigDecimalTEF = new FloatTypedExpressionFactory[BigDecimal,TBigDecimal] with PrimitiveJdbcMapper[BigDecimal] {
     val sample = BigDecimal(1)
+    val defaultColumnLength = -1
     def doMap(rs: ResultSet, i: Int) = BigDecimal(rs.getBigDecimal(i))
   }
 

@@ -228,11 +228,33 @@ trait Floatifier[T1,A2,T2] {
 trait IdentityFloatifier[A1,T1] extends Floatifier[T1,A1,T1]
 
 trait FloatTypedExpressionFactory[A1,T1] extends TypedExpressionFactory[A1,T1] with IdentityFloatifier[A1,T1] {
+  self: JdbcMapper[_,A1] =>
   def floatify(v: ExpressionNode): TypedExpressionConversion[A1,T1] = convert(v)
 }
 
+
+trait JdbcMapper[P,A] {
+  self: TypedExpressionFactory[A,_] =>
+  def doMap(rs: ResultSet, i: Int): P
+  def convertFromJdbc(v: P): A
+  def map(rs: ResultSet, i: Int): A = convertFromJdbc(doMap(rs, i)) 
+}
+
+
+trait PrimitiveJdbcMapper[A] extends JdbcMapper[A,A] {
+  self: TypedExpressionFactory[A,_] =>
+  def doMap(rs: ResultSet, i: Int): A
+  def convertFromJdbc(v: A) = v  
+}
+
+abstract class NonPrimitiveJdbcMapper[P,A,T](implicit pw: PrimitiveJdbcMapper[P]) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
+  self: TypedExpressionFactory[A,T] =>
+  def doMap(rs: ResultSet, i: Int): P = pw.doMap(rs, i)
+  def convertFromJdbc(v: P): A
+}
+
 trait TypedExpressionFactory[A,T] {
- outer =>
+  self: JdbcMapper[_,A] =>
      
   def create(a: A) : TypedExpression[A,T] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
@@ -250,38 +272,53 @@ trait TypedExpressionFactory[A,T] {
   
   def sample: A
 
-  def doMap(rs: ResultSet, i: Int): A
+  def defaultColumnLength: Int
+  
+  def thisMapper: JdbcMapper[_,A] = this
+  
+  private def zis = this
   
   def createOutMapper: OutMapper[A] = new OutMapper[A] {
     
-    def doMap(rs: ResultSet): A = outer.doMap(rs, index)    
+    def doMap(rs: ResultSet): A =       
+      zis.map(rs, index)
 
-    def sample:A = outer.sample
+    def sample:A = zis.sample
   }  
 }
 
 trait IntegralTypedExpressionFactory[A1,T1,A2,T2] 
   extends TypedExpressionFactory[A1,T1] with Floatifier[T1,A2,T2] {
+  self: JdbcMapper[_,A1] =>
   
   def floatify(v: ExpressionNode): TypedExpressionConversion[A2,T2] = floatifyer.convert(v)
   def floatifyer: TypedExpressionFactory[A2,T2]
 }
 
 
-trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] {
+trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] extends JdbcMapper[A1,A2] {
   self: TypedExpressionFactory[A2,T2] =>
     
   def deOptionizer: TypedExpressionFactory[A1,T1]
   
-  def sample = Option(deOptionizer.sample) 
+  def sample = Option(deOptionizer.sample)
   
-  def doMap(rs: ResultSet, i: Int): A2 = Utils.throwError(
-      "doMap should never get called on" + this.getClass.getName)
+  def defaultColumnLength: Int = deOptionizer.defaultColumnLength
+  
+  def convertFromJdbc(v: A1): A2 = Option(v).asInstanceOf[A2]
+  
+  def doMap(rs: ResultSet, i: Int) = deOptionizer.thisMapper.map(rs,i) 
+    //Utils.throwError("doMap should never get called on" + this.getClass.getName)
+  
+  //def convertFromJdbc(v: Any): A2 = Utils.throwError("doMap should never get called on" + this.getClass.getName)
+  
+//  def doMap(rs: ResultSet, i: Int): A2 = Utils.throwError(
+//      "doMap should never get called on" + this.getClass.getName)
   
   override def createOutMapper: OutMapper[A2] = new OutMapper[A2] {
     def doMap(rs: ResultSet): A2 = {
           
-      val v = deOptionizer.doMap(rs,index)
+      val v = deOptionizer.thisMapper.map(rs,index)
       val r = 
         if(rs.wasNull)
           None
@@ -291,7 +328,7 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] {
       r.asInstanceOf[A2]
     }
     
-    def sample:A2 = Option(deOptionizer.sample).asInstanceOf[A2]
+    def sample:A2 = convertFromJdbc(deOptionizer.sample)
   }
 }
 

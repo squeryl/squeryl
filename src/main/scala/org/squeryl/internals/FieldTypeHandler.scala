@@ -16,80 +16,102 @@
 package org.squeryl.internals
 import scala.collection.mutable.HashMap
 import scala.collection.mutable.ArrayBuffer
+import java.sql.ResultSet
+import org.squeryl.dsl._
 
-object Zaza {
+
+object FieldMapperz extends FieldMapperz {
+  import org.squeryl.PrimitiveTypeMode._
   
-  def main(args: Array[String]) {
-    println(classOf[Int].getName)
-    println(classOf[Int].getCanonicalName)
-  } 
+  register(byteTEF)
+  register(intTEF)
+  register(longTEF)
+  register(floatTEF)
+  register(doubleTEF)  
+  register(bigDecimalTEF)
+  
+  register(binaryTEF)
+  register(booleanTEF)
+  register(stringTEF)
+  register(timestampTEF)
+  register(dateTEF)  
+  register(uuidTEF)
+  val re = enumValueTEF(DummyEnum.DummyEnumerationValue)    
+  
+ /**
+   * Enumerations are treated differently, since the map method should normally
+   * return the actual Enumeration#value, but given that an enum is not only
+   * determined by the int value from the DB, but also the parent Enumeration
+   * parentEnumeration.values.find(_.id == v), the conversion is done 
+   * in FieldMetaData.canonicalEnumerationValueFor(i: Int) 
+   */
+  val z = new FieldAttributesBasedOnType[Any](
+      new {
+        def map(rs:ResultSet,i:Int) = rs.getInt(i)
+      }, 
+      re.defaultColumnLength, re.sample)
+      
+  m.put(z.clasz, z)
+  m.put(z.clasz.getSuperclass, z)
+  
 }
-
 
 class FieldMapperz {
-
-  def nativeJdbcTypeFor(c: Class[_]): Class[_] = null
-}
-
-
-trait FieldTypeHandler[T] {
-
-  private def isInt(t: Class[_]) = classOf[Int].isAssignableFrom(t) || classOf[java.lang.Integer].isAssignableFrom(t)
-  private def isLong(t: Class[_]) = classOf[Long].isAssignableFrom(t) || classOf[java.lang.Long].isAssignableFrom(t)
-  private def isBoolean(t: Class[_]) = classOf[Boolean].isAssignableFrom(t) || classOf[java.lang.Boolean].isAssignableFrom(t)
-  private def isDouble(t: Class[_]) = classOf[Double].isAssignableFrom(t) || classOf[java.lang.Double].isAssignableFrom(t)
-  private def isFloat(t: Class[_]) = classOf[Float].isAssignableFrom(t) || classOf[java.lang.Float].isAssignableFrom(t)
   
-  private def isString(t: Class[_]) = classOf[java.lang.String].isAssignableFrom(t)
-  private def isDate(t: Class[_]) = classOf[java.util.Date].isAssignableFrom(t)
-  private def isBigDecimal(t: Class[_]) = classOf[scala.math.BigDecimal].isAssignableFrom(t)
-  private def isTimestamp(t: Class[_]) = classOf[java.sql.Timestamp].isAssignableFrom(t)
-  private def isBinary(t: Class[_]) = classOf[Array[Byte]].isAssignableFrom(t)
-  private def isEnumerationValueType(t: Class[_]) = classOf[Enumeration#Value].isAssignableFrom(t)
-  private def isUuid(t: Class[_]) = classOf[java.util.UUID].isAssignableFrom(t)
-  
-  def handleType(t: Class[_]) = {
-
-      if(isBigDecimal(t))
-        handleBigDecimalType
-      else if(isInt(t))
-        handleIntType
-      else if(isLong(t))
-        handleLongType
-      else if(isString(t))
-        handleStringType
-      else if(isBoolean(t))
-        handleBooleanType
-      else if(isDouble(t))
-        handleDoubleType
-      else if(isFloat(t))  
-        handleFloatType
-      else if(isTimestamp(t))
-        handleTimestampType
-      else if(isDate(t))
-        handleDateType
-      else if(isBinary(t))
-        handleBinaryType
-      else if(isEnumerationValueType(t))
-        handleEnumerationValueType
-      else if (isUuid(t))
-        handleUuidType
-      else
-        handleUnknownType(t)
+  type MapperForReflection = {
+    def map(rs:ResultSet,i:Int): Any
   }
+   
+  class FieldAttributesBasedOnType[A](val mapper: MapperForReflection, val defaultLength: Int, val sample: A) {
 
-  protected def handleIntType : T
-  protected def handleStringType : T
-  protected def handleBooleanType : T
-  protected def handleDoubleType : T
-  protected def handleDateType: T
-  protected def handleLongType: T
-  protected def handleFloatType: T
-  protected def handleBigDecimalType: T
-  protected def handleTimestampType: T
-  protected def handleBinaryType: T
-  protected def handleEnumerationValueType: T
-  protected def handleUuidType: T
+    val clasz: Class[_] = sample.getClass
 
-  protected def handleUnknownType(c: Class[_]) : T
+    override def toString = 
+      clasz.getCanonicalName + " --> " + mapper.getClass.getCanonicalName    
+  }
+  
+  def isSupported(c: Class[_]) =
+    lookup(c) != None ||
+    c.isAssignableFrom(classOf[Some[_]]) ||
+    classOf[Product1[Any]].isAssignableFrom(c)
+  
+  def defaultColumnLength(c: Class[_]) =
+    get(c).defaultLength
+
+  def resultSetHandlerFor(c: Class[_]): (ResultSet,Int) => AnyRef = {
+    val fa = get(c) 
+    (rs:ResultSet,i:Int) => {
+       val z = fa.mapper.map(rs,i)
+       if(rs.wasNull) null
+       else z.asInstanceOf[AnyRef]
+    }
+  }
+      
+  
+  private def get(c: Class[_]) =
+    lookup(c).getOrElse(
+      Utils.throwError("Usupported native type " + c.getCanonicalName + "," + c.getName + "\n" + m.mkString("\n")))
+  
+  def sampleValueFor(c: Class[_]): AnyRef =
+    get(c).sample.asInstanceOf[AnyRef]
+  
+  private val m = new HashMap[Class[_],FieldAttributesBasedOnType[_]]
+  
+  def register[A](f: TypedExpressionFactory[A,_]) {
+    val z = new FieldAttributesBasedOnType(f.thisMapper, f.defaultColumnLength, f.sample)
+    m.put(z.clasz, z)
+  }
+    
+  private def lookup(c: Class[_]) =
+    if(!c.isPrimitive) 
+      m.get(c)
+    else c.getName match {
+      case "int" => m.get(classOf[java.lang.Integer])
+      case "long" => m.get(classOf[java.lang.Long])
+      case "float" => m.get(classOf[java.lang.Float])
+      case "byte" => m.get(classOf[java.lang.Byte])
+      case "boolean" => m.get(classOf[java.lang.Boolean])
+      case "double" => m.get(classOf[java.lang.Double])
+      case "void" => None
+    }           
 }

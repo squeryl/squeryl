@@ -181,7 +181,7 @@ trait DatabaseAdapter {
   def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
   def uuidTypeDeclaration = "char(36)"
-
+/*
   private val _declarationHandler = new FieldTypeHandler[String] {
 
     def handleIntType = intTypeDeclaration
@@ -199,16 +199,18 @@ trait DatabaseAdapter {
     def handleUnknownType(c: Class[_]) =
       org.squeryl.internals.Utils.throwError("don't know how to map field type " + c.getName)
   }
-  
-  def databaseTypeFor(fmd: FieldMetaData) =
+*/  
+  def databaseTypeFor(fmd: FieldMetaData):String =
     fmd.explicitDbTypeDeclaration.getOrElse(
       fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse(
           if(classOf[String].isAssignableFrom(fmd.wrappedFieldType))
             stringTypeDeclaration(fmd.length)
           else if(classOf[BigDecimal].isAssignableFrom(fmd.wrappedFieldType))
             bigDecimalTypeDeclaration(fmd.length, fmd.scale)
-          else
-            _declarationHandler.handleType(fmd.wrappedFieldType)                 
+          else {            
+            //val ar = FieldMapperz.sampleValueFor(fmd.wrappedFieldType)
+            databaseTypeFor(fmd.wrappedFieldType)
+          }
       )
     )
 
@@ -753,8 +755,39 @@ trait DatabaseAdapter {
     sw.write(quoteName(a))
   }
 
-  def databaseTypeFor(c: Class[_]) =
-    _declarationHandler.handleType(c)
+  def databaseTypeFor(c: Class[_]): String = {
+    val ar = FieldMapperz.sampleValueFor(c)
+    val decl = 
+      if(ar.isInstanceOf[Enumeration#Value])                 
+        intTypeDeclaration
+      else if(classOf[String].isAssignableFrom(c))
+        stringTypeDeclaration                  
+      else if(ar.isInstanceOf[java.sql.Timestamp])
+        timestampTypeDeclaration                  
+      else if(ar.isInstanceOf[java.util.Date])
+        dateTypeDeclaration
+      else if(ar.isInstanceOf[java.lang.Integer])
+        intTypeDeclaration
+      else if(ar.isInstanceOf[java.lang.Long])
+        longTypeDeclaration
+      else if(ar.isInstanceOf[java.lang.Boolean])
+        booleanTypeDeclaration
+      else if(ar.isInstanceOf[java.lang.Double])
+        doubleTypeDeclaration
+      else if(ar.isInstanceOf[java.lang.Float])
+        floatTypeDeclaration
+      else if(ar.isInstanceOf[java.util.UUID])
+        uuidTypeDeclaration
+      else if(classOf[scala.Array[Byte]].isAssignableFrom(c))
+        binaryTypeDeclaration
+      else if(classOf[BigDecimal].isAssignableFrom(c))
+        bigDecimalTypeDeclaration                  
+      else
+        Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
+                  
+      decl    
+  }
+
 
   def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {
     sw.write("cast(")

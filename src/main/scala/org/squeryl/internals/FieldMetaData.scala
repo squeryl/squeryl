@@ -201,7 +201,8 @@ class FieldMetaData(
     }
   
   val resultSetHandler =
-    FieldMetaData.resultSetHandlerFor(wrappedFieldType)
+    //FieldMetaData.resultSetHandlerFor(wrappedFieldType)
+    FieldMapperz.resultSetHandlerFor(wrappedFieldType)
 
   if(!isCustomType)
     assert(fieldType == wrappedFieldType,
@@ -356,35 +357,15 @@ trait FieldMetaDataFactory {
 
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
-  def isSupportedFieldType(c: Class[_]): Boolean =
-    FieldMetaData._isSupportedFieldType.handleType(c)
-
+  def isSupportedFieldType(c: Class[_]): Boolean = 
+    FieldMapperz.isSupported(c)
+    
   def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
 
 object FieldMetaData {
 
   private val _EMPTY_ARRAY = new Array[Object](0)
-
-  private [squeryl] val _isSupportedFieldType = new FieldTypeHandler[Boolean] {
-
-    def handleIntType = true
-    def handleStringType  = true
-    def handleBooleanType = true
-    def handleDoubleType = true
-    def handleDateType = true
-    def handleLongType = true
-    def handleFloatType = true
-    def handleBigDecimalType = true
-    def handleTimestampType = true
-    def handleBinaryType = true
-    def handleEnumerationValueType = true
-    def handleUuidType = true
-    def handleUnknownType(c: Class[_]) =
-      c.isAssignableFrom(classOf[Some[_]]) ||
-      classOf[Product1[Any]].isAssignableFrom(c)
-        //classOf[Some[_]].isAssignableFrom(c)
-  }
   
   var factory = new FieldMetaDataFactory {   
 
@@ -553,93 +534,9 @@ object FieldMetaData {
     else if(classOf[BigDecimal].isAssignableFrom(fieldType))
       fmd.schema.defaultSizeOfBigDecimal._1
     else
-      _defaultFieldLengthAssigner.handleType(fieldType)
+      FieldMapperz.defaultColumnLength(fieldType)
   }
-
-  private val _defaultFieldLengthAssigner = new FieldTypeHandler[Int] {
-
-    def handleIntType = 4
-    def handleStringType  = 255
-    def handleBooleanType = 1
-    def handleDoubleType = 8
-    def handleDateType = -1
-    def handleLongType = 8
-    def handleFloatType = 4
-    def handleBigDecimalType = -1
-    def handleTimestampType = -1
-    def handleBinaryType = 255
-    def handleEnumerationValueType = 4
-    def handleUuidType = 36
-    def handleUnknownType(c: Class[_]) = org.squeryl.internals.Utils.throwError("Cannot assign field length for " + c.getName)
-  }
-
-  private val _defaultValueFactory = new FieldTypeHandler[AnyRef] {
-
-    def handleIntType = new java.lang.Integer(0)
-    def handleStringType  = ""
-    def handleBooleanType = new java.lang.Boolean(false)
-    def handleDoubleType = new java.lang.Double(0.0)
-    def handleDateType = new java.util.Date()
-    def handleLongType = new java.lang.Long(0)
-    def handleFloatType = new java.lang.Float(0)
-    def handleBigDecimalType= new scala.math.BigDecimal(java.math.BigDecimal.ZERO)
-    def handleTimestampType = new java.sql.Timestamp(0)
-    def handleBinaryType = new Array[Byte](0)
-    def handleEnumerationValueType = DummyE.Z
-    def handleUuidType = java.util.UUID.fromString("00000000-0000-0000-0000-000000000000")
-    def handleUnknownType(c: Class[_]) = null
-  }
-
-  object DummyE extends Enumeration {
-    type DummyE = Value
-    val Z = Value
-  }
-
-  private val _mapper = new FieldTypeHandler[(ResultSet,Int)=>AnyRef] {
-
-    private def _handleNull(rs: ResultSet, v: Any) =
-      if(rs.wasNull)
-        null
-      else
-        v.asInstanceOf[AnyRef]
-
-    val _intM =     (rs:ResultSet,i:Int) => _handleNull(rs, rs.getInt(i))
-    val _stringM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getString(i))
-    val _doubleM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getDouble(i))
-    val _booleanM = (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBoolean(i))
-    //(rs:ResultSet,i:Int) => Session.currentSession.databaseAdapter.convertToBooleanForJdbc(rs, i)
-    val _dateM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getDate(i))
-    val _longM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getLong(i))
-    val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
-    val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
-    val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
-    val _binaryM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBytes(i))
-    val _uuidM = (rs:ResultSet, i:Int) => {
-      rs.getObject(i) // Some DBs require a call to getXXX before calling wasNull
-      if (rs.wasNull) null
-      else Session.currentSession.databaseAdapter.convertToUuidForJdbc(rs, i)
-    }
-
-    def handleIntType = _intM
-    def handleStringType  = _stringM
-    def handleBooleanType = _booleanM
-    def handleDoubleType = _doubleM
-    def handleDateType = _dateM
-    def handleFloatType = _floatM
-    def handleLongType = _longM
-    def handleBigDecimalType = _bigDecM
-    def handleTimestampType = _timestampM
-    def handleBinaryType = _binaryM
-    def handleUuidType = _uuidM
-    def handleEnumerationValueType = _intM
-
-    def handleUnknownType(c: Class[_]) =
-      org.squeryl.internals.Utils.throwError("field type " + c.getName + " is not supported")
-  }
-
-  def resultSetHandlerFor(c: Class[_]) =
-    _mapper.handleType(c)
-
+  
   def detectScalapOnClasspath(): Boolean = {
     try {
       Class.forName("scala.tools.scalap.scalax.rules.scalasig.ByteCode")
@@ -724,7 +621,9 @@ object FieldMetaData {
 	        case _ => None //Not a parameterized type
 	      } 
       }
-    } else
-      _defaultValueFactory.handleType(p)
+    } 
+    else {
+      FieldMapperz.sampleValueFor(p)
+    }
   }
 }
