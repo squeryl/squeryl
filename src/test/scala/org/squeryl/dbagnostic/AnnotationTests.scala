@@ -22,6 +22,7 @@ import org.squeryl.Schema
 import java.util.Date
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
+import org.squeryl.PrimitiveTypeMode
 
 @Row("T_TOASTER")
 class Toaster(
@@ -79,7 +80,7 @@ class AnnotationTests extends FunSuite with ShouldMatchers{
     //rudimentaryTests
   }
 
-  class ToastersInc extends Schema {
+  class ToastersInc extends Schema()(PrimitiveTypeMode) {
 
     val descendantOfKeyedObjects = table[DescendantOfKeyedObject]
 

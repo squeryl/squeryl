@@ -47,6 +47,9 @@ class FieldMetaData(
         val isOptimisticCounter: Boolean,
         val sampleValue: AnyRef) {
 
+  def nativeJdbcType =
+    this.schema.fieldMapper.nativeJdbcTypeFor(wrappedFieldType)
+  
   def isEnumeration = {
     classOf[Enumeration#Value].isAssignableFrom(wrappedFieldType)
   }
@@ -202,7 +205,7 @@ class FieldMetaData(
   
   val resultSetHandler =
     //FieldMetaData.resultSetHandlerFor(wrappedFieldType)
-    FieldMapperz.resultSetHandlerFor(wrappedFieldType)
+    this.schema.fieldMapper.resultSetHandlerFor(wrappedFieldType)
 
   if(!isCustomType)
     assert(fieldType == wrappedFieldType,
@@ -283,6 +286,11 @@ class FieldMetaData(
     catch {
       case e: IllegalArgumentException => org.squeryl.internals.Utils.throwError(wrappedFieldType.getName + " used on " + o.getClass.getName)
     }
+    
+  def getNativeJdbcValue(o:AnyRef): AnyRef = {
+    val r = get(o)
+    schema.fieldMapper.nativeJdbcValueFor(wrappedFieldType, r)
+  }
 
   def setFromResultSet(target: AnyRef, rs: ResultSet, index: Int) = {
     val v = resultSetHandler(rs, index)
@@ -357,9 +365,6 @@ trait FieldMetaDataFactory {
 
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
-  def isSupportedFieldType(c: Class[_]): Boolean = 
-    FieldMapperz.isSupported(c)
-    
   def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
 
@@ -377,6 +382,8 @@ object FieldMetaData {
 
     def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
 
+      val fieldMapper = parentMetaData.schema.fieldMapper 
+      
       val field  = property._1
       val getter = property._2
       val setter = property._3
@@ -404,7 +411,7 @@ object FieldMetaData {
            else if(getter != None)
              getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
            else
-            createDefaultValue(member, clsOfField, Some(typeOfField), colAnnotation)
+            createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
          }
          else null
 
@@ -416,7 +423,7 @@ object FieldMetaData {
       var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
 
       if(classOf[Product1[Any]].isAssignableFrom(clsOfField))
-        customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, clsOfField)
+        customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, clsOfField)
 
       if(customTypeFactory != None) {
         val f = customTypeFactory.get
@@ -429,7 +436,7 @@ object FieldMetaData {
          * in order to do so.
          */
         v = try {
-          createDefaultValue(member, clsOfField, Some(typeOfField), colAnnotation)
+          createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
         }
         catch {
           case e:Exception => null
@@ -460,7 +467,7 @@ object FieldMetaData {
           v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
         else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[Product1[_]]) {
           //if we get here, customTypeFactory has not had a chance to get created
-          customTypeFactory = _createCustomTypeFactory(parentMetaData.clasz, typeOfFieldOrTypeOfOption)
+          customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, typeOfFieldOrTypeOfOption)
           v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
         }
         else
@@ -488,7 +495,7 @@ object FieldMetaData {
    * that creates an instance of a custom type with it, the factory accepts null to create
    * default values for non nullable primitive types (int, long, etc...)
    */
-  private def _createCustomTypeFactory(ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any]] = {
+  private def _createCustomTypeFactory(fieldMapper: FieldMapper, ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any]] = {
     // run through the given class hierarchy and return the first method
     // which is called "value" and doesn't return java.lang.Object
     @tailrec
@@ -512,12 +519,12 @@ object FieldMetaData {
     find(typeOfField) flatMap(m => {
       val pType = m.getReturnType
 
-      assert(factory.isSupportedFieldType(pType),
+      assert(fieldMapper.isSupported(pType),
         "enclosed type %s of CustomType %s is not a supported field type!"
         .format(pType.getName, typeOfField.getName))
 
       val c = typeOfField.getConstructor(pType)
-      val defaultValue = createDefaultValue(c, pType, None, None)
+      val defaultValue = createDefaultValue(fieldMapper, c, pType, None, None)
 
       if(defaultValue == null) None
       else
@@ -534,7 +541,7 @@ object FieldMetaData {
     else if(classOf[BigDecimal].isAssignableFrom(fieldType))
       fmd.schema.defaultSizeOfBigDecimal._1
     else
-      FieldMapperz.defaultColumnLength(fieldType)
+      fmd.schema.fieldMapper.defaultColumnLength(fieldType)
   }
   
   def detectScalapOnClasspath(): Boolean = {
@@ -579,14 +586,14 @@ object FieldMetaData {
     }
   }
 
-  def createDefaultValue(member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
+  def createDefaultValue(fieldMapper: FieldMapper, member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
     if (p.isAssignableFrom(classOf[Option[Any]])) {
       /*
        * First we'll look at the annotation if it exists as it's the lowest cost.
        */
        optionFieldsInfo.flatMap(ann => 
          if(ann.optionType != classOf[Object])
-           Some(createDefaultValue(member, ann.optionType, None, None))
+           Some(createDefaultValue(fieldMapper, member, ann.optionType, None, None))
           else None).orElse{
 	      /*
 	       * Next we'll try the Java generic type.  This will fail if the generic parameter is a primitive as
@@ -605,7 +612,7 @@ object FieldMetaData {
 	                  if (classOf[Object] == oType && detectScalapOnClasspath()) optionTypeFromScalaSig(member) 
 	                  else Some(oType.asInstanceOf[Class[_]])
 	                trueTypeOption flatMap { trueType =>
-	                  val deduced = createDefaultValue(member, trueType, None, optionFieldsInfo)
+	                  val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)
 	                  if (deduced != null)
 	                    Some(deduced)
 	                  else
@@ -623,7 +630,7 @@ object FieldMetaData {
       }
     } 
     else {
-      FieldMapperz.sampleValueFor(p)
+      fieldMapper.sampleValueFor(p)
     }
   }
 }

@@ -202,16 +202,16 @@ trait DatabaseAdapter {
 */  
   def databaseTypeFor(fmd: FieldMetaData):String =
     fmd.explicitDbTypeDeclaration.getOrElse(
-      fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse(
-          if(classOf[String].isAssignableFrom(fmd.wrappedFieldType))
-            stringTypeDeclaration(fmd.length)
-          else if(classOf[BigDecimal].isAssignableFrom(fmd.wrappedFieldType))
-            bigDecimalTypeDeclaration(fmd.length, fmd.scale)
-          else {            
-            //val ar = FieldMapperz.sampleValueFor(fmd.wrappedFieldType)
-            databaseTypeFor(fmd.wrappedFieldType)
-          }
-      )
+      fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse {
+        val nativeJdbcType = fmd.nativeJdbcType
+          
+        if(classOf[String].isAssignableFrom(nativeJdbcType))
+          stringTypeDeclaration(fmd.length)
+        else if(classOf[BigDecimal].isAssignableFrom(nativeJdbcType))
+          bigDecimalTypeDeclaration(fmd.length, fmd.scale)
+        else             
+          databaseTypeFor(fmd.schema.fieldMapper, nativeJdbcType)        
+      }
     )
 
   def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
@@ -421,14 +421,14 @@ trait DatabaseAdapter {
   //with values at any time (via : a kind of prettyStatement method)
   protected def writeValue(o: AnyRef, fmd: FieldMetaData, sw: StatementWriter):String =
     if(sw.isForDisplay) {
-      val v = fmd.get(o)
+      val v = fmd.getNativeJdbcValue(o)
       if(v != null)
         v.toString
       else
         "null"
     }
     else {
-      sw.addParam(convertToJdbcValue(fmd.get(o)))
+      sw.addParam(convertToJdbcValue(fmd.getNativeJdbcValue(o)))
       "?"
     }
 
@@ -755,8 +755,8 @@ trait DatabaseAdapter {
     sw.write(quoteName(a))
   }
 
-  def databaseTypeFor(c: Class[_]): String = {
-    val ar = FieldMapperz.sampleValueFor(c)
+  def databaseTypeFor(fieldMapper: FieldMapper, c: Class[_]): String = {
+    val ar = fieldMapper.sampleValueFor(c)
     val decl = 
       if(ar.isInstanceOf[Enumeration#Value])                 
         intTypeDeclaration
@@ -788,7 +788,7 @@ trait DatabaseAdapter {
       decl    
   }
 
-
+/*
   def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {
     sw.write("cast(")
     e.write(sw)
@@ -821,4 +821,5 @@ trait DatabaseAdapter {
     sw.unindent
     sw.write("end)")
   }
+*/  
 }

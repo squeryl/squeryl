@@ -22,8 +22,9 @@ import reflect.{Manifest}
 import java.sql.SQLException
 import java.io.PrintWriter
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
+import org.squeryl.internals.FieldMapper
 
-trait Schema {
+class Schema(implicit val fieldMapper: FieldMapper) {
 
   protected implicit def thisSchema = this
 
@@ -354,14 +355,7 @@ trait Schema {
     
   private [squeryl] def _addTableType(typeT: Class[_], t: Table[_]) =
     _tableTypes += ((typeT, t))
-  
-  protected def view[T]()(implicit manifestT: Manifest[T]): View[T] =
-    view(tableNameFromClass(manifestT.erasure))(manifestT)
 
-  protected def view[T](name: String)(implicit manifestT: Manifest[T]): View[T] =
-    new View[T](name)(manifestT)
-
-  
   class ReferentialEvent(val eventName: String) {
     def restrict = new ReferentialActionImpl("restrict", this)
     def cascade = new ReferentialActionImpl("cascade", this)

@@ -61,10 +61,9 @@ class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId:
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
   override def toString = id+ ":" + title
 }
+import org.squeryl.PrimitiveTypeMode._
 
 class MusicDb extends Schema {
-
-  import org.squeryl.PrimitiveTypeMode._
 
   val songs = table[Song]
 

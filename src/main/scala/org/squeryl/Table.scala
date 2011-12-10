@@ -24,12 +24,9 @@ import scala.reflect.Manifest
 import collection.mutable.ArrayBuffer
 import javax.swing.UIDefaults.LazyValue
 
-private [squeryl] object DummySchema extends Schema
+//private [squeryl] object DummySchema extends Schema
 
 class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String]) extends View[T](n, c, schema, _prefix) {
-
-  def this(n:String)(implicit manifestT: Manifest[T]) =
-    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None)  
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
@@ -136,7 +133,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
           var idx = 1
           fmds.foreach(fmd => {
-            st.setObject(idx, dba.convertToJdbcValue(fmd.get(eN)))
+            st.setObject(idx, dba.convertToJdbcValue(fmd.getNativeJdbcValue(eN)))
             idx += 1
           })
           st.addBatch
@@ -192,7 +189,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     if(cnt != 1) {
       if(checkOCC && posoMetaData.isOptimistic) {
-        val version = posoMetaData.optimisticCounter.get.get(o.asInstanceOf[AnyRef])
+        val version = posoMetaData.optimisticCounter.get.getNativeJdbcValue(o.asInstanceOf[AnyRef])
         throw new StaleUpdateException(
            "Object "+prefixedName + "(id=" + o.asInstanceOf[KeyedEntity[_]].id + ", occVersionNumber=" + version +
            ") has become stale, it cannot be updated under optimistic concurrency control")

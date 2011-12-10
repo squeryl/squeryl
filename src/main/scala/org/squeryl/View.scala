@@ -25,8 +25,6 @@ import java.sql.ResultSet
  */
 class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema, _prefix: Option[String]) extends Queryable[T] {
 
-  def this(n:String)(implicit manifestT: Manifest[T]) =
-    this(n, manifestT.erasure.asInstanceOf[Class[T]], DummySchema, None)
 
 //2.9.x approach for LyfeCycle events :
 //  private [squeryl] var _callbacks: PosoLifecycleEventListener = NoOpPosoLifecycleEventListener

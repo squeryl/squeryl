@@ -28,6 +28,7 @@ import internals.{FieldMetaData, FieldReferenceLinker}
 import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
+import org.squeryl.PrimitiveTypeMode._
 
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")

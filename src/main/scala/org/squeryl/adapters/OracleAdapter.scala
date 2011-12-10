@@ -230,7 +230,7 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def viewAlias(vn: ViewExpressionNode[_]) =
     "t" + vn.uniqueId.get
-    
+/*    
   override def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {
     sw.write("cast(")
     e.write(sw)
@@ -246,7 +246,7 @@ class OracleAdapter extends DatabaseAdapter {
       
     sw.write(")")
   }
-    
+*/    
 }
 
 

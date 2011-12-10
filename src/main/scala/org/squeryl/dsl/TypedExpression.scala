@@ -16,9 +16,7 @@
 package org.squeryl.dsl
 
 import org.squeryl.dsl.ast._
-import org.squeryl.internals.OutMapper
-import org.squeryl.internals.StatementWriter
-import org.squeryl.internals.FieldReferenceLinker
+import org.squeryl.internals._
 import org.squeryl.Session
 import org.squeryl.Schema
 import org.squeryl.internals.AttributeValidOnNumericalColumn
@@ -75,7 +73,7 @@ sealed trait TOptionBoolean
 sealed trait TUUID extends TOptionUUID  with TNonOption
 sealed trait TOptionUUID
 
-@scala.annotation.implicitNotFound("The left side of the comparison (===, <>, between,...) is not compatible with the right side")
+@scala.annotation.implicitNotFound("The left side of the comparison (===, <>, between, ...) is not compatible with the right side.")
 sealed class CanCompare[-A1,-A2]
 
 
@@ -236,6 +234,7 @@ trait JdbcMapper[P,A] {
   def thisTypedExpressionFactory: TypedExpressionFactory[A,_] = this
   def doMap(rs: ResultSet, i: Int): P
   def convertFromJdbc(v: P): A
+  def convertToJdbc(v: A): P
   def defaultColumnLength: Int
   def map(rs: ResultSet, i: Int): A = convertFromJdbc(doMap(rs, i)) 
 }
@@ -244,26 +243,33 @@ trait JdbcMapper[P,A] {
 trait PrimitiveJdbcMapper[A] extends JdbcMapper[A,A] {
   self: TypedExpressionFactory[A,_] =>
   def doMap(rs: ResultSet, i: Int): A
-  def convertFromJdbc(v: A) = v  
+  def convertFromJdbc(v: A) = v
+  def convertToJdbc(v: A) = v
+  def nativeJdbcType = sample.getClass
 }
 
-abstract class NonPrimitiveJdbcMapper[P,A,T](implicit pw: PrimitiveJdbcMapper[P]) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
-  self: TypedExpressionFactory[A,T] =>
+abstract class NonPrimitiveJdbcMapper[P,A,T](implicit val primitiveMapper: PrimitiveJdbcMapper[P], val fieldMapper: FieldMapper) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
+  self: TypedExpressionFactory[A,T] =>    
+    
+  def doMap(rs: ResultSet, i: Int): P = primitiveMapper.doMap(rs, i)
+  def defaultColumnLength: Int = primitiveMapper.defaultColumnLength
+  def sample: A = 
+    convertFromJdbc(primitiveMapper.thisTypedExpressionFactory.sample)
   
-  def doMap(rs: ResultSet, i: Int): P = pw.doMap(rs, i)
-  def defaultColumnLength: Int = pw.defaultColumnLength
-  def sample: A = convertFromJdbc(pw.thisTypedExpressionFactory.sample)
-  
-  def convertFromJdbc(v: P): A  
+  def convertFromJdbc(v: P): A
+    
+  fieldMapper.register(this)
 }
 
 trait TypedExpressionFactory[A,T] {
   self: JdbcMapper[_,A] =>
      
+  def thisAnyRefMapper = this.asInstanceOf[JdbcMapper[AnyRef,A]]
+  
   def create(a: A) : TypedExpression[A,T] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantTypedExpression[A,T](a, createOutMapper)
+        new ConstantTypedExpression[A,T](a, createOutMapper, thisAnyRefMapper.convertToJdbc(a))
       case Some(n:SelectElement) =>
         new SelectElementReference[A,T](n, createOutMapper)
     }
@@ -310,14 +316,17 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] extends JdbcMapper[A1,A2] {
   def defaultColumnLength: Int = deOptionizer.defaultColumnLength
   
   def convertFromJdbc(v: A1): A2 = Option(v).asInstanceOf[A2]
+  /**
+   * Jdbc uses nulls, we work with A1 <: Any, so we must hide this
+   * to the compiler by allowing a null returning function pose as a Function1[A2,A1]
+   */
+  private val imposter = { 
+    (a2:A2) => if(a2 == None) null else (a2:Option[A1]).get.asInstanceOf[AnyRef]
+  }.asInstanceOf[Function1[A2,A1]]
+  
+  def convertToJdbc(v: A2) = imposter(v)
   
   def doMap(rs: ResultSet, i: Int) = deOptionizer.thisMapper.map(rs,i) 
-    //Utils.throwError("doMap should never get called on" + this.getClass.getName)
-  
-  //def convertFromJdbc(v: Any): A2 = Utils.throwError("doMap should never get called on" + this.getClass.getName)
-  
-//  def doMap(rs: ResultSet, i: Int): A2 = Utils.throwError(
-//      "doMap should never get called on" + this.getClass.getName)
   
   override def createOutMapper: OutMapper[A2] = new OutMapper[A2] {
     def doMap(rs: ResultSet): A2 = {

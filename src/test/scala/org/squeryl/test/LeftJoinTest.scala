@@ -87,8 +87,9 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction{
 
 
 import org.squeryl.Schema
+import org.squeryl.PrimitiveTypeMode._
+
 object LeftJoinSchema extends Schema {
- import org.squeryl.PrimitiveTypeMode._
 
  val items = table[Item]("Item")
 

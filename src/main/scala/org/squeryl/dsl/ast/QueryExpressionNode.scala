@@ -39,7 +39,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   private var _sample: Option[AnyRef] = None
 
   private def _isPrimitiveType(o: AnyRef) =
-    FieldMapperz.isSupported(o.getClass)
+    o.getClass.isPrimitive
 
   def isUseableAsSubquery: Boolean =
     _sample match {
