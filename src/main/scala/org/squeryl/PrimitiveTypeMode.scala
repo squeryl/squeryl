@@ -124,8 +124,7 @@ trait PrimitiveTypeMode extends QueryDsl {
   
   def enumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new NonPrimitiveJdbcMapper[Int,A,TEnumValue[A]] {
     //TODO: avoid isInstanceOf
-    val sample: A = ev.asInstanceOf[A]
-    val defaultColumnLength = 4
+    override val sample: A = ev.asInstanceOf[A]
     val enu = Utils.enumerationForValue(ev)
     def convertFromJdbc(v: Int): A = 
       enu.values.find(_.id == v).get.asInstanceOf[A]

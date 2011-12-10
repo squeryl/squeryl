@@ -150,7 +150,22 @@ trait QueryDsl
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
 
-    
+  def sDevPopulation[T2 >: TOptionFloat, T1 <: T2, A1, A2]
+         (b: TypedExpression[A1,T1])
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("stddev_pop", Seq(b)))
+         
+  def sDevSample[T2 >: TOptionFloat, T1 <: T2, A1, A2]
+         (b: TypedExpression[A1,T1])
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("stddev_samp", Seq(b)))
+         
+  def varPopulation[T2 >: TOptionFloat, T1 <: T2, A1, A2]
+         (b: TypedExpression[A1,T1])
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("var_pop", Seq(b)))
+         
+  def varSample[T2 >: TOptionFloat, T1 <: T2, A1, A2]
+         (b: TypedExpression[A1,T1])
+         (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("var_samp", Seq(b)))
+  
   def max[T2 >: TOption, T1 <: T2, A1, A2]
          (b: TypedExpression[A1,T1])
          (implicit f: TypedExpressionFactory[A2,T2]) = f.convert(new FunctionNode("max", Seq(b)))

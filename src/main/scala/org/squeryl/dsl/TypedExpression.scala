@@ -115,9 +115,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
          (e: TypedExpression[A2,T2])
          (implicit f:  TypedExpressionFactory[A3,T3], 
                    tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
-                   
-  //def value: A1 = sys.error("!!!!!!!!!")
-  
+
   def ===[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
   def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
   
@@ -235,8 +233,10 @@ trait FloatTypedExpressionFactory[A1,T1] extends TypedExpressionFactory[A1,T1] w
 
 trait JdbcMapper[P,A] {
   self: TypedExpressionFactory[A,_] =>
+  def thisTypedExpressionFactory: TypedExpressionFactory[A,_] = this
   def doMap(rs: ResultSet, i: Int): P
   def convertFromJdbc(v: P): A
+  def defaultColumnLength: Int
   def map(rs: ResultSet, i: Int): A = convertFromJdbc(doMap(rs, i)) 
 }
 
@@ -249,8 +249,12 @@ trait PrimitiveJdbcMapper[A] extends JdbcMapper[A,A] {
 
 abstract class NonPrimitiveJdbcMapper[P,A,T](implicit pw: PrimitiveJdbcMapper[P]) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
   self: TypedExpressionFactory[A,T] =>
+  
   def doMap(rs: ResultSet, i: Int): P = pw.doMap(rs, i)
-  def convertFromJdbc(v: P): A
+  def defaultColumnLength: Int = pw.defaultColumnLength
+  def sample: A = convertFromJdbc(pw.thisTypedExpressionFactory.sample)
+  
+  def convertFromJdbc(v: P): A  
 }
 
 trait TypedExpressionFactory[A,T] {
