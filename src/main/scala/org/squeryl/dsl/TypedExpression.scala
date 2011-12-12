@@ -248,7 +248,7 @@ trait PrimitiveJdbcMapper[A] extends JdbcMapper[A,A] {
   def nativeJdbcType = sample.getClass
 }
 
-abstract class NonPrimitiveJdbcMapper[P,A,T](implicit val primitiveMapper: PrimitiveJdbcMapper[P], val fieldMapper: FieldMapper) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
+abstract class NonPrimitiveJdbcMapper[P,A,T](val primitiveMapper: PrimitiveJdbcMapper[P], val fieldMapper: FieldMapper) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
   self: TypedExpressionFactory[A,T] =>    
     
   def extractNativeJdbcValue(rs: ResultSet, i: Int): P = primitiveMapper.extractNativeJdbcValue(rs, i)
@@ -256,6 +256,8 @@ abstract class NonPrimitiveJdbcMapper[P,A,T](implicit val primitiveMapper: Primi
   def sample: A = 
     convertFromJdbc(primitiveMapper.thisTypedExpressionFactory.sample)
 
+ def createFromNativeJdbcValue(v: P) = create(convertFromJdbc(v))
+ 
   fieldMapper.register(this)  
 }
 
@@ -279,7 +281,7 @@ trait TypedExpressionFactory[A,T] {
   def convert(v: ExpressionNode) = new TypedExpressionConversion[A,T](v,this)
   
   def sample: A
-
+  
   def defaultColumnLength: Int
   
   def thisMapper: JdbcMapper[_,A] = this
@@ -312,7 +314,7 @@ trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] extends JdbcMapper[A1,A2] {
   def sample = Option(deOptionizer.sample)
   
   def defaultColumnLength: Int = deOptionizer.defaultColumnLength
-  
+    
   def convertFromJdbc(v: A1): A2 = Option(v).asInstanceOf[A2]
   /**
    * Jdbc uses nulls, we work with A1 <: Any, so we must hide this

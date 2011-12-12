@@ -31,6 +31,11 @@ trait FieldMapper {
 
   implicit def thisFieldMapper = this
 
+  /**
+   * Extending classes will expose members of PrimitiveTypeSupport as implicit, to enable
+   * support of primitive types, or will expose theit own non jdbc native types. 
+   */  
+  
   protected object PrimitiveTypeSupport { 
     // =========================== Non Numerical =========================== 
     
@@ -101,7 +106,7 @@ trait FieldMapper {
       val deOptionizer = binaryTEF
     }
     
-    def enumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new NonPrimitiveJdbcMapper[Int,A,TEnumValue[A]]()(intTEF, outer) {
+    def enumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new NonPrimitiveJdbcMapper[Int,A,TEnumValue[A]](intTEF, outer) {
       val enu = Utils.enumerationForValue(ev)
       //TODO: avoid isInstanceOf
       override def sample: A = ev.asInstanceOf[A]
@@ -243,7 +248,9 @@ trait FieldMapper {
     def map(rs:ResultSet,i:Int) = fa.map(rs, i)
     
     def convertToJdbc(v: AnyRef): AnyRef = {
-      fa.convertToJdbc(v)
+      if(v != null)
+        fa.convertToJdbc(v)
+      else null
     }    
   }
   
@@ -277,15 +284,23 @@ trait FieldMapper {
        else z.asInstanceOf[AnyRef]
     }
   }
-      
-  
+
   private def get(c: Class[_]) =
-    lookup(c).getOrElse(
-      Utils.throwError("Usupported native type " + c.getCanonicalName + "," + c.getName + "\n" + registry.mkString("\n")))
+    lookup(c).
+      getOrElse(
+        Utils.throwError("Usupported native type " + c.getCanonicalName + "," + c.getName + "\n" + registry.mkString("\n")))  
   
   def sampleValueFor(c: Class[_]): AnyRef =
     get(c).sample.asInstanceOf[AnyRef]
     
+  def trySampleValueFor(c: Class[_]): AnyRef = {
+    val r = lookup(c).map(_.sample)    
+    r match {
+      case Some(x:AnyRef) => x
+      case _ => null
+    }
+  }
+  
   private [squeryl] def register[P,A](m: NonPrimitiveJdbcMapper[P,A,_]) {
     
     val z = new FieldAttributesBasedOnType(

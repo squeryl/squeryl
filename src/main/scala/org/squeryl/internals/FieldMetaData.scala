@@ -338,7 +338,7 @@ class FieldMetaData(
     }
     catch {
       case e: IllegalArgumentException => {
-        val typeOfV = if(v == null) "null" else v.getClass.getName
+        val typeOfV = if(v == null) "null" else v.getClass.getCanonicalName
         org.squeryl.internals.Utils.throwError(
           this + " was invoked with value '" + v + "' of type " + typeOfV + " on object of type " + target.getClass.getName + " \n" + e)
       }
@@ -629,8 +629,8 @@ object FieldMetaData {
 	      } 
       }
     } 
-    else {
-      fieldMapper.sampleValueFor(p)
+    else {      
+      fieldMapper.trySampleValueFor(p)
     }
   }
 }

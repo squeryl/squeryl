@@ -18,8 +18,9 @@ package org.squeryl.test.customtypes
 import java.sql.SQLException
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
+import org.squeryl.customtypes._
 
-/*
+import CustomTypesMode._
 
  
 abstract class TestCustomTypesMode extends SchemaTester with QueryTester with RunTestsInsideTransaction {
@@ -76,7 +77,6 @@ class TestData(schema : HospitalDb){
 object HospitalDb extends HospitalDb
 
 class HospitalDb extends Schema {
-  import CustomTypesMode._
   
   val patients = table[Patient]
 
@@ -100,6 +100,8 @@ class Patient(var firstName: FirstName, var age: Option[Age], var weight: Option
 
 class PatientInfo(val info: Info) extends KeyedEntity[IntField] {
 
+  def this() = this(new Info(""))
+  
   val patientId: IntField = null
 
   val id: IntField = null
@@ -150,4 +152,3 @@ class Info(v: String) extends StringField(v) with Domain[String] {
 }
 
 
-*/
