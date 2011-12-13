@@ -38,12 +38,7 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit val optionDateTEF = PrimitiveTypeSupport.optionDateTEF    
   implicit val timestampTEF = PrimitiveTypeSupport.timestampTEF
   implicit val optionTimestampTEF = PrimitiveTypeSupport.optionTimestampTEF
-  implicit val booleanTEF = PrimitiveTypeSupport.booleanTEF
-  implicit val optionBooleanTEF = PrimitiveTypeSupport.optionBooleanTEF
-  implicit val uuidTEF = PrimitiveTypeSupport.uuidTEF
-  implicit val optionUUIDTEF = PrimitiveTypeSupport.optionUUIDTEF
-  implicit val binaryTEF = PrimitiveTypeSupport.binaryTEF
-  implicit val optionByteArrayTEF = PrimitiveTypeSupport.optionByteArrayTEF     
+  
   // =========================== Numerical Integral =========================== 
   implicit val byteTEF = PrimitiveTypeSupport.byteTEF
   implicit val optionByteTEF = PrimitiveTypeSupport.optionByteTEF
@@ -51,6 +46,7 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit val optionIntTEF = PrimitiveTypeSupport.optionIntTEF
   implicit val longTEF = PrimitiveTypeSupport.longTEF
   implicit val optionLongTEF = PrimitiveTypeSupport.optionLongTEF
+  
   // =========================== Numerical Floating Point ===========================   
   implicit val floatTEF = PrimitiveTypeSupport.floatTEF
   implicit val optionFloatTEF = PrimitiveTypeSupport.optionFloatTEF
@@ -69,20 +65,20 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit def timestampToTE(s: Timestamp) = timestampTEF.create(s)    
   implicit def optionTimestampToTE(s: Option[Timestamp]) = optionTimestampTEF.create(s)
   
-  implicit def booleanToTE(s: Boolean) = booleanTEF.create(s)  
-  implicit def optionBooleanToTE(s: Option[Boolean]) = optionBooleanTEF.create(s)
+  implicit def booleanToTE(s: Boolean) = PrimitiveTypeSupport.booleanTEF.create(s)  
+  implicit def optionBooleanToTE(s: Option[Boolean]) = PrimitiveTypeSupport.optionBooleanTEF.create(s)
   
-  implicit def uuidToTE(s: UUID) = uuidTEF.create(s)  
-  implicit def optionUUIDToTE(s: Option[UUID]) = optionUUIDTEF.create(s)
+  implicit def uuidToTE(s: UUID) = PrimitiveTypeSupport.uuidTEF.create(s)  
+  implicit def optionUUIDToTE(s: Option[UUID]) = PrimitiveTypeSupport.optionUUIDTEF.create(s)
   
-  implicit def binaryToTE(s: Array[Byte]) = binaryTEF.create(s)  
-  implicit def optionByteArrayToTE(s: Option[Array[Byte]]) = optionByteArrayTEF.create(s)
+  implicit def binaryToTE(s: Array[Byte]) = PrimitiveTypeSupport.binaryTEF.create(s)  
+  implicit def optionByteArrayToTE(s: Option[Array[Byte]]) = PrimitiveTypeSupport.optionByteArrayTEF.create(s)
   
   implicit def enumValueToTE[A <: Enumeration#Value](e: A) = 
     PrimitiveTypeSupport.enumValueTEF(e).create(e)
     
   implicit def optionEnumcValueToTE[A <: Enumeration#Value](e: Option[A]) = 
-    PrimitiveTypeSupport.optionEnumValueTEF(e.getOrElse(PrimitiveTypeSupport.DummyEnum.DummyEnumerationValue)).create(e)
+    PrimitiveTypeSupport.optionEnumValueTEF(e).create(e)
   
   implicit def byteToTE(f: Byte) = byteTEF.create(f)    
   implicit def optionByteToTE(f: Option[Byte]) = optionByteTEF.create(f)

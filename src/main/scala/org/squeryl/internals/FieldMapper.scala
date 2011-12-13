@@ -118,15 +118,18 @@ trait FieldMapper {
       def convertFromJdbc(v: Int) = enu.values.find(_.id == v).get
     }    
     
-    def optionEnumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Enumeration#Value) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
-      val deOptionizer = enumValueTEF[A](ev)
-    }
-    
     object DummyEnum extends Enumeration {
       type DummyEnum = Value
       val DummyEnumerationValue = Value(-1, "DummyEnumerationValue")
     }
     
+    def optionEnumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Option[Enumeration#Value]) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
+      val deOptionizer = {
+        val e = ev.getOrElse(PrimitiveTypeSupport.DummyEnum.DummyEnumerationValue)
+        enumValueTEF[A](e)
+      }
+    }
+
     // =========================== Numerical Integral =========================== 
   
     val byteTEF = new IntegralTypedExpressionFactory[Byte,TByte,Float,TFloat] with PrimitiveJdbcMapper[Byte] {
@@ -216,6 +219,7 @@ trait FieldMapper {
     register(timestampTEF)
     register(dateTEF)  
     register(uuidTEF)
+
     val re = enumValueTEF(DummyEnum.DummyEnumerationValue)    
     
    /**
