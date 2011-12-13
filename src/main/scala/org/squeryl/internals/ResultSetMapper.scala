@@ -26,7 +26,7 @@ trait ResultSetUtils {
   def dumpRow(rs:ResultSet) = {
     val md = rs.getMetaData
    (for(i <- 1 to md.getColumnCount)
-      yield ""+rs.getObject(i)+":"+_simpleClassName(md.getColumnClassName(i)))
+      yield "#" + i + "->"+rs.getObject(i)+":"+_simpleClassName(md.getColumnClassName(i)))
     .mkString("ResultSetRow:[",",","]")
   }
 

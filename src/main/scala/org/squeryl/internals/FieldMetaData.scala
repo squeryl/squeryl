@@ -49,29 +49,22 @@ class FieldMetaData(
 
   def nativeJdbcType =
     this.schema.fieldMapper.nativeJdbcTypeFor(wrappedFieldType)
-  
-  def isEnumeration = {
-    classOf[Enumeration#Value].isAssignableFrom(wrappedFieldType)
-  }
+
+  /**
+   * None if this FieldMetaData is not an enumeration, Some(theParentEnumeration) otherwise
+   */
+  val enumeration: Option[Enumeration] =
+    sampleValue match {
+      case Some(e: Enumeration#Value) => Some(Utils.enumerationForValue(e))
+      case e: Enumeration#Value => Some(Utils.enumerationForValue(e))
+      case _ => None
+    }
 
   def canonicalEnumerationValueFor(id: Int) =
-    if(sampleValue == null) {
+    if(sampleValue == null)
       org.squeryl.internals.Utils.throwError("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
-    }
-    else {
-
-      val svE =
-        if(isOption)
-          sampleValue.asInstanceOf[Option[Enumeration#Value]].get
-        else
-          sampleValue.asInstanceOf[Enumeration#Value]
-
-      val enu = Utils.enumerationForValue(svE)
-
-      val r = enu.values.find(_.id == id).get
-
-      r
-    }
+    else
+      enumeration.get.values.find((v:Enumeration#Value) => v.id == id).get
 
   /**
    * This field is mutable only by the Schema trait, and only during the Schema instantiation,
@@ -204,7 +197,6 @@ class FieldMetaData(
     }
   
   val resultSetHandler =
-    //FieldMetaData.resultSetHandlerFor(wrappedFieldType)
     this.schema.fieldMapper.resultSetHandlerFor(wrappedFieldType)
 
   if(!isCustomType)
@@ -306,8 +298,8 @@ class FieldMetaData(
       val v0:AnyRef =
         if(v == null)
           null
-        else if(isEnumeration)
-          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
+        else if(enumeration != None)
+          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)        
         else if(customTypeFactory == None)
           v
         else {
@@ -337,7 +329,7 @@ class FieldMetaData(
           _setWithField(target, actualValue)
     }
     catch {
-      case e: IllegalArgumentException => {
+      case e: Exception => {
         val typeOfV = if(v == null) "null" else v.getClass.getCanonicalName
         org.squeryl.internals.Utils.throwError(
           this + " was invoked with value '" + v + "' of type " + typeOfV + " on object of type " + target.getClass.getName + " \n" + e)

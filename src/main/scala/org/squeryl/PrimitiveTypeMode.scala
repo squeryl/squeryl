@@ -43,8 +43,7 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit val uuidTEF = PrimitiveTypeSupport.uuidTEF
   implicit val optionUUIDTEF = PrimitiveTypeSupport.optionUUIDTEF
   implicit val binaryTEF = PrimitiveTypeSupport.binaryTEF
-  implicit val optionByteArrayTEF = PrimitiveTypeSupport.optionByteArrayTEF   
-  implicit def optionEnumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = PrimitiveTypeSupport.optionEnumValueTEF(ev)
+  implicit val optionByteArrayTEF = PrimitiveTypeSupport.optionByteArrayTEF     
   // =========================== Numerical Integral =========================== 
   implicit val byteTEF = PrimitiveTypeSupport.byteTEF
   implicit val optionByteTEF = PrimitiveTypeSupport.optionByteTEF

@@ -106,18 +106,19 @@ trait FieldMapper {
       val deOptionizer = binaryTEF
     }
     
-    def enumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new NonPrimitiveJdbcMapper[Int,A,TEnumValue[A]](intTEF, outer) {
-      val enu = Utils.enumerationForValue(ev)
-      //TODO: avoid isInstanceOf
-      override def sample: A = ev.asInstanceOf[A]
-  
-      def convertToJdbc(v: A) = (v : Enumeration#Value).id       
+    def enumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Enumeration#Value) = 
+      new JdbcMapper[Int,A] with TypedExpressionFactory[A,TEnumValue[A]] {
         
-      def convertFromJdbc(v: Int): A = 
-        enu.values.find(_.id == v).get.asInstanceOf[A]
-    }
+      val enu = Utils.enumerationForValue(ev)
+      
+      def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getInt(i)
+      def defaultColumnLength: Int = intTEF.defaultColumnLength
+      def sample: A = ev
+      def convertToJdbc(v: A) = v.id
+      def convertFromJdbc(v: Int) = enu.values.find(_.id == v).get
+    }    
     
-    def optionEnumValueTEF[A <: Enumeration#Value](ev: Enumeration#Value) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
+    def optionEnumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Enumeration#Value) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
       val deOptionizer = enumValueTEF[A](ev)
     }
     
@@ -308,7 +309,11 @@ trait FieldMapper {
         m.defaultColumnLength, 
         m.sample,
         m.primitiveMapper.nativeJdbcType)
-    registry.put(z.clasz, z)
+    
+    val wasThere = registry.put(z.clasz, z)
+    
+    if(wasThere != None)
+      Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
   }
   
   private def register[A](pm: PrimitiveJdbcMapper[A]) {
