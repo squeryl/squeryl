@@ -196,9 +196,11 @@ class FieldMetaData(
         res
     }
   
-  val resultSetHandler =
+  protected def createResultSetHandler =
     this.schema.fieldMapper.resultSetHandlerFor(wrappedFieldType)
 
+  val resultSetHandler = createResultSetHandler
+    
   if(!isCustomType)
     assert(fieldType == wrappedFieldType,
       "expected fieldType == wrappedFieldType in primitive type mode, got "+
