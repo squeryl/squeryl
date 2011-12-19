@@ -47,3 +47,35 @@ h3. Distinction between transaction and inTransaction
 * *'transaction'* causes a new transaction to begin and commit after the block's execution, or rollback if an exception occurs. Invoking a transaction always cause a new one to be created, even if called in the context of an existing transaction.
 
 * *'inTransaction'* will create a new transaction if none is in progress and commit it upon completion or rollback on exceptions. If a transaction already exists, it has no effect, the block will execute in the context of the existing transaction. The commit/rollback is handled in this case by the parent transaction block.
+
+
+h3. Using Squeryl under external transaction management
+
+When used within a framework that already manages transaction, for example a web framework, Squeryl must use the java.sql.Connection that belongs to the "current" context (usually implemented via thread local storage ) this can be accomplished by initializing SessionFactorye.externalTransactionManagementAdapter in the bootstrap code (before any Squeryl code gets to execute).    
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+SessionFactorye.externalTransactionManagementAdapter = Some(
+  () => new Session(
+     ...obtain the current session here ...
+     new OracleAdapter
+  )
+) 
+
+]]></script>
+
+h3. Managing transactions manually
+
+Given a java.sql.Connection, Squeryl statements can be issued with the *using* function :  
+ 
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+using(aJdbcConnection) {
+  // your Squeryl code here...
+} 
+
+]]></script>
+
+
+* *Note1* : with *using* the user code has the responsibility to close the connection.    
+* *Note2* : calling *inTransaction {}* within a *using {}* block has no effect, i.e. the inTransaction behaves as if there was a transaction, i.e. it does nothing (_see inTransaction_). 
