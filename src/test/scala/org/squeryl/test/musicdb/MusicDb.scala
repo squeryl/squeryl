@@ -854,7 +854,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     assertEquals(listSongs(Some(Jazz)).size, 
                  songs.where(s => s.genre === Jazz).size, 
                  "expected all Jazz pieces")
-    assertEquals(listSongs(None).size, songs.size, "expected all songs")
+    assertEquals(listSongs(None).size, songs.allRows.size, "expected all songs")
   }
   
   test("Enums"){
