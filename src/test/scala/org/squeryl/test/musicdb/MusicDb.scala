@@ -106,11 +106,10 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   import schema._
   
   var sharedTestInstance : TestData = null
+  
   override def prePopulate(){
     sharedTestInstance = new TestData(schema)
   }
-
-
 
   lazy val poncho =
    from(artists)(a =>
@@ -844,14 +843,12 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
                  "expected 2 Jazz/Rock pieces")
   }
 
-  /* TODO: this test should compile, but it doesn't.
-   * 
   test("Enums Inhibit"){
     val testInstance = sharedTestInstance; import testInstance._
 
     def listSongs(genreFilter: Option[Genre]) =
       from(songs)(s =>
-        where(s.genre === genreFilter.?)
+        where(Option(s.genre) === genreFilter.?)
         select(s)
       )
     assertEquals(listSongs(Some(Jazz)).size, 
@@ -859,7 +856,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
                  "expected all Jazz pieces")
     assertEquals(listSongs(None).size, songs.size, "expected all songs")
   }
-  */
   
   test("Enums"){
     val testInstance = sharedTestInstance; import testInstance._
@@ -1096,6 +1092,33 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       select((a,c)) 
       on(c.map(_.mainArtist) === a.id))
     query2.toList.size should be (1)
+  }
+  
+  test("Inhibit single LogicalBoolean"){
+    from(artists)(a =>
+      where((a.age === 1000000).inhibitWhen(true)) select(a)).toList.size should be > (0)
+    
+  }
+  
+  test("Inhibit one side of LogicalBoolean"){
+    val testInstance = sharedTestInstance; import testInstance._
+    //Left inhibit
+    from(artists)(a =>
+      where((a.age === 1000000).inhibitWhen(true) and a.id === hossamRamzy.id)
+      select(a)).toList.size should be (1)
+    //Right inhibit
+    from(artists)(a =>
+      where(a.id === hossamRamzy.id and (a.age === 1000000).inhibitWhen(true))
+      select(a)).toList.size should be (1)
+  }
+  
+  test("Inhibit both sides of LogicalBoolean"){
+    from(artists)(a =>
+      where((a.age === 1000000).inhibitWhen(true) and (a.id between (999, 1000)).inhibitWhen(true))
+      select(a)).toList.size should be > (0)
+  }
+  
+  test("Inhibit right hand side of enum"){
   }
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {

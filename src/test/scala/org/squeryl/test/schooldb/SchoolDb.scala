@@ -1239,7 +1239,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     passed('testInWithCompute)
   }
-
+  
   test("NewJoin1") {
     val testInstance = sharedTestInstance; import testInstance._
       val q =

@@ -139,11 +139,14 @@ class ExclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[_]) exten
 class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNode, op: String, rightArgInParent: Boolean = false)
   extends BinaryOperatorNode(left,right, op) with LogicalBoolean {
 
-  override def inhibited =
-    if(left.isInstanceOf[LogicalBoolean])
-      left.inhibited && right.inhibited
-    else
-      left.inhibited || right.inhibited
+  override def inhibited = _inhibitedByWhen || {
+    left match {
+    	case _: LogicalBoolean =>
+    		left.inhibited && right.inhibited
+    	case _ =>
+    		left.inhibited || right.inhibited
+    }
+  }
   
   override def doWrite(sw: StatementWriter) = {
     // since we are executing this method, we have at least one non inhibited children
@@ -189,7 +192,7 @@ class TernaryOperatorNode(val first: ExpressionNode, val second: ExpressionNode,
   extends FunctionNode(op, Seq(first, second, third)) with LogicalBoolean {
 
   override def inhibited =
-    first.inhibited || second.inhibited || third.inhibited
+    _inhibitedByWhen || first.inhibited || second.inhibited || third.inhibited
 }
 
 trait LogicalBoolean extends ExpressionNode  {
@@ -358,7 +361,7 @@ class BinaryOperatorNode
   override def children = List(left, right)
 
   override def inhibited =
-    left.inhibited || right.inhibited 
+     _inhibitedByWhen || left.inhibited || right.inhibited
 
   override def toString =
     'BinaryOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
@@ -532,10 +535,9 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
   override def children = List(ast)
 
   override def inhibited =
-    if(isConstantEmptyList) // not in Empty is always true, so we remove the condition
-      (! isIn.get)
-    else
-      super.inhibited
+    super.inhibited ||
+    (isConstantEmptyList && // not in Empty is always true, so we remove the condition
+      (! isIn.get))
 
   def isConstantEmptyList =
     if(ast.isInstanceOf[ConstantExpressionNodeList[_]]) {

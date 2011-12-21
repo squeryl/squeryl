@@ -31,16 +31,20 @@ class Course(val subjectId: Long) extends SchoolDb2Object {
   lazy val subject = SchoolDb2.subjectToCourses.right(this)
 }
 
-class Student(val firstName: String, val lastName: String) extends SchoolDb2Object {
-
+class Student(val firstName: String, val lastName: String) extends SchoolDb2Object {  
+  
   lazy val courses = SchoolDb2.courseSubscriptions.right(this)
 
   def fullName = compositeKey(firstName, lastName)
 }
 
-class Subject(val name: String) extends SchoolDb2Object {
-
+class Subject(val name: String, val parentSubjectId: Option[Long]) extends SchoolDb2Object {
+  
   lazy val courses = SchoolDb2.subjectToCourses.left(this)
+  
+  lazy val childSubjects = SchoolDb2.subjectToParentSubject.left(this)
+  
+  lazy val parentSubject = SchoolDb2.subjectToParentSubject.right(this)
 }
 
 class CourseSubscription(val courseId: Long, val studentId: Long, var grade: Float) extends KeyedEntity[CompositeKey2[Long,Long]] {
@@ -121,6 +125,12 @@ class SchoolDb2 extends Schema {
     oneToManyRelation(professors, professors).
     via((boss,p) => boss.id === p.bossId)
 
+    
+  val subjectToParentSubject =
+    oneToManyRelation(subjects, subjects).
+    via((subject,childSubject) => Option(subject.id) === childSubject.parentSubjectId)
+ 
+    
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
     foreignKeyDeclaration.constrainReference
@@ -158,10 +168,11 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
 
-    val philosophy = subjects.insert(new Subject("Philosophy"))
-    val chemistry = subjects.insert(new Subject("Chemistry"))
-    val physics = subjects.insert(new Subject("Physic"))
-    val computationTheory = subjects.insert(new Subject("Computation Theory"))
+    val philosophy = subjects.insert(new Subject("Philosophy", None))
+    val chemistry = subjects.insert(new Subject("Chemistry", None))
+    val physics = subjects.insert(new Subject("Physic", None))
+    val computerScience = subjects.insert(new Subject("Computer Science", None))
+    val computationTheory = subjects.insert(new Subject("Computation Theory", Some(computerScience.id)))
 
 
     val chemistryCourse = courses.insert(new Course(chemistry.id))
@@ -432,6 +443,18 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val set = Set("foo", "bar", "baz").toSeq
     from(entries)(e => where(e.text.in(set))select(e)).toList
     passed('testInFromSeq)
+  }
+  
+  test ("#73 relations with Option[] on one side of the equality expression blow up") {
+
+    seedDataDef
+        
+    val cs = subjects.where(_.name === "Computer Science").single
+    
+    val compTheory = cs.childSubjects.single
+    
+    assert(compTheory.name == "Computation Theory")
+    
   }
 }
 
