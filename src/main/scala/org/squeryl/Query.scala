@@ -19,7 +19,9 @@ import dsl.ast.{ExpressionNode}
 import internals.ResultSetMapper
 import java.sql.ResultSet
 
-trait Query[R] extends Iterable[R] with Queryable[R] {
+trait Query[R] extends Queryable[R] {
+  
+  def iterator: Iterator[R]
 
   protected[squeryl] def invokeYield(rsm: ResultSetMapper, resultSet: ResultSet): R
 
@@ -44,15 +46,6 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
     if(i.hasNext)
       org.squeryl.internals.Utils.throwError("single called on query returning more than one row : \n" + statement)
     r
-  }
-
-
-  override def headOption = {
-    val i = iterator
-    if(i.hasNext)
-      Some(i.next)
-    else
-      None
   }
 
   def distinct: Query[R]

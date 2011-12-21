@@ -1,6 +1,7 @@
 package org.squeryl.framework
 
 import org.squeryl.{Session, Query}
+import org.squeryl.PrimitiveTypeMode._
 import org.scalatest.matchers.ShouldMatchers
 
 trait QueryTester { self : ShouldMatchers =>

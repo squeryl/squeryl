@@ -33,6 +33,33 @@ trait QueryDsl
   with FromSignatures {
   outerQueryDsl =>
   
+  implicit def queryToIterable[R](q: Query[R]): Iterable[R] = {
+    
+    val i = q.iterator
+                
+    new Iterable[R] {
+
+      val hasFirst = i.hasNext
+                  
+      lazy val firstRow = 
+        if(hasFirst) Some(i.next) else None    
+      
+      override def head = firstRow.get
+      
+      override def headOption = firstRow
+      
+      override def isEmpty = ! hasFirst
+      
+      def iterator = 
+        new IteratorConcatenation(firstRow.iterator, i)
+      
+    }
+  }
+  
+//  implicit def viewToIterable[R](t: View[R]): Iterable[R] = 
+//      queryToIterable(view2QueryAll(t))
+  
+
   def using[A](session: Session)(a: =>A): A =
     _using(session, a _)
 
@@ -344,7 +371,7 @@ trait QueryDsl
    */
   implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
 
-  implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
+  //implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
 
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 

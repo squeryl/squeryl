@@ -82,7 +82,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     r
   }
 
-  def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
+//  def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
 
   def insert(e: Iterable[T]):Unit =
     _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented), true, false)

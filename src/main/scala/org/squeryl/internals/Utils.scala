@@ -105,3 +105,25 @@ object Utils {
     enu
   }
 }
+
+class IteratorConcatenation[R](first: Iterator[R], second: Iterator[R]) extends Iterator[R] {
+
+  var currentIterator = first
+    
+  def _hasNext =
+    if(currentIterator.hasNext) 
+      true
+    else if(currentIterator == second)
+      false
+    else {
+      currentIterator = second
+      currentIterator.hasNext
+    }
+
+  def hasNext = _hasNext
+  
+  def next = {
+    _hasNext
+    currentIterator.next
+  }
+}

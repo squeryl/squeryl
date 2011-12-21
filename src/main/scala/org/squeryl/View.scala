@@ -118,4 +118,8 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   def get[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): T = 
      lookup(k).getOrElse(Utils.throwError("Found no row with key '"+ k + "' in " + name + "."))
   
+  def allRows(implicit dsl: QueryDsl): Iterable[T] = {
+    import dsl._
+    dsl.queryToIterable(from(this)(a=> select(a)))
+  }
 }

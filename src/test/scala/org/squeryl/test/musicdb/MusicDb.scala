@@ -24,6 +24,7 @@ import dsl._
 import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
 import java.util.{Date, Calendar}
+import org.squeryl.PrimitiveTypeMode._
 
 object Genre extends Enumeration {
   type Genre = Value
@@ -940,7 +941,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   test("DynamicWhereClause1"){
     val testInstance = sharedTestInstance; import testInstance._
-    val allArtists = artists.toList
+    val allArtists = artists.allRows
 
     val q1 = dynamicWhereOnArtists(None, None)
 
@@ -983,7 +984,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   test("NotInTautology"){
 
-   val allArtists = artists.map(_.id).toSet
+   val allArtists = artists.allRows.map(_.id).toSet
 
    val q = artists.where(_.firstName notIn Nil).map(_.id).toSet
 

@@ -504,7 +504,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(beforeInsertsOfProfessor.exists(_ == s3))
     assert(afterInsertsOfProfessor.exists(_ == s3))
 
-    assert(professors.map(System.identityHashCode(_)).toSet == professorsCreatedWithFactory.toSet)
+    assert(professors.allRows.map(System.identityHashCode(_)).toSet == professorsCreatedWithFactory.toSet)
   }
 
 
@@ -1223,7 +1223,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s)
       )
 
-    val allStuents = students.map(_.id).toSet
+    val allStuents = students.allRows.map(_.id).toSet
     val allStudentsQ = q.map(_.id).toSet
 
     assertEquals(allStuents, allStudentsQ, 'testIsNotNullWithInhibition)
@@ -1349,11 +1349,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
 
 
-    val expectedAvgSal_ = professors.map(_.yearlySalaryBD.doubleValue)
+    val expectedAvgSal_ = professors.allRows.map(_.yearlySalaryBD.doubleValue)
 
     val expectedAvgSal = expectedAvgSal_.sum / expectedAvgSal_.size
 
-    val expectedAvgWeight_ = professors.map(_.weightInBD).filter(_ != None).map(_.get)
+    val expectedAvgWeight_ = professors.allRows.map(_.weightInBD).filter(_ != None).map(_.get)
 
     val expectedAvgWeight = expectedAvgWeight_.sum / expectedAvgWeight_.size
 

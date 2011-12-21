@@ -153,7 +153,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
-  override def iterator = new Iterator[R] with Closeable {
+  def iterator = new Iterator[R] with Closeable {
 
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)
