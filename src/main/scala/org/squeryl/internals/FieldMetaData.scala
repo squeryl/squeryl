@@ -31,6 +31,7 @@ import java.io.PrintStream
 import java.lang.reflect.Member
 import scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser
 import org.squeryl.dsl.ast.ConstantTypedExpression
+import org.squeryl.customtypes.CustomType
 
 class FieldMetaData(
         val parentMetaData: PosoMetaData[_],
@@ -307,13 +308,13 @@ class FieldMetaData(
         else {
           val f = customTypeFactory.get
 
-//          if(v.isInstanceOf[CustomType[_]]) {
-//            val r = v.asInstanceOf[CustomType[_]]._1
-//            f(if(r == null) null else r.asInstanceOf[AnyRef])
-//          }          
-//          else {
+          if(v.isInstanceOf[CustomType[_]]) {
+            val r = v.asInstanceOf[CustomType[_]]._1
+            f(if(r == null) null else r.asInstanceOf[AnyRef])
+          }          
+          else {
            f(v)
-//          }
+          }
         }
 
       val actualValue =
