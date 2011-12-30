@@ -141,7 +141,7 @@ trait Schema {
       statementHandler("-- composite key indexes :")
     
     for(cpk <- compositePKs) {
-      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      val createConstraintStmt = _dbAdapter.writeCompositePrimaryKeyConstraint(cpk._1, cpk._2)
       statementHandler(createConstraintStmt + ";")
     }
 
@@ -179,7 +179,7 @@ trait Schema {
     if(_dbAdapter.supportsForeignKeyConstraints)
       _declareForeignKeyConstraints
 
-    _createUniqueConstraintsOfCompositePKs
+    _createConstraintsOfCompositePKs
 
     createColumnGroupConstraintsAndIndexes
   }
@@ -271,9 +271,9 @@ trait Schema {
     }
   }
 
-  private def _createUniqueConstraintsOfCompositePKs =
+  private def _createConstraintsOfCompositePKs =
     for(cpk <- _allCompositePrimaryKeys) {
-      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      val createConstraintStmt = _dbAdapter.writeCompositePrimaryKeyConstraint(cpk._1, cpk._2)
       _executeDdl(createConstraintStmt)
     }  
 

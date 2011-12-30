@@ -665,6 +665,9 @@ trait DatabaseAdapter {
   def dropTable(t: Table[_]) =
     execFailSafeExecute(writeDropTable(t.prefixedName), e=> isTableDoesNotExistException(e))
 
+  def writeCompositePrimaryKeyConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = 
+      writeUniquenessConstraint(t, cols);
+
   def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
     //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)
     val sb = new StringBuilder(256)
