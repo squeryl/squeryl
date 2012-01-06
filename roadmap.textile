@@ -4,17 +4,9 @@ title: Roadmap
 headtitle: Roadmap - 
 ---
 
-h3. Features for next release (0.9.5)
+h3. Release 0.9.6 
 
-* Sql Case Statements
-
-* Remove the need to have zero arg constructions (already in the master branch)
-
-* improved logging support as described "here":http://groups.google.com/group/squeryl/browse_thread/thread/c5cf187fa6538e90/82205f2a92d0f82c?lnk=gst&q=logger#82205f2a92d0f82c
-
-* Callbacks for collecting performance statistics
-
-* Callbacks for persisted object's lifecycle events  
+"Ticket list":http://www.assembla.com/spaces/squeryl/milestones/855683-0-9-6
 
 h3. Wish list of _highly_ desired features (Unscheduled)
 

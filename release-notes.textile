@@ -5,7 +5,37 @@ headtitle: Releases -
 ---
 
 
-For upcoming features, have a look at "Squeryl's Roadmap":roadmap.html 
+
+h3. 0.9.5-RC1
+
+* "List of closed tickets":http://www.assembla.com/spaces/squeryl/milestones/381461-0-9-5-rc1
+
+h4. Additional changes : 
+
+* migration to sbt 0.10.x
+* Fix case statement with String (varchar) return type for Oracle
+* SQLServer adapter quotes idendifiers
+* SQL Server: Properly quote identifiers to allow using reserved words in field names
+* added def transaction[A](s: Session)(a: =>A)
+* Convert === None to SQL o is null
+* fail safe close on the jdbc connection when it fails on commit or rollback
+* Fixed an issue with retrieval of @ScalaSig data.
+* Option type deduction was failing for POSOs with a lot of fields (~50).  This method relies more on scalap.  Also, added turned off SBTs default filtering of the scala-complier.  The compiler is a dependency of scalap and is necessary for the @ScalaSig retrieval and parsing.
+* Changed ThreadLocal handing so that they get cleaned up after use. To be sure, all ThreadLocals are also initialized with null values.
+* Support Enumerations in IN. Added also a test case of .? that does not compile
+* adding update method to the ActiveRecord
+* Postgres/DB2/Oracle now honor uninsertable field meta data flag
+* Support unupdatable, uninsertable in schema DSL for columns
+* Do not persist static fields of POSOs
+* Add implicit so that nvl on a Timestamp followed by >= compiles.
+* Previously, the compiler would report the following error:
+* value >= is not a member of org.squeryl.dsl.NvlFunctionNonNumerical[Option[org.squeryl.PrimitiveTypeMode.TimestampType],org.squeryl.PrimitiveTypeMode.TimestampType]
+* added implicit conv for Option[BinaryType]
+* Fixed an issue where .leftOuter.inhibitWhen led to an inner join being performed by adding an inhibitWhen method on OuterJoinedQueryable.  This also means that inhibiting a leftOuter will now result in an Option[T] rather than an Option[Option[T]]
+* Added implicts to handle lists of UUIDs
+* Removal of deprecated  Boolean -> LogicalBoolean implicit conversion
+* Fix of : having being inhibited when followed by compute
+
 
 h3. 0.9.4 Final
 
