@@ -1,0 +1,7 @@
+---
+layout: manual
+title: Field type deduction
+headtitle: Field type deduction - 
+---
+
+Info on field type deduction
