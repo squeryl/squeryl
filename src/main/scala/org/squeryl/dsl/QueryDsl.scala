@@ -56,6 +56,15 @@ trait QueryDsl
     }
   }
 
+  def transaction[A](sf: SessionFactory)(a: =>A) = 
+    _executeTransactionWithin(sf.newSession, a _)
+  
+  def inTransaction[A](sf: SessionFactory)(a: =>A) =
+    if(! Session.hasCurrentSession)
+      _executeTransactionWithin(sf.newSession, a _)
+    else
+      _executeTransactionWithin(Session.currentSession, a _)
+
    def transaction[A](s: Session)(a: =>A) = 
      _executeTransactionWithin(s, a _)
    
