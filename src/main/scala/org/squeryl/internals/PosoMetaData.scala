@@ -113,7 +113,9 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
         }
         catch {
           case e:Exception => new RuntimeException(
-              "error while reflecting on metadata for " + property + " of class " + this.clasz.getCanonicalName, e)
+              Utils.failSafeString(
+              "error while reflecting on metadata for " + property + 
+              " of class " + this.clasz.getCanonicalName), e)
         }
     }
 
