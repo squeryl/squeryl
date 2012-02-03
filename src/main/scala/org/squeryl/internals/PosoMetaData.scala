@@ -107,11 +107,16 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
       val property = (field, getter, setter, a)
 
-      if(isImplicitMode && _groupOfMembersIsProperty(property)) {
-        fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
-      }
+      if(isImplicitMode && _groupOfMembersIsProperty(property)) 
+        try {
+          fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
+        }
+        catch {
+          case e:Exception => new RuntimeException(
+              "error while reflecting on metadata for " + property + " of class " + this.clasz.getCanonicalName, e)
+        }
     }
-    
+
     var k = fmds.find(fmd => fmd.isIdFieldOfKeyedEntity)
 
     val compositePrimaryKeyGetter: Option[Method] =
