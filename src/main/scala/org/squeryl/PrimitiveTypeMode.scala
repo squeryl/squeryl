@@ -238,7 +238,7 @@ trait PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Enumeration#Value](e)(outMapperFromEnumValue(e)) with EnumExpression[Enumeration#Value]
       case Some(n:SelectElement) =>
-        new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper) with  EnumExpression[Enumeration#Value]
+        new SelectElementReference[Enumeration#Value](n)(n.createEnumerationMapper(e)) with  EnumExpression[Enumeration#Value]
     }
 
   def createLeafNodeOfEnumExpressionOptionType[A](e: Option[EnumerationValueType]): EnumExpression[Option[Enumeration#Value]] =
@@ -246,7 +246,7 @@ trait PrimitiveTypeMode extends QueryDsl {
       case None =>
         new ConstantExpressionNode[Option[Enumeration#Value]](e, outMapperOptionFromOptionEnumValue(e)) with EnumExpression[Option[Enumeration#Value]]
       case Some(n:SelectElement) =>
-        new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper) with  EnumExpression[Option[Enumeration#Value]]
+        new SelectElementReference[Option[Enumeration#Value]](n)(n.createEnumerationOptionMapper(e)) with  EnumExpression[Option[Enumeration#Value]]
     }
 
   def createLeafNodeOfScalarUuidType(d: UUID) =

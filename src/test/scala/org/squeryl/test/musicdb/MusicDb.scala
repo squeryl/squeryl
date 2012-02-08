@@ -844,6 +844,25 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
                  "expected 2 Jazz/Rock pieces")
   }
 
+  test("Enums with groupBy"){
+    val testInstance = sharedTestInstance; import testInstance._
+    
+    
+    val allKnownGenres = from(songs)(s =>
+      groupBy(s.genre)
+    ).map(_.key).toSet
+    
+    
+    assert(allKnownGenres == Set(Genre.Jazz, Genre.Latin))
+    
+    val allKnownSecondaryGenres = from(songs)(s =>
+      groupBy(s.secondaryGenre)
+    ).map(_.key).toSet
+    
+    
+    assert(allKnownSecondaryGenres == Set(None, Some(Genre.Latin)))
+  }
+  
   test("Enums Inhibit"){
     val testInstance = sharedTestInstance; import testInstance._
 

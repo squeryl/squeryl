@@ -66,7 +66,7 @@ class FieldMetaData(
 
       val enu = Utils.enumerationForValue(svE)
 
-      val r = enu.values.find(_.id == id).get
+      val r = enu.values.find(_.id == id)
 
       r
     }
@@ -299,7 +299,7 @@ class FieldMetaData(
         if(v == null)
           null
         else if(isEnumeration)
-          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
+          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue).get
         else if(customTypeFactory == None)
           v
         else {

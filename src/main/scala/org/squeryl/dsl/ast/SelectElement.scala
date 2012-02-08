@@ -36,7 +36,7 @@ import org.squeryl.Session
  *  that refer to a SelectElement  
  */
 trait SelectElement extends ExpressionNode {
-
+  outer =>
   /**
    * <pre>
    * In the following select :
@@ -114,27 +114,30 @@ trait SelectElement extends ExpressionNode {
   /**
    * Will throw a ClassCastException if this type is not a Enumeration#Value
    */
-  def createEnumerationMapper: OutMapper[Enumeration#Value] = new OutMapper[Enumeration#Value]() {
+  def createEnumerationMapper(s: Enumeration#Value): OutMapper[Enumeration#Value] = new OutMapper[Enumeration#Value]() {
 
     def doMap(rs: ResultSet) = {
-      val fmd = this.asInstanceOf[FieldSelectElement].fieldMetaData
-      fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
+      val fmd = outer.asInstanceOf[FieldSelectElement].fieldMetaData
+      fmd.canonicalEnumerationValueFor(rs.getInt(this.index)).get
     }
 
-    def sample = org.squeryl.internals.Utils.throwError("!")
+    def sample = s
   }
 
   /**
    * Will throw a ClassCastException if this type is not a Enumeration#Value
    */
-  def createEnumerationOptionMapper: OutMapper[Option[Enumeration#Value]] = new OutMapper[Option[Enumeration#Value]]() {
+  def createEnumerationOptionMapper(s: Option[Enumeration#Value]): OutMapper[Option[Enumeration#Value]] = new OutMapper[Option[Enumeration#Value]]() {
 
     def doMap(rs: ResultSet) = {
-      val fmd = this.asInstanceOf[FieldSelectElement].fieldMetaData
-      Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
+      val fmd = outer.asInstanceOf[FieldSelectElement].fieldMetaData
+      fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
     }
 
-    def sample = org.squeryl.internals.Utils.throwError("!")
+    def sample = 
+      if(s == None) 
+        org.squeryl.internals.Utils.throwError("can't find a sample value for enum " + outer)
+      else s
   }
 }
 
