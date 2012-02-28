@@ -29,7 +29,9 @@ class MySQLAdapter extends DatabaseAdapter {
   override def binaryTypeDeclaration = "blob"
 
   override def timestampTypeDeclaration = "datetime"
-  
+
+  override def dateTypeDeclaration = "datetime"
+
   override def writeForeignKeyDeclaration(
     foreignKeyTable: Table[_], foreignKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,

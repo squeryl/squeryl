@@ -24,7 +24,9 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
   "org.apache.derby" % "derby" % "10.7.1.1" % "provided",
-  "junit" % "junit" % "4.8.2" % "provided"
+  "junit" % "junit" % "4.8.2" % "provided",
+  "org.jmock" % "jmock" % "2.6.0-RC2" % "provided",
+  "org.jmock" % "jmock-legacy" % "2.6.0-RC2" % "provided"
 )
 
 libraryDependencies <+= scalaVersion("org.scala-lang" % "scalap" % _ % "provided")
