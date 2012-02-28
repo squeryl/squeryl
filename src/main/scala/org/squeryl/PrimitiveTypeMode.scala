@@ -21,6 +21,7 @@ import dsl._
 import internals.FieldReferenceLinker
 import java.util.{ Date, UUID }
 import java.sql.Timestamp
+import sharding.ShardingDsl
 
 /**
  *  This factory is meant to use POSOs (Plain old Scala Objects),
@@ -39,7 +40,7 @@ import java.sql.Timestamp
 
 object PrimitiveTypeMode extends PrimitiveTypeMode
 
-trait PrimitiveTypeMode extends QueryDsl {
+trait PrimitiveTypeMode extends QueryDsl with ShardingDsl {
 
   type ByteType = Byte
 
