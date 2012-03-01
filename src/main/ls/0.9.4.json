@@ -1,0 +1,46 @@
+
+{
+ "organization":"org.squeryl",
+ "name":"squeryl",
+ "version":"0.9.4",
+ "description":"A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
+ "site":"http://www.squeryl.org",
+ "tags":["sql","orm","query","database","db","dsl"],
+ "docs":"http://squeryl.org/api/",
+ "licenses": [{
+   "name": "Apache 2",
+   "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+  }],
+ "resolvers": ["http://scala-tools.org/repo-releases"],
+ "dependencies": [{
+   "organization":"cglib",
+   "name": "cglib-nodep",
+   "version": "2.2"
+  },{
+   "organization":"com.h2database",
+   "name": "h2",
+   "version": "1.2.127"
+  },{
+   "organization":"mysql",
+   "name": "mysql-connector-java",
+   "version": "5.1.10"
+  },{
+   "organization":"postgresql",
+   "name": "postgresql",
+   "version": "8.4-701.jdbc4"
+  },{
+   "organization":"net.sourceforge.jtds",
+   "name": "jtds",
+   "version": "1.2.4"
+  },{
+   "organization":"org.apache.derby",
+   "name": "derby",
+   "version": "10.7.1.1"
+  },{
+   "organization":"junit",
+   "name": "junit",
+   "version": "4.8.2"
+  }],
+ "scalas": ["2.9.1","2.9.0-1","2.9.0","2.8.1","2.8.0"],
+ "sbt": false
+}
