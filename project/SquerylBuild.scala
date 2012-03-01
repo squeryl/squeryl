@@ -11,7 +11,7 @@ object SquerylBuild extends Build {
     		  description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
     		  organization := "org.squeryl",
     		  version := "0.9.5-RC2",
-    		  version <<= version { v => //only release of -Drelease=true is passed to JVM
+    		  version <<= version { v => //only release *if* -Drelease=true is passed to JVM
     		  	val release = Option(System.getProperty("release")) == Some("true")
     		  	if(release)
     		  		v 
@@ -56,6 +56,7 @@ object SquerylBuild extends Build {
 			  //below is for lsync, run "ls-write-version", commit to github, then run "lsync" 
 			  (LsKeys.tags in LsKeys.lsync) := Seq("sql", "orm", "query", "database", "db", "dsl"),
 			  (LsKeys.docsUrl in LsKeys.lsync) := Some(new URL("http://squeryl.org/api/")),
+			  (LsKeys.ghUser in LsKeys.lsync) := Some("max-l"),
     		  libraryDependencies ++= Seq(
   					  "cglib" % "cglib-nodep" % "2.2",
   					  "com.h2database" % "h2" % "1.2.127" % "provided",
