@@ -29,6 +29,7 @@ import internals.{FieldMetaData, FieldReferenceLinker}
 import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
+import org.squeryl.dsl.ast.ExpressionNode
 
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
@@ -768,7 +769,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       from(courses)(c=>
         where(c.startDate > jan2010 and c.startDate < mar2010)
         select(c)
-        orderBy(c.startDate asc, c.id asc)
+        orderBy(List[ExpressionNode](c.startDate.asc, c.id.asc))
       ).toList
 
     val expected = List(counterpoint.id,  mandarin.id)

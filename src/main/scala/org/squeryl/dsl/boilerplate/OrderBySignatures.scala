@@ -24,6 +24,11 @@ trait OrderBySignatures[R] {
 
   type O = ExpressionNode
 
+  def orderBy(args: List[O]): QueryYield[R] = {
+    _orderByExpressions = () => args.map(() => _)
+    this
+  }
+  
   def orderBy(e1: =>O): QueryYield[R] = {
     _orderByExpressions = ()=> List(e1 _)
     this
