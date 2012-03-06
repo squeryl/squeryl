@@ -32,7 +32,7 @@ h3. Contributors
 *  Antti Tuppurainen
 *  Christian Maslen
 *  David Flemström
-*  David Wysoker
+*  Alec Wysoker
 *  Mitsutoshi Aoe
 *  Rémy Roy
 *  Michael Bayne
