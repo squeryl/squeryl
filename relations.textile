@@ -174,7 +174,7 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
    * the operation to be persisted. Alternatively the method 'associate(o, a)' will call this assign(o, a)
    * and persist the changes.  
    */
-  def assign(o: O, a: A): Unit
+  def assign(o: O, a: A): A
 
   /**
    * @param a: the association object
@@ -182,7 +182,7 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
    * Calls assign(o,a) and persists the changes the database, by inserting or updating 'a', depending
    * on if it has been persisted or not.
    */
-  def associate(o: O, a: A): Unit
+  def associate(o: O, a: A): A
 
   /**
    * Creates a new association object 'a' and calls assign(o,a)
