@@ -239,13 +239,10 @@ It is also needed in the following case :
     )    
 ]]></script>
 
- This is only required when using PrimitiveType mode, with custom types 
+ This is required when using PrimitiveType mode. With custom types 
 there is no ambiguity, since custom types are not (AnyVal) numerics.
 
-A compiler plugin could eventually place .~ in all expression nodes.
-An alternative could also be to use other symbols than the 
-standard math operators to avoid the ambiguity altogether.
-Opinions on this choice/tradeoff would be appreciated.
+If you are using primitive types, you should use the following operators : div, times, plus, minus instead of /. *, +, -
 
 
 h3. Custom types
