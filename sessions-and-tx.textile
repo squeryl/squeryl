@@ -66,11 +66,11 @@ SessionFactorye.externalTransactionManagementAdapter = Some(
 
 h3. Managing transactions manually
 
-Given a java.sql.Connection, Squeryl statements can be issued with the *using* function :  
+Given an org.squeryl.Session, Squeryl statements can be issued with the *using* function :  
  
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
-using(aJdbcConnection) {
+using(squerylSession) {
   // your Squeryl code here...
 } 
 
