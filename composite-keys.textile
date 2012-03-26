@@ -33,7 +33,7 @@ composite key or a tuple that is compatible, i.e. that has the same type paramet
 
 * CompositeKey2[Long,Int] is *not* compatible with Tuple2(Long,Long)
 
-*Note* CompositeKeys cannot be used as binding expressions in relations (see : "issue 80":https://github.com/max-l/Squeryl/issues/issue/80)
+*Note* CompositeKeys cannot be used as binding expressions in relations (see : "issue 25":http://www.assembla.com/spaces/squeryl/tickets/25)
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
