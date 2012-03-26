@@ -23,6 +23,9 @@ CourseAssignment.id is a unique identifier for a CourseAssignment. In this case 
 
 * *Important*: Squeryl will create a uniqueness constraint on composite keys that form the *id* of a KeyedEntity[_]  
 
+* *Important*: a compositeKey cannot be a *val* it must be a *def*
+
+
 A composite key can be used in any equality expression (x === y), against a 
 composite key or a tuple that is compatible, i.e. that has the same type parameters, ex.:    
 
