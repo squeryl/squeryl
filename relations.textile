@@ -279,4 +279,3 @@ Relations are lazy, and are subject to the "N+1 problem":http://stackoverflow.co
 where  |Rk|  is the number of rows in the Rk part of the relation  
 
 In such a case, a single query is clearly preferable since it will fetch all objects in a single database round trip.  
-
