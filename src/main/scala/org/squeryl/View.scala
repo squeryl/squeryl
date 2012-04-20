@@ -15,6 +15,7 @@
  ***************************************************************************** */
 package org.squeryl
 
+import dsl.ast.ViewExpressionNode
 import dsl.{TypedExpression, QueryDsl}
 import internals._
 import java.sql.ResultSet
@@ -122,6 +123,8 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     import dsl._
     dsl.queryToIterable(from(this)(a=> select(a)))
   }
+
+  def viewExpressionNode: ViewExpressionNode[T] = new ViewExpressionNode[T](this)
 }
 
 sealed trait CanLookup
