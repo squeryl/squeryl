@@ -88,7 +88,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
   def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
 
   def insert(e: Iterable[T]):Unit =
-    _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented), true, false)
+    _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable), true, false)
 
   /**
    * isInsert if statement is insert otherwise update
@@ -209,7 +209,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val pkMd = posoMetaData.primaryKey.getOrElse(org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
 
     val fmds = List(
-      posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter).toList,
+      posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter && fmd.isUpdatable).toList,
       List(pkMd),
       posoMetaData.optimisticCounter.toList
     ).flatten
