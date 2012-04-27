@@ -18,7 +18,7 @@ package org.squeryl.adapters
 import org.squeryl.dsl.ast.FunctionNode
 import java.sql.{ResultSet, SQLException}
 import java.util.UUID
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.internals.{StatementWriter, DatabaseAdapter, FieldMetaData}
 import org.squeryl.{Session, Table}
 
 class PostgreSqlAdapter extends DatabaseAdapter {
@@ -88,6 +88,19 @@ class PostgreSqlAdapter extends DatabaseAdapter {
 
   override def isTableDoesNotExistException(e: SQLException) =
    e.getSQLState.equals("42P01")
+
+  override def writeCompositePrimaryKeyConstraint(t: Table[_], cols: Iterable[FieldMetaData]) =
+  {
+    // alter table TableName add primary key (col1, col2) ;
+    val sb = new StringBuilder(256)
+    sb.append("alter table ")
+    sb.append(quoteName(t.prefixedName))
+    sb.append(" add primary key (")
+    sb.append(cols.map(_.columnName).map(quoteName(_)).mkString(","))
+    sb.append(")")
+    sb.toString
+  }
+
 
   override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
     "alter table " + quoteName(foreignKeyTable.prefixedName) + " drop constraint " + quoteName(fkName)

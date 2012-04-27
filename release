@@ -1,0 +1,4 @@
+if test -f .sbtconfig; then
+  . .sbtconfig
+fi
+exec java -Drelease=true ${SBT_OPTS} -jar sbt-launch.jar "$@"

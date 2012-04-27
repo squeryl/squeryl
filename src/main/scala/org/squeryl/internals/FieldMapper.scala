@@ -107,7 +107,7 @@ trait FieldMapper {
     }
     
     def enumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Enumeration#Value) = 
-      new JdbcMapper[Int,A] with TypedExpressionFactory[A,TEnumValue[A]] {
+      new JdbcMapper[Int,A] with TypedExpressionFactory[A,TEnumValue[A]] { 
         
       val enu = Utils.enumerationForValue(ev)
       
@@ -115,7 +115,10 @@ trait FieldMapper {
       def defaultColumnLength: Int = intTEF.defaultColumnLength
       def sample: A = ev
       def convertToJdbc(v: A) = v.id
-      def convertFromJdbc(v: Int) = enu.values.find(_.id == v).get
+      def convertFromJdbc(v: Int) = {
+        enu.values.find(_.id == v).getOrElse(DummyEnum.DummyEnumerationValue) // JDBC has no concept of null value for primitive types (ex. Int)
+        // at this level, we mimic this JDBC flaw (the Option / None based on jdbc.wasNull will get sorted out by optionEnumValueTEF)
+      }
     }    
     
     object DummyEnum extends Enumeration {

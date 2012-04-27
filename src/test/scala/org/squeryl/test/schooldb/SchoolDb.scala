@@ -29,6 +29,7 @@ import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
 import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.dsl.ast.ExpressionNode
 
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
@@ -697,15 +698,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val jan2010 = dateFormat.parse("2010-01-01")
     val mar2010 = dateFormat.parse("2010-03-01")
 
-    val mandarinAndCounterpointCourses0 =
+    val mandarinAndCounterpointCourses =
       from(courses)(c=>
         where(c.startDate > jan2010 and c.startDate < mar2010)
         select(c)
-        orderBy(c.startDate asc, c.id asc)
-      )
-    
-    val mandarinAndCounterpointCourses = mandarinAndCounterpointCourses0.toList
-    
+        orderBy(List[ExpressionNode](c.startDate.asc, c.id.asc))
+      ).toList
+
     val expected = List(counterpoint.id,  mandarin.id)
     val result = mandarinAndCounterpointCourses.map(c=>c.id)
 

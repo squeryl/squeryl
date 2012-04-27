@@ -61,6 +61,7 @@ class FieldMetaData(
       case _ => None
     }
 
+
   def canonicalEnumerationValueFor(id: Int) =
     if(sampleValue == null)
       org.squeryl.internals.Utils.throwError("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
@@ -302,7 +303,7 @@ class FieldMetaData(
         if(v == null)
           null
         else if(enumeration != None)
-          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)        
+          canonicalEnumerationValueFor(v.asInstanceOf[java.lang.Integer].intValue)
         else if(customTypeFactory == None)
           v
         else {

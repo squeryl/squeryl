@@ -142,7 +142,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       statementHandler("-- composite key indexes :")
     
     for(cpk <- compositePKs) {
-      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      val createConstraintStmt = _dbAdapter.writeCompositePrimaryKeyConstraint(cpk._1, cpk._2)
       statementHandler(createConstraintStmt + ";")
     }
 
@@ -180,7 +180,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     if(_dbAdapter.supportsForeignKeyConstraints)
       _declareForeignKeyConstraints
 
-    _createUniqueConstraintsOfCompositePKs
+    _createConstraintsOfCompositePKs
 
     createColumnGroupConstraintsAndIndexes
   }
@@ -272,9 +272,9 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     }
   }
 
-  private def _createUniqueConstraintsOfCompositePKs =
+  private def _createConstraintsOfCompositePKs =
     for(cpk <- _allCompositePrimaryKeys) {
-      val createConstraintStmt = _dbAdapter.writeUniquenessConstraint(cpk._1, cpk._2)
+      val createConstraintStmt = _dbAdapter.writeCompositePrimaryKeyConstraint(cpk._1, cpk._2)
       _executeDdl(createConstraintStmt)
     }  
 

@@ -180,7 +180,6 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
   
   implicit def bigDecimalToTE(f: BigDecimal) = bigDecimalTEF.createFromNativeJdbcValue(f)
   implicit def optionBigDecimalToTE(f: Option[BigDecimal]) = f.map(new BigDecimalField(_))
-
 }
 
 object CustomTypesMode extends CustomTypesMode 

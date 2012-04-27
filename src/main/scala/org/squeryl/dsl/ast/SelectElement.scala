@@ -37,7 +37,7 @@ import org.squeryl.dsl.TypedExpression
  *  that refer to a SelectElement  
  */
 trait SelectElement extends ExpressionNode {
-
+  outer =>
   /**
    * <pre>
    * In the following select :
@@ -110,32 +110,6 @@ trait SelectElement extends ExpressionNode {
     expression.write(sw)
     sw.write(" as ")
     sw.databaseAdapter.writeSelectElementAlias(this, sw)
-  }
-
-  /**
-   * Will throw a ClassCastException if this type is not a Enumeration#Value
-   */
-  def createEnumerationMapper: OutMapper[Enumeration#Value] = new OutMapper[Enumeration#Value]() {
-
-    def doMap(rs: ResultSet) = {
-      val fmd = this.asInstanceOf[FieldSelectElement].fieldMetaData
-      fmd.canonicalEnumerationValueFor(rs.getInt(this.index))
-    }
-
-    def sample = org.squeryl.internals.Utils.throwError("!")
-  }
-
-  /**
-   * Will throw a ClassCastException if this type is not a Enumeration#Value
-   */
-  def createEnumerationOptionMapper: OutMapper[Option[Enumeration#Value]] = new OutMapper[Option[Enumeration#Value]]() {
-
-    def doMap(rs: ResultSet) = {
-      val fmd = this.asInstanceOf[FieldSelectElement].fieldMetaData
-      Some(fmd.canonicalEnumerationValueFor(rs.getInt(this.index)))
-    }
-
-    def sample = org.squeryl.internals.Utils.throwError("!")
   }
 }
 
