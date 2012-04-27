@@ -5,6 +5,16 @@ headtitle: Releases -
 ---
 
 
+h3. 0.9.5
+
+* Dynamic orderBy
+* Fix error with enumerations within groupBy
+
+h3. 0.9.5-RC2
+
+* Cryptic error message upon field type deduction failure became more explicit.
+* added transaction and inTransaction that takes a SessionFactory
+
 
 h3. 0.9.5-RC1
 
