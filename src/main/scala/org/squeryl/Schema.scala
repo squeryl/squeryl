@@ -510,6 +510,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   
   protected def transient = IsTransient()
 
+  protected def dbManaged = DbManaged
+
+  protected def triggerUpdated = TriggerUpdated
+
   class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
 
     def are(columnAttributes: AttributeValidOnMultipleColumn*) =
@@ -627,8 +631,8 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     /**
      * Same as {{{table.update(a)}}}
      */  
-    def update(implicit ked: KeyedEntityDef[A,_]) =
-      _performAction(_.update(a))
+    def update[K](implicit ked: KeyedEntityDef[A,K], toCanLookup: K => CanLookup) =
+      _performAction(_.update(a)(ked, queryDsl, toCanLookup))
       
   }
 

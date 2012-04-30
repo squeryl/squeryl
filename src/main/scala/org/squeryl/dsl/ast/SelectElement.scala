@@ -18,7 +18,7 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import java.sql.ResultSet
-import org.squeryl.Session
+import org.squeryl.{PgOptimistic, Session}
 import org.squeryl.dsl.TypedExpression
 import scala.annotation.tailrec
 
@@ -174,8 +174,13 @@ class FieldSelectElement
   
   val expression = new ExpressionNode {
     
-    def doWrite(sw: StatementWriter) =
+    def doWrite(sw: StatementWriter) = {
       sw.write(sw.quoteName(alias))
+      if (classOf[PgOptimistic].isAssignableFrom(origin.view.classOfT)
+          && fieldMetaData.columnName == "ctid") {
+        sw.write("::varchar")
+      }
+    }
   }
 
   def prepareColumnMapper(index: Int) =

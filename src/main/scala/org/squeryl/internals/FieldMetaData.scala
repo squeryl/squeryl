@@ -46,6 +46,7 @@ class FieldMetaData(
         field:  Option[Field],
         columnAnnotation: Option[Column],
         val isOptimisticCounter: Boolean,
+        val isPgOptimisticValue: Boolean,
         val sampleValue: Any) {
 
   def nativeJdbcType =
@@ -258,13 +259,18 @@ class FieldMetaData(
    * Inserts will only set values for a column if isInsertable is true
    */
   def isInsertable =
-    !columnAttributes.exists(_.isInstanceOf[Uninsertable])
+    !columnAttributes.exists(a => a.isInstanceOf[Uninsertable]) && !isDbManaged
 
   /**
    * Updates will only set values for a column if isUpdatable is true
    */
   def isUpdatable =
-    !columnAttributes.exists(_.isInstanceOf[Unupdatable])
+    !columnAttributes.exists(_.isInstanceOf[Unupdatable]) && !isDbManaged
+
+  def isDbManaged =
+    columnAttributes.exists(_ == DbManaged) || isPgOptimisticValue
+
+  def isTriggerUpdated = columnAttributes.exists(_ == TriggerUpdated)
 
   /**
    *  gets the value of the field from the object.
@@ -369,7 +375,7 @@ trait FieldMetaDataFactory {
 
   def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
 
-  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
+  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean, isPgOptimisticValue: Boolean): FieldMetaData
 
   def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
@@ -386,7 +392,7 @@ object FieldMetaData {
         c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
       }
 
-    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
+    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean, isPgOptimisticValue: Boolean) = {
 
       val fieldMapper = parentMetaData.schema.fieldMapper 
       
@@ -507,6 +513,7 @@ object FieldMetaData {
         field,
         colAnnotation,
         isOptimisticCounter,
+        isPgOptimisticValue,
         constructorSuppliedDefaultValue)
     }
   }

@@ -128,6 +128,8 @@ class PostgreSqlAdapter extends DatabaseAdapter {
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
+  override def supportsReturningClause: Boolean = true
+
   override def isTableDoesNotExistException(e: SQLException) =
    e.getSQLState.equals("42P01")
 

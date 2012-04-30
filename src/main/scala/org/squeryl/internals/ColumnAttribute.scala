@@ -74,4 +74,12 @@ case class Named(name: String) extends ColumnAttribute
 case class IsTransient() extends ColumnAttribute
         with AttributeValidOnNumericalColumn
         with AttributeValidOnNonNumericalColumn
-        
+
+case object DbManaged extends ColumnAttribute
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnNonNumericalColumn
+
+case object TriggerUpdated extends ColumnAttribute
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnNonNumericalColumn
+

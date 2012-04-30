@@ -109,7 +109,7 @@ trait IndirectKeyedEntity[K,T] extends KeyedEntity[K] {
 trait Optimistic {
   self: KeyedEntity[_] =>
 
-  protected val occVersionNumber = 0
+  protected [squeryl] val occVersionNumber = 0
 }
 
 /** Thrown to indicate that an error has occurred in the SQL database */
@@ -123,6 +123,19 @@ object SquerylSQLException {
 class SquerylSQLException(message: String, cause: Option[SQLException]) extends RuntimeException(message, cause.orNull) {
   // Overridden to provide covariant return type as a convenience
   override def getCause: SQLException = cause.orNull
+}
+
+trait PgOptimistic {
+  self: KeyedEntity[_] =>
+
+  protected [squeryl] val xmin: Int = 0
+  protected [squeryl] val ctid: String = ""
+
+  def copyOccData[T <: KeyedEntity[_] with PgOptimistic](target: T)(implicit table: Table[T]) {
+    table.posoMetaData.fieldsMetaData filter (_.isPgOptimisticValue) foreach { fmd =>
+      fmd.set(target, fmd.get(this))
+    }
+  }
 }
 
 class StaleUpdateException(message: String) extends RuntimeException(message)
