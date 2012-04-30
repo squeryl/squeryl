@@ -260,13 +260,14 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       }
     })
 
+    vxn.uniqueId = Some(idGen)
+
     val dba = _dbAdapter
     val sw = new StatementWriter(dba)
-    sw.inhibitAliasOnSelectElementReference = true
     dba.writeUpdate(this, us, sw)
     dba.executeUpdateAndCloseStatement(Session.currentSession, sw)    
   }
-  
+
   def delete(q: Query[T]): Int = {
 
     val queryAst = q.ast.asInstanceOf[QueryExpressionElements]

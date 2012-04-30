@@ -76,16 +76,25 @@ trait SelectElement extends ExpressionNode {
    *
    */
   def inhibitAliasOnSelectElementReference: Boolean = {
-    var e:ExpressionNode = origin
 
-    while(e.parent != None) {
-      e = e.parent.get
-    }
+    def shouldInhibit(e: ExpressionNode): Boolean =
+      e.parent map ({ p =>
+        if(p.isInstanceOf[QueryExpressionElements])
+          p.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference
+        else
+          shouldInhibit(p)
+      }) getOrElse true
 
-    if(!e.isInstanceOf[QueryExpressionElements])
-      true
-    else
-      e.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference
+    shouldInhibit(origin)
+  }
+
+  def realTableNamePrefix: Boolean = {
+
+    def parent(e: ExpressionNode): ExpressionNode =
+      (e.parent map (p => parent(p))) getOrElse e
+
+    val p = parent(origin)
+    p.isInstanceOf[UpdateStatement] || p.isInstanceOf[QueryExpressionElements]
   }
 
   def prepareColumnMapper(index: Int): Unit
@@ -182,7 +191,10 @@ class FieldSelectElement
 
   def alias =
     if(inhibitAliasOnSelectElementReference)
-      fieldMetaData.columnName
+      if(realTableNamePrefix)
+        origin.view.name + "." + fieldMetaData.columnName
+      else
+        fieldMetaData.columnName
     else
       origin.alias + "." + fieldMetaData.columnName
 
