@@ -31,8 +31,6 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   val scope = new HashSet[String]
 
-  var inhibitAliasOnSelectElementReference = false
-
   protected val _paramList = new ArrayBuffer[AnyRef]
 
   /**
