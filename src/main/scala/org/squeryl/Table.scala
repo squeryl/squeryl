@@ -206,11 +206,12 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
 
-    val pkMd = posoMetaData.primaryKey.getOrElse(org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.get
+    val pkMd = posoMetaData.primaryKey.getOrElse(
+      org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.toOption
 
     val fmds = List(
-      posoMetaData.fieldsMetaData.filter(fmd=> fmd != pkMd && ! fmd.isOptimisticCounter && fmd.isUpdatable).toList,
-      List(pkMd),
+      posoMetaData.fieldsMetaData.filter(fmd=> ! fmd.isIdFieldOfKeyedEntity && ! fmd.isOptimisticCounter && fmd.isUpdatable).toList,
+      pkMd.toList,
       posoMetaData.optimisticCounter.toList
     ).flatten
 
