@@ -16,7 +16,7 @@
 package org.squeryl;
 
 import dsl.ast._
-import dsl.{QueryDsl}
+import dsl.{CompositeKey, QueryDsl}
 import internals._
 import java.sql.{Statement}
 import logging.StackMarker
@@ -88,18 +88,19 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
   def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
 
   def insert(e: Iterable[T]):Unit =
-    _batchedUpdateOrInsert(e, posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable), true, false)
+    _batchedUpdateOrInsert(e, t => posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable), true, false)
 
   /**
    * isInsert if statement is insert otherwise update
    */
-  private def _batchedUpdateOrInsert(e: Iterable[T], fmds: Iterable[FieldMetaData], isInsert: Boolean, checkOCC: Boolean):Unit = {
+  private def _batchedUpdateOrInsert(e: Iterable[T], fmdCallback: T => Iterable[FieldMetaData], isInsert: Boolean, checkOCC: Boolean):Unit = {
     
     val it = e.iterator
 
     if(it.hasNext) {
 
       val e0 = it.next
+      val fmds = fmdCallback(e0)
       val sess = Session.currentSession
       val dba = _dbAdapter
       val sw = new StatementWriter(dba)
@@ -206,16 +207,33 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
 
-    val pkMd = posoMetaData.primaryKey.getOrElse(
-      org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).left.toOption
+    def buildFmds(t: T): Iterable[FieldMetaData] = {
+      val pkList = posoMetaData.primaryKey.getOrElse(
+        org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).fold(
+        pkMd => List(pkMd),
+        pkGetter => {
+          // Just for side-effect...
+          var fields: Option[List[FieldMetaData]]  = None
+          Utils.createQuery4WhereClause(this, (t0:T) => {
+            val ck = pkGetter.invoke(t0).asInstanceOf[CompositeKey]
 
-    val fmds = List(
-      posoMetaData.fieldsMetaData.filter(fmd=> ! fmd.isIdFieldOfKeyedEntity && ! fmd.isOptimisticCounter && fmd.isUpdatable).toList,
-      pkMd.toList,
-      posoMetaData.optimisticCounter.toList
-    ).flatten
+            fields = Some(ck._fields.toList)
 
-    _batchedUpdateOrInsert(e, fmds, false, checkOCC)
+            null
+          })
+
+          fields getOrElse (internals.Utils.throwError("No PK fields found"))
+        }
+      )
+
+      List(
+        posoMetaData.fieldsMetaData.filter(fmd=> ! fmd.isIdFieldOfKeyedEntity && ! fmd.isOptimisticCounter && fmd.isUpdatable).toList,
+        pkList,
+        posoMetaData.optimisticCounter.toList
+      ).flatten
+    }
+
+    _batchedUpdateOrInsert(e, buildFmds _, false, checkOCC)
   }
   
   def update(s: T =>UpdateStatement):Int = {
