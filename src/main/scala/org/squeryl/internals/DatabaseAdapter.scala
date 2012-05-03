@@ -499,7 +499,7 @@ trait DatabaseAdapter {
           val fieldWhere = ck._fields map (fmd => quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw))
           sw.write(fieldWhere.mkString(" and "))
 
-          null
+          new EqualityExpression(new InputOnlyConstantExpressionNode(1), new InputOnlyConstantExpressionNode(1))
         })
       }
     )
