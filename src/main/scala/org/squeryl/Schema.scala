@@ -558,7 +558,7 @@ trait Schema {
     new LifecycleEventPercursorClass[A](m.erasure, this, BeforeInsert)
 
   protected def beforeUpdate[A](t: Table[A]) =
-    new LifecycleEventPercursorTable[A](t, BeforeInsert)
+    new LifecycleEventPercursorTable[A](t, BeforeUpdate)
 
   protected def beforeUpdate[A]()(implicit m: Manifest[A]) =
     new LifecycleEventPercursorClass[A](m.erasure, this, BeforeUpdate)
