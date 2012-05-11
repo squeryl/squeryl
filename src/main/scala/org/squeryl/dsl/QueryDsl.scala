@@ -106,7 +106,8 @@ trait QueryDsl
 
     val c = s.connection
 
-    if(c.getAutoCommit)
+    val originalAutoCommit = c.getAutoCommit
+    if(originalAutoCommit)
       c.setAutoCommit(false)
 
     var txOk = false
@@ -128,6 +129,8 @@ trait QueryDsl
           c.commit
         else
           c.rollback
+        if(originalAutoCommit != c.getAutoCommit)
+          c.setAutoCommit(originalAutoCommit)
       }
       catch {
         case e:SQLException => {
