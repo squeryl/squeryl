@@ -59,5 +59,6 @@ class Derby_MusicDb extends musicdb.MusicDbTestRun with Derby_Connection {
 
 class Derby_LeftJoinTest extends LeftJoinTest with Derby_Connection
 
+class Derby_LogicalBooleanObjTests extends LogicalBooleanObjTests with Derby_Connection
 
 
