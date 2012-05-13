@@ -240,13 +240,13 @@ object LogicalBoolean
 {
 
   def and(conditions: Seq[LogicalBoolean]):LogicalBoolean =
-   conditions.fold(t)((x,c) => (x and c));
+   conditions.fold(_true_)((x,c) => (x and c));
 
   def or(conditions: Seq[LogicalBoolean]): LogicalBoolean =
-   conditions.fold(f)((x,c) => (x or c));
+   conditions.fold(_false_)((x,c) => (x or c));
 
-  def t = new TrueLogicalBoolean();
-  def f = new FalseLogicalBoolean();
+  def _true_ = new TrueLogicalBoolean();
+  def _false_ = new FalseLogicalBoolean();
 
 }
 
