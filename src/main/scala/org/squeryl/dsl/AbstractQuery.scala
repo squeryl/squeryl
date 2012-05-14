@@ -26,7 +26,7 @@ import java.io.Closeable
 
 abstract class AbstractQuery[R](
     val isRoot:Boolean,
-    private [squeryl] val unions: List[(String, Query[R])] = Nil
+    private [squeryl] val unions: List[(String, Query[R])]
   ) extends Query[R] {
 
   private [squeryl] var selectDistinct = false
