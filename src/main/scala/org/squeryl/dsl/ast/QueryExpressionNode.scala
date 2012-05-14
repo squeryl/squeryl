@@ -34,6 +34,9 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   val (whereClause, havingClause, groupByClause, orderByClause) =
      _queryYield.queryElements
 
+  private val unionClauses =
+      _query.unions map (kindAndQ => new UnionExpressionNode(kindAndQ._1, kindAndQ._2.ast))
+
   private var _selectList: Iterable[SelectElement] = Iterable.empty
 
   private var _sample: Option[AnyRef] = None
@@ -82,7 +85,8 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       whereClause.toList,
       groupByClause.toList,
       havingClause.toList,
-      orderByClause.toList      
+      orderByClause.toList,
+      unionClauses
     ).flatten
 
   def isChild(q: QueryableExpressionNode):Boolean =
@@ -126,20 +130,28 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   }
 
   def propagateOuterScope() {
-    filterDescendantsOfType[NestedExpression].foreach((n) => n.propagateOuterScope(this))
+    for {
+      node <- children if ! node.isInstanceOf[UnionExpressionNode]
+    } {
+      node.filterDescendantsOfType[NestedExpression].foreach((n) => n.propagateOuterScope(this))
+    }
   }
 
   def selectList: Iterable[SelectElement] = _selectList
 
   def doWrite(sw: StatementWriter) = {
     val isNotRoot = parent != None
+    val isContainedInUnion = parent map (_.isInstanceOf[UnionExpressionNode]) getOrElse (false)
 
-    if(isNotRoot) {
+    if(isNotRoot && ! isContainedInUnion) {
       sw.write("(")
       sw.indent(1)
     }
     sw.databaseAdapter.writeQuery(this, sw)
-    if(isNotRoot) {
+    unionClauses.foreach { u =>
+      u.write(sw)
+    }
+    if(isNotRoot && ! isContainedInUnion) {
       sw.unindent(1)
       sw.write(") ")
     }

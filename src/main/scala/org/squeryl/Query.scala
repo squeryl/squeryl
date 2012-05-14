@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl
 
-import dsl.ast.{ExpressionNode}
+import dsl.ast._
 import internals.ResultSetMapper
 import java.sql.ResultSet
 
@@ -34,7 +34,7 @@ trait Query[R] extends Queryable[R] {
 
   def ast: ExpressionNode
 
-  private[squeryl] def copy(asRoot:Boolean): Query[R]
+  private[squeryl] def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]): Query[R]
 
   /**
    * Returns the first row of the query. An exception will be thrown
@@ -48,11 +48,19 @@ trait Query[R] extends Queryable[R] {
     r
   }
 
+  def union(q: Query[R]): Query[R]
+
+  def unionAll(q: Query[R]): Query[R]
+
+  def intersect(q: Query[R]): Query[R]
+
+  def intersectAll(q: Query[R]): Query[R]
+
+  def except(q: Query[R]): Query[R]
+
+  def exceptAll(q: Query[R]): Query[R]
+
   def distinct: Query[R]
-
-  def union(q: Query[R]): Query[R] = org.squeryl.internals.Utils.throwError("not implemented")
-
-  def minus(q: Query[R]): Query[R] = org.squeryl.internals.Utils.throwError("not implemented")
 
   def forUpdate: Query[R]
 

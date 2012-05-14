@@ -24,6 +24,8 @@ class H2Adapter extends DatabaseAdapter {
   override def uuidTypeDeclaration = "uuid"
   override def isFullOuterJoinSupported = false
 
+  override def quoteIdentifier(s: String) = List("\"", s.replace("\"", "\"\""), "\"").mkString
+
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
     var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)

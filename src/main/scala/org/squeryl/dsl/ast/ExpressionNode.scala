@@ -569,3 +569,18 @@ trait NestedExpression {
     )
   }
 }
+
+class UnionExpressionNode(val kind: String, val ast: ExpressionNode) extends ExpressionNode {
+  def doWrite(sw: StatementWriter) = {
+    sw.write(kind)
+    sw.nextLine
+    ast.write(sw)
+  }
+
+  override def toString = {
+    'UnionExpressionNode + "[with " + kind  + "]"
+  }
+
+  override def children =
+    List(ast)
+}

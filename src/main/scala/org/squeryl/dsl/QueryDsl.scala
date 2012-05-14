@@ -235,9 +235,9 @@ trait QueryDsl
   def lower[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1], ev2: T1 <:< TOptionString) = 
     f.convert(new FunctionNode("lower", Seq(s)))
 
-  def exists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false).ast, "exists")
+  def exists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false, Nil).ast, "exists")
 
-  def notExists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false).ast, "not exists")
+  def notExists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false, Nil).ast, "not exists")
          
   implicit val numericComparisonEvidence   = new CanCompare[TNumeric, TNumeric]         
   implicit val dateComparisonEvidence      = new CanCompare[TOptionDate, TOptionDate]
@@ -335,12 +335,25 @@ trait QueryDsl
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       _inner.invokeYield(rsm, rs).measures
 
-    override private[squeryl] def copy(asRoot:Boolean) = new CountSubQueryableQuery(q)
+    override private[squeryl] def copy(asRoot:Boolean, newUnions: List[(String, Query[Long])]) =
+      new CountSubQueryableQuery(q)
 
     def name = _inner.name
 
     private[squeryl] def give(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs)
+
+    def union(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def unionAll(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def intersect(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def intersectAll(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def except(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def exceptAll(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
   }
 
   implicit def singleColComputeQuery2ScalarQuery[T](cq: Query[Measures[T]]): ScalarQuery[T] = new ScalarMeasureQuery[T](cq)
@@ -367,12 +380,25 @@ trait QueryDsl
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs).measures
 
-    override private[squeryl] def copy(asRoot:Boolean) = new ScalarMeasureQuery(q)
+    override private[squeryl] def copy(asRoot:Boolean, newUnions: List[(String, Query[T])]): Query[T] =
+      new ScalarMeasureQuery(q)
 
     def name = q.name
 
     private[squeryl] def give(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs).measures
+
+    def union(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def unionAll(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def intersect(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def intersectAll(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def except(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def exceptAll(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
   }
 
   /**
