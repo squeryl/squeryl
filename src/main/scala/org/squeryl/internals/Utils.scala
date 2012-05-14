@@ -68,14 +68,16 @@ object Utils {
       g(res)
       (new DummyQueryElements(None)).select(0)
     },
-    true)
+    true,
+    Nil)
 
   private class DummyQuery4WhereClause[A,B](q: Queryable[A],whereClause: A=>LogicalBoolean) extends Query1[A,Int](
     q,
     a => {
       (new DummyQueryElements(Some(() => whereClause(a)))).select(0)
     },
-    true)
+    true,
+    Nil)
 
   def createQuery4WhereClause[A](q: Queryable[A], whereClause: A=>LogicalBoolean): QueryExpressionElements =
     new DummyQuery4WhereClause(q, whereClause).ast

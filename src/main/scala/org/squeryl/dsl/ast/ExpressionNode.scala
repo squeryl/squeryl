@@ -609,3 +609,24 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
       ast.doWrite(sw)
     }
 }
+
+class UnionExpressionNode(val kind: String, val ast: ExpressionNode) extends ExpressionNode {
+  def doWrite(sw: StatementWriter) = {
+    sw.write(kind)
+    sw.nextLine
+    sw.write("(")
+    sw.nextLine
+    sw.indent(1)
+    ast.write(sw)
+    sw.unindent(1)
+    sw.write(")")
+    sw.nextLine
+  }
+
+  override def toString = {
+    'UnionExpressionNode + "[with " + kind  + "]"
+  }
+
+  override def children =
+    List(ast)
+}

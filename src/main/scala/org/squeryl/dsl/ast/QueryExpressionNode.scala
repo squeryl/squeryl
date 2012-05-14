@@ -35,6 +35,9 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   val (whereClause, havingClause, groupByClause, orderByClause) =
      _queryYield.queryElements
 
+  private val unionClauses =
+      _query.unions map (kindAndQ => new UnionExpressionNode(kindAndQ._1, kindAndQ._2.ast))
+
   private var _selectList: Iterable[SelectElement] = Iterable.empty
 
   private var _sample: Option[AnyRef] = None
@@ -74,18 +77,18 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     sb.toString
   }
 
-  override def children = {
-    val lb = ListBuffer[ExpressionNode]();
-    lb ++= selectList
-    lb ++= views
-    lb ++= subQueries
-    lb ++= tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get)  
-    lb ++= whereClause
-    lb ++= groupByClause
-    lb ++= havingClause
-    lb ++= orderByClause      
-    lb.toList
-  }
+  override def children =
+    List(
+      selectList.toList,
+      views.toList,
+      subQueries.toList,
+      tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get).toList,  
+      whereClause.toList,
+      groupByClause.toList,
+      havingClause.toList,
+      orderByClause.toList,
+      unionClauses
+    ).flatten
 
   def isChild(q: QueryableExpressionNode):Boolean =
     views.find(n => n == q) != None
@@ -96,11 +99,17 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def page = _query.page
 
+  def unionIsForUpdate = _query.unionIsForUpdate
+
+  def unionPage = _query.unionPage
+
   def alias = "q" + uniqueId.get
 
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] = {
     _selectList.map(se => new ExportedSelectElement(se))
   }
+
+  private def hasUnionQueryOptions = unionIsForUpdate || unionPage.isDefined
 
   def setOutExpressionNodesAndSample(sl: Iterable[SelectElement], s: AnyRef) = {
     _selectList = sl
@@ -131,15 +140,38 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def doWrite(sw: StatementWriter) = {
     val isNotRoot = parent != None
+    val isContainedInUnion = parent map (_.isInstanceOf[UnionExpressionNode]) getOrElse (false)
 
-    if(isNotRoot) {
+    if((isNotRoot && ! isContainedInUnion) || hasUnionQueryOptions) {
       sw.write("(")
       sw.indent(1)
     }
+
+    if (! unionClauses.isEmpty) {
+      sw.write("(")
+      sw.nextLine
+      sw.indent(1)
+    }
+
     sw.databaseAdapter.writeQuery(this, sw)
-    if(isNotRoot) {
+
+    if (! unionClauses.isEmpty) {
+      sw.unindent(1)
+      sw.write(")")
+      sw.nextLine
+    }
+
+    unionClauses.foreach { u =>
+      u.write(sw)
+    }
+
+    if((isNotRoot && ! isContainedInUnion) || hasUnionQueryOptions) {
       sw.unindent(1)
       sw.write(") ")
+    }
+
+    if (hasUnionQueryOptions) {
+      sw.databaseAdapter.writeUnionQueryOptions(this, sw)
     }
   }
 }
