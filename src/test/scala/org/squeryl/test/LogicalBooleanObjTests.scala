@@ -60,18 +60,17 @@ abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTr
   }
 
 
-  test("_true_ and _false_") {
+  test("True and False in LogicalBoolean") {
     import TestSchema._
     prepareDummyTable((1,1,1),(2,1,2));
 
     //Session.currentSession.setLogger(System.err.println(_));
 
-    val q = from(dummy)(d => where(LogicalBoolean._true_)select(d));
-    System.err.println("q="+q);
+    val q = from(dummy)(d => where(LogicalBoolean.True)select(d));
     val qt = q.toList
     qt should have length(2);
 
-    val qf = from(dummy)(d => where(LogicalBoolean._false_)select(d)).toList
+    val qf = from(dummy)(d => where(LogicalBoolean.False)select(d)).toList
     qf should have length(0);
 
 
