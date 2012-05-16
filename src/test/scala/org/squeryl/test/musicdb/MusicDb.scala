@@ -1563,6 +1563,23 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     query.toList.size should be (2)
   }
+
+  test("test subquery with orderBy"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val subquery = from(songs)((s) =>
+      select(s)
+      orderBy(s.title asc)
+    ).page(0,1)
+
+    val query = join(subquery,artists)((s,a) =>
+      select(s.id)
+      on( s.authorId === a.id )
+    )
+
+    query.toList should be (List(besameMama.id))
+  }
+
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {
 //
