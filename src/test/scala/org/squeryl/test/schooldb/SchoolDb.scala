@@ -1474,6 +1474,86 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   }
 
+  test("Union") {
+    val q1 =
+      from(students)(s => where(s.name === "Xiao") select(s))
+    val q2 =
+      from(students)(s => where(s.name === "Georgi") select(s))
+
+    val q3 = q1 union q2
+
+    val res = (for (s <- q3) yield s.name).toSet
+    val expected = Set("Xiao", "Georgi")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+  }
+
+  test("NestedUnion") {
+    val q1 = (
+      from(students)(s => where(s.name === "Xiao") select(s))
+      union
+      from(students)(s => where(s.name === "Georgi") select(s))
+    )
+
+    val q3 = join(q1, q1)((s1, s2) =>
+      where(s1.name === "Xiao")
+      select(s2)
+      on(s1.id === s2.id)
+    )
+
+    val res = (for (s <- q3) yield s.name).toSet
+    val expected = Set("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+  }
+
+  test("UnionInIn") {
+    val q1 =
+      from(students)(s =>
+        where(
+          s.id in (
+            from(students)(s2 => where(s2.id === s.id and s2.name === "Xiao") select(s2.id))
+            union
+            from(students)(s2 => where(s2.id === s.id and s2.name === "Georgi") select(s2.id))
+          )
+        )
+        select (s)
+      )
+
+    val res = (for (s <- q1) yield s.name).toSet
+    val expected = Set("Xiao", "Georgi")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+  }
+
+  test("UnionAll") {
+    val q1 =
+      from(students)(s => where(s.name === "Xiao") select(s))
+
+    val q3 = q1 union q1
+    val res1 = (for (s <- q3) yield s.name).toSet
+    val expected1 = Set("Xiao")
+    assert(expected1 == res1, "expected :\n " + expected1 + "\ngot : \n " + res1)
+
+    val q4 = q1 unionAll q1
+    val res2 = (for (s <- q4) yield s.name).toSet
+    val expected2 = Set("Xiao", "Xiao")
+    assert(expected2 == res2, "expected :\n " + expected2 + "\ngot : \n " + res2)
+  }
+
+  test("Intersect") {
+    val q1 =
+      from(students)(s => where(s.name in (List("Xiao", "Georgi"))) select(s))
+    val q2 =
+      from(students)(s => where(s.name === "Georgi") select(s))
+
+    val q3 = q1 intersect q2
+
+    val res1 = (for (s <- q3) yield s.name).toSet
+    val expected1 = Set("Georgi")
+    assert(expected1 == res1, "expected :\n " + expected1 + "\ngot : \n " + res1)
+  }
+
   test("UpdateSetAll") {
     val testInstance = sharedTestInstance; import testInstance._
     update(students)(s => setAll(s.age := Some(30)))
