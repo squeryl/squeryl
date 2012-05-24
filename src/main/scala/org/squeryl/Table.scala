@@ -108,12 +108,12 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
       if(isInsert) {
         val z = _callbacks.beforeInsert(e0.asInstanceOf[AnyRef])
-        _callbacks.beforeInsert(z)
+        forAfterUpdateOrInsert.append(z)
         dba.writeInsert(z.asInstanceOf[T], this, sw)
       }
       else {
         val z = _callbacks.beforeUpdate(e0.asInstanceOf[AnyRef])
-        _callbacks.beforeUpdate(z)
+        forAfterUpdateOrInsert.append(z)
         dba.writeUpdate(z.asInstanceOf[T], this, sw, checkOCC)
       }
 
