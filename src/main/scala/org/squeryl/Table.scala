@@ -116,7 +116,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         _callbacks.beforeUpdate(z)
         dba.writeUpdate(z.asInstanceOf[T], this, sw, checkOCC)
       }
-      
+
+      if(sess.isLoggingEnabled)
+        sess.log("Performing batched " + (if (isInsert) "insert" else "update") + " with " + sw.statement)
+
       val st = sess.connection.prepareStatement(sw.statement)
 
       try {
