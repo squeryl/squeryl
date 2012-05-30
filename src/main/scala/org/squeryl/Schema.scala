@@ -33,6 +33,8 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    */
   private val _tables = new ArrayBuffer[Table[_]] 
   
+  def tables: Seq[Table[_]] = _tables.toSeq
+  
   private val _tableTypes = new HashMap[Class[_], Table[_]]
 
   private val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]

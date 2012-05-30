@@ -10,15 +10,18 @@ object SquerylBuild extends Build {
       settings = Project.defaultSettings ++ lsSettings ++ Seq(
     		  description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
     		  organization := "org.squeryl",
-    		  version := "0.9.5",
+    		  version := "0.9.5-1",
     		  version <<= version { v => //only release *if* -Drelease=true is passed to JVM
     		  	val release = Option(System.getProperty("release")) == Some("true")
     		  	if(release)
     		  		v 
     		  	else {	
     		  		val suffix = Option(System.getProperty("suffix"))
-    		  		var i = v.indexOf('-')
-    		  		if(i < 0) i = v.length
+    		  		val i = (v.indexOf('-'), v.length) match {
+    		  		  case (x, l) if x < 0 => l
+    		  		  case (x, l) if v substring (x+1) matches """\d+""" => l //patch level, not RCx
+    		  		  case (x, _) => x
+    		  		}
     		  		v.substring(0,i) + "-" + (suffix getOrElse "SNAPSHOT")
     		  	}
   			  },
