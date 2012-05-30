@@ -15,11 +15,11 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import java.lang.reflect.Method
 import net.sf.cglib.proxy._
-import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast._
 import org.squeryl.dsl.CompositeKey
+import java.lang.reflect.{Field, Method}
+import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 
 object FieldReferenceLinker {
 
@@ -220,6 +220,9 @@ object FieldReferenceLinker {
     }
     result
   }
+  
+  private val _declaredFieldCache: collection.mutable.Map[Class[_], Array[Field]] =
+    (new HashMap[Class[_], Array[Field]]).withDefault(_.getDeclaredFields)
 
   private def _populateSelectColsRecurse(visited: HashSet[Int] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
 
@@ -239,7 +242,7 @@ object FieldReferenceLinker {
     visited.add(idHashCode)
     
     _populateSelectCols(yi, q, o)
-    for(f <- clazz.getDeclaredFields) {
+    for(f <- _declaredFieldCache(clazz)) {
       f.setAccessible(true);
       val ob = f.get(o)
 
