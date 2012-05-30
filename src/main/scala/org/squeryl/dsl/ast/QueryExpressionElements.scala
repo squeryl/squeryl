@@ -45,8 +45,9 @@ trait QueryExpressionElements extends ExpressionNode {
     whereClause match {
       case None => false
       case Some(e:ExpressionNode) =>
-        if(e.inhibited) false
-        else e.children.exists(! _.inhibited)
+        if (e.inhibited) false
+        else if (e.children.size == 0) true  // for constant
+        else (e.children.exists(! _.inhibited))
     }
 
   def havingClause: Option[ExpressionNode]
