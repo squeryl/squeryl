@@ -32,7 +32,7 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
 
   def ast: ExpressionNode
 
-  private[squeryl] def copy(asRoot:Boolean): Query[R]
+  private [squeryl] def copy(asRoot:Boolean): Query[R]
 
   /**
    * Returns the first row of the query. An exception will be thrown
@@ -46,6 +46,22 @@ trait Query[R] extends Iterable[R] with Queryable[R] {
     r
   }
 
+  /**
+   * Returns Some(singleRow), None if there are none, throws an exception 
+   * if the query returns more than one row.
+   */
+  def singleOption: Option[R] = {
+    val i = iterator
+    val res = 
+      if(i.hasNext)
+        Some(i.next)
+      else 
+        None
+
+    if(i.hasNext)
+      org.squeryl.internals.Utils.throwError("singleOption called on query returning more than one row : \n" + statement)
+    res
+  }
 
   override def headOption = {
     val i = iterator
