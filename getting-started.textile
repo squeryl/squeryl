@@ -4,7 +4,7 @@ title: Getting Started
 headtitle: Getting Started - 
 ---
 
-h3. The recommended version is 0.9.5
+h3. The recommended version is 0.9.5-2
 
 Supported Scala versions are 2.9.2, 2.9.1, 2.9.0, 2.8.1 and 2.8.0
 
@@ -16,7 +16,7 @@ Declare the Squeryl dependency in the SBT project definiition
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   
   libraryDependencies  ++=  Seq(
-    "org.squeryl" %% "squeryl" % "0.9.5",
+    "org.squeryl" %% "squeryl" % "0.9.5-2",
     yourDatabaseDependency
   )
    
