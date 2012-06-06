@@ -33,7 +33,7 @@ The arguments and return type of your custom function need be one of the followi
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
 
-trait NumericExpression[A]
+trait NumericalExpression[A]
 trait StringExpression[B]
 trait DateExpression[C] 	
 trait BooleanExpression[D]
