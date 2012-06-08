@@ -159,8 +159,9 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       }
 
       for(a <- forAfterUpdateOrInsert)
-        if(isInsert)
-          _callbacks.afterInsert(a)
+        if(isInsert) {
+          _setPersisted(_callbacks.afterInsert(a).asInstanceOf[T])
+        }
         else
           _callbacks.afterUpdate(a)
 
