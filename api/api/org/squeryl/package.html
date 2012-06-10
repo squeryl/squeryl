@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.squeryl</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../lib/template.css" />
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../package.html">org</a></p>
+        <h1>squeryl</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">squeryl</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.squeryl.EntityMember" data-isabs="true">
+      <a id="EntityMember:EntityMember"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="EntityMember.html"><span class="name">EntityMember</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.ForeignKeyDeclaration" data-isabs="false">
+      <a id="ForeignKeyDeclaration:ForeignKeyDeclaration"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ForeignKeyDeclaration.html"><span class="name">ForeignKeyDeclaration</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">ForeignKeyDeclaration are to be manipulated only during the Schema definition
+(this is why all public methods have the implicit arg (implicit ev: Schema))
+</p>
+    </li><li visbl="pub" name="org.squeryl.IndirectKeyedEntity" data-isabs="true">
+      <a id="IndirectKeyedEntity:IndirectKeyedEntity[K, T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IndirectKeyedEntity.html"><span class="name">IndirectKeyedEntity</span></a><span class="tparams">[<span name="K">K</span>, <span name="T">T</span>]</span><span class="result"> extends KeyedEntity[K]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.KeyedEntity" data-isabs="true">
+      <a id="KeyedEntity:KeyedEntity[K]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KeyedEntity.html"><span class="name">KeyedEntity</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends PersistenceStatus</span>
+      </span>
+      </h4>
+      <p class="comment cmt"> For use with View[A] or Table[A], when A extends KeyedEntity[K],
+lookup and delete by key become implicitly available
+Example :</p>
+    </li><li visbl="pub" name="org.squeryl.Optimistic" data-isabs="true">
+      <a id="Optimistic:Optimistic"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Optimistic.html"><span class="name">Optimistic</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.PersistenceStatus" data-isabs="true">
+      <a id="PersistenceStatus:PersistenceStatus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PersistenceStatus.html"><span class="name">PersistenceStatus</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.PrimitiveTypeMode" data-isabs="true">
+      <a id="PrimitiveTypeMode:PrimitiveTypeMode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PrimitiveTypeMode.html"><span class="name">PrimitiveTypeMode</span></a><span class="result"> extends QueryDsl</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.Query" data-isabs="true">
+      <a id="Query:Query[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Query.html"><span class="name">Query</span></a><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends Iterable[R] with Queryable[R]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.Queryable" data-isabs="true">
+      <a id="Queryable:Queryable[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Queryable.html"><span class="name">Queryable</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.ReferentialAction" data-isabs="true">
+      <a id="ReferentialAction:ReferentialAction"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ReferentialAction.html"><span class="name">ReferentialAction</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.Schema" data-isabs="true">
+      <a id="Schema:Schema"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Schema.html"><span class="name">Schema</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.Session" data-isabs="false">
+      <a id="Session:Session"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Session.html"><span class="name">Session</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.SessionFactory" data-isabs="true">
+      <a id="SessionFactory:SessionFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionFactory.html"><span class="name">SessionFactory</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.StaleUpdateException" data-isabs="false">
+      <a id="StaleUpdateException:StaleUpdateException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StaleUpdateException.html"><span class="name">StaleUpdateException</span></a><span class="result"> extends RuntimeException</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.Table" data-isabs="false">
+      <a id="Table:Table[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Table.html"><span class="name">Table</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends View[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.View" data-isabs="false">
+      <a id="View:View[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="View.html"><span class="name">View</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends Queryable[T]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class can be used for read only tables or (database) views
+for an updatable view, or table use Table[T]
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.squeryl.DummyEnum" data-isabs="false">
+      <a id="DummyEnum:DummyEnum"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DummyEnum$.html"><span class="name">DummyEnum</span></a><span class="result"> extends Enumeration</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.PrimitiveTypeMode" data-isabs="false">
+      <a id="PrimitiveTypeMode:PrimitiveTypeMode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PrimitiveTypeMode$.html"><span class="name">PrimitiveTypeMode</span></a><span class="result"> extends PrimitiveTypeMode</span>
+      </span>
+      </h4>
+      <p class="comment cmt"> This factory is meant to use POSOs (Plain old Scala Objects),
+i.</p>
+    </li><li visbl="pub" name="org.squeryl.Session" data-isabs="false">
+      <a id="Session:Session"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Session$.html"><span class="name">Session</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.SessionFactory" data-isabs="false">
+      <a id="SessionFactory:SessionFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionFactory$.html"><span class="name">SessionFactory</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.adapters" data-isabs="false">
+      <a id="adapters:adapters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="adapters/package.html"><span class="name">adapters</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.annotations" data-isabs="false">
+      <a id="annotations:annotations"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="annotations/package.html"><span class="name">annotations</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.customtypes" data-isabs="false">
+      <a id="customtypes:customtypes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="customtypes/package.html"><span class="name">customtypes</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.dsl" data-isabs="false">
+      <a id="dsl:dsl"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="dsl/package.html"><span class="name">dsl</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.internals" data-isabs="false">
+      <a id="internals:internals"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="internals/package.html"><span class="name">internals</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.logging" data-isabs="false">
+      <a id="logging:logging"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="logging/package.html"><span class="name">logging</span></a>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

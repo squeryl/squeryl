@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.squeryl.annotations</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../package.html">squeryl</a></p>
+        <h1>annotations</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">annotations</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.squeryl.annotations.package#Column" data-isabs="false">
+      <a id="Column:Column"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Column</span><span class="result"> = org.squeryl.annotations.ColumnBase @scala.annotation.target.field</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The preferred way to define column metadata is not not define them (!)
+Squeryl has default mappings for all Java primitive types.</p><div class="fullcomment"><div class="comment cmt"><p>The preferred way to define column metadata is not not define them (!)
+Squeryl has default mappings for all Java primitive types.
+Scala/Java
+Int/int  -&gt; 4 byte number
+Long/long  -&gt; 8 byte number
+Float/float -&gt; 4 byte floating point
+String -&gt; varchar(256)</p><p>The default mappings can be overridden at the field/column level using the
+Column attribute, and they can also be  overridden at the Schema level
+by overriding the method. For example, the following causes all string
+field in the schema to become varchars of length 64 :</p><p>override def columnTypeFor(fieldMetaData: FieldMetaData, databaseAdapter: DatabaseAdapter) =
+  if(fieldMetaData.isStringType)
+    return &quot;varchar(64)&quot;
+  else
+    super.columnTypeFor(fieldMetaData, databaseAdapter)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.annotations.package" class="extype" href="package$.html">package</a></dd></dl></div>
+    </li><li visbl="pub" name="org.squeryl.annotations.ColumnBase" data-isabs="false">
+      <a id="ColumnBase:ColumnBase"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ColumnBase.html"><span class="name">ColumnBase</span></a><span class="result"> extends Annotation with Annotation with ClassfileAnnotation</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.annotations.FieldToColumnCorrespondanceMode" data-isabs="false">
+      <a id="FieldToColumnCorrespondanceMode:FieldToColumnCorrespondanceMode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FieldToColumnCorrespondanceMode.html"><span class="name">FieldToColumnCorrespondanceMode</span></a><span class="result"> extends Enum[FieldToColumnCorrespondanceMode]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.annotations.OptionType" data-isabs="false">
+      <a id="OptionType:OptionType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OptionType.html"><span class="name">OptionType</span></a><span class="result"> extends Annotation with Annotation with ClassfileAnnotation</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.annotations.Row" data-isabs="false">
+      <a id="Row:Row"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Row.html"><span class="name">Row</span></a><span class="result"> extends Annotation with Annotation with ClassfileAnnotation</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.squeryl.annotations.Transient" data-isabs="false">
+      <a id="Transient:Transient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Transient.html"><span class="name">Transient</span></a><span class="result"> extends Annotation with Annotation with ClassfileAnnotation</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.squeryl.annotations.FieldToColumnCorrespondanceMode" data-isabs="false">
+      <a id="FieldToColumnCorrespondanceMode:FieldToColumnCorrespondanceMode"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FieldToColumnCorrespondanceMode$.html"><span class="name">FieldToColumnCorrespondanceMode</span></a><span class="result"> extends </span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
