@@ -58,6 +58,7 @@ class DerbyAdapter extends DatabaseAdapter {
       sw.write(" rows fetch next ")
       sw.write(p._2.toString)
       sw.write("rows only")
+      sw.pushPendingNextLine
     })
   }
   
