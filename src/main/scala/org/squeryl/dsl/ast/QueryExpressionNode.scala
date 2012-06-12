@@ -147,10 +147,25 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       sw.write("(")
       sw.indent(1)
     }
+
+    if (! unionClauses.isEmpty) {
+      sw.write("(")
+      sw.nextLine
+      sw.indent(1)
+    }
+
     sw.databaseAdapter.writeQuery(this, sw)
+
+    if (! unionClauses.isEmpty) {
+      sw.unindent(1)
+      sw.write(")")
+      sw.nextLine
+    }
+
     unionClauses.foreach { u =>
       u.write(sw)
     }
+
     if(isNotRoot && ! isContainedInUnion) {
       sw.unindent(1)
       sw.write(") ")
