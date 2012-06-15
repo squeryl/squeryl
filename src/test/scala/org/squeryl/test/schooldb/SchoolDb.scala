@@ -574,7 +574,35 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     validateQuery('testLikeOperator, q, identity[Int], List(gaitan.id,georgi.id,gontran.id))
     
   }
-  
+
+  test("SingleOption"){
+    val testInstance = sharedTestInstance; import testInstance._
+    val q =
+      from(students)(s=>
+        where(s.name like "G%")
+        select(s.id)
+        orderBy(s.name)
+      )
+      
+    val shouldBeRight =
+      try {
+        Left(q.singleOption)
+      }
+      catch {
+        case e: Exception => Right(e)
+      }
+
+    assert(shouldBeRight.isRight, "singleOption did not throw an exception when it should have") 
+
+    val q2 =
+      from(students)(s=>
+        where(s.name like "Gontran")
+        select(s.id)
+        orderBy(s.name)
+      )
+    
+    q2.singleOption should equal(Some(gontran.id))
+  }  
     
   test("isNull and === None comparison"){  
     val z1 =

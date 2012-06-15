@@ -209,9 +209,8 @@ object FieldReferenceLinker {
       if(res0 == null)
         org.squeryl.internals.Utils.throwError("query " + q + " yielded null")
 
-      val visitedSet = new HashSet[Int]
-      //val visitedSet = new HashSet[AnyRef]
-      
+      val visitedSet = new java.util.IdentityHashMap[AnyRef, AnyRef]
+        
       _populateSelectColsRecurse(visitedSet, yi, q, res0)
 
       result = (yi.outExpressions, res0)
@@ -222,14 +221,12 @@ object FieldReferenceLinker {
     result
   }
 
-  private def _populateSelectColsRecurse(visited: HashSet[Int] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
+  private def _populateSelectColsRecurse(visited: java.util.IdentityHashMap[AnyRef,AnyRef] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
 
     if(o == null)
       return
 
-    val idHashCode = System.identityHashCode(o)
-
-    if(visited.contains(idHashCode))
+    if(visited.containsKey(o))
       return
 
     val clazz = o.getClass
@@ -237,7 +234,7 @@ object FieldReferenceLinker {
     if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib.") || clazzName.startsWith("scala.Enumeration"))
       return
 
-    visited.add(idHashCode)
+    visited.put(o, o)
     
     _populateSelectCols(yi, q, o)
     for(f <- clazz.getDeclaredFields) {
