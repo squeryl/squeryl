@@ -98,11 +98,17 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def page = _query.page
 
+  def unionIsForUpdate = _query.unionIsForUpdate
+
+  def unionPage = _query.unionPage
+
   def alias = "q" + uniqueId.get
 
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] = {
     _selectList.map(se => new ExportedSelectElement(se))
   }
+
+  private def hasUnionQueryOptions = unionIsForUpdate || unionPage.isDefined
 
   def setOutExpressionNodesAndSample(sl: Iterable[SelectElement], s: AnyRef) = {
     _selectList = sl
@@ -143,7 +149,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     val isNotRoot = parent != None
     val isContainedInUnion = parent map (_.isInstanceOf[UnionExpressionNode]) getOrElse (false)
 
-    if(isNotRoot && ! isContainedInUnion) {
+    if((isNotRoot && ! isContainedInUnion) || hasUnionQueryOptions) {
       sw.write("(")
       sw.indent(1)
     }
@@ -166,9 +172,13 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
       u.write(sw)
     }
 
-    if(isNotRoot && ! isContainedInUnion) {
+    if((isNotRoot && ! isContainedInUnion) || hasUnionQueryOptions) {
       sw.unindent(1)
       sw.write(") ")
+    }
+
+    if (hasUnionQueryOptions) {
+      sw.databaseAdapter.writeUnionQueryOptions(this, sw)
     }
   }
 }

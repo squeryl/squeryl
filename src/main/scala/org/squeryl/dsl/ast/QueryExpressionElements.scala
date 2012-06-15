@@ -29,6 +29,10 @@ trait QueryExpressionElements extends ExpressionNode {
 
   def page: Option[(Int,Int)]
 
+  def unionIsForUpdate: Boolean
+
+  def unionPage: Option[(Int, Int)]
+
   def views: Iterable[QueryableExpressionNode]
 
   def isJoinForm: Boolean

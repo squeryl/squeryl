@@ -32,6 +32,8 @@ class DB2Adapter extends DatabaseAdapter {
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
+  override def supportsUnionQueryOptions = false
+
   override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val sw = new StatementWriter(false, this)
@@ -82,7 +84,7 @@ class DB2Adapter extends DatabaseAdapter {
     e.getErrorCode == -204
   }
 
-  override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter) = {}
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
     if (qen.page == None)

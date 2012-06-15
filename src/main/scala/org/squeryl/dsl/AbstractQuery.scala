@@ -35,9 +35,14 @@ abstract class AbstractQuery[R](
 
   private [squeryl] var page: Option[(Int,Int)] = None
 
+  private [squeryl] var unionIsForUpdate = false
+  private [squeryl] var unionPage: Option[(Int, Int)] = None
+
   val resultSetMapper = new ResultSetMapper
 
   val name = "query"
+
+  private def isUnionQuery = ! unions.isEmpty
 
   def give(rsm: ResultSetMapper, rs: ResultSet): R = {
     rsm.pushYieldedValues(rs)
@@ -122,6 +127,7 @@ abstract class AbstractQuery[R](
   def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]) = {
     val c = createCopy(asRoot, newUnions)
     c.selectDistinct = selectDistinct
+    c.page = page
     c
   }
 
@@ -139,6 +145,9 @@ abstract class AbstractQuery[R](
   }
 
   def distinct = {
+    if (isUnionQuery) {
+      Utils.throwError("distinct is not supported on union queries")
+    }
     val c = copy(true, Nil)
     c.selectDistinct = true;
     c
@@ -146,13 +155,20 @@ abstract class AbstractQuery[R](
 
   def page(offset: Int, pageLength: Int): Query[R] = {
     val c = copy(true, Nil)
-    c.page = Some((offset, pageLength))
+    val page = Some((offset, pageLength))
+    if (c.isUnionQuery)
+      c.unionPage = page
+    else
+      c.page = page
     c    
   }
 
   def forUpdate = {
     val c = copy(true, Nil)
-    c.isForUpdate = true;
+    if (c.isUnionQuery)
+      c.unionIsForUpdate = true
+    else
+      c.isForUpdate = true;
     c    
   }
 

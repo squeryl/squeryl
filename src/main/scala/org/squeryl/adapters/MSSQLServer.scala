@@ -38,7 +38,9 @@ class MSSQLServer extends DatabaseAdapter {
   override def dateTypeDeclaration = "date"
   override def floatTypeDeclaration = "real"
   override def timestampTypeDeclaration = "datetime"
-  
+
+  override def supportsUnionQueryOptions = false
+
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
     var res = "  " + quoteIdentifier(fmd.columnName) + " " + databaseTypeFor(fmd)
@@ -57,7 +59,7 @@ class MSSQLServer extends DatabaseAdapter {
   override def isTableDoesNotExistException(e: SQLException): Boolean =
     e.getErrorCode == 3701
 
-  override def writeEndOfQueryHint(qen: QueryExpressionElements, sw: StatementWriter) = {}
+  override def writeEndOfQueryHint(isForUpdate: () => Boolean, qen: QueryExpressionElements, sw: StatementWriter) = {}
 
   override def writeEndOfFromHint(qen: QueryExpressionElements, sw: StatementWriter) =
     if(qen.isForUpdate) {
@@ -148,7 +150,7 @@ class MSSQLServer extends DatabaseAdapter {
     val i = selectE.lastIndexOf(" as ")
     selectE.substring(i + 4, selectE.length)
   }
-  
-  override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = {}
+
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
   override def quoteIdentifier(s: String) = "[" + s + "]"
 }

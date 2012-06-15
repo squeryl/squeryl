@@ -38,6 +38,8 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
+  override def supportsUnionQueryOptions = false
+
   override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
@@ -113,8 +115,8 @@ class OracleAdapter extends DatabaseAdapter {
     sw.write(" on ")
     queryableExpressionNode.joinExpression.get.write(sw)
   }
-  
-  override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter) = {} 
+
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
     if(qen.page == None)
