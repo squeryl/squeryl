@@ -264,7 +264,7 @@ trait FieldMapper {
   
   protected class FieldAttributesBasedOnType[A](val mapper: MapperForReflection, val defaultLength: Int, val sample: A, val nativeJdbcType: Class[_]) {
 
-    val clasz: Class[_] = sample.getClass    
+    val clasz: Class[_] = sample.asInstanceOf[AnyRef].getClass
 
     override def toString = 
       clasz.getCanonicalName + " --> " + mapper.getClass.getCanonicalName    

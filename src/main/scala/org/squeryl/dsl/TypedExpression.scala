@@ -245,7 +245,7 @@ trait PrimitiveJdbcMapper[A] extends JdbcMapper[A,A] {
   def extractNativeJdbcValue(rs: ResultSet, i: Int): A
   def convertFromJdbc(v: A) = v
   def convertToJdbc(v: A) = v
-  def nativeJdbcType = sample.getClass
+  def nativeJdbcType = sample.asInstanceOf[AnyRef].getClass
 }
 
 abstract class NonPrimitiveJdbcMapper[P,A,T](val primitiveMapper: PrimitiveJdbcMapper[P], val fieldMapper: FieldMapper) extends JdbcMapper[P,A] with TypedExpressionFactory[A,T] {
