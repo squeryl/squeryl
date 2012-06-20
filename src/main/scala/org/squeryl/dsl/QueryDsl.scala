@@ -400,6 +400,8 @@ trait QueryDsl
     }
   }
 
+  private def invalidBindingExpression = Utils.throwError("Binding expression of relation uses a def, not a field (val or var)")
+  
   class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema, nameOverride: Option[String])
     extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
@@ -418,6 +420,12 @@ trait QueryDsl
       })
       
       val e2_ = e2.get
+      
+      if(!e2_._1.filterDescendantsOfType[ConstantTypedExpression[_,_]].isEmpty)
+        invalidBindingExpression
+
+      if(!e2_._2.filterDescendantsOfType[ConstantTypedExpression[_,_]].isEmpty)
+        invalidBindingExpression
 
       //invert Pair[EqualityExpression,EqualityExpression] if it has been declared in reverse :
       if(_viewReferedInExpression(leftTable, e2_._1)) {
@@ -635,6 +643,10 @@ trait QueryDsl
       val ee_ = ee.get  //here we have the equality AST (_ee) contains a left and right node, SelectElementReference
       //that refer to FieldSelectElement, who in turn refer to the FieldMetaData
 
+      if(! ee_.filterDescendantsOfType[ConstantTypedExpression[_,_]].isEmpty)
+        invalidBindingExpression
+        
+           
       // now the Tuple with the left and right FieldMetaData 
       _splitEquality(ee.get, rightTable, _isSelfReference)
     }
