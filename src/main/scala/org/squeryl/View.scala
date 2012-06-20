@@ -92,12 +92,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     t
   }
 
-  def lookup[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Option[T] = {
+  def lookup[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): Option[T] = {
     //TODO: find out why scalac won't let dsl be passed to another method
     import dsl._
 
     val q = from(this)(a => dsl.where {
-      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(a.id, k)
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.idF(a), k)
     } select(a))
 
     val it = q.iterator
@@ -115,7 +115,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   /**
    * Will throw an exception if the given key (k) returns no row.
    */
-  def get[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): T = 
+  def get[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): T = 
      lookup(k).getOrElse(Utils.throwError("Found no row with key '"+ k + "' in " + name + "."))
   
   def allRows(implicit dsl: QueryDsl): Iterable[T] = {

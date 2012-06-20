@@ -17,6 +17,12 @@ package org.squeryl
 
 import annotations.Transient
 
+
+trait KeyedEntityDef[A,K] {
+  def idF: A => K
+  def isPersisted: A => Boolean
+}
+
 /**
  *  For use with View[A] or Table[A], when A extends KeyedEntity[K],
  * lookup and delete by key become implicitly available

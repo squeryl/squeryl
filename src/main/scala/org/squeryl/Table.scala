@@ -170,19 +170,19 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
   /**
    * Updates without any Optimistic Concurrency Control check 
    */
-  def forceUpdate(o: T)(implicit ev: T <:< KeyedEntity[_]) =
-    _update(o, false)
+  def forceUpdate(o: T)(implicit ked: KeyedEntityDef[T,_]) =
+    _update(o, false, ked)
   
-  def update(o: T)(implicit ev: T <:< KeyedEntity[_]):Unit =
+  def update(o: T)(implicit ked: KeyedEntityDef[T,_]):Unit =
+    _update(o, true, ked)
+
+  def update(o: Iterable[T])(implicit ked: KeyedEntityDef[T,_]):Unit =
     _update(o, true)
 
-  def update(o: Iterable[T])(implicit ev: T <:< KeyedEntity[_]):Unit =
-    _update(o, true)
-
-  def forceUpdate(o: Iterable[T])(implicit ev: T <:< KeyedEntity[_]):Unit =
+  def forceUpdate(o: Iterable[T])(implicit ked: KeyedEntityDef[T,_]):Unit =
     _update(o, false)
 
-  private def _update(o: T, checkOCC: Boolean) = {
+  private def _update(o: T, checkOCC: Boolean, ked: KeyedEntityDef[T,_]) = {
 
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
@@ -300,8 +300,8 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     deleteCount == 1
   }
 
-  def insertOrUpdate(o: T)(implicit ev: T <:< KeyedEntity[_]): T = {
-    if(o.isPersisted)
+  def insertOrUpdate(o: T)(implicit ked: KeyedEntityDef[T,_]): T = {
+    if(ked.isPersisted(o))
       update(o)
     else
       insert(o)

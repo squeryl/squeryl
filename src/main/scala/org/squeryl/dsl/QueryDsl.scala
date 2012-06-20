@@ -33,6 +33,11 @@ trait QueryDsl
   with FromSignatures {
   outerQueryDsl =>
   
+  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
+    def idF = (a:A) => a.id
+    def isPersisted = (a:A) => a.isPersisted
+  } 
+    
   implicit def queryToIterable[R](q: Query[R]): Iterable[R] = {
     
     val i = q.iterator
@@ -387,14 +392,21 @@ trait QueryDsl
 
   def update[A](t: Table[A])(s: A =>UpdateStatement):Int = t.update(s)
 
-  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R]) = new ManyToManyRelationBuilder(l,r,None)
+  def manyToManyRelation[L,R](l: Table[L], r: Table[R])(implicit kedL: KeyedEntityDef[L,_], kedR: KeyedEntityDef[R,_]) = 
+    new ManyToManyRelationBuilder(l,r,None, kedL, kedR)
 
-  def manyToManyRelation[L <: KeyedEntity[_],R <: KeyedEntity[_],A <: KeyedEntity[_]](l: Table[L], r: Table[R], nameOfMiddleTable: String) = new ManyToManyRelationBuilder(l,r,Some(nameOfMiddleTable))
+  def manyToManyRelation[L,R](l: Table[L], r: Table[R], nameOfMiddleTable: String)(implicit kedL: KeyedEntityDef[L,_], kedR: KeyedEntityDef[R,_]) = 
+    new ManyToManyRelationBuilder(l,r,Some(nameOfMiddleTable), kedL, kedR)
 
-  class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R], nameOverride: Option[String]) {
+  class ManyToManyRelationBuilder[L, R](
+      l: Table[L], 
+      r: Table[R], 
+      nameOverride: Option[String],
+      kedL: KeyedEntityDef[L,_],
+      kedR: KeyedEntityDef[R,_]) {
 
-    def via[A <: KeyedEntity[_]](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride)
+    def via[A](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
+      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
       schema._addTable(m2m)
       m2m
     }
@@ -402,7 +414,16 @@ trait QueryDsl
 
   private def invalidBindingExpression = Utils.throwError("Binding expression of relation uses a def, not a field (val or var)")
   
-  class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema, nameOverride: Option[String])
+  class ManyToManyRelationImpl[L, R, A](
+      val leftTable: Table[L], 
+      val rightTable: Table[R], 
+      aClass: Class[A], 
+      f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], 
+      schema: Schema, 
+      nameOverride: Option[String],
+      kedL: KeyedEntityDef[L,_],
+      kedR: KeyedEntityDef[R,_],
+      kedA: KeyedEntityDef[A,_])
     extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
 
@@ -455,10 +476,10 @@ trait QueryDsl
     val rightForeignKeyDeclaration =
       schema._createForeignKeyDeclaration(rightFkFmd.columnName, rightPkFmd.columnName)
     
-    private def _associate[T <: KeyedEntity[_]](o: T, m2m: ManyToMany[T,A]): A = {
+    private def _associate[T](o: T, m2m: ManyToMany[T,A]): A = {
       val aInst = m2m.assign(o)
       try {
-        thisTableOfA.insertOrUpdate(aInst)
+        thisTableOfA.insertOrUpdate(aInst)(kedA)
       }
       catch {
         case e:SQLException =>
@@ -482,6 +503,8 @@ trait QueryDsl
 
 
       new DelegateQuery(q) with ManyToMany[R,A] {
+        
+        def kedL = thisTableOfA.kedR
 
         private def _assignKeys(r: R, a: AnyRef): Unit = {
           
@@ -505,7 +528,7 @@ trait QueryDsl
         
         def associate(o: R, a: A): A  = {
           assign(o, a)
-          thisTableOfA.insertOrUpdate(a)
+          thisTableOfA.insertOrUpdate(a)(kedA)
           a
         }
 
@@ -550,6 +573,8 @@ trait QueryDsl
         })
 
       new DelegateQuery(q) with ManyToMany[L,A] {
+        
+        def kedL = thisTableOfA.kedL
 
         private def _assignKeys(l: L, a: AnyRef): Unit = {
 
@@ -573,7 +598,7 @@ trait QueryDsl
         
         def associate(o: L, a: A): A = {
           assign(o, a)
-          thisTableOfA.insertOrUpdate(a)
+          thisTableOfA.insertOrUpdate(a)(kedA)
           a
         }
 
@@ -615,12 +640,12 @@ trait QueryDsl
 
   class OneToManyRelationBuilder[O <: KeyedEntity[_],M](ot: Table[O], mt: Table[M]) {
     
-    def via(f: (O,M)=>EqualityExpression)(implicit schema: Schema) =
-      new OneToManyRelationImpl(ot,mt,f, schema)
+    def via(f: (O,M)=>EqualityExpression)(implicit schema: Schema, kedM: KeyedEntityDef[M,_]) =
+      new OneToManyRelationImpl(ot,mt,f, schema, kedM)
 
   }
 
-  class OneToManyRelationImpl[O <: KeyedEntity[_],M](val leftTable: Table[O], val rightTable: Table[M], f: (O,M)=>EqualityExpression, schema: Schema)
+  class OneToManyRelationImpl[O,M](val leftTable: Table[O], val rightTable: Table[M], f: (O,M)=>EqualityExpression, schema: Schema, kedM: KeyedEntityDef[M,_])
     extends OneToManyRelation[O,M] {
 
     schema._addRelation(this)
@@ -672,9 +697,9 @@ trait QueryDsl
           m
         }
 
-        def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
+        def associate(m: M) = {
           assign(m)
-          rightTable.insertOrUpdate(m)
+          rightTable.insertOrUpdate(m)(kedM)
         }
       }
     }

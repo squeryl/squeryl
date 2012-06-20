@@ -17,15 +17,16 @@ package org.squeryl.dsl
 
 import org.squeryl.{ForeignKeyDeclaration, Table, Query, KeyedEntity}
 import collection.mutable.{HashMap, ArrayBuffer, Buffer}
+import org.squeryl.KeyedEntityDef
 
-trait Relation[L <: KeyedEntity[_],R] {
+trait Relation[L,R] {
   
   def leftTable: Table[L]
 
   def rightTable: Table[R]
 }
 
-trait OneToManyRelation[O <: KeyedEntity[_],M] extends Relation[O,M] {
+trait OneToManyRelation[O,M] extends Relation[O,M] {
 
   def foreignKeyDeclaration: ForeignKeyDeclaration
 
@@ -52,7 +53,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
 
   def iterator = _buffer.iterator
 
-  def associate(m: M)(implicit ev: M <:< KeyedEntity[_]) = {
+  def associate(m: M) = {
     relation.associate(m)
     _buffer.append(m)
     m
@@ -65,7 +66,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
   }
 }
 
-class StatefulManyToOne[O <: KeyedEntity[_]](val relation: ManyToOne[O]) {
+class StatefulManyToOne[O](val relation: ManyToOne[O]) {
 
   private var _one: Option[O] = None
 
@@ -89,7 +90,7 @@ class StatefulManyToOne[O <: KeyedEntity[_]](val relation: ManyToOne[O]) {
   }
 }
 
-trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]] extends Relation[L,R] {
+trait ManyToManyRelation[L, R, A] extends Relation[L,R] {
   self: Table[A] =>
 
   def thisTable: Table[A]
@@ -121,8 +122,10 @@ trait ManyToManyRelation[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEnt
  * Note that this trait is used on both "left" and "right" sides of the relation,
  * but in a given relation  
  */
-trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
+trait ManyToMany[O,A] extends Query[O] {
 
+  def kedL: KeyedEntityDef[O,_]
+  
   /**
    * @param a: the association object
    * 
@@ -184,8 +187,8 @@ trait ManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]] extends Query[O] {
 }
 
 
-class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: ManyToMany[O,A]) extends Iterable[O] {
-
+class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O] {
+  
   private val _map = new HashMap[O,A]
 
   refresh
@@ -215,7 +218,7 @@ class StatefulManyToMany[O <: KeyedEntity[_],A <: KeyedEntity[_]](val relation: 
     val b2 = _map.remove(o) != None
     assert(b1 == b2,
       'MutableManyToMany + " out of sync " + o.getClass.getName +" with id=" +
-      o.id + (if(b1) "" else "does not") + " exist in the db, and cached collection says the opposite")
+      relation.kedL.idF(o) + (if(b1) "" else "does not") + " exist in the db, and cached collection says the opposite")
     b1
   }
 
@@ -247,12 +250,12 @@ trait OneToMany[M] extends Query[M] {
    *
    * @return the 'm' parameter is returned
    */
-  def associate(m: M)(implicit ev: M <:< KeyedEntity[_]): M
+  def associate(m: M): M
   
   def deleteAll: Int
 }
 
-trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
+trait ManyToOne[O] extends Query[O] {
 
   /**
    * Assigns the foreign key with the value of the 'one' primary ky
