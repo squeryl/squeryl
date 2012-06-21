@@ -8,7 +8,7 @@ import java.sql.{Savepoint}
 
 import org.squeryl.framework._
 
-trait SchoolDb2Object extends KeyedEntity[Long] {
+trait SchoolDb2Object {
   val id: Long = 0
 }
 
@@ -87,6 +87,12 @@ class ASTConstructionInterferenceB(val aId: Long) extends KeyedEntity[Long] {
 
 class SchoolDb2 extends Schema {
 
+  implicit object schoolDbObjectKED extends KeyedEntityDef[SchoolDb2Object,Long] {
+    def idF = (a:SchoolDb2Object) => a.id
+    def isPersisted = (a:SchoolDb2Object) => a.id > 0
+    def idPropertyName = "id"
+  }
+  
   val entries = table[Entry]
   val comments = table[Comment]("commentz")
 
