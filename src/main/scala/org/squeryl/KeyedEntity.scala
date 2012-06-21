@@ -22,6 +22,8 @@ trait KeyedEntityDef[A,K] {
   def idF: A => K
   def isPersisted: A => Boolean
   def propertyName: String
+  def optimisticCounterPropertyName: Option[String] = None
+  def isOptimistic = optimisticCounterPropertyName.isDefined
 }
 
 /**

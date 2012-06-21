@@ -40,14 +40,19 @@ trait QueryDsl
   with BaseQueryDsl {
   outerQueryDsl =>
   
-  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
+  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
     def idF = (a:A) => a.id
     def isPersisted = (a:A) => a.isPersisted
     def propertyName = "id"
+    override def optimisticCounterPropertyName = 
+      if(classOf[Optimistic].isAssignableFrom(m.erasure))
+        Some("occVersionNumber")
+      else
+        None
   } 
 
-  implicit def kedForKeyedEntitiesOption[A,K](implicit ev: A <:< KeyedEntity[K]) =
-    Some(kedForKeyedEntities(ev))
+  implicit def kedForKeyedEntitiesOption[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]) =
+    Some(kedForKeyedEntities)
 
   implicit def queryToIterable[R](q: Query[R]): Iterable[R] = {
     

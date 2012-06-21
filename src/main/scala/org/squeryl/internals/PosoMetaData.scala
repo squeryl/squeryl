@@ -33,7 +33,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
   def findFieldMetaDataForProperty(name: String) =
      fieldsMetaData.find(fmd => fmd.nameOfProperty == name)
 
-  val isOptimistic = classOf[Optimistic].isAssignableFrom(clasz)
+  val isOptimistic = viewOrTable.ked.map(_.isOptimistic).getOrElse(false)
   
   val constructor =
     _const.headOption.orElse(org.squeryl.internals.Utils.throwError(clasz.getName +
@@ -107,9 +107,12 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
       val property = (field, getter, setter, a)
 
-      if(isImplicitMode && _groupOfMembersIsProperty(property)) 
+      if(isImplicitMode && _groupOfMembersIsProperty(property)) {
+        val isOptimisitcCounter =
+          (for(k <- viewOrTable.ked; 
+              counterProp <- k.optimisticCounterPropertyName if counterProp == name) yield true).isDefined
         try {
-          fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
+          fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimisitcCounter))
         }
         catch {
           case e:Exception => throw new RuntimeException(
@@ -117,6 +120,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
               "error while reflecting on metadata for " + property + 
               " of class " + this.clasz.getCanonicalName), e)
         }
+      }
     }
 
     var k = fmds.find(fmd => fmd.isIdFieldOfKeyedEntity)
