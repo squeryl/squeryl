@@ -19,7 +19,7 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.dsl._
-import org.squeryl.{Query, KeyedEntity, Schema, Session}
+import org.squeryl.{Query, Schema, Session}
 import javax.management.RuntimeErrorException
 import java.sql.ResultSet
 
@@ -248,8 +248,7 @@ class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes
 
   override def isIdFieldOfKeyedEntity = {
     val fmdHead = group._fields.head
-    classOf[KeyedEntity[Any]].isAssignableFrom(fmdHead.parentMetaData.clasz) &&
-    group._propertyName == "id"
+    fmdHead.parentMetaData.viewOrTable.ked.map(_.propertyName == group._propertyName).getOrElse(false)
   }
 
   assert(group._propertyName != None)

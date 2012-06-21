@@ -127,22 +127,15 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       else {
         // verify if we have an 'id' method that is a composite key, in this case we need to construct a
         // FieldMetaData that will become the 'primaryKey' field of this PosoMetaData
-        val isKE = classOf[KeyedEntity[Any]].isAssignableFrom(clasz)
-        val isIKE = classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(clasz)
-        if(isKE || isIKE) {
+        
+        viewOrTable.ked.map { ked =>
 
-          val pkMethod =
-            if(isKE)
-              clasz.getMethod("id")
-            else
-              clasz.getMethod("idField")
+          val pkMethod = clasz.getMethod(ked.propertyName)
 
-          assert(pkMethod != null, "method id or idField should exist in class " + clasz.getName)
+          assert(pkMethod != null, "Could not get getter for " + ked.propertyName + " in " + clasz.getCanonicalName())
 
-          Some(pkMethod)
+          pkMethod
         }
-        else
-          None
       }
 
     val metaDataForPk: Option[Either[FieldMetaData,Method]] =

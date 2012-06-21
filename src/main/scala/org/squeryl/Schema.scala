@@ -288,13 +288,12 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     
     val res = new ArrayBuffer[(Table[_],Iterable[FieldMetaData])]
     
-    for(t <- _tables
-        if classOf[KeyedEntity[_]].isAssignableFrom(t.posoMetaData.clasz)) {
+    for(t <- _tables; ked <- t.ked) {
 
       Utils.mapSampleObject(
-        t.asInstanceOf[Table[KeyedEntity[_]]],
-        (ke:KeyedEntity[_]) => {
-          val id = ke.id
+        t.asInstanceOf[Table[AnyRef]],
+        (z:AnyRef) => {
+          val id = ked.asInstanceOf[KeyedEntityDef[AnyRef,AnyRef]].idF(z)
           if(id.isInstanceOf[CompositeKey]) {
             val compositeCols = id.asInstanceOf[CompositeKey]._fields
             res.append((t, compositeCols))
@@ -333,20 +332,20 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
-  protected def table[T]()(implicit manifestT: Manifest[T]): Table[T] =
-    table(tableNameFromClass(manifestT.erasure))(manifestT)
+  protected def table[T]()(implicit manifestT: Manifest[T], ked: Option[KeyedEntityDef[T,_]]): Table[T] =
+    table(tableNameFromClass(manifestT.erasure))(manifestT, ked)
   
-  protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
+  protected def table[T](name: String)(implicit manifestT: Manifest[T], ked: Option[KeyedEntityDef[T,_]]): Table[T] = {
     val typeT = manifestT.erasure.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, None)
+    val t = new Table[T](name, typeT, this, None, ked)
     _addTable(t)
     _addTableType(typeT, t)
     t
   }
 
-  protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T]): Table[T] = {
+  protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T], ked: Option[KeyedEntityDef[T,_]]): Table[T] = {
     val typeT = manifestT.erasure.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, Some(prefix))
+    val t = new Table[T](name, typeT, this, Some(prefix), ked)
     _addTable(t)
     _addTableType(typeT, t)
     t
@@ -559,10 +558,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   protected def beforeUpdate[A]()(implicit m: Manifest[A]) =
     new LifecycleEventPercursorClass[A](m.erasure, this, BeforeUpdate)
 
-  protected def beforeDelete[A](t: Table[A])(implicit ev : A <:< KeyedEntity[_]) =
+  protected def beforeDelete[A](t: Table[A])(implicit ev : KeyedEntityDef[A,_]) =
     new LifecycleEventPercursorTable[A](t, BeforeDelete)
 
-  protected def beforeDelete[K, A <: KeyedEntity[K]]()(implicit m: Manifest[A]) =
+  protected def beforeDelete[K, A]()(implicit m: Manifest[A], ked: KeyedEntityDef[A,K]) =
     new LifecycleEventPercursorClass[A](m.erasure, this, BeforeDelete)
 
   protected def afterInsert[A](t: Table[A]) =

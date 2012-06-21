@@ -21,6 +21,7 @@ import annotations.Transient
 trait KeyedEntityDef[A,K] {
   def idF: A => K
   def isPersisted: A => Boolean
+  def propertyName: String
 }
 
 /**

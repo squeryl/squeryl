@@ -22,7 +22,7 @@ import java.math.BigDecimal
 import scala.annotation.tailrec
 import org.squeryl.annotations.{ColumnBase, Column}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
-import org.squeryl.{IndirectKeyedEntity, Session, KeyedEntity}
+import org.squeryl.Session
 import org.squeryl.dsl.CompositeKey
 import scala.reflect.generic.ByteCodecs
 import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteCode, ScalaSigPrinter}
@@ -115,8 +115,7 @@ class FieldMetaData(
   }
 
   def isIdFieldOfKeyedEntity =
-    (classOf[KeyedEntity[Any]].isAssignableFrom(parentMetaData.clasz) && nameOfProperty == "id") ||
-    (classOf[IndirectKeyedEntity[_,_]].isAssignableFrom(parentMetaData.clasz)  && nameOfProperty == "idField")
+    parentMetaData.viewOrTable.ked.map(_.propertyName == nameOfProperty).getOrElse(false)
 
   if(isIdFieldOfKeyedEntity && ! classOf[CompositeKey].isAssignableFrom(wrappedFieldType)) {
     schema.defaultColumnAttributesForKeyedEntityId(wrappedFieldType).foreach(ca => {

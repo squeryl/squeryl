@@ -41,7 +41,9 @@ class SchoolDbObject extends KeyedEntity[Int] {
 trait Person
 
 class Student(var name: String, var lastName: String, var age: Option[Int], var gender: Int, var addressId: Option[Int], var isMultilingual: Option[Boolean])
-  extends SchoolDbObject with Person {
+  extends Person {
+  
+  val id: Int = 0
 
   override def toString = "Student:" + id + ":" + name
   
@@ -117,6 +119,14 @@ class StringKeyedEntity(val id: String, val tempo: Tempo.Tempo) extends KeyedEnt
 
 class SchoolDb extends Schema {
 
+  implicit val personKED = new KeyedEntityDef[Student,Int] {
+    def idF = (a:Student) => a.id
+    def isPersisted = (a:Student) => a.id > 0
+    def propertyName = "id"
+  }
+  
+  implicit val personKEDO = Some(personKED)
+  
   import org.squeryl.PrimitiveTypeMode._
 
 //  override val name = {
@@ -144,7 +154,7 @@ class SchoolDb extends Schema {
 
   val professors = table[Professor]
   
-  val students = table[Student]
+  val students = table[Student] //(implicitly[Manifest[Student]],personKEDO)
   
   val addresses = table[Address]("AddressexageratelyLongName")
 
@@ -322,6 +332,9 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   import org.squeryl.PrimitiveTypeMode._
   import schema._
 
+  
+  
+  
   test("StringKeyedEntities"){
     val testInstance = sharedTestInstance; import testInstance._
     val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
@@ -482,7 +495,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val s1 = students.insert(new Student("z1", "z2", Some(4), 1, Some(4), Some(true)))
 
     assert(beforeInsertsOfPerson.exists(_ == s1))
-    assert(beforeInsertsOfKeyedEntity.exists(_ == s1))
+    assert(! beforeInsertsOfKeyedEntity.exists(_ == s1))
     assert(!beforeInsertsOfProfessor.exists(_ == s1))
     assert(!afterInsertsOfProfessor.exists(_ == s1))
 
@@ -951,7 +964,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
 
 
-  test("PartialUpdate1", SingleTestRun) {
+  test("PartialUpdate1") {
     val testInstance = sharedTestInstance; import testInstance._
 
     val initialHT = courses.where(c => c.id === heatTransfer.id).single

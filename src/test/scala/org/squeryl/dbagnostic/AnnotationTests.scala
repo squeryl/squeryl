@@ -82,6 +82,8 @@ class AnnotationTests extends FunSuite with ShouldMatchers{
 
   class ToastersInc extends Schema()(PrimitiveTypeMode) {
 
+    import org.squeryl.PrimitiveTypeMode._
+    
     val descendantOfKeyedObjects = table[DescendantOfKeyedObject]
 
     val nailCutters = table[NailCutter]

@@ -24,20 +24,31 @@ import java.sql.{SQLException, ResultSet}
 import collection.mutable.ArrayBuffer
 import scala.runtime.NonLocalReturnControl
 
+
+trait BaseQueryDsl {
+  implicit def kedForKeyedEntitiesOptionZ[A,K]: Option[KeyedEntityDef[A,K]] = None
+  
+}
+
 trait QueryDsl
   extends WhereState[Unconditioned]
   with ComputeMeasuresSignaturesFromStartOrWhereState
   with StartState
   with QueryElements[Unconditioned]
   with JoinSignatures
-  with FromSignatures {
+  with FromSignatures 
+  with BaseQueryDsl {
   outerQueryDsl =>
   
   implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
     def idF = (a:A) => a.id
     def isPersisted = (a:A) => a.isPersisted
+    def propertyName = "id"
   } 
-    
+
+  implicit def kedForKeyedEntitiesOption[A,K](implicit ev: A <:< KeyedEntity[K]) =
+    Some(kedForKeyedEntities(ev))
+
   implicit def queryToIterable[R](q: Query[R]): Iterable[R] = {
     
     val i = q.iterator
@@ -424,7 +435,7 @@ trait QueryDsl
       kedL: KeyedEntityDef[L,_],
       kedR: KeyedEntityDef[R,_],
       kedA: KeyedEntityDef[A,_])
-    extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None) with ManyToManyRelation[L,R,A] {
+    extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None, Some(kedA)) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
 
     def thisTable = thisTableOfA
@@ -636,9 +647,9 @@ trait QueryDsl
     }
   }
 
-  def oneToManyRelation[O <: KeyedEntity[_],M](ot: Table[O], mt: Table[M]) = new OneToManyRelationBuilder(ot,mt)
+  def oneToManyRelation[O,M](ot: Table[O], mt: Table[M])(implicit kedO: KeyedEntityDef[O,_]) = new OneToManyRelationBuilder(ot,mt)
 
-  class OneToManyRelationBuilder[O <: KeyedEntity[_],M](ot: Table[O], mt: Table[M]) {
+  class OneToManyRelationBuilder[O,M](ot: Table[O], mt: Table[M]) {
     
     def via(f: (O,M)=>EqualityExpression)(implicit schema: Schema, kedM: KeyedEntityDef[M,_]) =
       new OneToManyRelationImpl(ot,mt,f, schema, kedM)

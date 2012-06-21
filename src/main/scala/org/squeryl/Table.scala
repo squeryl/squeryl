@@ -26,7 +26,7 @@ import javax.swing.UIDefaults.LazyValue
 
 //private [squeryl] object DummySchema extends Schema
 
-class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String]) extends View[T](n, c, schema, _prefix) {
+class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String], ked: Option[KeyedEntityDef[T,_]]) extends View[T](n, c, schema, _prefix, ked) {
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
@@ -195,7 +195,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       if(checkOCC && posoMetaData.isOptimistic) {
         val version = posoMetaData.optimisticCounter.get.getNativeJdbcValue(o.asInstanceOf[AnyRef])
         throw new StaleUpdateException(
-           "Object "+prefixedName + "(id=" + o.asInstanceOf[KeyedEntity[_]].id + ", occVersionNumber=" + version +
+           "Object "+prefixedName + "(id=" + ked.idF(o) + ", occVersionNumber=" + version +
            ") has become stale, it cannot be updated under optimistic concurrency control")
       }
       else
@@ -278,10 +278,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
   def deleteWhere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =
     delete(dsl.from(this)(t => dsl.where(whereClause(t)).select(t)))      
 
-  def delete[K](k: K)(implicit ev: T <:< KeyedEntity[K], dsl: QueryDsl): Boolean  = {
+  def delete[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): Boolean  = {
     import dsl._
     val q = from(this)(a => dsl.where {
-      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(a.id, k)
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.idF(a), k)
     } select(a))
 
     lazy val z = q.headOption
