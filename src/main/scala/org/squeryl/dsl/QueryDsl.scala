@@ -26,8 +26,9 @@ import scala.runtime.NonLocalReturnControl
 
 
 trait BaseQueryDsl {
-  implicit def kedForKeyedEntitiesOptionZ[A,K]: Option[KeyedEntityDef[A,K]] = None
-  
+  implicit def kedForKeyedEntitiesOptionZ[A,K]: OptionalKeyedEntityDef[A,K] = new OptionalKeyedEntityDef[A,K] {
+    override def keyedEntityDef: Option[KeyedEntityDef[A,K]] = None
+  }
 }
 
 trait QueryDsl

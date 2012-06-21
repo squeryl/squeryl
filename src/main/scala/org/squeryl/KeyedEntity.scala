@@ -18,12 +18,17 @@ package org.squeryl
 import annotations.Transient
 
 
-trait KeyedEntityDef[A,K] {
+trait KeyedEntityDef[A,K] extends OptionalKeyedEntityDef[A,K]{
   def idF: A => K
   def isPersisted: A => Boolean
   def propertyName: String
   def optimisticCounterPropertyName: Option[String] = None
   def isOptimistic = optimisticCounterPropertyName.isDefined
+  def keyedEntityDef = Some(this)
+}
+
+trait OptionalKeyedEntityDef[A,K] {
+  def keyedEntityDef: Option[KeyedEntityDef[A,K]]
 }
 
 /**

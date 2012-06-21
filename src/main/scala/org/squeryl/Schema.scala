@@ -332,20 +332,20 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
-  protected def table[T]()(implicit manifestT: Manifest[T], ked: Option[KeyedEntityDef[T,_]]): Table[T] =
+  protected def table[T]()(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
     table(tableNameFromClass(manifestT.erasure))(manifestT, ked)
   
-  protected def table[T](name: String)(implicit manifestT: Manifest[T], ked: Option[KeyedEntityDef[T,_]]): Table[T] = {
+  protected def table[T](name: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.erasure.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, None, ked)
+    val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
     _addTable(t)
     _addTableType(typeT, t)
     t
   }
 
-  protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T], ked: Option[KeyedEntityDef[T,_]]): Table[T] = {
+  protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.erasure.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, Some(prefix), ked)
+    val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef)
     _addTable(t)
     _addTableType(typeT, t)
     t

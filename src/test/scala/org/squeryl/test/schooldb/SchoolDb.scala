@@ -124,9 +124,7 @@ class SchoolDb extends Schema {
     def isPersisted = (a:Student) => a.id > 0
     def propertyName = "id"
   }
-  
-  implicit val personKEDO = Some(personKED)
-  
+
   import org.squeryl.PrimitiveTypeMode._
 
 //  override val name = {
