@@ -229,7 +229,9 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val seedData = seedDataDef
     import seedData._
 
-    val xiao = students.lookup(xiaoJimbao.id).get
+    val xiao = {students.lookup(xiaoJimbao.id)
+      
+    }.get
 
     val courseSubscription = xiao.courses.assign(chemistryCourse)
 
