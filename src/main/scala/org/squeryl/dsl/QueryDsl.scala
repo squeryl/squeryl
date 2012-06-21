@@ -26,7 +26,7 @@ import scala.runtime.NonLocalReturnControl
 
 
 trait BaseQueryDsl {
-  implicit def kedForKeyedEntitiesOptionZ[A,K]: OptionalKeyedEntityDef[A,K] = new OptionalKeyedEntityDef[A,K] {
+  implicit def noneKeyedEntityDef[A,K]: OptionalKeyedEntityDef[A,K] = new OptionalKeyedEntityDef[A,K] {
     override def keyedEntityDef: Option[KeyedEntityDef[A,K]] = None
   }
 }
@@ -44,16 +44,13 @@ trait QueryDsl
   implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
     def idF = (a:A) => a.id
     def isPersisted = (a:A) => a.isPersisted
-    def propertyName = "id"
+    def idPropertyName = "id"
     override def optimisticCounterPropertyName = 
       if(classOf[Optimistic].isAssignableFrom(m.erasure))
         Some("occVersionNumber")
       else
         None
   } 
-
-  implicit def kedForKeyedEntitiesOption[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]) =
-    Some(kedForKeyedEntities)
 
   implicit def queryToIterable[R](q: Query[R]): Iterable[R] = {
     

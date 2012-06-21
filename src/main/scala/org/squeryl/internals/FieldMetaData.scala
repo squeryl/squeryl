@@ -115,7 +115,7 @@ class FieldMetaData(
   }
 
   def isIdFieldOfKeyedEntity =
-    parentMetaData.viewOrTable.ked.map(_.propertyName == nameOfProperty).getOrElse(false)
+    parentMetaData.viewOrTable.ked.map(_.idPropertyName == nameOfProperty).getOrElse(false)
 
   if(isIdFieldOfKeyedEntity && ! classOf[CompositeKey].isAssignableFrom(wrappedFieldType)) {
     schema.defaultColumnAttributesForKeyedEntityId(wrappedFieldType).foreach(ca => {

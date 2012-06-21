@@ -248,7 +248,7 @@ class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes
 
   override def isIdFieldOfKeyedEntity = {
     val fmdHead = group._fields.head
-    fmdHead.parentMetaData.viewOrTable.ked.map(_.propertyName == group._propertyName).getOrElse(false)
+    fmdHead.parentMetaData.viewOrTable.ked.map(_.idPropertyName == group._propertyName).getOrElse(false)
   }
 
   assert(group._propertyName != None)

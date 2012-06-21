@@ -34,7 +34,7 @@ import org.squeryl.dsl.ast.ExpressionNode
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
 
-class SchoolDbObject extends KeyedEntity[Int] {
+class SchoolDbObject {
   var id: Int = 0
 }
 
@@ -56,8 +56,11 @@ case class Course(var name: String, var startDate: Date, var finalExamDate: Opti
   @Column("meaninglessLongZ")
   var meaninglessLong: Long,
   @Column("meaninglessLongOption")
-  var meaninglessLongOption: Option[Long], val confirmed: Boolean)
-  extends SchoolDbObject with Optimistic {
+  var meaninglessLongOption: Option[Long], val confirmed: Boolean) {
+  
+  val id: Int = 0
+  
+  val occVersionNumber: Int = 0
 
   def occVersionNumberZ = occVersionNumber
 
@@ -119,10 +122,24 @@ class StringKeyedEntity(val id: String, val tempo: Tempo.Tempo) extends KeyedEnt
 
 class SchoolDb extends Schema {
 
-  implicit val personKED = new KeyedEntityDef[Student,Int] {
+  implicit object personKED extends KeyedEntityDef[Student,Int] {
     def idF = (a:Student) => a.id
     def isPersisted = (a:Student) => a.id > 0
-    def propertyName = "id"
+    def idPropertyName = "id"
+  }
+
+  implicit object schoolDbObjectKED extends KeyedEntityDef[SchoolDbObject,Int] {
+    def idF = (a:SchoolDbObject) => a.id
+    def isPersisted = (a:SchoolDbObject) => a.id > 0
+    def idPropertyName = "id"
+  }
+  
+  
+  implicit object courseKED extends KeyedEntityDef[Course,Int] {
+    def idF = (a:Course) => a.id
+    def isPersisted = (a:Course) => a.id > 0
+    def idPropertyName = "id"
+    override def optimisticCounterPropertyName = Some("occVersionNumber")
   }
 
   import org.squeryl.PrimitiveTypeMode._
@@ -1137,7 +1154,9 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchUpdate1") {
+    
     val testInstance = sharedTestInstance; import testInstance._
+    import schema._
     addresses.insert(List(
       new Address("St-Dominique",14, None,None,None),
       new Address("St-Urbain",23, None,None,None),

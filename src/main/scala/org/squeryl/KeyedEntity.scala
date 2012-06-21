@@ -18,16 +18,30 @@ package org.squeryl
 import annotations.Transient
 
 
-trait KeyedEntityDef[A,K] extends OptionalKeyedEntityDef[A,K]{
+trait KeyedEntityDef[-A,K] extends OptionalKeyedEntityDef[A,K]{
   def idF: A => K
+  /**
+   * returns true if the given instance has been persisted
+   */
   def isPersisted: A => Boolean
-  def propertyName: String
+  /**
+   * the (Scala) property/field name of the id 
+   */
+  def idPropertyName: String
+  /**
+   * the counter field name for OCC, None to disable OCC (optimistic concurrency control)
+   */
   def optimisticCounterPropertyName: Option[String] = None
-  def isOptimistic = optimisticCounterPropertyName.isDefined
-  def keyedEntityDef = Some(this)
+  
+  private [squeryl] def isOptimistic = optimisticCounterPropertyName.isDefined
+  
+  /**
+   * fulfills the contract of OptionalKeyedEntityDef
+   */
+  final def keyedEntityDef = Some(this)
 }
 
-trait OptionalKeyedEntityDef[A,K] {
+trait OptionalKeyedEntityDef[-A,K] {
   def keyedEntityDef: Option[KeyedEntityDef[A,K]]
 }
 

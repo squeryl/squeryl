@@ -134,9 +134,9 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
         
         viewOrTable.ked.map { ked =>
 
-          val pkMethod = clasz.getMethod(ked.propertyName)
+          val pkMethod = clasz.getMethod(ked.idPropertyName)
 
-          assert(pkMethod != null, "Could not get getter for " + ked.propertyName + " in " + clasz.getCanonicalName())
+          assert(pkMethod != null, "Could not get getter for " + ked.idPropertyName + " in " + clasz.getCanonicalName())
 
           pkMethod
         }
