@@ -218,7 +218,7 @@ class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O]
     val b2 = _map.remove(o) != None
     assert(b1 == b2,
       'MutableManyToMany + " out of sync " + o.asInstanceOf[AnyRef].getClass.getName +" with id=" +
-      relation.kedL.idF(o) + (if(b1) "" else "does not") + " exist in the db, and cached collection says the opposite")
+      relation.kedL.getId(o) + (if(b1) "" else "does not") + " exist in the db, and cached collection says the opposite")
     b1
   }
 

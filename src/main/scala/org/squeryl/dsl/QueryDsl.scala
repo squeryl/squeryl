@@ -42,8 +42,8 @@ trait QueryDsl
   outerQueryDsl =>
   
   implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
-    def idF = (a:A) => a.id
-    def isPersisted = (a:A) => a.isPersisted
+    def getId(a:A) = a.id
+    def isPersisted(a:A) = a.isPersisted
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = 
       if(classOf[Optimistic].isAssignableFrom(m.erasure))

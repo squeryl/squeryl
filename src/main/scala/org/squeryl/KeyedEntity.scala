@@ -19,11 +19,12 @@ import annotations.Transient
 
 @scala.annotation.implicitNotFound(msg = "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[{K}]")
 trait KeyedEntityDef[-A,K] extends OptionalKeyedEntityDef[A,K]{
-  def idF: A => K
+  
+  def getId(a: A): K
   /**
    * returns true if the given instance has been persisted
    */
-  def isPersisted: A => Boolean
+  def isPersisted(a: A):  Boolean
   /**
    * the (Scala) property/field name of the id 
    */

@@ -293,7 +293,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       Utils.mapSampleObject(
         t.asInstanceOf[Table[AnyRef]],
         (z:AnyRef) => {
-          val id = ked.asInstanceOf[KeyedEntityDef[AnyRef,AnyRef]].idF(z)
+          val id = ked.asInstanceOf[KeyedEntityDef[AnyRef,AnyRef]].getId(z)
           if(id.isInstanceOf[CompositeKey]) {
             val compositeCols = id.asInstanceOf[CompositeKey]._fields
             res.append((t, compositeCols))

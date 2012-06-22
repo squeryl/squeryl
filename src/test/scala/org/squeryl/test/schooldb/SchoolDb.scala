@@ -123,21 +123,21 @@ class StringKeyedEntity(val id: String, val tempo: Tempo.Tempo) extends KeyedEnt
 class SchoolDb extends Schema {
 
   implicit object personKED extends KeyedEntityDef[Student,Int] {
-    def idF = (a:Student) => a.id
-    def isPersisted = (a:Student) => a.id > 0
+    def getId(a:Student) = a.id
+    def isPersisted(a:Student) = a.id > 0
     def idPropertyName = "id"
   }
 
   implicit object schoolDbObjectKED extends KeyedEntityDef[SchoolDbObject,Int] {
-    def idF = (a:SchoolDbObject) => a.id
-    def isPersisted = (a:SchoolDbObject) => a.id > 0
+    def getId(a:SchoolDbObject) = a.id
+    def isPersisted(a:SchoolDbObject) = a.id > 0
     def idPropertyName = "id"
   }
   
   
   implicit object courseKED extends KeyedEntityDef[Course,Int] {
-    def idF = (a:Course) => a.id
-    def isPersisted = (a:Course) => a.id > 0
+    def getId(a:Course) = a.id
+    def isPersisted(a:Course) = a.id > 0
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = Some("occVersionNumber")
   }

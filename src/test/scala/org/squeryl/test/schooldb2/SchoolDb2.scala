@@ -88,8 +88,8 @@ class ASTConstructionInterferenceB(val aId: Long) extends KeyedEntity[Long] {
 class SchoolDb2 extends Schema {
 
   implicit object schoolDbObjectKED extends KeyedEntityDef[SchoolDb2Object,Long] {
-    def idF = (a:SchoolDb2Object) => a.id
-    def isPersisted = (a:SchoolDb2Object) => a.id > 0
+    def getId(a:SchoolDb2Object) = a.id
+    def isPersisted(a:SchoolDb2Object) = a.id > 0
     def idPropertyName = "id"
   }
   

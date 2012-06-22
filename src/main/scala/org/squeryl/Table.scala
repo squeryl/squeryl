@@ -195,7 +195,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       if(checkOCC && posoMetaData.isOptimistic) {
         val version = posoMetaData.optimisticCounter.get.getNativeJdbcValue(o.asInstanceOf[AnyRef])
         throw new StaleUpdateException(
-           "Object "+prefixedName + "(id=" + ked.idF(o) + ", occVersionNumber=" + version +
+           "Object "+prefixedName + "(id=" + ked.getId(o) + ", occVersionNumber=" + version +
            ") has become stale, it cannot be updated under optimistic concurrency control")
       }
       else
@@ -281,7 +281,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
   def delete[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): Boolean  = {
     import dsl._
     val q = from(this)(a => dsl.where {
-      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.idF(a), k)
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.getId(a), k)
     } select(a))
 
     lazy val z = q.headOption
