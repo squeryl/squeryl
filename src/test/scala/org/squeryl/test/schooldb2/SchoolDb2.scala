@@ -453,6 +453,41 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     passed('testInFromSeq)
   }
   
+  test("Inequality with query on right hand side", SingleTestRun) {
+    val seedData = seedDataDef
+    import seedData._
+   
+    val xiao = students.lookup(xiaoJimbao.id).get
+
+    val courseSubscription = xiao.courses.assign(chemistryCourse)
+
+    courseSubscriptions.insert(courseSubscription)
+    courseSubscription.grade = 95.0F
+    courseSubscriptions.update(courseSubscription)
+
+    val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
+    
+    assertEquals(95.0F, cs2.grade, 'testUpdateWithCompositePK)
+    
+    val cs = from(courseSubscriptions)(p => compute(avg(p.grade)))
+   
+    val belowOrEqualToAvg = 
+      from(courseSubscriptions)(p =>
+        where(p.grade lte from(courseSubscriptions)(p => compute(avg(p.grade))))
+        select(p)
+      ).toList
+      
+    assert(belowOrEqualToAvg.size == 1)
+    
+    val belowAvg = 
+      from(courseSubscriptions)(p =>
+        where(p.grade lt from(courseSubscriptions)(p => compute(avg(p.grade))))
+        select(p)
+      ).toList
+      
+    assert(belowAvg.size == 0)    
+  }
+  
   test ("#73 relations with Option[] on one side of the equality expression blow up") {
 
     seedDataDef
