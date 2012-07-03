@@ -81,7 +81,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     _tables.filter(_.posoMetaData.clasz == c).asInstanceOf[Iterable[Table[A]]]
   }
 
-  private [squeryl] def findAllTablesFor[A](c: Class[A]) =
+  def findAllTablesFor[A](c: Class[A]) =
     _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Traversable[Table[_]]]
 
 
