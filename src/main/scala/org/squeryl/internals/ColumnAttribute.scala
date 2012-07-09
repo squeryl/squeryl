@@ -68,3 +68,8 @@ case class Unupdatable() extends ColumnAttribute
 case class Named(name: String) extends ColumnAttribute
         with AttributeValidOnNumericalColumn
         with AttributeValidOnNonNumericalColumn        
+        
+case class IsTransient() extends ColumnAttribute
+        with AttributeValidOnNumericalColumn
+        with AttributeValidOnNonNumericalColumn
+        

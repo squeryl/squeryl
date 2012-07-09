@@ -147,6 +147,9 @@ class FieldMetaData(
     else
       Some(dbt.get.asInstanceOf[DBType].declaration)
   }
+  
+  def isTransient =
+    _columnAttributes.exists(_.isInstanceOf[IsTransient])
 
   def isCustomType = customTypeFactory != None
 

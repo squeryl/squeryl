@@ -101,7 +101,7 @@ case class PostalCode(code: String) extends KeyedEntity[String] {
   def id = code
 }
 
-class School(val addressId: Int, val name: String, val parentSchoolId: Long) extends KeyedEntity[Long] {
+case class School(val addressId: Int, val name: String, val parentSchoolId: Long, val transientField: String) extends KeyedEntity[Long] {
   var id_field: Long = 0
 
   def id = id_field
@@ -209,6 +209,10 @@ class SchoolDb extends Schema {
     e.tempo.defaultsTo(Tempo.Largo)
   ))
 
+  on(schools)(s => declare(
+    s.transientField is transient
+  ))
+  
   // disable the override, since the above is good for Oracle only, this is not a usage demo, but
   // a necessary hack to test the dbType override mechanism and still allow the test suite can run on all database :
   override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_])  =
@@ -497,6 +501,19 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testInOpWithStringList)
   }
   
+  test("transient annotation", SingleTestRun) {
+    
+
+    val s = schools.insert(new School(123,"EB123",0, "transient !"))
+    
+    val s2 = schools.lookup(s.id).get
+    
+    assert(s.id == s2.id)
+    
+    assert(s2.transientField != "transient !")
+    
+  }
+  
   test("lifecycleCallbacks") {
 
 
@@ -514,7 +531,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(!beforeInsertsOfProfessor.exists(_ == s1))
     assert(!afterInsertsOfProfessor.exists(_ == s1))
 
-    val s2 = schools.insert(new School(0,"EB",0))
+    val s2 = schools.insert(new School(0,"EB",0, ""))
 
     assert(!beforeInsertsOfPerson.exists(_ == s2))
     assert(beforeInsertsOfKeyedEntity.exists(_ == s2))

@@ -502,6 +502,8 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   protected def unupdatable = Unupdatable()
   
   protected def named(name: String) = Named(name)
+  
+  protected def transient = IsTransient()
 
   class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
 
