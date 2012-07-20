@@ -103,7 +103,6 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     val qen = new QueryExpressionNode[R](this, qy, subQueries, views)
     val (sl,d) = qy.invokeYieldForAst(qen, resultSetMapper)
     qen.setOutExpressionNodesAndSample(sl, d)
-    qen.propagateOuterScope()
 
 //    sl.filter(_.isInstanceOf[ExportedSelectElement]).
 //       map(_.asInstanceOf[ExportedSelectElement]).

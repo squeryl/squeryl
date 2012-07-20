@@ -1516,12 +1516,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   }
 
-  ignore("VeryVeryNestedExists"){
+  test("VeryVeryNestedExists"){
     val testInstance = sharedTestInstance; import testInstance._
-    // XXX This doesn't work s.addressId in s.addressId === a2.id is created
-    // as a direct ieldSelectElement, not ExportedSelectElement (however note that
-    // s.addressId in where(s.addressId in ... is created correctly (and then correctly
-    // resolved as an outer reference)
     val qStudents = from(students) ((s) => select(s))
     val qStudentsFromStudents = from(qStudents) ((s) => select(s))
     val studentsWithAnAddress =
@@ -1543,7 +1539,31 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testVeryVeryNestedExists)
 
   }
+  
+  test("selectFromExists"){
+    val testInstance = sharedTestInstance; import testInstance._
+    val qStudents = from(students) ((s) => select(s))
+    val studentsWithAnAddress =
+      from(qStudents)(s =>
+        where(exists(from(addresses)((a) =>
+          where(s.addressId === a.id) select(a))))
+          select(s)
+      )
+    val qAStudentIfHeHasAnAddress =
+      from(studentsWithAnAddress)(s =>
+        where(s.name === "Xiao")
+        select(s)
+      )
 
+    val res = for (s <- qAStudentIfHeHasAnAddress) yield s.name
+    val expected = List("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('selectFromExists)
+
+  }
+  
   test("UpdateSetAll") {
     val testInstance = sharedTestInstance; import testInstance._
     update(students)(s => setAll(s.age := Some(30)))
