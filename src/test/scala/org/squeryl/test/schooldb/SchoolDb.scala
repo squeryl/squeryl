@@ -1521,12 +1521,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   }
 
-  ignore("VeryVeryNestedExists"){
+  test("VeryVeryNestedExists"){
     val testInstance = sharedTestInstance; import testInstance._
-    // XXX This doesn't work s.addressId in s.addressId === a2.id is created
-    // as a direct ieldSelectElement, not ExportedSelectElement (however note that
-    // s.addressId in where(s.addressId in ... is created correctly (and then correctly
-    // resolved as an outer reference)
     val qStudents = from(students) ((s) => select(s))
     val qStudentsFromStudents = from(qStudents) ((s) => select(s))
     val studentsWithAnAddress =

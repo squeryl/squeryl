@@ -174,7 +174,7 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
 }
 
 class ExistsExpression(val ast: ExpressionNode, val opType: String)
-  extends PrefixOperatorNode(ast, opType, false) with LogicalBoolean with NestedExpression
+  extends PrefixOperatorNode(ast, opType, false) with LogicalBoolean
 
 class BetweenExpression(first: ExpressionNode, second: ExpressionNode, third: ExpressionNode)
   extends TernaryOperatorNode(first, second, third, "between") with LogicalBoolean {
@@ -527,7 +527,7 @@ class DummyExpressionHolder(val renderedExpression: String) extends ExpressionNo
 }
 
 class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = None)
-    extends ExpressionNode with NestedExpression {
+    extends ExpressionNode {
   def toIn = new RightHandSideOfIn[A](ast, Some(true))
   def toNotIn = new RightHandSideOfIn[A](ast, Some(false))
 
@@ -550,21 +550,4 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     else {
       ast.doWrite(sw)
     }
-}
-
-trait NestedExpression {
-  self: ExpressionNode =>
-
-  private [squeryl] def propagateOuterScope(query:QueryExpressionNode[_]) {
-    visitDescendants( (node, parent, depth) =>
-      node match {
-        case e:ExportedSelectElement if e.needsOuterScope => e.outerScopes = query :: e.outerScopes
-        case s:SelectElementReference[_,_] => s.delegateAtUseSite match {
-          case e:ExportedSelectElement if e.needsOuterScope => e.outerScopes = query :: e.outerScopes
-          case _ =>
-        }
-        case _ =>
-      }
-    )
-  }
 }

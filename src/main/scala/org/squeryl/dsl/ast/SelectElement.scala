@@ -20,6 +20,7 @@ import org.squeryl.internals._
 import java.sql.ResultSet
 import org.squeryl.Session
 import org.squeryl.dsl.TypedExpression
+import scala.annotation.tailrec
 
 /**
  * SelectElement are elements of a select list, for example they are a,b, and c in :
@@ -265,8 +266,6 @@ class ExportedSelectElement
   (val selectElement: SelectElement)
     extends SelectElement {
 
-  var outerScopes:List[QueryExpressionNode[_]] = Nil
-
   def resultSetMapper = selectElement.resultSetMapper
 
   override def inhibited =
@@ -325,7 +324,16 @@ class ExportedSelectElement
     outerTarget.getOrElse(org.squeryl.internals.Utils.throwError("could not find the target of : " + selectElement))
   )
 
-  def needsOuterScope:Boolean = innerTarget.isEmpty && outerTarget.isEmpty && ! isDirectOuterReference
+  private def outerScopes: List[QueryExpressionNode[_]] = outerScopes0(this, Nil)
+
+  @tailrec
+  private def outerScopes0(current: ExpressionNode, scopes: List[QueryExpressionNode[_]]): List[QueryExpressionNode[_]] = {
+    current.parent match {
+      case Some(s: QueryExpressionNode[_]) => outerScopes0(s, scopes :+ s)
+      case Some(n) => outerScopes0(n, scopes)
+      case None => scopes
+    }
+  }
 
   private def isDirectOuterReference: Boolean = outerScopes.exists((outer) => outer == selectElement.parentQueryable)
 
