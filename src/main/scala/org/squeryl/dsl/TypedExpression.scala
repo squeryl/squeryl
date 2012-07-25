@@ -315,43 +315,36 @@ trait IntegralTypedExpressionFactory[A1,T1,A2,T2]
   def floatifyer: TypedExpressionFactory[A2,T2]
 }
 
+trait DeOptionizer[P1, A1, T1, A2 >: Option[A1] <: Option[A1], T2] extends JdbcMapper[P1, A2] {
+  self: TypedExpressionFactory[A2, T2] =>
 
-trait DeOptionizer[A1,T1,A2 <: Option[A1],T2] extends JdbcMapper[A1,A2] {
-  self: TypedExpressionFactory[A2,T2] =>
-    
-  def deOptionizer: TypedExpressionFactory[A1,T1]
-  
+  def deOptionizer: TypedExpressionFactory[A1, T1] with JdbcMapper[P1, A1]
+
   def sample = Option(deOptionizer.sample)
-  
+
   def defaultColumnLength: Int = deOptionizer.defaultColumnLength
-    
-  def convertFromJdbc(v: A1): A2 = Option(v).asInstanceOf[A2]
-  /**
-   * Jdbc uses nulls, we work with A1 <: Any, so we must hide this
-   * to the compiler by allowing a null returning function pose as a Function1[A2,A1]
-   */
-  private val imposter = { 
-    (a2:A2) => if(a2 == None) null else (a2:Option[A1]).get.asInstanceOf[AnyRef]
-  }.asInstanceOf[Function1[A2,A1]]
-  
-  def convertToJdbc(v: A2) = imposter(v)
-  
-  def extractNativeJdbcValue(rs: ResultSet, i: Int) = deOptionizer.thisMapper.map(rs,i) 
-  
+
+  def convertFromJdbc(v: P1): A2 = Option(deOptionizer.convertFromJdbc(v))
+
+  def convertToJdbc(v: A2): P1 =
+    v map (p => deOptionizer.convertToJdbc(p)) getOrElse (null.asInstanceOf[P1])
+
+  def extractNativeJdbcValue(rs: ResultSet, i: Int) = deOptionizer.extractNativeJdbcValue(rs, i)
+
   override def createOutMapper: OutMapper[A2] = new OutMapper[A2] {
     def doMap(rs: ResultSet): A2 = {
-          
+
       val v = deOptionizer.thisMapper.map(rs,index)
-      val r = 
-        if(rs.wasNull)
+      val r =
+        if (rs.wasNull)
           None
         else
           Option(v)
-          
-      r.asInstanceOf[A2]
+
+      r
     }
-    
-    def sample:A2 = convertFromJdbc(deOptionizer.sample)
+
+    def sample = Option(deOptionizer.sample)
   }
 }
 

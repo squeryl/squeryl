@@ -247,7 +247,7 @@ trait QueryDsl
           A1,A2,A3]
          (a: TypedExpression[A1,T1],
           b: TypedExpression[A2,T2])
-         (implicit d: DeOptionizer[A3,T4,_,T3]): TypedExpression[A3,T4] = new NvlNode(a, d.deOptionizer.convert(b))
+         (implicit d: DeOptionizer[_,A3,T4,_,T3]): TypedExpression[A3,T4] = new NvlNode(a, d.deOptionizer.convert(b))
   
   def not(b: LogicalBoolean) = new FunctionNode("not", Seq(b)) with LogicalBoolean
 

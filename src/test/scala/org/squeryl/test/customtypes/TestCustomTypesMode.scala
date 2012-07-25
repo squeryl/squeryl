@@ -50,6 +50,7 @@ abstract class TestCustomTypesMode extends SchemaTester with QueryTester with Ru
     validateQuery('simpleSelect, simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
     validateQuery('simpleSelect1, patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
     validateQuery('simpleSelect2, patients.where(_.age < 40), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
+    validateQuery('simpleSelect3, patients.where(_.age < Some(new Age(40))), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
   }
 
   test("OneToMany"){

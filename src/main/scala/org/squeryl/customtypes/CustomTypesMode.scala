@@ -38,7 +38,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: StringField) = v.value
   }
         
-  val optionStringTEF = new TypedExpressionFactory[Option[StringField],TOptionString] with DeOptionizer[StringField, TString, Option[StringField], TOptionString]{
+  val optionStringTEF = new TypedExpressionFactory[Option[StringField],TOptionString] with DeOptionizer[String, StringField, TString, Option[StringField], TOptionString]{
     val deOptionizer = stringTEF
   }
     
@@ -47,7 +47,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: DateField) = v.value
   }
     
-  val optionDateTEF = new TypedExpressionFactory[Option[DateField],TOptionDate] with DeOptionizer[DateField, TDate, Option[DateField], TOptionDate] {    
+  val optionDateTEF = new TypedExpressionFactory[Option[DateField],TOptionDate] with DeOptionizer[Date, DateField, TDate, Option[DateField], TOptionDate] {
     val deOptionizer = dateTEF
   }
 
@@ -57,7 +57,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
 
   }
   
-  val optionTimestampTEF = new TypedExpressionFactory[Option[TimestampField],TOptionTimestamp] with DeOptionizer[TimestampField, TTimestamp, Option[TimestampField], TOptionTimestamp] {
+  val optionTimestampTEF = new TypedExpressionFactory[Option[TimestampField],TOptionTimestamp] with DeOptionizer[Timestamp, TimestampField, TTimestamp, Option[TimestampField], TOptionTimestamp] {
     val deOptionizer = timestampTEF
   }
 
@@ -66,7 +66,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: BooleanField) = v.value
   }
     
-  val optionBooleanTEF = new TypedExpressionFactory[Option[BooleanField],TOptionBoolean] with DeOptionizer[BooleanField, TBoolean, Option[BooleanField], TOptionBoolean] {
+  val optionBooleanTEF = new TypedExpressionFactory[Option[BooleanField],TOptionBoolean] with DeOptionizer[Boolean, BooleanField, TBoolean, Option[BooleanField], TOptionBoolean] {
     val deOptionizer = booleanTEF
   }
   
@@ -75,7 +75,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: UuidField) = v.value
   }
         
-  val optionUUIDTEF = new TypedExpressionFactory[Option[UuidField],TOptionUUID] with DeOptionizer[UuidField, TUUID, Option[UuidField], TOptionUUID] {
+  val optionUUIDTEF = new TypedExpressionFactory[Option[UuidField],TOptionUUID] with DeOptionizer[UUID, UuidField, TUUID, Option[UuidField], TOptionUUID] {
     val deOptionizer = uuidTEF
   }
     
@@ -86,7 +86,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: ByteField) = v.value
   }
     
-  val optionByteTEF = new IntegralTypedExpressionFactory[Option[ByteField],TOptionByte, Option[FloatField], TOptionFloat] with DeOptionizer[ByteField, TByte, Option[ByteField], TOptionByte] {
+  val optionByteTEF = new IntegralTypedExpressionFactory[Option[ByteField],TOptionByte, Option[FloatField], TOptionFloat] with DeOptionizer[Byte, ByteField, TByte, Option[ByteField], TOptionByte] {
     val deOptionizer = byteTEF
     val floatifyer = optionFloatTEF
   }
@@ -97,7 +97,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: IntField) = v.value
   }  
     
-  val optionIntTEF = new IntegralTypedExpressionFactory[Option[IntField],TOptionInt,Option[FloatField],TOptionFloat] with DeOptionizer[IntField,TInt,Option[IntField],TOptionInt] {
+  val optionIntTEF = new IntegralTypedExpressionFactory[Option[IntField],TOptionInt,Option[FloatField],TOptionFloat] with DeOptionizer[Int, IntField,TInt,Option[IntField],TOptionInt] {
     val deOptionizer = intTEF
     val floatifyer = optionFloatTEF
   }
@@ -108,7 +108,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: LongField) = v.value
   }
   
-  val optionLongTEF = new IntegralTypedExpressionFactory[Option[LongField],TOptionLong,Option[DoubleField],TOptionDouble] with DeOptionizer[LongField,TLong,Option[LongField],TOptionLong] {
+  val optionLongTEF = new IntegralTypedExpressionFactory[Option[LongField],TOptionLong,Option[DoubleField],TOptionDouble] with DeOptionizer[Long,LongField,TLong,Option[LongField],TOptionLong] {
     val deOptionizer = longTEF
     val floatifyer = optionDoubleTEF
   }
@@ -120,7 +120,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: FloatField) = v.value
   }
     
-  val optionFloatTEF = new FloatTypedExpressionFactory[Option[FloatField],TOptionFloat] with DeOptionizer[FloatField,TFloat,Option[FloatField],TOptionFloat] {
+  val optionFloatTEF = new FloatTypedExpressionFactory[Option[FloatField],TOptionFloat] with DeOptionizer[Float,FloatField,TFloat,Option[FloatField],TOptionFloat] {
     val deOptionizer = floatTEF
   }
     
@@ -129,7 +129,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: DoubleField) = v.value
   }
     
-  val optionDoubleTEF = new FloatTypedExpressionFactory[Option[DoubleField],TOptionDouble] with DeOptionizer[DoubleField,TDouble,Option[DoubleField],TOptionDouble] {
+  val optionDoubleTEF = new FloatTypedExpressionFactory[Option[DoubleField],TOptionDouble] with DeOptionizer[Double,DoubleField,TDouble,Option[DoubleField],TOptionDouble] {
     val deOptionizer = doubleTEF
   }
     
@@ -138,7 +138,7 @@ trait CustomTypesMode extends QueryDsl with FieldMapper {
     def convertToJdbc(v: BigDecimalField) = v.value
   }
     
-  val optionBigDecimalTEF = new FloatTypedExpressionFactory[Option[BigDecimalField],TOptionBigDecimal] with DeOptionizer[BigDecimalField,TBigDecimal,Option[BigDecimalField],TOptionBigDecimal] {
+  val optionBigDecimalTEF = new FloatTypedExpressionFactory[Option[BigDecimalField],TOptionBigDecimal] with DeOptionizer[BigDecimal,BigDecimalField,TBigDecimal,Option[BigDecimalField],TOptionBigDecimal] {
     val deOptionizer = bigDecimalTEF
   }      
   

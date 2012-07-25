@@ -45,7 +45,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getString(i)
     }
         
-    val optionStringTEF = new TypedExpressionFactory[Option[String],TOptionString] with DeOptionizer[String, TString, Option[String], TOptionString]{
+    val optionStringTEF = new TypedExpressionFactory[Option[String],TOptionString] with DeOptionizer[String, String, TString, Option[String], TOptionString]{
       val deOptionizer = stringTEF
     }
     
@@ -55,7 +55,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getDate(i)
     }
     
-    val optionDateTEF = new TypedExpressionFactory[Option[Date],TOptionDate] with DeOptionizer[Date, TDate, Option[Date], TOptionDate] {    
+    val optionDateTEF = new TypedExpressionFactory[Option[Date],TOptionDate] with DeOptionizer[Date, Date, TDate, Option[Date], TOptionDate] {
       val deOptionizer = dateTEF
     }
       
@@ -66,7 +66,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getTimestamp(i)
     }
   
-    val optionTimestampTEF = new TypedExpressionFactory[Option[Timestamp],TOptionTimestamp] with DeOptionizer[Timestamp, TTimestamp, Option[Timestamp], TOptionTimestamp] {
+    val optionTimestampTEF = new TypedExpressionFactory[Option[Timestamp],TOptionTimestamp] with DeOptionizer[Timestamp, Timestamp, TTimestamp, Option[Timestamp], TOptionTimestamp] {
       val deOptionizer = timestampTEF
     }
     
@@ -76,7 +76,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getBoolean(i)
     }
     
-    val optionBooleanTEF = new TypedExpressionFactory[Option[Boolean],TOptionBoolean] with DeOptionizer[Boolean, TBoolean, Option[Boolean], TOptionBoolean] {
+    val optionBooleanTEF = new TypedExpressionFactory[Option[Boolean],TOptionBoolean] with DeOptionizer[Boolean, Boolean, TBoolean, Option[Boolean], TOptionBoolean] {
       val deOptionizer = booleanTEF
     }
   
@@ -92,7 +92,7 @@ trait FieldMapper {
       }
     }
         
-    val optionUUIDTEF = new TypedExpressionFactory[Option[UUID],TOptionUUID] with DeOptionizer[UUID, TUUID, Option[UUID], TOptionUUID] {
+    val optionUUIDTEF = new TypedExpressionFactory[Option[UUID],TOptionUUID] with DeOptionizer[UUID, UUID, TUUID, Option[UUID], TOptionUUID] {
       val deOptionizer = uuidTEF
     }
     
@@ -102,7 +102,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getBytes(i)
     }
     
-    val optionByteArrayTEF = new TypedExpressionFactory[Option[Array[Byte]],TOptionByteArray] with DeOptionizer[Array[Byte], TByteArray, Option[Array[Byte]], TOptionByteArray] {
+    val optionByteArrayTEF = new TypedExpressionFactory[Option[Array[Byte]],TOptionByteArray] with DeOptionizer[Array[Byte], Array[Byte], TByteArray, Option[Array[Byte]], TOptionByteArray] {
       val deOptionizer = binaryTEF
     }
     
@@ -126,7 +126,7 @@ trait FieldMapper {
       val DummyEnumerationValue = Value(-1, "DummyEnumerationValue")
     }
     
-    def optionEnumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Option[Enumeration#Value]) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
+    def optionEnumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Option[Enumeration#Value]) = new TypedExpressionFactory[Option[A],TOptionEnumValue[A]] with DeOptionizer[Int,A,TEnumValue[A],Option[A],TOptionEnumValue[A]] {
       val deOptionizer = {
         val e = ev.getOrElse(PrimitiveTypeSupport.DummyEnum.DummyEnumerationValue)
         enumValueTEF[A](e)
@@ -142,7 +142,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getByte(i)
     }
     
-    val optionByteTEF = new IntegralTypedExpressionFactory[Option[Byte],TOptionByte, Option[Float], TOptionFloat] with DeOptionizer[Byte, TByte, Option[Byte], TOptionByte] {
+    val optionByteTEF = new IntegralTypedExpressionFactory[Option[Byte],TOptionByte, Option[Float], TOptionFloat] with DeOptionizer[Byte, Byte, TByte, Option[Byte], TOptionByte] {
       val deOptionizer = byteTEF
       val floatifyer = optionFloatTEF
     }
@@ -154,7 +154,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getInt(i)
     }  
     
-    val optionIntTEF = new IntegralTypedExpressionFactory[Option[Int],TOptionInt,Option[Float],TOptionFloat] with DeOptionizer[Int,TInt,Option[Int],TOptionInt] {
+    val optionIntTEF = new IntegralTypedExpressionFactory[Option[Int],TOptionInt,Option[Float],TOptionFloat] with DeOptionizer[Int,Int,TInt,Option[Int],TOptionInt] {
       val deOptionizer = intTEF
       val floatifyer = optionFloatTEF
     }
@@ -166,7 +166,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getLong(i)
     }
   
-    val optionLongTEF = new IntegralTypedExpressionFactory[Option[Long],TOptionLong,Option[Double],TOptionDouble] with DeOptionizer[Long,TLong,Option[Long],TOptionLong] {
+    val optionLongTEF = new IntegralTypedExpressionFactory[Option[Long],TOptionLong,Option[Double],TOptionDouble] with DeOptionizer[Long,Long,TLong,Option[Long],TOptionLong] {
       val deOptionizer = longTEF
       val floatifyer = optionDoubleTEF
     }
@@ -179,7 +179,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getFloat(i)
     }
     
-    val optionFloatTEF = new FloatTypedExpressionFactory[Option[Float],TOptionFloat] with DeOptionizer[Float,TFloat,Option[Float],TOptionFloat] {
+    val optionFloatTEF = new FloatTypedExpressionFactory[Option[Float],TOptionFloat] with DeOptionizer[Float,Float,TFloat,Option[Float],TOptionFloat] {
       val deOptionizer = floatTEF
     }
     
@@ -189,7 +189,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getDouble(i)
     }
     
-    val optionDoubleTEF = new FloatTypedExpressionFactory[Option[Double],TOptionDouble] with DeOptionizer[Double,TDouble,Option[Double],TOptionDouble] {
+    val optionDoubleTEF = new FloatTypedExpressionFactory[Option[Double],TOptionDouble] with DeOptionizer[Double,Double,TDouble,Option[Double],TOptionDouble] {
       val deOptionizer = doubleTEF
     }
     
@@ -199,7 +199,7 @@ trait FieldMapper {
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = BigDecimal(rs.getBigDecimal(i))
     }
     
-    val optionBigDecimalTEF = new FloatTypedExpressionFactory[Option[BigDecimal],TOptionBigDecimal] with DeOptionizer[BigDecimal,TBigDecimal,Option[BigDecimal],TOptionBigDecimal] {
+    val optionBigDecimalTEF = new FloatTypedExpressionFactory[Option[BigDecimal],TOptionBigDecimal] with DeOptionizer[BigDecimal,BigDecimal,TBigDecimal,Option[BigDecimal],TOptionBigDecimal] {
       val deOptionizer = bigDecimalTEF
     }  
   }
