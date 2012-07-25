@@ -28,6 +28,7 @@ trait Postgresql_Connection extends DBConnector{
   }
 }
 
+class Postgresql_SubQueryTests extends SubQueryTests with Postgresql_Connection
 class Postgresql_UuidTests extends UuidTests with Postgresql_Connection
 class Postgresql_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Postgresql_Connection
 class Postgresql_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Postgresql_Connection

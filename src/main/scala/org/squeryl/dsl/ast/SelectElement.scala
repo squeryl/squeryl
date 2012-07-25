@@ -57,7 +57,7 @@ trait SelectElement extends ExpressionNode {
    */  
   def origin: QueryableExpressionNode
 
-  def parentQueryable = parent.get.asInstanceOf[QueryableExpressionNode]  
+  def parentQueryable = parent.map{_.asInstanceOf[QueryableExpressionNode]}
 
   def resultSetMapper: ResultSetMapper
 
@@ -246,7 +246,7 @@ class SelectElementReference[A,T]
       selectElement
     else {
       val us = this._useSite
-      if(selectElement.parentQueryable == us)
+      if(selectElement.parentQueryable == Some(us))
         selectElement
       else {
         val ese = new ExportedSelectElement(this.selectElement)
@@ -335,7 +335,7 @@ class ExportedSelectElement
     }
   }
 
-  private def isDirectOuterReference: Boolean = outerScopes.exists((outer) => outer == selectElement.parentQueryable)
+  private def isDirectOuterReference: Boolean = outerScopes.exists((outer) => Some(outer) == selectElement.parentQueryable)
 
   private def outerTarget: Option[SelectElement] = {
     val q =
