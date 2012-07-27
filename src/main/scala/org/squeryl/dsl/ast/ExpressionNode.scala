@@ -449,7 +449,7 @@ class PrefixOperatorNode
 
   override def children = List(child)
 
-  override def inhibited = child.inhibited
+  override def inhibited = _inhibitedByWhen || child.inhibited
 
   override def toString = 'PrefixOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
 
@@ -550,7 +550,7 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode {
 
   private def e = a.e
   
-  override def inhibited = e.inhibited
+  override def inhibited = _inhibitedByWhen || e.inhibited
 
   def doWrite(sw: StatementWriter) = {
     e.write(sw)

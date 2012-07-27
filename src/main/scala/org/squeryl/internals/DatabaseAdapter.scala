@@ -113,7 +113,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.groupByClause.isEmpty) {      
+    if(qen.groupByClause.exists(e => ! e.inhibited)) {
       sw.write("Group By")
       sw.nextLine
       sw.writeIndented {
@@ -122,7 +122,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.havingClause.isEmpty) {
+    if(qen.havingClause.exists(e => ! e.inhibited)) {
       sw.write("Having")
       sw.nextLine
       sw.writeIndented {
@@ -131,7 +131,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.orderByClause.isEmpty ) {
+    if(qen.orderByClause.exists(e => ! e.inhibited) ) {
       sw.write("Order By")
       sw.nextLine
       val ob0 = qen.orderByClause.filter(e => ! e.inhibited)
