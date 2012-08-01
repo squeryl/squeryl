@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl
 
-import dsl.QueryDsl
+import dsl.{TypedExpression, QueryDsl}
 import internals._
 import java.sql.ResultSet
 
@@ -92,12 +92,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     _callbacks.afterSelect(t.asInstanceOf[AnyRef]).asInstanceOf[T]
   }
 
-  def lookup[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): Option[T] = {
+  def lookup[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl, toCanLookup: K => CanLookup): Option[T] = {
     //TODO: find out why scalac won't let dsl be passed to another method
     import dsl._
 
     val q = from(this)(a => dsl.where {
-      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.getId(a), k)
+      FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.getId(a), k, toCanLookup(k))
     } select(a))
 
     val it = q.iterator
@@ -115,7 +115,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
   /**
    * Will throw an exception if the given key (k) returns no row.
    */
-  def get[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): T = 
+  def get[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl, toCanLookup: K => CanLookup): T = 
      lookup(k).getOrElse(throw new NoSuchElementException("Found no row with key '"+ k + "' in " + name + "."))
   
   def allRows(implicit dsl: QueryDsl): Iterable[T] = {
@@ -123,3 +123,12 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     dsl.queryToIterable(from(this)(a=> select(a)))
   }
 }
+
+sealed trait CanLookup
+
+private [squeryl] case object CompositeKeyLookup extends CanLookup
+
+private [squeryl] case object UnknownCanLookup extends CanLookup
+
+private [squeryl] case class SimpleKeyLookup[T](convert: T => TypedExpression[T, _]) extends CanLookup
+
