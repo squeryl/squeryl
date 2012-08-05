@@ -54,8 +54,13 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     }
   }                                               
 
-  def sequenceName(t: Table[_]) =
-    t.prefixedPrefixedName("seq_")
+  def sequenceName(t: Table[_]) = {
+    val autoIncPK = t.posoMetaData.fieldsMetaData.find(fmd => fmd.isAutoIncremented)
+    t.name + "_" + autoIncPK.get.nameOfProperty + "_seq"
+  }
+
+  override def createSequenceName(fmd: FieldMetaData) =
+    fmd.parentMetaData.viewOrTable.name + "_" + fmd.columnName + "_seq"
 
   override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
