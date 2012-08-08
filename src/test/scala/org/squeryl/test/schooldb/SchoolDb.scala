@@ -52,6 +52,8 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
   def dummyKey = compositeKey(age, addressId)
 }
 
+case class Course2(id: Int, name: String, confirmed: Boolean, occVersionNumber: Int)
+
 case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date],
   @Column("meaninglessLongZ")
   var meaninglessLong: Long,
@@ -127,7 +129,7 @@ class SchoolDb extends Schema {
     def isPersisted(a:Student) = a.id > 0
     def idPropertyName = "id"
   }
-
+  
   implicit object schoolDbObjectKED extends KeyedEntityDef[SchoolDbObject,Int] {
     def getId(a:SchoolDbObject) = a.id
     def isPersisted(a:SchoolDbObject) = a.id > 0
@@ -141,6 +143,15 @@ class SchoolDb extends Schema {
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = Some("occVersionNumber")
   }
+  
+  implicit object course2KED extends KeyedEntityDef[Course2,Int] {
+    def getId(a:Course2) = a.id
+    def isPersisted(a:Course2) = a.id > 0
+    def idPropertyName = "id"
+    override def optimisticCounterPropertyName = Some("occVersionNumber")
+  }
+  
+  val courses2 = table[Course2]
 
   import org.squeryl.PrimitiveTypeMode._
 
@@ -1174,6 +1185,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     
     val testInstance = sharedTestInstance; import testInstance._
     import schema._
+        
     addresses.insert(List(
       new Address("St-Dominique",14, None,None,None),
       new Address("St-Urbain",23, None,None,None),
@@ -1201,6 +1213,29 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assertEquals(0, updatedQ.Count : Long, "batched update test failed")
 
     passed('testBatchUpdate1)
+  }
+  
+  test("BatchUpdateAndInsert2") {
+    
+    val testInstance = sharedTestInstance; import testInstance._
+    import schema._
+    
+    
+    courses2.insert(
+        Seq(Course2(0, "Programming 101", false, 0),
+            Course2(0, "Programming 102", false, 0)))
+    
+    val c = courses2.where(_.name like "Programming %")
+    val c0 = c.toList
+    
+    assert(c0.size == 2)
+    assert(c0.filter(_.confirmed).size == 0)
+
+    courses2.update(c0.map(_.copy(confirmed = true)))
+    
+    assert(c.filter(_.confirmed).size == 2)
+    
+    passed('BatchUpdateAndInsert2)
   }
 
   test("BigDecimal") {
