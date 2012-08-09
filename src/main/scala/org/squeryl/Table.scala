@@ -177,10 +177,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     _update(o, true, ked)
 
   def update(o: Iterable[T])(implicit ked: KeyedEntityDef[T,_]):Unit =
-    _update(o, true)
+    _update(o, ked.isOptimistic)
 
   def forceUpdate(o: Iterable[T])(implicit ked: KeyedEntityDef[T,_]):Unit =
-    _update(o, false)
+    _update(o, ked.isOptimistic)
 
   private def _update(o: T, checkOCC: Boolean, ked: KeyedEntityDef[T,_]) = {
 
