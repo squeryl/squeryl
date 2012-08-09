@@ -23,6 +23,13 @@ import org.squeryl.{Session, Table}
 
 class PostgreSqlAdapter extends DatabaseAdapter {
 
+  /**
+   * NB: You can override `usePostgresSequenceNamingScheme` to return true in a
+   * child class to change the sequence naming behavior to align with the
+   * default postgresql scheme.
+   */
+  def usePostgresSequenceNamingScheme: Boolean = false
+
   override def intTypeDeclaration = "integer"
   override def stringTypeDeclaration = "varchar"
   override def stringTypeDeclaration(length:Int) = "varchar("+length+")"
@@ -55,12 +62,28 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   }                                               
 
   def sequenceName(t: Table[_]) =
-    t.prefixedPrefixedName("seq_")
+    if (usePostgresSequenceNamingScheme) {
+      // This is compatible with the default postgresql sequence naming scheme.
+      val autoIncPK = t.posoMetaData.fieldsMetaData.find(fmd => fmd.isAutoIncremented)
+      t.name + "_" + autoIncPK.get.nameOfProperty + "_seq"
+    } else {
+      // Use the legacy Squeryl sequence naming scheme.
+      t.prefixedPrefixedName("seq_")
+    }
+
+  override def createSequenceName(fmd: FieldMetaData) =
+    if (usePostgresSequenceNamingScheme) {
+      // This is compatible with the default postgresql sequence naming scheme.
+      fmd.parentMetaData.viewOrTable.name + "_" + fmd.columnName + "_seq"
+    } else {
+      // Use the legacy Squeryl sequence naming scheme.
+      super.createSequenceName(fmd)
+    }
 
   override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
   
-  override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter):Unit = {
+  override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter): Unit = {
 
     val o_ = o.asInstanceOf[AnyRef]
 
