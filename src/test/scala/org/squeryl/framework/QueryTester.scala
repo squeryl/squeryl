@@ -28,7 +28,7 @@ trait QueryTester { self : ShouldMatchers =>
     println(queryName + " :")
     println(query)
 
-    for(r <- query)
+    for(r <- query.asInstanceOf[Query[Any]])
       println("-->" + r)
   }
 

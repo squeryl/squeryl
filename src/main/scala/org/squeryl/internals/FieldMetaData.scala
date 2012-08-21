@@ -24,7 +24,7 @@ import org.squeryl.annotations.{ColumnBase, Column}
 import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.Session
 import org.squeryl.dsl.CompositeKey
-import scala.reflect.generic.ByteCodecs
+import org.squeryl.customtypes.CustomType
 import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteCode, ScalaSigPrinter}
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
@@ -39,14 +39,14 @@ class FieldMetaData(
         val fieldType: Class[_], // if isOption, this fieldType is the type param of Option, i.e. the T in Option[T]
         val wrappedFieldType: Class[_], //in primitive type mode fieldType == wrappedFieldType, in custom type mode wrappedFieldType is the 'real'
         // type, i.e. the (primitive) type that jdbc understands
-        val customTypeFactory: Option[AnyRef=>Product1[Any]],
+        val customTypeFactory: Option[AnyRef => Product1[Any] with AnyRef],
         val isOption: Boolean,
         getter: Option[Method],
         setter: Option[Method],
         field:  Option[Field],
         columnAnnotation: Option[Column],
         val isOptimisticCounter: Boolean,
-        val sampleValue: AnyRef) {
+        val sampleValue: Any) {
 
   def nativeJdbcType =
     this.schema.fieldMapper.nativeJdbcTypeFor(wrappedFieldType)
@@ -301,7 +301,7 @@ class FieldMetaData(
    */
   def set(target: AnyRef, v: AnyRef) = {
     try {
-      val v0:AnyRef =
+      val v0: AnyRef =
         if(v == null)
           null
         else if(enumeration != None)
@@ -402,13 +402,20 @@ object FieldMetaData {
        * Look for a value in the sample type.  If one exists and
        * it is not None, we can use it to deduce the Option type.   
        */
-      var v =
+      var v: Any =
          if(sampleInstance4OptionTypeDeduction != null) {
-           if(field != None)
-             field.get.get(sampleInstance4OptionTypeDeduction)
-           else if(getter != None)
-             getter.get.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY :_*)
-           else
+           field flatMap { f =>
+             f.get(sampleInstance4OptionTypeDeduction) match {
+               case a: AnyRef => Some(a)
+               case _ => None
+             }
+           } orElse {
+	             getter flatMap { _.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY : _*) match {
+	               case a: AnyRef => Some(a)
+	               case _ => None
+	             }
+             }
+           } getOrElse
             createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
          }
          else null
@@ -418,7 +425,7 @@ object FieldMetaData {
 
       val constructorSuppliedDefaultValue = v
 
-      var customTypeFactory: Option[AnyRef=>Product1[Any]] = None
+      var customTypeFactory: Option[AnyRef=>Product1[Any] with AnyRef] = None
 
       if(classOf[Product1[Any]].isAssignableFrom(clsOfField))
         customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, clsOfField)
@@ -493,7 +500,7 @@ object FieldMetaData {
    * that creates an instance of a custom type with it, the factory accepts null to create
    * default values for non nullable primitive types (int, long, etc...)
    */
-  private def _createCustomTypeFactory(fieldMapper: FieldMapper, ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any]] = {
+  private def _createCustomTypeFactory(fieldMapper: FieldMapper, ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any] with AnyRef] = {
     // run through the given class hierarchy and return the first method
     // which is called "value" and doesn't return java.lang.Object
     @tailrec
@@ -508,7 +515,7 @@ object FieldMetaData {
      // invoke the given constructor and expose possible exceptions to the caller.
     def invoke(c: Constructor[_], value: AnyRef) =
       try {
-        c.newInstance(value).asInstanceOf[Product1[Any]]
+        c.newInstance(value).asInstanceOf[Product1[Any] with AnyRef]
       } catch {
         case ex: InvocationTargetException =>
           throw ex.getTargetException
