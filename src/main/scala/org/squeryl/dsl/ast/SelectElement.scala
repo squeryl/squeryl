@@ -236,7 +236,7 @@ class SelectElementReference[A,T]
       e = e.parent.get
       if(e.isInstanceOf[QueryExpressionNode[_]])
         return e.asInstanceOf[QueryExpressionNode[_]]
-    } while (e != None)
+    } while (true)
 
     org.squeryl.internals.Utils.throwError("could not determine use site of "+ this)
   }

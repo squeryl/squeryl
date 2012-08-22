@@ -211,6 +211,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       case (Some(_), None)                   => Some(_dbAdapter.writeIndexDeclaration(cols, None,    name, true))
       case (None,    Some(Indexed(idxName))) => Some(_dbAdapter.writeIndexDeclaration(cols, idxName, name, false))
       case (Some(_), Some(Indexed(idxName))) => Some(_dbAdapter.writeIndexDeclaration(cols, idxName, name, true))
+      case _ => Utils.throwError("Invalid declaration in schema on fields " + cols.mkString(","))
     }
   }
   

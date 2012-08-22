@@ -27,7 +27,7 @@ object SquerylBuild extends Build {
   			  },
     		  parallelExecution := false,
     		  publishMavenStyle := true,
-  			  scalaVersion := "2.9.2",
+  			  scalaVersion := "2.10.0-M7",
   			  crossScalaVersions := Seq("2.9.2", "2.9.1", "2.9.0"),
   			  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   			  homepage := Some(url("http://squeryl.org")),
@@ -73,7 +73,7 @@ object SquerylBuild extends Build {
   			    if(sv startsWith "2.9")
   			     "org.scalatest" % "scalatest_2.9.1" % "1.6.1" % "test"
   			    else
-  			      "org.scalatest" % "scalatest_2.8.2" % "1.5.1" % "test")
+  			      "org.scalatest" % "scalatest_2.10.0-M7" % "1.9-2.10.0-M7-B1" % "test")
   			  }))
 
 }

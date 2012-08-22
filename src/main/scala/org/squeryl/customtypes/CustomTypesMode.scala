@@ -22,7 +22,7 @@ import java.sql.Timestamp
 import org.squeryl.internals.{OutMapper, FieldReferenceLinker, FieldMapper}
 import com.sun.org.apache.xalan.internal.xsltc.compiler.util.IntType
 import java.sql.ResultSet
-
+@deprecated("use mechanism for extended field types instead : https://github.com/max-l/squeryl-extended-field-types-example", "0.9.6")
 trait CustomType[T] extends Product1[T] {
   def value: T
   def _1 = value

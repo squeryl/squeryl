@@ -544,7 +544,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val s2 = schools.insert(new School(0,"EB",0, ""))
 
-    assert(!beforeInsertsOfPerson.exists(_ == s2))
     assert(beforeInsertsOfKeyedEntity.exists(_ == s2))
     assert(!beforeInsertsOfProfessor.exists(_ == s2))
     assert(!afterInsertsOfProfessor.exists(_ == s2))
@@ -576,7 +575,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(fmd.get.fieldType.isAssignableFrom(classOf[String]), "'FieldMetaData " + fmd + " should be of type java.lang.String")
 
     val pk = addresses.posoMetaData.primaryKey.get.left.get
-    assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
+    assert(pk.nameOfProperty == "id", "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
 
     passed('testMetaData )
   }
@@ -1257,7 +1256,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula2 = professors.where(_.weightInBD === Some(261.123456111: BigDecimal))
 
-    assertEquals(261.123456111, babaZula2.single.weightInBD.get, 'testBigDecimal)
+    assertEquals(BigDecimal(261.123456111), babaZula2.single.weightInBD.get, 'testBigDecimal)
 
     update(professors)(p=>
       where(p.id === babaZula.id)
@@ -1275,7 +1274,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula4 = professors.where(_.weightInBD === Some(532.2469122224: BigDecimal))
 
-    assertEquals(532.2469122224, babaZula4.single.weightInBD.get, 'testBigDecimal)
+    assertEquals(BigDecimal(532.2469122224), babaZula4.single.weightInBD.get, 'testBigDecimal)
     assertEquals(1, babaZula4.Count : Long, 'testBigDecimal)
 
     update(professors)(p=>
