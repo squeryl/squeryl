@@ -11,13 +11,15 @@ that are grouped in a org.squeryl.Schema singleton.
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   import org.squeryl.PrimitiveTypeMode._
-  import org.squery.Schema
+  import org.squeryl.Schema
   import org.squeryl.annotations.Column
+  import java.util.Date
+  import java.sql.Timestamp
 
   class Author(val id: Long, 
                val firstName: String, 
-			   val lastName: String,
-			   val email: Option[String]) {
+               val lastName: String,
+               val email: Option[String]) {
 	def this() = this(0,"","",Some(""))		   
   }
   
@@ -25,16 +27,16 @@ that are grouped in a org.squeryl.Schema singleton.
   
   class Book(val id: Long, 
              var title: String,
-			 @Column("AUTHOR_ID") // the default 'exact match' policy can be overriden
-			 var authorId: Long,
-			 var coAuthorId: Option[Long]) {
+             @Column("AUTHOR_ID") // the default 'exact match' policy can be overriden
+             var authorId: Long,
+             var coAuthorId: Option[Long]) {
     
 	def this() = this(0,"",0,Some(0L))
   }
   
-  class Borrowal(val id: Long
-                 val bookId: Long
-                 val borrowerAccountId: Long
+  class Borrowal(val id: Long,
+                 val bookId: Long,
+                 val borrowerAccountId: Long,
                  val scheduledToReturnOn: Date,
                  val returnedOn: Option[Timestamp],
                  val numberOfPhonecallsForNonReturn: Int)
