@@ -25,7 +25,7 @@ class SampleTuple
   override def canEqual(a:Any) = false
   override def equals(a:Any) = false
   override def productArity = outNodes.size
-  override def productElement(n: Int):Any = _get(n)
+  override def productElement(n: Int):Any = _get(n + 1)
 
   protected def _get[B](i:Int) = {
     FieldReferenceLinker.putLastAccessedSelectElement(outNodes.apply(i - 1))
