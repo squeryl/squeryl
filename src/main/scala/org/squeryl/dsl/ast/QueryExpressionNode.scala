@@ -17,6 +17,7 @@ package org.squeryl.dsl.ast
 
 import org.squeryl.internals._
 import org.squeryl.dsl.{QueryYield, AbstractQuery}
+import scala.collection.mutable.ListBuffer
 
 class QueryExpressionNode[R](_query: AbstractQuery[R],
                              _queryYield:QueryYield[R],
@@ -73,17 +74,18 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
     sb.toString
   }
 
-  override def children =
-    List(
-      selectList.toList,
-      views.toList,
-      subQueries.toList,
-      tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get).toList,  
-      whereClause.toList,
-      groupByClause.toList,
-      havingClause.toList,
-      orderByClause.toList      
-    ).flatten
+  override def children = {
+    val lb = ListBuffer[ExpressionNode]();
+    lb ++= selectList
+    lb ++= views
+    lb ++= subQueries
+    lb ++= tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get)  
+    lb ++= whereClause
+    lb ++= groupByClause
+    lb ++= havingClause
+    lb ++= orderByClause      
+    lb.toList
+  }
 
   def isChild(q: QueryableExpressionNode):Boolean =
     views.find(n => n == q) != None
