@@ -15,12 +15,12 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import java.lang.reflect.Method
 import net.sf.cglib.proxy._
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast._
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.dsl.TypedExpression
+import java.lang.reflect.{Field, Method}
 
 object FieldReferenceLinker {
 
@@ -220,51 +220,67 @@ object FieldReferenceLinker {
     }
     result
   }
-
-  private def _populateSelectColsRecurse(visited: java.util.IdentityHashMap[AnyRef,AnyRef] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef):Unit = {
-
-    if(o == null)
-      return
-
-    if(visited.containsKey(o))
-      return
-
-    val clazz = o.getClass
-    val clazzName = clazz.getName
-    if(clazzName.startsWith("java.") || clazzName.startsWith("net.sf.cglib.") || clazzName.startsWith("scala.Enumeration"))
-      return
-
-    visited.put(o, o)
-    
-    _populateSelectCols(yi, q, o)
-    for(f <- clazz.getDeclaredFields) {
-      f.setAccessible(true);
-      val ob = f.get(o)
-
-      // don't follow closures and CGLIB internal state 
-      if(!(f.getName.startsWith("CGLIB$") ||
-           f.getType.getName.startsWith("scala.Function") || 
-           FieldMetaData.factory.hideFromYieldInspection(o, f)))
-        _populateSelectColsRecurse(visited, yi, q, ob)
-    }
+  
+  /*
+   * The theory here is that setting the var is an atomic operation, so
+   * it should be ok to perform without synchronization.
+   * Worst case scenario would be that one thread overwrites the map
+   * created by a previous thread, but since it's just a cache and the fields
+   * can be retrieved at any time, that's ok.
+   */
+  private object _declaredFieldCache {
+  
+	  var _cache: Map[Class[_], Array[Field]] =
+			  Map[Class[_], Array[Field]]()
+			  
+	  def apply(cls: Class[_]) =
+	    _cache.get(cls) getOrElse {
+	      val declaredFields = cls.getDeclaredFields()
+	      _cache += ((cls, declaredFields))
+	      declaredFields
+	    }
+	  
   }
+
+  private def _populateSelectColsRecurse(visited: java.util.IdentityHashMap[AnyRef, AnyRef] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef): Unit =
+	  if(o != null && o != None) {
+		  if(!visited.containsKey(o)) {
+			  val clazz = o.getClass
+			  val clazzName = clazz.getName
+			  //println("Looking at " + clazzName)
+			  if(!clazzName.startsWith("java.") && 
+					  !clazzName.startsWith("net.sf.cglib.") && 
+					  !clazzName.startsWith("scala.Enumeration")) {
+				  visited.put(o,o)
+				  _populateSelectCols(yi, q, o)
+				  for(f <- _declaredFieldCache(clazz)) {
+					  f.setAccessible(true);
+					  val ob = f.get(o)
+					  if(!f.getName.startsWith("CGLIB$") && 
+					        !f.getType.getName.startsWith("scala.Function") && 
+					        !FieldMetaData.factory.hideFromYieldInspection(o, f)) {
+						  _populateSelectColsRecurse(visited, yi, q, ob)
+					  }
+				  }
+			  }
+		  }
+	  }
+  
   
   private def _populateSelectCols(yi: YieldInspection,q: QueryExpressionElements, sample: AnyRef): Unit = {
-
     var owner = _findQENThatOwns(sample, q)
-    if(owner == None)
-      return
-
-    for(e <- owner.get.getOrCreateAllSelectElements(q))
-      yi.addSelectElement(e)
+    owner foreach { o =>
+      for(e <- o.getOrCreateAllSelectElements(q))
+    	  yi.addSelectElement(e)
+    }
   }
 
-  def findOwnerOfSample(s: Any): Option[QueryableExpressionNode] =
+  def findOwnerOfSample(s: AnyRef): Option[QueryableExpressionNode] =
 // TODO: could we enforce that Query[AnyVal] are not nested in some other way ?   
 //    if(s.isInstanceOf[AnyVal])
 //      org.squeryl.internals.Utils.throwError("A query that returns a AnyVal cannot be nested " + Utils.failSafeString(FieldReferenceLinker.inspectedQueryExpressionNode.toString))
 //    else
-     _findQENThatOwns(s.asInstanceOf[AnyRef], FieldReferenceLinker.inspectedQueryExpressionNode)
+     _findQENThatOwns(s, FieldReferenceLinker.inspectedQueryExpressionNode)
 
   private def _findQENThatOwns(sample: AnyRef, q: QueryExpressionElements): Option[QueryableExpressionNode] = {
 
