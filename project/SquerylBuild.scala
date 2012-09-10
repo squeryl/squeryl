@@ -10,7 +10,7 @@ object SquerylBuild extends Build {
     settings = Project.defaultSettings /* ++ lsSettings */ ++ Seq(
       description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
       organization := "org.squeryl",
-      version := "0.9.5",
+      version := "0.9.5-3",
       version <<= version { v => //only release *if* -Drelease=true is passed to JVM
         val release = Option(System.getProperty("release")) == Some("true")
         if (release)
@@ -24,7 +24,7 @@ object SquerylBuild extends Build {
       },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.10.0-M7",
+      scalaVersion := "2.9.2",
       crossScalaVersions := Seq("2.10.0-M7", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0", "2.8.1", "2.8.0"),
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),

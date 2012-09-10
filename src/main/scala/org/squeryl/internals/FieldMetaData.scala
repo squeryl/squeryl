@@ -417,7 +417,7 @@ object FieldMetaData {
        * Look for a value in the sample type.  If one exists and
        * it is not None, we can use it to deduce the Option type.   
        */
-      var v: Any =
+      var v: AnyRef =
          if(sampleInstance4OptionTypeDeduction != null) {
            field flatMap { f =>
              f.get(sampleInstance4OptionTypeDeduction) match {
