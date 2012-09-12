@@ -241,8 +241,10 @@ object FieldReferenceLinker {
       f.setAccessible(true);
       val ob = f.get(o)
 
-      // don't follow closures 
-      if(!(f.getType.getName.startsWith("scala.Function") || FieldMetaData.factory.hideFromYieldInspection(o, f)))
+      // don't follow closures and CGLIB internal state 
+      if(!(f.getName.startsWith("CGLIB$") ||
+           f.getType.getName.startsWith("scala.Function") || 
+           FieldMetaData.factory.hideFromYieldInspection(o, f)))
         _populateSelectColsRecurse(visited, yi, q, ob)
     }
   }
