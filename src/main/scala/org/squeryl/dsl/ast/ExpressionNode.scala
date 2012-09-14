@@ -640,3 +640,16 @@ class UnionExpressionNode(val kind: String, val ast: ExpressionNode) extends Exp
   override def children =
     List(ast)
 }
+
+class QueryValueExpressionNode[A1, T1](val ast: ExpressionNode, override val mapper: OutMapper[A1]) extends TypedExpression[A1, T1] {
+  def doWrite(sw:StatementWriter) = {
+    ast.write(sw)
+  }
+
+  override def toString = {
+    'QueryValueExpressionNode + ""
+  }
+
+  override def children =
+    List(ast)
+}

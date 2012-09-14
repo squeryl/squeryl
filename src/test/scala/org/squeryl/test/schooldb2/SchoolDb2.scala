@@ -218,6 +218,32 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 //    SchoolDb2.drop
 //  }
 
+  test("select using query value") {
+    val seedData = seedDataDef
+
+    val q: Query[String] =
+      from(subjects)(s =>
+        where(s.name === "Philosophy")
+          select(&(from(subjects)(s2 => where(s2.name === s.name) select(s2.name))))
+      )
+
+    assertEquals(1, q.toList.length, "Could not find row")
+  }
+
+  test("equality using query value") {
+    val seedData = seedDataDef
+
+    val q: Query[String] =
+      from(subjects)(s =>
+        where(
+          s.name === from(subjects)(s2 => where(s2.name === "Philosophy") select(s2.name))
+        )
+        select(s.name)
+      )
+
+    assertEquals(1, q.toList.length, "Could not find row")
+  }
+
   test("associate comment"){
     val entry = entries.insert(Entry("An entry"))
     val comment = Comment("A single comment")
