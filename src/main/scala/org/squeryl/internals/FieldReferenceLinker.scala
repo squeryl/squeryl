@@ -230,7 +230,7 @@ object FieldReferenceLinker {
    */
   private object _declaredFieldCache {
   
-	  var _cache: Map[Class[_], Array[Field]] =
+	  @volatile var _cache: Map[Class[_], Array[Field]] =
 			  Map[Class[_], Array[Field]]()
 			  
 	  def apply(cls: Class[_]) =

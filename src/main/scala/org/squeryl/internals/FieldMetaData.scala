@@ -66,7 +66,9 @@ class FieldMetaData(
     if(sampleValue == null)
       org.squeryl.internals.Utils.throwError("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
     else
-      enumeration.get.values.find((v:Enumeration#Value) => v.id == id).get
+      enumeration flatMap { e: Enumeration =>
+        e.values find { _.id == id }
+      } get
 
   /**
    * This field is mutable only by the Schema trait, and only during the Schema instantiation,

@@ -230,15 +230,18 @@ class SelectElementReference[A,T]
     selectElement.inhibited
 
   private def _useSite: QueryExpressionNode[_] = {
-    var e: ExpressionNode = this
-
-    do {
-      e = e.parent.get
-      if(e.isInstanceOf[QueryExpressionNode[_]])
-        return e.asInstanceOf[QueryExpressionNode[_]]
-    } while (e != None)
-
-    org.squeryl.internals.Utils.throwError("could not determine use site of "+ this)
+    
+    def findQueryExpressionNode(e: ExpressionNode): QueryExpressionNode[_] = e match {
+      case qe: QueryExpressionNode[_] => qe
+      case _ =>
+        e.parent match {
+          case Some(e_) => findQueryExpressionNode(e_)
+          case _ => 
+            org.squeryl.internals.Utils.throwError("could not determine use site of "+ this)
+        }
+    }
+    
+    findQueryExpressionNode(this)
   }
 
   lazy val delegateAtUseSite =
