@@ -113,6 +113,9 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit def stringArrayToTE(f: Array[String]) = stringArrayTEF.create(f)
   
 
+  implicit def logicalBooleanToTE(l: LogicalBoolean) =
+    PrimitiveTypeSupport.booleanTEF.convert(l)
+
   implicit def queryStringToTE(q: Query[String]) =
     new QueryValueExpressionNode[String, TString](q.copy(false, Nil).ast, stringTEF.createOutMapper)
   implicit def queryOptionStringToTE(q: Query[Option[String]]) =
