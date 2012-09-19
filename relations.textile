@@ -53,20 +53,20 @@ trait OneToMany[M] extends Query[M] {
    *
    *  Sets the foreign key of 'm' to refer to the primary key of the 'one' instance
    */
-  def assign(m: M): Unit
+  def assign(m: M): M
 
   /**
    * Calls 'assign(m)' and persists the changes the database, by inserting or updating 'm', depending
    * on if it has been persisted or not.
    */
-  def associate(m: M): Unit
+  def associate(m: M): M
   
   def deleteAll: Int
 }
 
 trait ManyToOne[O <: KeyedEntity[_]] extends Query[O] {
 
-  def assign(one: O): Unit
+  def assign(one: O): O
 
   def delete: Boolean
 }
