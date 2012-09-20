@@ -27,7 +27,7 @@ object SquerylBuild extends Build {
 	  },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.10.0-M7",
+      scalaVersion := "2.9.2",
       crossScalaVersions := Seq("2.10.0-M7", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0"),
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),

@@ -1265,7 +1265,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula2 = professors.where(_.weightInBD === Some(261.123456111: BigDecimal))
 
-    assertEquals(261.123456111, babaZula2.single.weightInBD.get, 'testBigDecimal)
+    assertEquals(BigDecimal(261.123456111), babaZula2.single.weightInBD.get, 'testBigDecimal)
 
     update(professors)(p=>
       where(p.id === babaZula.id)
@@ -1283,7 +1283,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula4 = professors.where(_.weightInBD === Some(532.2469122224: BigDecimal))
 
-    assertEquals(532.2469122224, babaZula4.single.weightInBD.get, 'testBigDecimal)
+    assertEquals(BigDecimal(532.2469122224), babaZula4.single.weightInBD.get, 'testBigDecimal)
     assertEquals(1, babaZula4.Count : Long, 'testBigDecimal)
 
     update(professors)(p=>
@@ -1293,7 +1293,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula5 = professors.where(_.yearlySalaryBD === 170)
 
-    assertEquals(170, babaZula5.single.yearlySalaryBD, 'testBigDecimal)
+    assertEquals(BigDecimal(170), babaZula5.single.yearlySalaryBD, 'testBigDecimal)
     assertEquals(1, babaZula5.Count : Long, 'testBigDecimal)
   }
 
