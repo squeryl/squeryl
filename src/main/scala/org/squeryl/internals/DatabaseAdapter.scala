@@ -257,7 +257,7 @@ trait DatabaseAdapter {
     sw.writeIndented {
       sw.writeLinesWithSeparator(
         t.posoMetaData.fieldsMetaData.map(
-          fmd => writeColumnDeclaration(fmd, fmd.declaredAsPrimaryKeyInSchema, schema)
+          fmd => writeColumnDeclaration(fmd, fmd.isIdFieldOfKeyedEntity, schema)
         ),
         ","
       )

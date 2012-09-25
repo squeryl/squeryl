@@ -39,43 +39,55 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     val st =
       (_dbAdapter.supportsAutoIncrementInColumnDeclaration, posoMetaData.primaryKey) match {
-        case (true, a:Any) => sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
-        case (false, Some(Left(pk:FieldMetaData))) => {
+        case (true, a: Any) => sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
+        case (false, Some(Left(pk: FieldMetaData))) => {
           val autoIncPk = new Array[String](1)
           autoIncPk(0) = pk.columnName
           sess.connection.prepareStatement(sw.statement, autoIncPk)
         }
-        case a:Any => sess.connection.prepareStatement(sw.statement)
-      }        
+        case a: Any => sess.connection.prepareStatement(sw.statement)
+      }
+
+    var r = t
 
     try {
       val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
-      if(cnt != 1)
+      if (cnt != 1)
         org.squeryl.internals.Utils.throwError("failed to insert")
 
       posoMetaData.primaryKey match {
-        case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
-          val rs = st.getGeneratedKeys
-          try {
-            assert(rs.next,
-              "getGeneratedKeys returned no rows for the auto incremented\n"+
-              " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or"+
-              " column might not be defined as auto increment")
-            pk.setFromResultSet(o, rs, 1)
+        case Some(Left(pk: FieldMetaData)) =>
+          val gked = ked match {
+            case g: GeneratedKeyDef[_, _] =>
+              Some(g.asInstanceOf[GeneratedKeyDef[T, Any]])
+            case _ =>
+              None
           }
-          finally {
-            rs.close
+          if (pk.isAutoIncremented || gked.isDefined) {
+            val rs = st.getGeneratedKeys
+            try {
+              assert(rs.next,
+                "getGeneratedKeys returned no rows for the auto incremented\n" +
+                  " primary key of table '" + name + "' JDBC3 feature might not be supported, \n or" +
+                  " column might not be defined as auto increment")
+              gked match {
+                case Some(setter) =>
+                  r = setter.setId(r, pk.resultSetHandler(rs, 1))
+                case _ =>
+                  pk.setFromResultSet(o, rs, 1)
+              }
+            } finally {
+              rs.close
+            }
           }
-        }
-        case a:Any =>{}
+        case _ => {}
       }
-    }
-    finally {
+    } finally {
       st.close
     }
-    
-    val r = _callbacks.afterInsert(o).asInstanceOf[T]
+
+    r = _callbacks.afterInsert(o).asInstanceOf[T]
 
     _setPersisted(r)
 
