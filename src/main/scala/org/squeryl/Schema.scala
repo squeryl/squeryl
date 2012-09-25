@@ -248,7 +248,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       s.execute(statement)
     }
     catch {
-      case e:SQLException => throw new RuntimeException("error executing " + statement + "\n" + e, e)
+      case e:SQLException => throw SquerylSQLException("error executing " + statement + "\n" + e, e)
     }
     finally {
       s.close
