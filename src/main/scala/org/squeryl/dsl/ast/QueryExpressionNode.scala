@@ -44,7 +44,7 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
 
   def isUseableAsSubquery: Boolean =
     _sample match {
-      case None => org.squeryl.internals.Utils.throwError("method cannot be called before initialization")
+      case None => throw new IllegalStateException("method cannot be called before initialization")
       case Some(p:Product) =>
         if(p.getClass.getName.startsWith("scala.Tuple")) {
           val z = (for(i <- 0 to (p.productArity - 1)) yield p.productElement(i))
