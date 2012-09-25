@@ -489,7 +489,7 @@ trait DatabaseAdapter {
     sw.nextLine
     sw.indent
     
-    t.posoMetaData.primaryKey.getOrElse(org.squeryl.internals.Utils.throwError("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
+    t.posoMetaData.primaryKey.getOrElse(throw new UnsupportedOperationException("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
       pkMd => sw.write(quoteName(pkMd.columnName), " = ", writeValue(o_, pkMd, sw)),
       pkGetter => {
         Utils.createQuery4WhereClause(t, (t0:T) => {

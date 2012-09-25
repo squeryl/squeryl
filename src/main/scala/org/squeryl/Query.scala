@@ -75,9 +75,9 @@ trait Query[R] extends Queryable[R] {
 
   def distinct: Query[R]
 
-  def union(q: Query[R]): Query[R] = org.squeryl.internals.Utils.throwError("not implemented")
+  def union(q: Query[R]): Query[R] = throw new UnsupportedOperationException("not implemented")
 
-  def minus(q: Query[R]): Query[R] = org.squeryl.internals.Utils.throwError("not implemented")
+  def minus(q: Query[R]): Query[R] = throw new UnsupportedOperationException("not implemented")
 
   def forUpdate: Query[R]
 

@@ -118,7 +118,7 @@ class TupleSelectElement
  (val origin: QueryExpressionNode[_], val expression: ExpressionNode, indexInTuple: Int, isGroupTuple: Boolean)
     extends SelectElement {
 
-  def resultSetMapper: ResultSetMapper = org.squeryl.internals.Utils.throwError("refactor me")
+  def resultSetMapper: ResultSetMapper = throw new UnsupportedOperationException("refactor me")
 
   //TODO: normalize ?
   def alias =
