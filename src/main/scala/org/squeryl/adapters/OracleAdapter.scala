@@ -117,9 +117,15 @@ class OracleAdapter extends DatabaseAdapter {
   override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter) = {} 
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-    if(qen.page == None)
-      super.writeQuery(qen, sw)
-    else {        
+    qen.page match {
+      case None => super.writeQuery(qen, sw)
+      case Some(pagingParams:(Int,Int)) => writePagedQuery(qen, pagingParams, sw) 
+    }
+
+  def writePagedQuery(qen: QueryExpressionElements, pagingParams: (Int, Int), sw: StatementWriter) = {
+      val beginOffset = pagingParams._1
+      val endOffset = pagingParams._2 + beginOffset + 1
+
       sw.write("select sq____1.* from (")
       sw.nextLine
       sw.writeIndented {
@@ -130,7 +136,8 @@ class OracleAdapter extends DatabaseAdapter {
         sw.writeIndented {
           sw.write("(")
           super.writeQuery(qen, sw)
-          sw.write(") sq____0")
+          sw.write(") sq____0 where rownum < ")
+          sw.write(endOffset.toString)
         }
       }
       sw.nextLine
@@ -139,13 +146,8 @@ class OracleAdapter extends DatabaseAdapter {
       sw.write("where")
       sw.nextLine
       sw.writeIndented {
-        sw.write("rn____ between ")
-        val page = qen.page.get
-        val beginOffset = page._1 + 1
-        val endOffset = page._2 + beginOffset - 1
+        sw.write("rn____ > ")
         sw.write(beginOffset.toString)
-        sw.write(" and ")
-        sw.write(endOffset.toString)
       }
     }
 
