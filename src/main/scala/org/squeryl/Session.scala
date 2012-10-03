@@ -89,7 +89,7 @@ object SessionFactory {
 
   def newSession: Session =
       concreteFactory.getOrElse(
-        org.squeryl.internals.Utils.throwError("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
+        throw new IllegalStateException("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
               "function for creating new org.squeryl.Session, before transaction can be used.\n" +
               "Alternatively SessionFactory.externalTransactionManagementAdapter can initialized, please refer to the documentation.")
       ).apply        
@@ -121,7 +121,7 @@ object Session {
       SessionFactory.externalTransactionManagementAdapter.get.apply getOrElse org.squeryl.internals.Utils.throwError("SessionFactory.externalTransactionManagementAdapter was unable to supply a Session for the current scope")
     }
     else currentSessionOption.getOrElse(
-      org.squeryl.internals.Utils.throwError("No session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'\n Usually this error occurs when a statement is executed outside of a transaction/inTrasaction block"))
+      throw new IllegalStateException("No session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'\n Usually this error occurs when a statement is executed outside of a transaction/inTrasaction block"))
 
   def hasCurrentSession =
     currentSessionOption != None
