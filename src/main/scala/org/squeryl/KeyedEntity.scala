@@ -16,6 +16,7 @@
 package org.squeryl
 
 import annotations.Transient
+import java.sql.SQLException
 
 @scala.annotation.implicitNotFound(msg = "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[{K}]")
 trait KeyedEntityDef[-A,K] extends OptionalKeyedEntityDef[A,K]{
@@ -109,6 +110,19 @@ trait Optimistic {
   self: KeyedEntity[_] =>
 
   protected val occVersionNumber = 0
+}
+
+/** Thrown to indicate that an error has occurred in the SQL database */
+object SquerylSQLException {
+  def apply(message: String, cause: SQLException) =
+    new SquerylSQLException(message, Some(cause))
+  def apply(message: String) =
+    new SquerylSQLException(message, None)
+}
+
+class SquerylSQLException(message: String, cause: Option[SQLException]) extends RuntimeException(message, cause.orNull) {
+  // Overridden to provide covariant return type as a convenience
+  override def getCause = cause.orNull
 }
 
 class StaleUpdateException(message: String) extends RuntimeException(message)

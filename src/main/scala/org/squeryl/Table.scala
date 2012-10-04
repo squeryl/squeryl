@@ -30,6 +30,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
+  /**
+   * @throws SquerylSQLException When a database error occurs or the insert
+   * does not result in 1 row
+   */
   def insert(t: T): T = StackMarker.lastSquerylStackFrame {
 
     val o = _callbacks.beforeInsert(t.asInstanceOf[AnyRef])
@@ -52,7 +56,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
       if(cnt != 1)
-        org.squeryl.internals.Utils.throwError("failed to insert")
+        throw SquerylSQLException("failed to insert.  Expected 1 row, got " + cnt)
 
       posoMetaData.primaryKey match {
         case Some(Left(pk:FieldMetaData)) => if(pk.isAutoIncremented) {
@@ -170,10 +174,16 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   /**
    * Updates without any Optimistic Concurrency Control check 
+   * @throws SquerylSQLException When a database error occurs or the update
+   * does not result in 1 row
    */
   def forceUpdate(o: T)(implicit ked: KeyedEntityDef[T,_]) =
     _update(o, false, ked)
   
+  /**
+   * @throws SquerylSQLException When a database error occurs or the update
+   * does not result in 1 row
+   */
   def update(o: T)(implicit ked: KeyedEntityDef[T,_]):Unit =
     _update(o, true, ked)
 
@@ -200,7 +210,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
            ") has become stale, it cannot be updated under optimistic concurrency control")
       }
       else
-        org.squeryl.internals.Utils.throwError("failed to update")
+        throw SquerylSQLException("failed to update.  Expected 1 row, got " + cnt)
     }
 
     _callbacks.afterUpdate(o0.asInstanceOf[AnyRef])
@@ -301,6 +311,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     deleteCount == 1
   }
 
+  /**
+   * @throws SquerylSQLException When a database error occurs or the operation
+   * does not result in 1 row
+   */
   def insertOrUpdate(o: T)(implicit ked: KeyedEntityDef[T,_]): T = {
     if(ked.isPersisted(o))
       update(o)

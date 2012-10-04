@@ -94,7 +94,7 @@ trait ExpressionNode {
 
   def ? : this.type = {
     if(! this.isInstanceOf[ConstantTypedExpression[_,_]])
-      org.squeryl.internals.Utils.throwError("the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument")
+      throw new UnsupportedOperationException("the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument")
 
     val c = this.asInstanceOf[ConstantTypedExpression[_,_]]
 

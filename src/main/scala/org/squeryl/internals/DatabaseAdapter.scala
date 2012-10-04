@@ -291,7 +291,7 @@ trait DatabaseAdapter {
     }
     catch {
       case e: SQLException =>
-          throw new RuntimeException(
+          throw SquerylSQLException(
             "Exception while executing statement : "+ e.getMessage+
            "\nerrorCode: " +
             e.getErrorCode + ", sqlState: " + e.getSQLState + "\n" +
@@ -324,7 +324,7 @@ trait DatabaseAdapter {
         if(silenceException(e))
           sp.foreach(c.rollback(_))
         else
-          throw new RuntimeException(
+          throw SquerylSQLException(
             "Exception while executing statement,\n" +
             "SQLState:" + e.getSQLState + ", ErrorCode:" + e.getErrorCode + "\n :" +
             sw.statement, e)
@@ -489,7 +489,7 @@ trait DatabaseAdapter {
     sw.nextLine
     sw.indent
     
-    t.posoMetaData.primaryKey.getOrElse(org.squeryl.internals.Utils.throwError("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
+    t.posoMetaData.primaryKey.getOrElse(throw new UnsupportedOperationException("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
       pkMd => sw.write(quoteName(pkMd.columnName), " = ", writeValue(o_, pkMd, sw)),
       pkGetter => {
         Utils.createQuery4WhereClause(t, (t0:T) => {

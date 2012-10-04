@@ -204,7 +204,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       if(!_nextCalled)
         _next
       if(!_hasNext)
-        org.squeryl.internals.Utils.throwError("next called with no rows available")
+        throw new NoSuchElementException("next called with no rows available")
       _nextCalled = false
 
       if(s.isLoggingEnabled)

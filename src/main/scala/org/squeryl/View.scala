@@ -116,7 +116,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
    * Will throw an exception if the given key (k) returns no row.
    */
   def get[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): T = 
-     lookup(k).getOrElse(Utils.throwError("Found no row with key '"+ k + "' in " + name + "."))
+     lookup(k).getOrElse(throw new NoSuchElementException("Found no row with key '"+ k + "' in " + name + "."))
   
   def allRows(implicit dsl: QueryDsl): Iterable[T] = {
     import dsl._
