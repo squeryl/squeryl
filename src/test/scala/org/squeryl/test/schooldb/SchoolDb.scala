@@ -1600,6 +1600,30 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   }
 
+  test("selectFromExists"){
+    val testInstance = sharedTestInstance; import testInstance._
+    val qStudents = from(students) ((s) => select(s))
+    val studentsWithAnAddress =
+      from(qStudents)(s =>
+        where(exists(from(addresses)((a) =>
+          where(s.addressId === a.id) select(a))))
+          select(s)
+      )
+    val qAStudentIfHeHasAnAddress =
+      from(studentsWithAnAddress)(s =>
+        where(s.name === "Xiao")
+        select(s)
+      )
+
+    val res = for (s <- qAStudentIfHeHasAnAddress) yield s.name
+    val expected = List("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('selectFromExists)
+
+  }
+  
   test("UpdateSetAll") {
     val testInstance = sharedTestInstance; import testInstance._
     update(students)(s => setAll(s.age := Some(30)))
