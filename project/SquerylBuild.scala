@@ -24,7 +24,8 @@ object SquerylBuild extends Build {
       },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.9.2",
+      scalaVersion := "2.10.0-RC1",
+      scalaBinaryVersion := "2.10.0-RC1",
       crossScalaVersions := Seq("2.10.0-M7", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0", "2.8.1", "2.8.0"),
       crossVersion := CrossVersion.full,
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
@@ -67,12 +68,14 @@ object SquerylBuild extends Build {
         "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided",
         "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
         "org.apache.derby" % "derby" % "10.7.1.1" % "provided",
+        "org.scala-lang" % "scala-actors" % "2.10.0-RC1" % "test",
         "junit" % "junit" % "4.8.2" % "provided"),
       libraryDependencies <++= scalaVersion { sv =>
         Seq("org.scala-lang" % "scalap" % sv,
           sv match {
           	case sv if sv startsWith "2.10" =>
-          	    "org.scalatest" % "scalatest_2.10.0-M6" % "1.9-2.10.0-M6-B2" % "test"
+          	     "org.scalatest" % "scalatest_2.10.0-RC1" % "2.0.M4" % "test"
+          	    //"org.scalatest" % "scalatest_2.10.0-M6" % "1.9-2.10.0-M6-B2" % "test"
           	case sv if sv startsWith "2.9" =>
           		"org.scalatest" % "scalatest_2.9.2" % "1.6.1" % "test"
           	case _ =>
