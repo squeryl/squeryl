@@ -19,3 +19,4 @@ profileOfH2Tests.html
 *.h2.db
 *.trace.db
 .sbtconfig
+project/pgp.sbt
