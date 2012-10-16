@@ -25,33 +25,15 @@ import collection.mutable.ArrayBuffer
 import scala.runtime.NonLocalReturnControl
 
 
-trait BaseQueryDsl {
-  implicit def noneKeyedEntityDef[A,K]: OptionalKeyedEntityDef[A,K] = new OptionalKeyedEntityDef[A,K] {
-    override def keyedEntityDef: Option[KeyedEntityDef[A,K]] = None
-  }
-}
-
 trait QueryDsl
   extends WhereState[Unconditioned]
   with ComputeMeasuresSignaturesFromStartOrWhereState
   with StartState
   with QueryElements[Unconditioned]
   with JoinSignatures
-  with FromSignatures 
-  with BaseQueryDsl {
+  with FromSignatures {
   outerQueryDsl =>
   
-  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
-    def getId(a:A) = a.id
-    def isPersisted(a:A) = a.isPersisted
-    def idPropertyName = "id"
-    override def optimisticCounterPropertyName = 
-      if(classOf[Optimistic].isAssignableFrom(m.erasure))
-        Some("occVersionNumber")
-      else
-        None
-  } 
-
   implicit def queryToIterable[R](q: Query[R]): Iterable[R] = {
     
     val i = q.iterator

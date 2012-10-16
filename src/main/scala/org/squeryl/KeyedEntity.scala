@@ -17,9 +17,36 @@ package org.squeryl
 
 import annotations.Transient
 import java.sql.SQLException
+import org.squeryl.internals.FieldMapper
+
+trait BaseSquerylEntrypoint {
+  implicit def noneKeyedEntityDef[A,K]: OptionalKeyedEntityDef[A,K] = new OptionalKeyedEntityDef[A,K] {
+    override def keyedEntityDef: Option[KeyedEntityDef[A,K]] = None
+  }
+    
+}
+
+trait SquerylEntrypoint extends BaseSquerylEntrypoint {
+  self: FieldMapper =>
+    
+  protected implicit def thisSquerylEntrypoint = this
+  
+  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
+    def getId(a:A) = a.id
+    def isPersisted(a:A) = a.isPersisted
+    def idPropertyName = "id"
+    override def optimisticCounterPropertyName = 
+      if(classOf[Optimistic].isAssignableFrom(m.erasure))
+        Some("occVersionNumber")
+      else
+        None
+  } 
+  
+}
+
 
 @scala.annotation.implicitNotFound(msg = "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[{K}]")
-trait KeyedEntityDef[-A,K] extends OptionalKeyedEntityDef[A,K]{
+abstract class KeyedEntityDef[-A,K](implicit ev: SquerylEntrypoint) extends OptionalKeyedEntityDef[A,K]{
   
   def getId(a: A): K
   /**

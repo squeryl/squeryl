@@ -25,11 +25,12 @@ import java.sql.ResultSet
 import org.squeryl.internals.Utils
 import org.squeryl.internals.FieldMapper
 
+@deprecated("PrimitiveTypeMode should not be used directly, but mixed into the trait SquerylEntrypoint, then imported to the app's code base")
+object PrimitiveTypeMode extends PrimitiveTypeMode with SquerylEntrypoint {
+  override implicit def thisSquerylEntrypoint = this
+}
 
-object PrimitiveTypeMode extends PrimitiveTypeMode
-
-trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
-    
+trait PrimitiveTypeMode extends QueryDsl with FieldMapper {    
   
   // =========================== Non Numerical =========================== 
   implicit val stringTEF = PrimitiveTypeSupport.stringTEF

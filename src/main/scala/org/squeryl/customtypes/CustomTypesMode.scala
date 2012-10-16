@@ -22,6 +22,7 @@ import java.sql.Timestamp
 import org.squeryl.internals.{OutMapper, FieldReferenceLinker, FieldMapper}
 import com.sun.org.apache.xalan.internal.xsltc.compiler.util.IntType
 import java.sql.ResultSet
+import org.squeryl.SquerylEntrypoint
 
 trait CustomType[T] extends Product1[T] {
   def value: T
@@ -29,7 +30,7 @@ trait CustomType[T] extends Product1[T] {
   def canEqual(a:Any) = false
 }
 
-trait CustomTypesMode extends QueryDsl with FieldMapper {
+trait CustomTypesMode extends QueryDsl with FieldMapper with SquerylEntrypoint {
   
   private val ps = PrimitiveTypeSupport
     
