@@ -12,10 +12,21 @@ abstract class SchemaTester extends DbTestBase{
   def schema : Schema
 
   def prePopulate() = {}
+  
+  override def withFixture(test: NoArgTest) {
+    super.withFixture(new NoArgTest {
+          def name = test.name
+          def configMap = test.configMap
+          def apply() { 
+            _initSchema
+           test.apply()
+          }
+    })
+  }
 
-  override def beforeAll(){
-    super.beforeAll
-    if(notIgnored){
+  lazy val _initSchema = {
+    if(SessionFactory.concreteFactory.isDefined){
+      //println("Creating schema")
       transaction{
          schema.drop
          schema.create
@@ -32,7 +43,7 @@ abstract class SchemaTester extends DbTestBase{
 
   override def afterAll(){
     super.afterAll
-    if(notIgnored){
+    if(SessionFactory.concreteFactory.isDefined){
       transaction{
          schema.drop
       }
@@ -44,35 +55,25 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
 
   def connectToDb : Option[() => Session]
 
-  var notIgnored = true
-
   val ignoredTests : List[String] = Nil
-
-  override def beforeAll(){
-    super.beforeAll
-    SessionFactory.concreteFactory = connectWrapper()
+  
+  lazy val _initFactory = {
+    //println("Initializing session factory")
+    SessionFactory.concreteFactory = connectToDb
   }
-
-  private def connectWrapper() : Option[() => Session] = {
-    val connector = connectToDb
-    if(connector.isEmpty){
-      notIgnored = false
-      None
-    }else{
-      Some(connector.get)
-    }
-  }
-
-  override def runTest(
-    testName: String,
-    args: Args): Unit = {
-
-
-    if(!notIgnored || ignoredTests.exists(_ == testName)) {
-      //reporter(TestIgnored(new Ordinal(0), suiteName, Some(this.getClass.getName),testName))
-      return
-    }
-    super.runTest(testName, args)
+  
+  override def withFixture(test: NoArgTest) = {
+    super.withFixture(new NoArgTest {
+      override def name = test.name
+      override def configMap = test.configMap
+      override def apply() = {
+	    _initFactory
+	    if(SessionFactory.concreteFactory.isDefined && !ignoredTests.exists(_ == test.name)) {
+	      //println("Running " + test.name + " with session factory " + SessionFactory.concreteFactory)
+	      test.apply()
+	    }
+      }
+    })
   }
 
 }
