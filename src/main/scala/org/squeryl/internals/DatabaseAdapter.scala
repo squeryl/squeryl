@@ -312,7 +312,7 @@ trait DatabaseAdapter {
   protected def execFailSafeExecute(sw: StatementWriter, silenceException: SQLException => Boolean): Unit = {
     val s = Session.currentSession
     val c = s.connection
-    val stat = c.createStatement
+    val stat = createStatement(c)
     val sp =
       if(failureOfStatementRequiresRollback) Some(c.setSavepoint)
       else None
@@ -349,14 +349,20 @@ trait DatabaseAdapter {
     _exec[A](s, sw, block, p)
   }
 
+  protected def prepareStatement(conn: Connection, statement: String): PreparedStatement =
+    conn.prepareStatement(statement)
+
+  protected def createStatement(conn: Connection): Statement =
+    conn.createStatement()
+
   def executeQuery(s: Session, sw: StatementWriter) = exec(s, sw) { params =>
-    val st = s.connection.prepareStatement(sw.statement)
+    val st = prepareStatement(s.connection, sw.statement)
     fillParamsInto(params, st)
     (st.executeQuery, st)
   }
 
   def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = exec(s, sw) { params =>
-    val st = s.connection.prepareStatement(sw.statement)
+    val st = prepareStatement(s.connection, sw.statement)
     fillParamsInto(params, st)
     (st.executeUpdate, st)
   }
@@ -364,7 +370,7 @@ trait DatabaseAdapter {
   def executeUpdateAndCloseStatement(s: Session, sw: StatementWriter): Int = exec(s, sw) { params =>
     if(s.isLoggingEnabled)
       s.log(sw.toString)
-    val st = s.connection.prepareStatement(sw.statement)
+    val st = prepareStatement(s.connection, sw.statement)
     fillParamsInto(params, st)
     try {
       st.executeUpdate
