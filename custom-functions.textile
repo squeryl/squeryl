@@ -54,7 +54,7 @@ Where :
   // For Squeryl versions before 0.9.5-Beta, OutMappers need to be 
   // created and given as argument to FunctionNode
 
-  val m1:OutMapper[String] = new OutMapper[String] {
+  def m1:OutMapper[String] = new OutMapper[String] {
     def doMap(rs: ResultSet) = rs.getString(index)
     def sample = ""
   }
@@ -64,7 +64,7 @@ Where :
 
   def sha1(e: StringExpression[String]) = new SHA1(e,m)
   
-  val m2:OutMapper[Option[StringType]] = new OutMapper[Option[String]] {
+  def m2:OutMapper[Option[StringType]] = new OutMapper[Option[String]] {
     def doMap(rs: ResultSet) = {
       val v = rs.getString(index)
       if(rs.wasNull)
