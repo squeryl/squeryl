@@ -235,11 +235,11 @@ trait DatabaseAdapter {
         sb.append(v)
     }
 
-    if(isPrimaryKey)
-      sb.append(" primary key")
-
     if(!fmd.isOption)
       sb.append(" not null")
+
+    if(isPrimaryKey)
+      sb.append(" primary key")
     
     if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       sb.append(" auto_increment")
