@@ -117,6 +117,12 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
   def ===[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
   def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
   
+  def ===[A2,T2](q: Query[Measures[A2]])(implicit tef: TypedExpressionFactory[A2,T2], ev: CanCompare[T1, T2]) = 
+    new BinaryOperatorNodeLogicalBoolean(this, q.copy(false).ast, "=")
+
+  def <>[A2,T2](q: Query[Measures[A2]])(implicit tef: TypedExpressionFactory[A2,T2], ev: CanCompare[T1, T2]) = 
+    new BinaryOperatorNodeLogicalBoolean(this, q.copy(false).ast, "=")
+  
   def gt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
   def lt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
   def gte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")

@@ -378,6 +378,21 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
   }
 
+  test("EqualCountInSubQuery", SingleTestRun){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(courses)(c =>
+        where (          
+          //new org.squeryl.dsl.ast.BinaryOperatorNodeLogicalBoolean(1, from(courseSubscriptions)(cs => compute(countDistinct(cs.courseId))).ast, "=")
+          1 === from(courseSubscriptions)(cs => where(c.id === cs.courseId) compute(countDistinct(cs.courseId)))
+        )
+        select(c)
+     ).toList
+     
+     assert(q.size == 4)
+  }
+
   test("CountSignatures"){
     val testInstance = sharedTestInstance; import testInstance._
     val q =
