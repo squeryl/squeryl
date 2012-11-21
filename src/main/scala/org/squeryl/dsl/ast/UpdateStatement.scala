@@ -23,7 +23,7 @@ class UpdateStatement(_whereClause: Option[()=>LogicalBoolean], uas: Seq[UpdateA
   val whereClause: Option[LogicalBoolean] =
     _whereClause.map(_.apply)
 
-  override def children = whereClause.toList
+  override def children = whereClause.toList ++ values
 
   def doWrite(sw: StatementWriter) = {}
 
