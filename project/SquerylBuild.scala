@@ -11,20 +11,21 @@ object SquerylBuild extends Build {
       description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
       organization := "org.squeryl",
       version := "0.9.6-M1",
-	  version <<= version { v => //only release *if* -Drelease=true is passed to JVM
-	  	val release = Option(System.getProperty("release")) == Some("true")
-	  	if(release)
-	  		v 
-	  	else {	
-	  		val suffix = Option(System.getProperty("suffix"))
-	  		val i = (v.indexOf('-'), v.length) match {
-	  		  case (x, l) if x < 0 => l
-	  		  case (x, l) if v substring (x+1) matches """\d+""" => l //patch level, not RCx
-	  		  case (x, _) => x
-	  		}
-	  		v.substring(0,i) + "-" + (suffix getOrElse "SNAPSHOT")
-	  	}
-	  },
+      javacOptions := Seq("-source", "1.6"),
+  	  version <<= version { v => //only release *if* -Drelease=true is passed to JVM
+  	  	val release = Option(System.getProperty("release")) == Some("true")
+  	  	if(release)
+  	  		v 
+  	  	else {	
+  	  		val suffix = Option(System.getProperty("suffix"))
+  	  		val i = (v.indexOf('-'), v.length) match {
+  	  		  case (x, l) if x < 0 => l
+  	  		  case (x, l) if v substring (x+1) matches """\d+""" => l //patch level, not RCx
+  	  		  case (x, _) => x
+  	  		}
+  	  		v.substring(0,i) + "-" + (suffix getOrElse "SNAPSHOT")
+  	  	}
+  	  },
       parallelExecution := false,
       publishMavenStyle := true,
       scalaVersion := "2.9.2",
