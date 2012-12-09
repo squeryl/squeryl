@@ -522,6 +522,91 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('blobTest)
   }
 
+  /**
+   * POC for raw SQL "facilities"
+   */
+  class RawQuery(query: String, args: Seq[Any]) {
+    
+    private def prep = {
+      // We'll pretend we don't care about connection, statement, resultSet leaks for now ...
+      val s = Session.currentSession
+
+      val st = s.connection.prepareStatement(query)
+      for(z <- args.zipWithIndex)
+        st.setObject(z._2 + 1, z._1.asInstanceOf[AnyRef])
+      st
+    }
+    
+    import org.squeryl.internals._
+    import org.squeryl.dsl.ast._
+    
+    def toSeq[A](t: Table[A]) = {
+      val st = prep
+      val resultSet = st.executeQuery
+      val res = new scala.collection.mutable.ArrayBuffer[A]
+      
+      // now for mapping a query to Schema objects : 
+      val rm = new ResultSetMapper
+      
+      for((fmd, i) <- t.posoMetaData.fieldsMetaData.zipWithIndex) { 
+        val jdbcIndex = i + 1
+        val fse = new FieldSelectElement(null, fmd, rm)
+        fse.prepareColumnMapper(jdbcIndex)
+        fse.prepareMapper(jdbcIndex)
+      }
+
+      while(resultSet.next) {
+        val v = t.give(rm, resultSet)
+        res.append(v)
+      }
+      res.toSeq
+    }
+    
+    def toTuple[A1,A2]()(implicit f1 : TypedExpressionFactory[A1,_], f2 : TypedExpressionFactory[A2,_]) = { 
+      
+      val st = prep
+      val rs = st.executeQuery
+      
+      if(!rs.next)
+        sys.error("consider using toOptionTuple[....]")
+
+      //let's pretend there was no shame to be had for such grotesque cheating : 
+      val m1 = f1.thisMapper.asInstanceOf[PrimitiveJdbcMapper[A1]]
+      val m2 = f2.thisMapper.asInstanceOf[PrimitiveJdbcMapper[A2]]      
+      // in fact, there should be a wrapper type of TypedExpressionFactory only for primitive types
+      // for use in such toTuple mapping ...
+
+      (m1.convertFromJdbc(m1.extractNativeJdbcValue(rs, 1)),
+       m2.convertFromJdbc(m2.extractNativeJdbcValue(rs, 2)))
+    }
+  }
+  
+  def query(q: String, a: Any*) = new RawQuery(q, a)
+  
+  test("raw sql", SingleTestRun) {
+
+    val r = 
+      query("select s.* from t_student s where s.name = ? and s.age = ?", 
+            "Xiao", 24).
+        toSeq(students)
+
+    r.map(_.name) match {
+      case Seq("Xiao") => passed('rawQueryPOC)
+      case a:Any => sys.error("Failed: " + a)
+    }    
+  }
+  
+  test("raw sql to Tuple", SingleTestRun) {
+    
+    val (name, age) = 
+      query("select s.name, s.age from t_student s where s.name = 'Xiao' and s.age = 24").
+        toTuple[String,Int]
+    
+    assert(name == "Xiao")
+        
+    assert(age == 24)
+  }
+  
   test("InOpWithStringList"){
     val testInstance = sharedTestInstance; import testInstance._
     val r =
