@@ -182,6 +182,21 @@ trait DatabaseAdapter {
   def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
   def uuidTypeDeclaration = "char(36)"
+    
+  // These are needed by the jdbc connection when creating arrays
+  def intArrayCreationType = "integer"
+  def doubleArrayCreationType = "double"
+  def longArrayCreationType = "bigint"
+    
+  final def arrayCreationType(ptype : Class[_]) : String = {
+    ptype.getName() match {
+      case "java.lang.Integer" => intArrayCreationType
+      case "java.lang.Double" => doubleArrayCreationType
+      case "java.lang.Long" => longArrayCreationType
+      case _ => throw new SQLException("Unable to create an sql array for " + ptype.getName())
+    }
+  }
+    
 /*
   private val _declarationHandler = new FieldTypeHandler[String] {
 

@@ -41,7 +41,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
   override def binaryTypeDeclaration = "bytea"
   override def uuidTypeDeclaration = "uuid"
-
+    
   override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
     foreignKeyTable.name + "FK" + idWithinSchema
 

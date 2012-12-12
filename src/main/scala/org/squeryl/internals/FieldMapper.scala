@@ -108,24 +108,10 @@ trait FieldMapper {
       val deOptionizer = binaryTEF
     }
     
-    val intArrayTEF = new TypedExpressionFactory[Array[Int],TIntArray] with ArrayJdbcMapper[java.sql.Array, Array[Int]] {
+    val intArrayTEF = new ArrayTEF[Int, TIntArray] {
       val sample = Array(0)
-      val defaultColumnLength = 1
-      def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getArray(i)
-      def convertToJdbc(v: Array[Int]): java.sql.Array = {
-        val content : Array[java.lang.Object] = v.map(i => new java.lang.Integer(i.toInt));
-        Session.currentSession.connection.createArrayOf("int4", content)
-      }
-      def convertFromJdbc(v: java.sql.Array): Array[Int] = {
-        var rv = Array[Int]()
-        try {
-          val obj = v.getArray();
-          rv = obj.asInstanceOf[Array[java.lang.Integer]].map(_.toInt)
-        } catch {
-          case _ => // TODO: Log error somehow
-        }
-        rv
-      }
+      def toWrappedJDBCType(element: Int) : java.lang.Object = new java.lang.Integer(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Int] = elements.map(i => i.asInstanceOf[java.lang.Integer].toInt)
     }
     
     //val optionIntArrayTEF = new TypedExpressionFactory[Option[Array[Int]],TOptionIntArray] with DeOptionizer[Array[Int], Array[Int], TIntArray, Option[Array[Int]], TOptionIntArray] {

@@ -10,7 +10,7 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
 
   import PrimitiveArraySchema._
 
-  test("can see array values in database") {
+  test("can insert and query integer array values in database") {
     transaction {
       schema.drop
       schema.create
@@ -24,6 +24,8 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
     res.size should equal(1)
     res(0).lap_times.size should equal(3)
     res(0).lap_times(0) should equal(1055)
+    res(0).lap_times(1) should equal(1299)
+    res(0).lap_times(2) should equal(1532)
   }
 }
 
