@@ -114,6 +114,19 @@ trait FieldMapper {
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Int] = elements.map(i => i.asInstanceOf[java.lang.Integer].toInt)
     }
     
+    val longArrayTEF = new ArrayTEF[Long, TLongArray] {
+      val sample = Array(0L)
+      def toWrappedJDBCType(element: Long) : java.lang.Object = new java.lang.Long(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Long] = elements.map(i => i.asInstanceOf[java.lang.Long].toLong)
+    }
+    
+    val doubleArrayTEF = new ArrayTEF[Double, TDoubleArray] {
+      val sample : Array[Double] = Array(0.0)
+      def toWrappedJDBCType(element: Double) : java.lang.Object = new java.lang.Double(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Double] = elements.map(i => i.asInstanceOf[java.lang.Double].toDouble)
+    }
+    
+    // FIXME: Get this to work...
     //val optionIntArrayTEF = new TypedExpressionFactory[Option[Array[Int]],TOptionIntArray] with DeOptionizer[Array[Int], Array[Int], TIntArray, Option[Array[Int]], TOptionIntArray] {
       //val deOptionizer = intArrayTEF
     //}
@@ -235,6 +248,8 @@ trait FieldMapper {
     register(dateTEF)  
     register(uuidTEF)
     register(intArrayTEF)
+    register(longArrayTEF)
+    register(doubleArrayTEF)
 
     val re = enumValueTEF(DummyEnum.DummyEnumerationValue)    
     

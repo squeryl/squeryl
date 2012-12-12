@@ -177,24 +177,26 @@ trait DatabaseAdapter {
   def longTypeDeclaration = "bigint"
   def floatTypeDeclaration = "real"
   def bigDecimalTypeDeclaration = "decimal"
-  def arrayIntTypeDeclaration = "int array"
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
   def uuidTypeDeclaration = "char(36)"
+  def intArrayTypeDeclaration = intTypeDeclaration + "[]"
+  def longArrayTypeDeclaration = longTypeDeclaration + "[]"
+  def doubleArrayTypeDeclaration = doubleTypeDeclaration + "[]"
     
-  // These are needed by the jdbc connection when creating arrays
-  def intArrayCreationType = "integer"
-  def doubleArrayCreationType = "double"
-  def longArrayCreationType = "bigint"
+  def jdbcIntArrayCreationType = intTypeDeclaration
+  def jdbcLongArrayCreationType = longTypeDeclaration
+  def jdbcDoubleArrayCreationType = doubleTypeDeclaration
     
   final def arrayCreationType(ptype : Class[_]) : String = {
-    ptype.getName() match {
-      case "java.lang.Integer" => intArrayCreationType
-      case "java.lang.Double" => doubleArrayCreationType
-      case "java.lang.Long" => longArrayCreationType
-      case _ => throw new SQLException("Unable to create an sql array for " + ptype.getName())
+    val rv = ptype.getName() match {
+      case "java.lang.Integer" => jdbcIntArrayCreationType
+      case "java.lang.Double" => jdbcDoubleArrayCreationType
+      case "java.lang.Long" => jdbcLongArrayCreationType
+      case _ => ""
     }
+    rv
   }
     
 /*
@@ -813,10 +815,14 @@ trait DatabaseAdapter {
       else if(classOf[BigDecimal].isAssignableFrom(c))
         bigDecimalTypeDeclaration                  
       else if(classOf[scala.Array[Int]].isAssignableFrom(c))
-        arrayIntTypeDeclaration
+        intArrayTypeDeclaration
+      else if(classOf[scala.Array[Long]].isAssignableFrom(c))
+        longArrayTypeDeclaration
+      else if(classOf[scala.Array[Double]].isAssignableFrom(c))
+        doubleArrayTypeDeclaration
       else
         Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
-                  
+     
       decl    
   }
 

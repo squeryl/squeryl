@@ -18,9 +18,10 @@ abstract class ArrayTEF[P, TE] extends TypedExpressionFactory[Array[P], TE] with
     val con = s.connection
     var rv: java.sql.Array = null
     try {
-      rv = con.createArrayOf(s.databaseAdapter.arrayCreationType(sample(0).getClass), content)
+      val typ = s.databaseAdapter.arrayCreationType(sample(0).getClass)
+      rv = con.createArrayOf(typ, content)
     } catch {
-      case e: Exception => s.log("Cannot create JDBC array: " + e.getMessage());
+      case e: Exception => s.log("Cannot create JDBC array: " + e.getMessage)
     }
     rv
   }

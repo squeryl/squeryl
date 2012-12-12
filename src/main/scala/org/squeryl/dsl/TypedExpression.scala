@@ -65,11 +65,15 @@ sealed trait TDate extends TOptionDate with TNonOption
 sealed trait TTimestamp extends TOptionTimestamp with TNonOption
 sealed trait TByteArray extends TOptionByteArray  with TNonOption
 sealed trait TIntArray extends TOptionIntArray  with TNonOption
+sealed trait TLongArray extends TOptionLongArray  with TNonOption
+sealed trait TDoubleArray extends TOptionDoubleArray  with TNonOption
 sealed trait TOptionString 
 sealed trait TOptionDate
 sealed trait TOptionTimestamp
 sealed trait TOptionByteArray  
 sealed trait TOptionIntArray  
+sealed trait TOptionLongArray  
+sealed trait TOptionDoubleArray  
 sealed trait TBoolean extends TOptionBoolean  with TNonOption
 sealed trait TOptionBoolean
 sealed trait TUUID extends TOptionUUID  with TNonOption

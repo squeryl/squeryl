@@ -36,11 +36,15 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def booleanTypeDeclaration = "boolean"
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "bigint"
-  override def arrayIntTypeDeclaration = "integer[]"
   override def bigDecimalTypeDeclaration = "numeric"
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
   override def binaryTypeDeclaration = "bytea"
   override def uuidTypeDeclaration = "uuid"
+    
+    
+  override def jdbcIntArrayCreationType = "int4"
+  override def jdbcLongArrayCreationType = "int8"
+  override def jdbcDoubleArrayCreationType = "float8"
     
   override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
     foreignKeyTable.name + "FK" + idWithinSchema

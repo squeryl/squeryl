@@ -14,18 +14,26 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
     transaction {
       schema.drop
       schema.create
-      swimmers.insert(new Swimmer(1, Array(1055, 1299, 1532)))
+      swimmers.insert(new Swimmer(1, Array(10.55, 12.99, 15.32), Array(100,110,20), Array(9876543210L,123456789L)))
     }
     
     val query = from(swimmers)((s) => select(s))
-    println(query.toString)
     val res = transaction { query.toList }
 
     res.size should equal(1)
     res(0).lap_times.size should equal(3)
-    res(0).lap_times(0) should equal(1055)
-    res(0).lap_times(1) should equal(1299)
-    res(0).lap_times(2) should equal(1532)
+    res(0).lap_times(0) should equal(10.55)
+    res(0).lap_times(1) should equal(12.99)
+    res(0).lap_times(2) should equal(15.32)
+    
+    res(0).scores.size should equal(3)
+    res(0).scores(0) should equal(100)
+    res(0).scores(1) should equal(110)
+    res(0).scores(2) should equal(20)
+    
+    res(0).orgids.size should equal(2)
+    res(0).orgids(0) should equal(9876543210L)
+    res(0).orgids(1) should equal(123456789L)
   }
 }
 
@@ -39,4 +47,4 @@ object PrimitiveArraySchema extends Schema {
   override def drop = super.drop
 }
 
-class Swimmer(val id: Int, val lap_times: Array[Int])
+class Swimmer(val id: Int, val lap_times: Array[Double], val scores : Array[Int], val orgids : Array[Long])
