@@ -177,6 +177,7 @@ trait DatabaseAdapter {
   def longTypeDeclaration = "bigint"
   def floatTypeDeclaration = "real"
   def bigDecimalTypeDeclaration = "decimal"
+  def arrayIntTypeDeclaration = "int array"
   def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "decimal(" + precision + "," + scale + ")"
   def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
@@ -796,6 +797,8 @@ trait DatabaseAdapter {
         binaryTypeDeclaration
       else if(classOf[BigDecimal].isAssignableFrom(c))
         bigDecimalTypeDeclaration                  
+      else if(classOf[scala.Array[Int]].isAssignableFrom(c))
+        arrayIntTypeDeclaration
       else
         Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
                   

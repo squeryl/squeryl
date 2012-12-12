@@ -2,11 +2,10 @@ package org.squeryl.postgres
 
 
 import org.squeryl.test._
-
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.PostgreSqlAdapter
-
 import org.squeryl.Session
+import org.squeryl.test.arrays.PrimitiveArrayTest
 
 trait Postgresql_Connection extends DBConnector{
   def connectToDb() : Option[() => Session] = {
@@ -28,6 +27,7 @@ trait Postgresql_Connection extends DBConnector{
   }
 }
 
+class Postgresql_ArrayTests extends PrimitiveArrayTest with Postgresql_Connection
 class Postgresql_UuidTests extends UuidTests with Postgresql_Connection
 class Postgresql_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Postgresql_Connection
 class Postgresql_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Postgresql_Connection

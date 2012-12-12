@@ -36,6 +36,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def booleanTypeDeclaration = "boolean"
   override def doubleTypeDeclaration = "double precision"
   override def longTypeDeclaration = "bigint"
+  override def arrayIntTypeDeclaration = "integer[]"
   override def bigDecimalTypeDeclaration = "numeric"
   override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
   override def binaryTypeDeclaration = "bytea"

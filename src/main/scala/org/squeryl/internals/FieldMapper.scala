@@ -22,7 +22,9 @@ import java.sql.Timestamp
 import java.util.Date
 import java.util.UUID
 import org.squeryl.dsl._
-
+import java.util.regex.Pattern
+import org.squeryl.Session
+import org.squeryl.dsl.ArrayJdbcMapper
 
 trait FieldMapper {
   outer =>
@@ -105,6 +107,30 @@ trait FieldMapper {
     val optionByteArrayTEF = new TypedExpressionFactory[Option[Array[Byte]],TOptionByteArray] with DeOptionizer[Array[Byte], Array[Byte], TByteArray, Option[Array[Byte]], TOptionByteArray] {
       val deOptionizer = binaryTEF
     }
+    
+    val intArrayTEF = new TypedExpressionFactory[Array[Int],TIntArray] with ArrayJdbcMapper[java.sql.Array, Array[Int]] {
+      val sample = Array(0)
+      val defaultColumnLength = 1
+      def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getArray(i)
+      def convertToJdbc(v: Array[Int]): java.sql.Array = {
+        val content : Array[java.lang.Object] = v.map(i => new java.lang.Integer(i.toInt));
+        Session.currentSession.connection.createArrayOf("int4", content)
+      }
+      def convertFromJdbc(v: java.sql.Array): Array[Int] = {
+        var rv = Array[Int]()
+        try {
+          val obj = v.getArray();
+          rv = obj.asInstanceOf[Array[java.lang.Integer]].map(_.toInt)
+        } catch {
+          case _ => // TODO: Log error somehow
+        }
+        rv
+      }
+    }
+    
+    //val optionIntArrayTEF = new TypedExpressionFactory[Option[Array[Int]],TOptionIntArray] with DeOptionizer[Array[Int], Array[Int], TIntArray, Option[Array[Int]], TOptionIntArray] {
+      //val deOptionizer = intArrayTEF
+    //}
     
     def enumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Enumeration#Value) = 
       new JdbcMapper[Int,A] with TypedExpressionFactory[A,TEnumValue[A]] { 
@@ -222,6 +248,7 @@ trait FieldMapper {
     register(timestampTEF)
     register(dateTEF)  
     register(uuidTEF)
+    register(intArrayTEF)
 
     val re = enumValueTEF(DummyEnum.DummyEnumerationValue)    
     
@@ -323,6 +350,20 @@ trait FieldMapper {
       Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
   }
   
+  private [squeryl] def register[S,J](m: ArrayJdbcMapper[S,J]) {
+    val f = m.thisTypedExpressionFactory
+    val z = new FieldAttributesBasedOnType(
+        makeMapper(m), 
+        m.defaultColumnLength, 
+        f.sample,
+        m.nativeJdbcType)
+    
+    val wasThere = registry.put(z.clasz, z)
+    
+    if(wasThere != None)
+      Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
+  }
+  
   private def register[A](pm: PrimitiveJdbcMapper[A]) {
     val f = pm.thisTypedExpressionFactory
     val z = new FieldAttributesBasedOnType(
@@ -333,8 +374,8 @@ trait FieldMapper {
     
     registry.put(c, z)    
   }
-    
-  private def lookup(c: Class[_]): Option[FieldAttributesBasedOnType[_]] =
+  
+  private def lookup(c: Class[_]): Option[FieldAttributesBasedOnType[_]] = {
     if(!c.isPrimitive) 
       registry.get(c)
     else c.getName match {
@@ -346,4 +387,5 @@ trait FieldMapper {
       case "double" => lookup(classOf[java.lang.Double])
       case "void" => None
     }           
+  }
 }
