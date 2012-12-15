@@ -28,7 +28,6 @@ trait Postgresql_Connection extends DBConnector{
 }
 
 class Postgresql_ArrayTests extends PrimitiveArrayTest with Postgresql_Connection
-/*
 class Postgresql_UuidTests extends UuidTests with Postgresql_Connection
 class Postgresql_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Postgresql_Connection
 class Postgresql_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Postgresql_Connection
@@ -44,7 +43,6 @@ class Postgresql_LeftJoinTest extends LeftJoinTest with Postgresql_Connection
 class Postgresql_ConnectionClosing extends ConnectionClosingTest with Postgresql_Connection {
   def dbSpecificSelectNow: String = "select now()"
 }
-*/
 
 
 

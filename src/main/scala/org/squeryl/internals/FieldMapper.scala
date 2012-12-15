@@ -126,7 +126,7 @@ trait FieldMapper {
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Double] = elements.map(i => i.asInstanceOf[java.lang.Double].toDouble)
     }
     
-    // FIXME: Get this to work...
+    // FIXME: The type soup on this was beyond my patience for now...I think we'll need an ArrayDeOptionizer
     //val optionIntArrayTEF = new TypedExpressionFactory[Option[Array[Int]],TOptionIntArray] with DeOptionizer[Array[Int], Array[Int], TIntArray, Option[Array[Int]], TOptionIntArray] {
       //val deOptionizer = intArrayTEF
     //}

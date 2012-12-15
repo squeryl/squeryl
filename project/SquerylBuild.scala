@@ -68,7 +68,7 @@ object SquerylBuild extends Build {
         "cglib" % "cglib-nodep" % "2.2",
         "com.h2database" % "h2" % "1.2.127" % "provided",
         "mysql" % "mysql-connector-java" % "5.1.10" % "provided",
-        "postgresql" % "postgresql" % "9.1-901-1.jdbc4" % "provided",
+        "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided",
         "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
         "org.apache.derby" % "derby" % "10.7.1.1" % "provided",
         "junit" % "junit" % "4.8.2" % "provided"),
