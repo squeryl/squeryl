@@ -38,6 +38,9 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit val optionDateTEF = PrimitiveTypeSupport.optionDateTEF    
   implicit val timestampTEF = PrimitiveTypeSupport.timestampTEF
   implicit val optionTimestampTEF = PrimitiveTypeSupport.optionTimestampTEF
+  implicit val doubleArrayTEF = PrimitiveTypeSupport.doubleArrayTEF
+  implicit val intArrayTEF = PrimitiveTypeSupport.intArrayTEF
+  implicit val longArrayTEF = PrimitiveTypeSupport.longArrayTEF
   
   // =========================== Numerical Integral =========================== 
   implicit val byteTEF = PrimitiveTypeSupport.byteTEF
@@ -97,5 +100,9 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   
   implicit def bigDecimalToTE(f: BigDecimal) = bigDecimalTEF.create(f)    
   implicit def optionBigDecimalToTE(f: Option[BigDecimal]) = optionBigDecimalTEF.create(f)
+  
+  implicit def doubleArrayToTE(f : Array[Double]) = doubleArrayTEF.create(f)
+  implicit def intArrayToTE(f : Array[Int]) = intArrayTEF.create(f)
+  implicit def longArrayToTE(f : Array[Long]) = longArrayTEF.create(f)
   
 }
