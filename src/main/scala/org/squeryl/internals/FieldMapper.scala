@@ -22,7 +22,9 @@ import java.sql.Timestamp
 import java.util.Date
 import java.util.UUID
 import org.squeryl.dsl._
-
+import java.util.regex.Pattern
+import org.squeryl.Session
+import org.squeryl.dsl.ArrayJdbcMapper
 
 trait FieldMapper {
   outer =>
@@ -105,6 +107,29 @@ trait FieldMapper {
     val optionByteArrayTEF = new TypedExpressionFactory[Option[Array[Byte]],TOptionByteArray] with DeOptionizer[Array[Byte], Array[Byte], TByteArray, Option[Array[Byte]], TOptionByteArray] {
       val deOptionizer = binaryTEF
     }
+    
+    val intArrayTEF = new ArrayTEF[Int, TIntArray] {
+      val sample = Array(0)
+      def toWrappedJDBCType(element: Int) : java.lang.Object = new java.lang.Integer(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Int] = elements.map(i => i.asInstanceOf[java.lang.Integer].toInt)
+    }
+    
+    val longArrayTEF = new ArrayTEF[Long, TLongArray] {
+      val sample = Array(0L)
+      def toWrappedJDBCType(element: Long) : java.lang.Object = new java.lang.Long(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Long] = elements.map(i => i.asInstanceOf[java.lang.Long].toLong)
+    }
+    
+    val doubleArrayTEF = new ArrayTEF[Double, TDoubleArray] {
+      val sample : Array[Double] = Array(0.0)
+      def toWrappedJDBCType(element: Double) : java.lang.Object = new java.lang.Double(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Double] = elements.map(i => i.asInstanceOf[java.lang.Double].toDouble)
+    }
+    
+    // FIXME: The type soup on this was beyond my patience for now...I think we'll need an ArrayDeOptionizer
+    //val optionIntArrayTEF = new TypedExpressionFactory[Option[Array[Int]],TOptionIntArray] with DeOptionizer[Array[Int], Array[Int], TIntArray, Option[Array[Int]], TOptionIntArray] {
+      //val deOptionizer = intArrayTEF
+    //}
     
     def enumValueTEF[A >: Enumeration#Value <: Enumeration#Value](ev: Enumeration#Value) = 
       new JdbcMapper[Int,A] with TypedExpressionFactory[A,TEnumValue[A]] { 
@@ -222,6 +247,9 @@ trait FieldMapper {
     register(timestampTEF)
     register(dateTEF)  
     register(uuidTEF)
+    register(intArrayTEF)
+    register(longArrayTEF)
+    register(doubleArrayTEF)
 
     val re = enumValueTEF(DummyEnum.DummyEnumerationValue)    
     
@@ -323,6 +351,20 @@ trait FieldMapper {
       Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
   }
   
+  private [squeryl] def register[S,J](m: ArrayJdbcMapper[S,J]) {
+    val f = m.thisTypedExpressionFactory
+    val z = new FieldAttributesBasedOnType(
+        makeMapper(m), 
+        m.defaultColumnLength, 
+        f.sample,
+        m.nativeJdbcType)
+    
+    val wasThere = registry.put(z.clasz, z)
+    
+    if(wasThere != None)
+      Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
+  }
+  
   private def register[A](pm: PrimitiveJdbcMapper[A]) {
     val f = pm.thisTypedExpressionFactory
     val z = new FieldAttributesBasedOnType(
@@ -333,8 +375,8 @@ trait FieldMapper {
     
     registry.put(c, z)    
   }
-    
-  private def lookup(c: Class[_]): Option[FieldAttributesBasedOnType[_]] =
+  
+  private def lookup(c: Class[_]): Option[FieldAttributesBasedOnType[_]] = {
     if(!c.isPrimitive) 
       registry.get(c)
     else c.getName match {
@@ -346,4 +388,5 @@ trait FieldMapper {
       case "double" => lookup(classOf[java.lang.Double])
       case "void" => None
     }           
+  }
 }

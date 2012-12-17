@@ -64,10 +64,16 @@ sealed trait TString extends TOptionString with TNonOption
 sealed trait TDate extends TOptionDate with TNonOption
 sealed trait TTimestamp extends TOptionTimestamp with TNonOption
 sealed trait TByteArray extends TOptionByteArray  with TNonOption
+sealed trait TIntArray extends TOptionIntArray  with TNonOption
+sealed trait TLongArray extends TOptionLongArray  with TNonOption
+sealed trait TDoubleArray extends TOptionDoubleArray  with TNonOption
 sealed trait TOptionString 
 sealed trait TOptionDate
 sealed trait TOptionTimestamp
 sealed trait TOptionByteArray  
+sealed trait TOptionIntArray  
+sealed trait TOptionLongArray  
+sealed trait TOptionDoubleArray  
 sealed trait TBoolean extends TOptionBoolean  with TNonOption
 sealed trait TOptionBoolean
 sealed trait TUUID extends TOptionUUID  with TNonOption
@@ -255,6 +261,10 @@ trait JdbcMapper[P,A] {
   def map(rs: ResultSet, i: Int): A = convertFromJdbc(extractNativeJdbcValue(rs, i)) 
 }
 
+trait ArrayJdbcMapper[P,A] extends JdbcMapper[P,A] {
+  self: TypedExpressionFactory[A,_] =>
+  def nativeJdbcType = sample.asInstanceOf[AnyRef].getClass
+}
 
 trait PrimitiveJdbcMapper[A] extends JdbcMapper[A,A] {
   self: TypedExpressionFactory[A,_] =>
