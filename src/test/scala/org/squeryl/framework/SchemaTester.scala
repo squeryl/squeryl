@@ -12,21 +12,10 @@ abstract class SchemaTester extends DbTestBase{
   def schema : Schema
 
   def prePopulate() = {}
-  
-  override def withFixture(test: NoArgTest) {
-    super.withFixture(new NoArgTest {
-          def name = test.name
-          def configMap = test.configMap
-          def apply() { 
-            _initSchema
-           test.apply()
-          }
-    })
-  }
 
-  lazy val _initSchema = {
-    if(SessionFactory.concreteFactory.isDefined){
-      //println("Creating schema")
+  override def beforeAll(){
+    super.beforeAll
+    if(notIgnored){
       transaction{
          schema.drop
          schema.create
@@ -43,7 +32,7 @@ abstract class SchemaTester extends DbTestBase{
 
   override def afterAll(){
     super.afterAll
-    if(SessionFactory.concreteFactory.isDefined){
+    if(notIgnored){
       transaction{
          schema.drop
       }
@@ -55,26 +44,37 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
 
   def connectToDb : Option[() => Session]
 
+  var notIgnored = true
+
   val ignoredTests : List[String] = Nil
-  
-  lazy val _initFactory = {
-    //println("Initializing session factory")
-    SessionFactory.concreteFactory = connectToDb
-  }
-  
-  override def withFixture(test: NoArgTest) = {
-    super.withFixture(new NoArgTest {
-      override def name = test.name
-      override def configMap = test.configMap
-      override def apply() = {
-	    _initFactory
-	    if(SessionFactory.concreteFactory.isDefined && !ignoredTests.exists(_ == test.name)) {
-	      //println("Running " + test.name + " with session factory " + SessionFactory.concreteFactory)
-	      test.apply()
-	    }
-      }
-    })
+
+  override def beforeAll(){
+    super.beforeAll
+    SessionFactory.concreteFactory = connectWrapper()
   }
 
+  private def connectWrapper() : Option[() => Session] = {
+    val connector = connectToDb
+    if(connector.isEmpty){
+      notIgnored = false
+      None
+    }else{
+      Some(connector.get)
+    }
+  }
+
+  override def runTest(
+    testName: String,
+    reporter: Reporter,
+    stopper: Stopper,
+    configMap: Map[String, Any],
+    tracker: Tracker): Unit = {
+
+    if(!notIgnored || ignoredTests.find(_ == testName).isDefined){
+      //reporter(TestIgnored(new Ordinal(0), suiteName, Some(this.getClass.getName),testName))
+      return
+    }
+    super.runTest(testName, reporter, stopper, configMap, tracker)
+  }
 }
 
