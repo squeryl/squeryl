@@ -1,0 +1,89 @@
+---
+layout: default
+title: Migrating to 0.9.6
+headtitle: Migrating to 0.9.6
+---
+
+h2. The companion object of trait org.squeryl.PrimitiveTypeMode is deprecated
+
+From 0.9.6 onwards, the new usage pattern for importin Squeryls's DSL into an application is 
+to define an entrypoint object and import it whereever the application uses the DSL.
+This object is also where KeyedEntities and custom types are defined.
+
+*Note:* the trait org.squeryl.PrimitiveTypeMode is *not* deprecated, only it's companion object  
+
+h4. In the next example, we defined an object SquerylEntrypointForMyApp that will be imported in an application wherever the DSL is used.
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+  import org.squeryl._
+  import org.squeryl.dsl._
+  import org.joda.time._
+  import java.sql.Timestamp
+  import java.sql.ResultSet
+  
+  object SquerylEntrypointForMyApp extends PrimitiveTypeMode {
+    // optionally define custom types :
+
+    // optionally define keyed entities :  
+    implicit object courseKED extends KeyedEntityDef[Course,Int] {
+      def getId(a:Course) = a.id
+      def isPersisted(a:Course) = a.id > 0
+      def idPropertyName = "id"
+      override def optimisticCounterPropertyName = Some("occVersionNumber")
+    }
+    
+    implicit val jodaTimeTEF = new NonPrimitiveJdbcMapper[Timestamp, DateTime, TTimestamp](timestampTEF, this) {
+      
+      /**
+       * Here we implement functions fo convert to and from the native JDBC type
+       */
+      
+      def convertFromJdbc(t: Timestamp) = new DateTime(t)
+      def convertToJdbc(t: DateTime) = new Timestamp(t.getMillis())
+    }
+  
+    /**
+     * We define this one here to allow working with Option of our new type, this allso 
+     * allows the 'nvl' function to work  
+     */
+    implicit val optionJodaTimeTEF = 
+      new TypedExpressionFactory[Option[DateTime], TOptionTimestamp] 
+        with DeOptionizer[Timestamp, DateTime, TTimestamp, Option[DateTime], TOptionTimestamp] {
+  
+      val deOptionizer = jodaTimeTEF
+    }
+    
+    /**
+     * the following are necessary for the AST lifting  
+     */
+    implicit def jodaTimeToTE(s: DateTime) = jodaTimeTEF.create(s)  
+  
+    implicit def optionJodaTimeToTE(s: Option[DateTime]) = optionJodaTimeTEF.create(s)
+  } 
+  
+  // elsewhere in the application : 
+
+  import SquerylEntrypointForMyApp._
+
+]]></script>
+
+
+*Warning*: Although deprecared, the org.squeryl.PrimitiveTypeMode companion object can still be used for backward compatibility.
+If it is used, it *cannot* be used in a same application with other instance of the
+org.squeryl.PrimitiveTypeMode trait.
+
+<script type="syntaxhighlighter" class="brush: scala"><![CDATA[
+
+    // WRONG, do not do this : 
+
+    object SquerylEntrypointForMyApp extends org.squeryl.PrimitiveTypeMode
+    
+    import SquerylEntrypointForMyApp._ 
+    
+    // elsewhere in the application
+    
+    import org.squeryl.PrimitiveTypeMode._
+  }
+
+]]></script>
