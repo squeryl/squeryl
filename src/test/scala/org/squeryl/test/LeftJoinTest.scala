@@ -4,7 +4,7 @@ import org.squeryl.framework._
 
 abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction{
 
- import org.squeryl.PrimitiveTypeMode._
+ import org.squeryl.test.PrimitiveTypeModeForTests._
 
   val schema = LeftJoinSchema
 
@@ -87,7 +87,7 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction{
 
 
 import org.squeryl.Schema
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 object LeftJoinSchema extends Schema {
 

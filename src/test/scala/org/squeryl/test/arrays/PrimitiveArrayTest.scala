@@ -1,10 +1,10 @@
 package org.squeryl.test.arrays
 
 import _root_.org.squeryl.framework._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransaction {
 
-  import _root_.org.squeryl.PrimitiveTypeMode._
 
   val schema = PrimitiveArraySchema
 
@@ -71,7 +71,6 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
 }
 
 import _root_.org.squeryl.Schema
-import _root_.org.squeryl.PrimitiveTypeMode._
 
 object PrimitiveArraySchema extends Schema {
 

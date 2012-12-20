@@ -5,7 +5,7 @@ import java.util.UUID
 import org.squeryl._
 import dsl.ast.QueryExpressionNode
 import framework.{RunTestsInsideTransaction, SchemaTester}
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 object SubQueryTestSchema{
   class Entity(

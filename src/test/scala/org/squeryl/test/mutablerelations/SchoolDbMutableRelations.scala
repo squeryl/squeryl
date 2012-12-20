@@ -1,6 +1,6 @@
 package org.squeryl.test.mutablerelations
 
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl._
 import org.squeryl.dsl.CompositeKey2
 

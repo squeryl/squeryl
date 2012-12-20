@@ -29,6 +29,8 @@ import org.squeryl.internals.FieldMapper
     "0.9.6")
 object PrimitiveTypeMode extends PrimitiveTypeMode
 
+private [squeryl] object InternalFieldMapper extends PrimitiveTypeMode
+
 trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
     
   

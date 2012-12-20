@@ -4,7 +4,7 @@ import org.squeryl._
 import org.squeryl.framework.{SchemaTester, RunTestsInsideTransaction}
 import java.util.UUID
 
-import PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 object UuidTests {
   class UuidAsProperty extends KeyedEntity[Long] {

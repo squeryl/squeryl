@@ -1,6 +1,6 @@
 package org.squeryl.test.schooldb2
 
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl._
 import dsl.ast._
 import dsl.{OneToMany, CompositeKey2}

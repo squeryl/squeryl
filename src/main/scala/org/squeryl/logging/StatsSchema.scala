@@ -18,7 +18,9 @@ package org.squeryl.logging
 import org.squeryl.KeyedEntity
 import org.squeryl.Schema
 import org.squeryl.dsl.CompositeKey2
-import org.squeryl.PrimitiveTypeMode._
+
+object StatsSchemaTypeMode extends org.squeryl.PrimitiveTypeMode
+import StatsSchemaTypeMode._
 
 /**
  * id is a UUID generatted by java.util.UUID
@@ -76,7 +78,7 @@ class StatLine(val statement: Statement, val avgExecTime: Double, val invocation
 object Measure extends Enumeration {
    type Measure = Value
    val AvgExecTime, InvocationCount, CumulativeExecutionTime, AvgResultSetSize = Value
-}
+} 
 
 object StatsSchema extends Schema {
 

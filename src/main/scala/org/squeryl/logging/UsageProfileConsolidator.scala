@@ -17,7 +17,7 @@ package org.squeryl.logging
 
 import org.squeryl.Session
 import org.squeryl.adapters.H2Adapter
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.logging.StatsSchemaTypeMode._
 
 
 object UsageProfileConsolidator {

@@ -3,7 +3,7 @@ package org.squeryl.test
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import org.squeryl.Schema
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 class NamingConventionTransformsTest extends FunSuite with ShouldMatchers {
 

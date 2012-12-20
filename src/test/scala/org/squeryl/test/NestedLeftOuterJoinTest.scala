@@ -1,7 +1,7 @@
 package org.squeryl.test
 
 import org.squeryl._
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl.framework._
 
 object TestSchema extends Schema {

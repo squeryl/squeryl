@@ -3,7 +3,7 @@ package org.squeryl.framework
 import org.scalatest.matchers.ShouldMatchers
 import org.squeryl.{SessionFactory, Session, Schema}
 
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest._
 import org.scalatest.events.{TestIgnored, Ordinal}
 

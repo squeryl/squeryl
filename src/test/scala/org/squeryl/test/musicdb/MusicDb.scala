@@ -24,7 +24,7 @@ import dsl._
 import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
 import java.util.{Date, Calendar}
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 object Genre extends Enumeration {
   type Genre = Value
@@ -62,7 +62,7 @@ class Song(val title: String, val authorId: Int, val interpretId: Int, val cdId:
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
   override def toString = id+ ":" + title
 }
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 class MusicDb extends Schema {
 
@@ -99,7 +99,7 @@ class TestData(schema : MusicDb){
 
 abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTestsInsideTransaction {
 
-  import org.squeryl.PrimitiveTypeMode._
+  import org.squeryl.test.PrimitiveTypeModeForTests._
 
   val schema = new MusicDb
 

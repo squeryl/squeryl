@@ -3,7 +3,7 @@ package org.squeryl.test
 import org.squeryl._
 import org.squeryl.framework._
 
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 class Foo(val value: String) extends KeyedEntity[Long] {
   val id: Long = 0
