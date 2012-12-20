@@ -248,7 +248,12 @@ class SchoolDb extends Schema {
     super.drop
   }
 
+  def studentTransform(s: Student) = {
+     new Student(s.name, s.lastName, s.age, ((s.gender % 2) + 1), s.addressId, s.isMultilingual)
+  }
+
   val beforeInsertsOfPerson = new ArrayBuffer[Person]
+  val transformedStudents = new ArrayBuffer[Student]
   val beforeInsertsOfKeyedEntity = new ArrayBuffer[KeyedEntity[_]]
   val beforeInsertsOfProfessor = new ArrayBuffer[Professor]
   val afterInsertsOfProfessor = new ArrayBuffer[Professor]
@@ -259,6 +264,9 @@ class SchoolDb extends Schema {
   val professorsCreatedWithFactory = new ArrayBuffer[Int]
 
   override def callbacks = Seq(
+    // We'll change the gender of z1 z2 student
+    beforeInsert[Student]
+      map(s => {if (s.name == "z1" && s.lastName == "z2"){val s2 = studentTransform(s); transformedStudents.append(s2); s2} else s}),
 
     beforeInsert[Person]
       map(p => {beforeInsertsOfPerson.append(p); p}),
@@ -643,10 +651,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     afterInsertsOfProfessor.clear
     beforeDeleteOfSchool.clear
     professorsCreatedWithFactory.clear
+    transformedStudents.clear
 
     val s1 = students.insert(new Student("z1", "z2", Some(4), 1, Some(4), Some(true)))
+    val sOpt = from(students)(s => where(s.name === "z1" and s.lastName === "z2") select(s)).headOption
 
+    assert(sOpt.isDefined && sOpt.map(_.gender == 2).getOrElse(false))
     assert(beforeInsertsOfPerson.exists(_ == s1))
+    assert(transformedStudents.exists(_ == s1))
     assert(! beforeInsertsOfKeyedEntity.exists(_ == s1))
     assert(!beforeInsertsOfProfessor.exists(_ == s1))
     assert(!afterInsertsOfProfessor.exists(_ == s1))
