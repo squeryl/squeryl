@@ -181,6 +181,24 @@ trait DatabaseAdapter {
   def timestampTypeDeclaration = "timestamp"
   def binaryTypeDeclaration = "binary"
   def uuidTypeDeclaration = "char(36)"
+  def intArrayTypeDeclaration = intTypeDeclaration + "[]"
+  def longArrayTypeDeclaration = longTypeDeclaration + "[]"
+  def doubleArrayTypeDeclaration = doubleTypeDeclaration + "[]"
+    
+  def jdbcIntArrayCreationType = intTypeDeclaration
+  def jdbcLongArrayCreationType = longTypeDeclaration
+  def jdbcDoubleArrayCreationType = doubleTypeDeclaration
+    
+  final def arrayCreationType(ptype : Class[_]) : String = {
+    val rv = ptype.getName() match {
+      case "java.lang.Integer" => jdbcIntArrayCreationType
+      case "java.lang.Double" => jdbcDoubleArrayCreationType
+      case "java.lang.Long" => jdbcLongArrayCreationType
+      case _ => ""
+    }
+    rv
+  }
+    
 /*
   private val _declarationHandler = new FieldTypeHandler[String] {
 
@@ -796,9 +814,15 @@ trait DatabaseAdapter {
         binaryTypeDeclaration
       else if(classOf[BigDecimal].isAssignableFrom(c))
         bigDecimalTypeDeclaration                  
+      else if(classOf[scala.Array[Int]].isAssignableFrom(c))
+        intArrayTypeDeclaration
+      else if(classOf[scala.Array[Long]].isAssignableFrom(c))
+        longArrayTypeDeclaration
+      else if(classOf[scala.Array[Double]].isAssignableFrom(c))
+        doubleArrayTypeDeclaration
       else
         Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
-                  
+     
       decl    
   }
 
