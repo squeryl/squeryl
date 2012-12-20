@@ -25,7 +25,8 @@ import java.sql.ResultSet
 import org.squeryl.internals.Utils
 import org.squeryl.internals.FieldMapper
 
-
+@deprecated("the PrimitiveTypeMode companion object is deprecated, you should define a mix in the trait for your application. See : http://squeryl.org/0.9.6.html",
+    "0.9.6")
 object PrimitiveTypeMode extends PrimitiveTypeMode
 
 trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
