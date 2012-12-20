@@ -23,7 +23,6 @@ h4. In the next example, we defined an object SquerylEntrypointForMyApp that wil
   import java.sql.ResultSet
   
   object SquerylEntrypointForMyApp extends PrimitiveTypeMode {
-    // optionally define custom types :
 
     // optionally define keyed entities :  
     implicit object courseKED extends KeyedEntityDef[Course,Int] {
@@ -32,6 +31,8 @@ h4. In the next example, we defined an object SquerylEntrypointForMyApp that wil
       def idPropertyName = "id"
       override def optimisticCounterPropertyName = Some("occVersionNumber")
     }
+
+    // optionally define custom types :
     
     implicit val jodaTimeTEF = new NonPrimitiveJdbcMapper[Timestamp, DateTime, TTimestamp](timestampTEF, this) {
       
