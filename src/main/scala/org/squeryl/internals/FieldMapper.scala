@@ -90,6 +90,7 @@ trait FieldMapper {
         v match {
             case u: UUID => u
             case s: String => UUID.fromString(s)
+            case _ => sample
         }
       }
     }

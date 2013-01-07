@@ -3,15 +3,20 @@ package org.squeryl.test
 import org.squeryl._
 import org.squeryl.framework.{SchemaTester, RunTestsInsideTransaction}
 import java.util.UUID
-
 import org.squeryl.test.PrimitiveTypeModeForTests._
+import framework.SingleTestRun
 
 object UuidTests {
   class UuidAsProperty extends KeyedEntity[Long] {
     val id: Long = 0
     val uuid = UUID.randomUUID
   }
-
+  
+  class UuidWithOption(val optionalUuid: Option[UUID]) extends KeyedEntity[Long] {
+    def this() = this(Some(UUID.randomUUID()))
+    val id: Long = 0
+  }  
+  
   class UuidAsId extends KeyedEntity[UUID] {
     var id = UUID.randomUUID
     lazy val foreigns = TestSchema.uuidOneToMany.left(this)
@@ -25,6 +30,7 @@ object UuidTests {
     val uuidAsProperty = table[UuidAsProperty]
     val uuidAsId = table[UuidAsId]
     val uuidAsForeignKey = table[UuidAsForeignKey]
+    val uuidWithOption = table[UuidWithOption]
 
     val uuidOneToMany = oneToManyRelation(uuidAsId, uuidAsForeignKey).via(_.id === _.foreignUuid)
 
@@ -52,6 +58,27 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction{
     testObject.uuid should equal(uuidAsProperty.where(_.uuid in List(testObject.uuid)).single.uuid)
   }
 
+  test("UuidOptional", SingleTestRun) {
+    import TestSchema._
+
+    val testObject = new UuidWithOption(None)
+    testObject.save
+    
+    val fromDb = uuidWithOption.lookup(testObject.id).get
+    println(fromDb.optionalUuid)
+    fromDb.optionalUuid should equal(None)
+    
+    val uuid = UUID.randomUUID()
+    
+    update(uuidWithOption)(p =>
+      where(p.id === testObject.id)
+      set(p.optionalUuid := Some(uuid))
+    )
+    
+    uuidWithOption.lookup(testObject.id).get.optionalUuid should equal(Some(uuid))
+
+  }
+  
   test("UuidAsId") {
     import TestSchema._
 
