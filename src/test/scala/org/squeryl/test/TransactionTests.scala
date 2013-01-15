@@ -2,8 +2,8 @@ package org.squeryl.test
 
 import org.squeryl._
 import org.squeryl.framework._
-
 import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.internals.Utils
 
 class Foo(val value: String) extends KeyedEntity[Long] {
   val id: Long = 0
@@ -97,6 +97,25 @@ abstract class TransactionTests extends DbTestBase{
       // works!
       assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
     }
+  }
+  
+  test("nested transactions with SessionFactory") {
+
+   val sf1  = new SessionFactory {
+     def newSession: Session = connectWrapper().get()
+   }    
+   
+   val sf2  = new SessionFactory {
+     def newSession: Session = Utils.throwError("inner inTransaction sould not be started")
+   }
+   
+   
+   inTransaction(sf1) {
+     
+     inTransaction(sf2) {
+       
+     }
+   }
   }
   
 }

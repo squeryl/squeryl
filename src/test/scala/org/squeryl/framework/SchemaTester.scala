@@ -53,7 +53,7 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
     SessionFactory.concreteFactory = connectWrapper()
   }
 
-  private def connectWrapper() : Option[() => Session] = {
+  def connectWrapper() : Option[() => Session] = {
     val connector = connectToDb
     if(connector.isEmpty){
       notIgnored = false
