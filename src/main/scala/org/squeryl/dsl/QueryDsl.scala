@@ -748,13 +748,16 @@ trait QueryDsl
     if(isSelfReference)
       assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity || ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
 
+    def msg = 
+      "equality expression incorrect in relation involving table " + rightTable.prefixedName + ", or perhaps inverted oneToManyRelation"
+      
     if(ee.left._fieldMetaData.parentMetaData.clasz == rightTable.classOfT &&
        (!isSelfReference || (isSelfReference && ee.right._fieldMetaData.isIdFieldOfKeyedEntity)) ) {
-      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity)
+      assert(ee.right._fieldMetaData.isIdFieldOfKeyedEntity, msg)
       (ee.right._fieldMetaData, ee.left._fieldMetaData)
     }
     else {
-      assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity)
+      assert(ee.left._fieldMetaData.isIdFieldOfKeyedEntity, msg)
       (ee.left._fieldMetaData, ee.right._fieldMetaData)
     }
   }
