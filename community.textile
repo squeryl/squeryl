@@ -5,6 +5,9 @@ headtitle: Community -
 ---
 h2. Blogs
 
+* "Presentation by Jay tailor": http://scala.sh/squeryl-presentation-slides.pdf
+* "Presentation un Russian":http://www.youtube.com/watch?v=7FQtslXpbpY
+* "With play2 on Heroku":http://www.jamesward.com/2012/07/16/getting-started-with-play-2-scala-and-squeryl
 * "Squeryl with Java Experiment":http://lunajs.blogspot.com/2011/06/squeryl-with-java-experiment.html
 * "Setup example in Japanese":http://blog.twiwt.org/e/7e40ce
 * "Scala ORM with Squeryl - A simple getting started guide":http://blog.xebia.com/2011/06/scala-orm-with-squeryl/
