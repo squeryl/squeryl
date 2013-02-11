@@ -16,7 +16,7 @@ Declare the Squeryl dependency in the SBT project definiition
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
   
   libraryDependencies  ++=  Seq(
-    "org.squeryl" %% "squeryl" % "0.9.5-2",
+    "org.squeryl" %% "squeryl" % "0.9.5-6",
     yourDatabaseDependency
   )
    
@@ -38,11 +38,6 @@ The remaining steps are :
 # "Define, and initialise a schema":http://squeryl.org/schema-definition.html
 
 You should now be ready to insert, update, delete data, and of course run queries.
-
-
-h3. Maven
-
-If for some reason you can't use SBT and must use Maven, you will find the Squeryl artifacts hosted "here":http://nexus.scala-tools.org/content/repositories/releases/org/squeryl/
 
 h3. Manual dependency management
 
