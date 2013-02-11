@@ -4,7 +4,7 @@ title: Getting Started
 headtitle: Getting Started - 
 ---
 
-h3. The recommended version is 0.9.5-2
+h3. The recommended version is 0.9.5-6
 
 Supported Scala versions are 2.9.2, 2.9.1, 2.9.0, 2.8.1 and 2.8.0
 
