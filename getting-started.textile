@@ -6,7 +6,7 @@ headtitle: Getting Started -
 
 h3. The recommended version is 0.9.5-6
 
-Supported Scala versions are 2.9.2, 2.9.1, 2.9.0, 2.8.1 and 2.8.0
+Supported Scala versions are 2.10.0, 2.9.2, 2.9.1, 2.9.0, 2.8.1 and 2.8.0
 
 h2. SBT
 
@@ -43,7 +43,7 @@ h3. Manual dependency management
 
 If you want to manage your dependencies without SBT or Maven, you will need the following jars :
 
-* The Scala runtime jar, version 2.9.2, 2.9.1 (or 2.9.0, 2.8.1, 2.8.0)
+* The Scala runtime jar, version 2.10.0, 2.9.2, 2.9.1 (or 2.9.0, 2.8.1, 2.8.0)
 * The Squeryl jar found "here":http://github.com/max-l/Squeryl/downloads
 * The CGLIB cglib-nodep-2.2.jar, found "here":http://sourceforge.net/projects/cglib/files/
 * A JDBC driver for your database, see "supported databases":./supported-databases.html
