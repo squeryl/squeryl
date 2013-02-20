@@ -2,68 +2,98 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl</title>
+          <title>ManyToManyRelationImpl - org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl</title>
+          <meta name="description" content="ManyToManyRelationImpl - org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" />
+          <meta name="keywords" content="ManyToManyRelationImpl org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
-      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.squeryl.dsl.QueryDsl$ManyToManyRelationImpl';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
         <body class="type">
       <div id="definition">
         <img src="../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../package.html">squeryl</a>.<a name="org.squeryl.dsl" class="extype" href="package.html">dsl</a>.<a name="org.squeryl.dsl.QueryDsl" class="extype" href="QueryDsl.html">QueryDsl</a></p>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="package.html" class="extype" name="org.squeryl.dsl">dsl</a>.<a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></p>
         <h1>ManyToManyRelationImpl</h1>
       </div>
 
-      <h4 class="signature" id="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <span class="name">ManyToManyRelationImpl</span>
-        <span class="tparams">[<span name="L">L &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="R">R &lt;: org.squeryl.KeyedEntity[_]</span>, <span name="A">A &lt;: org.squeryl.KeyedEntity[_]</span>]</span>
-        <span class="result"> extends <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[A] with <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a>[L, R, A]</span>
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ManyToManyRelationImpl</span><span class="tparams">[<span name="L">L &lt;: <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]</span>, <span name="R">R &lt;: <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]</span>, <span name="A">A &lt;: <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]</span>]</span><span class="result"> extends <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>] with <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a>[L, R, A]</dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/max-l/Squeryl/tree/0.9.5-6/src/main/scala/org/squeryl/dsl/QueryDsl.scala" target="_blank">QueryDsl.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a>[L, R, A], <a name="org.squeryl.dsl.Relation" class="extype" href="Relation.html">Relation</a>[L, R], <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[A], <a name="org.squeryl.View" class="extype" href="../View.html">View</a>[A], <a name="org.squeryl.Queryable" class="extype" href="../Queryable.html">Queryable</a>[A], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>], <a href="Relation.html" class="extype" name="org.squeryl.dsl.Relation">Relation</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>], <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>], <a href="../View.html" class="extype" name="org.squeryl.View">View</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>], <a href="../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
-      <div id="template">
-
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          <div id="order">
-                <span class="filtertype">Ordering</span>
-                <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
-              </div>
-          <div id="ancestors">
-                <span class="filtertype">Inherited</span>
-                <ol><li class="hideall out"><span>Hide All</span></li>
-                <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="in"><span>ManyToManyRelationImpl</span></li><li name="org.squeryl.dsl.ManyToManyRelation" class="in"><span>ManyToManyRelation</span></li><li name="org.squeryl.dsl.Relation" class="in"><span>Relation</span></li><li name="org.squeryl.Table" class="in"><span>Table</span></li><li name="org.squeryl.View" class="in"><span>View</span></li><li name="org.squeryl.Queryable" class="in"><span>Queryable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
-              </div>
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
             </div>
-        </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl"><span>ManyToManyRelationImpl</span></li><li class="in" name="org.squeryl.dsl.ManyToManyRelation"><span>ManyToManyRelation</span></li><li class="in" name="org.squeryl.dsl.Relation"><span>Relation</span></li><li class="in" name="org.squeryl.Table"><span>Table</span></li><li class="in" name="org.squeryl.View"><span>View</span></li><li class="in" name="org.squeryl.Queryable"><span>Queryable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
-        <div class="members" id="constructors">
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#this" data-isabs="false">
-      <a id="this:ManyToManyRelationImpl[L, R, A]"></a>
+              <ol><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(leftTable:org.squeryl.Table[L],rightTable:org.squeryl.Table[R],aClass:Class[A],f:(L,R,A)=&gt;(org.squeryl.dsl.ast.EqualityExpression,org.squeryl.dsl.ast.EqualityExpression),schema:org.squeryl.Schema,nameOverride:Option[String]):QueryDsl.this.ManyToManyRelationImpl[L,R,A]"></a>
+      <a id="&lt;init&gt;:ManyToManyRelationImpl[L,R,A]"></a>
       <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol"> 
-        <span class="name">ManyToManyRelationImpl</span>
-        
-        <span class="params">(<span name="leftTable">leftTable: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[L]</span>, <span name="rightTable">rightTable: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[R]</span>, <span name="aClass">aClass: Class[A]</span>, <span name="f">f: (L, R, A) ⇒ (<a name="org.squeryl.dsl.ast.EqualityExpression" class="extype" href="ast/EqualityExpression.html">EqualityExpression</a>, <a name="org.squeryl.dsl.ast.EqualityExpression" class="extype" href="ast/EqualityExpression.html">EqualityExpression</a>)</span>, <span name="schema">schema: <a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></span>, <span name="nameOverride">nameOverride: <span name="scala.Option" class="extype">Option</span>[String]</span>)</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ManyToManyRelationImpl</span><span class="params">(<span name="leftTable">leftTable: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>]</span>, <span name="rightTable">rightTable: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>]</span>, <span name="aClass">aClass: <span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>, <span name="f">f: (<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>) ⇒ (<a href="ast/EqualityExpression.html" class="extype" name="org.squeryl.dsl.ast.EqualityExpression">EqualityExpression</a>, <a href="ast/EqualityExpression.html" class="extype" name="org.squeryl.dsl.ast.EqualityExpression">EqualityExpression</a>)</span>, <span name="schema">schema: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>, <span name="nameOverride">nameOverride: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span>
       </span>
       </h4>
       
@@ -71,631 +101,735 @@
             </div>
 
         
-        
+
         
 
-        <div class="values members" id="values">
+        <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">##</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.View#_setPersisted" data-isabs="false">
-      <a id="_setPersisted:(A) ⇒ Unit"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">_setPersisted</span>
-        
-        <span class="result">: (A) ⇒ <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">asInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: T0</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">clone</span>
-        
-        <span class="params">()</span><span class="result">: AnyRef</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#delete" data-isabs="false">
-      <a id="delete[K](K)(&lt;:&lt;[A, KeyedEntity[K]],QueryDsl):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">delete</span>
-        <span class="tparams">[<span name="K">K</span>]</span>
-        <span class="params">(<span name="k">k: K</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, <a name="org.squeryl.KeyedEntity" class="extype" href="../KeyedEntity.html">KeyedEntity</a>[K]]</span>, <span name="dsl">dsl: <a name="org.squeryl.dsl.QueryDsl" class="extype" href="QueryDsl.html">QueryDsl</a></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#delete" data-isabs="false">
-      <a id="delete(Query[A]):Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">delete</span>
-        
-        <span class="params">(<span name="q">q: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[A]</span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#deleteWhere" data-isabs="false">
-      <a id="deleteWhere((A) ⇒ LogicalBoolean)(QueryDsl):Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">deleteWhere</span>
-        
-        <span class="params">(<span name="whereClause">whereClause: (A) ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a name="org.squeryl.dsl.QueryDsl" class="extype" href="QueryDsl.html">QueryDsl</a></span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">eq</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">equals</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
-      <a id="finalize():Unit"></a>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">finalize</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.squeryl.View#_setPersisted" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_setPersisted:T=&gt;Unit"></a>
+      <a id="_setPersisted:(A)⇒Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_setPersisted</span><span class="result">: (<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#forceUpdate" data-isabs="false">
-      <a id="forceUpdate(Iterable[A])(&lt;:&lt;[A, org.squeryl.KeyedEntity[_]]):Unit"></a>
+    </li><li name="org.squeryl.Table#delete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="delete[K](k:K)(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[K]],implicitdsl:org.squeryl.dsl.QueryDsl):Boolean"></a>
+      <a id="delete[K](K)(&lt;:&lt;[A,KeyedEntity[K]],QueryDsl):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">forceUpdate</span>
-        
-        <span class="params">(<span name="o">o: Iterable[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">delete</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: <span class="extype" name="org.squeryl.Table.delete.K">K</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[<span class="extype" name="org.squeryl.Table.delete.K">K</span>]]</span>, <span name="dsl">dsl: <a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#forceUpdate" data-isabs="false">
-      <a id="forceUpdate(A)(&lt;:&lt;[A, org.squeryl.KeyedEntity[_]]):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#delete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="delete(q:org.squeryl.Query[T]):Int"></a>
+      <a id="delete(Query[A]):Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">forceUpdate</span>
-        
-        <span class="params">(<span name="o">o: A</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">delete</span><span class="params">(<span name="q">q: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#deleteWhere" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="deleteWhere(whereClause:T=&gt;org.squeryl.dsl.ast.LogicalBoolean)(implicitdsl:org.squeryl.dsl.QueryDsl):Int"></a>
+      <a id="deleteWhere((A)⇒LogicalBoolean)(QueryDsl):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deleteWhere</span><span class="params">(<span name="whereClause">whereClause: (<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>) ⇒ <a href="ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.squeryl.Table#forceUpdate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forceUpdate(o:Iterable[T])(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[_]]):Unit"></a>
+      <a id="forceUpdate(Iterable[A])(&lt;:&lt;[A,KeyedEntity[_]]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forceUpdate</span><span class="params">(<span name="o">o: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#forceUpdate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forceUpdate(o:T)(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[_]]):AnyRef"></a>
+      <a id="forceUpdate(A)(&lt;:&lt;[A,KeyedEntity[_]]):AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forceUpdate</span><span class="params">(<span name="o">o: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Updates without any Optimistic Concurrency Control check
 </p><div class="fullcomment"><div class="comment cmt"><p>Updates without any Optimistic Concurrency Control check
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
-      <a id="getClass():java.lang.Class[_]"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.View#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get[K](k:K)(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[K]],implicitdsl:org.squeryl.dsl.QueryDsl):T"></a>
+      <a id="get[K](K)(&lt;:&lt;[A,KeyedEntity[K]],QueryDsl):A"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getClass</span>
-        
-        <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">get</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: <span class="extype" name="org.squeryl.View.get.K">K</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[<span class="extype" name="org.squeryl.View.get.K">K</span>]]</span>, <span name="dsl">dsl: <a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
-      <a id="hashCode():Int"></a>
+      <p class="shortcomment cmt">Will throw an exception if the given key (k) returns no row.</p><div class="fullcomment"><div class="comment cmt"><p>Will throw an exception if the given key (k) returns no row.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">hashCode</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#insert" data-isabs="false">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.squeryl.Table#insert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="insert(e:Iterable[T]):Unit"></a>
       <a id="insert(Iterable[A]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">insert</span>
-        
-        <span class="params">(<span name="e">e: Iterable[A]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">insert</span><span class="params">(<span name="e">e: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#insert" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#insert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="insert(t:org.squeryl.Query[T]):Nothing"></a>
       <a id="insert(Query[A]):Nothing"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">insert</span>
-        
-        <span class="params">(<span name="t">t: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[A]</span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">insert</span><span class="params">(<span name="t">t: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Nothing">Nothing</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#insert" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#insert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="insert(t:T):T"></a>
       <a id="insert(A):A"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">insert</span>
-        
-        <span class="params">(<span name="t">t: A</span>)</span><span class="result">: A</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">insert</span><span class="params">(<span name="t">t: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>)</span><span class="result">: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#insertOrUpdate" data-isabs="false">
-      <a id="insertOrUpdate(A)(&lt;:&lt;[A, org.squeryl.KeyedEntity[_]]):A"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#insertOrUpdate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="insertOrUpdate(o:T)(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[_]]):T"></a>
+      <a id="insertOrUpdate(A)(&lt;:&lt;[A,KeyedEntity[_]]):A"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">insertOrUpdate</span>
-        
-        <span class="params">(<span name="o">o: A</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: A</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">insertOrUpdate</span><span class="params">(<span name="o">o: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]]</span>)</span><span class="result">: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#left" data-isabs="false">
-      <a id="left(L):Query[R] with ManyToMany[R, A]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#left" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="left(leftSideMember:L):org.squeryl.Query[R]withorg.squeryl.dsl.ManyToMany[R,A]"></a>
+      <a id="left(L):Query[R]withManyToMany[R,A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">left</span>
-        
-        <span class="params">(<span name="leftSideMember">leftSideMember: L</span>)</span><span class="result">: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[R] with <a name="org.squeryl.dsl.ManyToMany" class="extype" href="ManyToMany.html">ManyToMany</a>[R, A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">left</span><span class="params">(<span name="leftSideMember">leftSideMember: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span></span>)</span><span class="result">: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>] with <a href="ManyToMany.html" class="extype" name="org.squeryl.dsl.ManyToMany">ManyToMany</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#leftForeignKeyDeclaration" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#leftForeignKeyDeclaration" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftForeignKeyDeclaration:org.squeryl.ForeignKeyDeclaration"></a>
       <a id="leftForeignKeyDeclaration:ForeignKeyDeclaration"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">leftForeignKeyDeclaration</span>
-        
-        <span class="result">: <a name="org.squeryl.ForeignKeyDeclaration" class="extype" href="../ForeignKeyDeclaration.html">ForeignKeyDeclaration</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftForeignKeyDeclaration</span><span class="result">: <a href="../ForeignKeyDeclaration.html" class="extype" name="org.squeryl.ForeignKeyDeclaration">ForeignKeyDeclaration</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToManyRelation#leftStateful" data-isabs="false">
-      <a id="leftStateful(L):StatefulManyToMany[R, A]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.ManyToManyRelation#leftStateful" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftStateful(leftSide:L):org.squeryl.dsl.StatefulManyToMany[R,A]"></a>
+      <a id="leftStateful(L):StatefulManyToMany[R,A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">leftStateful</span>
-        
-        <span class="params">(<span name="leftSide">leftSide: L</span>)</span><span class="result">: <a name="org.squeryl.dsl.StatefulManyToMany" class="extype" href="StatefulManyToMany.html">StatefulManyToMany</a>[R, A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftStateful</span><span class="params">(<span name="leftSide">leftSide: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span></span>)</span><span class="result">: <a href="StatefulManyToMany.html" class="extype" name="org.squeryl.dsl.StatefulManyToMany">StatefulManyToMany</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#leftTable" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#leftTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="leftTable:org.squeryl.Table[L]"></a>
       <a id="leftTable:Table[L]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">leftTable</span>
-        
-        <span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[L]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leftTable</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.Relation" class="extype" href="Relation.html">Relation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.View#lookup" data-isabs="false">
-      <a id="lookup[K](K)(&lt;:&lt;[A, KeyedEntity[K]],QueryDsl):Option[A]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="Relation.html" class="extype" name="org.squeryl.dsl.Relation">Relation</a></dd></dl></div>
+    </li><li name="org.squeryl.View#lookup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lookup[K](k:K)(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[K]],implicitdsl:org.squeryl.dsl.QueryDsl):Option[T]"></a>
+      <a id="lookup[K](K)(&lt;:&lt;[A,KeyedEntity[K]],QueryDsl):Option[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">lookup</span>
-        <span class="tparams">[<span name="K">K</span>]</span>
-        <span class="params">(<span name="k">k: K</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, <a name="org.squeryl.KeyedEntity" class="extype" href="../KeyedEntity.html">KeyedEntity</a>[K]]</span>, <span name="dsl">dsl: <a name="org.squeryl.dsl.QueryDsl" class="extype" href="QueryDsl.html">QueryDsl</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lookup</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: <span class="extype" name="org.squeryl.View.lookup.K">K</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[<span class="extype" name="org.squeryl.View.lookup.K">K</span>]]</span>, <span name="dsl">dsl: <a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.View#name" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="org.squeryl.View#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="name:String"></a>
       <a id="name:String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">name</span>
-        
-        <span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a> → <a name="org.squeryl.Queryable" class="extype" href="../Queryable.html">Queryable</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a> → <a href="../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">ne</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notify</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notifyAll</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.View#posoMetaData" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.squeryl.View#posoMetaData" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="posoMetaData:org.squeryl.internals.PosoMetaData[T]"></a>
       <a id="posoMetaData:PosoMetaData[A]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">posoMetaData</span>
-        
-        <span class="result">: <a name="org.squeryl.internals.PosoMetaData" class="extype" href="../internals/PosoMetaData.html">PosoMetaData</a>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">posoMetaData</span><span class="result">: <a href="../internals/PosoMetaData.html" class="extype" name="org.squeryl.internals.PosoMetaData">PosoMetaData</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.View#prefix" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="org.squeryl.View#prefix" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="prefix:Option[String]"></a>
       <a id="prefix:Option[String]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">prefix</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">prefix</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.View#prefixedName" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="org.squeryl.View#prefixedName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="prefixedName:String"></a>
       <a id="prefixedName:String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">prefixedName</span>
-        
-        <span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">prefixedName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.View#prefixedPrefixedName" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="org.squeryl.View#prefixedPrefixedName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="prefixedPrefixedName(s:String):String"></a>
       <a id="prefixedPrefixedName(String):String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">prefixedPrefixedName</span>
-        
-        <span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">prefixedPrefixedName</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Suppose you have : prefix.</p><div class="fullcomment"><div class="comment cmt"><p>Suppose you have : prefix.MyTable
 myTable.prefixedPrefixedName(&quot;z&quot;) will yield : prefix.zMyTable
 used for creating names for objects derived from a table, ex.: a sequence
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.View" class="extype" href="../View.html">View</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#right" data-isabs="false">
-      <a id="right(R):Query[L] with ManyToMany[L, A]"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../View.html" class="extype" name="org.squeryl.View">View</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#right" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="right(rightSideMember:R):org.squeryl.Query[L]withorg.squeryl.dsl.ManyToMany[L,A]"></a>
+      <a id="right(R):Query[L]withManyToMany[L,A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">right</span>
-        
-        <span class="params">(<span name="rightSideMember">rightSideMember: R</span>)</span><span class="result">: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[L] with <a name="org.squeryl.dsl.ManyToMany" class="extype" href="ManyToMany.html">ManyToMany</a>[L, A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">right</span><span class="params">(<span name="rightSideMember">rightSideMember: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span></span>)</span><span class="result">: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>] with <a href="ManyToMany.html" class="extype" name="org.squeryl.dsl.ManyToMany">ManyToMany</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#rightForeignKeyDeclaration" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#rightForeignKeyDeclaration" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rightForeignKeyDeclaration:org.squeryl.ForeignKeyDeclaration"></a>
       <a id="rightForeignKeyDeclaration:ForeignKeyDeclaration"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">rightForeignKeyDeclaration</span>
-        
-        <span class="result">: <a name="org.squeryl.ForeignKeyDeclaration" class="extype" href="../ForeignKeyDeclaration.html">ForeignKeyDeclaration</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightForeignKeyDeclaration</span><span class="result">: <a href="../ForeignKeyDeclaration.html" class="extype" name="org.squeryl.ForeignKeyDeclaration">ForeignKeyDeclaration</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToManyRelation#rightStateful" data-isabs="false">
-      <a id="rightStateful(R):StatefulManyToMany[L, A]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.ManyToManyRelation#rightStateful" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rightStateful(rightSide:R):org.squeryl.dsl.StatefulManyToMany[L,A]"></a>
+      <a id="rightStateful(R):StatefulManyToMany[L,A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">rightStateful</span>
-        
-        <span class="params">(<span name="rightSide">rightSide: R</span>)</span><span class="result">: <a name="org.squeryl.dsl.StatefulManyToMany" class="extype" href="StatefulManyToMany.html">StatefulManyToMany</a>[L, A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightStateful</span><span class="params">(<span name="rightSide">rightSide: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span></span>)</span><span class="result">: <a href="StatefulManyToMany.html" class="extype" name="org.squeryl.dsl.StatefulManyToMany">StatefulManyToMany</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#rightTable" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#rightTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rightTable:org.squeryl.Table[R]"></a>
       <a id="rightTable:Table[R]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">rightTable</span>
-        
-        <span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[R]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rightTable</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.Relation" class="extype" href="Relation.html">Relation</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
-      <a id="synchronized[T0](⇒ T0):T0"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="Relation.html" class="extype" name="org.squeryl.dsl.Relation">Relation</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">synchronized</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#thisTable" data-isabs="false">
-      <a id="thisTable:ManyToManyRelationImpl[L, R, A]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl#thisTable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="thisTable:QueryDsl.this.ManyToManyRelationImpl[L,R,A]"></a>
+      <a id="thisTable:ManyToManyRelationImpl[L,R,A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">thisTable</span>
-        
-        <span class="result">: <a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a>[L, R, A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thisTable</span><span class="result">: <a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl" class="extype" href="">ManyToManyRelationImpl</a> → <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl">ManyToManyRelationImpl</a> → <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a></dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">toString</span>
-        
-        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#update" data-isabs="false">
-      <a id="update((A) ⇒ UpdateStatement):Int"></a>
+    </li><li name="org.squeryl.Table#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(s:T=&gt;org.squeryl.dsl.ast.UpdateStatement):Int"></a>
+      <a id="update((A)⇒UpdateStatement):Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">update</span>
-        
-        <span class="params">(<span name="s">s: (A) ⇒ <a name="org.squeryl.dsl.ast.UpdateStatement" class="extype" href="ast/UpdateStatement.html">UpdateStatement</a></span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="s">s: (<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>) ⇒ <a href="ast/UpdateStatement.html" class="extype" name="org.squeryl.dsl.ast.UpdateStatement">UpdateStatement</a></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#update" data-isabs="false">
-      <a id="update(Iterable[A])(&lt;:&lt;[A, org.squeryl.KeyedEntity[_]]):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(o:Iterable[T])(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[_]]):Unit"></a>
+      <a id="update(Iterable[A])(&lt;:&lt;[A,KeyedEntity[_]]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">update</span>
-        
-        <span class="params">(<span name="o">o: Iterable[A]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="o">o: <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Table#update" data-isabs="false">
-      <a id="update(A)(&lt;:&lt;[A, org.squeryl.KeyedEntity[_]]):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="org.squeryl.Table#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(o:T)(implicitev:&lt;:&lt;[T,org.squeryl.KeyedEntity[_]]):Unit"></a>
+      <a id="update(A)(&lt;:&lt;[A,KeyedEntity[_]]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">update</span>
-        
-        <span class="params">(<span name="o">o: A</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span name="scala.Predef.&lt;:&lt;" class="extype">&lt;:&lt;</span>[A, org.squeryl.KeyedEntity[_]]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="o">o: <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Queryable#where" data-isabs="false">
-      <a id="where((A) ⇒ LogicalBoolean)(QueryDsl):Query[A]"></a>
+    </li><li name="org.squeryl.Queryable#where" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="where(whereClauseFunctor:T=&gt;org.squeryl.dsl.ast.LogicalBoolean)(implicitdsl:org.squeryl.dsl.QueryDsl):org.squeryl.Query[T]"></a>
+      <a id="where((A)⇒LogicalBoolean)(QueryDsl):Query[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">where</span>
-        
-        <span class="params">(<span name="whereClauseFunctor">whereClauseFunctor: (A) ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a name="org.squeryl.dsl.QueryDsl" class="extype" href="QueryDsl.html">QueryDsl</a></span>)</span><span class="result">: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[A]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">where</span><span class="params">(<span name="whereClauseFunctor">whereClauseFunctor: (<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>) ⇒ <a href="ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="dsl">dsl: <a href="QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>)</span><span class="result">: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Queryable" class="extype" href="../Queryable.html">Queryable</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToManyRelation#leftForeingKeyDeclaration" data-isabs="false">
-      <a id="leftForeingKeyDeclaration:ForeignKeyDeclaration"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name deprecated">leftForeingKeyDeclaration</span>
-        
-        <span class="result">: <a name="org.squeryl.ForeignKeyDeclaration" class="extype" href="../ForeignKeyDeclaration.html">ForeignKeyDeclaration</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p>Use leftForeignKeyDeclaration instead</p></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.ManyToManyRelation#rightForeingKeyDeclaration" data-isabs="false">
-      <a id="rightForeingKeyDeclaration:ForeignKeyDeclaration"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name deprecated">rightForeingKeyDeclaration</span>
-        
-        <span class="result">: <a name="org.squeryl.ForeignKeyDeclaration" class="extype" href="../ForeignKeyDeclaration.html">ForeignKeyDeclaration</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p>Use rightForeignKeyDeclaration instead</p></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a></dd></dl></div>
     </li></ol>
             </div>
 
-        <div name="org.squeryl.dsl.ManyToManyRelation" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.ManyToManyRelation" class="extype" href="ManyToManyRelation.html">ManyToManyRelation</a>[L, R, A]</h3>
-            </div><div name="org.squeryl.dsl.Relation" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.Relation" class="extype" href="Relation.html">Relation</a>[L, R]</h3>
-            </div><div name="org.squeryl.Table" class="parent">
-              <h3>Inherited from <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[A]</h3>
-            </div><div name="org.squeryl.View" class="parent">
-              <h3>Inherited from <a name="org.squeryl.View" class="extype" href="../View.html">View</a>[A]</h3>
-            </div><div name="org.squeryl.Queryable" class="parent">
-              <h3>Inherited from <a name="org.squeryl.Queryable" class="extype" href="../Queryable.html">Queryable</a>[A]</h3>
-            </div><div name="scala.AnyRef" class="parent">
-              <h3>Inherited from AnyRef</h3>
-            </div><div name="scala.Any" class="parent">
-              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.squeryl.dsl.ManyToManyRelation">
+              <h3>Inherited from <a href="ManyToManyRelation.html" class="extype" name="org.squeryl.dsl.ManyToManyRelation">ManyToManyRelation</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.Relation">
+              <h3>Inherited from <a href="Relation.html" class="extype" name="org.squeryl.dsl.Relation">Relation</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.L">L</span>, <span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.R">R</span>]</h3>
+            </div><div class="parent" name="org.squeryl.Table">
+              <h3>Inherited from <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</h3>
+            </div><div class="parent" name="org.squeryl.View">
+              <h3>Inherited from <a href="../View.html" class="extype" name="org.squeryl.View">View</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</h3>
+            </div><div class="parent" name="org.squeryl.Queryable">
+              <h3>Inherited from <a href="../Queryable.html" class="extype" name="org.squeryl.Queryable">Queryable</a>[<span class="extype" name="org.squeryl.dsl.QueryDsl.ManyToManyRelationImpl.A">A</span>]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
 
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>
