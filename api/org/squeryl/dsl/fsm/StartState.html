@@ -2,510 +2,630 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.squeryl.dsl.fsm.StartState</title>
+          <title>StartState - org.squeryl.dsl.fsm.StartState</title>
+          <meta name="description" content="StartState - org.squeryl.dsl.fsm.StartState" />
+          <meta name="keywords" content="StartState org.squeryl.dsl.fsm.StartState" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
-      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'org.squeryl.dsl.fsm.StartState';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
         <body class="type">
       <div id="definition">
         <img src="../../../../lib/trait_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../../package.html">squeryl</a>.<a name="org.squeryl.dsl" class="extype" href="../package.html">dsl</a>.<a name="org.squeryl.dsl.fsm" class="extype" href="package.html">fsm</a></p>
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a>.<a href="package.html" class="extype" name="org.squeryl.dsl.fsm">fsm</a></p>
         <h1>StartState</h1>
       </div>
 
-      <h4 class="signature" id="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <span class="name">StartState</span>
-        
-        <span class="result"> extends <a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a> with <a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></span>
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StartState</span><span class="result"> extends <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a> with <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Self Type</dt><dd>org.squeryl.dsl.fsm.QueryElements[_]</dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="QueryElements.html" class="extype" name="org.squeryl.dsl.fsm.QueryElements">QueryElements</a>[_]</dd><dt>Source</dt><dd><a href="https://github.com/max-l/Squeryl/tree/0.9.5-6/src/main/scala/org/squeryl/dsl/fsm/StartState.scala" target="_blank">StartState.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a>, <a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a>, <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.squeryl.customtypes.CustomTypesMode" class="extype" href="../../customtypes/CustomTypesMode.html">CustomTypesMode</a>, <a name="org.squeryl.customtypes.CustomTypesMode" class="extype" href="../../customtypes/CustomTypesMode$.html">CustomTypesMode</a>, <a name="org.squeryl.PrimitiveTypeMode" class="extype" href="../../PrimitiveTypeMode.html">PrimitiveTypeMode</a>, <a name="org.squeryl.PrimitiveTypeMode" class="extype" href="../../PrimitiveTypeMode$.html">PrimitiveTypeMode</a>, <a name="org.squeryl.dsl.QueryDsl" class="extype" href="../QueryDsl.html">QueryDsl</a>, <a name="org.squeryl.dsl.fsm.QueryElements" class="extype" href="QueryElements.html">QueryElements</a></div>
+          <div class="subClasses hiddenContent"><a href="../../customtypes/CustomTypesMode$.html" class="extype" name="org.squeryl.customtypes.CustomTypesMode">CustomTypesMode</a>, <a href="../../customtypes/CustomTypesMode.html" class="extype" name="org.squeryl.customtypes.CustomTypesMode">CustomTypesMode</a>, <a href="../../PrimitiveTypeMode.html" class="extype" name="org.squeryl.PrimitiveTypeMode">PrimitiveTypeMode</a>, <a href="../../PrimitiveTypeMode$.html" class="extype" name="org.squeryl.PrimitiveTypeMode">PrimitiveTypeMode</a>, <a href="../QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a>, <a href="QueryElements.html" class="extype" name="org.squeryl.dsl.fsm.QueryElements">QueryElements</a></div>
         </div></div>
         
 
-      <div id="template">
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.squeryl.dsl.fsm.StartState"><span>StartState</span></li><li class="in" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState"><span>ComputeMeasuresSignaturesFromStartOrWhereState</span></li><li class="in" name="org.squeryl.dsl.boilerplate.GroupBySignatures"><span>GroupBySignatures</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          <div id="order">
-                <span class="filtertype">Ordering</span>
-                <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
-              </div>
-          <div id="ancestors">
-                <span class="filtertype">Inherited</span>
-                <ol><li class="hideall out"><span>Hide All</span></li>
-                <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.squeryl.dsl.fsm.StartState" class="in"><span>StartState</span></li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="in"><span>ComputeMeasuresSignaturesFromStartOrWhereState</span></li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="in"><span>GroupBySignatures</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
-              </div>
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="org.squeryl.dsl.fsm.StartState#select" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="select[R](yieldClosure:=&gt;R):org.squeryl.dsl.fsm.SelectState[R]"></a>
+      <a id="select[R](⇒R):SelectState[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">select</span><span class="tparams">[<span name="R">R</span>]</span><span class="params">(<span name="yieldClosure">yieldClosure: ⇒ <span class="extype" name="org.squeryl.dsl.fsm.StartState.select.R">R</span></span>)</span><span class="result">: <a href="SelectState.html" class="extype" name="org.squeryl.dsl.fsm.SelectState">SelectState</a>[<span class="extype" name="org.squeryl.dsl.fsm.StartState.select.R">R</span>]</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1,T2,T3,T4,T5,T6,T7](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5],e6:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T6],e7:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T7]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[Product7[T1,T2,T3,T4,T5,T6,T7]]"></a>
+      <a id="compute[T1,T2,T3,T4,T5,T6,T7](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5],⇒TypedExpressionNode[T6],⇒TypedExpressionNode[T7]):ComputeStateStartOrWhereState[Product7[T1,T2,T3,T4,T5,T6,T7]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T5">T5</span>]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T6">T6</span>]</span>, <span name="e7">e7: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T7">T7</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product7">Product7</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T5">T5</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T6">T6</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T7">T7</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1,T2,T3,T4,T5,T6](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5],e6:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T6]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[Product6[T1,T2,T3,T4,T5,T6]]"></a>
+      <a id="compute[T1,T2,T3,T4,T5,T6](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5],⇒TypedExpressionNode[T6]):ComputeStateStartOrWhereState[Product6[T1,T2,T3,T4,T5,T6]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T5">T5</span>]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T6">T6</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product6">Product6</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T5">T5</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T6">T6</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1,T2,T3,T4,T5](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[Product5[T1,T2,T3,T4,T5]]"></a>
+      <a id="compute[T1,T2,T3,T4,T5](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5]):ComputeStateStartOrWhereState[Product5[T1,T2,T3,T4,T5]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T5">T5</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product5">Product5</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T5">T5</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1,T2,T3,T4](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[Product4[T1,T2,T3,T4]]"></a>
+      <a id="compute[T1,T2,T3,T4](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4]):ComputeStateStartOrWhereState[Product4[T1,T2,T3,T4]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product4">Product4</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T4">T4</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1,T2,T3](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[Product3[T1,T2,T3]]"></a>
+      <a id="compute[T1,T2,T3](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3]):ComputeStateStartOrWhereState[Product3[T1,T2,T3]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product3">Product3</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T3">T3</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1,T2](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[Product2[T1,T2]]"></a>
+      <a id="compute[T1,T2](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2]):ComputeStateStartOrWhereState[Product2[T1,T2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="scala.Product2">Product2</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T2">T2</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compute[T1](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1]):org.squeryl.dsl.fsm.ComputeStateStartOrWhereState[T1]"></a>
+      <a id="compute[T1](⇒TypedExpressionNode[T1]):ComputeStateStartOrWhereState[T1]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compute</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>)</span><span class="result">: <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState.compute.T1">T1</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2,T3,T4,T5,T6,T7,T8](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5],e6:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T6],e7:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T7],e8:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T8]):org.squeryl.dsl.fsm.GroupByState[Product8[T1,T2,T3,T4,T5,T6,T7,T8]]"></a>
+      <a id="groupBy[T1,T2,T3,T4,T5,T6,T7,T8](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5],⇒TypedExpressionNode[T6],⇒TypedExpressionNode[T7],⇒TypedExpressionNode[T8]):GroupByState[Product8[T1,T2,T3,T4,T5,T6,T7,T8]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T6">T6</span>]</span>, <span name="e7">e7: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T7">T7</span>]</span>, <span name="e8">e8: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T8">T8</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product8">Product8</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T6">T6</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T7">T7</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T8">T8</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2,T3,T4,T5,T6,T7](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5],e6:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T6],e7:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T7]):org.squeryl.dsl.fsm.GroupByState[Product7[T1,T2,T3,T4,T5,T6,T7]]"></a>
+      <a id="groupBy[T1,T2,T3,T4,T5,T6,T7](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5],⇒TypedExpressionNode[T6],⇒TypedExpressionNode[T7]):GroupByState[Product7[T1,T2,T3,T4,T5,T6,T7]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T6">T6</span>]</span>, <span name="e7">e7: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T7">T7</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product7">Product7</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T6">T6</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T7">T7</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2,T3,T4,T5,T6](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5],e6:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T6]):org.squeryl.dsl.fsm.GroupByState[Product6[T1,T2,T3,T4,T5,T6]]"></a>
+      <a id="groupBy[T1,T2,T3,T4,T5,T6](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5],⇒TypedExpressionNode[T6]):GroupByState[Product6[T1,T2,T3,T4,T5,T6]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>]</span>, <span name="e6">e6: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T6">T6</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product6">Product6</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T6">T6</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2,T3,T4,T5](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4],e5:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T5]):org.squeryl.dsl.fsm.GroupByState[Product5[T1,T2,T3,T4,T5]]"></a>
+      <a id="groupBy[T1,T2,T3,T4,T5](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4],⇒TypedExpressionNode[T5]):GroupByState[Product5[T1,T2,T3,T4,T5]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>]</span>, <span name="e5">e5: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product5">Product5</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T5">T5</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2,T3,T4](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3],e4:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T4]):org.squeryl.dsl.fsm.GroupByState[Product4[T1,T2,T3,T4]]"></a>
+      <a id="groupBy[T1,T2,T3,T4](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3],⇒TypedExpressionNode[T4]):GroupByState[Product4[T1,T2,T3,T4]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]</span>, <span name="e4">e4: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product4">Product4</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T4">T4</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2,T3](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2],e3:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T3]):org.squeryl.dsl.fsm.GroupByState[Product3[T1,T2,T3]]"></a>
+      <a id="groupBy[T1,T2,T3](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2],⇒TypedExpressionNode[T3]):GroupByState[Product3[T1,T2,T3]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>, <span name="e3">e3: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product3">Product3</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T3">T3</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1,T2](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1],e2:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T2]):org.squeryl.dsl.fsm.GroupByState[Product2[T1,T2]]"></a>
+      <a id="groupBy[T1,T2](⇒TypedExpressionNode[T1],⇒TypedExpressionNode[T2]):GroupByState[Product2[T1,T2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>, <span name="e2">e2: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="scala.Product2">Product2</span>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>, <span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T2">T2</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupBy[T1](e1:=&gt;org.squeryl.dsl.ast.TypedExpressionNode[T1]):org.squeryl.dsl.fsm.GroupByState[T1]"></a>
+      <a id="groupBy[T1](⇒TypedExpressionNode[T1]):GroupByState[T1]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupBy</span><span class="tparams">[<span name="T1">T1</span>]</span><span class="params">(<span name="e1">e1: ⇒ <a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>)</span><span class="result">: <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures.groupBy.T1">T1</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">
+              <h3>Inherited from <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></h3>
+            </div><div class="parent" name="org.squeryl.dsl.boilerplate.GroupBySignatures">
+              <h3>Inherited from <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
             </div>
         </div>
 
-        
-
-        
-        
-        <div class="values members" id="values">
-              <h3>Abstract Value Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.fsm.StartState#select" data-isabs="true">
-      <a id="select[R](⇒ R):SelectState[R]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">select</span>
-        <span class="tparams">[<span name="R">R</span>]</span>
-        <span class="params">(<span name="yieldClosure">yieldClosure: ⇒ R</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.SelectState" class="extype" href="SelectState.html">SelectState</a>[R]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>abstract </dd></dl></div>
-    </li></ol>
-            </div>
-
-        <div class="values members" id="values">
-              <h3>Concrete Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
-      <a id="##():Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">##</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">asInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: T0</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">clone</span>
-        
-        <span class="params">()</span><span class="result">: AnyRef</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1, T2, T3, T4, T5, T6, T7](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7]):ComputeStateStartOrWhereState[Product7[T1, T2, T3, T4, T5, T6, T7]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T6]</span>, <span name="e7">e7: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T7]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[<span name="scala.Product7" class="extype">Product7</span>[T1, T2, T3, T4, T5, T6, T7]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1, T2, T3, T4, T5, T6](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6]):ComputeStateStartOrWhereState[Product6[T1, T2, T3, T4, T5, T6]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T6]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[<span name="scala.Product6" class="extype">Product6</span>[T1, T2, T3, T4, T5, T6]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1, T2, T3, T4, T5](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5]):ComputeStateStartOrWhereState[Product5[T1, T2, T3, T4, T5]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[<span name="scala.Product5" class="extype">Product5</span>[T1, T2, T3, T4, T5]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1, T2, T3, T4](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4]):ComputeStateStartOrWhereState[Product4[T1, T2, T3, T4]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[<span name="scala.Product4" class="extype">Product4</span>[T1, T2, T3, T4]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1, T2, T3](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3]):ComputeStateStartOrWhereState[Product3[T1, T2, T3]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[<span name="scala.Product3" class="extype">Product3</span>[T1, T2, T3]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1, T2](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2]):ComputeStateStartOrWhereState[Product2[T1, T2]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[<span name="scala.Product2" class="extype">Product2</span>[T1, T2]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState#compute" data-isabs="false">
-      <a id="compute[T1](⇒ TypedExpressionNode[T1]):ComputeStateStartOrWhereState[T1]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">compute</span>
-        <span class="tparams">[<span name="T1">T1</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" class="extype" href="ComputeStateStartOrWhereState.html">ComputeStateStartOrWhereState</a>[T1]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">eq</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">equals</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">finalize</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
-      <a id="getClass():java.lang.Class[_]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getClass</span>
-        
-        <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2, T3, T4, T5, T6, T7, T8](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7],⇒ TypedExpressionNode[T8]):GroupByState[Product8[T1, T2, T3, T4, T5, T6, T7, T8]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T6]</span>, <span name="e7">e7: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T7]</span>, <span name="e8">e8: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T8]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product8" class="extype">Product8</span>[T1, T2, T3, T4, T5, T6, T7, T8]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2, T3, T4, T5, T6, T7](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6],⇒ TypedExpressionNode[T7]):GroupByState[Product7[T1, T2, T3, T4, T5, T6, T7]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T6]</span>, <span name="e7">e7: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T7]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product7" class="extype">Product7</span>[T1, T2, T3, T4, T5, T6, T7]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2, T3, T4, T5, T6](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5],⇒ TypedExpressionNode[T6]):GroupByState[Product6[T1, T2, T3, T4, T5, T6]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>, <span name="e6">e6: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T6]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product6" class="extype">Product6</span>[T1, T2, T3, T4, T5, T6]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2, T3, T4, T5](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4],⇒ TypedExpressionNode[T5]):GroupByState[Product5[T1, T2, T3, T4, T5]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>, <span name="e5">e5: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T5]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product5" class="extype">Product5</span>[T1, T2, T3, T4, T5]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2, T3, T4](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3],⇒ TypedExpressionNode[T4]):GroupByState[Product4[T1, T2, T3, T4]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>, <span name="e4">e4: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T4]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product4" class="extype">Product4</span>[T1, T2, T3, T4]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2, T3](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2],⇒ TypedExpressionNode[T3]):GroupByState[Product3[T1, T2, T3]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>, <span name="e3">e3: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T3]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product3" class="extype">Product3</span>[T1, T2, T3]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1, T2](⇒ TypedExpressionNode[T1],⇒ TypedExpressionNode[T2]):GroupByState[Product2[T1, T2]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>, <span name="e2">e2: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T2]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[<span name="scala.Product2" class="extype">Product2</span>[T1, T2]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.GroupBySignatures#groupBy" data-isabs="false">
-      <a id="groupBy[T1](⇒ TypedExpressionNode[T1]):GroupByState[T1]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupBy</span>
-        <span class="tparams">[<span name="T1">T1</span>]</span>
-        <span class="params">(<span name="e1">e1: ⇒ <a name="org.squeryl.dsl.ast.TypedExpressionNode" class="extype" href="../ast/TypedExpressionNode.html">TypedExpressionNode</a>[T1]</span>)</span><span class="result">: <a name="org.squeryl.dsl.fsm.GroupByState" class="extype" href="GroupByState.html">GroupByState</a>[T1]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">hashCode</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">ne</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notify</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notifyAll</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
-      <a id="synchronized[T0](⇒ T0):T0"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">synchronized</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
-      <a id="toString():String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">toString</span>
-        
-        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li></ol>
-            </div>
-
-        <div name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState" class="extype" href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html">ComputeMeasuresSignaturesFromStartOrWhereState</a></h3>
-            </div><div name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.boilerplate.GroupBySignatures" class="extype" href="../boilerplate/GroupBySignatures.html">GroupBySignatures</a></h3>
-            </div><div name="scala.AnyRef" class="parent">
-              <h3>Inherited from AnyRef</h3>
-            </div><div name="scala.Any" class="parent">
-              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
-            </div>
-
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>
