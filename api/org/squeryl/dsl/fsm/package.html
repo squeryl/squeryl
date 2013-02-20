@@ -2,217 +2,448 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.squeryl.dsl.fsm</title>
+          <title>fsm - org.squeryl.dsl.fsm</title>
+          <meta name="description" content="fsm - org.squeryl.dsl.fsm" />
+          <meta name="keywords" content="fsm org.squeryl.dsl.fsm" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
-      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'org.squeryl.dsl.fsm.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
         <body class="value">
       <div id="definition">
         <img src="../../../../lib/package_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../../package.html">squeryl</a>.<a name="org.squeryl.dsl" class="extype" href="../package.html">dsl</a></p>
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a></p>
         <h1>fsm</h1>
       </div>
 
-      <h4 class="signature" id="signature">
-      <span class="kind">package</span>
-      <span class="symbol"> 
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
         <span class="name">fsm</span>
-        
-        
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"></div>
+          <div id="comment" class="fullcommenttop"></div>
         
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
       <div id="template">
-
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          
-          
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-            </div>
-        </div>
-
+        <div id="allMembers">
         
 
-        <div class="types members" id="types">
+        <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield" data-isabs="false">
-      <a id="BaseQueryYield:BaseQueryYield[G]"></a>
+              <ol><li name="org.squeryl.dsl.fsm.BaseQueryYield" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BaseQueryYield[G]extendsSelectState[G]withOrderBySignatures[G]withQueryYield[G]"></a>
+      <a id="BaseQueryYield[G]:BaseQueryYield[G]"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="BaseQueryYield.html"><span class="name">BaseQueryYield</span></a>
-        <span class="tparams">[<span name="G">G</span>]</span>
-        <span class="result"> extends SelectState[G] with OrderBySignatures[G] with QueryYield[G]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BaseQueryYield.html"><span class="name">BaseQueryYield</span></a><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends <a href="SelectState.html" class="extype" name="org.squeryl.dsl.fsm.SelectState">SelectState</a>[<span class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield.G">G</span>] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<span class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield.G">G</span>] with <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<span class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield.G">G</span>]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" data-isabs="true">
-      <a id="ComputeStateFromGroupByState:ComputeStateFromGroupByState[K, M]"></a>
+    </li><li name="org.squeryl.dsl.fsm.CaseOfChain" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CaseOfChainextendsObject"></a>
+      <a id="CaseOfChain:CaseOfChain"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="ComputeStateFromGroupByState.html"><span class="name">ComputeStateFromGroupByState</span></a>
-        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
-        <span class="result"> extends QueryYield[GroupWithMeasures[K, M]] with OrderBySignatures[GroupWithMeasures[K, M]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfChain.html"><span class="name">CaseOfChain</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" data-isabs="true">
-      <a id="ComputeStateStartOrWhereState:ComputeStateStartOrWhereState[M]"></a>
+    </li><li name="org.squeryl.dsl.fsm.CaseOfChainNonNumericalTermination" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfChainNonNumericalTermination[A]extendsCaseOfChainTermination[A]withNonNumericalExpression[A]"></a>
+      <a id="CaseOfChainNonNumericalTermination[A]:CaseOfChainNonNumericalTermination[A]"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="ComputeStateStartOrWhereState.html"><span class="name">ComputeStateStartOrWhereState</span></a>
-        <span class="tparams">[<span name="M">M</span>]</span>
-        <span class="result"> extends QueryYield[Measures[M]] with OrderBySignatures[Measures[M]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfChainNonNumericalTermination.html"><span class="name">CaseOfChainNonNumericalTermination</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="CaseOfChainTermination.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChainTermination">CaseOfChainTermination</a>[<span class="extype" name="org.squeryl.dsl.fsm.CaseOfChainNonNumericalTermination.A">A</span>] with <a href="../NonNumericalExpression.html" class="extype" name="org.squeryl.dsl.NonNumericalExpression">NonNumericalExpression</a>[<span class="extype" name="org.squeryl.dsl.fsm.CaseOfChainNonNumericalTermination.A">A</span>]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.Conditioned" data-isabs="true">
+    </li><li name="org.squeryl.dsl.fsm.CaseOfChainNumericalTermination" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfChainNumericalTermination[A]extendsCaseOfChainTermination[A]withNumericalExpression[A]"></a>
+      <a id="CaseOfChainNumericalTermination[A]:CaseOfChainNumericalTermination[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfChainNumericalTermination.html"><span class="name">CaseOfChainNumericalTermination</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="CaseOfChainTermination.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChainTermination">CaseOfChainTermination</a>[<span class="extype" name="org.squeryl.dsl.fsm.CaseOfChainNumericalTermination.A">A</span>] with <a href="../NumericalExpression.html" class="extype" name="org.squeryl.dsl.NumericalExpression">NumericalExpression</a>[<span class="extype" name="org.squeryl.dsl.fsm.CaseOfChainNumericalTermination.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfChainTermination" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfChainTermination[A]extendsExpressionNode"></a>
+      <a id="CaseOfChainTermination[A]:CaseOfChainTermination[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfChainTermination.html"><span class="name">CaseOfChainTermination</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfConditionChainNonNumerical" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfConditionChainNonNumerical[A]extendsCaseOfChain"></a>
+      <a id="CaseOfConditionChainNonNumerical[A]:CaseOfConditionChainNonNumerical[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfConditionChainNonNumerical.html"><span class="name">CaseOfConditionChainNonNumerical</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="CaseOfChain.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChain">CaseOfChain</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfConditionChainNumerical" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfConditionChainNumerical[A]extendsCaseOfChain"></a>
+      <a id="CaseOfConditionChainNumerical[A]:CaseOfConditionChainNumerical[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfConditionChainNumerical.html"><span class="name">CaseOfConditionChainNumerical</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="CaseOfChain.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChain">CaseOfChain</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfConditionChainStart" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfConditionChainStartextendsObject"></a>
+      <a id="CaseOfConditionChainStart:CaseOfConditionChainStart"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfConditionChainStart.html"><span class="name">CaseOfConditionChainStart</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfNonNumericalExpressionMatchStart" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfNonNumericalExpressionMatchStart[A]extendsObject"></a>
+      <a id="CaseOfNonNumericalExpressionMatchStart[A]:CaseOfNonNumericalExpressionMatchStart[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfNonNumericalExpressionMatchStart.html"><span class="name">CaseOfNonNumericalExpressionMatchStart</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfNonNumericalExpressionMatchYieldingNonNumerical" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfNonNumericalExpressionMatchYieldingNonNumerical[A,T]extendsCaseOfChain"></a>
+      <a id="CaseOfNonNumericalExpressionMatchYieldingNonNumerical[A,T]:CaseOfNonNumericalExpressionMatchYieldingNonNumerical[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfNonNumericalExpressionMatchYieldingNonNumerical.html"><span class="name">CaseOfNonNumericalExpressionMatchYieldingNonNumerical</span></a><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="result"> extends <a href="CaseOfChain.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChain">CaseOfChain</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfNonNumericalExpressionMatchYieldingNumerical" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfNonNumericalExpressionMatchYieldingNumerical[A,T]extendsCaseOfChain"></a>
+      <a id="CaseOfNonNumericalExpressionMatchYieldingNumerical[A,T]:CaseOfNonNumericalExpressionMatchYieldingNumerical[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfNonNumericalExpressionMatchYieldingNumerical.html"><span class="name">CaseOfNonNumericalExpressionMatchYieldingNumerical</span></a><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="result"> extends <a href="CaseOfChain.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChain">CaseOfChain</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfNumericalExpressionMatchStart" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfNumericalExpressionMatchStart[A]extendsObject"></a>
+      <a id="CaseOfNumericalExpressionMatchStart[A]:CaseOfNumericalExpressionMatchStart[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfNumericalExpressionMatchStart.html"><span class="name">CaseOfNumericalExpressionMatchStart</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfNumericalExpressionMatchYieldingNonNumerical" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfNumericalExpressionMatchYieldingNonNumerical[A,T]extendsCaseOfChain"></a>
+      <a id="CaseOfNumericalExpressionMatchYieldingNonNumerical[A,T]:CaseOfNumericalExpressionMatchYieldingNonNumerical[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfNumericalExpressionMatchYieldingNonNumerical.html"><span class="name">CaseOfNumericalExpressionMatchYieldingNonNumerical</span></a><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="result"> extends <a href="CaseOfChain.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChain">CaseOfChain</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.CaseOfNumericalExpressionMatchYieldingNumerical" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseOfNumericalExpressionMatchYieldingNumerical[A,T]extendsCaseOfChain"></a>
+      <a id="CaseOfNumericalExpressionMatchYieldingNumerical[A,T]:CaseOfNumericalExpressionMatchYieldingNumerical[A,T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseOfNumericalExpressionMatchYieldingNumerical.html"><span class="name">CaseOfNumericalExpressionMatchYieldingNumerical</span></a><span class="tparams">[<span name="A">A</span>, <span name="T">T</span>]</span><span class="result"> extends <a href="CaseOfChain.html" class="extype" name="org.squeryl.dsl.fsm.CaseOfChain">CaseOfChain</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComputeStateFromGroupByState[K,M]extendsQueryYield[org.squeryl.dsl.GroupWithMeasures[K,M]]withOrderBySignatures[org.squeryl.dsl.GroupWithMeasures[K,M]]"></a>
+      <a id="ComputeStateFromGroupByState[K,M]:ComputeStateFromGroupByState[K,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ComputeStateFromGroupByState.html"><span class="name">ComputeStateFromGroupByState</span></a><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState.M">M</span>]] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState.M">M</span>]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ComputeStateStartOrWhereState[M]extendsQueryYield[org.squeryl.dsl.Measures[M]]withOrderBySignatures[org.squeryl.dsl.Measures[M]]"></a>
+      <a id="ComputeStateStartOrWhereState[M]:ComputeStateStartOrWhereState[M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ComputeStateStartOrWhereState.html"><span class="name">ComputeStateStartOrWhereState</span></a><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[<span class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState.M">M</span>]] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[<span class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState.M">M</span>]]</span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.Conditioned" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ConditionedextendsObject"></a>
       <a id="Conditioned:Conditioned"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="Conditioned.html"><span class="name">Conditioned</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed abstract </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupByState" data-isabs="true">
-      <a id="GroupByState:GroupByState[K]"></a>
-      <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="GroupByState.html"><span class="name">GroupByState</span></a>
-        <span class="tparams">[<span name="K">K</span>]</span>
-        <span class="result"> extends QueryYield[Group[K]] with ComputeMeasuresSignaturesFromGroupByState[K] with OrderBySignatures[Group[K]]</span>
+      <span class="symbol">
+        <a href="Conditioned.html"><span class="name">Conditioned</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupQueryYield" data-isabs="false">
-      <a id="GroupQueryYield:GroupQueryYield[K]"></a>
+    </li><li name="org.squeryl.dsl.fsm.GroupByState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GroupByState[K]extendsQueryYield[org.squeryl.dsl.Group[K]]withComputeMeasuresSignaturesFromGroupByState[K]withOrderBySignatures[org.squeryl.dsl.Group[K]]"></a>
+      <a id="GroupByState[K]:GroupByState[K]"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="GroupQueryYield.html"><span class="name">GroupQueryYield</span></a>
-        <span class="tparams">[<span name="K">K</span>]</span>
-        <span class="result"> extends BaseQueryYield[Group[K]] with GroupByState[K] with HavingState[K] with OrderBySignatures[Group[K]] with QueryYield[Group[K]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupByState.html"><span class="name">GroupByState</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../Group.html" class="extype" name="org.squeryl.dsl.Group">Group</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupByState.K">K</span>]] with <a href="../boilerplate/ComputeMeasuresSignaturesFromGroupByState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromGroupByState">ComputeMeasuresSignaturesFromGroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupByState.K">K</span>] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../Group.html" class="extype" name="org.squeryl.dsl.Group">Group</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupByState.K">K</span>]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" data-isabs="false">
-      <a id="GroupWithMeasuresQueryYield:GroupWithMeasuresQueryYield[K, M]"></a>
+    </li><li name="org.squeryl.dsl.fsm.GroupQueryYield" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupQueryYield[K]extendsBaseQueryYield[org.squeryl.dsl.Group[K]]withGroupByState[K]withHavingState[K]withOrderBySignatures[org.squeryl.dsl.Group[K]]withQueryYield[org.squeryl.dsl.Group[K]]"></a>
+      <a id="GroupQueryYield[K]:GroupQueryYield[K]"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="GroupWithMeasuresQueryYield.html"><span class="name">GroupWithMeasuresQueryYield</span></a>
-        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
-        <span class="result"> extends BaseQueryYield[GroupWithMeasures[K, M]] with ComputeStateFromGroupByState[K, M] with OrderBySignatures[GroupWithMeasures[K, M]] with QueryYield[GroupWithMeasures[K, M]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupQueryYield.html"><span class="name">GroupQueryYield</span></a><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a>[<a href="../Group.html" class="extype" name="org.squeryl.dsl.Group">Group</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupQueryYield.K">K</span>]] with <a href="GroupByState.html" class="extype" name="org.squeryl.dsl.fsm.GroupByState">GroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupQueryYield.K">K</span>] with <a href="HavingState.html" class="extype" name="org.squeryl.dsl.fsm.HavingState">HavingState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupQueryYield.K">K</span>] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../Group.html" class="extype" name="org.squeryl.dsl.Group">Group</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupQueryYield.K">K</span>]] with <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../Group.html" class="extype" name="org.squeryl.dsl.Group">Group</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupQueryYield.K">K</span>]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.HavingState" data-isabs="true">
-      <a id="HavingState:HavingState[G]"></a>
+    </li><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GroupWithMeasuresQueryYield[K,M]extendsBaseQueryYield[org.squeryl.dsl.GroupWithMeasures[K,M]]withComputeStateFromGroupByState[K,M]withOrderBySignatures[org.squeryl.dsl.GroupWithMeasures[K,M]]withQueryYield[org.squeryl.dsl.GroupWithMeasures[K,M]]"></a>
+      <a id="GroupWithMeasuresQueryYield[K,M]:GroupWithMeasuresQueryYield[K,M]"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="HavingState.html"><span class="name">HavingState</span></a>
-        <span class="tparams">[<span name="G">G</span>]</span>
-        <span class="result"> extends ComputeMeasuresSignaturesFromGroupByState[G]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupWithMeasuresQueryYield.html"><span class="name">GroupWithMeasuresQueryYield</span></a><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]] with <a href="ComputeStateFromGroupByState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">ComputeStateFromGroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]] with <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.MeasuresQueryYield" data-isabs="false">
-      <a id="MeasuresQueryYield:MeasuresQueryYield[M]"></a>
+    </li><li name="org.squeryl.dsl.fsm.HavingState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HavingState[G]extendsComputeMeasuresSignaturesFromGroupByState[G]"></a>
+      <a id="HavingState[G]:HavingState[G]"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="MeasuresQueryYield.html"><span class="name">MeasuresQueryYield</span></a>
-        <span class="tparams">[<span name="M">M</span>]</span>
-        <span class="result"> extends BaseQueryYield[Measures[M]] with OrderBySignatures[Measures[M]] with ComputeStateStartOrWhereState[M] with QueryYield[Measures[M]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HavingState.html"><span class="name">HavingState</span></a><span class="tparams">[<span name="G">G</span>]</span><span class="result"> extends <a href="../boilerplate/ComputeMeasuresSignaturesFromGroupByState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromGroupByState">ComputeMeasuresSignaturesFromGroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.HavingState.G">G</span>]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.QueryElements" data-isabs="true">
-      <a id="QueryElements:QueryElements[Cond]"></a>
+    </li><li name="org.squeryl.dsl.fsm.MeasuresQueryYield" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MeasuresQueryYield[M]extendsBaseQueryYield[org.squeryl.dsl.Measures[M]]withOrderBySignatures[org.squeryl.dsl.Measures[M]]withComputeStateStartOrWhereState[M]withQueryYield[org.squeryl.dsl.Measures[M]]"></a>
+      <a id="MeasuresQueryYield[M]:MeasuresQueryYield[M]"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="QueryElements.html"><span class="name">QueryElements</span></a>
-        <span class="tparams">[<span name="Cond">Cond</span>]</span>
-        <span class="result"> extends WhereState[Cond] with ComputeMeasuresSignaturesFromStartOrWhereState with StartState</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MeasuresQueryYield.html"><span class="name">MeasuresQueryYield</span></a><span class="tparams">[<span name="M">M</span>]</span><span class="result"> extends <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a>[<a href="../Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[<span class="extype" name="org.squeryl.dsl.fsm.MeasuresQueryYield.M">M</span>]] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[<span class="extype" name="org.squeryl.dsl.fsm.MeasuresQueryYield.M">M</span>]] with <a href="ComputeStateStartOrWhereState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateStartOrWhereState">ComputeStateStartOrWhereState</a>[<span class="extype" name="org.squeryl.dsl.fsm.MeasuresQueryYield.M">M</span>] with <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../Measures.html" class="extype" name="org.squeryl.dsl.Measures">Measures</a>[<span class="extype" name="org.squeryl.dsl.fsm.MeasuresQueryYield.M">M</span>]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.SelectState" data-isabs="true">
-      <a id="SelectState:SelectState[R]"></a>
+    </li><li name="org.squeryl.dsl.fsm.QueryElements" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="QueryElements[Cond]extendsWhereState[Cond]withComputeMeasuresSignaturesFromStartOrWhereStatewithStartState"></a>
+      <a id="QueryElements[Cond]:QueryElements[Cond]"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="SelectState.html"><span class="name">SelectState</span></a>
-        <span class="tparams">[<span name="R">R</span>]</span>
-        <span class="result"> extends QueryYield[R] with OrderBySignatures[R]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="QueryElements.html"><span class="name">QueryElements</span></a><span class="tparams">[<span name="Cond">Cond</span>]</span><span class="result"> extends <a href="WhereState.html" class="extype" name="org.squeryl.dsl.fsm.WhereState">WhereState</a>[<span class="extype" name="org.squeryl.dsl.fsm.QueryElements.Cond">Cond</span>] with <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a> with <a href="StartState.html" class="extype" name="org.squeryl.dsl.fsm.StartState">StartState</a></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.StartState" data-isabs="true">
+    </li><li name="org.squeryl.dsl.fsm.SelectState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SelectState[R]extendsQueryYield[R]withOrderBySignatures[R]"></a>
+      <a id="SelectState[R]:SelectState[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SelectState.html"><span class="name">SelectState</span></a><span class="tparams">[<span name="R">R</span>]</span><span class="result"> extends <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<span class="extype" name="org.squeryl.dsl.fsm.SelectState.R">R</span>] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<span class="extype" name="org.squeryl.dsl.fsm.SelectState.R">R</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="org.squeryl.dsl.fsm.StartState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StartStateextendsGroupBySignatureswithComputeMeasuresSignaturesFromStartOrWhereState"></a>
       <a id="StartState:StartState"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="StartState.html"><span class="name">StartState</span></a>
-        
-        <span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StartState.html"><span class="name">StartState</span></a><span class="result"> extends <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a> with <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.Unconditioned" data-isabs="true">
+    </li><li name="org.squeryl.dsl.fsm.Unconditioned" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="UnconditionedextendsObject"></a>
       <a id="Unconditioned:Unconditioned"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="Unconditioned.html"><span class="name">Unconditioned</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Unconditioned.html"><span class="name">Unconditioned</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>sealed abstract </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.WhereState" data-isabs="true">
-      <a id="WhereState:WhereState[Cond]"></a>
+      
+    </li><li name="org.squeryl.dsl.fsm.WhereState" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WhereState[Cond]extendsGroupBySignatureswithComputeMeasuresSignaturesFromStartOrWhereState"></a>
+      <a id="WhereState[Cond]:WhereState[Cond]"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="WhereState.html"><span class="name">WhereState</span></a>
-        <span class="tparams">[<span name="Cond">Cond</span>]</span>
-        <span class="result"> extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WhereState.html"><span class="name">WhereState</span></a><span class="tparams">[<span name="Cond">Cond</span>]</span><span class="result"> extends <a href="../boilerplate/GroupBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.GroupBySignatures">GroupBySignatures</a> with <a href="../boilerplate/ComputeMeasuresSignaturesFromStartOrWhereState.html" class="extype" name="org.squeryl.dsl.boilerplate.ComputeMeasuresSignaturesFromStartOrWhereState">ComputeMeasuresSignaturesFromStartOrWhereState</a></span>
       </span>
       </h4>
       
     </li></ol>
             </div>
+
         
+
         
 
         
 
         
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
 
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>

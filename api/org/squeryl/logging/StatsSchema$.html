@@ -2,245 +2,503 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.squeryl.logging.StatsSchema</title>
+          <title>StatsSchema - org.squeryl.logging.StatsSchema</title>
+          <meta name="description" content="StatsSchema - org.squeryl.logging.StatsSchema" />
+          <meta name="keywords" content="StatsSchema org.squeryl.logging.StatsSchema" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
-      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.squeryl.logging.StatsSchema$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
         <body class="value">
       <div id="definition">
         <img src="../../../lib/object_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../package.html">squeryl</a>.<a name="org.squeryl.logging" class="extype" href="package.html">logging</a></p>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="package.html" class="extype" name="org.squeryl.logging">logging</a></p>
         <h1>StatsSchema</h1>
       </div>
 
-      <h4 class="signature" id="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
-        <span class="name">StatsSchema</span>
-        
-        <span class="result"> extends <a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></span>
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StatsSchema</span><span class="result"> extends <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/max-l/Squeryl/tree/0.9.5-6/src/main/scala/org/squeryl/logging/StatsSchema.scala" target="_blank">StatsSchema.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
-      <div id="template">
-
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          <div id="order">
-                <span class="filtertype">Ordering</span>
-                <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
-              </div>
-          <div id="ancestors">
-                <span class="filtertype">Inherited</span>
-                <ol><li class="hideall out"><span>Hide All</span></li>
-                <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.squeryl.logging.StatsSchema" class="in"><span>StatsSchema</span></li><li name="org.squeryl.Schema" class="in"><span>Schema</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
-              </div>
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
             </div>
-        </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.squeryl.logging.StatsSchema"><span>StatsSchema</span></li><li class="in" name="org.squeryl.Schema"><span>Schema</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
+      <div id="template">
+        <div id="allMembers">
         
 
-        <div class="types members" id="types">
+        <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.Schema.ColGroupDeclaration" data-isabs="false">
+              <ol><li name="org.squeryl.Schema.ActiveRecord" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ActiveRecord[A]extendsObject"></a>
+      <a id="ActiveRecord[A]:ActiveRecord[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="../Schema$ActiveRecord.html"><span class="name">ActiveRecord</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Active Record pattern implementation.</p>
+    </li><li name="org.squeryl.Schema.ColGroupDeclaration" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ColGroupDeclarationextendsObject"></a>
       <a id="ColGroupDeclaration:ColGroupDeclaration"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="../Schema$ColGroupDeclaration.html"><span class="name">ColGroupDeclaration</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="../Schema$ColGroupDeclaration.html"><span class="name">ColGroupDeclaration</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.Schema.ReferentialActionImpl" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema.ReferentialActionImpl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ReferentialActionImplextendsReferentialAction"></a>
       <a id="ReferentialActionImpl:ReferentialActionImpl"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="../Schema$ReferentialActionImpl.html"><span class="name">ReferentialActionImpl</span></a>
-        
-        <span class="result"> extends ReferentialAction</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="../Schema$ReferentialActionImpl.html"><span class="name">ReferentialActionImpl</span></a><span class="result"> extends <a href="../ReferentialAction.html" class="extype" name="org.squeryl.ReferentialAction">ReferentialAction</a></span>
       </span>
       </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.Schema.ReferentialEvent" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema.ReferentialEvent" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ReferentialEventextendsObject"></a>
       <a id="ReferentialEvent:ReferentialEvent"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="../Schema$ReferentialEvent.html"><span class="name">ReferentialEvent</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="../Schema$ReferentialEvent.html"><span class="name">ReferentialEvent</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
     </li></ol>
             </div>
-        
+
         
 
-        <div class="values members" id="values">
+        <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">##</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema.NamingConventionTransforms" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.squeryl.Schema.NamingConventionTransforms" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NamingConventionTransforms"></a>
       <a id="NamingConventionTransforms:NamingConventionTransforms"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
         <a href="../Schema$NamingConventionTransforms$.html"><span class="name">NamingConventionTransforms</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
-      
-    </li><li visbl="pub" name="org.squeryl.Schema#applyDefaultForeignKeyPolicy" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#afterDelete" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="afterDelete[A]()(implicitm:scala.reflect.Manifest[A]):org.squeryl.internals.LifecycleEventPercursorClass[A]"></a>
+      <a id="afterDelete[A]()(Manifest[A]):LifecycleEventPercursorClass[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterDelete</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.afterDelete.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorClass.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorClass">LifecycleEventPercursorClass</a>[<span class="extype" name="org.squeryl.Schema.afterDelete.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#afterDelete" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="afterDelete[A](t:org.squeryl.Table[A]):org.squeryl.internals.LifecycleEventPercursorTable[A]"></a>
+      <a id="afterDelete[A](Table[A]):LifecycleEventPercursorTable[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterDelete</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.afterDelete.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorTable.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorTable">LifecycleEventPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.afterDelete.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#afterInsert" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="afterInsert[A]()(implicitm:scala.reflect.Manifest[A]):org.squeryl.internals.LifecycleEventPercursorClass[A]"></a>
+      <a id="afterInsert[A]()(Manifest[A]):LifecycleEventPercursorClass[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterInsert</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.afterInsert.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorClass.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorClass">LifecycleEventPercursorClass</a>[<span class="extype" name="org.squeryl.Schema.afterInsert.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#afterInsert" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="afterInsert[A](t:org.squeryl.Table[A]):org.squeryl.internals.LifecycleEventPercursorTable[A]"></a>
+      <a id="afterInsert[A](Table[A]):LifecycleEventPercursorTable[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterInsert</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.afterInsert.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorTable.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorTable">LifecycleEventPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.afterInsert.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#afterUpdate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="afterUpdate[A]()(implicitm:scala.reflect.Manifest[A]):org.squeryl.internals.LifecycleEventPercursorClass[A]"></a>
+      <a id="afterUpdate[A]()(Manifest[A]):LifecycleEventPercursorClass[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterUpdate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.afterUpdate.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorClass.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorClass">LifecycleEventPercursorClass</a>[<span class="extype" name="org.squeryl.Schema.afterUpdate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#afterUpdate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="afterUpdate[A](t:org.squeryl.Table[A]):org.squeryl.internals.LifecycleEventPercursorTable[A]"></a>
+      <a id="afterUpdate[A](Table[A]):LifecycleEventPercursorTable[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">afterUpdate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.afterUpdate.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorTable.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorTable">LifecycleEventPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.afterUpdate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#anyRef2ActiveTransaction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="anyRef2ActiveTransaction[A](a:A)(implicitqueryDsl:org.squeryl.dsl.QueryDsl,implicitm:scala.reflect.Manifest[A]):Schema.this.ActiveRecord[A]"></a>
+      <a id="anyRef2ActiveTransaction[A](A)(QueryDsl,Manifest[A]):ActiveRecord[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">anyRef2ActiveTransaction</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="org.squeryl.Schema.anyRef2ActiveTransaction.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="queryDsl">queryDsl: <a href="../dsl/QueryDsl.html" class="extype" name="org.squeryl.dsl.QueryDsl">QueryDsl</a></span>, <span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.anyRef2ActiveTransaction.A">A</span>]</span>)</span><span class="result">: <a href="#ActiveRecord[A]extendsObject" class="extmbr" name="org.squeryl.Schema.ActiveRecord">ActiveRecord</a>[<span class="extype" name="org.squeryl.Schema.anyRef2ActiveTransaction.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Creates a ActiveRecord instance for the given the object.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a ActiveRecord instance for the given the object. That allows the user
+to save the given object using the Active Record pattern.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a instance of ActiveRecord associated to the given object.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#applyDefaultForeignKeyPolicy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applyDefaultForeignKeyPolicy(foreignKeyDeclaration:org.squeryl.ForeignKeyDeclaration):Unit"></a>
       <a id="applyDefaultForeignKeyPolicy(ForeignKeyDeclaration):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">applyDefaultForeignKeyPolicy</span>
-        
-        <span class="params">(<span name="foreignKeyDeclaration">foreignKeyDeclaration: <a name="org.squeryl.ForeignKeyDeclaration" class="extype" href="../ForeignKeyDeclaration.html">ForeignKeyDeclaration</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applyDefaultForeignKeyPolicy</span><span class="params">(<span name="foreignKeyDeclaration">foreignKeyDeclaration: <a href="../ForeignKeyDeclaration.html" class="extype" name="org.squeryl.ForeignKeyDeclaration">ForeignKeyDeclaration</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">asInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: T0</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#autoIncremented" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.squeryl.Schema#autoIncremented" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="autoIncremented(sequenceName:String):org.squeryl.internals.AutoIncremented"></a>
       <a id="autoIncremented(String):AutoIncremented"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">autoIncremented</span>
-        
-        <span class="params">(<span name="sequenceName">sequenceName: String</span>)</span><span class="result">: <a name="org.squeryl.internals.AutoIncremented" class="extype" href="../internals/AutoIncremented.html">AutoIncremented</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">autoIncremented</span><span class="params">(<span name="sequenceName">sequenceName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../internals/AutoIncremented.html" class="extype" name="org.squeryl.internals.AutoIncremented">AutoIncremented</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#autoIncremented" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#autoIncremented" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="autoIncremented:org.squeryl.internals.AutoIncremented"></a>
       <a id="autoIncremented:AutoIncremented"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">autoIncremented</span>
-        
-        <span class="result">: <a name="org.squeryl.internals.AutoIncremented" class="extype" href="../internals/AutoIncremented.html">AutoIncremented</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">autoIncremented</span><span class="result">: <a href="../internals/AutoIncremented.html" class="extype" name="org.squeryl.internals.AutoIncremented">AutoIncremented</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#beforeDelete" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beforeDelete[K,A&lt;:org.squeryl.KeyedEntity[K]]()(implicitm:scala.reflect.Manifest[A]):org.squeryl.internals.LifecycleEventPercursorClass[A]"></a>
+      <a id="beforeDelete[K,A&lt;:KeyedEntity[K]]()(Manifest[A]):LifecycleEventPercursorClass[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforeDelete</span><span class="tparams">[<span name="K">K</span>, <span name="A">A &lt;: <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[<span class="extype" name="org.squeryl.Schema.beforeDelete.K">K</span>]</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.beforeDelete.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorClass.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorClass">LifecycleEventPercursorClass</a>[<span class="extype" name="org.squeryl.Schema.beforeDelete.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#beforeDelete" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beforeDelete[A](t:org.squeryl.Table[A])(implicitev:&lt;:&lt;[A,org.squeryl.KeyedEntity[_]]):org.squeryl.internals.LifecycleEventPercursorTable[A]"></a>
+      <a id="beforeDelete[A](Table[A])(&lt;:&lt;[A,KeyedEntity[_]]):LifecycleEventPercursorTable[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforeDelete</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.beforeDelete.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="org.squeryl.Schema.beforeDelete.A">A</span>, <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[_]]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorTable.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorTable">LifecycleEventPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.beforeDelete.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#beforeInsert" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beforeInsert[A]()(implicitm:scala.reflect.Manifest[A]):org.squeryl.internals.LifecycleEventPercursorClass[A]"></a>
+      <a id="beforeInsert[A]()(Manifest[A]):LifecycleEventPercursorClass[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforeInsert</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.beforeInsert.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorClass.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorClass">LifecycleEventPercursorClass</a>[<span class="extype" name="org.squeryl.Schema.beforeInsert.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#beforeInsert" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beforeInsert[A](t:org.squeryl.Table[A]):org.squeryl.internals.LifecycleEventPercursorTable[A]"></a>
+      <a id="beforeInsert[A](Table[A]):LifecycleEventPercursorTable[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforeInsert</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.beforeInsert.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorTable.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorTable">LifecycleEventPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.beforeInsert.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#beforeUpdate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beforeUpdate[A]()(implicitm:scala.reflect.Manifest[A]):org.squeryl.internals.LifecycleEventPercursorClass[A]"></a>
+      <a id="beforeUpdate[A]()(Manifest[A]):LifecycleEventPercursorClass[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforeUpdate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.beforeUpdate.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorClass.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorClass">LifecycleEventPercursorClass</a>[<span class="extype" name="org.squeryl.Schema.beforeUpdate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#beforeUpdate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beforeUpdate[A](t:org.squeryl.Table[A]):org.squeryl.internals.LifecycleEventPercursorTable[A]"></a>
+      <a id="beforeUpdate[A](Table[A]):LifecycleEventPercursorTable[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beforeUpdate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="t">t: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.beforeUpdate.A">A</span>]</span>)</span><span class="result">: <a href="../internals/LifecycleEventPercursorTable.html" class="extype" name="org.squeryl.internals.LifecycleEventPercursorTable">LifecycleEventPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.beforeUpdate.A">A</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#callbacks" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="callbacks:Seq[org.squeryl.internals.LifecycleEvent]"></a>
+      <a id="callbacks:Seq[LifecycleEvent]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">callbacks</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../internals/LifecycleEvent.html" class="extype" name="org.squeryl.internals.LifecycleEvent">LifecycleEvent</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">clone</span>
-        
-        <span class="params">()</span><span class="result">: AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#columnNameFromPropertyName" data-isabs="false">
+    </li><li name="org.squeryl.Schema#columnNameFromPropertyName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="columnNameFromPropertyName(propertyName:String):String"></a>
       <a id="columnNameFromPropertyName(String):String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">columnNameFromPropertyName</span>
-        
-        <span class="params">(<span name="propertyName">propertyName: String</span>)</span><span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">columnNameFromPropertyName</span><span class="params">(<span name="propertyName">propertyName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#columnTypeFor" data-isabs="false">
-      <a id="columnTypeFor(FieldMetaData,org.squeryl.Table[_]):Option[String]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#columnTypeFor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="columnTypeFor(fieldMetaData:org.squeryl.internals.FieldMetaData,owner:org.squeryl.Table[_]):Option[String]"></a>
+      <a id="columnTypeFor(FieldMetaData,Table[_]):Option[String]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">columnTypeFor</span>
-        
-        <span class="params">(<span name="fieldMetaData">fieldMetaData: <a name="org.squeryl.internals.FieldMetaData" class="extype" href="../internals/FieldMetaData.html">FieldMetaData</a></span>, <span name="owner">owner: org.squeryl.Table[_]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">columnTypeFor</span><span class="params">(<span name="fieldMetaData">fieldMetaData: <a href="../internals/FieldMetaData.html" class="extype" name="org.squeryl.internals.FieldMetaData">FieldMetaData</a></span>, <span name="owner">owner: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[_]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Use this method to override the DatabaseAdapter's default column type for the given field
@@ -254,616 +512,769 @@
        Some(&quot;number&quot;)
      else
        None
- }</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#columns" data-isabs="false">
-      <a id="columns(org.squeryl.dsl.ast.TypedExpressionNode[_]*):ColGroupDeclaration"></a>
+ }</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#columns" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="columns(fieldList:org.squeryl.dsl.ast.TypedExpressionNode[_]*):Schema.this.ColGroupDeclaration"></a>
+      <a id="columns(TypedExpressionNode[_]*):ColGroupDeclaration"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">columns</span>
-        
-        <span class="params">(<span name="fieldList">fieldList: org.squeryl.dsl.ast.TypedExpressionNode[_]*</span>)</span><span class="result">: <a name="org.squeryl.Schema.ColGroupDeclaration" class="extype" href="../Schema$ColGroupDeclaration.html">ColGroupDeclaration</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">columns</span><span class="params">(<span name="fieldList">fieldList: <a href="../dsl/ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[_]*</span>)</span><span class="result">: <a href="#ColGroupDeclarationextendsObject" class="extmbr" name="org.squeryl.Schema.ColGroupDeclaration">ColGroupDeclaration</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#create" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="create:Unit"></a>
       <a id="create:Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">create</span>
-        
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">create</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#createColumnGroupConstraintsAndIndexes" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#createColumnGroupConstraintsAndIndexes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createColumnGroupConstraintsAndIndexes:Unit"></a>
       <a id="createColumnGroupConstraintsAndIndexes:Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">createColumnGroupConstraintsAndIndexes</span>
-        
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createColumnGroupConstraintsAndIndexes</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#dbType" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#dbType" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dbType(declaration:String):org.squeryl.internals.DBType"></a>
       <a id="dbType(String):DBType"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">dbType</span>
-        
-        <span class="params">(<span name="declaration">declaration: String</span>)</span><span class="result">: <a name="org.squeryl.internals.DBType" class="extype" href="../internals/DBType.html">DBType</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dbType</span><span class="params">(<span name="declaration">declaration: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../internals/DBType.html" class="extype" name="org.squeryl.internals.DBType">DBType</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#declare" data-isabs="false">
-      <a id="declare[B](BaseColumnAttributeAssignment*):BaseColumnAttributeAssignment*"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#declare" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="declare[B](a:org.squeryl.dsl.ast.BaseColumnAttributeAssignment*):Seq[org.squeryl.dsl.ast.BaseColumnAttributeAssignment]"></a>
+      <a id="declare[B](BaseColumnAttributeAssignment*):Seq[BaseColumnAttributeAssignment]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">declare</span>
-        <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="a">a: <a name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment" class="extype" href="../dsl/ast/BaseColumnAttributeAssignment.html">BaseColumnAttributeAssignment</a>*</span>)</span><span class="result">: <a name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment" class="extype" href="../dsl/ast/BaseColumnAttributeAssignment.html">BaseColumnAttributeAssignment</a>*</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">declare</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="a">a: <a href="../dsl/ast/BaseColumnAttributeAssignment.html" class="extype" name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment">BaseColumnAttributeAssignment</a>*</span>)</span><span class="result">: <span class="extype" name="scala.collection.Seq">Seq</span>[<a href="../dsl/ast/BaseColumnAttributeAssignment.html" class="extype" name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment">BaseColumnAttributeAssignment</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">protected since table declarations must only be done inside a Schema
 </p><div class="fullcomment"><div class="comment cmt"><p>protected since table declarations must only be done inside a Schema
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#defaultColumnAttributesForKeyedEntityId" data-isabs="false">
-      <a id="defaultColumnAttributesForKeyedEntityId(Class[_]):scala.collection.immutable.Set[_ &gt;: org.squeryl.internals.PrimaryKey &lt;: Product with Serializable with org.squeryl.internals.AttributeValidOnNumericalColumn]"></a>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#defaultColumnAttributesForKeyedEntityId" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultColumnAttributesForKeyedEntityId(typeOfIdField:Class[_]):scala.collection.immutable.Set[_&gt;:org.squeryl.internals.PrimaryKey&lt;:org.squeryl.internals.AttributeValidOnNumericalColumnwithProductwithSerializable]"></a>
+      <a id="defaultColumnAttributesForKeyedEntityId(Class[_]):Set[_&gt;:PrimaryKey&lt;:AttributeValidOnNumericalColumnwithProductwithSerializable]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">defaultColumnAttributesForKeyedEntityId</span>
-        
-        <span class="params">(<span name="typeOfIdField">typeOfIdField: Class[_]</span>)</span><span class="result">: scala.collection.immutable.Set[_ &gt;: org.squeryl.internals.PrimaryKey &lt;: Product with Serializable with org.squeryl.internals.AttributeValidOnNumericalColumn]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultColumnAttributesForKeyedEntityId</span><span class="params">(<span name="typeOfIdField">typeOfIdField: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Set">Set</span>[_ &gt;: <a href="../internals/PrimaryKey.html" class="extype" name="org.squeryl.internals.PrimaryKey">PrimaryKey</a> &lt;: <a href="../internals/AttributeValidOnNumericalColumn.html" class="extype" name="org.squeryl.internals.AttributeValidOnNumericalColumn">AttributeValidOnNumericalColumn</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#defaultLengthOfString" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#defaultLengthOfString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultLengthOfString:Int"></a>
       <a id="defaultLengthOfString:Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">defaultLengthOfString</span>
-        
-        <span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultLengthOfString</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the default database storage (column) length for String columns for this Schema,
 Can be overridden by the Column Annotation ex.: Column(length=256)
 default is 128
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#defaultSizeOfBigDecimal" data-isabs="false">
-      <a id="defaultSizeOfBigDecimal:(Int, Int)"></a>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#defaultSizeOfBigDecimal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultSizeOfBigDecimal:(Int,Int)"></a>
+      <a id="defaultSizeOfBigDecimal:(Int,Int)"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">defaultSizeOfBigDecimal</span>
-        
-        <span class="result">: (<span name="scala.Int" class="extype">Int</span>, <span name="scala.Int" class="extype">Int</span>)</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultSizeOfBigDecimal</span><span class="result">: (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Tuple2 with (LengthOfDecimal, Scale) that will determine the storage
 length of the database type that map fields of type java.lang.BigDecimal
 Can be overridden by the Column Annotation, ex.: Column(length=22, scale=20)
 default is (20,16)
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#drop" data-isabs="false">
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.logging.StatsSchema#drop" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="drop:Unit"></a>
       <a id="drop:Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">drop</span>
-        
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drop</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">This will drop all tables and related sequences in the schema.</p><div class="fullcomment"><div class="comment cmt"><p>This will drop all tables and related sequences in the schema... it's a
 dangerous operation, typically this is only useful for development
 database instances, the method is protected in order to make it a little
 less 'accessible'
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.logging.StatsSchema" class="extype" href="">StatsSchema</a> → <a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.logging.StatsSchema">StatsSchema</a> → <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">eq</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">equals</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
-      <a id="finalize():Unit"></a>
+    </li><li name="org.squeryl.Schema#factoryFor" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="factoryFor[A](table:org.squeryl.Table[A]):org.squeryl.internals.PosoFactoryPercursorTable[A]"></a>
+      <a id="factoryFor[A](Table[A]):PosoFactoryPercursorTable[A]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">finalize</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">factoryFor</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="table">table: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.factoryFor.A">A</span>]</span>)</span><span class="result">: <a href="../internals/PosoFactoryPercursorTable.html" class="extype" name="org.squeryl.internals.PosoFactoryPercursorTable">PosoFactoryPercursorTable</a>[<span class="extype" name="org.squeryl.Schema.factoryFor.A">A</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#findTablesFor" data-isabs="false">
+    </li><li name="org.squeryl.Schema#findTablesFor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="findTablesFor[A](a:A):Iterable[org.squeryl.Table[A]]"></a>
       <a id="findTablesFor[A](A):Iterable[Table[A]]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">findTablesFor</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="a">a: A</span>)</span><span class="result">: Iterable[<a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[A]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">findTablesFor</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="org.squeryl.Schema.findTablesFor.A">A</span></span>)</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[<a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.findTablesFor.A">A</span>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
-      <a id="getClass():java.lang.Class[_]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getClass</span>
-        
-        <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">hashCode</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#indexed" data-isabs="false">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.squeryl.Schema#indexed" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="indexed(indexName:String):org.squeryl.internals.Indexed"></a>
       <a id="indexed(String):Indexed"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">indexed</span>
-        
-        <span class="params">(<span name="indexName">indexName: String</span>)</span><span class="result">: <a name="org.squeryl.internals.Indexed" class="extype" href="../internals/Indexed.html">Indexed</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">indexed</span><span class="params">(<span name="indexName">indexName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../internals/Indexed.html" class="extype" name="org.squeryl.internals.Indexed">Indexed</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#indexed" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#indexed" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="indexed:org.squeryl.internals.Indexed"></a>
       <a id="indexed:Indexed"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">indexed</span>
-        
-        <span class="result">: <a name="org.squeryl.internals.Indexed" class="extype" href="../internals/Indexed.html">Indexed</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">indexed</span><span class="result">: <a href="../internals/Indexed.html" class="extype" name="org.squeryl.internals.Indexed">Indexed</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#invocationStats" data-isabs="false">
-      <a id="invocationStats:Query[GroupWithMeasures[Product2[IntType, IntType], Product4[Option[DoubleType], LongType, Option[LongType], FloatType]]]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.logging.StatsSchema#invocationStats" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="invocationStats:org.squeryl.Query[org.squeryl.dsl.GroupWithMeasures[Product2[org.squeryl.PrimitiveTypeMode.IntType,org.squeryl.PrimitiveTypeMode.IntType],Product4[Option[org.squeryl.PrimitiveTypeMode.DoubleType],org.squeryl.PrimitiveTypeMode.LongType,Option[org.squeryl.PrimitiveTypeMode.LongType],org.squeryl.PrimitiveTypeMode.FloatType]]]"></a>
+      <a id="invocationStats:Query[GroupWithMeasures[Product2[PrimitiveTypeMode.IntType,PrimitiveTypeMode.IntType],Product4[Option[PrimitiveTypeMode.DoubleType],PrimitiveTypeMode.LongType,Option[PrimitiveTypeMode.LongType],PrimitiveTypeMode.FloatType]]]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">invocationStats</span>
-        
-        <span class="result">: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../dsl/GroupWithMeasures.html">GroupWithMeasures</a>[<span name="scala.Product2" class="extype">Product2</span>[IntType, IntType], <span name="scala.Product4" class="extype">Product4</span>[<span name="scala.Option" class="extype">Option</span>[DoubleType], LongType, <span name="scala.Option" class="extype">Option</span>[LongType], FloatType]]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invocationStats</span><span class="result">: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<a href="../dsl/GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="scala.Product2">Product2</span>[<a href="../PrimitiveTypeMode$.html#IntType=Int" class="extmbr" name="org.squeryl.PrimitiveTypeMode.IntType">PrimitiveTypeMode.IntType</a>, <a href="../PrimitiveTypeMode$.html#IntType=Int" class="extmbr" name="org.squeryl.PrimitiveTypeMode.IntType">PrimitiveTypeMode.IntType</a>], <span class="extype" name="scala.Product4">Product4</span>[<span class="extype" name="scala.Option">Option</span>[<a href="../PrimitiveTypeMode$.html#DoubleType=Double" class="extmbr" name="org.squeryl.PrimitiveTypeMode.DoubleType">PrimitiveTypeMode.DoubleType</a>], <a href="../PrimitiveTypeMode$.html#LongType=Long" class="extmbr" name="org.squeryl.PrimitiveTypeMode.LongType">PrimitiveTypeMode.LongType</a>, <span class="extype" name="scala.Option">Option</span>[<a href="../PrimitiveTypeMode$.html#LongType=Long" class="extmbr" name="org.squeryl.PrimitiveTypeMode.LongType">PrimitiveTypeMode.LongType</a>], <a href="../PrimitiveTypeMode$.html#FloatType=Float" class="extmbr" name="org.squeryl.PrimitiveTypeMode.FloatType">PrimitiveTypeMode.FloatType</a>]]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#name" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.squeryl.Schema#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="name:Option[String]"></a>
       <a id="name:Option[String]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">name</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#named" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="named(name:String):org.squeryl.internals.Named"></a>
+      <a id="named(String):Named"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">named</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../internals/Named.html" class="extype" name="org.squeryl.internals.Named">Named</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">ne</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notify</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notifyAll</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#on" data-isabs="false">
-      <a id="on[A](Table[A])((A) ⇒ Seq[BaseColumnAttributeAssignment]):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.squeryl.Schema#on" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on[A](table:org.squeryl.Table[A])(declarations:A=&gt;Seq[org.squeryl.dsl.ast.BaseColumnAttributeAssignment]):Unit"></a>
+      <a id="on[A](Table[A])((A)⇒Seq[BaseColumnAttributeAssignment]):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="table">table: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[A]</span>)</span><span class="params">(<span name="declarations">declarations: (A) ⇒ Seq[<a name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment" class="extype" href="../dsl/ast/BaseColumnAttributeAssignment.html">BaseColumnAttributeAssignment</a>]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="table">table: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.on.A">A</span>]</span>)</span><span class="params">(<span name="declarations">declarations: (<span class="extype" name="org.squeryl.Schema.on.A">A</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<a href="../dsl/ast/BaseColumnAttributeAssignment.html" class="extype" name="org.squeryl.dsl.ast.BaseColumnAttributeAssignment">BaseColumnAttributeAssignment</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">protected since table declarations must only be done inside a Schema
 </p><div class="fullcomment"><div class="comment cmt"><p>protected since table declarations must only be done inside a Schema
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#onDelete" data-isabs="false">
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#onDelete" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="onDelete:Schema.this.ReferentialEvent"></a>
       <a id="onDelete:ReferentialEvent"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">onDelete</span>
-        
-        <span class="result">: <a name="org.squeryl.Schema.ReferentialEvent" class="extype" href="../Schema$ReferentialEvent.html">ReferentialEvent</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">onDelete</span><span class="result">: <a href="#ReferentialEventextendsObject" class="extmbr" name="org.squeryl.Schema.ReferentialEvent">ReferentialEvent</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#onUpdate" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#onUpdate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="onUpdate:Schema.this.ReferentialEvent"></a>
       <a id="onUpdate:ReferentialEvent"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">onUpdate</span>
-        
-        <span class="result">: <a name="org.squeryl.Schema.ReferentialEvent" class="extype" href="../Schema$ReferentialEvent.html">ReferentialEvent</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">onUpdate</span><span class="result">: <a href="#ReferentialEventextendsObject" class="extmbr" name="org.squeryl.Schema.ReferentialEvent">ReferentialEvent</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#primaryKey" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#primaryKey" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="primaryKey:org.squeryl.internals.PrimaryKey"></a>
       <a id="primaryKey:PrimaryKey"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">primaryKey</span>
-        
-        <span class="result">: <a name="org.squeryl.internals.PrimaryKey" class="extype" href="../internals/PrimaryKey.html">PrimaryKey</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">primaryKey</span><span class="result">: <a href="../internals/PrimaryKey.html" class="extype" name="org.squeryl.internals.PrimaryKey">PrimaryKey</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#printDdl" data-isabs="false">
-      <a id="printDdl((String) ⇒ Unit):Unit"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#printDdl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printDdl(statementHandler:String=&gt;Unit):Unit"></a>
+      <a id="printDdl((String)⇒Unit):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printDdl</span>
-        
-        <span class="params">(<span name="statementHandler">statementHandler: (String) ⇒ <span name="scala.Unit" class="extype">Unit</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printDdl</span><span class="params">(<span name="statementHandler">statementHandler: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#printDdl" data-isabs="false">
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#printDdl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printDdl(pw:java.io.PrintWriter):Unit"></a>
       <a id="printDdl(PrintWriter):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printDdl</span>
-        
-        <span class="params">(<span name="pw">pw: <span name="java.io.PrintWriter" class="extype">PrintWriter</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printDdl</span><span class="params">(<span name="pw">pw: <span class="extype" name="java.io.PrintWriter">PrintWriter</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#printDdl" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#printDdl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printDdl:Unit"></a>
       <a id="printDdl:Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">printDdl</span>
-        
-        <span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printDdl</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Prints the schema to standard output, it is simply : schema.</p><div class="fullcomment"><div class="comment cmt"><p>Prints the schema to standard output, it is simply : schema.printDdl(println(_))
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#recordEndOfIteration" data-isabs="false">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.logging.StatsSchema#recordEndOfIteration" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recordEndOfIteration(statementInvocationId:String,iterationEndTime:Long,rowCount:Int,iterationCompleted:Boolean):Int"></a>
       <a id="recordEndOfIteration(String,Long,Int,Boolean):Int"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">recordEndOfIteration</span>
-        
-        <span class="params">(<span name="statementInvocationId">statementInvocationId: String</span>, <span name="iterationEndTime">iterationEndTime: <span name="scala.Long" class="extype">Long</span></span>, <span name="rowCount">rowCount: <span name="scala.Int" class="extype">Int</span></span>, <span name="iterationCompleted">iterationCompleted: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recordEndOfIteration</span><span class="params">(<span name="statementInvocationId">statementInvocationId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="iterationEndTime">iterationEndTime: <span class="extype" name="scala.Long">Long</span></span>, <span name="rowCount">rowCount: <span class="extype" name="scala.Int">Int</span></span>, <span name="iterationCompleted">iterationCompleted: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#recordStatementInvocation" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatsSchema#recordStatementInvocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="recordStatementInvocation(sie:org.squeryl.logging.StatementInvocationEvent):String"></a>
       <a id="recordStatementInvocation(StatementInvocationEvent):String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">recordStatementInvocation</span>
-        
-        <span class="params">(<span name="sie">sie: <a name="org.squeryl.logging.StatementInvocationEvent" class="extype" href="StatementInvocationEvent.html">StatementInvocationEvent</a></span>)</span><span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">recordStatementInvocation</span><span class="params">(<span name="sie">sie: <a href="StatementInvocationEvent.html" class="extype" name="org.squeryl.logging.StatementInvocationEvent">StatementInvocationEvent</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#statementInvocations" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatsSchema#statementInvocations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="statementInvocations:org.squeryl.Table[org.squeryl.logging.StatementInvocation]"></a>
       <a id="statementInvocations:Table[StatementInvocation]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">statementInvocations</span>
-        
-        <span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[<a name="org.squeryl.logging.StatementInvocation" class="extype" href="StatementInvocation.html">StatementInvocation</a>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">statementInvocations</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<a href="StatementInvocation.html" class="extype" name="org.squeryl.logging.StatementInvocation">StatementInvocation</a>]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#statements" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatsSchema#statements" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="statements:org.squeryl.Table[org.squeryl.logging.Statement]"></a>
       <a id="statements:Table[Statement]"></a>
       <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">statements</span>
-        
-        <span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[<a name="org.squeryl.logging.Statement" class="extype" href="Statement.html">Statement</a>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">statements</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<a href="Statement.html" class="extype" name="org.squeryl.logging.Statement">Statement</a>]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
-      <a id="synchronized[T0](⇒ T0):T0"></a>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">synchronized</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#table" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.squeryl.Schema#table" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="table[T](name:String,prefix:String)(implicitmanifestT:scala.reflect.Manifest[T]):org.squeryl.Table[T]"></a>
       <a id="table[T](String,String)(Manifest[T]):Table[T]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">table</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="name">name: String</span>, <span name="prefix">prefix: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[T]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">table</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="prefix">prefix: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.table.T">T</span>]</span>)</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.table.T">T</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#table" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#table" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="table[T](name:String)(implicitmanifestT:scala.reflect.Manifest[T]):org.squeryl.Table[T]"></a>
       <a id="table[T](String)(Manifest[T]):Table[T]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">table</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="name">name: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[T]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">table</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.table.T">T</span>]</span>)</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.table.T">T</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#table" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#table" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="table[T]()(implicitmanifestT:scala.reflect.Manifest[T]):org.squeryl.Table[T]"></a>
       <a id="table[T]()(Manifest[T]):Table[T]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">table</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[T]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">table</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.table.T">T</span>]</span>)</span><span class="result">: <a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[<span class="extype" name="org.squeryl.Schema.table.T">T</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#tableNameFromClass" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#tableNameFromClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tableNameFromClass(c:Class[_]):String"></a>
       <a id="tableNameFromClass(Class[_]):String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">tableNameFromClass</span>
-        
-        <span class="params">(<span name="c">c: Class[_]</span>)</span><span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tableNameFromClass</span><span class="params">(<span name="c">c: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#tableNameFromClassName" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#tableNameFromClassName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tableNameFromClassName(tableName:String):String"></a>
       <a id="tableNameFromClassName(String):String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">tableNameFromClassName</span>
-        
-        <span class="params">(<span name="tableName">tableName: String</span>)</span><span class="result">: String</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tableNameFromClassName</span><span class="params">(<span name="tableName">tableName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#thisSchema" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#tables" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tables:Seq[org.squeryl.Table[_]]"></a>
+      <a id="tables:Seq[Table[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tables</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../Table.html" class="extype" name="org.squeryl.Table">Table</a>[_]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#thisSchema" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="thisSchema:org.squeryl.Schema"></a>
       <a id="thisSchema:Schema"></a>
       <h4 class="signature">
-      <span class="kind">implicit def</span>
-      <span class="symbol"> 
-        <span class="name">thisSchema</span>
-        
-        <span class="result">: <a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thisSchema</span><span class="result">: <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected implicit </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">toString</span>
-        
-        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema#topRankingStatements" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatsSchema#topRankingStatements" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="topRankingStatements(topN:Int,measure:org.squeryl.logging.Measure.Measure):org.squeryl.Query[org.squeryl.logging.StatLine]"></a>
       <a id="topRankingStatements(Int,Measure):Query[StatLine]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">topRankingStatements</span>
-        
-        <span class="params">(<span name="topN">topN: <span name="scala.Int" class="extype">Int</span></span>, <span name="measure">measure: Measure</span>)</span><span class="result">: <a name="org.squeryl.Query" class="extype" href="../Query.html">Query</a>[<a name="org.squeryl.logging.StatLine" class="extype" href="StatLine.html">StatLine</a>]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">topRankingStatements</span><span class="params">(<span name="topN">topN: <span class="extype" name="scala.Int">Int</span></span>, <span name="measure">measure: <a href="Measure$.html#Measure=org.squeryl.logging.Measure.Value" class="extmbr" name="org.squeryl.logging.Measure.Measure">Measure</a></span>)</span><span class="result">: <a href="../Query.html" class="extype" name="org.squeryl.Query">Query</a>[<a href="StatLine.html" class="extype" name="org.squeryl.logging.StatLine">StatLine</a>]</span>
       </span>
       </h4>
       
-    </li><li visbl="prt" name="org.squeryl.Schema#unique" data-isabs="false">
+    </li><li name="org.squeryl.Schema#uninsertable" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="uninsertable:org.squeryl.internals.Uninsertable"></a>
+      <a id="uninsertable:Uninsertable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">uninsertable</span><span class="result">: <a href="../internals/Uninsertable.html" class="extype" name="org.squeryl.internals.Uninsertable">Uninsertable</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#unique" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unique:org.squeryl.internals.Unique"></a>
       <a id="unique:Unique"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">unique</span>
-        
-        <span class="result">: <a name="org.squeryl.internals.Unique" class="extype" href="../internals/Unique.html">Unique</a></span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unique</span><span class="result">: <a href="../internals/Unique.html" class="extype" name="org.squeryl.internals.Unique">Unique</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#view" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#unupdatable" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unupdatable:org.squeryl.internals.Unupdatable"></a>
+      <a id="unupdatable:Unupdatable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unupdatable</span><span class="result">: <a href="../internals/Unupdatable.html" class="extype" name="org.squeryl.internals.Unupdatable">Unupdatable</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#view" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="view[T](name:String)(implicitmanifestT:scala.reflect.Manifest[T]):org.squeryl.View[T]"></a>
       <a id="view[T](String)(Manifest[T]):View[T]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">view</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">(<span name="name">name: String</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <a name="org.squeryl.View" class="extype" href="../View.html">View</a>[T]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">view</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.view.T">T</span>]</span>)</span><span class="result">: <a href="../View.html" class="extype" name="org.squeryl.View">View</a>[<span class="extype" name="org.squeryl.Schema.view.T">T</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.Schema#view" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="org.squeryl.Schema#view" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="view[T]()(implicitmanifestT:scala.reflect.Manifest[T]):org.squeryl.View[T]"></a>
       <a id="view[T]()(Manifest[T]):View[T]"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">view</span>
-        <span class="tparams">[<span name="T">T</span>]</span>
-        <span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span name="scala.reflect.Manifest" class="extype">Manifest</span>[T]</span>)</span><span class="result">: <a name="org.squeryl.View" class="extype" href="../View.html">View</a>[T]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">view</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="manifestT">manifestT: <span class="extype" name="scala.reflect.Manifest">Manifest</span>[<span class="extype" name="org.squeryl.Schema.view.T">T</span>]</span>)</span><span class="result">: <a href="../View.html" class="extype" name="org.squeryl.View">View</a>[<span class="extype" name="org.squeryl.Schema.view.T">T</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#applyDefaultForeingKeyPolicy" data-isabs="false">
-      <a id="applyDefaultForeingKeyPolicy(ForeignKeyDeclaration):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name deprecated">applyDefaultForeingKeyPolicy</span>
-        
-        <span class="params">(<span name="foreingKeyDeclaration">foreingKeyDeclaration: <a name="org.squeryl.ForeignKeyDeclaration" class="extype" href="../ForeignKeyDeclaration.html">ForeignKeyDeclaration</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p>Use applyDefaultForeignKeyPolicy instead</p></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.Schema#findTableFor" data-isabs="false">
-      <a id="findTableFor[A](A):Option[Table[A]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name deprecated">findTableFor</span>
-        <span class="tparams">[<span name="A">A</span>]</span>
-        <span class="params">(<span name="a">a: A</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.squeryl.Table" class="extype" href="../Table.html">Table</a>[A]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p>will be removed in a future version, use findTablesFor instead.</p></dd></dl></div>
     </li></ol>
             </div>
 
-        <div name="org.squeryl.Schema" class="parent">
-              <h3>Inherited from <a name="org.squeryl.Schema" class="extype" href="../Schema.html">Schema</a></h3>
-            </div><div name="scala.AnyRef" class="parent">
-              <h3>Inherited from AnyRef</h3>
-            </div><div name="scala.Any" class="parent">
-              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.squeryl.Schema">
+              <h3>Inherited from <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
 
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>

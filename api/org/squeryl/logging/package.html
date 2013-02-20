@@ -2,198 +2,240 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.squeryl.logging</title>
+          <title>logging - org.squeryl.logging</title>
+          <meta name="description" content="logging - org.squeryl.logging" />
+          <meta name="keywords" content="logging org.squeryl.logging" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
-      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.squeryl.logging.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
         <body class="value">
       <div id="definition">
         <img src="../../../lib/package_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../package.html">squeryl</a></p>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.squeryl">squeryl</a></p>
         <h1>logging</h1>
       </div>
 
-      <h4 class="signature" id="signature">
-      <span class="kind">package</span>
-      <span class="symbol"> 
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
         <span class="name">logging</span>
-        
-        
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"></div>
+          <div id="comment" class="fullcommenttop"></div>
         
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
       <div id="template">
-
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          
-          
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-            </div>
-        </div>
-
+        <div id="allMembers">
         
 
-        <div class="types members" id="types">
+        <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.logging.LocalH2SinkStatisticsListener" data-isabs="false">
+              <ol><li name="org.squeryl.logging.LocalH2SinkStatisticsListener" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LocalH2SinkStatisticsListenerextendsStatisticsListener"></a>
       <a id="LocalH2SinkStatisticsListener:LocalH2SinkStatisticsListener"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="LocalH2SinkStatisticsListener.html"><span class="name">LocalH2SinkStatisticsListener</span></a>
-        
-        <span class="result"> extends StatisticsListener</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LocalH2SinkStatisticsListener.html"><span class="name">LocalH2SinkStatisticsListener</span></a><span class="result"> extends <a href="StatisticsListener.html" class="extype" name="org.squeryl.logging.StatisticsListener">StatisticsListener</a></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatLine" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatLineextendsObject"></a>
       <a id="StatLine:StatLine"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="StatLine.html"><span class="name">StatLine</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StatLine.html"><span class="name">StatLine</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.Statement" data-isabs="false">
+    </li><li name="org.squeryl.logging.Statement" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatementextendsKeyedEntity[org.squeryl.dsl.CompositeKey2[Int,Int]]"></a>
       <a id="Statement:Statement"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="Statement.html"><span class="name">Statement</span></a>
-        
-        <span class="result"> extends KeyedEntity[CompositeKey2[Int, Int]]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Statement.html"><span class="name">Statement</span></a><span class="result"> extends <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[<a href="../dsl/CompositeKey2.html" class="extype" name="org.squeryl.dsl.CompositeKey2">CompositeKey2</a>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]]</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatementInvocation" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatementInvocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatementInvocationextendsKeyedEntity[String]"></a>
       <a id="StatementInvocation:StatementInvocation"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="StatementInvocation.html"><span class="name">StatementInvocation</span></a>
-        
-        <span class="result"> extends KeyedEntity[String]</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StatementInvocation.html"><span class="name">StatementInvocation</span></a><span class="result"> extends <a href="../KeyedEntity.html" class="extype" name="org.squeryl.KeyedEntity">KeyedEntity</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="comment cmt">id is a UUID generatted by java.</p>
-    </li><li visbl="pub" name="org.squeryl.logging.StatementInvocationEvent" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatementInvocationEvent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatementInvocationEventextendsObject"></a>
       <a id="StatementInvocationEvent:StatementInvocationEvent"></a>
       <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="StatementInvocationEvent.html"><span class="name">StatementInvocationEvent</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StatementInvocationEvent.html"><span class="name">StatementInvocationEvent</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatisticsListener" data-isabs="true">
+    </li><li name="org.squeryl.logging.StatisticsListener" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StatisticsListenerextendsObject"></a>
       <a id="StatisticsListener:StatisticsListener"></a>
       <h4 class="signature">
-      <span class="kind">trait</span>
-      <span class="symbol"> 
-        <a href="StatisticsListener.html"><span class="name">StatisticsListener</span></a>
-        
-        <span class="result"> extends AnyRef</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StatisticsListener.html"><span class="name">StatisticsListener</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
     </li></ol>
             </div>
-        
+
         
 
-        <div class="values members" id="values">
+        <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.logging.BarChartRenderer" data-isabs="false">
+              <ol><li name="org.squeryl.logging.BarChartRenderer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BarChartRenderer"></a>
       <a id="BarChartRenderer:BarChartRenderer"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
         <a href="BarChartRenderer$.html"><span class="name">BarChartRenderer</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.LocalH2SinkStatisticsListener" data-isabs="false">
+    </li><li name="org.squeryl.logging.LocalH2SinkStatisticsListener" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LocalH2SinkStatisticsListener"></a>
       <a id="LocalH2SinkStatisticsListener:LocalH2SinkStatisticsListener"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
         <a href="LocalH2SinkStatisticsListener$.html"><span class="name">LocalH2SinkStatisticsListener</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.Measure" data-isabs="false">
+    </li><li name="org.squeryl.logging.Measure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Measure"></a>
       <a id="Measure:Measure"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
-        <a href="Measure$.html"><span class="name">Measure</span></a>
-        
-        <span class="result"> extends Enumeration</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Measure$.html"><span class="name">Measure</span></a><span class="result"> extends <span class="extype" name="scala.Enumeration">Enumeration</span></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StackMarker" data-isabs="false">
+    </li><li name="org.squeryl.logging.StackMarker" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StackMarker"></a>
       <a id="StackMarker:StackMarker"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
         <a href="StackMarker$.html"><span class="name">StackMarker</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatementHasher" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatementHasher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatementHasher"></a>
       <a id="StatementHasher:StatementHasher"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
         <a href="StatementHasher$.html"><span class="name">StatementHasher</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.StatsSchema" data-isabs="false">
+    </li><li name="org.squeryl.logging.StatsSchema" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatsSchema"></a>
       <a id="StatsSchema:StatsSchema"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
-        <a href="StatsSchema$.html"><span class="name">StatsSchema</span></a>
-        
-        <span class="result"> extends Schema</span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StatsSchema$.html"><span class="name">StatsSchema</span></a><span class="result"> extends <a href="../Schema.html" class="extype" name="org.squeryl.Schema">Schema</a></span>
       </span>
       </h4>
       
-    </li><li visbl="pub" name="org.squeryl.logging.UsageProfileConsolidator" data-isabs="false">
+    </li><li name="org.squeryl.logging.UsageProfileConsolidator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UsageProfileConsolidator"></a>
       <a id="UsageProfileConsolidator:UsageProfileConsolidator"></a>
       <h4 class="signature">
-      <span class="kind">object</span>
-      <span class="symbol"> 
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
         <a href="UsageProfileConsolidator$.html"><span class="name">UsageProfileConsolidator</span></a>
-        
-        <span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
@@ -202,9 +244,27 @@
 
         
 
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>

@@ -2,681 +2,857 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield</title>
+          <title>GroupWithMeasuresQueryYield - org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield</title>
+          <meta name="description" content="GroupWithMeasuresQueryYield - org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" />
+          <meta name="keywords" content="GroupWithMeasuresQueryYield org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
-      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
       <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
     
         </head>
         <body class="type">
       <div id="definition">
         <img src="../../../../lib/class_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.squeryl" class="extype" href="../../package.html">squeryl</a>.<a name="org.squeryl.dsl" class="extype" href="../package.html">dsl</a>.<a name="org.squeryl.dsl.fsm" class="extype" href="package.html">fsm</a></p>
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.squeryl">squeryl</a>.<a href="../package.html" class="extype" name="org.squeryl.dsl">dsl</a>.<a href="package.html" class="extype" name="org.squeryl.dsl.fsm">fsm</a></p>
         <h1>GroupWithMeasuresQueryYield</h1>
       </div>
 
-      <h4 class="signature" id="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <span class="name">GroupWithMeasuresQueryYield</span>
-        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
-        <span class="result"> extends <a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]] with <a name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" class="extype" href="ComputeStateFromGroupByState.html">ComputeStateFromGroupByState</a>[K, M] with <a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]] with <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GroupWithMeasuresQueryYield</span><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]] with <a href="ComputeStateFromGroupByState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">ComputeStateFromGroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>] with <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]] with <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
       </span>
       </h4>
       
-          <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/max-l/Squeryl/tree/0.9.5-6/src/main/scala/org/squeryl/dsl/fsm/BaseQueryYield.scala" target="_blank">BaseQueryYield.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" class="extype" href="ComputeStateFromGroupByState.html">ComputeStateFromGroupByState</a>[K, M], <a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]], <a name="org.squeryl.dsl.fsm.SelectState" class="extype" href="SelectState.html">SelectState</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]], <a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]], <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ComputeStateFromGroupByState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">ComputeStateFromGroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>], <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]], <a href="SelectState.html" class="extype" name="org.squeryl.dsl.fsm.SelectState">SelectState</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]], <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]], <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
-      <div id="template">
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield"><span>GroupWithMeasuresQueryYield</span></li><li class="in" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState"><span>ComputeStateFromGroupByState</span></li><li class="in" name="org.squeryl.dsl.fsm.BaseQueryYield"><span>BaseQueryYield</span></li><li class="in" name="org.squeryl.dsl.fsm.SelectState"><span>SelectState</span></li><li class="in" name="org.squeryl.dsl.boilerplate.OrderBySignatures"><span>OrderBySignatures</span></li><li class="in" name="org.squeryl.dsl.QueryYield"><span>QueryYield</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
 
-        <div id="mbrsel">
-          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
-          <div id="order">
-                <span class="filtertype">Ordering</span>
-                <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
-              </div>
-          <div id="ancestors">
-                <span class="filtertype">Inherited</span>
-                <ol><li class="hideall out"><span>Hide All</span></li>
-                <li class="showall in"><span>Show all</span></li></ol>
-                <ol id="linearization"><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" class="in"><span>GroupWithMeasuresQueryYield</span></li><li name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" class="in"><span>ComputeStateFromGroupByState</span></li><li name="org.squeryl.dsl.fsm.BaseQueryYield" class="in"><span>BaseQueryYield</span></li><li name="org.squeryl.dsl.fsm.SelectState" class="in"><span>SelectState</span></li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="in"><span>OrderBySignatures</span></li><li name="org.squeryl.dsl.QueryYield" class="in"><span>QueryYield</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
-              </div>
-          <div id="visbl">
-              <span class="filtertype">Visibility</span>
-              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(_qe:org.squeryl.dsl.fsm.QueryElements[_],_groupByClauseClosure:()=&gt;List[org.squeryl.dsl.ast.TypedExpressionNode[_]],_having:Option[()=&gt;org.squeryl.dsl.ast.LogicalBoolean],_computeClauseClosure:()=&gt;List[org.squeryl.dsl.ast.TypedExpressionNode[_]]):org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield[K,M]"></a>
+      <a id="&lt;init&gt;:GroupWithMeasuresQueryYield[K,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">GroupWithMeasuresQueryYield</span><span class="params">(<span name="_qe">_qe: <a href="QueryElements.html" class="extype" name="org.squeryl.dsl.fsm.QueryElements">QueryElements</a>[_]</span>, <span name="_groupByClauseClosure">_groupByClauseClosure: () ⇒ <span class="extype" name="scala.List">List</span>[<a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[_]]</span>, <span name="_having">_having: <span class="extype" name="scala.Option">Option</span>[() ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a>]</span>, <span name="_computeClauseClosure">_computeClauseClosure: () ⇒ <span class="extype" name="scala.List">List</span>[<a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[_]]</span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.squeryl.dsl.boilerplate.OrderBySignatures.O" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="O=org.squeryl.dsl.ast.ExpressionNode"></a>
+      <a id="O:O"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">O</span><span class="result"> = <a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.SampleGroupWithMeasures" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SampleGroupWithMeasures[K,M]extendsGroupWithMeasures[K,M]"></a>
+      <a id="SampleGroupWithMeasures[K,M]:SampleGroupWithMeasures[K,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupWithMeasuresQueryYield$SampleGroupWithMeasures.html"><span class="name">SampleGroupWithMeasures</span></a><span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span><span class="result"> extends <a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.SampleGroupWithMeasures.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.SampleGroupWithMeasures.M">M</span>]</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#_createColumnToTupleMapper" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_createColumnToTupleMapper(origin:org.squeryl.dsl.ast.QueryExpressionNode[_],agregateArgs:List[org.squeryl.dsl.ast.TypedExpressionNode[_]],offsetInResultSet:Int,isForGroup:Boolean):(org.squeryl.internals.ColumnToTupleMapper,List[org.squeryl.dsl.ast.TupleSelectElement])"></a>
+      <a id="_createColumnToTupleMapper(QueryExpressionNode[_],List[TypedExpressionNode[_]],Int,Boolean):(ColumnToTupleMapper,List[TupleSelectElement])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_createColumnToTupleMapper</span><span class="params">(<span name="origin">origin: <a href="../ast/QueryExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionNode">QueryExpressionNode</a>[_]</span>, <span name="agregateArgs">agregateArgs: <span class="extype" name="scala.List">List</span>[<a href="../ast/TypedExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.TypedExpressionNode">TypedExpressionNode</a>[_]]</span>, <span name="offsetInResultSet">offsetInResultSet: <span class="extype" name="scala.Int">Int</span></span>, <span name="isForGroup">isForGroup: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: (<a href="../../internals/ColumnToTupleMapper.html" class="extype" name="org.squeryl.internals.ColumnToTupleMapper">ColumnToTupleMapper</a>, <span class="extype" name="scala.collection.immutable.List">List</span>[<a href="../ast/TupleSelectElement.html" class="extype" name="org.squeryl.dsl.ast.TupleSelectElement">TupleSelectElement</a>])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#_havingClause" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_havingClause:Option[()=&gt;org.squeryl.dsl.ast.LogicalBoolean]"></a>
+      <a id="_havingClause:Option[()⇒LogicalBoolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_havingClause</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[() ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#_orderByExpressions" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_orderByExpressions:()=&gt;List[()=&gt;org.squeryl.dsl.ast.ExpressionNode]"></a>
+      <a id="_orderByExpressions:()⇒List[()⇒ExpressionNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_orderByExpressions</span><span class="result">: () ⇒ <span class="extype" name="scala.List">List</span>[() ⇒ <a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#_sTuple1ToValue" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_sTuple1ToValue[B](b:B):B"></a>
+      <a id="_sTuple1ToValue[B](B):B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_sTuple1ToValue</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="b">b: <span class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield._sTuple1ToValue.B">B</span></span>)</span><span class="result">: <span class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield._sTuple1ToValue.B">B</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#computeClause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="computeClause:List[org.squeryl.dsl.ast.ExpressionNode]"></a>
+      <a id="computeClause:List[ExpressionNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">computeClause</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#groupByClause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="groupByClause:Iterable[org.squeryl.dsl.ast.ExpressionNode]"></a>
+      <a id="groupByClause:Iterable[ExpressionNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">groupByClause</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#havingClause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="havingClause:Option[org.squeryl.dsl.ast.ExpressionNode]"></a>
+      <a id="havingClause:Option[ExpressionNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">havingClause</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield">GroupWithMeasuresQueryYield</a> → <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#invokeYield" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invokeYield(rsm:org.squeryl.internals.ResultSetMapper,rs:java.sql.ResultSet):org.squeryl.dsl.GroupWithMeasures[K,M]"></a>
+      <a id="invokeYield(ResultSetMapper,ResultSet):GroupWithMeasures[K,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invokeYield</span><span class="params">(<span name="rsm">rsm: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>, <span name="rs">rs: <span class="extype" name="java.sql.ResultSet">ResultSet</span></span>)</span><span class="result">: <a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield">GroupWithMeasuresQueryYield</a> → <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a> → <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#invokeYieldForAst" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="invokeYieldForAst(q:org.squeryl.dsl.ast.QueryExpressionNode[_],rsm:org.squeryl.internals.ResultSetMapper):(List[org.squeryl.dsl.ast.SelectElement],GroupWithMeasuresQueryYield.this.SampleGroupWithMeasures[K,M])"></a>
+      <a id="invokeYieldForAst(QueryExpressionNode[_],ResultSetMapper):(List[SelectElement],SampleGroupWithMeasures[K,M])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">invokeYieldForAst</span><span class="params">(<span name="q">q: <a href="../ast/QueryExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.QueryExpressionNode">QueryExpressionNode</a>[_]</span>, <span name="rsm">rsm: <a href="../../internals/ResultSetMapper.html" class="extype" name="org.squeryl.internals.ResultSetMapper">ResultSetMapper</a></span>)</span><span class="result">: (<span class="extype" name="scala.collection.immutable.List">List</span>[<a href="../ast/SelectElement.html" class="extype" name="org.squeryl.dsl.ast.SelectElement">SelectElement</a>], <a href="GroupWithMeasuresQueryYield$SampleGroupWithMeasures.html" class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.SampleGroupWithMeasures">SampleGroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield">GroupWithMeasuresQueryYield</a> → <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a> → <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb2:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb3:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb4:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb5:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb6:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb7:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield7[R]"></a>
+      <a id="on(⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean):JoinQueryYield7[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb5">lb5: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb6">lb6: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb7">lb7: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield7.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield7">JoinQueryYield7</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb2:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb3:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb4:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb5:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb6:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield6[R]"></a>
+      <a id="on(⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean):JoinQueryYield6[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb5">lb5: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb6">lb6: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield6.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield6">JoinQueryYield6</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb2:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb3:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb4:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb5:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield5[R]"></a>
+      <a id="on(⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean):JoinQueryYield5[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb5">lb5: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield5.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield5">JoinQueryYield5</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb2:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb3:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb4:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield4[R]"></a>
+      <a id="on(⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean):JoinQueryYield4[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield4.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield4">JoinQueryYield4</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb2:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb3:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield3[R]"></a>
+      <a id="on(⇒LogicalBoolean,⇒LogicalBoolean,⇒LogicalBoolean):JoinQueryYield3[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield3.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield3">JoinQueryYield3</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean,lb2:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield2[R]"></a>
+      <a id="on(⇒LogicalBoolean,⇒LogicalBoolean):JoinQueryYield2[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield2.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield2">JoinQueryYield2</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.QueryYield#on" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="on(lb1:=&gt;org.squeryl.dsl.ast.LogicalBoolean):org.squeryl.dsl.boilerplate.JoinQueryYield1[R]"></a>
+      <a id="on(⇒LogicalBoolean):JoinQueryYield1[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">on</span><span class="params">(<span name="lb1">lb1: ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a></span>)</span><span class="result">: <a href="../boilerplate/JoinQueryYield1.html" class="extype" name="org.squeryl.dsl.boilerplate.JoinQueryYield1">JoinQueryYield1</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O,e2:=&gt;OrderBySignatures.this.O,e3:=&gt;OrderBySignatures.this.O,e4:=&gt;OrderBySignatures.this.O,e5:=&gt;OrderBySignatures.this.O,e6:=&gt;OrderBySignatures.this.O,e7:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O,⇒O,⇒O,⇒O,⇒O,⇒O,⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e2">e2: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e3">e3: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e4">e4: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e5">e5: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e6">e6: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e7">e7: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O,e2:=&gt;OrderBySignatures.this.O,e3:=&gt;OrderBySignatures.this.O,e4:=&gt;OrderBySignatures.this.O,e5:=&gt;OrderBySignatures.this.O,e6:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O,⇒O,⇒O,⇒O,⇒O,⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e2">e2: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e3">e3: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e4">e4: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e5">e5: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e6">e6: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O,e2:=&gt;OrderBySignatures.this.O,e3:=&gt;OrderBySignatures.this.O,e4:=&gt;OrderBySignatures.this.O,e5:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O,⇒O,⇒O,⇒O,⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e2">e2: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e3">e3: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e4">e4: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e5">e5: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O,e2:=&gt;OrderBySignatures.this.O,e3:=&gt;OrderBySignatures.this.O,e4:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O,⇒O,⇒O,⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e2">e2: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e3">e3: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e4">e4: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O,e2:=&gt;OrderBySignatures.this.O,e3:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O,⇒O,⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e2">e2: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e3">e3: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O,e2:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O,⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>, <span name="e2">e2: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(e1:=&gt;OrderBySignatures.this.O):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(⇒O):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="e1">e1: ⇒ <a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a></span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderBy(args:List[OrderBySignatures.this.O]):org.squeryl.dsl.QueryYield[R]"></a>
+      <a id="orderBy(List[O]):QueryYield[GroupWithMeasures[K,M]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderBy</span><span class="params">(<span name="args">args: <span class="extype" name="scala.List">List</span>[<a href="#O=org.squeryl.dsl.ast.ExpressionNode" class="extmbr" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.O">O</a>]</span>)</span><span class="result">: <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#orderByClause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="orderByClause:Iterable[org.squeryl.dsl.ast.ExpressionNode]"></a>
+      <a id="orderByClause:Iterable[ExpressionNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orderByClause</span><span class="result">: <span class="extype" name="scala.Iterable">Iterable</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#queryElements" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="queryElements:(Option[org.squeryl.dsl.ast.ExpressionNode],Option[org.squeryl.dsl.ast.ExpressionNode],Iterable[org.squeryl.dsl.ast.ExpressionNode],Iterable[org.squeryl.dsl.ast.ExpressionNode])"></a>
+      <a id="queryElements:(Option[ExpressionNode],Option[ExpressionNode],Iterable[ExpressionNode],Iterable[ExpressionNode])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">queryElements</span><span class="result">: (<span class="extype" name="scala.Option">Option</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>], <span class="extype" name="scala.Option">Option</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>], <span class="extype" name="scala.Iterable">Iterable</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>], <span class="extype" name="scala.Iterable">Iterable</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield">GroupWithMeasuresQueryYield</a> → <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a> → <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#queryElementzz" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="queryElementzz:org.squeryl.dsl.fsm.QueryElements[_]"></a>
+      <a id="queryElementzz:QueryElements[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">queryElementzz</span><span class="result">: <a href="QueryElements.html" class="extype" name="org.squeryl.dsl.fsm.QueryElements">QueryElements</a>[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#selectClosure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="selectClosure:()=&gt;G"></a>
+      <a id="selectClosure:()⇒GroupWithMeasures[K,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">selectClosure</span><span class="result">: () ⇒ <a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#unevaluatedHavingClause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="unevaluatedHavingClause:Option[()=&gt;org.squeryl.dsl.ast.LogicalBoolean]"></a>
+      <a id="unevaluatedHavingClause:Option[()⇒LogicalBoolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unevaluatedHavingClause</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[() ⇒ <a href="../ast/LogicalBoolean.html" class="extype" name="org.squeryl.dsl.ast.LogicalBoolean">LogicalBoolean</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.squeryl.dsl.fsm.BaseQueryYield#whereClause" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="whereClause:Option[org.squeryl.dsl.ast.ExpressionNode]"></a>
+      <a id="whereClause:Option[ExpressionNode]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">whereClause</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="../ast/ExpressionNode.html" class="extype" name="org.squeryl.dsl.ast.ExpressionNode">ExpressionNode</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">
+              <h3>Inherited from <a href="ComputeStateFromGroupByState.html" class="extype" name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState">ComputeStateFromGroupByState</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.fsm.BaseQueryYield">
+              <h3>Inherited from <a href="BaseQueryYield.html" class="extype" name="org.squeryl.dsl.fsm.BaseQueryYield">BaseQueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.fsm.SelectState">
+              <h3>Inherited from <a href="SelectState.html" class="extype" name="org.squeryl.dsl.fsm.SelectState">SelectState</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.boilerplate.OrderBySignatures">
+              <h3>Inherited from <a href="../boilerplate/OrderBySignatures.html" class="extype" name="org.squeryl.dsl.boilerplate.OrderBySignatures">OrderBySignatures</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</h3>
+            </div><div class="parent" name="org.squeryl.dsl.QueryYield">
+              <h3>Inherited from <a href="../QueryYield.html" class="extype" name="org.squeryl.dsl.QueryYield">QueryYield</a>[<a href="../GroupWithMeasures.html" class="extype" name="org.squeryl.dsl.GroupWithMeasures">GroupWithMeasures</a>[<span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.K">K</span>, <span class="extype" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.M">M</span>]]</h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
             </div>
         </div>
 
-        <div class="members" id="constructors">
-              <h3>Instance Constructors</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#this" data-isabs="false">
-      <a id="this:GroupWithMeasuresQueryYield[K, M]"></a>
-      <h4 class="signature">
-      <span class="kind">new</span>
-      <span class="symbol"> 
-        <span class="name">GroupWithMeasuresQueryYield</span>
-        
-        <span class="params">(<span name="_qe">_qe: org.squeryl.dsl.fsm.QueryElements[_]</span>, <span name="_groupByClauseClosure">_groupByClauseClosure: () ⇒ List[org.squeryl.dsl.ast.TypedExpressionNode[_]]</span>, <span name="_computeClauseClosure">_computeClauseClosure: () ⇒ List[org.squeryl.dsl.ast.TypedExpressionNode[_]]</span>)</span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
-
-        <div class="types members" id="types">
-              <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#O" data-isabs="false">
-      <a id="O:O"></a>
-      <h4 class="signature">
-      <span class="kind">type</span>
-      <span class="symbol"> 
-        <span class="name">O</span>
-        
-        <span class="result"> = <a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.SampleGroupWithMeasures" data-isabs="false">
-      <a id="SampleGroupWithMeasures:SampleGroupWithMeasures[K, M]"></a>
-      <h4 class="signature">
-      <span class="kind">class</span>
-      <span class="symbol"> 
-        <a href="GroupWithMeasuresQueryYield$SampleGroupWithMeasures.html"><span class="name">SampleGroupWithMeasures</span></a>
-        <span class="tparams">[<span name="K">K</span>, <span name="M">M</span>]</span>
-        <span class="result"> extends GroupWithMeasures[K, M]</span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
-        
-        
-
-        <div class="values members" id="values">
-              <h3>Value Members</h3>
-              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">!=</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
-      <a id="##():Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">##</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">==</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.dsl.fsm.BaseQueryYield#_createColumnToTupleMapper" data-isabs="false">
-      <a id="_createColumnToTupleMapper(org.squeryl.dsl.ast.QueryExpressionNode[_],List[org.squeryl.dsl.ast.TypedExpressionNode[_]],Int,Boolean):(ColumnToTupleMapper, List[TupleSelectElement])"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">_createColumnToTupleMapper</span>
-        
-        <span class="params">(<span name="origin">origin: org.squeryl.dsl.ast.QueryExpressionNode[_]</span>, <span name="agregateArgs">agregateArgs: List[org.squeryl.dsl.ast.TypedExpressionNode[_]]</span>, <span name="offsetInResultSet">offsetInResultSet: <span name="scala.Int" class="extype">Int</span></span>, <span name="isForGroup">isForGroup: <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: (<a name="org.squeryl.internals.ColumnToTupleMapper" class="extype" href="../../internals/ColumnToTupleMapper.html">ColumnToTupleMapper</a>, <span name="scala.collection.immutable.List" class="extype">List</span>[<a name="org.squeryl.dsl.ast.TupleSelectElement" class="extype" href="../ast/TupleSelectElement.html">TupleSelectElement</a>])</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.dsl.fsm.BaseQueryYield#_havingClause" data-isabs="false">
-      <a id="_havingClause:Option[() ⇒ LogicalBoolean]"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">_havingClause</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[() ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.dsl.fsm.BaseQueryYield#_orderByExpressions" data-isabs="false">
-      <a id="_orderByExpressions:() ⇒ List[() ⇒ ExpressionNode]"></a>
-      <h4 class="signature">
-      <span class="kind">var</span>
-      <span class="symbol"> 
-        <span class="name">_orderByExpressions</span>
-        
-        <span class="result">: () ⇒ List[() ⇒ <a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="prt" name="org.squeryl.dsl.fsm.BaseQueryYield#_sTuple1ToValue" data-isabs="false">
-      <a id="_sTuple1ToValue[B](B):B"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">_sTuple1ToValue</span>
-        <span class="tparams">[<span name="B">B</span>]</span>
-        <span class="params">(<span name="b">b: B</span>)</span><span class="result">: B</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">asInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: T0</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">clone</span>
-        
-        <span class="params">()</span><span class="result">: AnyRef</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#computeClause" data-isabs="false">
-      <a id="computeClause:List[ExpressionNode]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">computeClause</span>
-        
-        <span class="result">: List[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">eq</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">equals</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">finalize</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
-      <a id="getClass():java.lang.Class[_]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">getClass</span>
-        
-        <span class="params">()</span><span class="result">: java.lang.Class[_]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#groupByClause" data-isabs="false">
-      <a id="groupByClause:Iterable[ExpressionNode]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">groupByClause</span>
-        
-        <span class="result">: Iterable[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">hashCode</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#havingClause" data-isabs="false">
-      <a id="havingClause:Option[ExpressionNode]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">havingClause</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#invokeYield" data-isabs="false">
-      <a id="invokeYield(ResultSetMapper,ResultSet):GroupWithMeasures[K, M]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">invokeYield</span>
-        
-        <span class="params">(<span name="rsm">rsm: <a name="org.squeryl.internals.ResultSetMapper" class="extype" href="../../internals/ResultSetMapper.html">ResultSetMapper</a></span>, <span name="rs">rs: <span name="java.sql.ResultSet" class="extype">ResultSet</span></span>)</span><span class="result">: <a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" class="extype" href="">GroupWithMeasuresQueryYield</a> → <a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a> → <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#invokeYieldForAst" data-isabs="false">
-      <a id="invokeYieldForAst(org.squeryl.dsl.ast.QueryExpressionNode[_],ResultSetMapper):(List[SelectElement], SampleGroupWithMeasures[K, M])"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">invokeYieldForAst</span>
-        
-        <span class="params">(<span name="q">q: org.squeryl.dsl.ast.QueryExpressionNode[_]</span>, <span name="rsm">rsm: <a name="org.squeryl.internals.ResultSetMapper" class="extype" href="../../internals/ResultSetMapper.html">ResultSetMapper</a></span>)</span><span class="result">: (<span name="scala.collection.immutable.List" class="extype">List</span>[<a name="org.squeryl.dsl.ast.SelectElement" class="extype" href="../ast/SelectElement.html">SelectElement</a>], <a name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield.SampleGroupWithMeasures" class="extype" href="GroupWithMeasuresQueryYield$SampleGroupWithMeasures.html">SampleGroupWithMeasures</a>[K, M])</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" class="extype" href="">GroupWithMeasuresQueryYield</a> → <a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a> → <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">isInstanceOf</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">ne</span>
-        
-        <span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notify</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">notifyAll</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean):JoinQueryYield7[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb5">lb5: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb6">lb6: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb7">lb7: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield7" class="extype" href="../boilerplate/JoinQueryYield7.html">JoinQueryYield7</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean):JoinQueryYield6[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb5">lb5: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb6">lb6: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield6" class="extype" href="../boilerplate/JoinQueryYield6.html">JoinQueryYield6</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean):JoinQueryYield5[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb5">lb5: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield5" class="extype" href="../boilerplate/JoinQueryYield5.html">JoinQueryYield5</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean):JoinQueryYield4[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb4">lb4: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield4" class="extype" href="../boilerplate/JoinQueryYield4.html">JoinQueryYield4</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean,⇒ LogicalBoolean,⇒ LogicalBoolean):JoinQueryYield3[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb3">lb3: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield3" class="extype" href="../boilerplate/JoinQueryYield3.html">JoinQueryYield3</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean,⇒ LogicalBoolean):JoinQueryYield2[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>, <span name="lb2">lb2: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield2" class="extype" href="../boilerplate/JoinQueryYield2.html">JoinQueryYield2</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.QueryYield#on" data-isabs="false">
-      <a id="on(⇒ LogicalBoolean):JoinQueryYield1[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">on</span>
-        
-        <span class="params">(<span name="lb1">lb1: ⇒ <a name="org.squeryl.dsl.ast.LogicalBoolean" class="extype" href="../ast/LogicalBoolean.html">LogicalBoolean</a></span>)</span><span class="result">: <a name="org.squeryl.dsl.boilerplate.JoinQueryYield1" class="extype" href="../boilerplate/JoinQueryYield1.html">JoinQueryYield1</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O,⇒ O,⇒ O,⇒ O,⇒ O,⇒ O,⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>, <span name="e2">e2: ⇒ O</span>, <span name="e3">e3: ⇒ O</span>, <span name="e4">e4: ⇒ O</span>, <span name="e5">e5: ⇒ O</span>, <span name="e6">e6: ⇒ O</span>, <span name="e7">e7: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O,⇒ O,⇒ O,⇒ O,⇒ O,⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>, <span name="e2">e2: ⇒ O</span>, <span name="e3">e3: ⇒ O</span>, <span name="e4">e4: ⇒ O</span>, <span name="e5">e5: ⇒ O</span>, <span name="e6">e6: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O,⇒ O,⇒ O,⇒ O,⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>, <span name="e2">e2: ⇒ O</span>, <span name="e3">e3: ⇒ O</span>, <span name="e4">e4: ⇒ O</span>, <span name="e5">e5: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O,⇒ O,⇒ O,⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>, <span name="e2">e2: ⇒ O</span>, <span name="e3">e3: ⇒ O</span>, <span name="e4">e4: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O,⇒ O,⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>, <span name="e2">e2: ⇒ O</span>, <span name="e3">e3: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O,⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>, <span name="e2">e2: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.boilerplate.OrderBySignatures#orderBy" data-isabs="false">
-      <a id="orderBy(⇒ O):QueryYield[GroupWithMeasures[K, M]]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderBy</span>
-        
-        <span class="params">(<span name="e1">e1: ⇒ O</span>)</span><span class="result">: <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#orderByClause" data-isabs="false">
-      <a id="orderByClause:Iterable[ExpressionNode]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">orderByClause</span>
-        
-        <span class="result">: Iterable[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield#queryElements" data-isabs="false">
-      <a id="queryElements:(Option[ExpressionNode], Option[ExpressionNode], Iterable[ExpressionNode], Iterable[ExpressionNode])"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">queryElements</span>
-        
-        <span class="result">: (<span name="scala.Option" class="extype">Option</span>[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>], <span name="scala.Option" class="extype">Option</span>[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>], Iterable[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>], Iterable[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>])</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.GroupWithMeasuresQueryYield" class="extype" href="">GroupWithMeasuresQueryYield</a> → <a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a> → <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#queryElementzz" data-isabs="false">
-      <a id="queryElementzz:org.squeryl.dsl.fsm.QueryElements[_]"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">queryElementzz</span>
-        
-        <span class="result">: org.squeryl.dsl.fsm.QueryElements[_]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#selectClosure" data-isabs="false">
-      <a id="selectClosure:() ⇒ GroupWithMeasures[K, M]"></a>
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol"> 
-        <span class="name">selectClosure</span>
-        
-        <span class="result">: () ⇒ <a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
-      <a id="synchronized[T0](⇒ T0):T0"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">synchronized</span>
-        <span class="tparams">[<span name="T0">T0</span>]</span>
-        <span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
-      <a id="toString():String"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">toString</span>
-        
-        <span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">wait</span>
-        
-        <span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>final </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li visbl="pub" name="org.squeryl.dsl.fsm.BaseQueryYield#whereClause" data-isabs="false">
-      <a id="whereClause:Option[ExpressionNode]"></a>
-      <h4 class="signature">
-      <span class="kind">def</span>
-      <span class="symbol"> 
-        <span class="name">whereClause</span>
-        
-        <span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.squeryl.dsl.ast.ExpressionNode" class="extype" href="../ast/ExpressionNode.html">ExpressionNode</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a></dd></dl></div>
-    </li></ol>
-            </div>
-
-        <div name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.fsm.ComputeStateFromGroupByState" class="extype" href="ComputeStateFromGroupByState.html">ComputeStateFromGroupByState</a>[K, M]</h3>
-            </div><div name="org.squeryl.dsl.fsm.BaseQueryYield" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.fsm.BaseQueryYield" class="extype" href="BaseQueryYield.html">BaseQueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</h3>
-            </div><div name="org.squeryl.dsl.fsm.SelectState" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.fsm.SelectState" class="extype" href="SelectState.html">SelectState</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</h3>
-            </div><div name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.boilerplate.OrderBySignatures" class="extype" href="../boilerplate/OrderBySignatures.html">OrderBySignatures</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</h3>
-            </div><div name="org.squeryl.dsl.QueryYield" class="parent">
-              <h3>Inherited from <a name="org.squeryl.dsl.QueryYield" class="extype" href="../QueryYield.html">QueryYield</a>[<a name="org.squeryl.dsl.GroupWithMeasures" class="extype" href="../GroupWithMeasures.html">GroupWithMeasures</a>[K, M]]</h3>
-            </div><div name="scala.AnyRef" class="parent">
-              <h3>Inherited from AnyRef</h3>
-            </div><div name="scala.Any" class="parent">
-              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
-            </div>
-
       </div>
-      
+
       <div id="tooltip"></div>
-      
+
+      <div id="footer">  </div>
+
+
     </body>
       </html>
