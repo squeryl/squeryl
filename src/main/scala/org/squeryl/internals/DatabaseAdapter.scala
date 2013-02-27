@@ -394,8 +394,6 @@ trait DatabaseAdapter {
   }
 
   def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) { params =>
-    if(s.isLoggingEnabled)
-      s.log(sw.toString)
     fillParamsInto(params, ps)
     ps.executeUpdate
   }
