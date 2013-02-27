@@ -122,10 +122,10 @@ object StatsSchema extends Schema {
     si.id
   }
 
-  def recordEndOfIteration(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
+  def recordEndOfIteration(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
 
     update(statementInvocations)(si =>
-      where(si.id === statementInvocationId)
+      where(si.id === se.uuid)
       set(si.iterationEndTime := Some(iterationEndTime), si.rowCount := Some(rowCount))
     )
   }

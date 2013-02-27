@@ -37,7 +37,7 @@ trait StatisticsListener {
 
   def queryExecuted(se: StatementInvocationEvent): Unit
 
-  def resultSetIterationEnded(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
+  def resultSetIterationEnded(se: StatementInvocationEvent, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean): Unit
 
   def updateExecuted(se: StatementInvocationEvent): Unit
 
