@@ -22,7 +22,7 @@ import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
 import collection.mutable.ArrayBuffer
-import scala.runtime.NonLocalReturnControl
+import scala.util.control.ControlThrowable
 
 
 trait BaseQueryDsl {
@@ -162,7 +162,7 @@ trait QueryDsl
       res
     }
     catch {
-      case e:NonLocalReturnControl[_] => 
+      case e: ControlThrowable =>
       {
         txOk = true
         throw e
