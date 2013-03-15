@@ -207,7 +207,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
         throw new NoSuchElementException("next called with no rows available")
       _nextCalled = false
 
-      if(s.isLoggingEnabled)
+      if(s.isLoggingEnabled && s.logQueryResults)
         s.log(ResultSetUtils.dumpRow(rs))
 
       give(resultSetMapper, rs)

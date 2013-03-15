@@ -39,6 +39,8 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
 
   var logUnclosedStatements = false
 
+  var logQueryResults = true
+
   private val _statements = new ArrayBuffer[Statement]
 
   private val _resultSets = new ArrayBuffer[ResultSet]
