@@ -18,7 +18,7 @@ package org.squeryl
 import annotations.Transient
 import java.sql.SQLException
 
-@scala.annotation.implicitNotFound(msg = "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[{K}]")
+@scala.annotation.implicitNotFound(msg = "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[${K}]")
 trait KeyedEntityDef[-A,K] extends OptionalKeyedEntityDef[A,K]{
   
   def getId(a: A): K
