@@ -125,6 +125,11 @@ trait FieldMapper {
       val sample : Array[Double] = Array(0.0)
       def toWrappedJDBCType(element: Double) : java.lang.Object = new java.lang.Double(element)
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Double] = elements.map(i => i.asInstanceOf[java.lang.Double].toDouble)
+
+    val stringArrayTEF = new ArrayTEF[String, TStringArray] {
+      val sample : Array[String] = Array("")
+      def toWrappedJDBCType(element: String) : java.lang.Object = new java.lang.String(element)
+      def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[String] = elements.map(i => i.asInstanceOf[java.lang.String].toString)
     }
     
     // FIXME: The type soup on this was beyond my patience for now...I think we'll need an ArrayDeOptionizer
@@ -251,6 +256,7 @@ trait FieldMapper {
     register(intArrayTEF)
     register(longArrayTEF)
     register(doubleArrayTEF)
+    register(stringArrayTEF)
 
     val re = enumValueTEF(DummyEnum.DummyEnumerationValue)    
     
