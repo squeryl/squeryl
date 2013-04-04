@@ -44,6 +44,7 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit val doubleArrayTEF = PrimitiveTypeSupport.doubleArrayTEF
   implicit val intArrayTEF = PrimitiveTypeSupport.intArrayTEF
   implicit val longArrayTEF = PrimitiveTypeSupport.longArrayTEF
+  implicit val stringArrayTEF = PrimitiveTypeSupport.stringArrayTEF
   
   // =========================== Numerical Integral =========================== 
   implicit val byteTEF = PrimitiveTypeSupport.byteTEF
@@ -107,5 +108,6 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit def doubleArrayToTE(f : Array[Double]) = doubleArrayTEF.create(f)
   implicit def intArrayToTE(f : Array[Int]) = intArrayTEF.create(f)
   implicit def longArrayToTE(f : Array[Long]) = longArrayTEF.create(f)
+  implicit def stringArrayToTE(f: Array[String]) = stringArrayTEF.create(f)
   
 }

@@ -45,6 +45,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def jdbcIntArrayCreationType = "int4"
   override def jdbcLongArrayCreationType = "int8"
   override def jdbcDoubleArrayCreationType = "float8"
+  override def jdbcStringArrayCreationType = "varchar"
     
   override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
     foreignKeyTable.name + "FK" + idWithinSchema
