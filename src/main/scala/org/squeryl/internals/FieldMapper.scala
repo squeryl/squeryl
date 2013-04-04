@@ -125,6 +125,7 @@ trait FieldMapper {
       val sample : Array[Double] = Array(0.0)
       def toWrappedJDBCType(element: Double) : java.lang.Object = new java.lang.Double(element)
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Double] = elements.map(i => i.asInstanceOf[java.lang.Double].toDouble)
+    }
 
     val stringArrayTEF = new ArrayTEF[String, TStringArray] {
       val sample : Array[String] = Array("")
