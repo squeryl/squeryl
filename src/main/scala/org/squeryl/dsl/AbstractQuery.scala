@@ -23,6 +23,7 @@ import org.squeryl.{View, Queryable, Session, Query}
 import collection.mutable.ArrayBuffer
 import org.squeryl.logging._
 import java.io.Closeable
+import org.squeryl.ccast.CQueryExpressionNode
 
 abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
@@ -122,6 +123,9 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
   def createCopy(asRoot:Boolean): AbstractQuery[R]
 
   def dumpAst = ast.dumpAst
+  
+  def ccast: CQueryExpressionNode = 
+    ast.ast2TableOrQuery
 
   def statement: String = _genStatement(true)
 

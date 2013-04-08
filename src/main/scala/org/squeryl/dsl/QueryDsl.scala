@@ -353,6 +353,8 @@ trait QueryDsl
     def dumpAst = _inner.dumpAst
 
     def ast = _inner.ast
+    
+    def ccast = _inner.ccast
 
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       _inner.invokeYield(rsm, rs).measures
@@ -385,6 +387,8 @@ trait QueryDsl
     def statement: String = q.statement
     
     def ast = q.ast
+    
+    def ccast = q.ccast
 
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs).measures

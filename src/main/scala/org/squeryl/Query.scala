@@ -18,6 +18,8 @@ package org.squeryl
 import dsl.ast.{ExpressionNode}
 import internals.ResultSetMapper
 import java.sql.ResultSet
+import ccast._
+
 
 trait Query[R] extends Queryable[R] {
   
@@ -26,6 +28,8 @@ trait Query[R] extends Queryable[R] {
   protected[squeryl] def invokeYield(rsm: ResultSetMapper, resultSet: ResultSet): R
 
   def dumpAst: String
+  
+  def ccast: CQueryExpressionNode
 
   /**
    * returns a 'pretty' statement, i.e. values are printed instead of '?'  

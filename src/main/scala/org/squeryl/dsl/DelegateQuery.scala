@@ -19,6 +19,8 @@ class DelegateQuery[M](val q: Query[M]) extends Query[M] {
   def statement: String = q.statement
 
   def ast = q.ast
+  
+  def ccast = q.ccast
 
   protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
     q.invokeYield(rsm, rs)

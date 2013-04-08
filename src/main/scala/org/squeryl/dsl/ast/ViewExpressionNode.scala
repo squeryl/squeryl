@@ -19,10 +19,13 @@ import org.squeryl.dsl._
 import collection.mutable.HashMap
 import org.squeryl.internals.{StatementWriter, ResultSetMapper, FieldMetaData}
 import org.squeryl.{Session, View}
+import org.squeryl.ccast._
 
 class ViewExpressionNode[U](val view: View[U])
   extends QueryableExpressionNode {
 
+  def ast2TableOrQuery = CTable(view.prefix, view.name)
+  
   private val _selectElements = new HashMap[FieldMetaData,SelectElement]
 
   def isChild(q: QueryableExpressionNode) = false

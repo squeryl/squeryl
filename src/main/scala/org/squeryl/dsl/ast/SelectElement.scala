@@ -21,6 +21,7 @@ import java.sql.ResultSet
 import org.squeryl.Session
 import org.squeryl.dsl.TypedExpression
 import scala.annotation.tailrec
+import org.squeryl.ccast._
 
 /**
  * SelectElement are elements of a select list, for example they are a,b, and c in :
@@ -61,7 +62,7 @@ trait SelectElement extends ExpressionNode {
 
   def resultSetMapper: ResultSetMapper
 
-  def alias: String
+  def alias: String  
 
   def aliasSegment: String =
     alias
@@ -121,6 +122,8 @@ trait SelectElement extends ExpressionNode {
     sw.write(" as ")
     sw.databaseAdapter.writeSelectElementAlias(this, sw)
   }
+  
+  def ast2SelectElement: CSelectElement = Utils.throwError("not implemented")
 }
 
 class TupleSelectElement
@@ -152,7 +155,7 @@ class TupleSelectElement
       columnToTupleMapper.get.activate(indexInTuple, jdbcIndex)
 
   override def toString =
-    'TupleSelectElement + ":" + indexInTuple + ":" + writeToString
+    'TupleSelectElement + ":" + indexInTuple + ":" + writeToString    
 }
 
 class FieldSelectElement
@@ -196,6 +199,12 @@ class FieldSelectElement
   override def toString =
     'FieldSelectElement + ":" +
        Utils.failSafeString(alias, fieldMetaData.nameOfProperty)
+       
+  override def ast2SelectElement = CFieldSelectElement(
+    CTable(origin.view.prefix, origin.view.name),
+    fieldMetaData.columnName,
+    ResultSetCol(0, fieldMetaData.fieldType))
+
 }
 
 class ValueSelectElement
@@ -238,6 +247,14 @@ class SelectElementReference[A,T]
   override def toString =
     'SelectElementReference + ":" + Utils.failSafeString(delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 
+    //selectElement: CSelectElement, resultSetCol: ResultSetCol
+    
+  def ast2SelectElement = 
+    CSelectElementReference(selectElement.ast2SelectElement, 
+      ResultSetCol(mapper.index, mapper.jdbcClass))
+      
+  override def ccast = ast2SelectElement
+    
   override def inhibited =
     selectElement.inhibited
 
@@ -297,6 +314,10 @@ class ExportedSelectElement
 
   def origin = selectElement.origin
 
+  override def ast2SelectElement = CExportedSelectElement(selectElement.ast2SelectElement)
+  
+  override def ccast = ast2SelectElement
+  
   val expression = new ExpressionNode {
 
     def doWrite(sw: StatementWriter) =

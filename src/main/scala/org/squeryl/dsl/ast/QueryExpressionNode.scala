@@ -18,6 +18,7 @@ package org.squeryl.dsl.ast
 import org.squeryl.internals._
 import org.squeryl.dsl.{QueryYield, AbstractQuery}
 import scala.collection.mutable.ListBuffer
+import org.squeryl.ccast._
 
 class QueryExpressionNode[R](_query: AbstractQuery[R],
                              _queryYield:QueryYield[R],
@@ -26,6 +27,12 @@ class QueryExpressionNode[R](_query: AbstractQuery[R],
   extends QueryExpressionElements
     with QueryableExpressionNode {
 
+  def ast2TableOrQuery =         
+    CQueryExpressionNode(
+        selectList.map(_.ast2SelectElement).toSeq,
+        tableExpressions.map(_.ast2TableOrQuery).toSeq,
+        whereClause.map(_.ccast: CExpressionNode))  
+  
   def tableExpressions: Iterable[QueryableExpressionNode] = 
     List(views.filter(v => ! v.inhibited),
          subQueries.filter(v => ! v.inhibited)).flatten

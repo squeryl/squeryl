@@ -22,9 +22,12 @@ import org.squeryl.dsl._
 import org.squeryl.{Query, Schema, Session}
 import javax.management.RuntimeErrorException
 import java.sql.ResultSet
+import org.squeryl.ccast._
 
 trait ExpressionNode {
 
+  def ccast: CExpressionNode = Utils.throwError("not implemented")
+  
   var parent: Option[ExpressionNode] = None
 
   def id = Integer.toHexString(System.identityHashCode(this))
@@ -304,6 +307,9 @@ class ConstantTypedExpression[A1,T1](val value: A1, override val mapper: OutMapp
     }
   }
   override def toString = 'ConstantTypedExpression + ":" + value
+  
+    override def ccast = 
+    	new CConstantTypedExpression(value, mapper.jdbcClass)
 }
 
 class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode {
@@ -364,6 +370,9 @@ class BinaryOperatorNode
 
   override def toString =
     'BinaryOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
+    
+  override def ccast = 
+    new CBinaryOperatorNode(left.ccast, right.ccast, operatorToken): CExpressionNode 
   
   def doWrite(sw: StatementWriter) = {
     sw.write("(")
@@ -452,6 +461,8 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
 
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement]
 
+  def ast2TableOrQuery: CTableOrQuery
+  
   def dumpAst = {
     val sb = new StringBuffer
     visitDescendants {(n,parent,d:Int) =>
