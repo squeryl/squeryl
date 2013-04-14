@@ -45,6 +45,14 @@ trait DatabaseAdapter {
   def writeQuery(qen: QueryExpressionElements, sw: StatementWriter):Unit =
     writeQuery(qen, sw, false, None)
 
+  /**
+   * Should we verify that when we delete by primary key the JDBC driver reports
+   * that no more than one row was affected?  MonetDB in particular seems to
+   * act badly here
+   * @return true if we should throw an exception if the driver reports more than 1 affected row
+   */
+  def verifyDeleteByPK: Boolean = true
+
   protected def writeQuery(qen: QueryExpressionElements, sw: StatementWriter, inverseOrderBy: Boolean, topHint: Option[String]):Unit = {
 
     sw.write("Select")

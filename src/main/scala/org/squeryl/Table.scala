@@ -308,8 +308,9 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       z.map(x => _callbacks.afterDelete(x.asInstanceOf[AnyRef]))
     }
 
-    assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
-    deleteCount == 1
+    if(Session.currentSessionOption map { ses => ses.databaseAdapter.verifyDeleteByPK } getOrElse true)
+      assert(deleteCount <= 1, "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount)
+    deleteCount > 0
   }
 
   /**
