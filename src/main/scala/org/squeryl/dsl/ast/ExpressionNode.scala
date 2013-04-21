@@ -282,7 +282,7 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 
 class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, NoOpOutMapper, v.asInstanceOf[AnyRef])
 
-class ConstantTypedExpression[A1,T1](val value: A1, override val mapper: OutMapper[A1], nativeJdbcValue: AnyRef) extends TypedExpression[A1,T1] {
+class ConstantTypedExpression[A1,T1](val value: A1, override val mapper: OutMapper[A1], val nativeJdbcValue: AnyRef) extends TypedExpression[A1,T1] {
 
   private def needsQuote = value.isInstanceOf[String]
 
@@ -317,7 +317,9 @@ class ConstantExpressionNodeList[T](val value: Traversable[T], mapper: OutMapper
       sw.write(ConstantExpressionNodeList.this.value.map(e=>"'" +e+"'").mkString(","))
     else {
       sw.write(ConstantExpressionNodeList.this.value.toSeq.map(z => "?").mkString(","))
-      ConstantExpressionNodeList.this.value.foreach(z => sw.addParam(ConstantExpressionNodeListParam(ConstantExpressionNodeList.this)))
+      ConstantExpressionNodeList.this.value.foreach(z => 
+        sw.addParam(ConstantExpressionNodeListParam(z.asInstanceOf[AnyRef], ConstantExpressionNodeList.this))
+      )
     }
 }
 

@@ -124,7 +124,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       val st = sess.connection.prepareStatement(sw.statement)
 
       try {
-        dba.fillParamsInto(dba.convertParamsForJdbc(sw.paramsZ), st)
+        dba.fillParamsInto(sw.params, st)
         st.addBatch
 
         var updateCount = 1
@@ -141,7 +141,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
           var idx = 1
           fmds.foreach(fmd => {
-            st.setObject(idx, dba.convertToJdbcValue(fmd.getNativeJdbcValue(eN)))
+            dba.setParamInto(st, FieldStatementParam(eN, fmd), idx)            
             idx += 1
           })
           st.addBatch

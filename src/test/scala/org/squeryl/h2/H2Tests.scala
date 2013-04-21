@@ -7,6 +7,15 @@ import org.squeryl.adapters.H2Adapter
 
 import org.squeryl.Session
 
+/*
+ * To run on command line : 
+ * 
+ * org.scalatest.tools.Runner -s org.squeryl.h2.H2_SchoolDb -eNDXEHLOW
+ * 
+ * org.scalatest.tools.Runner -s org.squeryl.h2.H2_SchoolDb -eNDXEHLOW -n SingleTestRun
+ * 
+ * */
+
 trait H2_Connection extends DBConnector{
   def connectToDb() : Option[() => Session] = {
     if(config.hasProps("h2.connectionString", "h2.user", "h2.password")){

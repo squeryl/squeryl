@@ -40,7 +40,7 @@ case class FieldStatementParam(v: AnyRef, fmd: FieldMetaData) extends StatementP
  * type inferencer doesn't like it, so I grab the mapper that is available, which is JDBC compatible, so in practive it should work 
  * all the time...
  * */
-case class ConstantExpressionNodeListParam(v: ConstantExpressionNodeList[_]) extends StatementParam
+case class ConstantExpressionNodeListParam(v: AnyRef, l: ConstantExpressionNodeList[_]) extends StatementParam
 
 class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAdapter) {
   outer =>
@@ -66,7 +66,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     override def addParam(p: StatementParam) = outer.addParam(p)
   }
 
-  def paramsZ: Iterable[StatementParam] = _paramList
+  def params: Iterable[StatementParam] = _paramList
 
   private val _stringBuilder = new StringBuilder(256)
 

@@ -387,7 +387,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
   }
 
-  test("EqualCountInSubQuery", SingleTestRun){
+  test("EqualCountInSubQuery"){
     val testInstance = sharedTestInstance; import testInstance._
 
     val q =
@@ -472,6 +472,17 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testKeyedEntityIdRenaming)
   }
 
+  test("update to null", SingleTestRun) {
+    val testInstance = sharedTestInstance; import testInstance._
+          
+    val rejan = students.insert(new Student("Réjean", "Plourde", Some(24), 2, Some(oneHutchissonStreet.id), Some(true)))
+    
+    update(students)(p =>
+      where(p.id === rejan.id)
+      set(p.isMultilingual := None)
+    )
+  }
+  
   test("DeepNest2"){
     val testInstance = sharedTestInstance; import testInstance._
 
@@ -592,7 +603,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   
   def query(q: String, a: Any*) = new RawQuery(q, a)
   
-  test("raw sql", SingleTestRun) {
+  test("raw sql") {
 
     val r = 
       query("select s.* from t_student s where s.name = ? and s.age = ?", 
@@ -605,7 +616,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     }    
   }
   
-  test("raw sql to Tuple", SingleTestRun) {
+  test("raw sql to Tuple") {
     
     val (name, age) = 
       query("select s.name, s.age from t_student s where s.name = 'Xiao' and s.age = 24").

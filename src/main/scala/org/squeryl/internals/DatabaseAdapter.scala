@@ -290,29 +290,26 @@ trait DatabaseAdapter {
     }
     sw.write(")")
   }                     
-
-  //TODO: remove
-  def convertParamsForJdbc(params: Iterable[StatementParam]): Iterable[StatementParam] = params 
-/*  
-  =
-    for(p <- params) yield {
-       p match {
-         case null => null	        
-	     case None => null
-	     case Some(x: AnyRef) => convertToJdbcValue(x)
-	     case x: AnyRef =>  convertToJdbcValue(x)
-	   }     
-    }
-*/        
-  def fillParamsInto(params: Iterable[AnyRef], s: PreparedStatement) {    
+     
+  def fillParamsInto(params: Iterable[StatementParam], s: PreparedStatement) {    
     var i = 1;
     for(p <- params) {
-      s.setObject(i, p)
+      setParamInto(s, p, i)
       i += 1
     }    
   }
+  
+  def setParamInto(s: PreparedStatement, p: StatementParam, i: Int) =
+    p match {
+    	case ConstantStatementParam(constantTypedExpression) =>
+    	  s.setObject(i, convertToJdbcValue(constantTypedExpression.nativeJdbcValue))
+    	case FieldStatementParam(o, fieldMetaData) =>
+    	  s.setObject(i, convertToJdbcValue(fieldMetaData.get(o)))
+    	case ConstantExpressionNodeListParam(v, constantExpressionNodeList) =>
+    	  s.setObject(i, convertToJdbcValue(v))
+    }
 
-  private def _exec[A](s: Session, sw: StatementWriter, block: Iterable[AnyRef]=>A, args: Iterable[AnyRef]): A =
+  private def _exec[A](s: Session, sw: StatementWriter, block: Iterable[StatementParam]=>A, args: Iterable[StatementParam]): A =
     try {
       if(s.isLoggingEnabled)
         s.log(sw.toString)      
@@ -370,9 +367,8 @@ trait DatabaseAdapter {
     sw
   }
 
-  protected def exec[A](s: Session, sw: StatementWriter)(block: Iterable[AnyRef]=>A): A = {
-    val p = convertParamsForJdbc(sw.paramsZ)
-    _exec[A](s, sw, block, p)
+  protected def exec[A](s: Session, sw: StatementWriter)(block: Iterable[StatementParam] => A): A = {
+    _exec[A](s, sw, block, sw.params)
   }
 
   protected def prepareStatement(conn: Connection, statement: String): PreparedStatement =
@@ -432,7 +428,12 @@ trait DatabaseAdapter {
    * a CustomType
    */
   def convertToJdbcValue(r: AnyRef) : AnyRef = {
+    
+    if(r == null)
+      return r
+      
     var v = r
+        
     if(v.isInstanceOf[Product1[_]])
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
 
