@@ -230,7 +230,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
             fields = Some(ck._fields.toList)
 
-            new EqualityExpression(new InputOnlyConstantExpressionNode(1), new InputOnlyConstantExpressionNode(1))
+            new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))
           })
 
           fields getOrElse (internals.Utils.throwError("No PK fields found"))

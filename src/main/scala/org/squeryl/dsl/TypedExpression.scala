@@ -301,8 +301,10 @@ trait TypedExpressionFactory[A,T] {
     }
   
   def createConstant(a: A) =
-    new ConstantTypedExpression[A,T](a, createOutMapper, thisAnyRefMapper.convertToJdbc(a))
+    new ConstantTypedExpression[A,T](a, thisAnyRefMapper.convertToJdbc(a), Some(this))
     
+  def jdbcSample = 
+    thisAnyRefMapper.convertToJdbc(sample)
   /**
    * Converts the argument into a TypedExpression[A,T], the resulting expression
    * is meant to be equivalent in terms of SQL generation, the conversion is only

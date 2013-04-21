@@ -302,9 +302,16 @@ trait DatabaseAdapter {
   def setParamInto(s: PreparedStatement, p: StatementParam, i: Int) =
     p match {
     	case ConstantStatementParam(constantTypedExpression) =>
-    	  s.setObject(i, convertToJdbcValue(constantTypedExpression.nativeJdbcValue))
+    	  
+    	  val t = jdbcTypeConstantFor(constantTypedExpression.jdbcClass)
+    	  
+    	  s.setObject(i, convertToJdbcValue(constantTypedExpression.nativeJdbcValue), t)
     	case FieldStatementParam(o, fieldMetaData) =>
-    	  s.setObject(i, convertToJdbcValue(fieldMetaData.get(o)))
+    	  
+    	  val t = jdbcTypeConstantFor(fieldMetaData.nativeJdbcType)
+    	  
+    	  s.setObject(i, convertToJdbcValue(fieldMetaData.get(o)), t)
+    	  
     	case ConstantExpressionNodeListParam(v, constantExpressionNodeList) =>
     	  s.setObject(i, convertToJdbcValue(v))
     }
@@ -531,7 +538,7 @@ trait DatabaseAdapter {
           val fieldWhere = ck._fields map (fmd => quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw))
           sw.write(fieldWhere.mkString(" and "))
 
-          new EqualityExpression(new InputOnlyConstantExpressionNode(1), new InputOnlyConstantExpressionNode(1))
+          new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))
         })
       }
     )
@@ -868,5 +875,26 @@ trait DatabaseAdapter {
     sw.unindent
     sw.write("end)")
   }
-*/  
+*/
+  
+  def jdbcTypeConstantFor(c: Class[_]) =
+    c.getCanonicalName match {
+		case "java.lang.String" => Types.VARCHAR
+		case "java.math.BigDecimal" => Types.DECIMAL
+		case "java.lang.Boolean" => Types.BIT
+		case "java.lang.Byte" => Types.TINYINT
+		case "java.lang.Integer" => Types.INTEGER
+		case "java.lang.Long" => Types.BIGINT
+		case "java.lang.Float" => Types.FLOAT
+		case "java.lang.Double" => Types.DOUBLE
+		case "java.lang.Byte[]" => Types.BINARY
+		case "byte[]" => Types.BINARY
+		case "java.sql.Date" => Types.DATE
+		case "java.util.Date" => Types.DATE
+		case "java.sql.Timestamp" => Types.TIMESTAMP
+		case "java.util.UUID" => Types.VARCHAR
+		case "scala.math.BigDecimal" => Types.VARCHAR
+		case s:Any =>
+		  throw new RuntimeException("Don't know jdbc type for " + s)
+  }  
 }

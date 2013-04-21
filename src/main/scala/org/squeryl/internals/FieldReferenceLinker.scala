@@ -21,6 +21,7 @@ import org.squeryl.dsl.ast._
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.dsl.TypedExpression
 import java.lang.reflect.{Field, Method}
+import org.squeryl.InternalFieldMapper
 
 object FieldReferenceLinker {
 
@@ -174,7 +175,7 @@ object FieldReferenceLinker {
 
   def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c: Any): LogicalBoolean = {
     val fr = _takeLastAccessedUntypedFieldReference
-
+    
     new BinaryOperatorNodeLogicalBoolean(
       fr,
       new InputOnlyConstantExpressionNode(c),

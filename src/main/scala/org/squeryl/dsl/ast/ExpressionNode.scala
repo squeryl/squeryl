@@ -280,12 +280,24 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 }
 
 
-class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, NoOpOutMapper, v.asInstanceOf[AnyRef])
+class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, v.asInstanceOf[AnyRef], None)
 
-class ConstantTypedExpression[A1,T1](val value: A1, override val mapper: OutMapper[A1], val nativeJdbcValue: AnyRef) extends TypedExpression[A1,T1] {
+class ConstantTypedExpression[A1,T1](val value: A1, val nativeJdbcValue: AnyRef, i: Option[TypedExpressionFactory[A1,_]]) extends TypedExpression[A1,T1] {
 
   private def needsQuote = value.isInstanceOf[String]
 
+  override def mapper: OutMapper[A1] = i.get.createOutMapper
+  
+  override def sample = 
+    if(value != null) value
+    else i.get.sample
+
+  def jdbcClass = 
+    i.map(_.jdbcSample).getOrElse(nativeJdbcValue).getClass
+    
+    if(nativeJdbcValue != null) nativeJdbcValue.getClass
+    else mapper.jdbcClass
+    
   def doWrite(sw: StatementWriter) = {
     if(sw.isForDisplay) {      
       sw.write(displayAsString)
