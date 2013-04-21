@@ -17,6 +17,8 @@ package org.squeryl.internals
 
 import org.squeryl.dsl.ast.{ExpressionNode}
 import collection.mutable.{HashSet, HashMap, ArrayBuffer}
+import org.squeryl.dsl.ast.ConstantTypedExpression
+import org.squeryl.dsl.ast.ConstantExpressionNodeList
 
 /**
  * @arg isForDisplay: when true, users of StatementWriter should write
@@ -24,6 +26,22 @@ import collection.mutable.{HashSet, HashMap, ArrayBuffer}
  *   otherwise a jdbc param declarations '?' should be written, and
  *   the param values should be accumulated with addParam(s)
  */
+
+trait StatementParam
+
+case class ConstantStatementParam(p: ConstantTypedExpression[_,_]) extends StatementParam
+case class FieldStatementParam(v: AnyRef, fmd: FieldMetaData) extends StatementParam
+/*
+ * ParamWithMapper is a workadound to accomodate the ConstantExpressionNodeList, ideally 'in' and 'notIn' would grab the TEF in scope :
+ * 
+ * def in[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2], tef: TypedExpressionFactory[A2,T2]): LogicalBoolean =  
+ *   new InclusionOperator(this, new RightHandSideOfIn(new zConstantExpressionNodeList(t, mapper)).toIn)
+ * 
+ * type inferencer doesn't like it, so I grab the mapper that is available, which is JDBC compatible, so in practive it should work 
+ * all the time...
+ * */
+case class ConstantExpressionNodeListParam(v: ConstantExpressionNodeList[_]) extends StatementParam
+
 class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAdapter) {
   outer =>
 
@@ -31,7 +49,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   val scope = new HashSet[String]
 
-  protected val _paramList = new ArrayBuffer[AnyRef]
+  protected val _paramList = new ArrayBuffer[StatementParam]
 
   /**
    * a surrogate writer will accumulate text within itself (not the parent)
@@ -45,16 +63,16 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     
     override def surrogate = outer.surrogate
 
-    override def addParam(p: AnyRef) = outer.addParam(p)
+    override def addParam(p: StatementParam) = outer.addParam(p)
   }
 
-  def paramsZ: Iterable[AnyRef] = _paramList
+  def paramsZ: Iterable[StatementParam] = _paramList
 
   private val _stringBuilder = new StringBuilder(256)
 
   def statement = _stringBuilder.toString
 
-  def addParam(p: AnyRef) = _paramList.append(p)
+  def addParam(p: StatementParam) = _paramList.append(p)
 
   override def toString =
     if(_paramList.size == 0)

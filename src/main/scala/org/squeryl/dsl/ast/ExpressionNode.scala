@@ -287,36 +287,37 @@ class ConstantTypedExpression[A1,T1](val value: A1, override val mapper: OutMapp
   private def needsQuote = value.isInstanceOf[String]
 
   def doWrite(sw: StatementWriter) = {
-    if(sw.isForDisplay) {
-      if(value == null)
-        sw.write("null")
-      else if(needsQuote) {
-        sw.write("'")
-        sw.write(value.toString)
-        sw.write("'")
-      }
-      else
-        sw.write(value.toString)
+    if(sw.isForDisplay) {      
+      sw.write(displayAsString)
     }
     else {
       sw.write("?")
-      sw.addParam(nativeJdbcValue)
+      sw.addParam(ConstantStatementParam(this))
     }
   }
+    
+  def displayAsString =
+      if(value == null)
+        "null"
+      else if(needsQuote)
+        "'" + value.toString + "'"      
+      else
+        value.toString    
+  
   override def toString = 'ConstantTypedExpression + ":" + value
 }
 
-class ConstantExpressionNodeList[T](val value: Traversable[T]) extends ExpressionNode {
+class ConstantExpressionNodeList[T](val value: Traversable[T], mapper: OutMapper[_]) extends ExpressionNode {
 
   def isEmpty =
     value == Nil
 
   def doWrite(sw: StatementWriter) =
     if(sw.isForDisplay)
-      sw.write(this.value.map(e=>"'" +e+"'").mkString(","))
+      sw.write(ConstantExpressionNodeList.this.value.map(e=>"'" +e+"'").mkString(","))
     else {
-      sw.write(this.value.toSeq.map(z => "?").mkString(","))
-      this.value.foreach(z => sw.addParam(z.asInstanceOf[AnyRef]))
+      sw.write(ConstantExpressionNodeList.this.value.toSeq.map(z => "?").mkString(","))
+      ConstantExpressionNodeList.this.value.foreach(z => sw.addParam(ConstantExpressionNodeListParam(ConstantExpressionNodeList.this)))
     }
 }
 

@@ -290,8 +290,11 @@ trait DatabaseAdapter {
     }
     sw.write(")")
   }                     
-  
-  def convertParamsForJdbc(params: Iterable[AnyRef]) =
+
+  //TODO: remove
+  def convertParamsForJdbc(params: Iterable[StatementParam]): Iterable[StatementParam] = params 
+/*  
+  =
     for(p <- params) yield {
        p match {
          case null => null	        
@@ -300,7 +303,7 @@ trait DatabaseAdapter {
 	     case x: AnyRef =>  convertToJdbcValue(x)
 	   }     
     }
-        
+*/        
   def fillParamsInto(params: Iterable[AnyRef], s: PreparedStatement) {    
     var i = 1;
     for(p <- params) {
@@ -448,10 +451,9 @@ trait DatabaseAdapter {
 //    if(v.isInstanceOf[java.lang.Boolean])
 //      v = convertFromBooleanForJdbc(v)
   
-  // TODO: move to StatementWriter (since it encapsulates the 'magic' of swapping values for '?' when needed)
-  //and consider delaying the ? to 'value' decision until execution, in order to make StatementWriter loggable
-  //with values at any time (via : a kind of prettyStatement method)
-  protected def writeValue(o: AnyRef, fmd: FieldMetaData, sw: StatementWriter):String =
+
+  //TODO: move to StatementWriter ?
+  protected def writeValue(o: AnyRef, fmd: FieldMetaData, sw: StatementWriter): String =         
     if(sw.isForDisplay) {
       val v = fmd.getNativeJdbcValue(o)
       if(v != null)
@@ -460,9 +462,9 @@ trait DatabaseAdapter {
         "null"
     }
     else {
-      sw.addParam(convertToJdbcValue(fmd.getNativeJdbcValue(o)))
+      sw.addParam(FieldStatementParam(o, fmd))
       "?"
-    }
+    }  
 
 //  protected def writeValue(sw: StatementWriter, v: AnyRef):String =
 //    if(sw.isForDisplay) {
@@ -719,7 +721,7 @@ trait DatabaseAdapter {
     sw.write("(")
     left.write(sw)
     sw.write(" ~ ?)")
-    sw.addParam(pattern)
+    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))    
   }
 
   def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {

@@ -23,6 +23,8 @@ import collection.Set
 import collection.immutable.List
 import collection.mutable.HashSet
 import org.squeryl.internals.{FieldMetaData, StatementWriter, DatabaseAdapter}
+import org.squeryl.internals.ConstantStatementParam
+import org.squeryl.InternalFieldMapper
 
 
 class OracleAdapter extends DatabaseAdapter {
@@ -218,7 +220,7 @@ class OracleAdapter extends DatabaseAdapter {
     sw.write(" REGEXP_LIKE(")
     left.write(sw)
     sw.write(",?)")
-    sw.addParam(pattern)
+    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))    
   }
 
   override def fieldAlias(n: QueryableExpressionNode, fse: FieldSelectElement) =

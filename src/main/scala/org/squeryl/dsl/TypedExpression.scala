@@ -173,13 +173,13 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
   
   
   def in[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =  
-    new InclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toIn)  
+    new InclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t, mapper)).toIn)  
   
   def in[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =
     new InclusionOperator(this, new RightHandSideOfIn(q.copy(false).ast))
   
   def notIn[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =  
-    new ExclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toNotIn)
+    new ExclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t, mapper)).toNotIn)
   
   def notIn[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =
     new ExclusionOperator(this, new RightHandSideOfIn(q.copy(false).ast))
@@ -295,10 +295,14 @@ trait TypedExpressionFactory[A,T] {
   def create(a: A) : TypedExpression[A,T] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case None =>
-        new ConstantTypedExpression[A,T](a, createOutMapper, thisAnyRefMapper.convertToJdbc(a))
+        createConstant(a)
       case Some(n:SelectElement) =>
         new SelectElementReference[A,T](n, createOutMapper)
     }
+  
+  def createConstant(a: A) =
+    new ConstantTypedExpression[A,T](a, createOutMapper, thisAnyRefMapper.convertToJdbc(a))
+    
   /**
    * Converts the argument into a TypedExpression[A,T], the resulting expression
    * is meant to be equivalent in terms of SQL generation, the conversion is only

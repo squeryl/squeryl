@@ -19,6 +19,8 @@ import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
 import org.squeryl.dsl.ast.{BinaryOperatorNode, ExpressionNode}
+import org.squeryl.internals.ConstantStatementParam
+import org.squeryl.InternalFieldMapper
 
 class MySQLAdapter extends DatabaseAdapter {
 
@@ -99,8 +101,8 @@ class MySQLAdapter extends DatabaseAdapter {
   override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
-    sw.write(" regexp ?)")
-    sw.addParam(pattern)
+    sw.write(" regexp ?)")    
+    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))    
   }
 
   override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
