@@ -303,15 +303,12 @@ trait DatabaseAdapter {
     p match {
     	case ConstantStatementParam(constantTypedExpression) =>
     	  
-    	  val t = jdbcTypeConstantFor(constantTypedExpression.jdbcClass)
-    	  
-    	  s.setObject(i, convertToJdbcValue(constantTypedExpression.nativeJdbcValue), t)
+    	  //val t = jdbcTypeConstantFor(constantTypedExpression.jdbcClass)    	  
+    	  s.setObject(i, convertToJdbcValue(constantTypedExpression.nativeJdbcValue))
     	case FieldStatementParam(o, fieldMetaData) =>
     	  
-    	  val t = jdbcTypeConstantFor(fieldMetaData.nativeJdbcType)
-    	  
-    	  s.setObject(i, convertToJdbcValue(fieldMetaData.get(o)), t)
-    	  
+    	  //val t = jdbcTypeConstantFor(fieldMetaData.nativeJdbcType)    	  
+    	  s.setObject(i, convertToJdbcValue(fieldMetaData.get(o)))    	  
     	case ConstantExpressionNodeListParam(v, constantExpressionNodeList) =>
     	  s.setObject(i, convertToJdbcValue(v))
     }
