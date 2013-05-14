@@ -19,7 +19,9 @@ package org.squeryl.dsl.ast
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.dsl._
-import org.squeryl.{Query, Schema, Session}
+
+import org.squeryl.dsl._
+import org.squeryl.{Query, KeyedEntity, Schema, Session, PrimitiveTypeMode}
 import javax.management.RuntimeErrorException
 import java.sql.ResultSet
 
@@ -197,9 +199,58 @@ class TernaryOperatorNode(val first: ExpressionNode, val second: ExpressionNode,
 
 trait LogicalBoolean extends ExpressionNode  {
 
-  def and(b: LogicalBoolean) = new BinaryOperatorNodeLogicalBoolean(this, b, "and")
-  def or(b: LogicalBoolean) = new BinaryOperatorNodeLogicalBoolean(this, b, "or")
+  def and(b: LogicalBoolean): LogicalBoolean
+          = new BinaryOperatorNodeLogicalBoolean(this, b, "and")
+
+  def or(b: LogicalBoolean): LogicalBoolean
+          = new BinaryOperatorNodeLogicalBoolean(this, b, "or")
 }
+
+trait ConstantLogicalBoolean extends LogicalBoolean
+{
+}
+
+class TrueLogicalBoolean extends ConstantLogicalBoolean
+{
+
+  override def and (b: LogicalBoolean) = b;
+
+  override def or( b: LogicalBoolean) = this;
+
+  override def doWrite(sw: StatementWriter):Unit = 
+    sw.write("(1=1)");
+
+}
+
+class FalseLogicalBoolean extends ConstantLogicalBoolean
+{
+
+  override def doWrite(sw: StatementWriter) = 
+   {  
+     sw.write("(1=0)");
+   } 
+
+  override def and (b: LogicalBoolean) = this;
+
+  override def or( b: LogicalBoolean) = b;
+
+
+}
+
+object LogicalBoolean
+{
+
+  def and(conditions: Seq[LogicalBoolean]):LogicalBoolean =
+   conditions.fold(True)((x,c) => (x and c));
+
+  def or(conditions: Seq[LogicalBoolean]): LogicalBoolean =
+   conditions.fold(False)((x,c) => (x or c));
+
+  def True = new TrueLogicalBoolean();
+  def False = new FalseLogicalBoolean();
+
+}
+
 
 
 class UpdateAssignment(val left: FieldMetaData, val right: ExpressionNode)

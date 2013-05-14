@@ -41,3 +41,5 @@ class MSSQL_LeftJoinTest extends LeftJoinTest with MSSQL_Connection
 //class MSSQL_ConnectionClosing extends ConnectionClosingTest with MSSQL_Connection {
 //  def dbSpecificSelectNow: String = "SELECT CURRENT_TIMESTAMP"
 //}
+
+class MSSQL_LogicalBooleanObjTests extends LogicalBooleanObjTests with MSSQL_Connection

@@ -45,4 +45,5 @@ class Postgresql_ConnectionClosing extends ConnectionClosingTest with Postgresql
 }
 
 
+class Postgresql_LogicalBooleanObjTests extends LogicalBooleanObjTests with Postgresql_Connection
 
