@@ -18,7 +18,7 @@ package org.squeryl.internals
 
 import java.lang.Class
 import java.lang.annotation.Annotation
-import net.sf.cglib.proxy.{Factory, Callback, Enhancer}
+import net.sf.cglib.proxy.{Factory, Callback, CallbackFilter, Enhancer, NoOp}
 import java.lang.reflect.{Member, Constructor, Method, Field, Modifier}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
@@ -222,9 +222,9 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     (callB:Callback) => {
 
-      val cb = new Array[Callback](1)
-      cb(0) = callB
-      e.setCallback(callB)
+      val cb = Array[Callback](callB, NoOp.INSTANCE)
+      e.setCallbacks(cb)
+      e.setCallbackFilter(PosoMetaData.finalizeFilter)
       //TODO : are we creating am unnecessary instance ?  
       val fac = e.create(pc , constructor._2).asInstanceOf[Factory]
 
@@ -320,6 +320,13 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     if(c != null)
       _fillWithMembers(c, members)
+  }
+}
+
+object PosoMetaData {
+  val finalizeFilter = new CallbackFilter {
+    def accept(method: Method): Int =
+      if (method.getName == "finalize") 1 else 0
   }
 }
 
