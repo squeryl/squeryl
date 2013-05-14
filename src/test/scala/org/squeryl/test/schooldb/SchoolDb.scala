@@ -602,11 +602,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
   def query(q: String, a: Any*) = new RawQuery(q, a)
-  
+/*
   test("raw sql") {
 
     val r = 
-      query("select s.* from t_student s where s.name = ? and s.age = ?", 
+      query("select s.* from student s where s.name = ? and s.age = ?",
             "Xiao", 24).
         toSeq(students)
 
@@ -619,14 +619,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("raw sql to Tuple") {
     
     val (name, age) = 
-      query("select s.name, s.age from t_student s where s.name = 'Xiao' and s.age = 24").
+      query("select s.name, s.age from student s where s.name = 'Xiao' and s.age = 24").
         toTuple[String,Int]
     
     assert(name == "Xiao")
         
     assert(age == 24)
   }
-  
+*/
   test("InOpWithStringList"){
     val testInstance = sharedTestInstance; import testInstance._
     val r =

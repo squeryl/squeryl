@@ -192,16 +192,19 @@ trait DatabaseAdapter {
   def intArrayTypeDeclaration = intTypeDeclaration + "[]"
   def longArrayTypeDeclaration = longTypeDeclaration + "[]"
   def doubleArrayTypeDeclaration = doubleTypeDeclaration + "[]"
-    
+
+  def stringArrayTypeDeclaration = stringTypeDeclaration + "[]"
   def jdbcIntArrayCreationType = intTypeDeclaration
   def jdbcLongArrayCreationType = longTypeDeclaration
   def jdbcDoubleArrayCreationType = doubleTypeDeclaration
-    
+  def jdbcStringArrayCreationType = stringTypeDeclaration
+
   final def arrayCreationType(ptype : Class[_]) : String = {
     val rv = ptype.getName() match {
       case "java.lang.Integer" => jdbcIntArrayCreationType
       case "java.lang.Double" => jdbcDoubleArrayCreationType
       case "java.lang.Long" => jdbcLongArrayCreationType
+      case "java.lang.String" => jdbcStringArrayCreationType
       case _ => ""
     }
     rv
@@ -834,6 +837,8 @@ trait DatabaseAdapter {
         longArrayTypeDeclaration
       else if(classOf[scala.Array[Double]].isAssignableFrom(c))
         doubleArrayTypeDeclaration
+      else if(classOf[scala.Array[String]].isAssignableFrom(c))
+        stringArrayTypeDeclaration
       else
         Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
      
