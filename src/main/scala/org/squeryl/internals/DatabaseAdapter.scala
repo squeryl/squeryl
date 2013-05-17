@@ -317,7 +317,7 @@ trait DatabaseAdapter {
     	  s.setObject(i, convertToJdbcValue(v))
     }
 
-  private def _exec[A](s: Session, sw: StatementWriter, block: Iterable[StatementParam]=>A, args: Iterable[StatementParam]): A =
+  private def _exec[A](s: AbstractSession, sw: StatementWriter, block: Iterable[StatementParam]=>A, args: Iterable[StatementParam]): A =
     try {
       if(s.isLoggingEnabled)
         s.log(sw.toString)      
@@ -375,7 +375,7 @@ trait DatabaseAdapter {
     sw
   }
 
-  protected def exec[A](s: Session, sw: StatementWriter)(block: Iterable[StatementParam] => A): A = {
+  protected def exec[A](s: AbstractSession, sw: StatementWriter)(block: Iterable[StatementParam] => A): A = {
     _exec[A](s, sw, block, sw.params)
   }
 
@@ -385,7 +385,7 @@ trait DatabaseAdapter {
   protected def createStatement(conn: Connection): Statement =
     conn.createStatement()
 
-  def executeQuery(s: Session, sw: StatementWriter) = exec(s, sw) { params =>
+  def executeQuery(s: AbstractSession, sw: StatementWriter) = exec(s, sw) { params =>
     val st = prepareStatement(s.connection, sw.statement)
     fillParamsInto(params, st)
     (st.executeQuery, st)
@@ -397,7 +397,7 @@ trait DatabaseAdapter {
     (st.executeUpdate, st)
   }
 
-  def executeUpdateAndCloseStatement(s: Session, sw: StatementWriter): Int = exec(s, sw) { params =>
+  def executeUpdateAndCloseStatement(s: AbstractSession, sw: StatementWriter): Int = exec(s, sw) { params =>
     val st = prepareStatement(s.connection, sw.statement)
     fillParamsInto(params, st)
     try {
@@ -408,7 +408,7 @@ trait DatabaseAdapter {
     }
   }
 
-  def executeUpdateForInsert(s: Session, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) { params =>
+  def executeUpdateForInsert(s: AbstractSession, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) { params =>
     fillParamsInto(params, ps)
     ps.executeUpdate
   }
@@ -695,7 +695,7 @@ trait DatabaseAdapter {
   def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
     "alter table " + quoteName(foreignKeyTable.prefixedName) + " drop constraint " + quoteName(fkName)
 
-  def dropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String, session: Session):Unit =
+  def dropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String, session: AbstractSession):Unit =
     execFailSafeExecute(writeDropForeignKeyStatement(foreignKeyTable, fkName), e => true)
 
   def isTableDoesNotExistException(e: SQLException): Boolean
