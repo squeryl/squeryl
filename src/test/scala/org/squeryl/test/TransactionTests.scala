@@ -102,11 +102,11 @@ abstract class TransactionTests extends DbTestBase{
   test("nested transactions with SessionFactory") {
 
    val sf1  = new SessionFactory {
-     def newSession: Session = connectWrapper().get()
+     def newSession: AbstractSession = connectWrapper().get()
    }    
    
    val sf2  = new SessionFactory {
-     def newSession: Session = Utils.throwError("inner inTransaction sould not be started")
+     def newSession: AbstractSession = Utils.throwError("inner inTransaction sould not be started")
    }
    
    

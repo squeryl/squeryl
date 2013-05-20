@@ -80,38 +80,19 @@ trait QueryDsl
   
 
   def using[A](session: Session)(a: =>A): A =
-    _using(session, a _)
+    session.using(a _)
 
-  private def _using[A](session: Session, a: ()=>A): A = {
-    val s = Session.currentSessionOption
-    try {
-      if(s != None) s.get.unbindFromCurrentThread
-      try {
-        session.bindToCurrentThread
-        val r = a()
-        r
-      }
-      finally {
-        session.unbindFromCurrentThread
-        session.cleanup
-      }
-    }
-    finally {
-      if(s != None) s.get.bindToCurrentThread
-    }
-  }
-
-  def transaction[A](sf: SessionFactory)(a: =>A) = 
-    _executeTransactionWithin(sf.newSession, a _)
+  def transaction[A](sf: SessionFactory)(a: =>A) =
+    sf.newSession.withinTransaction(a _)
   
   def inTransaction[A](sf: SessionFactory)(a: =>A) =
     if(! Session.hasCurrentSession)
-      _executeTransactionWithin(sf.newSession, a _)
+      sf.newSession.withinTransaction(a _)
     else
       a
 
    def transaction[A](s: Session)(a: =>A) = 
-     _executeTransactionWithin(s, a _)
+     s.withinTransaction(a _)
    
   /**
    * 'transaction' causes a new transaction to begin and commit after the block execution, or rollback
@@ -120,13 +101,13 @@ trait QueryDsl
    */
   def transaction[A](a: =>A): A =
     if(! Session.hasCurrentSession)
-      _executeTransactionWithin(SessionFactory.newSession, a _)
+      SessionFactory.newSession.withinTransaction(a _)
     else {
       val s = Session.currentSession
       val res =
         try {
           s.unbindFromCurrentThread
-          _executeTransactionWithin(SessionFactory.newSession, a _)
+          SessionFactory.newSession.withinTransaction(a _)
         }
         finally {
           s.bindToCurrentThread
@@ -142,55 +123,10 @@ trait QueryDsl
    */
   def inTransaction[A](a: =>A): A =
     if(! Session.hasCurrentSession)
-      _executeTransactionWithin(SessionFactory.newSession, a _)
+      SessionFactory.newSession.withinTransaction(a _)
     else {
       a
     }
-
-  private def _executeTransactionWithin[A](s: Session, a: ()=>A) = {
-
-    val c = s.connection
-
-    val originalAutoCommit = c.getAutoCommit
-    if(originalAutoCommit)
-      c.setAutoCommit(false)
-
-    var txOk = false
-    try {
-      val res = _using(s, a)
-      txOk = true
-      res
-    }
-    catch {
-      case e: ControlThrowable =>
-      {
-        txOk = true
-        throw e
-      }
-    }
-    finally {
-      try {
-        if(txOk)
-          c.commit
-        else
-          c.rollback
-        if(originalAutoCommit != c.getAutoCommit)
-          c.setAutoCommit(originalAutoCommit)
-      }
-      catch {
-        case e:SQLException => {
-          Utils.close(c)
-          if(txOk) throw e // if an exception occured b4 the commit/rollback we don't want to obscure the original exception 
-        }
-      }
-      try{c.close}
-      catch {
-        case e:SQLException => {
-          if(txOk) throw e // if an exception occured b4 the close we don't want to obscure the original exception
-        }
-      }
-    }
-  }
   
   implicit def __thisDsl:QueryDsl = this  
 
