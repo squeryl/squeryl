@@ -1,7 +1,7 @@
 package org.squeryl.framework
 
 import org.scalatest.matchers.ShouldMatchers
-import org.squeryl.{SessionFactory, Session, Schema}
+import org.squeryl.{AbstractSession, SessionFactory, Session, Schema}
 
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest._
@@ -42,7 +42,7 @@ abstract class SchemaTester extends DbTestBase{
 
 abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAfterAll with BeforeAndAfterEach {
 
-  def connectToDb : Option[() => Session]
+  def connectToDb : Option[() => AbstractSession]
 
   var notIgnored = true
 
@@ -53,7 +53,7 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
     SessionFactory.concreteFactory = connectWrapper()
   }
 
-  def connectWrapper() : Option[() => Session] = {
+  def connectWrapper() : Option[() => AbstractSession] = {
     val connector = connectToDb
     if(connector.isEmpty){
       notIgnored = false

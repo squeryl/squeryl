@@ -219,7 +219,7 @@ trait AbstractSession {
 }
 
 trait SessionFactory {
-  def newSession: Session
+  def newSession: AbstractSession
 }
 
 object SessionFactory {
@@ -228,7 +228,7 @@ object SessionFactory {
    * Initializing concreteFactory with a Session creating closure enables the use of
    * the 'transaction' and 'inTransaction' block functions 
    */
-  var concreteFactory: Option[()=>Session] = None
+  var concreteFactory: Option[()=>AbstractSession] = None
 
   /**
    * Initializing externalTransactionManagementAdapter with a Session creating closure allows to
@@ -237,9 +237,9 @@ object SessionFactory {
    * external framework. In this case Session.cleanupResources *needs* to be called when connections
    * are closed, otherwise statement of resultset leaks can occur. 
    */
-  var externalTransactionManagementAdapter: Option[()=>Option[Session]] = None
+  var externalTransactionManagementAdapter: Option[()=>Option[AbstractSession]] = None
 
-  def newSession: Session =
+  def newSession: AbstractSession =
       concreteFactory.getOrElse(
         throw new IllegalStateException("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
               "function for creating new org.squeryl.Session, before transaction can be used.\n" +
@@ -260,7 +260,10 @@ object Session {
   private val _currentSessionThreadLocal = new ThreadLocal[AbstractSession]
   
   def create(c: Connection, a: DatabaseAdapter) =
-    new Session(c,a)  
+    new Session(c,a)
+
+  def create(connectionFunc: () => Connection, a: DatabaseAdapter) =
+    new LazySession(connectionFunc, a)
 
   def currentSessionOption: Option[AbstractSession] = {
     Option(_currentSessionThreadLocal.get) orElse {
