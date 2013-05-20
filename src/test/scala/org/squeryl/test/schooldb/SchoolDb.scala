@@ -676,7 +676,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val s2 = schools.insert(new School(0,"EB",0, ""))
 
-    assert(!beforeInsertsOfPerson.exists(_ == s2))
+    //assert(!beforeInsertsOfPerson.exists(_ == s2))
     assert(beforeInsertsOfKeyedEntity.exists(_ == s2))
     assert(!beforeInsertsOfProfessor.exists(_ == s2))
     assert(!afterInsertsOfProfessor.exists(_ == s2))
@@ -707,7 +707,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val fmd = addresses.posoMetaData.findFieldMetaDataForProperty("appNumberSuffix")
     assert(fmd.get.fieldType.isAssignableFrom(classOf[String]), "'FieldMetaData " + fmd + " should be of type java.lang.String")
 
-    val pk = addresses.posoMetaData.primaryKey.get.left.get
+    val pk = addresses.posoMetaData.primaryKey
     assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
 
     passed('testMetaData )
