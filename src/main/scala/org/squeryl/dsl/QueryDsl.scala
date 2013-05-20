@@ -80,7 +80,7 @@ trait QueryDsl
   
 
   def using[A](session: Session)(a: =>A): A =
-    session._using(session, a _)
+    session.using(a _)
 
   def transaction[A](sf: SessionFactory)(a: =>A) =
     sf.newSession.withinTransaction(a _)

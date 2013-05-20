@@ -30,19 +30,30 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
 
   var originalAutoCommit = true
 
-  def connection: Connection = this.synchronized {
+  def connection: Connection = {
+    /*
+     * No need to synchronize this since Sessions are not thread safe
+     */
     _connection getOrElse {
       val c = connectionFunc()
-      originalAutoCommit = c.getAutoCommit
-      _connection = Option(c)
-      c
+      try {
+        originalAutoCommit = c.getAutoCommit
+        if(originalAutoCommit)
+          c.setAutoCommit(false)
+        _connection = Option(c)
+        c
+      } catch {
+        case e: SQLException =>
+          Utils.close(connection)
+          throw e
+      }
     }
   }
 
   def withinTransaction[A](f: () => A): A = {
     var txOk = false
     try {
-      val res = f()
+      val res = this.using[A](f)
       txOk = true
       res
     } catch {
@@ -84,12 +95,19 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
   val hasConnection = true
 
   def withinTransaction[A](f: () => A): A = {
-    val originalAutoCommit = connection.getAutoCommit
-    if (originalAutoCommit)
-      connection.setAutoCommit(false)
+    val originalAutoCommit = true
+    try {
+      connection.getAutoCommit
+      if (originalAutoCommit)
+        connection.setAutoCommit(false)
+    } catch {
+      case e: SQLException =>
+        Utils.close(connection)
+        throw e
+    }
     var txOk = false
     try {
-      val res = _using[A](this, f)
+      val res = this.using[A](f)
       txOk = true
       res
     } catch {
@@ -130,20 +148,20 @@ trait AbstractSession {
 
   def hasConnection: Boolean
 
-  def withinTransaction[A](f: () => A): A
+  protected[squeryl] def withinTransaction[A](f: () => A): A
 
-  protected[squeryl] def _using[A](session: Session, a: ()=>A): A = {
+  protected[squeryl] def using[A](a: ()=>A): A = {
     val s = Session.currentSessionOption
     try {
       if(s != None) s.get.unbindFromCurrentThread
       try {
-        session.bindToCurrentThread
+        this.bindToCurrentThread
         val r = a()
         r
       }
       finally {
-        session.unbindFromCurrentThread
-        session.cleanup
+        this.unbindFromCurrentThread
+        this.cleanup
       }
     }
     finally {
