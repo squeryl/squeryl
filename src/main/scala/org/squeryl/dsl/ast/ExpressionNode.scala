@@ -16,14 +16,11 @@
 package org.squeryl.dsl.ast
 
 
-import collection.mutable.ArrayBuffer
+import scala.collection.mutable.ArrayBuffer
+
 import org.squeryl.internals._
 import org.squeryl.dsl._
-
-import org.squeryl.dsl._
-import org.squeryl.{Query, KeyedEntity, Schema, Session, PrimitiveTypeMode}
-import javax.management.RuntimeErrorException
-import java.sql.ResultSet
+import org.squeryl.Session
 
 trait ExpressionNode {
 
@@ -197,60 +194,55 @@ class TernaryOperatorNode(val first: ExpressionNode, val second: ExpressionNode,
     _inhibitedByWhen || first.inhibited || second.inhibited || third.inhibited
 }
 
-trait LogicalBoolean extends ExpressionNode  {
+trait LogicalBoolean extends ExpressionNode {
 
-  def and(b: LogicalBoolean): LogicalBoolean
-          = new BinaryOperatorNodeLogicalBoolean(this, b, "and")
+  def and(b: LogicalBoolean): LogicalBoolean =
+    new BinaryOperatorNodeLogicalBoolean(this, b, "and")
 
-  def or(b: LogicalBoolean): LogicalBoolean
-          = new BinaryOperatorNodeLogicalBoolean(this, b, "or")
-}
+  def or(b: LogicalBoolean): LogicalBoolean =
+    new BinaryOperatorNodeLogicalBoolean(this, b, "or")
 
-trait ConstantLogicalBoolean extends LogicalBoolean
-{
-}
+  def and(b: Option[LogicalBoolean]): LogicalBoolean =
+    b.map(_ and this).getOrElse(this)
 
-class TrueLogicalBoolean extends ConstantLogicalBoolean
-{
-
-  override def and (b: LogicalBoolean) = b;
-
-  override def or( b: LogicalBoolean) = this;
-
-  override def doWrite(sw: StatementWriter):Unit = 
-    sw.write("(1=1)");
+  def or(b: Option[LogicalBoolean]): LogicalBoolean =
+    b.map(_ or this).getOrElse(this)
 
 }
 
-class FalseLogicalBoolean extends ConstantLogicalBoolean
-{
+object TrueLogicalBoolean extends LogicalBoolean {
 
-  override def doWrite(sw: StatementWriter) = 
-   {  
-     sw.write("(1=0)");
-   } 
+  override def and(b: LogicalBoolean) = b
 
-  override def and (b: LogicalBoolean) = this;
+  override def or(b: LogicalBoolean) = this
 
-  override def or( b: LogicalBoolean) = b;
-
+  override def doWrite(sw: StatementWriter) {
+    sw.write("(1=1)")
+  }
 
 }
 
-object LogicalBoolean
-{
+object FalseLogicalBoolean extends LogicalBoolean {
 
-  def and(conditions: Seq[LogicalBoolean]):LogicalBoolean =
-   conditions.fold(True)((x,c) => (x and c));
+  override def and(b: LogicalBoolean) = this
+
+  override def or(b: LogicalBoolean) = b
+
+  override def doWrite(sw: StatementWriter) {
+    sw.write("(1=0)")
+  }
+
+}
+
+object LogicalBoolean {
+
+  def and(conditions: Seq[LogicalBoolean]): LogicalBoolean =
+    conditions.fold(TrueLogicalBoolean)(_ and _)
 
   def or(conditions: Seq[LogicalBoolean]): LogicalBoolean =
-   conditions.fold(False)((x,c) => (x or c));
-
-  def True = new TrueLogicalBoolean();
-  def False = new FalseLogicalBoolean();
+    conditions.fold(FalseLogicalBoolean)(_ or _)
 
 }
-
 
 
 class UpdateAssignment(val left: FieldMetaData, val right: ExpressionNode)
