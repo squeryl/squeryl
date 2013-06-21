@@ -203,10 +203,10 @@ trait LogicalBoolean extends ExpressionNode {
     new BinaryOperatorNodeLogicalBoolean(this, b, "or")
 
   def and(b: Option[LogicalBoolean]): LogicalBoolean =
-    b.map(_ and this).getOrElse(this)
+    b.map(this and _).getOrElse(this)
 
   def or(b: Option[LogicalBoolean]): LogicalBoolean =
-    b.map(_ or this).getOrElse(this)
+    b.map(this or _).getOrElse(this)
 
 }
 
