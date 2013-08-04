@@ -44,7 +44,7 @@ trait CompositeKey {
     val head = equalities.head
     val tail = equalities.tail
 
-    tail.foldLeft(equalities.head : LogicalBoolean)((a,b) => new BinaryOperatorNodeLogicalBoolean(a, b, "and"))
+    tail.foldLeft(equalities.head : LogicalBoolean)(_ and _)
   }
 
   def is(attributes: AttributeValidOnMultipleColumn*) = new CompositeKeyAttributeAssignment(this, attributes)  
