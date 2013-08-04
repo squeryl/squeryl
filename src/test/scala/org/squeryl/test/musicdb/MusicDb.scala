@@ -164,9 +164,34 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       artistIdsWithSongs, 'testOuterJoinWithSubQuery)
 
     passed('testOuterJoinWithSubQuery)
-  }  
+  }
 
+  test("OuterJoinInOuter", SingleTestRun){
+    val testInstance = sharedTestInstance;
+    import testInstance._
 
+    val firstSongs =
+      from(songs)(s =>
+        groupBy(s.authorId)
+          compute(min(s.id))
+      )
+
+    val j2 =
+      join(artists, firstSongs, cds.leftOuter) (
+        (a, fs, cd) =>
+          select(a, cd)
+            on(a.id === fs.measures,  cd.map(_.mainArtist) === a.id)
+      ) : Query[(Person, Option[Cd])]
+
+    val j3 =
+      join(artists, j2.leftOuter) (
+        (a, j2_) =>
+          select(a, j2)
+            on(a.id === j2_.map(_._1.id))
+      ).toList
+
+    passed('testOuterJoinInOuter)
+  }
 
   lazy val songsFeaturingPoncho =
     from(songs, artists)((s,a) =>
