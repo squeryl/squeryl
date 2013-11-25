@@ -71,7 +71,7 @@ To update all rows use the setAll function :
 h2. Delete
 
 Delete is done either by key (when objects extend KeyedEntity[K]), or
-with a boolean clause via the table's deleteWhere method, 
+with a boolean clause via the table's deleteWhere method. Here is an 
 example of Table[PlaylistElement].deleteWhere usage :
 
 <script type="syntaxhighlighter" class="brush: sql"><![CDATA[
@@ -127,7 +127,7 @@ The advantage of this is obviously making 1 trip to the DB versus N trips (given
 h2. Active Record pattern
 
 Another option available for inserting objects is through the use of the
-convenience save method. This method allows the entity to be persisted
+convenience method save. This method allows the entity to be persisted
 without the invocation of the insert method of the respective table :
 
 <script type="syntaxhighlighter" class="brush: scala"><![CDATA[
