@@ -1,6 +1,6 @@
 package org.squeryl.logging
 
-import org.squeryl.Session
+import org.squeryl.{AbstractSession, Session}
 import org.squeryl.adapters.H2Adapter
 import org.squeryl.InternalFieldMapper._
 
@@ -35,7 +35,7 @@ object LocalH2SinkStatisticsListener {
   }
 }
 
-class LocalH2SinkStatisticsListener(val h2Session: Session) extends StatisticsListener {
+class LocalH2SinkStatisticsListener(val h2Session: AbstractSession) extends StatisticsListener {
 
   private var _closed = false
 

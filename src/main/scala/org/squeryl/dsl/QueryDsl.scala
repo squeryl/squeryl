@@ -79,7 +79,7 @@ trait QueryDsl
 //      queryToIterable(view2QueryAll(t))
   
 
-  def using[A](session: Session)(a: =>A): A =
+  def using[A](session: AbstractSession)(a: =>A): A =
     session.using(a _)
 
   def transaction[A](sf: SessionFactory)(a: =>A) =
@@ -91,7 +91,7 @@ trait QueryDsl
     else
       a
 
-   def transaction[A](s: Session)(a: =>A) = 
+   def transaction[A](s: AbstractSession)(a: =>A) =
      s.withinTransaction(a _)
    
   /**

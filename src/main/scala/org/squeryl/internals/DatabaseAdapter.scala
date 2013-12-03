@@ -391,7 +391,7 @@ trait DatabaseAdapter {
     (st.executeQuery, st)
   }
 
-  def executeUpdate(s: Session, sw: StatementWriter):(Int,PreparedStatement) = exec(s, sw) { params =>
+  def executeUpdate(s: AbstractSession, sw: StatementWriter):(Int,PreparedStatement) = exec(s, sw) { params =>
     val st = prepareStatement(s.connection, sw.statement)
     fillParamsInto(params, st)
     (st.executeUpdate, st)
