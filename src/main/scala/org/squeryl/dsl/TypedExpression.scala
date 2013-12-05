@@ -162,6 +162,8 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
   
   def like[A2,T2 <: TOptionString](s: TypedExpression[A2,T2])(implicit ev: CanCompare[T1,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "like")
   
+  def ilike[A2,T2 <: TOptionString](s: TypedExpression[A2,T2])(implicit ev: CanCompare[T1,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "ilike")
+
   def ||[A2,T2](e: TypedExpression[A2,T2]) = new ConcatOp[A1,A2,T1,T2](this, e)
     
   def regex(pattern: String) = new FunctionNode(pattern, Seq(this)) with LogicalBoolean {
