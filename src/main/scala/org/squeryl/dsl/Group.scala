@@ -38,3 +38,7 @@ class GroupWithMeasures[K,M](k: K, m: M) {
     sb.toString
   }
 }
+
+object GroupWithMeasures {
+	def unapply[K, M](x: GroupWithMeasures[K, M]) = Some((x.key, x.measures))
+}
