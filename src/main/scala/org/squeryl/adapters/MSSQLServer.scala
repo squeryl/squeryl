@@ -137,11 +137,9 @@ class MSSQLServer extends DatabaseAdapter {
       val beginOffset = page._1
       val pageSize = page._2
 
-      sw.write("With ___z____ as (")
       sw.writeIndented {
         super.writeQuery(qen, sw, false, Some(" TOP " + (beginOffset + pageSize) + " "))
       }
-      sw.write(")")
     }
   
   private def _stripPrefix(selectE: String):String = {
