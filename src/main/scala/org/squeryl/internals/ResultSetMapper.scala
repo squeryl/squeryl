@@ -144,7 +144,22 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
       case 5 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs))
       case 6 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs))
       case 7 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs))
-      //TODO: implement tuples results of size up to 22
+      case 8 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs))
+      case 9 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs))
+      case 10 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs))
+      case 11 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs))
+      case 12 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs))
+      case 13 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs))
+      case 14 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs))
+      case 15 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs))
+      case 16 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs))
+      case 17 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs))
+      case 18 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs))
+      case 19 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs))
+      case 20 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs))
+      case 21 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs))
+      case 22 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs), m(21).map(rs))
+
       case z:Any => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
     }
     
