@@ -38,7 +38,9 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit val stringTEF = PrimitiveTypeSupport.stringTEF
   implicit val optionStringTEF = PrimitiveTypeSupport.optionStringTEF
   implicit val dateTEF = PrimitiveTypeSupport.dateTEF
-  implicit val optionDateTEF = PrimitiveTypeSupport.optionDateTEF    
+  implicit val optionDateTEF = PrimitiveTypeSupport.optionDateTEF
+  implicit val sqlDateTEF = PrimitiveTypeSupport.sqlDateTEF
+  implicit val optionSqlDateTEF = PrimitiveTypeSupport.optionSqlDateTEF
   implicit val timestampTEF = PrimitiveTypeSupport.timestampTEF
   implicit val optionTimestampTEF = PrimitiveTypeSupport.optionTimestampTEF
   implicit val doubleArrayTEF = PrimitiveTypeSupport.doubleArrayTEF

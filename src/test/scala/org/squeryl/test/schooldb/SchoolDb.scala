@@ -29,6 +29,13 @@ import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ExpressionNode
+import scala.Some
+import org.squeryl.test.schooldb.YieldInspectionAnother
+import org.squeryl.test.schooldb.PostalCode
+import org.squeryl.test.schooldb.Course
+import org.squeryl.test.schooldb.School
+import org.squeryl.test.schooldb.YieldInspectionTest
+import org.squeryl.test.schooldb.Course2
 
 
 object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
@@ -137,6 +144,13 @@ case class School(val addressId: Int, val name: String, val parentSchoolId: Long
   def id = id_field
 }
 
+
+case class SqlDate(val id:Long, val aDate: java.sql.Date) extends KeyedEntity[Long] {
+
+  def this() = this(0L, new java.sql.Date(0))
+
+}
+
 case class YieldInspectionTest(id:Int, num:Int)
 
 case class YieldInspectionAnother(id:Int, name:String, testId:Int)
@@ -203,6 +217,8 @@ class SchoolDb extends Schema {
   
   val tests = table[YieldInspectionTest]
   val others = table[YieldInspectionAnother]
+
+  val sqlDates = table[SqlDate]
   
 // uncomment to test : when http://www.assembla.com/spaces/squeryl/tickets/14-assertion-fails-on-self-referring-onetomanyrelationship
 //  an unverted constraint gets created, unless expr. is inverted : child.parentSchoolId === parent.id
@@ -472,7 +488,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testKeyedEntityIdRenaming)
   }
 
-  test("update to null", SingleTestRun) {
+  test("update to null") {
     val testInstance = sharedTestInstance; import testInstance._
           
     val rejan = students.insert(new Student("Réjean", "Plourde", Some(24), 2, Some(oneHutchissonStreet.id), Some(true)))
@@ -829,7 +845,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 //    validateQuery('testNotOperator, q, identity[Int], List(xiao.id, pratap.id))
 //  }
 
-  test("DateTypeMapping"){
+  test("DateTypeMapping") {
     val testInstance = sharedTestInstance; import testInstance._
 
     val mandarinCourse =
@@ -845,10 +861,23 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val mandarinCourse2011 =
       courses.where(c => c.id === mandarin.id).single
 
-    assert(mandarinCourse.startDate == feb2011,
-      'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse.startDate)
+    assert(mandarinCourse2011.startDate == feb2011,
+      'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse2011.startDate)
 
     passed('testDateTypeMapping )
+  }
+
+  test("java.sql.DateTypeMapping2", SingleTestRun){
+
+    val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+
+    val origDate = new java.sql.Date(dateFormat.parse("2013-12-19").getTime)
+
+    val aDate = sqlDates.insert(SqlDate(0L, origDate))
+
+    val storedDate = sqlDates.lookup(aDate.id).get
+
+    assert(storedDate.aDate == origDate ,"expected " + origDate + " got " + storedDate.aDate)
   }
 
   test("DateOptionMapping"){

@@ -56,12 +56,21 @@ trait FieldMapper {
       val defaultColumnLength = -1
       def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getDate(i)
     }
+
+    val sqlDateTEF = new TypedExpressionFactory[java.sql.Date,TDate] with PrimitiveJdbcMapper[java.sql.Date] {
+      val sample = new java.sql.Date(0L)
+      val defaultColumnLength = -1
+      def extractNativeJdbcValue(rs: ResultSet, i: Int) = rs.getDate(i)
+    }
     
     val optionDateTEF = new TypedExpressionFactory[Option[Date],TOptionDate] with DeOptionizer[Date, Date, TDate, Option[Date], TOptionDate] {
       val deOptionizer = dateTEF
     }
-      
-    
+
+    val optionSqlDateTEF = new TypedExpressionFactory[Option[java.sql.Date],TOptionDate] with DeOptionizer[java.sql.Date, java.sql.Date, TDate, Option[java.sql.Date], TOptionDate] {
+      val deOptionizer = sqlDateTEF
+    }
+
     val timestampTEF = new TypedExpressionFactory[Timestamp,TTimestamp] with PrimitiveJdbcMapper[Timestamp] {
       val sample = new Timestamp(0)
       val defaultColumnLength = -1
@@ -252,7 +261,8 @@ trait FieldMapper {
     register(booleanTEF)
     register(stringTEF)
     register(timestampTEF)
-    register(dateTEF)  
+    register(dateTEF)
+    register(sqlDateTEF)
     register(uuidTEF)
     register(intArrayTEF)
     register(longArrayTEF)
