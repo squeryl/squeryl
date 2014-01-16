@@ -18,7 +18,7 @@ package org.squeryl.adapters
 import org.squeryl.dsl.ast.FunctionNode
 import java.sql.{ResultSet, SQLException}
 import java.util.UUID
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter, FieldMetaData}
+import org.squeryl.internals.{StatementWriter, DatabaseAdapter, FieldMetaData, FieldStatementParam}
 import org.squeryl.{Session, Table}
 
 class PostgreSqlAdapter extends DatabaseAdapter {
@@ -112,6 +112,19 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     sw.write(") values ");
     sw.write(colVals.mkString("(",",",")"));
   }
+
+  /**
+   * In the case custom DB type used it is benefitial to explicitly cast value to its type, because it invokes
+   * proper cast function. For example, it is possible to insert Scala String into a DB ENUM using dbType.
+   */
+  override protected def writeValue(o: AnyRef, fmd: FieldMetaData, sw: StatementWriter): String =
+    fmd.explicitDbTypeDeclaration match {
+      case Some(declaration) if !sw.isForDisplay => {
+        sw.addParam(FieldStatementParam(o, fmd))
+        f"?::$declaration"
+      }
+      case _ => super.writeValue(o, fmd, sw)
+    }
 
   override def supportsAutoIncrementInColumnDeclaration: Boolean = false
 
