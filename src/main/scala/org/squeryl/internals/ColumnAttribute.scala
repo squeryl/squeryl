@@ -47,9 +47,11 @@ case class PrimaryKey() extends ColumnAttribute
         with AttributeValidOnNumericalColumn
         with AttributeValidOnMultipleColumn
 
-case class DBType(val declaration: String) extends ColumnAttribute
+case class DBType(val declaration: String, val explicit: Boolean = false) extends ColumnAttribute
   with AttributeValidOnNonNumericalColumn
-  with AttributeValidOnNumericalColumn
+  with AttributeValidOnNumericalColumn {
+  def explicitCast = copy(explicit = true)
+}
 
 /**
  * Flag column as not accepting values on INSERT

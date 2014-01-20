@@ -119,9 +119,9 @@ class PostgreSqlAdapter extends DatabaseAdapter {
    */
   override protected def writeValue(o: AnyRef, fmd: FieldMetaData, sw: StatementWriter): String =
     fmd.explicitDbTypeDeclaration match {
-      case Some(declaration) if !sw.isForDisplay => {
-        sw.addParam(FieldStatementParam(o, fmd))
-        f"?::$declaration"
+      case Some(declaration) if fmd.explicitDbTypeCast => {
+        val original = super.writeValue(o, fmd, sw)
+        s"$original::$declaration"
       }
       case _ => super.writeValue(o, fmd, sw)
     }
