@@ -150,6 +150,11 @@ class FieldMetaData(
       Some(dbt.get.asInstanceOf[DBType].declaration)
   }
   
+  /**
+   * If explicit db type case has been requested
+   */
+  def explicitDbTypeCast: Boolean = _columnAttributes.find(_.isInstanceOf[DBType]).map(a => a.asInstanceOf[DBType].explicit).getOrElse(false)
+  
   def isTransient =
     _columnAttributes.exists(_.isInstanceOf[IsTransient])
 
