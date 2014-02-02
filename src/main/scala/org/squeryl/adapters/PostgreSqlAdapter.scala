@@ -121,7 +121,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     fmd.explicitDbTypeDeclaration match {
       case Some(declaration) if fmd.explicitDbTypeCast => {
         val original = super.writeValue(o, fmd, sw)
-        s"$original::$declaration"
+        original + "::" + declaration
       }
       case _ => super.writeValue(o, fmd, sw)
     }
