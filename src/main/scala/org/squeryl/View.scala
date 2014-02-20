@@ -89,8 +89,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     resultSetMapper.map(o, resultSet);
     val t = o.asInstanceOf[T]
     _setPersisted(t)
-    _callbacks.afterSelect(t.asInstanceOf[AnyRef])
-    t
+    _callbacks.afterSelect(t.asInstanceOf[AnyRef]).asInstanceOf[T]
   }
 
   def lookup[K](k: K)(implicit ked: KeyedEntityDef[T,K], dsl: QueryDsl): Option[T] = {
