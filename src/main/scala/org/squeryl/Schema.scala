@@ -570,7 +570,13 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   protected def beforeDelete[K, A]()(implicit m: Manifest[A], ked: KeyedEntityDef[A,K]) =
     new LifecycleEventPercursorClass[A](m.erasure, this, BeforeDelete)
-
+   
+  protected def afterSelect[A](t: Table[A]) =
+    new LifecycleEventPercursorTable[A](t, AfterSelect)
+    
+  protected def afterSelect[A]()(implicit m: Manifest[A]) =
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterSelect)
+    
   protected def afterInsert[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterInsert)
 

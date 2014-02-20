@@ -89,6 +89,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     resultSetMapper.map(o, resultSet);
     val t = o.asInstanceOf[T]
     _setPersisted(t)
+    _callbacks.afterSelect(t.asInstanceOf[AnyRef])
     t
   }
 
