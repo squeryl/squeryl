@@ -272,6 +272,7 @@ class SchoolDb extends Schema {
   val transformedStudents = new ArrayBuffer[Student]
   val beforeInsertsOfKeyedEntity = new ArrayBuffer[KeyedEntity[_]]
   val beforeInsertsOfProfessor = new ArrayBuffer[Professor]
+  val afterSelectsOfStudent = new ArrayBuffer[Student]
   val afterInsertsOfProfessor = new ArrayBuffer[Professor]
   val afterInsertsOfSchool = new ArrayBuffer[School]
   val beforeDeleteOfSchool = new ArrayBuffer[School]
@@ -292,6 +293,9 @@ class SchoolDb extends Schema {
 
     beforeInsert[KeyedEntity[_]]
       call(beforeInsertsOfKeyedEntity.append(_)),
+      
+    afterSelect[Student]
+      call(afterSelectsOfStudent.append(_)),
 
     afterInsert[Professor]
       call(afterInsertsOfProfessor.append(_)),
@@ -675,6 +679,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     beforeInsertsOfPerson.clear
     beforeInsertsOfKeyedEntity.clear
     beforeInsertsOfProfessor.clear
+    afterSelectsOfStudent.clear
     afterInsertsOfProfessor.clear
     beforeDeleteOfSchool.clear
     professorsCreatedWithFactory.clear
@@ -686,6 +691,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(sOpt.isDefined && sOpt.map(_.gender == 2).getOrElse(false))
     assert(beforeInsertsOfPerson.exists(_ == s1))
     assert(transformedStudents.exists(_ == s1))
+    assert(sOpt.isDefined && afterSelectsOfStudent.exists(_ == sOpt.get))
     assert(! beforeInsertsOfKeyedEntity.exists(_ == s1))
     assert(!beforeInsertsOfProfessor.exists(_ == s1))
     assert(!afterInsertsOfProfessor.exists(_ == s1))
