@@ -32,28 +32,28 @@ trait CustomType[T] extends Product1[T] {
 trait CustomTypesMode extends QueryDsl {
 
   implicit def createConstantNodeOfScalarIntType(i: Int) =
-    new ConstantExpressionNode[IntType](mapInt2IntType(i)) with NumericalExpression[IntType]
+    new ConstantExpressionNode[IntType](mapInt2IntType(i))(createOutMapperIntType) with NumericalExpression[IntType]
 
   implicit def createConstantNodeOfScalarStringType(s: String) =
-    new ConstantExpressionNode[StringType](mapString2StringType(s)) with StringExpression[StringType]
+    new ConstantExpressionNode[StringType](mapString2StringType(s))(createOutMapperStringType) with StringExpression[StringType]
 
   implicit def createConstantNodeOfScalarDoubleType(i: Double) =
-    new ConstantExpressionNode[DoubleType](mapDouble2DoubleType(i)) with NumericalExpression[DoubleType]
+    new ConstantExpressionNode[DoubleType](mapDouble2DoubleType(i))(createOutMapperDoubleType) with NumericalExpression[DoubleType]
 
   implicit def createConstantNodeOfScalarBigDecimalType(i: BigDecimal) =
-    new ConstantExpressionNode[BigDecimalType](mapBigDecimal2BigDecimalType(i)) with NumericalExpression[BigDecimalType]
+    new ConstantExpressionNode[BigDecimalType](mapBigDecimal2BigDecimalType(i))(createOutMapperBigDecimalType) with NumericalExpression[BigDecimalType]
 
   implicit def createConstantNodeOfScalarFloatType(i: Float) =
-    new ConstantExpressionNode[FloatType](mapFloat2FloatType(i)) with NumericalExpression[FloatType]
+    new ConstantExpressionNode[FloatType](mapFloat2FloatType(i))(createOutMapperFloatType) with NumericalExpression[FloatType]
 
   implicit def createConstantNodeOfScalarLongType(i: Long) =
-    new ConstantExpressionNode[LongType](mapLong2LongType(i)) with NumericalExpression[LongType]
+    new ConstantExpressionNode[LongType](mapLong2LongType(i))(createOutMapperLongType) with NumericalExpression[LongType]
 
   implicit def createConstantNodeOfScalarBooleanType(i: Boolean) =
-    new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(i)) with NonNumericalExpression[BooleanType]
+    new ConstantExpressionNode[BooleanType](mapBoolean2BooleanType(i))(createOutMapperBooleanType) with NonNumericalExpression[BooleanType]
 
   implicit def createConstantNodeOfScalarBinaryType(i: Array[Byte]) =
-    new ConstantExpressionNode[BinaryType](mapBinary2BinaryType(i)) with BinaryExpression[BinaryType]
+    new ConstantExpressionNode[BinaryType](mapBinary2BinaryType(i))(createOutMapperBinaryType) with BinaryExpression[BinaryType]
 
   type ByteType = ByteField
 

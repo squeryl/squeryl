@@ -31,7 +31,6 @@ import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ExpressionNode
 
-
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
 
 class SchoolDbObject extends KeyedEntity[Int] {
@@ -88,6 +87,7 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
 
 class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float], var yearlySalaryBD: BigDecimal, var weightInBD: Option[BigDecimal]) extends KeyedEntity[Long] with Person {
 
+  def this() = this("", 0F, Some(0F), BigDecimal(0), Some(BigDecimal(0)))
   var id: Long = 0
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
@@ -865,7 +865,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testNVLFunction )
   }
 
-  test("LongTypeMapping"){
+  test("LongTypeMapping", SingleTestRun){
     val testInstance = sharedTestInstance; import testInstance._
 
     var ht = courses.where(c => c.id === heatTransfer.id).single

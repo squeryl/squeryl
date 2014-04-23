@@ -493,6 +493,14 @@ object FieldMetaData {
         else
           typeOfFieldOrTypeOfOption
 
+      if(typeOfFieldOrTypeOfOption == None.getClass) {
+        Utils.throwError(
+          "class " + parentMetaData.clasz.getCanonicalName +" used in table " +
+            parentMetaData.viewOrTable.name +
+            ", needs a zero arg constructor with sample values for Option[] field " +
+            name
+        )
+      }
 
       new FieldMetaData(
         parentMetaData,

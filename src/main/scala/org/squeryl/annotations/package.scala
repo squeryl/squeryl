@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl
 
-import annotation.target.field
+import annotation.meta.field
 import annotations.ColumnBase
 
 package object annotations {

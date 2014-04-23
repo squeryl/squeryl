@@ -112,7 +112,11 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
           fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimistic && name == "occVersionNumber"))
         }
         catch {
-          case e:Exception => throw new RuntimeException(
+          case e:Exception =>
+            println(">>>" + clasz.getCanonicalName)
+            println(">>>" + name)
+
+            throw new RuntimeException(
               Utils.failSafeString(
               "error while reflecting on metadata for " + property + 
               " of class " + this.clasz.getCanonicalName), e)

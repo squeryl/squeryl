@@ -63,6 +63,7 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
     }
   }
 
+  /*
   override def runTest(
     testName: String,
     reporter: Reporter,
@@ -76,5 +77,16 @@ abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAft
     }
     super.runTest(testName, reporter, stopper, configMap, tracker)
   }
+  */
+
+/*
+  override protected def runTest(testName: String,args: org.scalatest.Args): org.scalatest.Status = {
+
+    if(!notIgnored || ignoredTests.find(_ == testName).isDefined)
+      org.scalatest.SucceededStatus
+    else
+      super.runTest(testName, args)
+  }
+*/
 }
 

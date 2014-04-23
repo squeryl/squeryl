@@ -267,7 +267,7 @@ trait QueryDsl
   class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R], nameOverride: Option[String]) {
 
     def via[A <: KeyedEntity[_]](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride)
+      val m2m = new ManyToManyRelationImpl(l,r,manifestA.runtimeClass.asInstanceOf[Class[A]], f, schema, nameOverride)
       schema._addTable(m2m)
       m2m
     }
@@ -275,6 +275,7 @@ trait QueryDsl
 
   class ManyToManyRelationImpl[L <: KeyedEntity[_], R <: KeyedEntity[_], A <: KeyedEntity[_]](val leftTable: Table[L], val rightTable: Table[R], aClass: Class[A], f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], schema: Schema, nameOverride: Option[String])
     extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None) with ManyToManyRelation[L,R,A] {
+
     thisTableOfA =>    
 
     def thisTable = thisTableOfA
@@ -283,7 +284,7 @@ trait QueryDsl
     
     private val (_leftEqualityExpr, _rightEqualityExpr) = {
 
-      var e2: Option[Pair[EqualityExpression,EqualityExpression]] = None
+      var e2: Option[Tuple2[EqualityExpression,EqualityExpression]] = None
 
       from(leftTable, rightTable, thisTableOfA)((l,r,a) => {
         e2 = Some(f(l,r,a))
