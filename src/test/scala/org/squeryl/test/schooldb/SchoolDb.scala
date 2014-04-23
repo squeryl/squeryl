@@ -30,12 +30,6 @@ import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ExpressionNode
 import scala.Some
-import org.squeryl.test.schooldb.YieldInspectionAnother
-import org.squeryl.test.schooldb.PostalCode
-import org.squeryl.test.schooldb.Course
-import org.squeryl.test.schooldb.School
-import org.squeryl.test.schooldb.YieldInspectionTest
-import org.squeryl.test.schooldb.Course2
 
 
 object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
@@ -130,6 +124,7 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
 
 class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float], var yearlySalaryBD: BigDecimal, var weightInBD: Option[BigDecimal]) extends KeyedEntity[Long] with Person {
 
+  def this() = this("", 0F, Some(0F), BigDecimal(0), Some(BigDecimal(0)))
   var id: Long = 0
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
@@ -873,7 +868,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testDateTypeMapping )
   }
 
-  test("java.sql.DateTypeMapping2", SingleTestRun){
+  test("java.sql.DateTypeMapping2"){
 
     val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -1037,7 +1032,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testNVLFunction )
   }
 
-  test("LongTypeMapping"){
+  test("LongTypeMapping", SingleTestRun){
     val testInstance = sharedTestInstance; import testInstance._
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
@@ -1672,7 +1667,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testNewOuterJoin3 )
   }
   
-  test("TestYieldInspectionLeakViaCGLIB", SingleTestRun) {
+  test("TestYieldInspectionLeakViaCGLIB") {
       tests.insert(List(YieldInspectionTest(1, 100), YieldInspectionTest(1,500), YieldInspectionTest(2,600)))
       others.insert(List(YieldInspectionAnother(1, "One", 1), YieldInspectionAnother(2, "Two", 2)))
 

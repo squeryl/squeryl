@@ -28,7 +28,15 @@ object SquerylBuild extends Build {
   	  },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.10.3",
+      scalaVersion := "2.11.0",
+      scalacOptions ++= Seq(
+        "-unchecked",
+        "-deprecation",
+        "-feature",
+        "-language:implicitConversions",
+        "-language:postfixOps",
+        "-language:reflectiveCalls",
+        "-language:existentials"),
       crossScalaVersions := Seq("2.10.3", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0"),
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
@@ -74,6 +82,8 @@ object SquerylBuild extends Build {
       libraryDependencies <++= scalaVersion { sv =>
         Seq("org.scala-lang" % "scalap" % sv,
           sv match {
+            case sv if sv startsWith "2.11" =>
+              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
           	case sv if sv startsWith "2.10" =>
           	    "org.scalatest" %% "scalatest" % "1.9.1" % "test"
           	case sv if sv startsWith "2.9" =>

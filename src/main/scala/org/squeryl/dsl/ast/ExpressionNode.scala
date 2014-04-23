@@ -72,7 +72,7 @@ trait ExpressionNode {
     _filterDescendants(
       this,
       new ArrayBuffer[ExpressionNode],
-      (n:ExpressionNode)=> manifest.erasure.isAssignableFrom(n.getClass)
+      (n:ExpressionNode)=> manifest.runtimeClass.isAssignableFrom(n.getClass)
     ).asInstanceOf[Iterable[T]]
 
   /**
@@ -262,7 +262,7 @@ trait BaseColumnAttributeAssignment {
     findAttribute[A](m) != None
 
   def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
-    columnAttributes.find(ca => m.erasure.isAssignableFrom(ca.getClass))  
+    columnAttributes.find(ca => m.runtimeClass.isAssignableFrom(ca.getClass))  
 }
 
 class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], columnAttributes_ : Seq[ColumnAttribute])

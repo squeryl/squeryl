@@ -115,10 +115,15 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
           (for(k <- viewOrTable.ked; 
               counterProp <- k.optimisticCounterPropertyName if counterProp == name) yield true).isDefined
         try {
-          fmds.append(FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimisitcCounter))
+          val r = FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimisitcCounter)
+          fmds.append(r)
         }
         catch {
-          case e:Exception => throw new RuntimeException(
+          case e:Exception =>
+            println(">>>" + clasz.getCanonicalName)
+            println(">>>" + name)
+
+            throw new RuntimeException(
               Utils.failSafeString(
               "error while reflecting on metadata for " + property + 
               " of class " + this.clasz.getCanonicalName), e)

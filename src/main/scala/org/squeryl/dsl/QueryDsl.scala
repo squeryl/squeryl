@@ -46,7 +46,7 @@ trait QueryDsl
     def isPersisted(a:A) = a.isPersisted
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = 
-      if(classOf[Optimistic].isAssignableFrom(m.erasure))
+      if(classOf[Optimistic].isAssignableFrom(m.runtimeClass))
         Some("occVersionNumber")
       else
         None
@@ -355,8 +355,8 @@ trait QueryDsl
       kedL: KeyedEntityDef[L,_],
       kedR: KeyedEntityDef[R,_]) {
 
-    def via[A](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
+    def via[A](f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
+      val m2m = new ManyToManyRelationImpl(l,r,manifestA.runtimeClass.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
       schema._addTable(m2m)
       m2m
     }
@@ -368,7 +368,7 @@ trait QueryDsl
       val leftTable: Table[L], 
       val rightTable: Table[R], 
       aClass: Class[A], 
-      f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], 
+      f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression],
       schema: Schema, 
       nameOverride: Option[String],
       kedL: KeyedEntityDef[L,_],
@@ -383,7 +383,7 @@ trait QueryDsl
     
     private val (_leftEqualityExpr, _rightEqualityExpr) = {
 
-      var e2: Option[Pair[EqualityExpression,EqualityExpression]] = None
+      var e2: Option[Tuple2[EqualityExpression,EqualityExpression]] = None
 
       from(leftTable, rightTable, thisTableOfA)((l,r,a) => {
         e2 = Some(f(l,r,a))
