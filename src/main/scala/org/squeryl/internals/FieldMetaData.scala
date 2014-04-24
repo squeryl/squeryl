@@ -678,7 +678,7 @@ object FieldMetaData {
         	printer.printSymbol(c)
       }
       val fullSig = baos.toString
-      val matcher = """\s%s : scala.Option\[scala\.(\w+)\]?""".format(member.getName).r.pattern.matcher(fullSig)
+      val matcher = """\s%s\s*:\s*scala.Option\[scala\.(\w+)\]?""".format(member.getName).r.pattern.matcher(fullSig)
       if (matcher.find) {
         matcher.group(1) match {
           case "Int" => Some(classOf[scala.Int])
