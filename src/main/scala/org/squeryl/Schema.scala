@@ -175,9 +175,19 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       _dbAdapter.dropTable(t)
       _dbAdapter.postDropTable(t)
     }
+
+    for {
+      schema <- name
+      dropSchema <- _dbAdapter.writeDropSchema(schema)
+    } _executeDdl(dropSchema)
   }  
 
   def create = {
+    for {
+      schema <- name
+      createSchema <- _dbAdapter.writeCreateSchema(schema)
+    }  _executeDdl(createSchema)
+
     _createTables
     if(_dbAdapter.supportsForeignKeyConstraints)
       _declareForeignKeyConstraints
