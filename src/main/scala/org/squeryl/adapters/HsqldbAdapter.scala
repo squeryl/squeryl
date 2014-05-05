@@ -39,4 +39,8 @@ class HsqldbAdapter extends DatabaseAdapter {
   }
 
   override def quoteIdentifier(s: String): String = "\"%s\"".format(s)
+
+  override def writeCreateSchema(name: String): Option[String] = Some("CREATE SCHEMA %s".format(quoteIdentifier(name)))
+
+  override def writeDropSchema(name: String): Option[String] = Some("DROP SCHEMA %s".format(quoteIdentifier(name)))
 }

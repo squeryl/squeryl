@@ -899,5 +899,9 @@ trait DatabaseAdapter {
 		case "scala.math.BigDecimal" => Types.VARCHAR
 		case s:Any =>
 		  throw new RuntimeException("Don't know jdbc type for " + s)
-  }  
+  }
+
+  def writeCreateSchema(name: String): Option[String] = None
+
+  def writeDropSchema(name: String): Option[String] = None
 }
