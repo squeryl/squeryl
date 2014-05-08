@@ -7,86 +7,64 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest._
 import org.scalatest.events.{TestIgnored, Ordinal}
 
-abstract class SchemaTester extends DbTestBase{
+abstract class SchemaTester extends DbTestBase {
+  self: DBConnector =>
 
   def schema : Schema
 
   def prePopulate() = {}
 
   override def beforeAll(){
-    super.beforeAll
-    if(notIgnored){
-      transaction{
-         schema.drop
-         schema.create
+
+    super.beforeAll()
+
+    sessionCreator().foreach { _ =>
+      transaction {
+        schema.drop
+        schema.create
         try{
           prePopulate
         }catch{
           case e : Exception =>
             println(e.getMessage)
-            println(e.getStackTraceString)
+            println(e.getStackTrace)
         }
       }
     }
   }
 
   override def afterAll(){
-    super.afterAll
-    if(notIgnored){
-      transaction{
-         schema.drop
+    super.afterAll()
+
+    sessionCreator().foreach { _ =>
+      transaction {
+        schema.drop
       }
     }
   }
 }
 
-abstract class DbTestBase extends FunSuite with ShouldMatchers with BeforeAndAfterAll with BeforeAndAfterEach {
+abstract class DbTestBase extends FunSuite with Matchers with BeforeAndAfterAll with BeforeAndAfterEach {
+  self: DBConnector =>
 
-  def connectToDb : Option[() => AbstractSession]
+  def isIgnored(testName: String) =
+    sessionCreator().isEmpty || ignoredTests.find(_ == testName).isEmpty
 
-  var notIgnored = true
-
-  val ignoredTests : List[String] = Nil
+  def ignoredTests : List[String] = Nil
 
   override def beforeAll(){
-    super.beforeAll
-    SessionFactory.concreteFactory = connectWrapper()
-  }
-
-  def connectWrapper() : Option[() => AbstractSession] = {
-    val connector = connectToDb
-    if(connector.isEmpty){
-      notIgnored = false
-      None
-    }else{
-      Some(connector.get)
+    val c = sessionCreator()
+    if(c.isDefined) {
+      SessionFactory.concreteFactory = c
     }
   }
 
-  /*
-  override def runTest(
-    testName: String,
-    reporter: Reporter,
-    stopper: Stopper,
-    configMap: Map[String, Any],
-    tracker: Tracker): Unit = {
-
-    if(!notIgnored || ignoredTests.find(_ == testName).isDefined){
-      //reporter(TestIgnored(new Ordinal(0), suiteName, Some(this.getClass.getName),testName))
-      return
-    }
-    super.runTest(testName, reporter, stopper, configMap, tracker)
-  }
-  */
-
-/*
   override protected def runTest(testName: String,args: org.scalatest.Args): org.scalatest.Status = {
-
-    if(!notIgnored || ignoredTests.find(_ == testName).isDefined)
+    if(isIgnored(testName))
       org.scalatest.SucceededStatus
     else
       super.runTest(testName, args)
   }
-*/
+
 }
 

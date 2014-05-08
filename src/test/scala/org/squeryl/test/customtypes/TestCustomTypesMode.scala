@@ -24,6 +24,7 @@ import CustomTypesMode._
 
  
 abstract class TestCustomTypesMode extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   val schema = new HospitalDb
 

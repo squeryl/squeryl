@@ -8,7 +8,8 @@ import org.squeryl.Session
 import org.squeryl.test.arrays.PrimitiveArrayTest
 
 trait Postgresql_Connection extends DBConnector{
-  def connectToDb() : Option[() => Session] = {
+  
+  def sessionCreator() : Option[() => Session] = {
     if(config.hasProps("postgresql.connectionString", "postgresql.user", "postgresql.password")){
       Class.forName("org.postgresql.Driver")
 

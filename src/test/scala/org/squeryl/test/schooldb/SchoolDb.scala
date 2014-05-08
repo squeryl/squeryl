@@ -345,6 +345,7 @@ class TestInstance(schema : SchoolDb){
 }
 
 abstract class FullOuterJoinTests extends SchoolDbTestBase{
+  self: DBConnector =>
 
   import schema._
 
@@ -380,6 +381,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 }
 
 abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   lazy val schema = new SchoolDb
 
@@ -391,6 +393,7 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 
 }
 abstract class SchoolDbTestRun extends SchoolDbTestBase {
+  self: DBConnector =>
 
   import schema._
 
@@ -1798,6 +1801,7 @@ object Issue14Schema extends Schema{
 }
 
 abstract class Issue14 extends DbTestBase with QueryTester {
+  self: DBConnector =>
 
 
 

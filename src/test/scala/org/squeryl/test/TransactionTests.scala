@@ -18,7 +18,8 @@ object FooSchema extends Schema {
   }
 }
 
-abstract class TransactionTests extends DbTestBase{
+abstract class TransactionTests extends DbTestBase {
+  self: DBConnector =>
 
   def throwExc(except: Boolean): Int = {
     if(except) throw new Exception()
@@ -102,7 +103,7 @@ abstract class TransactionTests extends DbTestBase{
   test("nested transactions with SessionFactory") {
 
    val sf1  = new SessionFactory {
-     def newSession: AbstractSession = connectWrapper().get()
+     def newSession: AbstractSession = sessionCreator().get()
    }    
    
    val sf2  = new SessionFactory {

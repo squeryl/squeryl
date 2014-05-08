@@ -1,9 +1,10 @@
 package org.squeryl.test
 
-import org.squeryl.framework.DbTestBase
+import org.squeryl.framework.{DBConnector, DbTestBase}
 import org.squeryl.{SessionFactory, Session}
 
 abstract class ConnectionClosingTest extends DbTestBase {
+  self: DBConnector =>
 
   def dbSpecificSelectNow: String
 
