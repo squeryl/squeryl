@@ -1,10 +1,9 @@
 package org.squeryl.test
 
 import org.squeryl._
-import org.squeryl.framework.{SchemaTester, RunTestsInsideTransaction}
+import org.squeryl.framework.{DBConnector, SchemaTester, RunTestsInsideTransaction, SingleTestRun}
 import java.util.UUID
 import org.squeryl.test.PrimitiveTypeModeForTests._
-import framework.SingleTestRun
 
 object UuidTests {
   class UuidAsProperty extends KeyedEntity[Long] {
@@ -42,7 +41,8 @@ object UuidTests {
 
 }
 
-abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction{
+abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
+  self: DBConnector =>
   import UuidTests._
 
   final def schema = TestSchema

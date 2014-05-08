@@ -9,7 +9,7 @@ import org.squeryl.adapters.OracleAdapter
 import org.squeryl.Session
 
 trait Oracle_Connection extends DBConnector{
-  def connectToDb() : Option[() => Session] = {
+  def sessionCreator() : Option[() => Session] = {
     if(config.hasProps("oracle.connectionString", "oracle.user", "oracle.password")){
       Class.forName("oracle.jdbc.OracleDriver")
 

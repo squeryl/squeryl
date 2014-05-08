@@ -29,14 +29,18 @@ object SquerylBuild extends Build {
       parallelExecution := false,
       publishMavenStyle := true,
       scalaVersion := "2.11.0",
-      scalacOptions ++= Seq(
-        "-unchecked",
-        "-deprecation",
-        "-feature",
-        "-language:implicitConversions",
-        "-language:postfixOps",
-        "-language:reflectiveCalls",
-        "-language:existentials"),
+      scalacOptions <++= scalaVersion map { sv =>
+        Seq("-unchecked", "-deprecation") ++ (
+          if(sv.startsWith("2.11"))
+            Seq("-feature",
+            "-language:implicitConversions",
+            "-language:postfixOps",
+            "-language:reflectiveCalls",
+            "-language:existentials")
+          else
+            Nil
+          )
+      },
       crossScalaVersions := Seq("2.10.3", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0"),
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
@@ -78,18 +82,18 @@ object SquerylBuild extends Build {
         "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided",
         "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
         "org.apache.derby" % "derby" % "10.7.1.1" % "provided",
-        "junit" % "junit" % "4.8.2" % "provided"),
+        "junit" % "junit" % "4.8.2" % "provided"
+      ),
       libraryDependencies <++= scalaVersion { sv =>
         Seq("org.scala-lang" % "scalap" % sv,
           sv match {
             case sv if sv startsWith "2.11" =>
               "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-          	case sv if sv startsWith "2.10" =>
-          	    "org.scalatest" %% "scalatest" % "1.9.1" % "test"
-          	case sv if sv startsWith "2.9" =>
-          		"org.scalatest" % "scalatest_2.9.2" % "1.6.1" % "test"
-          	case _ =>
-          		"org.scalatest" % "scalatest_2.8.2" % "1.5.1" % "test"
-        })
+            case sv if sv startsWith "2.10" =>
+              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
+            case _ =>
+              "org.scalatest" % "scalatest_2.9.2" % "2.0.M6-SNAP3" % "test"
+          }
+        )
       }))
 }

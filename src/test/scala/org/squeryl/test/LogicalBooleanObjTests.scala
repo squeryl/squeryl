@@ -1,9 +1,9 @@
 package org.squeryl.test
 
 import org.squeryl._
-import org.squeryl.framework.{SchemaTester, RunTestsInsideTransaction}
+import org.squeryl.framework.{DBConnector, SchemaTester, RunTestsInsideTransaction}
 import org.squeryl.dsl.ast._
-import org.squeryl.PrimitiveTypeMode._
+import org.squeryl.test.PrimitiveTypeMode4Tests._
 
 object LogicalBooleanObjTests {
 
@@ -16,7 +16,8 @@ object LogicalBooleanObjTests {
 }
 
 
-abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTransaction{
+abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTransaction {
+  self: DBConnector =>
   import org.squeryl.test.LogicalBooleanObjTests._
 
   final def schema = TestSchema

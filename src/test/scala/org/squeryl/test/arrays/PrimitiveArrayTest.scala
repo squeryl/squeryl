@@ -4,6 +4,7 @@ import _root_.org.squeryl.framework._
 import org.squeryl.test.PrimitiveTypeModeForTests._
 
 abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
 
   val schema = PrimitiveArraySchema

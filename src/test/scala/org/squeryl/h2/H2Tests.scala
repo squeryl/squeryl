@@ -36,12 +36,12 @@ trait H2_ConnectionCommon extends DBConnector {
 }
 
 trait H2_Connection extends DBConnector with H2_ConnectionCommon {
-  def connectToDb() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
+  def sessionCreator() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
 }
 
 
 trait H2_LazyConnection extends DBConnector with H2_ConnectionCommon {
-  def connectToDb() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
+  def sessionCreator() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
 
 }
 

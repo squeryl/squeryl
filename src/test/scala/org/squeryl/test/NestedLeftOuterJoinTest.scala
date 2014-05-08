@@ -15,7 +15,8 @@ class A(val id: Int, val name: String) extends KeyedEntity[Int]
 
 class B(val id: Int, val name: String, val aId: Int) extends KeyedEntity[Int]
 
-abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideTransaction{
+abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   def schema = TestSchema
 
