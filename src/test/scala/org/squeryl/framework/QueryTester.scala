@@ -2,9 +2,9 @@ package org.squeryl.framework
 
 import org.squeryl.{Session, Query}
 import org.squeryl.PrimitiveTypeMode._
-import org.scalatest.Matchers
+import org.scalatest.matchers.ShouldMatchers
 
-trait QueryTester { self : Matchers =>
+trait QueryTester extends ShouldMatchers {
 
   var logQueries = false
 
@@ -76,7 +76,5 @@ trait QueryTester { self : Matchers =>
 
   def passed(s: Symbol) = {} //println(s )
 }
-
-
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")

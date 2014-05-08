@@ -33,7 +33,6 @@ trait QueryDsl
   with JoinSignatures
   with FromSignatures {
   outerQueryDsl =>
-  
   def using[A](session: Session)(a: =>A): A =
     _using(session, a _)
 
@@ -267,7 +266,7 @@ trait QueryDsl
   class ManyToManyRelationBuilder[L <: KeyedEntity[_], R <: KeyedEntity[_]](l: Table[L], r: Table[R], nameOverride: Option[String]) {
 
     def via[A <: KeyedEntity[_]](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.runtimeClass.asInstanceOf[Class[A]], f, schema, nameOverride)
+      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride)
       schema._addTable(m2m)
       m2m
     }

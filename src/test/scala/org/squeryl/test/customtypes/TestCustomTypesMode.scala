@@ -19,8 +19,11 @@ import java.sql.SQLException
 import org.squeryl.customtypes._
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
+import CustomTypesMode._
+import org.scalatest.matchers.ShouldMatchers
 
-abstract class TestCustomTypesMode extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+
+abstract class TestCustomTypesMode extends SchemaTester with ShouldMatchers with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
   val schema = new HospitalDb

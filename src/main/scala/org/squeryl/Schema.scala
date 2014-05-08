@@ -333,10 +333,10 @@ trait Schema {
     c.getSimpleName
 
   protected def table[T]()(implicit manifestT: Manifest[T]): Table[T] =
-    table(tableNameFromClass(manifestT.runtimeClass))(manifestT)
+    table(tableNameFromClass(manifestT.erasure))(manifestT)
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
+    val typeT = manifestT.erasure.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None)
     _addTable(t)
     _addTableType(typeT, t)
@@ -344,7 +344,7 @@ trait Schema {
   }
 
   protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T]): Table[T] = {
-    val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
+    val typeT = manifestT.erasure.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, Some(prefix))
     _addTable(t)
     _addTableType(typeT, t)
@@ -358,7 +358,7 @@ trait Schema {
     _tableTypes += ((typeT, t))
   
   protected def view[T]()(implicit manifestT: Manifest[T]): View[T] =
-    view(tableNameFromClass(manifestT.runtimeClass))(manifestT)
+    view(tableNameFromClass(manifestT.erasure))(manifestT)
 
   protected def view[T](name: String)(implicit manifestT: Manifest[T]): View[T] =
     new View[T](name)(manifestT)
@@ -557,37 +557,37 @@ trait Schema {
     new LifecycleEventPercursorTable[A](t, BeforeInsert)
 
   protected def beforeInsert[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeInsert)
+    new LifecycleEventPercursorClass[A](m.erasure, this, BeforeInsert)
 
   protected def beforeUpdate[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, BeforeUpdate)
 
   protected def beforeUpdate[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeUpdate)
+    new LifecycleEventPercursorClass[A](m.erasure, this, BeforeUpdate)
 
   protected def beforeDelete[A](t: Table[A])(implicit ev : A <:< KeyedEntity[_]) =
     new LifecycleEventPercursorTable[A](t, BeforeDelete)
 
   protected def beforeDelete[K, A <: KeyedEntity[K]]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeDelete)
+    new LifecycleEventPercursorClass[A](m.erasure, this, BeforeDelete)
 
   protected def afterInsert[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterInsert)
 
   protected def afterInsert[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterInsert)
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterInsert)
 
   protected def afterUpdate[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterUpdate)
 
   protected def afterUpdate[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterUpdate)
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterUpdate)
 
   protected def afterDelete[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterDelete)
 
   protected def afterDelete[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterDelete)
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterDelete)
 
   protected def factoryFor[A](table: Table[A]) =
     new PosoFactoryPercursorTable[A](table)
@@ -608,7 +608,7 @@ trait Schema {
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
     
     private def _performAction(action: (Table[A]) => Unit) =
-      _tableTypes get (m.runtimeClass) map { table: Table[_] =>
+      _tableTypes get (m.erasure) map { table: Table[_] =>
         queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
       }
     
