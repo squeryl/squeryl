@@ -1,9 +1,10 @@
 package org.squeryl.framework
 
 import org.squeryl.{Session, Query}
-import org.scalatest.matchers.ShouldMatchers
+import org.squeryl.PrimitiveTypeMode._
+import org.scalatest.Matchers
 
-trait QueryTester { self : ShouldMatchers =>
+trait QueryTester { self : Matchers =>
 
   var logQueries = false
 

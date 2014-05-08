@@ -95,7 +95,7 @@ object BarChartRenderer {
    }
 
 
-  def page(stats: Stat*) =
+  def page(stats: Stat*) = """
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -122,5 +122,6 @@ object BarChartRenderer {
         <div id="chart4" style="width: 1000px; height: 400px;"></div>
       </body>
     </html>
+    """
 
 }

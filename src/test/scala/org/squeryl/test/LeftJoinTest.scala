@@ -2,7 +2,8 @@ package org.squeryl.test
 
 import org.squeryl.framework._
 
-abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction{
+abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction {
+ self: DBConnector =>
 
  import org.squeryl.PrimitiveTypeMode._
 

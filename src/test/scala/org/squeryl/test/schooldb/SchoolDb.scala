@@ -279,80 +279,11 @@ class TestInstance(schema : SchoolDb){
   val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
 }
 
-
-abstract class TypeSystemExerciseTests extends SchoolDbTestBase{
-
-  import org.squeryl.PrimitiveTypeMode._
-  import schema._
-
-  test("exerciseTypeSystem1") {
-    val testInstance = sharedTestInstance; import testInstance._
-     val q =
-      from(professors, courseAssigments, students, courses, courseSubscriptions, addresses)(
-       (p, ca, s, c, cs, a) =>
-        where(
-         p.id === ca.professorId and
-         ca.courseId === c.id and
-         cs.studentId === s.id and
-         cs.courseId === c.id and
-         s.addressId === a.id
-        )
-        groupBy(
-          s.isMultilingual : TypedExpressionNode[Option[Boolean]],
-          p.yearlySalary : TypedExpressionNode[Float],
-          p.weight :  TypedExpressionNode[Option[Float]],
-          a.appNumberSuffix : TypedExpressionNode[Option[String]],
-          c.finalExamDate : TypedExpressionNode[Option[Date]],
-          a.appNumber : TypedExpressionNode[Option[Int]],
-          c.meaninglessLongOption : TypedExpressionNode[Option[Long]],
-          c.meaninglessLongOption / (s.addressId+1) : TypedExpressionNode[Option[Double]] // TODO: fix NOT A GROUP BY exception ....
-        )
-        compute(
-          min(p.id) : TypedExpressionNode[Option[Long]],
-          avg(ca.id) : TypedExpressionNode[Option[Float]],
-          avg(c.meaninglessLongOption) : TypedExpressionNode[Option[Double]],
-          max(c.finalExamDate) : TypedExpressionNode[Option[Date]],
-          min(a.numberSuffix) : TypedExpressionNode[Option[String]],
-          max(s.isMultilingual) : TypedExpressionNode[Option[Boolean]],
-          min(c.startDate)  : TypedExpressionNode[Option[Date]]
-        )
-      )
-
-    try {
-       q.single : GroupWithMeasures[
-       Product8[Option[Boolean],
-        Float,
-        Option[Float],
-        Option[String],
-        Option[Date],
-        Option[Int],
-        Option[Long],
-        Option[Double]],
-       Product7[Option[Long],
-        Option[Float],
-        Option[Double],
-        Option[Date],
-        Option[String],
-        Option[Boolean],
-        Option[Date]]
-      ]
-      passed('exerciseTypeSystem1)
-    }
-    catch {
-      case e:Exception => {
-        println("statement failed : \n" + q.statement)
-        throw e
-      }
-    }
-  }
-}
-
 abstract class FullOuterJoinTests extends SchoolDbTestBase{
+  self: DBConnector =>
 
   import org.squeryl.PrimitiveTypeMode._
   import schema._
-
-
 
   test("NewLeftOuterJoin1Reverse")  {
     val testInstance = sharedTestInstance; import testInstance._
@@ -384,6 +315,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 }
 
 abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   lazy val schema = new SchoolDb
 
@@ -395,7 +327,10 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 
 }
 abstract class SchoolDbTestRun extends SchoolDbTestBase {
+  self: DBConnector =>
+
   import org.squeryl.PrimitiveTypeMode._
+  
   import schema._
 
   test("StringKeyedEntities"){
@@ -1596,6 +1531,7 @@ object Issue14Schema extends Schema{
 }
 
 abstract class Issue14 extends DbTestBase with QueryTester {
+  self: DBConnector =>
 
   import org.squeryl.PrimitiveTypeMode._
 

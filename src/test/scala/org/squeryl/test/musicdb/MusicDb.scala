@@ -99,6 +99,7 @@ class TestData(schema : MusicDb){
 }
 
 abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   import org.squeryl.PrimitiveTypeMode._
 

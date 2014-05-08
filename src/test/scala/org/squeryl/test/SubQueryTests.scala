@@ -4,7 +4,7 @@ import java.util.UUID
 
 import org.squeryl._
 import dsl.ast.QueryExpressionNode
-import framework.{RunTestsInsideTransaction, SchemaTester}
+import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 import org.squeryl.PrimitiveTypeMode._
 
 object SubQueryTestSchema{
@@ -39,6 +39,7 @@ object SubQueryTestSchema{
 }
 
 abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction{
+  self: DBConnector =>
   import SubQueryTestSchema._
 
 

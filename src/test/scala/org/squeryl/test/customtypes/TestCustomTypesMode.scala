@@ -21,6 +21,7 @@ import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
 
 abstract class TestCustomTypesMode extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   val schema = new HospitalDb
 

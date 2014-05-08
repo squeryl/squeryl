@@ -6,7 +6,7 @@ import org.squeryl.framework.DBConnector
 import org.squeryl.Session
 
 trait MSSQL_Connection extends DBConnector{
-  def connectToDb() : Option[() => Session] = {
+  def sessionCreator() : Option[() => Session] = {
     if(config.hasProps("mssql.connectionString")) {
       Class.forName("net.sourceforge.jtds.jdbc.Driver")
 

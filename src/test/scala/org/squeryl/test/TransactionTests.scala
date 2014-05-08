@@ -2,6 +2,7 @@ package org.squeryl.test
 
 import org.squeryl._
 import org.squeryl.framework._
+import org.squeryl.internals._
 
 import org.squeryl.PrimitiveTypeMode._
 
@@ -18,7 +19,8 @@ object FooSchema extends Schema {
   }
 }
 
-abstract class TransactionTests extends DbTestBase{
+abstract class TransactionTests extends DbTestBase {
+  self: DBConnector =>
 
   def throwExc(except: Boolean): Int = {
     if(except) throw new Exception()
@@ -97,6 +99,25 @@ abstract class TransactionTests extends DbTestBase{
       // works!
       assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
     }
+  }
+
+  test("nested transactions with SessionFactory") {
+
+   val sf1  = new SessionFactory {
+     def newSession: Session = sessionCreator().get()
+   }    
+   
+   val sf2  = new SessionFactory {
+     def newSession: Session = Utils.throwError("inner inTransaction sould not be started")
+   }
+   
+   
+   inTransaction(sf1) {
+     
+     inTransaction(sf2) {
+       
+     }
+   }
   }
   
 }

@@ -18,7 +18,7 @@ package org.squeryl.test.demo
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.{Query, Session, KeyedEntity, Schema}
 import org.squeryl.dsl.GroupWithMeasures
-import org.squeryl.framework.{RunTestsInsideTransaction, SchemaTester}
+import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 
 // The root object of the schema. Inheriting KeyedEntity[T] is not mandatory
 // it just makes primary key methods available (delete and lookup) on tables.
@@ -161,7 +161,8 @@ class TestData{
   val funkAndLatinJazz = playlists.insert(new Playlist("Funk and Latin Jazz", "c:/myPlayLists/funkAndLatinJazz"))
 }
 
-abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction{
+abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   val schema = MusicDb
 

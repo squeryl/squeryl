@@ -6,9 +6,10 @@ import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.H2Adapter
 
 import org.squeryl.Session
+import java.sql.Connection
 
-trait H2_Connection extends DBConnector{
-  def connectToDb() : Option[() => Session] = {
+trait H2_ConnectionCommon extends DBConnector {
+  def connectToDbCommon(sessionFunc: Connection => Session) : Option[() => Session] = {
     if(config.hasProps("h2.connectionString", "h2.user", "h2.password")){
       Class.forName("org.h2.Driver")
       Some(() => {
@@ -17,8 +18,7 @@ trait H2_Connection extends DBConnector{
           config.getProp("h2.user"),
           config.getProp("h2.password")
         )
-        c.setAutoCommit(false)
-        Session.create(c, new H2Adapter)
+        sessionFunc(c)
       })
     }else{
       None
@@ -26,6 +26,13 @@ trait H2_Connection extends DBConnector{
   }
 }
 
+trait H2_Connection extends DBConnector with H2_ConnectionCommon {
+  def sessionCreator() : Option[() => Session] = connectToDbCommon(Session.create(_, new H2Adapter))
+}
+
+/*
+ * Non-Lazy
+ */
 class H2_UuidTests extends UuidTests with H2_Connection
 class H2_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with H2_Connection
 class H2_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with H2_Connection
