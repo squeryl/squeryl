@@ -338,10 +338,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     c.getSimpleName
 
   protected def table[T]()(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
-    table(tableNameFromClass(manifestT.runtimeClass))(manifestT, ked)
+    table(tableNameFromClass(manifestT.erasure))(manifestT, ked)
   
   protected def table[T](name: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-    val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
+    val typeT = manifestT.erasure.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
     _addTable(t)
     _addTableType(typeT, t)
@@ -349,7 +349,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   }
 
   protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-    val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
+    val typeT = manifestT.erasure.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef)
     _addTable(t)
     _addTableType(typeT, t)
@@ -557,13 +557,13 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     new LifecycleEventPercursorTable[A](t, BeforeInsert)
 
   protected def beforeInsert[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeInsert)
+    new LifecycleEventPercursorClass[A](m.erasure, this, BeforeInsert)
 
   protected def beforeUpdate[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, BeforeUpdate)
 
   protected def beforeUpdate[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeUpdate)
+    new LifecycleEventPercursorClass[A](m.erasure, this, BeforeUpdate)
 
   protected def beforeDelete[A](t: Table[A])(implicit ev : KeyedEntityDef[A,_]) =
     new LifecycleEventPercursorTable[A](t, BeforeDelete)
@@ -581,19 +581,19 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     new LifecycleEventPercursorTable[A](t, AfterInsert)
 
   protected def afterInsert[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterInsert)
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterInsert)
 
   protected def afterUpdate[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterUpdate)
 
   protected def afterUpdate[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterUpdate)
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterUpdate)
 
   protected def afterDelete[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterDelete)
 
   protected def afterDelete[A]()(implicit m: Manifest[A]) =
-    new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterDelete)
+    new LifecycleEventPercursorClass[A](m.erasure, this, AfterDelete)
 
   protected def factoryFor[A](table: Table[A]) =
     new PosoFactoryPercursorTable[A](table)
@@ -614,7 +614,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
     
     private def _performAction(action: (Table[A]) => Unit) =
-      _tableTypes get (m.runtimeClass) map { table: Table[_] =>
+      _tableTypes get (m.erasure) map { table: Table[_] =>
         queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
       }
     

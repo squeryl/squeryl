@@ -46,7 +46,7 @@ trait QueryDsl
     def isPersisted(a:A) = a.isPersisted
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = 
-      if(classOf[Optimistic].isAssignableFrom(m.runtimeClass))
+      if(classOf[Optimistic].isAssignableFrom(m.erasure))
         Some("occVersionNumber")
       else
         None
@@ -356,7 +356,7 @@ trait QueryDsl
       kedR: KeyedEntityDef[R,_]) {
 
     def via[A](f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.runtimeClass.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
+      val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
       schema._addTable(m2m)
       m2m
     }
