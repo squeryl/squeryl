@@ -15,13 +15,19 @@
  ***************************************************************************** */
 package org.squeryl
 
-import annotation.meta.field
-//2.9.x import annotation.target.field
-import annotations.ColumnBase
 
 package object annotations {
   /**
-   * The preferred way to define column metadata is not not define them (!)
+   *
+   * Please note: Squeryl 0.9.5 supports Scala 2.9 -> 2.11.
+   * Before 0.9.5-7 the @Column attribute was defined in a way so that it
+   * would automatically be applied to the Java @field of a val or var.
+   * The Scala teams choice to change the location of the @field annotation
+   * unfortunately made this behavior impossible
+   * to retain.  If you are using the @Column attribute ito annotate
+   * constructor parameters you MUST define it as @(Column @field).  Better yet, don't use
+   * the Column annotation at all and define your column meta data in the Schema instead.
+   *
    * Squeryl has default mappings for all Java primitive types.
    * Scala/Java
    * Int/int  -> 4 byte number
@@ -40,5 +46,5 @@ package object annotations {
    *   else
    *     super.columnTypeFor(fieldMetaData, databaseAdapter)
    */
-  type Column = ColumnBase @field
+  type Column = ColumnBase
 }
