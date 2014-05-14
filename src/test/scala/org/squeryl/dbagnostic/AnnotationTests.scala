@@ -30,7 +30,6 @@ import org.squeryl.test.PrimitiveTypeModeForTests
 @Row("T_TOASTER")
 class Toaster(
 
-  @Column(optionType=classOf[Int])
   var yearOfManufacture: Option[Int],
 
 // TODO: uncomment when scalac bug #3003 is resolved
@@ -46,7 +45,7 @@ class Toaster(
   @Column(name="BRAND_NAME", length=32)
   var brandName: String) {
 
-  @Column(name="WEIGHT", optionType=classOf[Float])
+  @Column(name="WEIGHT")
   var weightInGrams: Option[String] = None
 
   @Column("Zozo12")
@@ -72,10 +71,8 @@ class AnnotationTests extends FunSuite with ShouldMatchers {
 
 
   class C(
-    @Column(optionType=classOf[Long]) var j: Option[Long],
-    @Column(optionType=classOf[java.lang.String]) var k: Option[String]) (
-
-    @Column(optionType=classOf[Int])
+    var j: Option[Long],
+    var k: Option[String]) (
     var i:Option[Int]
   )
 
@@ -134,7 +131,9 @@ class AnnotationTests extends FunSuite with ShouldMatchers {
   /**
    * There has been a Scala bug with obtaining a Class[_] member in annotations,
    * if this test fails, it means that Scala has regressed TODO: file a bug
-   */
+   *
+   * Removing this since the bug seems long since fixed
+   *
   test("scalaReflectionTests"){
     val colAnotations =
       classOf[C].getDeclaredFields.toList.sortBy(f => f.getName).map(f => f.getAnnotations.toList).flatten
@@ -150,4 +149,5 @@ class AnnotationTests extends FunSuite with ShouldMatchers {
     assert(classOf[Long].isAssignableFrom(t2), "expected classOf[Long], got " + t2.getName)
     assert(classOf[String].isAssignableFrom(t3), "expected classOf[String], got " + t3.getName)
   }
+   */
 }

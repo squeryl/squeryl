@@ -83,10 +83,11 @@ class Student(var name: String, var lastName: String, var age: Option[Int], var 
 
 case class Course2(id: Int, name: String, confirmed: Boolean, occVersionNumber: Int)
 
-case class Course(var name: String, var startDate: Date, var finalExamDate: Option[Date],
-  @Column("meaninglessLongZ")
-  var meaninglessLong: Long,
-  @Column("meaninglessLongOption")
+case class Course(
+  var name: String, 
+  var startDate: Date, 
+  var finalExamDate: Option[Date],
+  var meaninglessLongZ: Long,
   var meaninglessLongOption: Option[Long], val confirmed: Boolean) {
   
   val id: Int = 0
@@ -1034,17 +1035,17 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
 
-    assert(ht.meaninglessLong == 3, "expected 3, got " + ht.meaninglessLong)
+    assert(ht.meaninglessLongZ == 3, "expected 3, got " + ht.meaninglessLongZ)
     assert(ht.meaninglessLongOption == Some(1234), "expected Some(1234), got " + ht.meaninglessLongOption)
 
-    ht.meaninglessLong = -3
+    ht.meaninglessLongZ = -3
     ht.meaninglessLongOption = None
 
     ht.update
 
     ht = courses.where(c => c.id === heatTransfer.id).single
 
-    assert(ht.meaninglessLong == -3, "expected -3, got " + ht.meaninglessLong)
+    assert(ht.meaninglessLongZ == -3, "expected -3, got " + ht.meaninglessLongZ)
     assert(ht.meaninglessLongOption == None, "expected None, got " + ht.meaninglessLongOption)
 
     ht.meaninglessLongOption = Some(4321)
@@ -1173,7 +1174,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val q =
       from(courses)(c =>
-        select((c.id, c.meaninglessLong, c.meaninglessLongOption))
+        select((c.id, c.meaninglessLongZ, c.meaninglessLongOption))
         orderBy(c.id)
       )
 
@@ -1181,7 +1182,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     var nRows = courses.update(c =>
        where(c.id gt -1)
-       set(c.meaninglessLong := 123L,
+       set(c.meaninglessLongZ := 123L,
            c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
               // when meaninglessLongOption is null,the SQL addition will have a null result
     )
@@ -1196,7 +1197,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     nRows =
       update(courses)(c =>
         where(c.id gt -1)
-        set(c.meaninglessLong := 0L,
+        set(c.meaninglessLongZ := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
       )
 
@@ -1215,7 +1216,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(courses)(c =>
       where(c.id in from(courses)(c0=> where(c0.id lt -1) select(c0.id)))
-      set(c.meaninglessLong := 0L,
+      set(c.meaninglessLongZ := 0L,
           c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
     )
 
