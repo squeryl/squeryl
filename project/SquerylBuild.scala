@@ -28,7 +28,7 @@ object SquerylBuild extends Build {
   	  },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.11.0",
+      scalaVersion := "2.11.1",
       scalacOptions <++= scalaVersion map { sv =>
         Seq("-unchecked", "-deprecation") ++ (
           if(sv.startsWith("2.11"))
@@ -41,7 +41,7 @@ object SquerylBuild extends Build {
             Nil
           )
       },
-      crossScalaVersions := Seq("2.10.3", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0"),
+      crossScalaVersions := Seq("2.10.3"),
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
       pomExtra := (<scm>
