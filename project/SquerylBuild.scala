@@ -1,5 +1,6 @@
 import sbt._
 import Keys._
+import Append._
 //import ls.Plugin._
 
 object SquerylBuild extends Build {
@@ -25,8 +26,8 @@ object SquerylBuild extends Build {
       },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.10.4",
-      crossScalaVersions := Seq("2.11.1", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0", "2.8.2", "2.8.1", "2.8.0"),
+      scalaVersion := "2.11.1",
+      crossScalaVersions := Seq("2.10.4", "2.9.3", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0"),
       scalacOptions <++= scalaVersion map { sv =>
         Seq("-unchecked", "-deprecation") ++ (
           if(sv.startsWith("2.11"))
@@ -38,6 +39,13 @@ object SquerylBuild extends Build {
           else
             Nil
           )
+      },
+      unmanagedSourceDirectories in Compile := {
+        val existing = (unmanagedSourceDirectories in Compile).value
+        (if(scalaVersion.value.startsWith("2.9"))
+          baseDirectory.value / "src" / "main" / "scala-2.9"
+        else
+          baseDirectory.value / "src" / "main" / "scala-2.10+") +: existing
       },
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
