@@ -623,7 +623,12 @@ object FieldMetaData {
     val _dateM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getDate(i))
     val _longM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getLong(i))
     val _floatM =   (rs:ResultSet,i:Int) => _handleNull(rs, rs.getFloat(i))
-    val _bigDecM =  (rs:ResultSet,i:Int) => _handleNull(rs, new scala.math.BigDecimal(rs.getBigDecimal(i)))
+    val _bigDecM =  (rs:ResultSet,i:Int) => {
+      val bd = rs.getBigDecimal(i)
+      if (rs.wasNull)
+        null
+      bd
+    }
     val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
     val _binaryM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBytes(i))
     val _uuidM = (rs:ResultSet, i:Int) => {
