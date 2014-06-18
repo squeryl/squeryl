@@ -237,7 +237,13 @@ trait FieldMapper {
     val bigDecimalTEF = new FloatTypedExpressionFactory[BigDecimal,TBigDecimal] with PrimitiveJdbcMapper[BigDecimal] {
       val sample = BigDecimal(1)
       val defaultColumnLength = -1
-      def extractNativeJdbcValue(rs: ResultSet, i: Int) = BigDecimal(rs.getBigDecimal(i))
+      def extractNativeJdbcValue(rs: ResultSet, i: Int) = {
+        val v = rs.getBigDecimal(i)
+        if(rs.wasNull())
+          null
+        else
+          BigDecimal(v)
+      }
     }
     
     val optionBigDecimalTEF = new FloatTypedExpressionFactory[Option[BigDecimal],TOptionBigDecimal] with DeOptionizer[BigDecimal,BigDecimal,TBigDecimal,Option[BigDecimal],TOptionBigDecimal] {
