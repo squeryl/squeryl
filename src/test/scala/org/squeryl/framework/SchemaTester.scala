@@ -47,7 +47,7 @@ abstract class DbTestBase extends FunSuite with BeforeAndAfterAll with BeforeAnd
   self: DBConnector =>
 
   def isIgnored(testName: String) =
-    sessionCreator().isEmpty || ignoredTests.find(_ == testName).isEmpty
+    sessionCreator().isEmpty || ignoredTests.exists(_ == testName)
 
   def ignoredTests : List[String] = Nil
 

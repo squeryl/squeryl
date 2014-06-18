@@ -333,6 +333,18 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   
   import schema._
 
+  test("DecimalNull", SingleTestRun) {
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val p = new Professor("Mad Professor", 80.0F, Some(70.5F), 80.0F, None)
+
+    professors.insert(p)
+
+    professors.lookup(p.id)
+
+    passed('testAvgBigDecimal)
+  }
+
   test("StringKeyedEntities"){
     val testInstance = sharedTestInstance; import testInstance._
     val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))

@@ -627,7 +627,8 @@ object FieldMetaData {
       val bd = rs.getBigDecimal(i)
       if (rs.wasNull)
         null
-      bd
+      else
+        scala.BigDecimal(bd)
     }
     val _timestampM =    (rs:ResultSet,i:Int) => _handleNull(rs, rs.getTimestamp(i))
     val _binaryM =  (rs:ResultSet,i:Int) => _handleNull(rs, rs.getBytes(i))

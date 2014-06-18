@@ -6,4 +6,4 @@ resolvers ++= Seq(
 //addSbtPlugin("me.lessis" % "ls-sbt" % "0.1.1")
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
-resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
