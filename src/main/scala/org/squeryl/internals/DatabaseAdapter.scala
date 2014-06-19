@@ -531,12 +531,20 @@ trait DatabaseAdapter {
     sw.indent
     
     t.posoMetaData.primaryKey.getOrElse(throw new UnsupportedOperationException("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
-      pkMd => sw.write(quoteName(pkMd.columnName), " = ", writeValue(o_, pkMd, sw)),
+      pkMd => {
+        val (op, vl) = if(pkMd.getNativeJdbcValue(o_) == null) (" is ", "null") else (" = ", writeValue(o_, pkMd, sw))
+        sw.write(quoteName(pkMd.columnName), op, vl)
+      },
       pkGetter => {
         Utils.createQuery4WhereClause(t, (t0:T) => {
           val ck = pkGetter.invoke(t0).asInstanceOf[CompositeKey]
 
-          val fieldWhere = ck._fields map (fmd => quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw))
+          val fieldWhere = ck._fields map {
+            case fmd if(fmd.getNativeJdbcValue(o_) == null) =>
+              quoteName(fmd.columnName) + " is null"
+            case fmd =>
+              quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
+          }
           sw.write(fieldWhere.mkString(" and "))
 
           new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))

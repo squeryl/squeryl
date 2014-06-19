@@ -58,7 +58,13 @@ object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
     def isPersisted(a:Course2) = a.id > 0
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = Some("occVersionNumber")
-  }  
+  }
+
+  implicit object courseOfferingKED extends KeyedEntityDef[CourseOffering,CompositeKey3[Int, Option[Long], Int]] {
+    def getId(a:CourseOffering) = a.id
+    def isPersisted(a:CourseOffering) = a.isPersisted
+    def idPropertyName = "id"
+  }
 }
 
 import AppSpecificTypeMode._
@@ -127,6 +133,10 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
   def this() = this("", 0F, Some(0F), BigDecimal(0), Some(BigDecimal(0)))
   var id: Long = 0
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
+}
+
+case class CourseOffering(courseId:Int, schoolId:Option[Long], addressId:Int, description:String) extends PersistenceStatus {
+  def id = CompositeKey3(courseId, schoolId, addressId)
 }
 
 case class PostalCode(code: String) extends KeyedEntity[String] {
@@ -204,6 +214,8 @@ class SchoolDb extends Schema {
   val courseSubscriptions = table[CourseSubscription]
 
   val courseAssigments = table[CourseAssignment]
+
+  val courseOfferings = table[CourseOffering]
 
   val schools = table[School]
 
@@ -341,7 +353,12 @@ class TestInstance(schema : SchoolDb){
   courseSubscriptions.insert(new CourseSubscription(counterpoint.id, pratap.id))
   courseSubscriptions.insert(new CourseSubscription(mandarin.id, gaitan.id))
 
+
   val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
+
+  val offering1 = courseOfferings.insert(new CourseOffering(groupTheory.id, Some(tournesol.id), oneHutchissonStreet.id, "Offered Daily"))
+  val offering2 = courseOfferings.insert(new CourseOffering(groupTheory.id, None, twoHutchissonStreet.id, "May be cancelled"))
+
 }
 
 abstract class FullOuterJoinTests extends SchoolDbTestBase{
@@ -569,6 +586,18 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assertEquals(2, c.rawData(1), 'blobTest)
 
     passed('blobTest)
+  }
+
+  test("nullCompoundKey"){
+    val testInstance = sharedTestInstance;
+    import testInstance._
+
+    courseOfferings.allRows.foreach{ row =>
+      val newRow = row.copy(description = "Cancelled")
+      courseOfferings.update(newRow)
+    }
+
+    passed('nullCompoundKey)
   }
 
   /**
