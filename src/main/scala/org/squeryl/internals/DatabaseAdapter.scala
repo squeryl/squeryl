@@ -131,7 +131,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.orderByClause.isEmpty && qen.parent == None) {
+    if(! qen.orderByClause.isEmpty ) {
       sw.write("Order By")
       sw.nextLine
       val ob0 = qen.orderByClause.filter(e => ! e.inhibited)

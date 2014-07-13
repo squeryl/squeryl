@@ -1166,6 +1166,40 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   
   test("Inhibit right hand side of enum"){
   }
+
+  test("test subquery with page"){
+
+    // Should only grab the first two songs in title order.
+
+    val subquery = from(songs)((s) =>
+      select(s)
+    ).page(0,2)
+
+    val query = join(subquery,artists)((s,a) =>
+      select(s,a)
+      orderBy(s.title asc)
+      on( s.authorId === a.id )
+    )
+
+    query.toList.size should be (2)
+  }
+
+  test("test subquery with orderBy"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val subquery = from(songs)((s) =>
+      select(s)
+      orderBy(s.title asc)
+    ).page(0,1)
+
+    val query = join(subquery,artists)((s,a) =>
+      select(s.id)
+      on( s.authorId === a.id )
+    )
+
+    query.toList should be (List(besameMama.id))
+  }
+
 //  //class EnumE[A <: Enumeration#Value](val a: A) {
 //  class EnumE[A](val a: A) {
 //

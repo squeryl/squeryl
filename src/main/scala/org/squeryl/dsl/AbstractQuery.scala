@@ -116,6 +116,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
   def copy(asRoot:Boolean) = {
     val c = createCopy(asRoot)
     c.selectDistinct = selectDistinct
+    c.page = page
     c
   }
 
