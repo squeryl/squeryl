@@ -64,12 +64,15 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
     } finally {
       if (hasConnection) {
         try {
-          if (txOk)
-            connection.commit
-          else
-            connection.rollback
-          if (originalAutoCommit != connection.getAutoCommit)
-            connection.setAutoCommit(originalAutoCommit)
+          try {
+            if (txOk)
+              connection.commit
+            else
+              connection.rollback
+          } finally {
+            if (originalAutoCommit != connection.getAutoCommit)
+              connection.setAutoCommit(originalAutoCommit)
+          }
         } catch {
           case e: SQLException => {
             Utils.close(connection)
@@ -117,12 +120,15 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
       }
     } finally {
       try {
-        if (txOk)
-          connection.commit
-        else
-          connection.rollback
-        if (originalAutoCommit != connection.getAutoCommit)
-          connection.setAutoCommit(originalAutoCommit)
+        try {
+          if (txOk)
+            connection.commit
+          else
+            connection.rollback
+        } finally {
+          if (originalAutoCommit != connection.getAutoCommit)
+            connection.setAutoCommit(originalAutoCommit)
+        }
       } catch {
         case e: SQLException => {
           Utils.close(connection)
@@ -208,6 +214,8 @@ trait AbstractSession {
     _statements.clear
     _resultSets.foreach(rs => Utils.close(rs))
     _resultSets.clear
+
+    FieldReferenceLinker.clearThreadLocalState()
   }
 
   def close = {

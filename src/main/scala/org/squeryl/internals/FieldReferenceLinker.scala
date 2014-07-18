@@ -25,6 +25,13 @@ import org.squeryl.InternalFieldMapper
 
 object FieldReferenceLinker {
 
+  def clearThreadLocalState() {
+    _yieldValues.remove()
+    __lastAccessedFieldReference.remove()
+    _compositeKeyMembers.remove()
+    _yieldInspectionTL.remove()
+  }
+
   def pushExpressionOrCollectValue[T](e: ()=>TypedExpression[T,_]): T = {
     if (isYieldInspectionMode) {
       val yi = _yieldInspectionTL.get

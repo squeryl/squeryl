@@ -51,14 +51,16 @@ class DerbyAdapter extends DatabaseAdapter {
     res
   }
 
-  override def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = 
-    qen.page.foreach(p => {
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) {
+    page().foreach(p => {
       sw.write("offset ")
       sw.write(p._1.toString)
       sw.write(" rows fetch next ")
       sw.write(p._2.toString)
       sw.write("rows only")
+      sw.pushPendingNextLine
     })
+  }
   
   override def isTableDoesNotExistException(e: SQLException) =
     e.getSQLState == "42Y55"

@@ -24,7 +24,10 @@ import collection.mutable.ArrayBuffer
 import org.squeryl.logging._
 import java.io.Closeable
 
-abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
+abstract class AbstractQuery[R](
+    val isRoot:Boolean,
+    private [squeryl] val unions: List[(String, Query[R])]
+  ) extends Query[R] {
 
   private [squeryl] var selectDistinct = false
   
@@ -32,10 +35,14 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
   private [squeryl] var page: Option[(Int,Int)] = None
 
+  private [squeryl] var unionIsForUpdate = false
+  private [squeryl] var unionPage: Option[(Int, Int)] = None
 
   val resultSetMapper = new ResultSetMapper
 
   val name = "query"
+
+  private def isUnionQuery = ! unions.isEmpty
 
   def give(rsm: ResultSetMapper, rs: ResultSet): R = {
     rsm.pushYieldedValues(rs)
@@ -68,6 +75,9 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     }
     new StackTraceElement("unknown", "unknown", "unknown", -1)
   }
+
+  protected def copyUnions(u: List[(String, Query[R])]) =
+    u map (t => (t._1, t._2.copy(false, Nil)))
 
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
@@ -113,13 +123,14 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
 
   def ast: QueryExpressionNode[R]
 
-  def copy(asRoot:Boolean) = {
-    val c = createCopy(asRoot)
+  def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]) = {
+    val c = createCopy(asRoot, newUnions)
     c.selectDistinct = selectDistinct
+    c.page = page
     c
   }
 
-  def createCopy(asRoot:Boolean): AbstractQuery[R]
+  def createCopy(asRoot:Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R]
 
   def dumpAst = ast.dumpAst
 
@@ -133,20 +144,30 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
   }
 
   def distinct = {
-    val c = copy(true)
+    if (isUnionQuery) {
+      Utils.throwError("distinct is not supported on union queries")
+    }
+    val c = copy(true, Nil)
     c.selectDistinct = true;
     c
   }
 
   def page(offset: Int, pageLength: Int): Query[R] = {
-    val c = copy(true)
-    c.page = Some((offset, pageLength))
+    val c = copy(true, Nil)
+    val page = Some((offset, pageLength))
+    if (c.isUnionQuery)
+      c.unionPage = page
+    else
+      c.page = page
     c    
   }
 
   def forUpdate = {
-    val c = copy(true)
-    c.isForUpdate = true;
+    val c = copy(true, Nil)
+    if (c.isUnionQuery)
+      c.unionIsForUpdate = true
+    else
+      c.isForUpdate = true;
     c    
   }
 
@@ -251,7 +272,7 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
     }      
     else {
       val qr = q.asInstanceOf[AbstractQuery[U]]
-      val copy = qr.copy(false)
+      val copy = qr.copy(false, Nil)
       new SubQueryable(copy, copy.ast.sample.asInstanceOf[U], copy.resultSetMapper, true, copy.ast)
     }
 
@@ -282,4 +303,19 @@ abstract class AbstractQuery[R](val isRoot:Boolean) extends Query[R] {
       else
         queryable.give(resultSetMapper, rs)
   }
+
+  private def createUnion(kind: String, q: Query[R]): Query[R] = 
+    copy(true, List((kind, q)))
+
+  def union(q: Query[R]): Query[R] = createUnion("Union", q) 
+
+  def unionAll(q: Query[R]): Query[R] = createUnion("Union All", q)
+
+  def intersect(q: Query[R]): Query[R] = createUnion("Intersect", q)
+
+  def intersectAll(q: Query[R]): Query[R] = createUnion("Intersect All", q)
+
+  def except(q: Query[R]): Query[R] = createUnion("Except", q)
+
+  def exceptAll(q: Query[R]): Query[R] = createUnion("Except All", q)
 }

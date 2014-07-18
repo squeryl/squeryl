@@ -101,12 +101,19 @@ trait ExpressionNode {
   }
 }
 
+class ListExpressionNode(override val children: List[ExpressionNode]) extends ExpressionNode {
+  override def doWrite(sw: StatementWriter) {
+    sw.writeNodesWithSeparator(children, ", ", false)
+  }
+}
 
-trait ListExpressionNode extends ExpressionNode {
-
-  def quotesElement = false
-  
-  def isEmpty: Boolean
+class RowValueConstructorNode(override val children: List[ExpressionNode]) extends ExpressionNode {
+  override def doWrite(sw: StatementWriter) {
+    // sw.write("ROW")
+    sw.write("(")
+    sw.writeNodesWithSeparator(children, ", ", false)
+    sw.write(")")
+  }
 }
 
 class EqualityExpression(override val left: TypedExpression[_,_], override val right: TypedExpression[_,_]) extends BinaryOperatorNodeLogicalBoolean(left, right, "=") {
@@ -442,7 +449,7 @@ class PrefixOperatorNode
 
   override def children = List(child)
 
-  override def inhibited = child.inhibited
+  override def inhibited = _inhibitedByWhen || child.inhibited
 
   override def toString = 'PrefixOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
 
@@ -543,7 +550,7 @@ class OrderByExpression(a: OrderByArg) extends ExpressionNode {
 
   private def e = a.e
   
-  override def inhibited = e.inhibited
+  override def inhibited = _inhibitedByWhen || e.inhibited
 
   def doWrite(sw: StatementWriter) = {
     e.write(sw)
@@ -600,6 +607,9 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     if(ast.isInstanceOf[ConstantExpressionNodeList[_]]) {
       ast.asInstanceOf[ConstantExpressionNodeList[_]].isEmpty
     }
+    else if(ast.isInstanceOf[ListExpressionNode]) {
+      ast.asInstanceOf[ListExpressionNode].children.isEmpty
+    }
     else false
 
   override def doWrite(sw: StatementWriter) =
@@ -608,4 +618,38 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     else {
       ast.doWrite(sw)
     }
+}
+
+class UnionExpressionNode(val kind: String, val ast: ExpressionNode) extends ExpressionNode {
+  def doWrite(sw: StatementWriter) = {
+    sw.write(kind)
+    sw.nextLine
+    sw.write("(")
+    sw.nextLine
+    sw.indent(1)
+    ast.write(sw)
+    sw.unindent(1)
+    sw.write(")")
+    sw.nextLine
+  }
+
+  override def toString = {
+    'UnionExpressionNode + "[with " + kind  + "]"
+  }
+
+  override def children =
+    List(ast)
+}
+
+class QueryValueExpressionNode[A1, T1](val ast: ExpressionNode, override val mapper: OutMapper[A1]) extends TypedExpression[A1, T1] {
+  def doWrite(sw:StatementWriter) = {
+    ast.write(sw)
+  }
+
+  override def toString = {
+    'QueryValueExpressionNode + ""
+  }
+
+  override def children =
+    List(ast)
 }
