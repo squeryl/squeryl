@@ -414,7 +414,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   import schema._
 
+  test("cast"){
+    val testInstance = sharedTestInstance; import testInstance._
 
+    val q =
+      from(addresses)(a => where(a.id === "1".cast[Int, TInt]("int")) select(a))
+    assert(q.toList.size == 1)
+  }
 
   test("DecimalNull", SingleTestRun) {
     val testInstance = sharedTestInstance; import testInstance._

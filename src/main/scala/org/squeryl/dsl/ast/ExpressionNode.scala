@@ -99,6 +99,11 @@ trait ExpressionNode {
 
     inhibitWhen(c.value == None)
   }
+
+  def cast[A, T](typ: String)(implicit tef: TypedExpressionFactory[A, T]): TypedExpression[A,T] =
+    new CastExpressionNode(this, typ) with TypedExpression[A, T] {
+      override def mapper = tef.createOutMapper
+    }
 }
 
 class ListExpressionNode(override val children: List[ExpressionNode]) extends ExpressionNode {
