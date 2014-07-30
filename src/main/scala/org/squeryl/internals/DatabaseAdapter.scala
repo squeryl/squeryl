@@ -289,6 +289,8 @@ trait DatabaseAdapter {
 
   def supportsUnionQueryOptions = true
 
+  def supportsReturningClause = false
+
   def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 
     sw.write("create table ")
@@ -419,9 +421,9 @@ trait DatabaseAdapter {
     }
   }
 
-  def executeUpdateForInsert(s: AbstractSession, sw: StatementWriter, ps: PreparedStatement) = exec(s, sw) { params =>
+  def executeUpdateForInsert(s: AbstractSession, sw: StatementWriter, ps: PreparedStatement): Boolean = exec(s, sw) { params =>
     fillParamsInto(params, ps)
-    ps.executeUpdate
+    ps.execute()
   }
 
   protected def getInsertableFields(fmd : Iterable[FieldMetaData]) = fmd.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable )
@@ -440,6 +442,19 @@ trait DatabaseAdapter {
       f.map(fmd => writeValue(o_, fmd, sw)
     ).mkString("(",",",")"));
   }
+
+  protected [squeryl] def writeReturningClause[T](t: Table[T], sw: StatementWriter) {
+    if (supportsReturningClause) {
+      val f = t.posoMetaData.refreshableFields.toList
+
+      f.headOption foreach { _ =>
+        sw.write(" returning ")
+        sw.write(f.map(fmd => quoteName(t.name + "." + fmd.columnName)).mkString(", "));
+      }
+    }
+  }
+
+
 
   /**
    * Converts field instances so they can be fed, and understood by JDBC
@@ -517,59 +532,79 @@ trait DatabaseAdapter {
 
   def isFullOuterJoinSupported = true
 
-  def writeUpdate[T](o: T, t: Table[T], sw: StatementWriter, checkOCC: Boolean) = {
+  def writeUpdate[T](o: T, t: Table[T], sw: StatementWriter, checkOCC: Boolean, fieldFilter: FieldMetaData => Boolean = _ => true): Boolean = {
 
     val o_ = o.asInstanceOf[AnyRef]
 
+    val fmds = t.posoMetaData.fieldsMetaData.
+      filter(fmd=> ! fmd.isIdFieldOfKeyedEntity && fmd.isUpdatable).
+      filter(fieldFilter)
 
-    sw.write("update ", quoteName(t.prefixedName), " set ")
-    sw.nextLine
-    sw.indent
-    sw.writeLinesWithSeparator(
-      t.posoMetaData.fieldsMetaData.
-        filter(fmd=> ! fmd.isIdFieldOfKeyedEntity && fmd.isUpdatable).
-          map(fmd => {
-            if(fmd.isOptimisticCounter)
-              quoteName(fmd.columnName) + " = " + quoteName(fmd.columnName) + " + 1 "
-            else
-              quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
-          }),
-      ","
-    )
-    sw.unindent
-    sw.write("where")
-    sw.nextLine
-    sw.indent
-    
-    t.posoMetaData.primaryKey.getOrElse(throw new UnsupportedOperationException("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
-      pkMd => {
-        val (op, vl) = if(pkMd.getNativeJdbcValue(o_) == null) (" is ", "null") else (" = ", writeValue(o_, pkMd, sw))
-        sw.write(quoteName(pkMd.columnName), op, vl)
-      },
-      pkGetter => {
-        Utils.createQuery4WhereClause(t, (t0:T) => {
-          val ck = pkGetter.invoke(t0).asInstanceOf[CompositeKey]
+    if (fmds.isEmpty)
+      false
+    else {
+      sw.write("update ", quoteName(t.prefixedName), " set ")
+      sw.nextLine
+      sw.indent
+      sw.writeLinesWithSeparator(
+        fmds.map(fmd => {
+          if(fmd.isOptimisticCounter)
+            quoteName(fmd.columnName) + " = " + quoteName(fmd.columnName) + " + 1 "
+          else
+            quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
+        }),
+        ","
+      )
+      sw.unindent
+      sw.write("where")
+      sw.nextLine
+      sw.indent
 
-          val fieldWhere = ck._fields map {
-            case fmd if(fmd.getNativeJdbcValue(o_) == null) =>
-              quoteName(fmd.columnName) + " is null"
-            case fmd =>
-              quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
-          }
-          sw.write(fieldWhere.mkString(" and "))
+      t.posoMetaData.primaryKey.getOrElse(throw new UnsupportedOperationException("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
+        pkMd => {
+          val (op, vl) = if(pkMd.getNativeJdbcValue(o_) == null) (" is ", "null") else (" = ", writeValue(o_, pkMd, sw))
+          sw.write(quoteName(pkMd.columnName), op, vl)
+        },
+        pkGetter => {
+          Utils.createQuery4WhereClause(t, (t0:T) => {
+            val ck = pkGetter.invoke(t0).asInstanceOf[CompositeKey]
 
-          new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))
+            val fieldWhere = ck._fields map {
+              case fmd if(fmd.getNativeJdbcValue(o_) == null) =>
+                quoteName(fmd.columnName) + " is null"
+              case fmd =>
+                quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
+            }
+            sw.write(fieldWhere.mkString(" and "))
+
+            new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))
+          })
+        }
+      )
+
+      if(checkOCC) {
+        t.posoMetaData.optimisticCounter.foreach(occ => {
+          sw.write(" and ")
+          sw.write(quoteName(occ.columnName))
+          sw.write(" = ")
+          sw.write(writeValue(o_, occ, sw))
         })
-      }
-    )
 
-    if(checkOCC)
-      t.posoMetaData.optimisticCounter.foreach(occ => {
-         sw.write(" and ")
-         sw.write(quoteName(occ.columnName))
-         sw.write(" = ")
-         sw.write(writeValue(o_, occ, sw))
-      })
+        t.posoMetaData.pgOptimisticValues.foreach(
+          field => {
+            sw.write(" and ")
+            sw.write(quoteName(field.columnName))
+            if (field.columnName == "ctid") {
+              sw.write("::varchar")
+            }
+            sw.write(" = ")
+            sw.write(writeValue(o_, field, sw))
+          }
+        )
+      }
+
+      true
+    }
   }
 
   def writeDelete[T](t: Table[T], whereClause: Option[ExpressionNode], sw: StatementWriter) = {

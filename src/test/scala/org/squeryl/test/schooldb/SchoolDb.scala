@@ -156,9 +156,9 @@ case class SqlDate(val id:Long, val aDate: java.sql.Date) extends KeyedEntity[Lo
 
 }
 
-case class YieldInspectionTest(id:Int, num:Int)
+case class YieldInspectionTest(id:Int, num:Int) extends KeyedEntity[Int]
 
-case class YieldInspectionAnother(id:Int, name:String, testId:Int)
+case class YieldInspectionAnother(id:Int, name:String, testId:Int) extends KeyedEntity[Int]
 
 object SDB extends SchoolDb
 

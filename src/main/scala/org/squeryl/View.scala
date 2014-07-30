@@ -112,7 +112,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     else
       None
   }
-  
+
   /**
    * Will throw an exception if the given key (k) returns no row.
    */
