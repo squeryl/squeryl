@@ -99,6 +99,11 @@ trait ExpressionNode {
 
     inhibitWhen(c.value == None)
   }
+
+  def cast[A, T](typ: String)(implicit tef: TypedExpressionFactory[A, T]): TypedExpression[A,T] =
+    new CastExpressionNode(this, typ) with TypedExpression[A, T] {
+      override def mapper = tef.createOutMapper
+    }
 }
 
 class ListExpressionNode(override val children: List[ExpressionNode]) extends ExpressionNode {
@@ -330,7 +335,7 @@ class TokenExpressionNode(val token: String) extends ExpressionNode {
 }
 
 
-class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, v.asInstanceOf[AnyRef], None)
+private [squeryl] class InputOnlyConstantExpressionNode(v: Any) extends ConstantTypedExpression[Any,Any](v, v.asInstanceOf[AnyRef], None)
 
 class ConstantTypedExpression[A1,T1](val value: A1, val nativeJdbcValue: AnyRef, i: Option[TypedExpressionFactory[A1,_]]) extends TypedExpression[A1,T1] {
 
