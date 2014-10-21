@@ -246,21 +246,25 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
   }
 
   private def _groupOfMembersIsProperty(property: (Option[Field], Option[Method], Option[Method], Set[Annotation])): Boolean  = {
-    
+
     if(property._4.find(an => an.isInstanceOf[Transient]) != None)
-      return false    
+      return false
 
-    val hasAField = property._1 != None
-	
-	val isAStaticField = property._1.map(f => Modifier.isStatic(f.getModifiers)).getOrElse(false)
+    val hasAField = property._1.map { field =>
+      !Modifier.isStatic(field.getModifiers)
+    } getOrElse false
 
-    val hasGetter = property._2 != None &&
-      ! classOf[java.lang.Void].isAssignableFrom(property._2.get.getReturnType) &&
-      property._2.get.getParameterTypes.length == 0
+    val hasGetter = property._2.map { getter =>
+      !Modifier.isStatic(getter.getModifiers) &&
+        !classOf[java.lang.Void].isAssignableFrom(getter.getReturnType) &&
+        getter.getParameterTypes.length == 0
+    } getOrElse false
 
-    val hasSetter = property._3 != None &&
-      property._3.get.getParameterTypes.length == 1
-    
+    val hasSetter = property._3.map { setter =>
+      !Modifier.isStatic(setter.getModifiers) &&
+        property._3.get.getParameterTypes.length == 1
+    } getOrElse false
+
     val memberTypes = new ArrayBuffer[Class[_]]
 
     if(hasAField)
@@ -268,7 +272,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     if(hasGetter)
       memberTypes.append(property._2.get.getReturnType)
     if(hasSetter)
-      memberTypes.append(property._3.get.getParameterTypes.apply(0))    
+      memberTypes.append(property._3.get.getParameterTypes.apply(0))
 
     //not a property if it has no getter, setter or field
     if(memberTypes.size == 0)
@@ -282,11 +286,11 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     }
 
     (hasAField, hasGetter, hasSetter) match {
-      case (true,  false, false) => !isAStaticField
+      case (true,  false, false) => true
       case (false, true,  true)  => true
       case (true,  true,  true)  => true
       case (true,  true, false)  => true
-      case a:Any => false
+      case _ => false
     }
   }
 
