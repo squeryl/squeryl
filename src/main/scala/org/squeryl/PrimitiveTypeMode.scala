@@ -83,11 +83,11 @@ trait PrimitiveTypeMode extends QueryDsl with FieldMapper {
   implicit def binaryToTE(s: Array[Byte]) = PrimitiveTypeSupport.binaryTEF.create(s)
   implicit def optionByteArrayToTE(s: Option[Array[Byte]]) = PrimitiveTypeSupport.optionByteArrayTEF.create(s)
 
-  implicit def enumValueToTE[A <: Enumeration#Value](e: A) =
-    PrimitiveTypeSupport.enumValueTEF(e).create(e)
+  implicit def enumValueToTE[A >: Enumeration#Value <: Enumeration#Value](e: A): TypedExpression[A, TEnumValue[A]] =
+    PrimitiveTypeSupport.enumValueTEF[A](e).create(e)
     
-  implicit def optionEnumcValueToTE[A <: Enumeration#Value](e: Option[A]) = 
-    PrimitiveTypeSupport.optionEnumValueTEF(e).create(e)
+  implicit def optionEnumcValueToTE[A >: Enumeration#Value <: Enumeration#Value](e: Option[A]): TypedExpression[Option[A], TOptionEnumValue[A]] =
+    PrimitiveTypeSupport.optionEnumValueTEF[A](e).create(e)
   
   implicit def byteToTE(f: Byte) = byteTEF.create(f)    
   implicit def optionByteToTE(f: Option[Byte]) = optionByteTEF.create(f)
