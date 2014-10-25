@@ -45,8 +45,8 @@ object SquerylBuild extends Build {
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
       pomExtra := (<scm>
-                     <url>git@github.com:max-l/squeryl.git</url>
-                     <connection>scm:git:git@github.com:max-l/squeryl.git</connection>
+                     <url>git@github.com:squeryl/squeryl.git</url>
+                     <connection>scm:git:git@github.com:squeryl/squeryl.git</connection>
                    </scm>
                    <developers>
                      <developer>
@@ -73,7 +73,7 @@ object SquerylBuild extends Build {
       /*
 			  (LsKeys.tags in LsKeys.lsync) := Seq("sql", "orm", "query", "database", "db", "dsl"),
 			  (LsKeys.docsUrl in LsKeys.lsync) := Some(new URL("http://squeryl.org/api/")),
-			  (LsKeys.ghUser in LsKeys.lsync) := Some("max-l"),
+			  (LsKeys.ghUser in LsKeys.lsync) := Some("squeryl"),
         */
       libraryDependencies ++= Seq(
         "cglib" % "cglib-nodep" % "2.2",

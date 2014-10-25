@@ -454,7 +454,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
 
 //  test("Issue68"){
-//    //https://github.com/max-l/Squeryl/issues#issue/68
+//    //https://github.com/squeryl/squeryl/issues#issue/68
 //    // Invoking a persisent field during construction causes interference in AST construction
 //
 //    val a = new ASTConstructionInterferenceA
