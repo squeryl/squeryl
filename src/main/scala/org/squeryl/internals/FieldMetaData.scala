@@ -452,13 +452,18 @@ object FieldMetaData {
           createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
         }
         catch {
-          case e:Exception => null
+          case e: Exception => {
+            var errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
+            if (!detectScalapOnClasspath()) errorMessage += "scalap option deduction not enabled. See: http://squeryl.org/scalap.html for more information."
+              throw new RuntimeException(errorMessage, e)
+          }
         }
 
       val deductionFailed =
         v match {
           case Some(None) => true
-          case a:Any  => (v == null)
+          case null => true
+          case a:Any  => false
         }
 
       if(deductionFailed) {
