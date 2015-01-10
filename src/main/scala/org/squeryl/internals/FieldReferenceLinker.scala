@@ -242,7 +242,7 @@ object FieldReferenceLinker {
   
 	  @volatile var _cache: Map[Class[_], Array[Field]] =
 			  Map[Class[_], Array[Field]]()
-			  
+
 	  def apply(cls: Class[_]) =
 	    _cache.get(cls) getOrElse {
 	      val declaredFields = cls.getDeclaredFields()
@@ -329,7 +329,11 @@ object FieldReferenceLinker {
         if(isComposite)
           _compositeKeyMembers.set(Some(new ArrayBuffer[SelectElement]))
 
-        var res = proxy.invokeSuper(o, args);
+        var res =
+          if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
+            "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
+          else
+            proxy.invokeSuper(o, args);
 
         if(isComposite) {
           val ck = res.asInstanceOf[CompositeKey]
@@ -337,9 +341,6 @@ object FieldReferenceLinker {
           ck._propertyName = Some(m.getName)
           _compositeKeyMembers.remove()
         }
-
-        if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
-          res = "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
 
         if(fmd != None) {
 
