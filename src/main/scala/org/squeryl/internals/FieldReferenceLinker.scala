@@ -329,7 +329,7 @@ object FieldReferenceLinker {
         if(isComposite)
           _compositeKeyMembers.set(Some(new ArrayBuffer[SelectElement]))
 
-        var res =
+        val res =
           if(m.getName.equals("toString") && m.getParameterTypes.length == 0)
             "sample:"+viewExpressionNode.view.name+"["+Integer.toHexString(System.identityHashCode(o)) + "]"
           else
