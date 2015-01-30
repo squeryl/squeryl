@@ -63,7 +63,7 @@ class H2_ConnectionClosing extends ConnectionClosingTest with H2_Connection {
 }
 class H2_LogicalBooleanObjTests extends LogicalBooleanObjTests with H2_Connection
 
-
+class H2_CommonTableExpressions extends schooldb.CommonTableExpressions with H2_Connection
 
 /*
  * Lazy

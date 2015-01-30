@@ -130,16 +130,15 @@ trait QueryDsl
   
   implicit def __thisDsl:QueryDsl = this  
 
-  private class QueryElementsImpl[Cond](override val whereClause: Option[()=>LogicalBoolean])
-    extends QueryElements[Cond]
-
   def where(b: =>LogicalBoolean): WhereState[Conditioned] =
-    new QueryElementsImpl[Conditioned](Some(b _))
+    new fsm.QueryElementsImpl[Conditioned](Some(b _), Nil)
+
+  def withWith(queries: Query[_]*): WithState =
+    new fsm.WithState(queries.toList.map(_.copy(false, Nil)))
 
   def &[A,T](i: =>TypedExpression[A,T]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
     
-  
   implicit def typedExpression2OrderByArg[E <% TypedExpression[_,_]](e: E) = new OrderByArg(e)
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)

@@ -20,6 +20,8 @@ import boilerplate._
 import org.squeryl.internals.{ResultSetMapper}
 import java.sql.ResultSet
 
+import org.squeryl.Query
+
 trait QueryYield[R] {
 
   def invokeYield(resultSetMapper: ResultSetMapper, rs: ResultSet): R
@@ -31,7 +33,8 @@ trait QueryYield[R] {
     (Option[ExpressionNode],
      Option[ExpressionNode],
      Iterable[ExpressionNode],
-     Iterable[ExpressionNode])
+     Iterable[ExpressionNode],
+     Iterable[Query[_]])
 
   private [squeryl] var joinExpressions: Seq[()=>LogicalBoolean] = Nil
 

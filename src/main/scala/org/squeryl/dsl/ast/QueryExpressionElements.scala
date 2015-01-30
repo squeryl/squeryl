@@ -59,4 +59,6 @@ trait QueryExpressionElements extends ExpressionNode {
   def groupByClause: Iterable[ExpressionNode]
 
   def orderByClause: Iterable[ExpressionNode]
+
+  def commonTableExpressions: Iterable[QueryExpressionElements]
 }

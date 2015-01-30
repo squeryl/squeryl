@@ -60,7 +60,7 @@ object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
     override def optimisticCounterPropertyName = Some("occVersionNumber")
   }
 
-  implicit object courseOfferingKED extends KeyedEntityDef[CourseOffering,CompositeKey3[Int, Option[Long], Int]] {
+  implicit object courseOfferingKED extends KeyedEntityDef[CourseOffering,CompositeKey3[Int, Long, Int]] {
     def getId(a:CourseOffering) = a.id
     def isPersisted(a:CourseOffering) = a.isPersisted
     def idPropertyName = "id"
@@ -135,8 +135,8 @@ class Professor(var lastName: String, var yearlySalary: Float, var weight: Optio
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
 }
 
-case class CourseOffering(courseId:Int, schoolId:Option[Long], addressId:Int, description:String) extends PersistenceStatus {
-  def id = CompositeKey3(courseId, schoolId, addressId)
+case class CourseOffering(courseId:Int, professorId:Long, addressId:Int, description:String) extends PersistenceStatus {
+  def id = CompositeKey3(courseId, professorId, addressId)
 }
 
 case class PostalCode(code: String) extends KeyedEntity[String] {
@@ -356,8 +356,8 @@ class TestInstance(schema : SchoolDb){
 
   val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
 
-  val offering1 = courseOfferings.insert(new CourseOffering(groupTheory.id, Some(tournesol.id), oneHutchissonStreet.id, "Offered Daily"))
-  val offering2 = courseOfferings.insert(new CourseOffering(groupTheory.id, None, twoHutchissonStreet.id, "May be cancelled"))
+  val offering1 = courseOfferings.insert(new CourseOffering(groupTheory.id, tournesol.id, oneHutchissonStreet.id, "Offered Daily"))
+  val offering2 = courseOfferings.insert(new CourseOffering(groupTheory.id, tournesol.id, twoHutchissonStreet.id, "May be cancelled"))
 
 }
 
@@ -409,6 +409,48 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
   }
 
 }
+
+abstract class CommonTableExpressions extends SchoolDbTestBase {
+  self: DBConnector =>
+
+  import schema._
+
+  test("commonTableExpressions") {
+    val testInstance = sharedTestInstance; import testInstance._
+    val qStudents = from(students) ((s) =>
+      where(s.name === "Xiao")
+      select(s))
+    val qAddresses = from(addresses)(a => select(a))
+
+    val q =
+      from(qStudents)(s =>
+        withWith(qStudents, qAddresses)
+        where(exists(
+          join(qStudents, qStudents)((s2, s3) =>
+            where(s2.name === "Xiao" and exists(
+              from(qStudents)(s4 =>
+                where (s4.name === "Xiao")
+                select (s4))))
+            select(s2)
+            on(s2.name === s3.name))) and s.name === "Xiao")
+        select(s))
+
+    /*
+    val q =
+      from(qStudents)(s =>
+        withWith(qStudents)
+        select(s))
+    */
+
+    val res = for (s <- q) yield s.name
+    val expected = List("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('commonTableExpressions)
+  }
+}
+
 abstract class SchoolDbTestRun extends SchoolDbTestBase {
   self: DBConnector =>
 
@@ -418,7 +460,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val testInstance = sharedTestInstance; import testInstance._
 
     val q =
-      from(addresses)(a => where(a.id === "1".cast[Int, TInt]("int")) select(a))
+      from(addresses)(a => where(a.id === "1".cast[Int, TInt]("int4")) select(a))
     assert(q.toList.size == 1)
   }
 
@@ -1776,7 +1818,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
     passed('testVeryNestedExists)
-
   }
 
   test("VeryVeryNestedExists"){
@@ -1835,6 +1876,32 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val is:Long = from(students)(s => where(s.age === 30)compute(count))
 
     assert(expected == is, "expected :\n " + expected + "\ngot : \n " + is)
+  }
+
+  test("commonTableExpressions") {
+    val testInstance = sharedTestInstance; import testInstance._
+    val qStudents = from(students) ((s) => select(s))
+    val qAddresses = from(addresses) ((a) => select(a))
+
+    val q =
+      from(qStudents)(s =>
+        withWith(qStudents, qAddresses)
+        where(exists(
+          join(qStudents, qStudents)((s2, s3) =>
+            where(s2.name === "Xiao" and exists(
+              from(qStudents)(s4 =>
+                where (s4.name === "Xiao")
+                select (s4))))
+            select(s2)
+            on(s2.name === s3.name))) and s.name === "Xiao")
+        select(s))
+
+    val res = for (s <- q) yield s.name
+    val expected = List("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('commonTableExpressions)
   }
 }
 

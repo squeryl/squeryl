@@ -21,6 +21,7 @@ import org.squeryl.dsl.boilerplate._
 import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
 
+import org.squeryl.Query
 
 class BaseQueryYield[G]
   (val queryElementzz: QueryElements[_], val selectClosure: ()=>G)
@@ -67,8 +68,10 @@ class BaseQueryYield[G]
 
   def groupByClause: Iterable[ExpressionNode] = Iterable.empty
 
+  def commonTableExpressions: Iterable[Query[_]] = queryElementzz.commonTableExpressions
+
   def queryElements =
-    (whereClause, havingClause, groupByClause, orderByClause)
+    (whereClause, havingClause, groupByClause, orderByClause, commonTableExpressions)
 
   def computeClause:List[ExpressionNode] = List.empty
 
@@ -114,7 +117,7 @@ class GroupQueryYield[K] (
     new Group(rsm.groupKeysMapper.get.mapToTuple(rs))
 
   override def queryElements =
-    (whereClause, havingClause, groupByClause, orderByClause)
+    (whereClause, havingClause, groupByClause, orderByClause, commonTableExpressions)
 
   class SampleGroup[K](k:K)
     extends Group(k) {
@@ -144,7 +147,7 @@ class MeasuresQueryYield[M](
     new Measures(rsm.groupMeasuresMapper.get.mapToTuple(rs))
 
   override def queryElements =
-    (whereClause, havingClause, groupByClause, orderByClause)
+    (whereClause, havingClause, groupByClause, orderByClause, commonTableExpressions)
 
 
   class SampleMeasures[M](m:M)
@@ -189,7 +192,7 @@ extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
       super.havingClause
 
    override def queryElements =
-    (whereClause, havingClause, _groupByClauseClosure().map(e => e), orderByClause)
+    (whereClause, havingClause, _groupByClauseClosure().map(e => e), orderByClause, commonTableExpressions)
 
   override def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
     new GroupWithMeasures(rsm.groupKeysMapper.get.mapToTuple(rs), rsm.groupMeasuresMapper.get.mapToTuple(rs))

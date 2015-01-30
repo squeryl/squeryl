@@ -38,11 +38,15 @@ abstract class AbstractQuery[R](
   private [squeryl] var unionIsForUpdate = false
   private [squeryl] var unionPage: Option[(Int, Int)] = None
 
+  private var __root: Option[Query[R]] = None
+
   val resultSetMapper = new ResultSetMapper
 
   val name = "query"
 
   private def isUnionQuery = ! unions.isEmpty
+
+  override private [squeryl] def root = __root
 
   def give(rsm: ResultSetMapper, rs: ResultSet): R = {
     rsm.pushYieldedValues(rs)
@@ -109,7 +113,7 @@ abstract class AbstractQuery[R](
           org.squeryl.internals.Utils.throwError("Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html")
         subQueries.append(z)
       }
-    
+
     val qen = new QueryExpressionNode[R](this, qy, subQueries, views)
     val (sl,d) = qy.invokeYieldForAst(qen, resultSetMapper)
     qen.setOutExpressionNodesAndSample(sl, d)
@@ -127,6 +131,13 @@ abstract class AbstractQuery[R](
     val c = createCopy(asRoot, newUnions)
     c.selectDistinct = selectDistinct
     c.page = page
+
+    if (! isRoot) {
+      c.__root = __root
+    } else {
+      c.__root = Some(this)
+    }
+
     c
   }
 
