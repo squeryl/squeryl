@@ -133,7 +133,7 @@ trait QueryDsl
   def where(b: =>LogicalBoolean): WhereState[Conditioned] =
     new fsm.QueryElementsImpl[Conditioned](Some(b _), Nil)
 
-  def withWith(queries: Query[_]*): WithState =
+  def withCte(queries: Query[_]*): WithState =
     new fsm.WithState(queries.toList.map(_.copy(false, Nil)))
 
   def &[A,T](i: =>TypedExpression[A,T]): A =

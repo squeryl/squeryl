@@ -1,0 +1,51 @@
+package org.squeryl.postgres
+
+import org.squeryl._
+import org.squeryl.dsl._
+import java.sql.Timestamp
+import java.sql.ResultSet
+import adapters.{PostgreSqlAdapter, H2Adapter}
+
+import java.util.{Map => JMap, Collections}
+
+object MyTypes extends PrimitiveTypeMode
+
+import MyTypes._
+
+case class HstoreTest(id: Int, foo: JMap[AnyRef, AnyRef]) extends KeyedEntity[Int] {
+}
+
+object HstoreTester extends Schema {
+
+  val hstoretest = table[HstoreTest]("hstoretest")
+}
+
+object FooTest3 {
+
+  import HstoreTester._
+
+  def main(args: Array[String]): Unit = {
+
+    Class.forName("org.postgresql.Driver")
+
+    SessionFactory.concreteFactory = Some({
+      () =>
+        val s = Session.create(
+          java.sql.DriverManager.getConnection("jdbc:postgresql:squeryl", "squeryl", "squeryl"),
+          new PostgreSqlAdapter)
+        s.setLogger(println _)
+        s
+    })
+
+    test1
+  }
+
+  def test1 = transaction {
+    val x = from(hstoretest)(h => select(h)).toList
+
+    println(x)
+  }
+}
+
+
+
