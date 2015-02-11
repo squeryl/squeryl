@@ -45,6 +45,8 @@ class Postgresql_ConnectionClosing extends ConnectionClosingTest with Postgresql
   def dbSpecificSelectNow: String = "select now()"
 }
 
+class Postgresql_CommonTableExpressions extends schooldb.CommonTableExpressions with Postgresql_Connection
+
 
 class Postgresql_LogicalBooleanObjTests extends LogicalBooleanObjTests with Postgresql_Connection
 

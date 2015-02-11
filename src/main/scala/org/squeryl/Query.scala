@@ -90,4 +90,6 @@ trait Query[R] extends Queryable[R] {
   def forUpdate: Query[R]
 
   def page(offset: Int, pageLength: Int): Query[R]
+
+  private [squeryl] def root: Option[Query[R]] = None
 }

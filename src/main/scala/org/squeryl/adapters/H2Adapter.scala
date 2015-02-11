@@ -50,4 +50,6 @@ class H2Adapter extends DatabaseAdapter {
 
   override def isTableDoesNotExistException(e: SQLException): Boolean =
     e.getErrorCode == 42102
+
+  override def supportsCommonTableExpressions = false
 }

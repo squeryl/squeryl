@@ -53,7 +53,27 @@ trait DatabaseAdapter {
    */
   def verifyDeleteByPK: Boolean = true
 
+  protected [squeryl] def writeCteReference(sw: StatementWriter, q: QueryExpressionElements): Unit = {
+    sw.write(quoteName("cte_" + q.alias))
+  }
+
   protected def writeQuery(qen: QueryExpressionElements, sw: StatementWriter, inverseOrderBy: Boolean, topHint: Option[String]):Unit = {
+
+    if (supportsCommonTableExpressions && qen.commonTableExpressions.nonEmpty) {
+      sw.write("With")
+      for (z <- qen.commonTableExpressions.zipi) {
+        sw.write(" ")
+        writeCteReference(sw, z.element)
+        sw.write(" As ")
+        sw.write("(")
+        writeQuery(z.element, sw)
+        sw.write(")")
+        if (!z.isLast) {
+          sw.write(",")
+        }
+        sw.nextLine
+      }
+    }
 
     sw.write("Select")
 
@@ -288,6 +308,8 @@ trait DatabaseAdapter {
   def supportsAutoIncrementInColumnDeclaration:Boolean = true
 
   def supportsUnionQueryOptions = true
+
+  def supportsCommonTableExpressions = true
 
   def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 
