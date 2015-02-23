@@ -192,7 +192,7 @@ abstract class AbstractQuery[R](
     val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
 
-    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
+    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement, sw.paramsValues)
 
     if(s.statisticsListener != None)
       s.statisticsListener.get.queryExecuted(statEx)

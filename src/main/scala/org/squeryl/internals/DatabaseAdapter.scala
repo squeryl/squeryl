@@ -336,18 +336,16 @@ trait DatabaseAdapter {
   }
   
   def setParamInto(s: PreparedStatement, p: StatementParam, i: Int) =
+    s.setObject(i, paramToJdbcValue(p))
+
+  def paramToJdbcValue(p: StatementParam): AnyRef =
     p match {
-    	case ConstantStatementParam(constantTypedExpression) =>
-    	  
-    	  //val t = jdbcTypeConstantFor(constantTypedExpression.jdbcClass)    	  
-    	  s.setObject(i, convertToJdbcValue(constantTypedExpression.nativeJdbcValue))
-    	case FieldStatementParam(o, fieldMetaData) =>
-    	  
-    	  //val t = jdbcTypeConstantFor(fieldMetaData.nativeJdbcType)    	  
-    	  //s.setObject(i, convertToJdbcValue(fieldMetaData.get(o)))
-        s.setObject(i, convertToJdbcValue(fieldMetaData.getNativeJdbcValue(o)))    	  
-    	case ConstantExpressionNodeListParam(v, constantExpressionNodeList) =>
-    	  s.setObject(i, convertToJdbcValue(v))
+      case ConstantStatementParam(constantTypedExpression) =>
+        convertToJdbcValue(constantTypedExpression.nativeJdbcValue)
+      case FieldStatementParam(o, fieldMetaData) =>
+        convertToJdbcValue(fieldMetaData.getNativeJdbcValue(o))
+      case ConstantExpressionNodeListParam(v, constantExpressionNodeList) =>
+        convertToJdbcValue(v)
     }
 
   private def _exec[A](s: AbstractSession, sw: StatementWriter, block: Iterable[StatementParam]=>A, args: Iterable[StatementParam]): A =
