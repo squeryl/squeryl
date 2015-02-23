@@ -17,7 +17,7 @@ package org.squeryl.logging
 
 
 
-class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
+class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String, val jdbcParams: Iterable[AnyRef]) {
 
   val uuid = {
     val tmp = java.util.UUID.randomUUID
