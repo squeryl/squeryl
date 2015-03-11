@@ -22,8 +22,6 @@ import org.squeryl.dsl.ast.{ExpressionNode, QueryExpressionElements}
 import org.squeryl._
 import org.squeryl.internals._
 
-import scala.collection.mutable.ArrayBuffer
-
 class SQLiteAdapter extends DatabaseAdapter {
 
   override def uuidTypeDeclaration = "uuid"

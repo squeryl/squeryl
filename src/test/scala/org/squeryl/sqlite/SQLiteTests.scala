@@ -24,7 +24,6 @@ trait SQLite_ConnectionCommon extends DBConnector {
       Some(() => {
         val c = java.sql.DriverManager.getConnection(config.getProp("sqlite.connectionString"))
         val s = sessionFunc(c)
-//        s.setLogger(println)
         s
       })
     }else{
@@ -57,9 +56,15 @@ class SQLite_SchoolDb extends schooldb.SchoolDbTestRun with SQLite_Connection {
   )
 }
 class SQLite_TestCustomTypesMode extends customtypes.TestCustomTypesMode with SQLite_Connection
-//TODO
-class SQLite_KickTheTires extends demo.KickTheTires with SQLite_Connection
+class SQLite_KickTheTires extends demo.KickTheTires with SQLite_Connection {
+  // This test generates a sentence with double parentheses after `in` clause
+  // In SQLite this causes that the query returns only one item
+  override val ignoredTests = List(
+    "kick tires"
+  )
+}
 class SQLite_MusicDb extends musicdb.MusicDbTestRun with SQLite_Connection {
+  // Regexp not supported
   override val ignoredTests = List(
     "UpperAndLowerFuncs"
   )
@@ -86,8 +91,15 @@ class SQLite_LazySchoolDb extends schooldb.SchoolDbTestRun with SQLite_LazyConne
   )
 }
 class SQLite_LazyTestCustomTypesMode extends customtypes.TestCustomTypesMode with SQLite_LazyConnection
-class SQLite_LazyKickTheTires extends demo.KickTheTires with SQLite_LazyConnection
+class SQLite_LazyKickTheTires extends demo.KickTheTires with SQLite_LazyConnection {
+  // This test generates a sentence with double parentheses after `in` clause
+  // In SQLite this causes that the query returns only one item
+  override val ignoredTests = List(
+    "kick tires"
+  )
+}
 class SQLite_LazyMusicDb extends musicdb.MusicDbTestRun with SQLite_LazyConnection {
+  // Regexp not supported
   override val ignoredTests = List(
     "UpperAndLowerFuncs"
   )
@@ -97,4 +109,3 @@ class SQLite_LazyConnectionClosing extends ConnectionClosingTest with SQLite_Laz
   def dbSpecificSelectNow: String = "select CURRENT_TIMESTAMP"
 }
 class SQLite_LazyLogicalBooleanObjTests extends LogicalBooleanObjTests with SQLite_LazyConnection
-
