@@ -82,6 +82,7 @@ object SquerylBuild extends Build {
         "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided",
         "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
         "org.apache.derby" % "derby" % "10.7.1.1" % "provided",
+        "org.xerial" % "sqlite-jdbc" % "3.8.7" % "test",
         "junit" % "junit" % "4.8.2" % "provided"
       ),
       libraryDependencies <++= scalaVersion { sv =>
