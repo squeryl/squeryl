@@ -19,7 +19,7 @@ import dsl.ast._
 import dsl.{CompositeKey, QueryDsl}
 import internals._
 import java.sql.{Statement}
-import logging.StackMarker
+import logging.{StackMarker, StatementInvocationEvent}
 import collection.mutable.ArrayBuffer
 
 //private [squeryl] object DummySchema extends Schema
@@ -51,6 +51,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       }
 
     try {
+      val beforeUpdate = System.currentTimeMillis
       val cnt = _dbAdapter.executeUpdateForInsert(sess, sw, st)
 
       if(cnt != 1)
@@ -71,6 +72,10 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
           }
         }
         case a:Any =>{}
+      }
+      Session.currentSession.statisticsListener.foreach { listener =>
+        val statEx = StatementInvocationEvent(beforeUpdate, System.currentTimeMillis, cnt, sw)
+        listener.updateExecuted(statEx)
       }
     }
     finally {
@@ -145,7 +150,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
           st.addBatch
           updateCount += 1
         }
-
+        val beforeExecuteBatch = System.currentTimeMillis
         val execResults = st.executeBatch
 
         if(checkOCC)
@@ -155,6 +160,14 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
               throw new StaleUpdateException(
                 "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
             }
+
+        Session.currentSession.statisticsListener.foreach { listener =>
+          val statEx = StatementInvocationEvent(beforeExecuteBatch, System.currentTimeMillis, execResults.sum, sw)
+          if(isInsert)
+            listener.insertExecuted(statEx)
+          else
+            listener.updateExecuted(statEx)
+        }
       }
       finally {
         st.close
@@ -196,6 +209,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
     val o0 = _callbacks.beforeUpdate(o.asInstanceOf[AnyRef]).asInstanceOf[T]
+    val beforeUpdate = System.currentTimeMillis
     dba.writeUpdate(o0, this, sw, checkOCC)
 
     val cnt  = dba.executeUpdateAndCloseStatement(Session.currentSession, sw)
@@ -209,6 +223,11 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       }
       else
         throw SquerylSQLException("failed to update.  Expected 1 row, got " + cnt)
+    }
+
+    Session.currentSession.statisticsListener.foreach { listener =>
+      val statEx = StatementInvocationEvent(beforeUpdate, System.currentTimeMillis, cnt, sw)
+      listener.updateExecuted(statEx)
     }
 
     _callbacks.afterUpdate(o0.asInstanceOf[AnyRef])
@@ -272,7 +291,15 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
     val dba = _dbAdapter
     val sw = new StatementWriter(dba)
     dba.writeUpdate(this, us, sw)
-    dba.executeUpdateAndCloseStatement(Session.currentSession, sw)
+    val beforeUpdate = System.currentTimeMillis
+    val cnt = dba.executeUpdateAndCloseStatement(Session.currentSession, sw)
+
+    Session.currentSession.statisticsListener.foreach { listener =>
+      val statEx = StatementInvocationEvent(beforeUpdate, System.currentTimeMillis, cnt, sw)
+      listener.updateExecuted(statEx)
+    }
+
+    cnt
   }
 
   def delete(q: Query[T]): Int = {
@@ -282,8 +309,15 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     val sw = new StatementWriter(_dbAdapter)
     _dbAdapter.writeDelete(this, queryAst.whereClause, sw)
+    val beforeDelete = System.currentTimeMillis
+    val cnt = _dbAdapter.executeUpdateAndCloseStatement(Session.currentSession, sw)
 
-    _dbAdapter.executeUpdateAndCloseStatement(Session.currentSession, sw)
+    Session.currentSession.statisticsListener.foreach { listener =>
+      val statEx = StatementInvocationEvent(beforeDelete, System.currentTimeMillis, cnt, sw)
+      listener.deleteExecuted(statEx)
+    }
+
+    cnt
   }
 
   def deleteWhere(whereClause: T => LogicalBoolean)(implicit dsl: QueryDsl): Int =

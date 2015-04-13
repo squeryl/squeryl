@@ -54,35 +54,17 @@ abstract class AbstractQuery[R](
     r
   }
 
+  protected def copyUnions(u: List[(String, Query[R])]) =
+    u map (t => (t._1, t._2.copy(false, Nil)))
+
   /**
    * Builds the AST tree of the this Query, *some state mutation of the AST nodes occurs
    * during AST construction, for example, the parent child relationship is set by this method,
    * unique IDs of node that needs them for example.
    *
    * After this call, the query (and it's AST) becomes immutable by virtue of the unaccessibility
-   * of it's public methods 
+   * of it's public methods
    */
-  val definitionSite: Option[StackTraceElement] =
-    if(!isRoot) None
-    else Some(_deduceDefinitionSite)
-
-  private def _deduceDefinitionSite: StackTraceElement = {
-    val st = Thread.currentThread.getStackTrace
-    var i = 1
-    while(i < st.length) {
-      val e = st(i)
-      val cn = e.getClassName
-      if((cn.startsWith("org.squeryl.") && (!cn.startsWith("org.squeryl.tests."))) || cn.startsWith("scala."))
-        i = i + 1
-      else
-        return e
-    }
-    new StackTraceElement("unknown", "unknown", "unknown", -1)
-  }
-
-  protected def copyUnions(u: List[(String, Query[R])]) =
-    u map (t => (t._1, t._2.copy(false, Nil)))
-
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
 
@@ -192,7 +174,7 @@ abstract class AbstractQuery[R](
     val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
 
-    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement, sw.paramsValues)
+    lazy val statEx = StatementInvocationEvent(beforeQueryExecute, System.currentTimeMillis, -1, sw)
 
     if(s.statisticsListener != None)
       s.statisticsListener.get.queryExecuted(statEx)
