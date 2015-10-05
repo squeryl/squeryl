@@ -10,7 +10,7 @@ object SquerylBuild extends Build {
     settings = Project.defaultSettings /* ++ lsSettings */ ++ Seq(
       description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
       organization := "org.squeryl",
-      version := "0.9.6-RC2",
+      version := "0.9.6-RC4",
       javacOptions := Seq("-source", "1.6", "-target", "1.6"),
   	  version <<= version { v => //only release *if* -Drelease=true is passed to JVM
   	  	val release = Option(System.getProperty("release")) == Some("true")
@@ -28,8 +28,21 @@ object SquerylBuild extends Build {
   	  },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.10.3",
-      crossScalaVersions := Seq("2.10.3", "2.9.2", "2.9.1", "2.9.0-1", "2.9.0"),
+      scalaVersion := "2.11.6",
+      crossScalaVersions := Seq("2.11.6", "2.10.3"),
+      scalacOptions <++= scalaVersion map { sv =>
+        Seq("-unchecked", "-deprecation") ++ (
+          if(sv.startsWith("2.11"))
+            Seq("-feature",
+            "-language:implicitConversions",
+            "-language:postfixOps",
+            "-language:reflectiveCalls",
+            "-language:existentials")
+          else
+            Nil
+          )
+      },
+    resolvers ++= Seq(Resolver.mavenLocal),
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
       pomExtra := (<scm>
@@ -74,6 +87,8 @@ object SquerylBuild extends Build {
       libraryDependencies <++= scalaVersion { sv =>
         Seq("org.scala-lang" % "scalap" % sv,
           sv match {
+          	case sv if sv startsWith "2.11" =>
+          	    "org.scalatest" %% "scalatest" % "2.2.4" % "test"
           	case sv if sv startsWith "2.10" =>
           	    "org.scalatest" %% "scalatest" % "1.9.1" % "test"
           	case sv if sv startsWith "2.9" =>
