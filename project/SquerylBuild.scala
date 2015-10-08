@@ -28,8 +28,8 @@ object SquerylBuild extends Build {
   	  },
       parallelExecution := false,
       publishMavenStyle := true,
-      scalaVersion := "2.11.1",
-      crossScalaVersions := Seq("2.11.1", "2.10.3"),
+      scalaVersion := "2.11.6",
+      crossScalaVersions := Seq("2.11.6", "2.10.5"),
       scalacOptions <++= scalaVersion map { sv =>
         Seq("-unchecked", "-deprecation") ++ (
           if(sv.startsWith("2.11"))
@@ -77,11 +77,11 @@ object SquerylBuild extends Build {
         */
       libraryDependencies ++= Seq(
         "cglib" % "cglib-nodep" % "2.2",
-        "com.h2database" % "h2" % "1.2.127" % "provided",
-        "mysql" % "mysql-connector-java" % "5.1.10" % "provided",
-        "postgresql" % "postgresql" % "8.4-701.jdbc4" % "provided",
+        "com.h2database" % "h2" % "1.4.187" % "provided",
+        "mysql" % "mysql-connector-java" % "5.1.35" % "provided",
+        "postgresql" % "postgresql" % "9.1-901.jdbc4" % "provided",
         "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
-        "org.apache.derby" % "derby" % "10.7.1.1" % "provided",
+        "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
         "org.xerial" % "sqlite-jdbc" % "3.8.7" % "test",
         "junit" % "junit" % "4.8.2" % "provided"
       ),

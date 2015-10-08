@@ -11,6 +11,8 @@
 ## For more information
 Documentation can be found at [The Squeryl Website][1] and [Scaladoc] [3]. Questions can be directed to the [Google Group][2]
 
+[![Build Status](https://travis-ci.org/squeryl/squeryl.svg?branch=master)](https://travis-ci.org/squeryl/squeryl)
+
 [1]: http://squeryl.org
 [2]: https://groups.google.com/forum/#!forum/squeryl
 [3]: http://squeryl.org/api/index.html#package
