@@ -38,7 +38,6 @@ trait CompositeKey {
     _members.getOrElse(constantMembers)
 
   private [squeryl] def buildEquality(ck: CompositeKey): LogicalBoolean = {
-      
     val equalities = (members zip ck.members).map(t => new EqualityExpression(t._1, t._2))
 
     val head = equalities.head
@@ -47,10 +46,42 @@ trait CompositeKey {
     tail.foldLeft(equalities.head : LogicalBoolean)(_ and _)
   }
 
-  def is(attributes: AttributeValidOnMultipleColumn*) = new CompositeKeyAttributeAssignment(this, attributes)  
+  def is(attributes: AttributeValidOnMultipleColumn*) = new CompositeKeyAttributeAssignment(this, attributes)
+
+  protected def inExpr(cks: Iterable[CompositeKey]): LogicalBoolean = {
+    new InclusionOperator(
+      new RowValueConstructorNode(members.toList),
+      new RightHandSideOfIn(
+        new ListExpressionNode(
+          cks.toList map (ck =>
+            new RowValueConstructorNode(ck.members.toList)
+          )
+        ),
+        Some(true)
+      )
+    )
+  }
+
+  protected def notInExpr(cks: Iterable[CompositeKey]): LogicalBoolean = {
+    new ExclusionOperator(
+      new RowValueConstructorNode(members.toList),
+      new RightHandSideOfIn(
+        new ListExpressionNode(
+          cks.toList map (ck =>
+            new RowValueConstructorNode(ck.members.toList)
+          )
+        ),
+        Some(false)
+      )
+    )
+  }
 }
 
-case class CompositeKey2[A1,A2](val a1:A1, val a2: A2) extends CompositeKey {
+case class CompositeKey2[A1,A2](val a1:A1, val a2: A2)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey2[A1,A2]) =
     buildEquality(ck)
@@ -58,14 +89,22 @@ case class CompositeKey2[A1,A2](val a1:A1, val a2: A2) extends CompositeKey {
   def ===(ck: Tuple2[A1,A2]) =
     buildEquality(new CompositeKey2(ck._1, ck._2))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2)
-  )
+  def in(cks: CompositeKey2[A1, A2]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2)*) = inExpr(cks map (ck => new CompositeKey2(ck._1, ck._2)))
+
+  def notIn(cks: CompositeKey2[A1, A2]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2)*) = notInExpr(cks map (ck => new CompositeKey2(ck._1, ck._2)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2)
 
 }
 
-case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3) extends CompositeKey {
+case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey3[A1,A2,A3]) =
     buildEquality(ck)
@@ -73,14 +112,22 @@ case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3) extends Co
   def ===(ck: Tuple3[A1,A2,A3]) =
     buildEquality(new CompositeKey3(ck._1, ck._2, ck._3))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3)
-  )
+  def in(cks: CompositeKey3[A1, A2, A3]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3)*) = inExpr(cks map (ck => new CompositeKey3(ck._1, ck._2, ck._3)))
+
+  def notIn(cks: CompositeKey3[A1, A2, A3]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3)*) = notInExpr(cks map (ck => new CompositeKey3(ck._1, ck._2, ck._3)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3)
 }
 
-case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4: A4) extends CompositeKey {
+case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4: A4)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey4[A1,A2,A3,A4]) =
     buildEquality(ck)
@@ -88,16 +135,24 @@ case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4:
   def ===(ck: Tuple4[A1,A2,A3,A4]) =
     buildEquality(new CompositeKey4(ck._1, ck._2, ck._3, ck._4))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3),
-    new InputOnlyConstantExpressionNode(a4)
-  )
+  def in(cks: CompositeKey4[A1, A2, A3, A4]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3, A4)*) = inExpr(cks map (ck => new CompositeKey4(ck._1, ck._2, ck._3, ck._4)))
+
+  def notIn(cks: CompositeKey4[A1, A2, A3, A4]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3, A4)*) = notInExpr(cks map (ck => new CompositeKey4(ck._1, ck._2, ck._3, ck._4)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4)
 }
 
 
-case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5) extends CompositeKey {
+case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _],
+      ev5: A5 => TypedExpression[A5, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey5[A1,A2,A3,A4,A5]) =
     buildEquality(ck)
@@ -105,15 +160,23 @@ case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val 
   def ===(ck: Tuple5[A1,A2,A3,A4,A5]) =
     buildEquality(new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3),
-    new InputOnlyConstantExpressionNode(a4),
-    new InputOnlyConstantExpressionNode(a5)
-  )
+  def in(cks: CompositeKey5[A1, A2, A3, A4, A5]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3, A4, A5)*) = inExpr(cks map (ck => new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5)))
+
+  def notIn(cks: CompositeKey5[A1, A2, A3, A4, A5]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3, A4, A5)*) = notInExpr(cks map (ck => new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5)
 }
-case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6) extends CompositeKey {
+case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _],
+      ev5: A5 => TypedExpression[A5, _],
+      ev6: A6 => TypedExpression[A6, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey6[A1,A2,A3,A4,A5,A6]) =
     buildEquality(ck)
@@ -121,17 +184,25 @@ case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, v
   def ===(ck: Tuple6[A1,A2,A3,A4,A5,A6]) =
     buildEquality(new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3),
-    new InputOnlyConstantExpressionNode(a4),
-    new InputOnlyConstantExpressionNode(a5),
-    new InputOnlyConstantExpressionNode(a6)
-  )
+  def in(cks: CompositeKey6[A1, A2, A3, A4, A5, A6]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3, A4, A5, A6)*) = inExpr(cks map (ck => new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6)))
+
+  def notIn(cks: CompositeKey6[A1, A2, A3, A4, A5, A6]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3, A4, A5, A6)*) = notInExpr(cks map (ck => new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6)
 }
 
-case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7) extends CompositeKey {
+case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _],
+      ev5: A5 => TypedExpression[A5, _],
+      ev6: A6 => TypedExpression[A6, _],
+      ev7: A7 => TypedExpression[A7, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey7[A1,A2,A3,A4,A5,A6,A7]) =
     buildEquality(ck)
@@ -139,18 +210,26 @@ case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3
   def ===(ck: Tuple7[A1,A2,A3,A4,A5,A6,A7]) =
     buildEquality(new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3),
-    new InputOnlyConstantExpressionNode(a4),
-    new InputOnlyConstantExpressionNode(a5),
-    new InputOnlyConstantExpressionNode(a6),
-    new InputOnlyConstantExpressionNode(a7)
-  )
+  def in(cks: CompositeKey7[A1, A2, A3, A4, A5, A6, A7]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3, A4, A5, A6, A7)*) = inExpr(cks map (ck => new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7)))
+
+  def notIn(cks: CompositeKey7[A1, A2, A3, A4, A5, A6, A7]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7)*) = notInExpr(cks map (ck => new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7)
 }
 
-case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7, val a8: A8) extends CompositeKey {
+case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7, val a8: A8)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _],
+      ev5: A5 => TypedExpression[A5, _],
+      ev6: A6 => TypedExpression[A6, _],
+      ev7: A7 => TypedExpression[A7, _],
+      ev8: A8 => TypedExpression[A8, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8]) =
     buildEquality(ck)
@@ -158,19 +237,27 @@ case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3:
   def ===(ck: Tuple8[A1,A2,A3,A4,A5,A6,A7,A8]) =
     buildEquality(new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7,ck._8))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3),
-    new InputOnlyConstantExpressionNode(a4),
-    new InputOnlyConstantExpressionNode(a5),
-    new InputOnlyConstantExpressionNode(a6),
-    new InputOnlyConstantExpressionNode(a7),
-    new InputOnlyConstantExpressionNode(a8)
-  )
+  def in(cks: CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8)*) = inExpr(cks map (ck => new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8)))
+
+  def notIn(cks: CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8)*) = notInExpr(cks map (ck => new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7, a8)
 }
 
-case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7, val a8: A8,val a9: A9) extends CompositeKey {
+case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7, val a8: A8,val a9: A9)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _],
+      ev5: A5 => TypedExpression[A5, _],
+      ev6: A6 => TypedExpression[A6, _],
+      ev7: A7 => TypedExpression[A7, _],
+      ev8: A8 => TypedExpression[A8, _],
+      ev9: A9 => TypedExpression[A9, _])
+    extends CompositeKey {
 
   def ===(ck: CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9]) =
     buildEquality(ck)
@@ -178,15 +265,11 @@ case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val 
   def ===(ck: Tuple9[A1,A2,A3,A4,A5,A6,A7,A8,A9]) =
     buildEquality(new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6,ck._7,ck._8,ck._9))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(
-    new InputOnlyConstantExpressionNode(a1),
-    new InputOnlyConstantExpressionNode(a2),
-    new InputOnlyConstantExpressionNode(a3),
-    new InputOnlyConstantExpressionNode(a4),
-    new InputOnlyConstantExpressionNode(a5),
-    new InputOnlyConstantExpressionNode(a6),
-    new InputOnlyConstantExpressionNode(a7),
-    new InputOnlyConstantExpressionNode(a8),
-    new InputOnlyConstantExpressionNode(a9)
-  )
+  def in(cks: CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9]*) = inExpr(cks)
+  def inTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8, A9)*) = inExpr(cks map (ck => new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8, ck._9)))
+
+  def notIn(cks: CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9]*) = notInExpr(cks)
+  def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8, A9)*) = notInExpr(cks map (ck => new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8, ck._9)))
+
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7, a8, a9)
 }

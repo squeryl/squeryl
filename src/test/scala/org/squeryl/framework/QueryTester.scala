@@ -4,7 +4,7 @@ import org.squeryl.{Session, Query}
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest.matchers.ShouldMatchers
 
-trait QueryTester { self : ShouldMatchers =>
+trait QueryTester extends ShouldMatchers {
 
   var logQueries = false
 

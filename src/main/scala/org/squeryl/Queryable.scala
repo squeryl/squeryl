@@ -21,7 +21,7 @@ import internals.ResultSetMapper
 import java.sql.ResultSet
 
 trait Queryable[T] {
-  
+
   def name: String
 
   private[squeryl] var inhibited = false

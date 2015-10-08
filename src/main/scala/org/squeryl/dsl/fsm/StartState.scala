@@ -19,6 +19,8 @@ import org.squeryl.dsl._
 import ast.{LogicalBoolean, UpdateStatement, UpdateAssignment}
 import boilerplate.{ComputeMeasuresSignaturesFromStartOrWhereState, ComputeMeasuresSignaturesFromGroupByState, GroupBySignatures, OrderBySignatures}
 
+import org.squeryl.Query
+
 abstract sealed class Conditioned
 abstract sealed class Unconditioned
 
@@ -36,6 +38,8 @@ trait QueryElements[Cond]
     with StartState {
 
   private [squeryl] def whereClause:Option[()=>LogicalBoolean] = None
+
+  private [squeryl] def commonTableExpressions: List[Query[_]] = Nil
 }
 
 trait SelectState[R] extends QueryYield[R] with OrderBySignatures[R] {
@@ -87,4 +91,17 @@ trait GroupByState[K]
   }
 }
 
+class WithState(override val commonTableExpressions: List[Query[_]])
+  extends WhereState[Unconditioned]
+  with ComputeMeasuresSignaturesFromStartOrWhereState
+  with StartState
+  with QueryElements[Unconditioned] {
 
+  def where(b: =>LogicalBoolean): WhereState[Conditioned] =
+    new QueryElementsImpl[Conditioned](Some(b _), commonTableExpressions)
+}
+
+private [squeryl] class QueryElementsImpl[Cond](
+  override val whereClause: Option[()=>LogicalBoolean],
+  override val commonTableExpressions: List[Query[_]])
+  extends QueryElements[Cond]

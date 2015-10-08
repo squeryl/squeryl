@@ -36,12 +36,12 @@ trait H2_ConnectionCommon extends DBConnector {
 }
 
 trait H2_Connection extends DBConnector with H2_ConnectionCommon {
-  def connectToDb() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
+  def sessionCreator() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
 }
 
 
 trait H2_LazyConnection extends DBConnector with H2_ConnectionCommon {
-  def connectToDb() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
+  def sessionCreator() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
 
 }
 
@@ -63,7 +63,7 @@ class H2_ConnectionClosing extends ConnectionClosingTest with H2_Connection {
 }
 class H2_LogicalBooleanObjTests extends LogicalBooleanObjTests with H2_Connection
 
-
+class H2_CommonTableExpressions extends schooldb.CommonTableExpressions with H2_Connection
 
 /*
  * Lazy

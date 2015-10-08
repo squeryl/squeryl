@@ -130,16 +130,15 @@ trait QueryDsl
   
   implicit def __thisDsl:QueryDsl = this  
 
-  private class QueryElementsImpl[Cond](override val whereClause: Option[()=>LogicalBoolean])
-    extends QueryElements[Cond]
-
   def where(b: =>LogicalBoolean): WhereState[Conditioned] =
-    new QueryElementsImpl[Conditioned](Some(b _))
+    new fsm.QueryElementsImpl[Conditioned](Some(b _), Nil)
+
+  def withCte(queries: Query[_]*): WithState =
+    new fsm.WithState(queries.toList.map(_.copy(false, Nil)))
 
   def &[A,T](i: =>TypedExpression[A,T]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
     
-  
   implicit def typedExpression2OrderByArg[E <% TypedExpression[_,_]](e: E) = new OrderByArg(e)
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
@@ -193,9 +192,9 @@ trait QueryDsl
   def lower[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1], ev2: T1 <:< TOptionString) = 
     f.convert(new FunctionNode("lower", Seq(s)))
 
-  def exists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false).ast, "exists")
+  def exists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false, Nil).ast, "exists")
 
-  def notExists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false).ast, "not exists")
+  def notExists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false, Nil).ast, "not exists")
          
   implicit val numericComparisonEvidence   = new CanCompare[TNumeric, TNumeric]         
   implicit val dateComparisonEvidence      = new CanCompare[TOptionDate, TOptionDate]
@@ -293,12 +292,25 @@ trait QueryDsl
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       _inner.invokeYield(rsm, rs).measures
 
-    override private[squeryl] def copy(asRoot:Boolean) = new CountSubQueryableQuery(q)
+    override private[squeryl] def copy(asRoot:Boolean, newUnions: List[(String, Query[Long])]) =
+      new CountSubQueryableQuery(q)
 
     def name = _inner.name
 
     private[squeryl] def give(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs)
+
+    def union(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def unionAll(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def intersect(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def intersectAll(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def except(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
+
+    def exceptAll(q0: Query[Long]): Query[Long] = Utils.throwError("Not supported")
   }
 
   implicit def singleColComputeQuery2ScalarQuery[T](cq: Query[Measures[T]]): ScalarQuery[T] = new ScalarMeasureQuery[T](cq)
@@ -325,12 +337,25 @@ trait QueryDsl
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs).measures
 
-    override private[squeryl] def copy(asRoot:Boolean) = new ScalarMeasureQuery(q)
+    override private[squeryl] def copy(asRoot:Boolean, newUnions: List[(String, Query[T])]): Query[T] =
+      new ScalarMeasureQuery(q)
 
     def name = q.name
 
     private[squeryl] def give(rsm: ResultSetMapper, rs: ResultSet) =
       q.invokeYield(rsm, rs).measures
+
+    def union(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def unionAll(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def intersect(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def intersectAll(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def except(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
+
+    def exceptAll(q0: Query[T]): Query[T] = Utils.throwError("Not supported")
   }
 
   /**
@@ -355,7 +380,7 @@ trait QueryDsl
       kedL: KeyedEntityDef[L,_],
       kedR: KeyedEntityDef[R,_]) {
 
-    def via[A](f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
+    def via[A](f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
       val m2m = new ManyToManyRelationImpl(l,r,manifestA.erasure.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
       schema._addTable(m2m)
       m2m
@@ -368,7 +393,7 @@ trait QueryDsl
       val leftTable: Table[L], 
       val rightTable: Table[R], 
       aClass: Class[A], 
-      f: (L,R,A)=>Pair[EqualityExpression,EqualityExpression], 
+      f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression],
       schema: Schema, 
       nameOverride: Option[String],
       kedL: KeyedEntityDef[L,_],
@@ -383,7 +408,7 @@ trait QueryDsl
     
     private val (_leftEqualityExpr, _rightEqualityExpr) = {
 
-      var e2: Option[Pair[EqualityExpression,EqualityExpression]] = None
+      var e2: Option[Tuple2[EqualityExpression,EqualityExpression]] = None
 
       from(leftTable, rightTable, thisTableOfA)((l,r,a) => {
         e2 = Some(f(l,r,a))
@@ -498,13 +523,13 @@ trait QueryDsl
         def _whereClauseForAssociations(a0: A) = {
           val leftPk = leftPkFmd.get(leftSideMember.asInstanceOf[AnyRef])
           leftFkFmd.get(a0.asInstanceOf[AnyRef])
-          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk)
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk, None)
         }
 
         def _equalityForRightSide(a0: A, r: R) = {
           val rightPk = rightPkFmd.get(r.asInstanceOf[AnyRef])
           rightFkFmd.get(a0.asInstanceOf[AnyRef])
-          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(rightPk)
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(rightPk, None)
         }
 
         def dissociateAll = 
@@ -568,13 +593,13 @@ trait QueryDsl
         def _leftEquality(l: L, a0: A) = {
           val leftPk = leftPkFmd.get(l.asInstanceOf[AnyRef])
           leftFkFmd.get(a0.asInstanceOf[AnyRef])
-          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk)
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(leftPk, None)
         }
 
         def _whereClauseForAssociations(a0: A) = {
           val rightPk = rightPkFmd.get(rightSideMember.asInstanceOf[AnyRef])
           rightFkFmd.get(a0.asInstanceOf[AnyRef])
-          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(rightPk)
+          FieldReferenceLinker.createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(rightPk, None)
         }
 
         def dissociateAll =
@@ -700,47 +725,163 @@ trait QueryDsl
 
   // Composite key syntactic sugar :
 
-  def compositeKey[A1,A2](a1: A1, a2: A2) =
+  def compositeKey[A1,A2](a1: A1, a2: A2)(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _]) =
     new CompositeKey2(a1, a2)
 
-  def compositeKey[A1,A2,A3](a1: A1, a2: A2, a3: A3) =
+  def compositeKey[A1,A2,A3](a1: A1, a2: A2, a3: A3)(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _]) =
     new CompositeKey3(a1, a2, a3)
 
-  def compositeKey[A1,A2,A3,A4](a1: A1, a2: A2, a3: A3, a4: A4) =
+  def compositeKey[A1,A2,A3,A4](a1: A1, a2: A2, a3: A3, a4: A4)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _]) =
     new CompositeKey4(a1, a2, a3, a4)
 
-  def compositeKey[A1,A2,A3,A4,A5](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5) =
+  def compositeKey[A1,A2,A3,A4,A5](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5)(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _]) =
     new CompositeKey5(a1, a2, a3, a4, a5)
 
-  def compositeKey[A1,A2,A3,A4,A5,A6](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6) =
+  def compositeKey[A1,A2,A3,A4,A5,A6](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6)(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _]) =
     new CompositeKey6(a1, a2, a3, a4, a5, a6)
 
-  def compositeKey[A1,A2,A3,A4,A5,A6,A7](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7) =
+  def compositeKey[A1,A2,A3,A4,A5,A6,A7](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7)(
+    implicit
+      ev1: A1 => TypedExpression[A1, _],
+      ev2: A2 => TypedExpression[A2, _],
+      ev3: A3 => TypedExpression[A3, _],
+      ev4: A4 => TypedExpression[A4, _],
+      ev5: A5 => TypedExpression[A5, _],
+      ev6: A6 => TypedExpression[A6, _],
+      ev7: A7 => TypedExpression[A7, _]) =
     new CompositeKey7(a1, a2, a3, a4, a5, a6, a7)
 
-  def compositeKey[A1,A2,A3,A4,A5,A6,A7,A8](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8) =
+  def compositeKey[A1,A2,A3,A4,A5,A6,A7,A8](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8)(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _],
+        ev7: A7 => TypedExpression[A7, _],
+        ev8: A8 => TypedExpression[A8, _]) =
     new CompositeKey8(a1, a2, a3, a4, a5, a6, a7, a8)
 
-  def compositeKey[A1,A2,A3,A4,A5,A6,A7,A8,A9](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8, a9: A9) =
+  def compositeKey[A1,A2,A3,A4,A5,A6,A7,A8,A9](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8, a9: A9)(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _],
+        ev7: A7 => TypedExpression[A7, _],
+        ev8: A8 => TypedExpression[A8, _],
+        ev9: A9 => TypedExpression[A9, _]) =
     new CompositeKey9(a1, a2, a3, a4, a5, a6, a7, a8, a9)
 
   // Tuple to composite key conversions :
   
-  implicit def t2te[A1,A2](t: (A1,A2)) = new CompositeKey2[A1,A2](t._1, t._2)
+  implicit def t2te[A1,A2](t: (A1,A2))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _]) =
+    new CompositeKey2[A1,A2](t._1, t._2)
 
-  implicit def t3te[A1,A2,A3](t: (A1,A2,A3)) = new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
+  implicit def t3te[A1,A2,A3](t: (A1,A2,A3))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _]) =
+    new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
 
-  implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4)) = new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
+  implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _]) =
+    new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
 
-  implicit def t5te[A1,A2,A3,A4,A5](t: (A1,A2,A3,A4,A5)) = new CompositeKey5[A1,A2,A3,A4,A5](t._1, t._2, t._3, t._4, t._5)
+  implicit def t5te[A1,A2,A3,A4,A5](t: (A1,A2,A3,A4,A5))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _]) =
+    new CompositeKey5[A1,A2,A3,A4,A5](t._1, t._2, t._3, t._4, t._5)
 
-  implicit def t6te[A1,A2,A3,A4,A5,A6](t: (A1,A2,A3,A4,A5,A6)) = new CompositeKey6[A1,A2,A3,A4,A5,A6](t._1, t._2, t._3, t._4, t._5, t._6)
+  implicit def t6te[A1,A2,A3,A4,A5,A6](t: (A1,A2,A3,A4,A5,A6))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _]) =
+    new CompositeKey6[A1,A2,A3,A4,A5,A6](t._1, t._2, t._3, t._4, t._5, t._6)
 
-  implicit def t7te[A1,A2,A3,A4,A5,A6,A7](t: (A1,A2,A3,A4,A5,A6,A7)) = new CompositeKey7[A1,A2,A3,A4,A5,A6,A7](t._1, t._2, t._3, t._4, t._5, t._6, t._7)
+  implicit def t7te[A1,A2,A3,A4,A5,A6,A7](t: (A1,A2,A3,A4,A5,A6,A7))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _],
+        ev7: A7 => TypedExpression[A7, _]) =
+    new CompositeKey7[A1,A2,A3,A4,A5,A6,A7](t._1, t._2, t._3, t._4, t._5, t._6, t._7)
 
-  implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8)) = new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
+  implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _],
+        ev7: A7 => TypedExpression[A7, _],
+        ev8: A8 => TypedExpression[A8, _]) =
+    new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
 
-  implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9)) = new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
+  implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9))(
+      implicit
+        ev1: A1 => TypedExpression[A1, _],
+        ev2: A2 => TypedExpression[A2, _],
+        ev3: A3 => TypedExpression[A3, _],
+        ev4: A4 => TypedExpression[A4, _],
+        ev5: A5 => TypedExpression[A5, _],
+        ev6: A6 => TypedExpression[A6, _],
+        ev7: A7 => TypedExpression[A7, _],
+        ev8: A8 => TypedExpression[A8, _],
+        ev9: A9 => TypedExpression[A9, _]) =
+    new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
+
+  implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup = CompositeKeyLookup
+
+  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, _]): CanLookup = new SimpleKeyLookup[T](ev)
 
   // Case statements :
 /*

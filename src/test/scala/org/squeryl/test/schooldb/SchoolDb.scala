@@ -29,13 +29,7 @@ import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
 import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ExpressionNode
-import scala.Some
-import org.squeryl.test.schooldb.YieldInspectionAnother
-import org.squeryl.test.schooldb.PostalCode
-import org.squeryl.test.schooldb.Course
-import org.squeryl.test.schooldb.School
-import org.squeryl.test.schooldb.YieldInspectionTest
-import org.squeryl.test.schooldb.Course2
+
 
 
 object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
@@ -64,7 +58,13 @@ object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
     def isPersisted(a:Course2) = a.id > 0
     def idPropertyName = "id"
     override def optimisticCounterPropertyName = Some("occVersionNumber")
-  }  
+  }
+
+  implicit object courseOfferingKED extends KeyedEntityDef[CourseOffering,CompositeKey3[Int, Long, Int]] {
+    def getId(a:CourseOffering) = a.id
+    def isPersisted(a:CourseOffering) = a.isPersisted
+    def idPropertyName = "id"
+  }
 }
 
 import AppSpecificTypeMode._
@@ -130,8 +130,13 @@ class Address(var streetName: String, var numberz:Int, var numberSuffix:Option[S
 
 class Professor(var lastName: String, var yearlySalary: Float, var weight: Option[Float], var yearlySalaryBD: BigDecimal, var weightInBD: Option[BigDecimal]) extends KeyedEntity[Long] with Person {
 
+  def this() = this("", 0F, Some(0F), BigDecimal(0), Some(BigDecimal(0)))
   var id: Long = 0
   override def toString = "Professor:" + id + ",sal=" + yearlySalary
+}
+
+case class CourseOffering(courseId:Int, professorId:Long, addressId:Int, description:String) extends PersistenceStatus {
+  def id = CompositeKey3(courseId, professorId, addressId)
 }
 
 case class PostalCode(code: String) extends KeyedEntity[String] {
@@ -209,6 +214,8 @@ class SchoolDb extends Schema {
   val courseSubscriptions = table[CourseSubscription]
 
   val courseAssigments = table[CourseAssignment]
+
+  val courseOfferings = table[CourseOffering]
 
   val schools = table[School]
 
@@ -346,10 +353,16 @@ class TestInstance(schema : SchoolDb){
   courseSubscriptions.insert(new CourseSubscription(counterpoint.id, pratap.id))
   courseSubscriptions.insert(new CourseSubscription(mandarin.id, gaitan.id))
 
+
   val tournesol = professors.insert(new Professor("tournesol", 80.0F, Some(70.5F), 80.0F, Some(70.5F)))
+
+  val offering1 = courseOfferings.insert(new CourseOffering(groupTheory.id, tournesol.id, oneHutchissonStreet.id, "Offered Daily"))
+  val offering2 = courseOfferings.insert(new CourseOffering(groupTheory.id, tournesol.id, twoHutchissonStreet.id, "May be cancelled"))
+
 }
 
 abstract class FullOuterJoinTests extends SchoolDbTestBase{
+  self: DBConnector =>
 
   import schema._
 
@@ -385,6 +398,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 }
 
 abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTestsInsideTransaction {
+  self: DBConnector =>
 
   lazy val schema = new SchoolDb
 
@@ -395,13 +409,73 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
   }
 
 }
-abstract class SchoolDbTestRun extends SchoolDbTestBase {
+
+abstract class CommonTableExpressions extends SchoolDbTestBase {
+  self: DBConnector =>
 
   import schema._
 
-  
-  
-  
+  test("commonTableExpressions") {
+    val testInstance = sharedTestInstance; import testInstance._
+    val qStudents = from(students) ((s) =>
+      where(s.name === "Xiao")
+      select(s))
+    val qAddresses = from(addresses)(a => select(a))
+
+    val q =
+      from(qStudents)(s =>
+        withCte(qStudents, qAddresses)
+        where(exists(
+          join(qStudents, qStudents)((s2, s3) =>
+            where(s2.name === "Xiao" and exists(
+              from(qStudents)(s4 =>
+                where (s4.name === "Xiao")
+                select (s4))))
+            select(s2)
+            on(s2.name === s3.name))) and s.name === "Xiao")
+        select(s))
+
+    /*
+    val q =
+      from(qStudents)(s =>
+        withCte(qStudents)
+        select(s))
+    */
+
+    val res = for (s <- q) yield s.name
+    val expected = List("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('commonTableExpressions)
+  }
+}
+
+abstract class SchoolDbTestRun extends SchoolDbTestBase {
+  self: DBConnector =>
+
+  import schema._
+
+  test("cast"){
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val q =
+      from(addresses)(a => where(a.id === "1".cast[Int, TInt]("int4")) select(a))
+    assert(q.toList.size == 1)
+  }
+
+  test("DecimalNull", SingleTestRun) {
+    val testInstance = sharedTestInstance; import testInstance._
+
+    val p = new Professor("Mad Professor", 80.0F, Some(70.5F), 80.0F, None)
+
+    professors.insert(p)
+
+    professors.lookup(p.id)
+
+    passed('testAvgBigDecimal)
+  }
+
   test("StringKeyedEntities"){
     val testInstance = sharedTestInstance; import testInstance._
     val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
@@ -560,6 +634,18 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assertEquals(2, c.rawData(1), 'blobTest)
 
     passed('blobTest)
+  }
+
+  test("nullCompoundKey"){
+    val testInstance = sharedTestInstance;
+    import testInstance._
+
+    courseOfferings.allRows.foreach{ row =>
+      val newRow = row.copy(description = "Cancelled")
+      courseOfferings.update(newRow)
+    }
+
+    passed('nullCompoundKey)
   }
 
   /**
@@ -873,7 +959,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testDateTypeMapping )
   }
 
-  test("java.sql.DateTypeMapping2", SingleTestRun){
+  test("java.sql.DateTypeMapping2"){
 
     val dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -1037,7 +1123,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testNVLFunction )
   }
 
-  test("LongTypeMapping"){
+  test("LongTypeMapping", SingleTestRun){
     val testInstance = sharedTestInstance; import testInstance._
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
@@ -1672,7 +1758,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testNewOuterJoin3 )
   }
   
-  test("TestYieldInspectionLeakViaCGLIB", SingleTestRun) {
+  test("TestYieldInspectionLeakViaCGLIB") {
       tests.insert(List(YieldInspectionTest(1, 100), YieldInspectionTest(1,500), YieldInspectionTest(2,600)))
       others.insert(List(YieldInspectionAnother(1, "One", 1), YieldInspectionAnother(2, "Two", 2)))
 
@@ -1732,7 +1818,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
 
     passed('testVeryNestedExists)
-
   }
 
   test("VeryVeryNestedExists"){
@@ -1792,6 +1877,32 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(expected == is, "expected :\n " + expected + "\ngot : \n " + is)
   }
+
+  test("commonTableExpressions") {
+    val testInstance = sharedTestInstance; import testInstance._
+    val qStudents = from(students) ((s) => select(s))
+    val qAddresses = from(addresses) ((a) => select(a))
+
+    val q =
+      from(qStudents)(s =>
+        withCte(qStudents, qAddresses)
+        where(exists(
+          join(qStudents, qStudents)((s2, s3) =>
+            where(s2.name === "Xiao" and exists(
+              from(qStudents)(s4 =>
+                where (s4.name === "Xiao")
+                select (s4))))
+            select(s2)
+            on(s2.name === s3.name))) and s.name === "Xiao")
+        select(s))
+
+    val res = for (s <- q) yield s.name
+    val expected = List("Xiao")
+
+    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+
+    passed('commonTableExpressions)
+  }
 }
 
 object Issue14Schema extends Schema{
@@ -1803,6 +1914,7 @@ object Issue14Schema extends Schema{
 }
 
 abstract class Issue14 extends DbTestBase with QueryTester {
+  self: DBConnector =>
 
 
 

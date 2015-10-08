@@ -30,6 +30,8 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
 
   var originalAutoCommit = true
 
+  var originalTransactionIsolation = java.sql.Connection.TRANSACTION_NONE
+
   def connection: Connection = {
     /*
      * No need to synchronize this since Sessions are not thread safe
@@ -40,6 +42,7 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
         originalAutoCommit = c.getAutoCommit
         if(originalAutoCommit)
           c.setAutoCommit(false)
+        originalTransactionIsolation = c.getTransactionIsolation
         _connection = Option(c)
         c
       } catch {
@@ -64,12 +67,17 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
     } finally {
       if (hasConnection) {
         try {
-          if (txOk)
-            connection.commit
-          else
-            connection.rollback
-          if (originalAutoCommit != connection.getAutoCommit)
-            connection.setAutoCommit(originalAutoCommit)
+          try {
+            if (txOk)
+              connection.commit
+            else
+              connection.rollback
+          } finally {
+            if (originalAutoCommit != connection.getAutoCommit) {
+              connection.setAutoCommit(originalAutoCommit)
+            }
+            connection.setTransactionIsolation(originalTransactionIsolation)
+          }
         } catch {
           case e: SQLException => {
             Utils.close(connection)
@@ -95,16 +103,26 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
   val hasConnection = true
 
   def withinTransaction[A](f: () => A): A = {
-    val originalAutoCommit = true
-    try {
-      connection.getAutoCommit
-      if (originalAutoCommit)
-        connection.setAutoCommit(false)
-    } catch {
-      case e: SQLException =>
-        Utils.close(connection)
-        throw e
-    }
+    val originalAutoCommit =
+      try {
+        val r = connection.getAutoCommit
+        if (r)
+          connection.setAutoCommit(false)
+        r
+      } catch {
+        case e: SQLException =>
+          Utils.close(connection)
+          throw e
+      }
+    val originalTransactionIsolation =
+      try {
+        connection.getTransactionIsolation
+      } catch {
+        case e: SQLException => {
+          Utils.close(connection)
+          throw e
+        }
+      }
     var txOk = false
     try {
       val res = this.using[A](f)
@@ -117,12 +135,17 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
       }
     } finally {
       try {
-        if (txOk)
-          connection.commit
-        else
-          connection.rollback
-        if (originalAutoCommit != connection.getAutoCommit)
-          connection.setAutoCommit(originalAutoCommit)
+        try {
+          if (txOk)
+            connection.commit
+          else
+            connection.rollback
+        } finally {
+          if (originalAutoCommit != connection.getAutoCommit) {
+            connection.setAutoCommit(originalAutoCommit)
+          }
+          connection.setTransactionIsolation(originalTransactionIsolation)
+        }
       } catch {
         case e: SQLException => {
           Utils.close(connection)
@@ -208,6 +231,8 @@ trait AbstractSession {
     _statements.clear
     _resultSets.foreach(rs => Utils.close(rs))
     _resultSets.clear
+
+    FieldReferenceLinker.clearThreadLocalState()
   }
 
   def close = {

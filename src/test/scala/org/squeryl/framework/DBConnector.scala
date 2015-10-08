@@ -4,7 +4,7 @@ import org.squeryl.{AbstractSession, Session}
 
 trait DBConnector {
 
-  def connectToDb() : Option[() => AbstractSession]
+  def sessionCreator() : Option[() => AbstractSession]
 
   lazy val config = {
     new FileConfigReader("org.squeryl.tests.cfg")

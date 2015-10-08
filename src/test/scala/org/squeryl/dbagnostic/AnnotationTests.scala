@@ -21,6 +21,8 @@ import org.squeryl.annotations.{Row, Column}
 import org.squeryl.Schema
 import java.util.Date
 import org.scalatest.FunSuite
+//import org.scalatest.Matchers
+//import org.scalatest.matchers.{ShouldMatchers => Matchers}
 import org.scalatest.matchers.ShouldMatchers
 import org.squeryl.test.PrimitiveTypeModeForTests
 
@@ -66,7 +68,7 @@ class DescendantOfKeyedObject extends KeyedObject {
   //val pouf = "pouf"
 }
 
-class AnnotationTests extends FunSuite with ShouldMatchers{
+class AnnotationTests extends FunSuite with ShouldMatchers {
 
 
   class C(

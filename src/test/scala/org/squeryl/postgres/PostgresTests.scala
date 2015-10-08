@@ -8,7 +8,8 @@ import org.squeryl.Session
 import org.squeryl.test.arrays.PrimitiveArrayTest
 
 trait Postgresql_Connection extends DBConnector{
-  def connectToDb() : Option[() => Session] = {
+  
+  def sessionCreator() : Option[() => Session] = {
     if(config.hasProps("postgresql.connectionString", "postgresql.user", "postgresql.password")){
       Class.forName("org.postgresql.Driver")
 
@@ -43,6 +44,8 @@ class Postgresql_LeftJoinTest extends LeftJoinTest with Postgresql_Connection
 class Postgresql_ConnectionClosing extends ConnectionClosingTest with Postgresql_Connection {
   def dbSpecificSelectNow: String = "select now()"
 }
+
+class Postgresql_CommonTableExpressions extends schooldb.CommonTableExpressions with Postgresql_Connection
 
 
 class Postgresql_LogicalBooleanObjTests extends LogicalBooleanObjTests with Postgresql_Connection

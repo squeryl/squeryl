@@ -8,7 +8,7 @@ import org.squeryl.adapters.DerbyAdapter
 import org.squeryl.Session
 
 trait Derby_Connection extends DBConnector{
-  def connectToDb() : Option[() => Session] = {
+  def sessionCreator() : Option[() => Session] = {
     if(config.hasProps("derby.connectionString", "derby.user", "derby.password")){
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver")
       Some(() => {
@@ -35,7 +35,7 @@ class Derby_SchoolDb extends schooldb.SchoolDbTestRun with Derby_Connection {
   /* FIXME: https://issues.apache.org/jira/browse/DERBY-4998
    * Because of a derby bug we ignore the BigDecimal test cases until it's fixed.
    */
-  override val ignoredTests = List("BigDecimal","assertColumnNameChangeWithDeclareSyntax")
+  override val ignoredTests = List("BigDecimal","assertColumnNameChangeWithDeclareSyntax", "cast", "commonTableExpressions")
 }
 //class Derby_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Derby_Connection
 class Derby_KickTheTires extends demo.KickTheTires with Derby_Connection

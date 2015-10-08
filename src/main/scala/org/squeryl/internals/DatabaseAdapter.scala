@@ -53,7 +53,27 @@ trait DatabaseAdapter {
    */
   def verifyDeleteByPK: Boolean = true
 
+  protected [squeryl] def writeCteReference(sw: StatementWriter, q: QueryExpressionElements): Unit = {
+    sw.write(quoteName("cte_" + q.alias))
+  }
+
   protected def writeQuery(qen: QueryExpressionElements, sw: StatementWriter, inverseOrderBy: Boolean, topHint: Option[String]):Unit = {
+
+    if (supportsCommonTableExpressions && qen.commonTableExpressions.nonEmpty) {
+      sw.write("With")
+      for (z <- qen.commonTableExpressions.zipi) {
+        sw.write(" ")
+        writeCteReference(sw, z.element)
+        sw.write(" As ")
+        sw.write("(")
+        writeQuery(z.element, sw)
+        sw.write(")")
+        if (!z.isLast) {
+          sw.write(",")
+        }
+        sw.nextLine
+      }
+    }
 
     sw.write("Select")
 
@@ -113,7 +133,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.groupByClause.isEmpty) {      
+    if(qen.groupByClause.exists(e => ! e.inhibited)) {
       sw.write("Group By")
       sw.nextLine
       sw.writeIndented {
@@ -122,7 +142,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.havingClause.isEmpty) {
+    if(qen.havingClause.exists(e => ! e.inhibited)) {
       sw.write("Having")
       sw.nextLine
       sw.writeIndented {
@@ -131,7 +151,7 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    if(! qen.orderByClause.isEmpty && qen.parent == None) {
+    if(qen.orderByClause.exists(e => ! e.inhibited) ) {
       sw.write("Order By")
       sw.nextLine
       val ob0 = qen.orderByClause.filter(e => ! e.inhibited)
@@ -142,25 +162,34 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    writeEndOfQueryHint(qen, sw)
+    writeEndOfQueryHint(() => qen.isForUpdate, qen, sw)
 
-    writePaginatedQueryDeclaration(qen, sw)
+    writePaginatedQueryDeclaration(() => qen.page, qen, sw)
   }
 
-  def writeEndOfQueryHint(qen: QueryExpressionElements, sw: StatementWriter) = 
-    if(qen.isForUpdate) {
+  def writeUnionQueryOptions(qen: QueryExpressionElements, sw: StatementWriter) {
+    if (! supportsUnionQueryOptions)
+      Utils.throwError("Database adapter does not support query options on a union query")
+
+    writeEndOfQueryHint(() => qen.unionIsForUpdate, qen, sw)
+    writePaginatedQueryDeclaration(() => qen.unionPage, qen, sw)
+  }
+
+  def writeEndOfQueryHint(isForUpdate: () => Boolean, qen: QueryExpressionElements, sw: StatementWriter) =
+    if(isForUpdate()) {
       sw.write("for update")
       sw.pushPendingNextLine
     }
 
   def writeEndOfFromHint(qen: QueryExpressionElements, sw: StatementWriter) = {}
 
-  def writePaginatedQueryDeclaration(qen: QueryExpressionElements, sw: StatementWriter):Unit = 
-    qen.page.foreach(p => {
+  def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter):Unit =
+    page().foreach(p => {
       sw.write("limit ")
       sw.write(p._2.toString)
       sw.write(" offset ")
       sw.write(p._1.toString)
+      sw.pushPendingNextLine
     })
 
 
@@ -277,6 +306,10 @@ trait DatabaseAdapter {
   }
 
   def supportsAutoIncrementInColumnDeclaration:Boolean = true
+
+  def supportsUnionQueryOptions = true
+
+  def supportsCommonTableExpressions = true
 
   def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema) = {
 
@@ -531,12 +564,20 @@ trait DatabaseAdapter {
     sw.indent
     
     t.posoMetaData.primaryKey.getOrElse(throw new UnsupportedOperationException("writeUpdate was called on an object that does not extend from KeyedEntity[]")).fold(
-      pkMd => sw.write(quoteName(pkMd.columnName), " = ", writeValue(o_, pkMd, sw)),
+      pkMd => {
+        val (op, vl) = if(pkMd.getNativeJdbcValue(o_) == null) (" is ", "null") else (" = ", writeValue(o_, pkMd, sw))
+        sw.write(quoteName(pkMd.columnName), op, vl)
+      },
       pkGetter => {
         Utils.createQuery4WhereClause(t, (t0:T) => {
           val ck = pkGetter.invoke(t0).asInstanceOf[CompositeKey]
 
-          val fieldWhere = ck._fields map (fmd => quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw))
+          val fieldWhere = ck._fields map {
+            case fmd if(fmd.getNativeJdbcValue(o_) == null) =>
+              quoteName(fmd.columnName) + " is null"
+            case fmd =>
+              quoteName(fmd.columnName) + " = " + writeValue(o_, fmd, sw)
+          }
           sw.write(fieldWhere.mkString(" and "))
 
           new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))
@@ -599,9 +640,18 @@ trait DatabaseAdapter {
       sw.write(quoteName(col.columnName))
       sw.write(" = ")
       val v = z.element
-      sw.write("(")
-      v.write(sw)
-      sw.write(")")
+      col.explicitDbTypeDeclaration match {
+        case Some(dbType) if col.explicitDbTypeCast => {
+          sw.write("cast(")
+          v.write(sw)
+          sw.write(s" as ${sw.quoteName(dbType)})")
+        }
+        case _ => {
+          sw.write("(")
+          v.write(sw)
+          sw.write(")")
+        }
+      }
       if(!z.isLast) {
         sw.write(",")
         sw.nextLine

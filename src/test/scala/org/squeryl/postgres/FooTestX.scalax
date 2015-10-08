@@ -1,0 +1,56 @@
+package org.squeryl.postgres
+
+import org.squeryl._
+import adapters._
+import dsl._
+
+import PrimitiveTypeMode._
+
+case class Foo(
+    val id: Int
+  ) extends KeyedEntity[Int] {
+}
+
+object FooSchema extends Schema {
+  val foos = table[Foo]
+}
+
+object FooTestX extends App {
+  Class.forName("org.postgresql.Driver")
+
+  SessionFactory.concreteFactory =
+    Some(() => {
+      val c = java.sql.DriverManager.getConnection(
+        "jdbc:postgresql://localhost:5432/squeryl",
+        "squeryl",
+        "squeryl"
+      )
+      c.setAutoCommit(false)
+      val s = Session.create(c, new PostgreSqlAdapter)
+
+      s.setLogger(println)
+
+      s
+    })
+
+
+  import FooSchema._
+
+  transaction {
+    val qFoos = from(foos) ((f) => select(f))
+    val q =
+      from(qFoos)(s =>
+        where(exists(from(foos)((a) =>
+          where(exists
+            (from(foos) ( (a2) =>
+              where(s.id === 1)
+                select(&(3)))))
+            select(&(2)))))
+          select(&(1))
+      )
+
+    println(q.toString)
+
+    println(q.toList)
+  }
+}
