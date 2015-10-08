@@ -12,7 +12,8 @@ object SquerylBuild extends Build {
       organization := "org.squeryl",
       version := "0.9.6-RC3",
       javacOptions := Seq("-source", "1.6", "-target", "1.6"),
-  	  version <<= version { v => //only release *if* -Drelease=true is passed to JVM
+      //only release *if* -Drelease=true is passed to JVM
+      version <<= version { v =>
   	  	val release = Option(System.getProperty("release")) == Some("true")
   	  	if(release)
   	  		v 
@@ -31,7 +32,7 @@ object SquerylBuild extends Build {
       scalaVersion := "2.11.6",
       crossScalaVersions := Seq("2.11.6", "2.10.5"),
       scalacOptions <++= scalaVersion map { sv =>
-        Seq("-unchecked", "-deprecation") ++ (
+      Seq("-unchecked", "-deprecation") ++ (
           if(sv.startsWith("2.11"))
             Seq("-feature",
             "-language:implicitConversions",
@@ -60,6 +61,17 @@ object SquerylBuild extends Build {
                        <url>https://github.com/davewhittaker</url>
                      </developer>
                    </developers>),
+      credentials ~= { c =>
+        (Option(System.getenv().get("SONATYPE_USERNAME")), Option(System.getenv().get("SONATYPE_PASSWORD"))) match {
+          case (Some(username), Some(password)) => 
+            c :+ Credentials(
+              "Sonatype Nexus Repository Manager", 
+              "oss.sonatype.org", 
+              username, 
+              password)
+          case _ => c
+        }
+      },
       publishTo <<= version { v => //add credentials to ~/.sbt/sonatype.sbt
         val nexus = "https://oss.sonatype.org/"
         if (v.trim.endsWith("SNAPSHOT"))
@@ -69,12 +81,6 @@ object SquerylBuild extends Build {
       },
       publishArtifact in Test := false,
       pomIncludeRepository := { _ => false },
-      //below is for lsync, run "ls-write-version", commit to github, then run "lsync" 
-      /*
-			  (LsKeys.tags in LsKeys.lsync) := Seq("sql", "orm", "query", "database", "db", "dsl"),
-			  (LsKeys.docsUrl in LsKeys.lsync) := Some(new URL("http://squeryl.org/api/")),
-			  (LsKeys.ghUser in LsKeys.lsync) := Some("squeryl"),
-        */
       libraryDependencies ++= Seq(
         "cglib" % "cglib-nodep" % "2.2",
         "com.h2database" % "h2" % "1.4.187" % "provided",
