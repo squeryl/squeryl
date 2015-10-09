@@ -1,3 +1,4 @@
+
 ## How to build
 1. Download or clone repository:  
      `git clone git://github.com/squeryl/squeryl.git`
