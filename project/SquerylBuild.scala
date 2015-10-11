@@ -91,16 +91,18 @@ object SquerylBuild extends Build {
         "org.xerial" % "sqlite-jdbc" % "3.8.7" % "test",
         "junit" % "junit" % "4.8.2" % "provided"
       ),
-      libraryDependencies <++= scalaVersion { sv =>
-        Seq("org.scala-lang" % "scalap" % sv,
-          sv match {
-            case sv if sv startsWith "2.11" =>
-              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-            case sv if sv startsWith "2.10" =>
-              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-            case _ =>
-              "org.scalatest" % "scalatest_2.9.2" % "2.0.M6-SNAP3" % "test"
-          }
-        )
-      }))
+      libraryDependencies ++= Seq(
+        "org.json4s" %% "json4s-scalap" % "3.3.0",
+        "org.scalatest" %% "scalatest" % "2.1.3" % "test"
+      ),
+      libraryDependencies ++= {
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+            Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.5")
+          case _ =>
+            Nil
+        }
+      }
+    )
+  )
 }
