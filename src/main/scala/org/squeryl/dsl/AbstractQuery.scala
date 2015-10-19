@@ -137,7 +137,6 @@ abstract class AbstractQuery[R](
     } else {
       c.__root = Some(this)
     }
-
     c
   }
 

@@ -10,7 +10,7 @@ object SquerylBuild extends Build {
     settings = Project.defaultSettings /* ++ lsSettings */ ++ Seq(
       description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
       organization := "org.squeryl",
-      version := "0.9.6-RC3",
+      version := "0.9.6-RC4",
       javacOptions := Seq("-source", "1.6", "-target", "1.6"),
       //only release *if* -Drelease=true is passed to JVM
       version <<= version { v =>
@@ -43,6 +43,9 @@ object SquerylBuild extends Build {
             Nil
           )
       },
+
+    resolvers ++= Seq(Resolver.mavenLocal),
+
       licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       homepage := Some(url("http://squeryl.org")),
       pomExtra := (<scm>
@@ -94,13 +97,14 @@ object SquerylBuild extends Build {
       libraryDependencies <++= scalaVersion { sv =>
         Seq("org.scala-lang" % "scalap" % sv,
           sv match {
-            case sv if sv startsWith "2.11" =>
-              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-            case sv if sv startsWith "2.10" =>
-              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-            case _ =>
-              "org.scalatest" % "scalatest_2.9.2" % "2.0.M6-SNAP3" % "test"
-          }
-        )
+          	case sv if sv startsWith "2.11" =>
+          	    "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+          	case sv if sv startsWith "2.10" =>
+          	    "org.scalatest" %% "scalatest" % "1.9.1" % "test"
+          	case sv if sv startsWith "2.9" =>
+          		"org.scalatest" % "scalatest_2.9.2" % "1.6.1" % "test"
+          	case _ =>
+          		"org.scalatest" % "scalatest_2.8.2" % "1.5.1" % "test"
+        })
       }))
 }
