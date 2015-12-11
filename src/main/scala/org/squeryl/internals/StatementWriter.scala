@@ -68,6 +68,8 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   def params: Iterable[StatementParam] = _paramList
 
+  def paramsValues: Iterable[AnyRef] = _paramList.map(p => databaseAdapter.paramToJdbcValue(p))
+
   private val _stringBuilder = new StringBuilder(256)
 
   def statement = _stringBuilder.toString
@@ -78,8 +80,8 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     if(_paramList.size == 0)
       statement
     else
-      _paramList.mkString(statement+"\njdbcParams:[",",","]")
-  
+      paramsValues.mkString(statement+"\njdbcParams:[",",","]")
+
   private val INDENT_INCREMENT = 2
   
   private var indentWidth = 0
