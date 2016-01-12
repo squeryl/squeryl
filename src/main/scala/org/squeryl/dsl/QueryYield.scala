@@ -15,12 +15,13 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
-import ast.{LogicalBoolean, ExpressionNode, QueryExpressionNode, SelectElement}
-import boilerplate._
-import org.squeryl.internals.{ResultSetMapper}
 import java.sql.ResultSet
 
 import org.squeryl.Query
+import org.squeryl.dsl.ast._
+import org.squeryl.dsl.boilerplate._
+import org.squeryl.dsl.fsm.IncludePathCommon
+import org.squeryl.internals.ResultSetMapper
 
 trait QueryYield[R] {
 
@@ -37,6 +38,8 @@ trait QueryYield[R] {
      Iterable[Query[_]])
 
   private [squeryl] var joinExpressions: Seq[()=>LogicalBoolean] = Nil
+
+  protected [squeryl] def includePath: Option[IncludePathCommon] = None
 
   def on(lb1: =>LogicalBoolean) = {
     joinExpressions = Seq(lb1 _)

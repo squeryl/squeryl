@@ -223,6 +223,11 @@ object FieldReferenceLinker {
         
       _populateSelectColsRecurse(visitedSet, yi, q, res0)
 
+      if (q.hasIncludes) {
+        val deps = q.views.filter(v => v.sample != res0)
+        deps.foreach(_populateSelectColsRecurse(visitedSet, yi, q, _))
+      }
+
       result = (yi.outExpressions, res0)
     }
     finally {

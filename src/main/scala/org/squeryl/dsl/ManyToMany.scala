@@ -15,9 +15,12 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
+import org.squeryl.dsl.ast.EqualityExpression
 import org.squeryl.{ForeignKeyDeclaration, Table, Query, KeyedEntity}
 import collection.mutable.{HashMap, ArrayBuffer, Buffer}
 import org.squeryl.KeyedEntityDef
+
+import scala.reflect.runtime.universe._
 
 trait Relation[L,R] {
   
@@ -27,25 +30,58 @@ trait Relation[L,R] {
 }
 
 trait OneToManyRelation[O,M] extends Relation[O,M] {
+  private [squeryl] def oneType: Class[O]
+  private [squeryl] def manyType: Class[M]
 
   def foreignKeyDeclaration: ForeignKeyDeclaration
 
   def left(leftSide: O): OneToMany[M]
 
-  def leftStateful(leftSide: O) = new StatefulOneToMany[M](left(leftSide))
+  def leftStateful(leftSide: O) = new StatefulOneToMany[M](() => left(leftSide))
+
+  def leftIncludable(leftSide: O) = new IncludableOneToMany[M](() => left(leftSide))
 
   def right(rightSide: M): ManyToOne[O]
 
-  def rightStateful(rightSide: M) = new StatefulManyToOne[O](right(rightSide))
+  def rightStateful(rightSide: M) = new StatefulManyToOne[O](() => right(rightSide))
+
+  def rightIncludable(rightSide: M) = new IncludableManyToOne[O](() => right(rightSide))
+
+  def equalityExpression: (O,M)=>EqualityExpression
 }
 
-class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
+class IncludableOneToMany[M](rel: () => OneToMany[M]) extends StatefulOneToMany[M](rel) {
+  override protected val autoFill: Boolean = false
+  private var isFilled = false
 
+  override def iterator: Iterator[M] = {
+    if(!isFilled) {
+        refresh
+      }
+    super.iterator
+  }
+
+  override def refresh: Unit = {
+    super.refresh
+    isFilled = true
+  }
+
+  override protected[squeryl] def add(entity: Option[M]): Unit = {
+    super.add(entity)
+    isFilled = true
+  }
+}
+
+class StatefulOneToMany[M](val rel: () => OneToMany[M]) extends Iterable[M] {
+
+  protected def autoFill: Boolean = true
   private val _buffer = new ArrayBuffer[M]
+  private lazy val relation = rel()
 
-  refresh
+  if(autoFill)
+    refresh
   
-  def refresh = {
+  def refresh: Unit = {
     _buffer.clear
     for(m <- relation.iterator.toSeq)
       _buffer.append(m)
@@ -64,13 +100,44 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
     _buffer.clear
     r
   }
+
+  protected [squeryl] def add(entity: Option[M]): Unit = {
+    if(entity.nonEmpty && !_buffer.contains(entity.get))
+      _buffer += entity.get
+  }
 }
 
-class StatefulManyToOne[O](val relation: ManyToOne[O]) {
+class IncludableManyToOne[O](rel: () => ManyToOne[O]) extends StatefulManyToOne[O](rel) {
+  
+  override protected def autoFill: Boolean = false
+  private var isFilled = false
 
+  override def one: Option[O] = {
+    if(!isFilled) {
+      refresh
+    }
+    super.one
+  }
+
+  override def refresh: Unit = {
+    super.refresh
+    isFilled = true
+  }
+
+  override protected[squeryl] def fill(o: Option[O]): Unit = {
+    super.fill(o)
+    isFilled = true
+  }
+}
+
+class StatefulManyToOne[O](val rel: () => ManyToOne[O]) {
+
+  protected def autoFill: Boolean = true
   private var _one: Option[O] = None
+  private lazy val relation = rel()
 
-  refresh
+  if(autoFill)
+    refresh
 
   def refresh = 
     _one = relation.iterator.toSeq.headOption
@@ -88,6 +155,8 @@ class StatefulManyToOne[O](val relation: ManyToOne[O]) {
     _one = None
     b
   }
+
+  protected [squeryl] def fill(o: Option[O]): Unit = _one = o
 }
 
 trait ManyToManyRelation[L, R, A] extends Relation[L,R] {
@@ -186,7 +255,6 @@ trait ManyToMany[O,A] extends Query[O] {
   def associationMap: Query[(O,A)]
 }
 
-
 class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O] {
   
   private val _map = new HashMap[O,A]
@@ -234,6 +302,8 @@ class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O]
 
 
 trait OneToMany[M] extends Query[M] {
+
+  private [squeryl] def genericType: Class[M]
 
   /**
    * @param the object on the 'many side' to be associated with this
