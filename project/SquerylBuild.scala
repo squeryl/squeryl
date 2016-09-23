@@ -92,15 +92,9 @@ object SquerylBuild extends Build {
         "junit" % "junit" % "4.8.2" % "provided"
       ),
       libraryDependencies <++= scalaVersion { sv =>
-        Seq("org.scala-lang" % "scalap" % sv,
-          sv match {
-            case sv if sv startsWith "2.11" =>
-              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-            case sv if sv startsWith "2.10" =>
-              "org.scalatest" %% "scalatest" % "2.1.3" % "test"
-            case _ =>
-              "org.scalatest" % "scalatest_2.9.2" % "2.0.M6-SNAP3" % "test"
-          }
+        Seq(
+          "org.scala-lang" % "scalap" % sv,
+          "org.scalatest" %% "scalatest" % "3.0.0"
         )
       }))
 }
