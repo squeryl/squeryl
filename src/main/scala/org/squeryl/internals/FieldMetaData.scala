@@ -25,11 +25,10 @@ import collection.mutable.{HashMap, HashSet, ArrayBuffer}
 import org.squeryl.Session
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.customtypes.CustomType
-import scala.tools.scalap.scalax.rules.scalasig.{ScalaSigAttributeParsers, ByteCode, ScalaSigPrinter}
+import org.json4s.scalap.scalasig._
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.lang.reflect.Member
-import scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.customtypes.CustomType
 
@@ -448,16 +447,7 @@ object FieldMetaData {
          * If we have not yet been able to deduce the value of the field, delegate to createDefaultValue
          * in order to do so.
          */
-        v = try {
-          createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
-        }
-        catch {
-          case e: Exception => {
-            var errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
-            if (!detectScalapOnClasspath()) errorMessage += "scalap option deduction not enabled. See: http://squeryl.org/scalap.html for more information."
-              throw new RuntimeException(errorMessage, e)
-          }
-        }
+        v = createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
 
       val deductionFailed =
         v match {
@@ -467,8 +457,7 @@ object FieldMetaData {
         }
 
       if(deductionFailed) {
-        var errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
-        if(!detectScalapOnClasspath()) errorMessage += "scalap option deduction not enabled. See: http://squeryl.org/scalap.html for more information."
+        val errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
         org.squeryl.internals.Utils.throwError(errorMessage)
       }
 
@@ -572,45 +561,30 @@ object FieldMetaData {
     }
   }
   
-  def detectScalapOnClasspath(): Boolean = {
-    try {
-      Class.forName("scala.tools.scalap.scalax.rules.scalasig.ByteCode")
-      true
-    }catch{
-      case cnfe : ClassNotFoundException =>
-        false
-
-    }
-  }
-
   def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
     val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
-    scalaSigOption flatMap { scalaSig =>
-      val syms = scalaSig.topLevelClasses
-      // Print classes
-      val baos = new ByteArrayOutputStream
-      val stream = new PrintStream(baos)
-      val printer = new ScalaSigPrinter(stream, true)
-      for (c <- syms) {
-        if(c.path == member.getDeclaringClass().getName())
-        	printer.printSymbol(c)
+    scalaSigOption.flatMap { scalaSig =>
+      val result = scalaSig.symbols.filter { sym =>
+        member.getName == sym.name
+      }.collect {
+        case sym: MethodSymbol => sym.infoType
+      }.collect {
+        case tpe: NullaryMethodType => tpe.resultType
+      }.collect {
+        case TypeRefType(_, _, Seq(TypeRefType(_, tpe, _))) =>
+          PartialFunction.condOpt(tpe.name){
+            case "Int" => classOf[scala.Int]
+            case "Short" => classOf[scala.Short]
+            case "Long" => classOf[scala.Long]
+            case "Double" => classOf[scala.Double]
+            case "Float" => classOf[scala.Float]
+            case "Boolean" => classOf[scala.Boolean]
+            case "Byte" => classOf[scala.Byte]
+            case "Char" => classOf[scala.Char]
+          }
       }
-      val fullSig = baos.toString
-      val matcher = """\s%s\s*:\s*scala.Option\[scala\.(\w+)\]?""".format(member.getName).r.pattern.matcher(fullSig)
-      if (matcher.find) {
-        matcher.group(1) match {
-          case "Int" => Some(classOf[scala.Int])
-          case "Short" => Some(classOf[scala.Short])
-          case "Long" => Some(classOf[scala.Long])
-          case "Double" => Some(classOf[scala.Double])
-          case "Float" => Some(classOf[scala.Float])
-          case "Boolean" => Some(classOf[scala.Boolean])
-          case "Byte" => Some(classOf[scala.Byte])
-          case "Char" => Some(classOf[scala.Char])
-          case _ => None //Unknown scala primitive type?
-        }
-      } else
-        None //Pattern was not found anywhere in the signature
+      assert(result.size <= 1)
+      result.headOption.flatten
     }
   }
 
@@ -637,7 +611,7 @@ object FieldMetaData {
 	                 * if that's what we find then we need to get the real value from @ScalaSignature
 	                 */
 	                val trueTypeOption = 
-	                  if (classOf[Object] == oType && detectScalapOnClasspath()) optionTypeFromScalaSig(member) 
+	                  if (classOf[Object] == oType) optionTypeFromScalaSig(member)
 	                  else Some(oType.asInstanceOf[Class[_]])
 	                trueTypeOption flatMap { trueType =>
 	                  val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)
