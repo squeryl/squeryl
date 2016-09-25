@@ -30,7 +30,7 @@ object SquerylBuild extends Build {
       parallelExecution := false,
       publishMavenStyle := true,
       scalaVersion := "2.11.6",
-      crossScalaVersions := Seq("2.11.6", "2.10.5"),
+      crossScalaVersions := Seq("2.12.0-M4", "2.11.6", "2.10.5"),
       scalacOptions <++= scalaVersion map { sv =>
       Seq("-unchecked", "-deprecation") ++ (
           if(sv.startsWith("2.11"))

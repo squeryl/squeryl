@@ -563,7 +563,7 @@ object FieldMetaData {
   
   def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
     val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
-    scalaSigOption.flatMap { scalaSig =>
+    scalaSigOption flatMap { scalaSig =>
       val result = scalaSig.symbols.filter { sym =>
         member.getName == sym.name
       }.collect {
