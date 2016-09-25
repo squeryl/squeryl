@@ -21,10 +21,10 @@ import org.squeryl.framework._
 import org.squeryl.customtypes._
 
 import CustomTypesMode._
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
 
-abstract class TestCustomTypesMode extends SchemaTester with ShouldMatchers with QueryTester with RunTestsInsideTransaction {
+abstract class TestCustomTypesMode extends SchemaTester with Matchers with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
   val schema = new HospitalDb

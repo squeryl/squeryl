@@ -25,7 +25,7 @@ import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
 import java.util.{Date, Calendar}
 import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
 object Genre extends Enumeration {
   type Genre = Value
@@ -65,7 +65,7 @@ class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbO
 }
 import org.squeryl.test.PrimitiveTypeModeForTests._
 
-class MusicDb extends Schema with ShouldMatchers {
+class MusicDb extends Schema with Matchers {
 
   val songs = table[Song]
 
@@ -98,7 +98,7 @@ class TestData(schema : MusicDb){
   val expectedSongCountPerAlbum = List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
 }
 
-abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTestsInsideTransaction with ShouldMatchers {
+abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTestsInsideTransaction with Matchers {
   self: DBConnector =>
 
   import org.squeryl.test.PrimitiveTypeModeForTests._
