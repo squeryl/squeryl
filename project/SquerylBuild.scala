@@ -30,7 +30,7 @@ object SquerylBuild extends Build {
       parallelExecution := false,
       publishMavenStyle := true,
       scalaVersion := "2.11.6",
-      crossScalaVersions := Seq("2.12.0-M4", "2.11.6", "2.10.5"),
+      crossScalaVersions := Seq("2.12.0-RC1", "2.11.6", "2.10.5"),
       scalacOptions <++= scalaVersion map { sv =>
       Seq("-unchecked", "-deprecation") ++ (
           if(sv.startsWith("2.11"))
@@ -92,7 +92,7 @@ object SquerylBuild extends Build {
         "junit" % "junit" % "4.8.2" % "provided"
       ),
       libraryDependencies ++= Seq(
-        "org.json4s" %% "json4s-scalap" % "3.3.0",
+        "org.json4s" %% "json4s-scalap" % "3.4.1",
         "org.scalatest" %% "scalatest" % "3.0.0" % "test"
       ),
       libraryDependencies ++= {
