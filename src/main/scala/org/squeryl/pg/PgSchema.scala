@@ -9,7 +9,7 @@ class PgSchema(implicit fieldMapper: FieldMapper)
     extends Schema()(fieldMapper) {
 
   protected def srf[T]()(implicit man: Manifest[T]): ((ExpressionNode*) => View[T]) =
-    srf(tableNameFromClass(man.erasure))(man)
+    srf(tableNameFromClass(man.runtimeClass))(man)
 
   protected def srf[T](name: String)(implicit man: Manifest[T]): ((ExpressionNode*) => View[T]) =
     srf0(name, None, _: _*)
@@ -18,7 +18,7 @@ class PgSchema(implicit fieldMapper: FieldMapper)
     srf0(name, Some(prefix), _: _*)
 
   private def srf0[T](name: String, prefix: Option[String], args: ExpressionNode*)(implicit man: Manifest[T]): View[T] = {
-    val typeT = man.erasure.asInstanceOf[Class[T]]
+    val typeT = man.runtimeClass.asInstanceOf[Class[T]]
     new SrfView[T](name, typeT, this, prefix, args)
   }
 }
