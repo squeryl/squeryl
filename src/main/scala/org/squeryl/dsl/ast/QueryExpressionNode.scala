@@ -93,7 +93,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
   def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) = throw new UnsupportedOperationException("implement me")
 
   override def toString = {
-    val sb = new StringBuffer
+    val sb = new java.lang.StringBuilder
     sb.append('QueryExpressionNode + "[")
     if(_query.isRoot)
       sb.append("root:")

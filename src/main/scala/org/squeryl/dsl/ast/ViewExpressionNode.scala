@@ -79,7 +79,7 @@ class ViewExpressionNode[U](val view: View[U])
       sw.write(sw.quoteName(view.prefixedName))
 
   override def toString = {
-    val sb = new StringBuffer
+    val sb = new java.lang.StringBuilder
     sb.append('ViewExpressionNode +"[")
     sb.append(sample)
     sb.append("]:")

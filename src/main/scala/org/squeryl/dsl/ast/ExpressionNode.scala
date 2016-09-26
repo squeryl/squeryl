@@ -523,7 +523,7 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement]
 
   def dumpAst = {
-    val sb = new StringBuffer
+    val sb = new java.lang.StringBuilder
     visitDescendants {(n,parent,d:Int) =>
       val c = 4 * d
       for(i <- 1 to c) sb.append(' ')

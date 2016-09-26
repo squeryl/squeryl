@@ -75,7 +75,7 @@ object BarChartRenderer {
   """
 
   def funcCalls(stats: Seq[Stat]) = {
-    val sb = new StringBuffer
+    val sb = new java.lang.StringBuilder
     var i = 0
     for(s <- stats) {
       i += 1
