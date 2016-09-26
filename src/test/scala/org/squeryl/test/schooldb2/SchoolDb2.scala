@@ -218,6 +218,11 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 //    SchoolDb2.drop
 //  }
 
+  test("select expected relation") {
+    assertEquals(1, SchoolDb2.findOneToManyRelationsFor(classOf[Subject], classOf[Course]).toSeq.length, "Did not find exactly one relation")
+    assertEquals(SchoolDb2.subjectToCourses, SchoolDb2.findOneToManyRelationsFor(classOf[Subject], classOf[Course]).head, "Relation should be subjectToCourses")
+  }
+
   test("select using query value") {
     val seedData = seedDataDef
 

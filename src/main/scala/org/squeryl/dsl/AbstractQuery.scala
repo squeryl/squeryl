@@ -16,19 +16,25 @@
 package org.squeryl.dsl
 
 import ast._
-import internal.{InnerJoinedQueryable, OuterJoinedQueryable}
+import org.squeryl.dsl.internal.{JoinedQueryable, InnerJoinedQueryable, OuterJoinedQueryable}
 import java.sql.ResultSet
+import org.squeryl.dsl.fsm._
 import org.squeryl.internals._
-import org.squeryl.{View, Queryable, Session, Query}
+import org.squeryl._
 import collection.mutable.ArrayBuffer
 import org.squeryl.logging._
 import java.io.Closeable
+
+import scala.collection.immutable.HashMap
+import scala.reflect.ClassTag
 
 abstract class AbstractQuery[R](
     val isRoot:Boolean,
     private [squeryl] val unions: List[(String, Query[R])]
   ) extends Query[R] {
 
+  def sampleYield: QueryYield[R]
+  
   private [squeryl] var selectDistinct = false
   
   private [squeryl] var isForUpdate = false
@@ -85,28 +91,59 @@ abstract class AbstractQuery[R](
 
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
+    subQueryables.foreach(s => IncludePathHelper.registerSubQueryable(s.queryable, s))
 
     val subQueries = new ArrayBuffer[QueryableExpressionNode]
 
     val views = new ArrayBuffer[ViewExpressionNode[_]]
 
+    val subQueryableCollection =
+    if(IncludePathHelper.joinedIncludes.nonEmpty) {
+      val leftQuery = subQueryables.head
+
+      def walkAndCollect(leftQueryable: SubQueryable[_], left: JoinedIncludePath, collected: Seq[(SubQueryable[_])]):
+        Seq[(SubQueryable[_])] = {
+
+        val newCollection =
+          if(left.relations != null)
+            left.relations.flatMap(walkAndCollect(left.subQueryable, _, collected))
+          else
+            List()
+
+        if(left.joinedQueryable.nonEmpty) {
+          qy.joinExpressions ++= List(left.joinCondition.get)
+          left.subQueryable.node.joinExpression = Some(left.joinCondition.get())
+          newCollection ++ collected ++ List(left.subQueryable)
+        }
+        else
+          newCollection ++ collected
+      }
+
+      val subQueryableAndJoinClause = walkAndCollect(null, IncludePathHelper.joinedIncludes.get, List()).reverse
+      subQueryables ++ subQueryableAndJoinClause
+    } else {
+      subQueryables
+    }
+
     if(qy.joinExpressions != Nil) {
-      val sqIterator = subQueryables.iterator
-      val joinExprsIterator = qy.joinExpressions.iterator 
+      val sqIterator = subQueryableCollection.iterator
+      val joinExprsIterator = qy.joinExpressions.iterator
       sqIterator.next // get rid of the first one
 
       while(sqIterator.hasNext) {
         val nthQueryable = sqIterator.next
         val nthJoinExpr = joinExprsIterator.next
-        nthQueryable.node.joinExpression = Some(nthJoinExpr())
+        if(nthQueryable.node.joinExpression.isEmpty) {
+          nthQueryable.node.joinExpression = Some(nthJoinExpr())
+        }
       }
     }
 
-    for(sq <- subQueryables)
+    for(sq <- subQueryableCollection)
       if(! sq.isQuery)
         views.append(sq.node.asInstanceOf[ViewExpressionNode[_]])
 
-    for(sq <- subQueryables)
+    for(sq <- subQueryableCollection)
       if(sq.isQuery) {
         val z = sq.node.asInstanceOf[QueryExpressionNode[_]]
         if(! z.isUseableAsSubquery)
@@ -184,8 +221,15 @@ abstract class AbstractQuery[R](
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
-  def iterator = new Iterator[R] with Closeable {
+  case class GroupedData(keyValue: Option[Any], parentKeyValue: Option[Any], relation: Option[IncludePathRelation])
 
+  private case class IncludeRowData(entity: Option[KeyedEntity[_]], parent: Option[KeyedEntity[_]], includePathRelation: Option[IncludePathRelation])
+
+  def iterator = if(sampleYield.includePath.nonEmpty) {
+      new IncludeIterator
+    } else {
+
+  new Iterator[R] with Closeable {
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)
     val s = Session.currentSession
@@ -204,7 +248,7 @@ abstract class AbstractQuery[R](
     var _hasNext = false;
 
     var rowCount = 0
-    
+
     def close {
       stmt.close
       rs.close
@@ -245,6 +289,173 @@ abstract class AbstractQuery[R](
       give(resultSetMapper, rs)
     }
   }
+}
+
+  private class IncludeIterator extends Iterator[R] with Closeable {
+    val sw = new StatementWriter(false, _dbAdapter)
+    ast.write(sw)
+    val s = Session.currentSession
+    val beforeQueryExecute = System.currentTimeMillis
+    val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
+
+    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
+
+    if(s.statisticsListener != None)
+      s.statisticsListener.get.queryExecuted(statEx)
+
+    s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
+    s._addResultSet(rs) // same for the result set
+
+    // cache for materialized entities, so we don't have to reread entities from the result set more than once
+    class EntityCache {
+
+      val cachedEntityData: collection.mutable.HashMap[Long, collection.mutable.HashMap[Long, Option[KeyedEntity[_]]]] = new collection.mutable.HashMap[Long, collection.mutable.HashMap[Long, Option[KeyedEntity[_]]]]()
+      def cacheEntity(includePath: JoinedIncludePath, primaryKey: Any, entity: Option[KeyedEntity[_]]) = {
+        val cachedTableMap = cachedEntityData.get(includePath.hashCode())
+        val tableMap =
+          cachedTableMap.fold({
+            val newMap = collection.mutable.HashMap[Long, Option[KeyedEntity[_]]]()
+            cachedEntityData.put(includePath.hashCode(), newMap)
+
+            newMap
+          })(a => a)
+
+        tableMap += ((primaryKey.hashCode(), entity))
+      }
+
+      private val defaultKeyEntityMap = collection.mutable.HashMap[Long, Option[KeyedEntity[_]]]()
+      def getCachedEntity(includePath: JoinedIncludePath, primaryKey: Any): Option[KeyedEntity[_]] = {
+        val options = {
+          val e1 = cachedEntityData.get(includePath.hashCode())
+          e1.getOrElse(defaultKeyEntityMap)
+        }
+        val value = {
+          val e2 = options.getOrElse(primaryKey.hashCode(), None)
+          e2
+        }
+        value
+      }
+    }
+
+    val entityCache = new EntityCache
+
+    val parentPkMetadataFieldPath = collection.mutable.HashMap[Long, FieldMetaData]()
+    // read all of the results in one go, currently does not support per-entity reads
+    Iterator.from(1).takeWhile(_ => rs.next).foreach(p => {
+
+      case class ReadRow(entity: KeyedEntity[_], parentPk: Seq[Any])
+      def readRow(includePath: JoinedIncludePath, parentIncludePath: Option[JoinedIncludePath]): Option[ReadRow] = {
+
+        val children = includePath.relations.map(r => {
+          (r, readRow(r, Some(includePath)))
+        })
+
+        // find the PK for this entity - either by being passed from it's child recursively (fk relationship)
+        // or by reading it from the db row
+        val primaryKey =
+          children.filter(
+            _._1.includePathRelation.map(_.isInstanceOf[OneToManyIncludePathRelation[_, _]]).getOrElse(false))
+          .flatMap(_._2).headOption.fold({
+            // read the key from the db row if it's a single field PK
+            val key = includePath.subQueryable.resultSetMapper.readPrimaryKey(rs)
+
+            // if the read did not return anything, check for a composite key
+            if(key.isEmpty) {
+              val sampleId = includePath.subQueryable.sample.asInstanceOf[Option[KeyedEntity[_]]].get.id
+              if(sampleId.isInstanceOf[CompositeKey]) {
+                includePath.subQueryable.resultSetMapper.readFields(sampleId.asInstanceOf[CompositeKey]._fields, rs)
+              } else {
+                key
+              }
+            } else {
+              key
+            }
+          })(child => child.parentPk)
+
+        // materialize entity from db row
+        val keyedEntity = if(primaryKey.nonEmpty) {
+          val cachedEntity = entityCache.getCachedEntity(includePath, primaryKey)
+
+          if(cachedEntity.nonEmpty) {
+            cachedEntity
+          } else {
+            val materializedEntity =
+            if(parentIncludePath.nonEmpty) {
+              includePath.subQueryable.give(rs).asInstanceOf[Option[KeyedEntity[_]]]
+            } else {
+                Option(includePath.subQueryable.give(rs).asInstanceOf[KeyedEntity[R]])
+            }
+
+            entityCache.cacheEntity(includePath, primaryKey, materializedEntity)
+
+            materializedEntity
+          }
+        } else {
+          None
+        }
+
+        // populate relations with materialized children
+        if(keyedEntity.nonEmpty) {
+          children.foreach(c => {
+            c._1.includePathRelation.map(includeChildRelation => {
+              includeChildRelation match {
+                case x: OneToManyIncludePathRelation[_, _] => {
+                  val relationship = includeChildRelation.relationshipAccessor[StatefulOneToMany[Any]](keyedEntity.get)
+                  relationship.add(c._2.map(_.entity))
+                }
+                case y: ManyToOneIncludePathRelation[_, _] => {
+                  val relationship = includeChildRelation.relationshipAccessor[StatefulManyToOne[Any]](keyedEntity.get)
+                  relationship.fill(c._2.map(_.entity))
+                }
+              }
+            })
+          })
+        }
+
+        // get the parent PK field from this materialized entity, if present
+        val parentPkFieldMetaData = parentIncludePath.map(parentInclude =>
+          getParentPKFieldMetadata(includePath, parentInclude.subQueryable.sample, includePath.subQueryable.sample))
+
+        keyedEntity.map(entity => {
+          val pk = parentPkFieldMetaData.map(_.get(entity))
+          ReadRow(entity, pk.toList)
+        })
+      }
+
+      def getParentPKFieldMetadata(includePath: JoinedIncludePath, parentSample: Any, currentSample: Any): FieldMetaData = {
+        parentPkMetadataFieldPath.get(includePath.hashCode()).fold({
+          val accessor = includePath.includePathRelation.head.equalityExpressionAccessor(parentSample, currentSample)
+          val fmd = if(includePath.includePathRelation.map(_.isInstanceOf[OneToManyIncludePathRelation[_, _]]).getOrElse(false)) {
+            accessor.right._fieldMetaData
+          } else {
+            accessor.left._fieldMetaData
+          }
+
+          parentPkMetadataFieldPath += ((includePath.hashCode(), fmd))
+          fmd
+        })(fmd => fmd)
+      }
+
+      readRow(IncludePathHelper.joinedIncludes.get, None)
+    })
+
+    private val entityList = IncludePathHelper.joinedIncludes.fold(
+      List[R]()
+    )(ji => {
+      entityCache.cachedEntityData.get(ji.hashCode()).fold(List[R]())(b => b.map(_._2).flatMap(_.asInstanceOf[Option[R]]).toList)
+    })
+
+    private val iterator = entityList.iterator
+
+    def hasNext: Boolean = iterator.hasNext
+
+    def next(): R = iterator.next()
+
+    def close(): Unit = {
+      stmt.close
+      rs.close
+    }
+  }
 
   override def toString = dumpAst + "\n" + _genStatement(true)
 
@@ -254,7 +465,7 @@ abstract class AbstractQuery[R](
       val vxn = v.viewExpressionNode
       vxn.sample =
         v.posoMetaData.createSample(FieldReferenceLinker.createCallBack(vxn))
-      
+
       new SubQueryable(v, vxn.sample, vxn.resultSetMapper, false, vxn)
     }
     else if(q.isInstanceOf[OptionalQueryable[_]]) {
@@ -280,7 +491,7 @@ abstract class AbstractQuery[R](
     }
     else if(q.isInstanceOf[DelegateQuery[_]]) {
       createSubQueryable(q.asInstanceOf[DelegateQuery[U]].q)
-    }      
+    }
     else {
       val qr = q.asInstanceOf[AbstractQuery[U]]
       val copy = qr.copy(false, Nil)
@@ -315,10 +526,72 @@ abstract class AbstractQuery[R](
         queryable.give(resultSetMapper, rs)
   }
 
-  private def createUnion(kind: String, q: Query[R]): Query[R] = 
+  case class JoinedIncludePath(subQueryable: SubQueryable[_],
+                               joinedQueryable: Option[JoinedQueryable[_]],
+                               joinCondition: Option[() => LogicalBoolean],
+                               includePathRelation: Option[IncludePathRelation],
+                               relations: Seq[JoinedIncludePath])
+
+  private object IncludePathHelper {
+    private var subQueryableHashMap = new HashMap[Queryable[_], SubQueryable[_]]()
+    private def createOrFindSubqueryable[U](q: Queryable[U]): SubQueryable[U] = {
+      {if(subQueryableHashMap.contains(q)) {
+        subQueryableHashMap(q)
+      } else {
+        val subQueryable = createSubQueryable(q)
+        registerSubQueryable(q, subQueryable)
+        subQueryable
+      }}.asInstanceOf[SubQueryable[U]]
+    }
+
+    def registerSubQueryable(q: Queryable[_], sq: SubQueryable[_]) = {
+      subQueryableHashMap = subQueryableHashMap + (q -> sq)
+    }
+
+    protected lazy val includedSubQueryables: Iterable[SubQueryable[_]] = {
+      joinedIncludes
+      subQueryableHashMap.map(_._2).toList
+    }
+
+    lazy val joinedIncludes = sampleYield.includePath.map(includePathToJoinExpressionAdjacentRecursive(_))
+
+    private def includePathToJoinExpressionAdjacentRecursive(left: IncludePathCommon): JoinedIncludePath = {
+      val (leftTable, leftSubQueryable) = (left.table, createOrFindSubqueryable(left.table))
+      val adjacentMembers =
+        left.relations.filterNot(x => x.inhibited).map(includeRelation => {
+          includeRelationToJoinIncludeRecursive(leftSubQueryable, left.classType.runtimeClass, includeRelation)
+        }).toList
+
+      JoinedIncludePath(leftSubQueryable, None, None, None, adjacentMembers)
+    }
+
+    private def includeRelationToJoinIncludeRecursive(leftSubqueryable: SubQueryable[_], leftClass: Class[_], includeRelation: IncludePathRelation): JoinedIncludePath = {
+      val right = includeRelation.right
+      val rightTable = right.table
+      val joinedQueryable: JoinedQueryable[_] =
+        includeRelation match {
+          case m: OneToManyIncludePathRelation[_, _] => new OuterJoinedQueryable[Any](rightTable.asInstanceOf[Queryable[Any]], "left")
+          case m: ManyToOneIncludePathRelation[_, _] => new OuterJoinedQueryable[Any](rightTable.asInstanceOf[Queryable[Any]], "left")
+        }
+      val rightSubQueryable = createOrFindSubqueryable(joinedQueryable)
+      val squerylRelation = includeRelation.equalityExpressionAccessor(leftSubqueryable.sample, rightSubQueryable.sample)
+
+      val joinLogicalBoolean: () => LogicalBoolean = () => squerylRelation
+
+      val relations =
+        if(right.relations != null)
+          right.relations.filterNot(x => x.inhibited).map(x => includeRelationToJoinIncludeRecursive(rightSubQueryable, right.classType.runtimeClass, x)).toList
+        else
+          List()
+
+      JoinedIncludePath(rightSubQueryable, Some(joinedQueryable), Some(joinLogicalBoolean), Some(includeRelation), relations)
+    }
+  }
+
+  private def createUnion(kind: String, q: Query[R]): Query[R] =
     copy(true, List((kind, q)))
 
-  def union(q: Query[R]): Query[R] = createUnion("Union", q) 
+  def union(q: Query[R]): Query[R] = createUnion("Union", q)
 
   def unionAll(q: Query[R]): Query[R] = createUnion("Union All", q)
 

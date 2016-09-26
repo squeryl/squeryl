@@ -32,8 +32,9 @@ class Query1[T1,R]
   def invokeYield(rsm: ResultSetMapper, rs: ResultSet): R =
     f(sq1.give(rs)).invokeYield(rsm, rs)
 
-  val ast = buildAst(f(sq1.sample), sq1)
+  val ast = buildAst(sampleYield, sq1)
 
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample)
 }
 
 class Query2[T1,T2,R](
@@ -54,7 +55,9 @@ class Query2[T1,T2,R](
       sq2.give(rs)
     ).invokeYield(rsm, rs)
 
-  val ast = buildAst(f(sq1.sample, sq2.sample), sq1,sq2)
+  val ast = buildAst(sampleYield, sq1,sq2)
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample)
 }
 
 class Query3[T1,T2,T3,R](
@@ -78,7 +81,9 @@ class Query3[T1,T2,T3,R](
       sq3.give(rs)
     ).invokeYield(rsm, rs)
 
-  val ast = buildAst(f(sq1.sample, sq2.sample, sq3.sample), sq1,sq2,sq3)
+  val ast = buildAst(sampleYield, sq1,sq2,sq3)
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample)
 }
 
 class Query4[T1,T2,T3,T4,R](
@@ -105,7 +110,9 @@ class Query4[T1,T2,T3,T4,R](
       sq4.give(rs)
     ).invokeYield(rsm, rs)
 
-  val ast = buildAst(f(sq1.sample, sq2.sample, sq3.sample, sq4.sample), sq1,sq2,sq3,sq4)
+  val ast = buildAst(sampleYield, sq1,sq2,sq3,sq4)
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample)
 }
 
 class Query5[T1,T2,T3,T4,T5,R](
@@ -136,9 +143,11 @@ class Query5[T1,T2,T3,T4,T5,R](
     ).invokeYield(rsm, rs)
 
   val ast = buildAst(
-    f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample),
+    sampleYield,
     sq1,sq2,sq3,sq4,sq5
   )
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample)
 }
 
 class Query6[T1,T2,T3,T4,T5,T6,R](
@@ -172,9 +181,11 @@ class Query6[T1,T2,T3,T4,T5,T6,R](
     ).invokeYield(rsm, rs)
 
   val ast = buildAst(
-    f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample),
+    sampleYield,
     sq1,sq2,sq3,sq4,sq5,sq6
   )
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample)
 }
 
 class Query7[T1,T2,T3,T4,T5,T6,T7,R](
@@ -211,9 +222,11 @@ class Query7[T1,T2,T3,T4,T5,T6,T7,R](
     ).invokeYield(rsm, rs)
 
   val ast = buildAst(
-    f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample),
+    sampleYield,
     sq1,sq2,sq3,sq4,sq5,sq6,sq7
   )
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample)
 }
 
 class Query8[T1,T2,T3,T4,T5,T6,T7,T8,R](
@@ -253,9 +266,11 @@ class Query8[T1,T2,T3,T4,T5,T6,T7,T8,R](
     ).invokeYield(rsm, rs)
 
   val ast = buildAst(
-    f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample, sq8.sample),
+    sampleYield,
     sq1,sq2,sq3,sq4,sq5,sq6,sq7,sq8
   )
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample, sq8.sample)
 }
 
 class Query9[T1,T2,T3,T4,T5,T6,T7,T8,T9,R](
@@ -298,9 +313,11 @@ class Query9[T1,T2,T3,T4,T5,T6,T7,T8,T9,R](
     ).invokeYield(rsm, rs)
 
   val ast = buildAst(
-    f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample, sq8.sample, sq9.sample),
+    sampleYield,
     sq1,sq2,sq3,sq4,sq5,sq6,sq7,sq8,sq9
   )
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample, sq8.sample, sq9.sample)
 }
 
 class Query10[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,R](
@@ -346,7 +363,9 @@ class Query10[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,R](
     ).invokeYield(rsm, rs)
 
   val ast = buildAst(
-    f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample, sq8.sample, sq9.sample, sq10.sample),
+    sampleYield,
     sq1,sq2,sq3,sq4,sq5,sq6,sq7,sq8,sq9, sq10
   )
+
+  lazy val sampleYield: QueryYield[R] = f(sq1.sample, sq2.sample, sq3.sample, sq4.sample, sq5.sample, sq6.sample, sq7.sample, sq8.sample, sq9.sample, sq10.sample)
 }

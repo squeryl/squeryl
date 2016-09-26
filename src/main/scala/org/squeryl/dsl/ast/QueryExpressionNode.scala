@@ -257,5 +257,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
       writeCompleteQuery
     }
   }
+
+  def hasIncludes = _queryYield.includePath.nonEmpty
 }
 

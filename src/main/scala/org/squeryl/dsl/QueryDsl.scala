@@ -22,6 +22,8 @@ import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
 import collection.mutable.ArrayBuffer
+import scala.reflect.ClassTag
+import scala.reflect.runtime.universe.typeTag
 import scala.util.control.ControlThrowable
 
 
@@ -611,16 +613,23 @@ trait QueryDsl
     }
   }
 
-  def oneToManyRelation[O,M](ot: Table[O], mt: Table[M])(implicit kedO: KeyedEntityDef[O,_]) = new OneToManyRelationBuilder(ot,mt)
+  def oneToManyRelation[O,M](ot: Table[O], mt: Table[M])(implicit kedO: KeyedEntityDef[O,_], oneClass: ClassTag[O], manyClass: ClassTag[M]) = new OneToManyRelationBuilder(ot,mt)
 
-  class OneToManyRelationBuilder[O,M](ot: Table[O], mt: Table[M]) {
+  class OneToManyRelationBuilder[O,M](ot: Table[O], mt: Table[M])(implicit oneClass: ClassTag[O], manyClass: ClassTag[M]) {
     
     def via(f: (O,M)=>EqualityExpression)(implicit schema: Schema, kedM: KeyedEntityDef[M,_]) =
-      new OneToManyRelationImpl(ot,mt,f, schema, kedM)
+      new OneToManyRelationImpl(ot,mt,f, schema, kedM, oneClass.runtimeClass.asInstanceOf[Class[O]], manyClass.runtimeClass.asInstanceOf[Class[M]])
 
   }
 
-  class OneToManyRelationImpl[O,M](val leftTable: Table[O], val rightTable: Table[M], f: (O,M)=>EqualityExpression, schema: Schema, kedM: KeyedEntityDef[M,_])
+  class OneToManyRelationImpl[O,M](
+    val leftTable: Table[O],
+    val rightTable: Table[M],
+    f: (O,M)=>EqualityExpression,
+    schema: Schema,
+    kedM: KeyedEntityDef[M,_],
+    val oneType: Class[O],
+    val manyType: Class[M])
     extends OneToManyRelation[O,M] {
 
     schema._addRelation(this)
@@ -676,6 +685,8 @@ trait QueryDsl
           assign(m)
           rightTable.insertOrUpdate(m)(kedM)
         }
+
+        private[squeryl] def genericType: Class[M] = manyType
       }
     }
 
@@ -698,6 +709,8 @@ trait QueryDsl
           leftTable.deleteWhere(o => f(o, rightSide)) > 0
       }
     }
+
+    def equalityExpression: (O, M) => EqualityExpression = f
   }
 
   /**

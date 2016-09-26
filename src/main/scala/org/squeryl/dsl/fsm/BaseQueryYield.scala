@@ -15,13 +15,15 @@
  ***************************************************************************** */
 package org.squeryl.dsl.fsm
 
-import org.squeryl.dsl.ast._
-import org.squeryl.dsl._
-import org.squeryl.dsl.boilerplate._
-import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
 
-import org.squeryl.Query
+import org.squeryl._
+import org.squeryl.dsl._
+import org.squeryl.dsl.ast._
+import org.squeryl.dsl.boilerplate._
+import org.squeryl.internals.{ColumnToTupleMapper, FieldReferenceLinker, OutMapper, ResultSetMapper}
+
+import scala.reflect.ClassTag
 
 class BaseQueryYield[G]
   (val queryElementzz: QueryElements[_], val selectClosure: ()=>G)
@@ -97,6 +99,16 @@ class BaseQueryYield[G]
             t._1.asInstanceOf[B]
           else b
       }
+
+  def include(includeExpression: PathBuilder[G] => PathBuilder[_])(implicit s: Schema, gClass: ClassTag[G]) = {
+    val pb = new PathBuilder[G](new IncludePathNode[G](), Seq())
+    val allPaths = includeExpression(pb)
+    val node = new IncludePathNode[G]()
+
+    node._relations ++= allPaths.relations
+
+    new IncludedPropertiesQueryYield[G](this, Some(node))
+  }
 }
 
 class GroupQueryYield[K] (
@@ -212,4 +224,18 @@ extends BaseQueryYield[GroupWithMeasures[K,M]](_qe, null)
 
     (List(knodes,mnodes).flatten,  new SampleGroupWithMeasures(stK, stM))
   }
+}
+
+class IncludedPropertiesQueryYield[R](
+                                       baseQueryYield: BaseQueryYield[R],
+                                       override val includePath: Option[IncludePathCommon])
+  extends QueryYield[R] {
+
+  def invokeYield(resultSetMapper: ResultSetMapper, rs: ResultSet): R = baseQueryYield.invokeYield(resultSetMapper, rs)
+
+  def queryElements: (Option[ExpressionNode], Option[ExpressionNode], Iterable[ExpressionNode], Iterable[ExpressionNode], Iterable[Query[_]]) =
+    baseQueryYield.queryElements
+
+  def invokeYieldForAst(q: QueryExpressionNode[_], rsm: ResultSetMapper): (Iterable[SelectElement], AnyRef) =
+    baseQueryYield.invokeYieldForAst(q, rsm)
 }

@@ -19,7 +19,9 @@ import org.squeryl.dsl._
 import ast.{LogicalBoolean, UpdateStatement, UpdateAssignment}
 import boilerplate.{ComputeMeasuresSignaturesFromStartOrWhereState, ComputeMeasuresSignaturesFromGroupByState, GroupBySignatures, OrderBySignatures}
 
-import org.squeryl.Query
+import org.squeryl.{Schema, Query}
+
+import scala.reflect.ClassTag
 
 abstract sealed class Conditioned
 abstract sealed class Unconditioned
@@ -44,6 +46,8 @@ trait QueryElements[Cond]
 
 trait SelectState[R] extends QueryYield[R] with OrderBySignatures[R] {
   self: BaseQueryYield[R] =>
+
+  def include(includeExpression: PathBuilder[R] => PathBuilder[_])(implicit s: Schema, rClass: ClassTag[R]) : IncludedPropertiesQueryYield[R]
 }
 
 trait ComputeStateStartOrWhereState[M]

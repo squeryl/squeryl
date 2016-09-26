@@ -173,6 +173,8 @@ class ResultSetMapper extends ResultSetUtils {
 
   private val _fieldMapper = new ArrayBuffer[ColumnToFieldMapper]
 
+  private def primaryKeyFieldMappers = _fieldMapper.filter(_.fieldMetaData.declaredAsPrimaryKeyInSchema)
+
   var groupKeysMapper: Option[ColumnToTupleMapper] = None
 
   var groupMeasuresMapper: Option[ColumnToTupleMapper] = None
@@ -252,6 +254,14 @@ class ResultSetMapper extends ResultSetUtils {
         throw new RuntimeException("could not map row :\n" + dumpRow(resultSet) + "\n with mapper :\n" + this, e)
       }
     }
+  }
+
+  def readPrimaryKey(resultSet: ResultSet): Seq[Any] = {
+    primaryKeyFieldMappers.map(m => resultSet.getObject(m.index))
+  }
+
+  def readFields(fieldMetaData: Seq[FieldMetaData], resultSet: ResultSet): Seq[Any] = {
+    _fieldMapper.filter(c => fieldMetaData.contains(c.fieldMetaData)).map(m => resultSet.getObject(m.index))
   }
 }
 
