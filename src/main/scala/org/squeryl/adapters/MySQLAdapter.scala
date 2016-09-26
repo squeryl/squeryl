@@ -18,7 +18,7 @@ package org.squeryl.adapters
 import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
-import org.squeryl.dsl.ast.{BinaryOperatorNode, ExpressionNode}
+import org.squeryl.dsl.ast.ExpressionNode
 import org.squeryl.internals.ConstantStatementParam
 import org.squeryl.InternalFieldMapper
 

@@ -19,7 +19,6 @@ import java.sql.{ResultSet, SQLException, Statement}
 import org.squeryl.dsl.boilerplate.Query1
 import org.squeryl.Queryable
 import org.squeryl.dsl.fsm.QueryElements
-import org.squeryl.dsl.QueryYield
 import org.squeryl.dsl.ast.{QueryExpressionElements, LogicalBoolean}
 import java.lang.RuntimeException
 import java.sql.Connection

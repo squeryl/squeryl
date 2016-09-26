@@ -22,8 +22,6 @@ import java.sql.Timestamp
 import java.util.Date
 import java.util.UUID
 import org.squeryl.dsl._
-import java.util.regex.Pattern
-import org.squeryl.Session
 import org.squeryl.dsl.ArrayJdbcMapper
 
 trait FieldMapper {

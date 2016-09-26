@@ -21,7 +21,6 @@ import org.squeryl.Session
 import org.squeryl.Schema
 import org.squeryl.internals.AttributeValidOnNumericalColumn
 import org.squeryl.Query
-import java.util.Date
 import java.sql.ResultSet
 import org.squeryl.internals.Utils
 

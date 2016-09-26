@@ -15,8 +15,8 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
-import org.squeryl.{ForeignKeyDeclaration, Table, Query, KeyedEntity}
-import collection.mutable.{HashMap, ArrayBuffer, Buffer}
+import org.squeryl.{ForeignKeyDeclaration, Table, Query}
+import collection.mutable.{HashMap, ArrayBuffer}
 import org.squeryl.KeyedEntityDef
 
 trait Relation[L,R] {

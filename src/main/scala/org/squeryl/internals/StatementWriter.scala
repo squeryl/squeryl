@@ -16,7 +16,7 @@
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast.{ExpressionNode}
-import collection.mutable.{HashSet, HashMap, ArrayBuffer}
+import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.dsl.ast.ConstantExpressionNodeList
 

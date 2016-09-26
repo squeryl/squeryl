@@ -19,9 +19,7 @@ package org.squeryl.customtypes;
 import java.util.{Date, UUID}
 import org.squeryl.dsl._
 import java.sql.Timestamp
-import org.squeryl.internals.{OutMapper, FieldReferenceLinker, FieldMapper}
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.IntType
-import java.sql.ResultSet
+import org.squeryl.internals.FieldMapper
 
 trait CustomType[T] extends Product1[T] {
   def value: T

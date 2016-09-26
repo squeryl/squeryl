@@ -23,7 +23,6 @@ import java.lang.reflect.{Member, Constructor, Method, Field, Modifier}
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.annotations._
 import org.squeryl._
-import dsl.CompositeKey
 
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: View[T]) {
 
