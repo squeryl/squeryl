@@ -16,9 +16,7 @@
 package org.squeryl.dsl
 
 import ast._
-import collection.mutable.ArrayBuffer
-import org.squeryl.Schema
-import org.squeryl.internals.{AttributeValidOnMultipleColumn, ColumnAttribute, FieldMetaData}
+import org.squeryl.internals.{AttributeValidOnMultipleColumn, FieldMetaData}
 
 trait CompositeKey {
 

@@ -21,8 +21,6 @@ import fsm._
 import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
-import collection.mutable.ArrayBuffer
-import scala.util.control.ControlThrowable
 
 
 trait BaseQueryDsl {

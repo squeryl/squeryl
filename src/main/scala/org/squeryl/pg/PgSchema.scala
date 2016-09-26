@@ -1,7 +1,6 @@
 package org.squeryl.pg
 
 import org.squeryl._
-import org.squeryl.adapters.PostgreSqlAdapter
 import internals.{StatementWriter, FieldMapper}
 import dsl.ast.{ViewExpressionNode, ExpressionNode}
 

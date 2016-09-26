@@ -18,16 +18,13 @@ package org.squeryl.internals
 import java.lang.annotation.Annotation
 import java.lang.reflect.{Field, Method, Constructor, InvocationTargetException, Type, ParameterizedType}
 import java.sql.ResultSet
-import java.math.BigDecimal
 import scala.annotation.tailrec
 import org.squeryl.annotations.{ColumnBase, Column}
-import collection.mutable.{HashMap, HashSet, ArrayBuffer}
+import collection.mutable.{HashMap, HashSet}
 import org.squeryl.Session
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.customtypes.CustomType
 import org.json4s.scalap.scalasig._
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
 import java.lang.reflect.Member
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.customtypes.CustomType

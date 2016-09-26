@@ -16,7 +16,7 @@
 package org.squeryl.internals
 
 import net.sf.cglib.proxy._
-import collection.mutable.{HashSet, ArrayBuffer}
+import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast._
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.dsl.TypedExpression

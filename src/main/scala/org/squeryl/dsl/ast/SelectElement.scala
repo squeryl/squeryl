@@ -15,9 +15,7 @@
  ***************************************************************************** */
 package org.squeryl.dsl.ast
 
-import collection.mutable.ArrayBuffer
 import org.squeryl.internals._
-import java.sql.ResultSet
 import org.squeryl.Session
 import org.squeryl.dsl.TypedExpression
 import scala.annotation.tailrec

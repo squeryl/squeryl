@@ -17,7 +17,6 @@ package org.squeryl.adapters
 
 import org.squeryl.{Session, Table}
 import org.squeryl.dsl.ast._
-import org.squeryl.dsl._
 import java.sql.SQLException
 import collection.Set
 import collection.immutable.List

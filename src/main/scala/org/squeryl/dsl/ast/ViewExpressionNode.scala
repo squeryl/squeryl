@@ -15,7 +15,6 @@
  ***************************************************************************** */
 package org.squeryl.dsl.ast
 
-import org.squeryl.dsl._
 import collection.mutable.HashMap
 import org.squeryl.internals.{StatementWriter, ResultSetMapper, FieldMetaData}
 import org.squeryl.{Session, View}

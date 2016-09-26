@@ -20,9 +20,7 @@ import dsl.{CompositeKey, QueryDsl}
 import internals._
 import java.sql.{Statement}
 import logging.StackMarker
-import scala.reflect.Manifest
 import collection.mutable.ArrayBuffer
-import javax.swing.UIDefaults.LazyValue
 
 //private [squeryl] object DummySchema extends Schema
 

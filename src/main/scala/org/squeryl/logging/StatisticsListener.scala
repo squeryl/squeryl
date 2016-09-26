@@ -15,10 +15,6 @@
  ******************************************************************************/
 package org.squeryl.logging
 
-import org.squeryl.dsl.ast.ExpressionNode
-import org.squeryl.internals.Utils
-import org.squeryl.dsl.CompositeKey2
-import org.squeryl.{Schema, KeyedEntity}
 
 
 class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
