@@ -94,13 +94,13 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 libraryDependencies ++= Seq(
-  "cglib" % "cglib-nodep" % "2.2",
-  "com.h2database" % "h2" % "1.4.187" % "provided",
-  "mysql" % "mysql-connector-java" % "5.1.35" % "provided",
+  "cglib" % "cglib-nodep" % "3.2.4",
+  "com.h2database" % "h2" % "1.4.192" % "provided",
+  "mysql" % "mysql-connector-java" % "5.1.39" % "provided",
   "postgresql" % "postgresql" % "9.1-901.jdbc4" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.8.7" % "test",
+  "org.xerial" % "sqlite-jdbc" % "3.14.2" % "test",
   "org.json4s" %% "json4s-scalap" % "3.4.1",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
@@ -108,7 +108,7 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.5")
+      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.6")
     case _ =>
       Nil
   }
