@@ -29,9 +29,11 @@ parallelExecution := false
 
 publishMavenStyle := true
 
-scalaVersion := "2.11.6"
+val Scala211 = "2.11.8"
 
-crossScalaVersions := Seq("2.12.0-RC1", "2.11.6", "2.10.5")
+scalaVersion := Scala211
+
+crossScalaVersions := Seq("2.12.0-RC1", Scala211, "2.10.6")
 
 scalacOptions ++= {
   Seq("-unchecked", "-deprecation") ++ (
