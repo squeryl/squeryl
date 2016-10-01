@@ -795,8 +795,8 @@ trait DatabaseAdapter {
 //  def writeUniquenessConstraint(columnDefs: Seq[FieldMetaData], nameOfCompositeKey: Option[String]) = ""
 
   /**
-   * @name the name specified in the Schema, when not None, it  must be used as the name
-   * @nameOfCompositeKey when not None, the column group forms a composite key, 'nameOfCompositeKey' can be used
+   * @param name the name specified in the Schema, when not None, it  must be used as the name
+   * @param nameOfCompositeKey when not None, the column group forms a composite key, 'nameOfCompositeKey' can be used
    * as part of the name to create a more meaningfull name for the constraint, when 'name' is None
    */
   def writeIndexDeclaration(columnDefs: Seq[FieldMetaData], name:Option[String], nameOfCompositeKey: Option[String], isUnique: Boolean) = {                                    

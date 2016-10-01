@@ -42,8 +42,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     _fieldsMetaData.filter(! _.isTransient)
     
   /**
-   * @arg fieldsMetaData the metadata of the persistent fields of this Poso
-   * @arg primaryKey None if this Poso is not a KeyedEntity[], Either[a persistedField, a composite key]  
+   * fieldsMetaData the metadata of the persistent fields of this Poso
+   * primaryKey None if this Poso is not a KeyedEntity[], Either[a persistedField, a composite key]
    */
   val (_fieldsMetaData, primaryKey): (Iterable[FieldMetaData], Option[Either[FieldMetaData,Method]]) = {
 

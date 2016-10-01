@@ -20,12 +20,6 @@ import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.dsl.ast.ConstantExpressionNodeList
 
-/**
- * @arg isForDisplay: when true, users of StatementWriter should write
- *   jdbc params as strings in statement,
- *   otherwise a jdbc param declarations '?' should be written, and
- *   the param values should be accumulated with addParam(s)
- */
 
 trait StatementParam
 
@@ -42,6 +36,12 @@ case class FieldStatementParam(v: AnyRef, fmd: FieldMetaData) extends StatementP
  * */
 case class ConstantExpressionNodeListParam(v: AnyRef, l: ConstantExpressionNodeList[_]) extends StatementParam
 
+/**
+ * @param isForDisplay: when true, users of StatementWriter should write
+ *   jdbc params as strings in statement,
+ *   otherwise a jdbc param declarations '?' should be written, and
+ *   the param values should be accumulated with addParam(s)
+ */
 class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAdapter) {
   outer =>
 

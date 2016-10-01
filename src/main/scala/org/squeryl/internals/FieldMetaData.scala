@@ -266,7 +266,7 @@ class FieldMetaData(
    *  gets the value of the field from the object.
    * Note that it will unwrap Option[] and return null instead of None, i.e.
    * if converts None and Some to null and some.get respectively 
-   * @arg o the object that owns the field
+   * @param o the object that owns the field
    */
   def get(o:AnyRef): AnyRef =
     try {

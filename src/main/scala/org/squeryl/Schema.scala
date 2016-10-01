@@ -109,7 +109,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   def printDdl(pw: PrintWriter): Unit = printDdl(pw.println(_))
 
   /**
-   * @arg statementHandler is a closure that receives every declaration in the schema.
+   * @param statementHandler is a closure that receives every declaration in the schema.
    */
   def printDdl(statementHandler: String => Unit): Unit = {
 
