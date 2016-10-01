@@ -67,8 +67,16 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
 
   private var _sample: Option[AnyRef] = None
 
-  private def _isPrimitiveType(o: AnyRef) =
-    o.getClass.isPrimitive
+  private def _isPrimitiveType(o: AnyRef) = // AnyRef can not be primitive.
+    List("java.lang.Boolean",
+      "java.lang.Character",
+      "java.lang.Byte",
+      "java.lang.Short",
+      "java.lang.Integer",
+      "java.lang.Long",
+      "java.lang.Float",
+      "java.lang.Double",
+      "java.lang.Void").contains(o.getClass.getName)
 
   def isUseableAsSubquery: Boolean =
     _sample match {
