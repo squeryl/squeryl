@@ -15,7 +15,6 @@ package org.squeryl.test.customtypes
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************** */
-import java.sql.SQLException
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
 import org.squeryl.customtypes._
@@ -56,8 +55,6 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
   }
 
   test("OneToMany"){
-    val testObjects = sharedTestObjects; import testObjects._
-
     val jose = patients.where(_.age > 70).single
     val pi = new PatientInfo(new Info("!!!!!"))
 

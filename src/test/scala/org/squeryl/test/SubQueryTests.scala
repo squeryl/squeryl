@@ -3,7 +3,6 @@ package org.squeryl.test
 import java.util.UUID
 
 import org.squeryl._
-import dsl.ast.QueryExpressionNode
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 import org.squeryl.test.PrimitiveTypeModeForTests._
 

@@ -15,15 +15,13 @@ package org.squeryl.test.musicdb
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************** */
-import java.sql.SQLException
 import java.sql.Timestamp
 
 import org.squeryl._
 import adapters._
 import dsl._
-import dsl.ast.{RightHandSideOfIn, BinaryOperatorNodeLogicalBoolean}
 import framework._
-import java.util.{Date, Calendar}
+import java.util.Calendar
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest.Matchers
 
@@ -169,9 +167,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   test("OuterJoinInOuter", SingleTestRun){
-    val testInstance = sharedTestInstance;
-    import testInstance._
-
     val firstSongs =
       from(songs)(s =>
         groupBy(s.authorId)
@@ -603,8 +598,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   test("TestTimestampImplicit"){
-    val testInstance = sharedTestInstance; import testInstance._
-
     val t: Option[Timestamp] =
       from(artists)(a=>
         compute(min(a.timeOfLastUpdate))
@@ -708,8 +701,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   test("DeleteVariations"){
-    val testInstance = sharedTestInstance; import testInstance._
-
     var artistForDelete = artists.insert(new Person("Delete", "Me", None))
 
     assert(artists.delete(artistForDelete.id), "delete returned false, expected true")
@@ -858,8 +849,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 //  }
 
   test("Enums IN"){
-    val testInstance = sharedTestInstance; import testInstance._
-
     val gs = List(Jazz, Rock)
     val mainstream = from(songs)(s =>
       where(s.genre in (gs))
@@ -871,9 +860,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   test("Enums with groupBy", SingleTestRun){
-    val testInstance = sharedTestInstance; import testInstance._
-    
-    
     val allKnownGenres = from(songs)(s =>
       groupBy(s.genre)
     ).map(_.key).toSet
@@ -890,8 +876,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
   
   test("Enums Inhibit"){
-    val testInstance = sharedTestInstance; import testInstance._
-
     def listSongs(genreFilter: Option[Genre]) =
       from(songs)(s =>
         where(Option(s.genre) === genreFilter.?)

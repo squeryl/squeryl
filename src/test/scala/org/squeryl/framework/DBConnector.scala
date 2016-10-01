@@ -1,6 +1,6 @@
 package org.squeryl.framework
 
-import org.squeryl.{AbstractSession, Session}
+import org.squeryl.AbstractSession
 
 trait DBConnector {
 

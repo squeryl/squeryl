@@ -19,7 +19,6 @@ package org.squeryl.dbagnostic
 import org.squeryl.KeyedEntity
 import org.squeryl.annotations.{Row, Column}
 import org.squeryl.Schema
-import java.util.Date
 import org.scalatest.FunSuite
 import org.scalatest.Matchers
 import org.squeryl.test.PrimitiveTypeModeForTests

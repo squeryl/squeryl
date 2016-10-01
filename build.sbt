@@ -48,6 +48,18 @@ scalacOptions ++= {
   )
 }
 
+val unusedWarnings = Seq(
+  "-Ywarn-unused-import"
+)
+
+scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
+  case Some((2, v)) if v >= 11 => unusedWarnings
+}.toList.flatten
+
+Seq(Compile, Test).flatMap(c =>
+  scalacOptions in (c, console) --= unusedWarnings
+)
+
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
 homepage := Some(url("http://squeryl.org"))

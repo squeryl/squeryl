@@ -1,10 +1,9 @@
 package org.squeryl.framework
 
-import org.squeryl.{AbstractSession, SessionFactory, Session, Schema}
+import org.squeryl.{SessionFactory, Schema}
 
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest._
-import org.scalatest.events.{TestIgnored, Ordinal}
 
 abstract class SchemaTester extends DbTestBase {
   self: DBConnector =>

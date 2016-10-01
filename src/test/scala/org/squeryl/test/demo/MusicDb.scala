@@ -16,7 +16,7 @@ package org.squeryl.test.demo
  * limitations under the License.
  ***************************************************************************** */
 import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.squeryl.{Query, Session, KeyedEntity, Schema}
+import org.squeryl.{Query, KeyedEntity, Schema}
 import org.squeryl.dsl.GroupWithMeasures
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 

@@ -20,14 +20,11 @@ import org.squeryl.annotations.{Column}
 import org.squeryl.framework._
 import java.util.Date
 import java.text.SimpleDateFormat
-import org.squeryl.dsl.{GroupWithMeasures}
 import org.squeryl.dsl._
 import org.squeryl._
-import adapters.{MSSQLServer, PostgreSqlAdapter, OracleAdapter, MySQLAdapter, DerbyAdapter}
+import adapters.{MSSQLServer, OracleAdapter, DerbyAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker}
-import org.scalatest.Suite
 import collection.mutable.ArrayBuffer
-import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ExpressionNode
 
 
@@ -416,7 +413,6 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
   import schema._
 
   test("commonTableExpressions") {
-    val testInstance = sharedTestInstance; import testInstance._
     val qStudents = from(students) ((s) =>
       where(s.name === "Xiao")
       select(s))
@@ -457,16 +453,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   import schema._
 
   test("cast"){
-    val testInstance = sharedTestInstance; import testInstance._
-
     val q =
       from(addresses)(a => where(a.id === "1".cast[Int, TInt]("int4")) select(a))
     assert(q.toList.size == 1)
   }
 
   test("DecimalNull", SingleTestRun) {
-    val testInstance = sharedTestInstance; import testInstance._
-
     val p = new Professor("Mad Professor", 80.0F, Some(70.5F), 80.0F, None)
 
     professors.insert(p)
@@ -477,13 +469,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("StringKeyedEntities"){
-    val testInstance = sharedTestInstance; import testInstance._
     val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
   }
 
   test("EqualCountInSubQuery"){
-    val testInstance = sharedTestInstance; import testInstance._
-
     val q =
       from(courses)(c =>
         where (          
@@ -497,7 +486,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("CountSignatures"){
-    val testInstance = sharedTestInstance; import testInstance._
     val q =
       from(courseSubscriptions)(cs =>
         compute(countDistinct(cs.courseId))
@@ -637,9 +625,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("nullCompoundKey"){
-    val testInstance = sharedTestInstance;
-    import testInstance._
-
     courseOfferings.allRows.foreach{ row =>
       val newRow = row.copy(description = "Cancelled")
       courseOfferings.update(newRow)
@@ -806,9 +791,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
 
   test("MetaData"){
-
-    val testInstance = sharedTestInstance; import testInstance._
-
     professors.posoMetaData.primaryKey.get.left.get
 
     val tst = new Student("Xiao", "Jimbao Gallois", Some(24), 2,Some(1), None)
@@ -1100,8 +1082,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("NVLFunction"){
-    val testInstance = sharedTestInstance; import testInstance._
-
 //    val groupTheory = courses.insert(new Course("Group Theory", jan2009, Some(may2009), 0, None, false))
 //    val heatTransfer = courses.insert(new Course("Heat Transfer", feb2009, None, 3, Some(1234), false))
 //    val counterpoint = courses.insert(new Course("Counterpoint", feb2010, None,0, None, true))
@@ -1410,7 +1390,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchInserts1") {
-    val testInstance = sharedTestInstance; import testInstance._
     addresses.insert(List(
       new Address("St-Dominique",14, None,None,None),
       new Address("St-Urbain",23, None,None,None),
@@ -1435,8 +1414,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchUpdate1") {
-    
-    val testInstance = sharedTestInstance; import testInstance._
     import schema._
         
     addresses.insert(List(
@@ -1469,8 +1446,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
   test("BatchUpdateAndInsert2") {
-    
-    val testInstance = sharedTestInstance; import testInstance._
     import schema._
     
     
@@ -1543,8 +1518,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("YieldInspectionResidue") {
-    val testInstance = sharedTestInstance; import testInstance._
-
     val z = from(students)(s => where(s.lastName === "Jimbao Gallois") select(s.name)).single
 
     val r = FieldReferenceLinker.takeLastAccessedFieldReference
@@ -1555,7 +1528,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("InWithCompute") {
-    val testInstance = sharedTestInstance; import testInstance._
     val z0 =
       from(students)(s2 =>
         where(s2.age gt 0)
@@ -1578,7 +1550,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("IsNotNullWithInhibition") {
-    val testInstance = sharedTestInstance; import testInstance._
     val q =
       from(students)(s =>
         where(s.id.isNull.inhibitWhen(true)) // should return all students
@@ -1603,7 +1574,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
   test("NewJoin1") {
-    val testInstance = sharedTestInstance; import testInstance._
       val q =
        join(students, addresses.leftOuter, addresses)((s,a1,a2) => {
 
@@ -1648,8 +1618,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
 
   test("#62 CompositeKey with Option members generate sql with = null instead of is null")  {
-    
-    val testInstance = sharedTestInstance; import testInstance._
     // this should not blow up :
     val q = students.where(_.dummyKey === (None: Option[Int], None: Option[Int]))
 
@@ -1698,8 +1666,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("AvgBigDecimal") {
-    val testInstance = sharedTestInstance; import testInstance._
-
     val avgSalary: Option[BigDecimal] =
       from(professors)(p=>
         compute(avg(p.yearlySalaryBD))
@@ -1771,7 +1737,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("Exists")  {
-    val testInstance = sharedTestInstance; import testInstance._
     val studentsWithAnAddress =
       from(students)(s =>
         where(exists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
@@ -1787,7 +1752,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("NotExists")  {
-    val testInstance = sharedTestInstance; import testInstance._
     val studentsWithNoAddress =
       from(students)(s =>
         where(notExists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
@@ -1802,7 +1766,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("VeryNestedExists")  {
-    val testInstance = sharedTestInstance; import testInstance._
     val qStudents = from(students) ((s) => select(s))
     val qStudentsFromStudents = from(qStudents) ((s) => select(s))
     val studentsWithAnAddress =
@@ -1821,7 +1784,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("VeryVeryNestedExists"){
-    val testInstance = sharedTestInstance; import testInstance._
     val qStudents = from(students) ((s) => select(s))
     val qStudentsFromStudents = from(qStudents) ((s) => select(s))
     val studentsWithAnAddress =
@@ -1845,7 +1807,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("selectFromExists"){
-    val testInstance = sharedTestInstance; import testInstance._
     val qStudents = from(students) ((s) => select(s))
     val studentsWithAnAddress =
       from(qStudents)(s =>
@@ -1869,7 +1830,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
   test("UpdateSetAll") {
-    val testInstance = sharedTestInstance; import testInstance._
     update(students)(s => setAll(s.age := Some(30)))
 
     val expected:Long = from(students)(s => compute(count))
@@ -1879,7 +1839,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("commonTableExpressions") {
-    val testInstance = sharedTestInstance; import testInstance._
     val qStudents = from(students) ((s) => select(s))
     val qAddresses = from(addresses) ((a) => select(a))
 
