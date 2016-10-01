@@ -49,6 +49,7 @@ scalacOptions ++= {
 }
 
 val unusedWarnings = Seq(
+  "-Ywarn-unused",
   "-Ywarn-unused-import"
 )
 

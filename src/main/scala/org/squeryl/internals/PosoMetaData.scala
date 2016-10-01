@@ -49,8 +49,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val isImplicitMode = _isImplicitMode
 
-    val setters = new ArrayBuffer[Method]
-
     val sampleInstance4OptionTypeDeduction =
       try {
         constructor._1.newInstance(constructor._2 :_*).asInstanceOf[AnyRef];
@@ -130,7 +128,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       }
     }
 
-    var k = fmds.find(fmd => fmd.isIdFieldOfKeyedEntity)
+    val k = fmds.find(fmd => fmd.isIdFieldOfKeyedEntity)
 
     val compositePrimaryKeyGetter: Option[Method] =
       if(k != None) // can't have both PK Field and CompositePK
@@ -195,7 +193,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
         org.squeryl.internals.Utils.throwError("inner classes are not supported, except when outer class is a singleton (object)\ninner class is : " + cn)
     }
 
-    var res = new Array[Object](params.size)
+    val res = new Array[Object](params.size)
 
     for(i <- 0 to params.length -1) {
       val v = FieldMetaData.createDefaultValue(schema.fieldMapper, c, params(i), None, None)
@@ -204,9 +202,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     r.append((c, res))
   }
-
-  private def _noOptionalColumnDeclared =
-    org.squeryl.internals.Utils.throwError("class " + clasz.getName + " has an Option[] member with no Column annotation with optionType declared.")
 
   //def createSamplePoso[T](vxn: ViewExpressionNode[T], classOfT: Class[T]): T = {
     //Enhancer.create(classOfT, new PosoPropertyAccessInterceptor(vxn)).asInstanceOf[T]
@@ -221,7 +216,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     val e = new Enhancer
     e.setSuperclass(clasz)
     val pc: Array[Class[_]] = constructor._1.getParameterTypes
-    val args:Array[Object] = constructor._2
     e.setUseFactory(true)
 
     (callB:Callback) => {

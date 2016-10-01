@@ -469,7 +469,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("StringKeyedEntities"){
-    val se = stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
+    stringKeyedEntities.insert(new StringKeyedEntity("123", Tempo.Largo))
   }
 
   test("EqualCountInSubQuery"){
@@ -513,12 +513,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     //passed('testCountSignatures)
   }
 
-  def avgStudentAge =
+  def avgStudentAge() =
     from(students)(s =>
       compute(avg(s.age))
     )
 
-  def avgStudentAgeFunky =
+  def avgStudentAgeFunky() =
     from(students)(s =>
       compute(avg(s.age), avg(s.age) + 3, avg(s.age) / count, count + 6)
     )
@@ -581,7 +581,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   test("assertColumnNameChangeWithDeclareSyntax") {
     val st = Session.currentSession.connection.createStatement()
-    val r = st.execute("select the_Last_Name from t_professor")                                                        
+    st.execute("select the_Last_Name from t_professor")
     // this should not blow up...
   }
   
@@ -793,7 +793,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("MetaData"){
     professors.posoMetaData.primaryKey.get.left.get
 
-    val tst = new Student("Xiao", "Jimbao Gallois", Some(24), 2,Some(1), None)
+    new Student("Xiao", "Jimbao Gallois", Some(24), 2,Some(1), None)
     val fmd = addresses.posoMetaData.findFieldMetaDataForProperty("appNumberSuffix")
     assert(fmd.get.fieldType.isAssignableFrom(classOf[String]), "'FieldMetaData " + fmd + " should be of type java.lang.String")
 
@@ -804,7 +804,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("OptionAndNonOptionMixInComputeTuple"){
-    val t:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
+    val _:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
     passed('testOptionAndNonOptionMixInComputeTuple)
   }
 
@@ -828,15 +828,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       // concat doesn't work in Derby with numeric fields.
       // see: https://issues.apache.org/jira/browse/DERBY-1306
 
-      val res = addressesOfStudentsOlderThan24.toList
+      addressesOfStudentsOlderThan24.toList
 
       passed('testConcatWithOptionalCols )
     }
   }
 
   test("ScalarOptionQuery"){
-    val avgAge:Option[Float] = avgStudentAge
-    //println("avgAge = " + avgAge)
+    avgStudentAge
     passed('testScalarOptionQuery )
   }
 
@@ -1230,7 +1229,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   test("ForUpdate") {
     val testInstance = sharedTestInstance; import testInstance._
-    var t = professors.where(p => p.id === tournesol.id).forUpdate.single
+    val t = professors.where(p => p.id === tournesol.id).forUpdate.single
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
@@ -1334,11 +1333,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val zarnitsyn = professors.insert(new Professor("zarnitsyn", 60.0F, Some(70.5F), 60.0F, Some(70.5F)))
 
-    val before = professors.where(p => p.id === tournesol.id).single.yearlySalary
+    professors.where(p => p.id === tournesol.id).single.yearlySalary
 
     val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123)))
 
-    val c = update(professors)(p =>
+    update(professors)(p =>
       where(p.id === tournesol.id)
       set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123))))
     )
@@ -1362,10 +1361,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     Session.currentSession.connection.commit // we commit to release all locks
 
-    var ht = courses.where(c => c.id === heatTransfer.id).single
+    val ht = courses.where(c => c.id === heatTransfer.id).single
 
     transaction {
-      var ht2 = courses.where(c => c.id === heatTransfer.id).single
+      val ht2 = courses.where(c => c.id === heatTransfer.id).single
       ht2.update
     }
 
@@ -1518,7 +1517,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("YieldInspectionResidue") {
-    val z = from(students)(s => where(s.lastName === "Jimbao Gallois") select(s.name)).single
+    from(students)(s => where(s.lastName === "Jimbao Gallois") select(s.name)).single
 
     val r = FieldReferenceLinker.takeLastAccessedFieldReference
 
@@ -1574,13 +1573,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
   test("NewJoin1") {
-      val q =
        join(students, addresses.leftOuter, addresses)((s,a1,a2) => {
-
-         val s0: Student = s
-         val  z0: Option[Address] = a1
-         //val  z1: Address = a1
-         val  z2: Address = a2
          select(s,a1,a2).
          on(s.addressId === a1.map(_.id), s.addressId === a2.id)
        })
@@ -1730,7 +1723,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
       val group = from(tests)(t=> groupBy(t.id) compute(sum(t.num)))
 
-      val testQuery = join(group, others)((g, o)=>
+      join(group, others)((g, o)=>
         select(g.measures.get, o)
         on(g.key === o.testId)
         ).toList

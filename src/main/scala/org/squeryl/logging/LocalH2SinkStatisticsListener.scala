@@ -16,7 +16,6 @@ object LocalH2SinkStatisticsListener {
     Class.forName("org.h2.Driver");
 
     val file = new java.io.File(workingDir, schemaName + ".h2.db").getCanonicalFile
-    val exists = file.exists
 
     if(file.exists && overwrite)
       file.delete

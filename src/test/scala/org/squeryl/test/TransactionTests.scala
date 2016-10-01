@@ -34,7 +34,7 @@ abstract class TransactionTests extends DbTestBase {
   
   def returnInTransaction: Int =  
     transaction {
-      val foo1 = FooSchema.foos.insert(new Foo("test"))
+      FooSchema.foos.insert(new Foo("test"))
       return 1
     }
 
@@ -44,7 +44,7 @@ abstract class TransactionTests extends DbTestBase {
       FooSchema.reset
     }
     transaction {
-      val foo1 = FooSchema.foos.insert(new Foo("test"))
+      FooSchema.foos.insert(new Foo("test"))
       assert(FooSchema.foos.where(f => f.value === "test").size == 1 )
 
       try {
@@ -64,7 +64,7 @@ abstract class TransactionTests extends DbTestBase {
       FooSchema.reset
     }
     transaction {
-      val foo1 = FooSchema.foos.insert(new Foo("test"))
+      FooSchema.foos.insert(new Foo("test"))
       assert(FooSchema.foos.where(f => f.value === "test").size ==1)//should equal(1)
 
       doSomething(false)
@@ -78,7 +78,7 @@ abstract class TransactionTests extends DbTestBase {
       FooSchema.reset
     }
     transaction {
-      val foo1 = FooSchema.foos.insert(new Foo("test"))
+      FooSchema.foos.insert(new Foo("test"))
       assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
 
       doSomething(false)

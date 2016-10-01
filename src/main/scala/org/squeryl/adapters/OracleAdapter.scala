@@ -174,7 +174,7 @@ class OracleAdapter extends DatabaseAdapter {
 
   def makeUniqueInScope(s: String, scope: Set[String], padLength: Int): String = {
 
-    var prefix = s.substring(0, s.length - padLength)
+    val prefix = s.substring(0, s.length - padLength)
     val possibilities = paddingPossibilities(prefix, padLength)
 
     for(p <- possibilities if !scope.contains(p))

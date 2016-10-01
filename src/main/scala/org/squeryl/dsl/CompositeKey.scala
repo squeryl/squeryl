@@ -38,7 +38,7 @@ trait CompositeKey {
   private [squeryl] def buildEquality(ck: CompositeKey): LogicalBoolean = {
     val equalities = (members zip ck.members).map(t => new EqualityExpression(t._1, t._2))
 
-    val head = equalities.head
+    equalities.head
     val tail = equalities.tail
 
     tail.foldLeft(equalities.head : LogicalBoolean)(_ and _)

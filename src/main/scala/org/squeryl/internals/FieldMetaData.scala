@@ -303,7 +303,7 @@ class FieldMetaData(
    * Sets the value 'v' to the object, the value will be converted to Some or None
    * if the field is an Option[], (if isOption).   
    */
-  def set(target: AnyRef, v: AnyRef) = {
+  def set(target: AnyRef, v: AnyRef): Unit = {
     try {
       val v0: AnyRef =
         if(v == null)
@@ -332,11 +332,11 @@ class FieldMetaData(
         else
           Some(v0)
 
-      val res =
-        if(setter != None)
-          _setWithSetter(target, actualValue)
-        else
-          _setWithField(target, actualValue)
+
+      if(setter != None)
+        _setWithSetter(target, actualValue)
+      else
+        _setWithField(target, actualValue)
     }
     catch {
       case e: Exception => {
@@ -396,7 +396,7 @@ object FieldMetaData {
       /*
        * Retrieve the member in use, its class and its generic type
        */
-      var (member, clsOfField, typeOfField) =
+      val (member, clsOfField, typeOfField) =
         (setter.map(s => (s: Member, s.getParameterTypes.head, s.getGenericParameterTypes.head))
           .orElse(getter.map(g => (g: Member, g.getReturnType, g.getGenericReturnType)))
           .orElse(field.map(f => (f: Member, f.getType, f.getType)))

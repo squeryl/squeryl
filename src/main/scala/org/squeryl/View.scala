@@ -66,8 +66,6 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
 
   private [squeryl] def allFieldsMetaData: Iterable[FieldMetaData] = posoMetaData.fieldsMetaData
 
-  private val _emptyArray = new Array[Object](0);
-
   protected val _setPersisted =
     if(classOf[PersistenceStatus].isAssignableFrom(classOfT))
       (t:T) => t.asInstanceOf[PersistenceStatus]._isPersisted = true

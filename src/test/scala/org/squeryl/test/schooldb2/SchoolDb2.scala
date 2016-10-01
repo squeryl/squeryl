@@ -169,7 +169,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   
   import schema._
 
-  def seedDataDef = new {
+  def seedDataDef() = new {
     
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
@@ -218,7 +218,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 //  }
 
   test("select using query value") {
-    val seedData = seedDataDef
+    seedDataDef()
 
     val q: Query[String] =
       from(subjects)(s =>
@@ -230,7 +230,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("equality using query value") {
-    val seedData = seedDataDef
+    seedDataDef()
 
     val q: Query[String] =
       from(subjects)(s =>
@@ -325,8 +325,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   test("OneToMany"){
     val seedData = seedDataDef
     import seedData._
-
-    val pc = philosophy.id
 
     val philosophyCourse10AMWednesday = new Course
     val philosophyCourse2PMWednesday = new Course
@@ -495,7 +493,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     
     assertEquals(95.0F, cs2.grade, 'testUpdateWithCompositePK)
     
-    val cs = from(courseSubscriptions)(p => compute(avg(p.grade)))
+    from(courseSubscriptions)(p => compute(avg(p.grade)))
    
     val belowOrEqualToAvg = 
       from(courseSubscriptions)(p =>

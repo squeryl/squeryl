@@ -168,8 +168,8 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     if(_dbAdapter.supportsForeignKeyConstraints)
       _dropForeignKeyConstraints
 
-    val s = Session.currentSession.connection.createStatement
-    val con = Session.currentSession.connection
+    Session.currentSession.connection.createStatement
+    Session.currentSession.connection
 
     for(t <- _tables) {
       _dbAdapter.dropTable(t)
@@ -229,7 +229,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     val dba = cs.databaseAdapter
 
     for(fk <- _activeForeignKeySpecs) {
-      val s = cs.connection.createStatement
+      cs.connection.createStatement
       dba.dropForeignKeyStatement(fk._1, dba.foreignKeyConstraintName(fk._1, fk._3.idWithinSchema), cs)
     }
   }

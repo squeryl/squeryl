@@ -90,10 +90,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
   def indent: Unit = indent(INDENT_INCREMENT)
   def unindent: Unit = unindent(INDENT_INCREMENT)
 
-  private def _dumpToConsole(s: String) = print(s)
-  
   private def _append(s: String) = {
-    //_dumpToConsole(s)
     _flushPendingNextLine
     _stringBuilder.append(s)
   }
@@ -125,7 +122,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
   
   def writeLines(s: String*) = {
     val size = s.size
-    var c = 1
+    val c = 1
 
     for(l <- s) {
       _append(l)

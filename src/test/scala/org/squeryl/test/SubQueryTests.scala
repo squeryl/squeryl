@@ -62,6 +62,6 @@ abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction
         select(e, edge)
       )
 
-    val blowup = from(entEdges)(ee => select(ee._1))
+    from(entEdges)(ee => select(ee._1))
   }
 }

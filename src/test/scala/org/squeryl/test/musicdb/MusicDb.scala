@@ -180,7 +180,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
             on(a.id === fs.measures,  cd.map(_.mainArtist) === a.id)
       ) : Query[(Person, Option[Cd])]
 
-    val j3 =
+    val _ =
       join(artists, j2.leftOuter) (
         (a, j2_) =>
           select(a, j2)
@@ -598,7 +598,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   test("TestTimestampImplicit"){
-    val t: Option[Timestamp] =
+    val _: Option[Timestamp] =
       from(artists)(a=>
         compute(min(a.timeOfLastUpdate))
       )
@@ -694,7 +694,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   test("KeyedEntityImplicitLookup"){
     val testInstance = sharedTestInstance; import testInstance._
 
-    var ac = artists.lookup(alainCaron.id).get
+    val ac = artists.lookup(alainCaron.id).get
 
     assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
     passed('testKeyedEntityImplicitLookup)
@@ -709,7 +709,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     artistForDelete = artists.insert(new Person("Delete", "Me", None))
 
-    var c = artists.deleteWhere(a => a.id === artistForDelete.id)
+    val c = artists.deleteWhere(a => a.id === artistForDelete.id)
 
     assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
 
@@ -986,7 +986,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     /// Non compilation Test (should not compile):
     // val z1 = from(artists)(a => select(&(nvl(a.age,a.age)))).toList : List[Option[Int]]
 
-    val z2 = from(artists)(a => select(&(nvl(a.age,0)))).toList : List[Int]
+    from(artists)(a => select(&(nvl(a.age,0)))).toList : List[Int]
   }
 
   def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =

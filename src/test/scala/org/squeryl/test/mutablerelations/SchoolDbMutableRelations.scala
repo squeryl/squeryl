@@ -180,11 +180,11 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     val philosophyCourse2PMWednesday = new Course
     val philosophyCourse3PMFriday = new Course
 
-    val c1 = philosophy.courses.associate(philosophyCourse10AMWednesday)
-    val c2 = philosophy.courses.associate(philosophyCourse2PMWednesday)
-    val c3 = philosophy.courses.associate(philosophyCourse3PMFriday)
+    philosophy.courses.associate(philosophyCourse10AMWednesday)
+    philosophy.courses.associate(philosophyCourse2PMWednesday)
+    philosophy.courses.associate(philosophyCourse3PMFriday)
 
-    val c4 = chemistry.courses.associate(new Course)
+    chemistry.courses.associate(new Course)
 
 
     val s = from(subjects)(s0 =>

@@ -203,21 +203,16 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     assert(songIds == funkAndLatinJazz.songsInPlaylistOrder.map(_.id).toSet)
 
     // Nesting in From clause :
-    val songsFromThe60sInFunkAndLatinJazzPlaylist2 =
-      from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
-        where(s.id === 123)
-        select(s)
-      )
+    from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
+      where(s.id === 123)
+      select(s)
+    )
     
     // Left Outer Join :
-    var ratingsForAllSongs =
-      join(songs, ratings.leftOuter)((s,r) =>
-        select((s, r))
-        on(s.id === r.map(_.songId))
-      )
-
-//    for(sr <- ratingsForAllSongs)
-//      println(sr._1.title + " rating is " + sr._2.map(r => r.appreciationScore.toString).getOrElse("not rated"))
+    join(songs, ratings.leftOuter)((s,r) =>
+      select((s, r))
+      on(s.id === r.map(_.songId))
+    )
 
 
     update(songs)(s =>

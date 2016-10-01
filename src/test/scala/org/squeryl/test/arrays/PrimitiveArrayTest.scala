@@ -62,7 +62,7 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
           set (s.lap_times := Array(11.69), s.scores := Array(1, 2, 3, 4, 5), s.orgids := Array(13L), s.tags := Array("and things")))
     }
 
-    val query2 = from(swimmers)((s) => select(s))
+    from(swimmers)((s) => select(s))
     val res2 = transaction { query.toList }
 
     res2.size should equal(1)

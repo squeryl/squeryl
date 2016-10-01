@@ -144,11 +144,6 @@ class MSSQLServer extends DatabaseAdapter {
       }
     }
   
-  private def _stripPrefix(selectE: String):String = {
-    val i = selectE.lastIndexOf(" as ")
-    selectE.substring(i + 4, selectE.length)
-  }
-
   override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
   override def quoteIdentifier(s: String) = "[" + s + "]"
 }
