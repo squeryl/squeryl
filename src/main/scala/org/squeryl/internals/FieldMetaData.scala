@@ -88,9 +88,8 @@ class FieldMetaData(
 
   def sequenceName: String = {
 
-    val ai = _columnAttributes.find(_.isInstanceOf[AutoIncremented]).
-      getOrElse(org.squeryl.internals.Utils.throwError(this + " is not declared as autoIncremented, hence it has no sequenceName")).
-        asInstanceOf[AutoIncremented]
+    val ai = _columnAttributes.collectFirst{case a: AutoIncremented => a}.
+      getOrElse(org.squeryl.internals.Utils.throwError(this + " is not declared as autoIncremented, hence it has no sequenceName"))
 
     if(ai.nameOfSequence != None) {
       return ai.nameOfSequence.get
@@ -139,17 +138,13 @@ class FieldMetaData(
    * the adapter (see Correspondance of field types to database column types http://squeryl.org/schema-definition.html)  
    */
   def explicitDbTypeDeclaration: Option[String] = {
-    val dbt = _columnAttributes.find(_.isInstanceOf[DBType])
-    if(dbt == None)
-      None
-    else
-      Some(dbt.get.asInstanceOf[DBType].declaration)
+    _columnAttributes.collectFirst{case d: DBType => d.declaration}
   }
   
   /**
    * If explicit db type case has been requested
    */
-  def explicitDbTypeCast: Boolean = _columnAttributes.find(_.isInstanceOf[DBType]).map(a => a.asInstanceOf[DBType].explicit).getOrElse(false)
+  def explicitDbTypeCast: Boolean = _columnAttributes.collectFirst{case d: DBType => d.explicit}.getOrElse(false)
   
   def isTransient =
     _columnAttributes.exists(_.isInstanceOf[IsTransient])
@@ -188,7 +183,7 @@ class FieldMetaData(
    */
   def columnName =
     if(columnAnnotation == None) {
-      val nameDefinedInSchema = _columnAttributes.find(_.isInstanceOf[Named]).map(_.asInstanceOf[Named].name)      
+      val nameDefinedInSchema = _columnAttributes.collectFirst{case n: Named => n.name}
       parentMetaData.schema.columnNameFromPropertyName(nameDefinedInSchema.getOrElse(nameOfProperty))
     }
     else {
@@ -315,12 +310,11 @@ class FieldMetaData(
         else {
           val f = customTypeFactory.get
 
-          if(v.isInstanceOf[CustomType[_]]) {
-            val r = v.asInstanceOf[CustomType[_]]._1
-            f(if(r == null) null else r.asInstanceOf[AnyRef])
-          }          
-          else {
-           f(v)
+          v match {
+            case r: CustomType[_] =>
+              f(if(r == null) null else r._1.asInstanceOf[AnyRef])
+            case _ =>
+              f(v)
           }
         }
 
@@ -391,7 +385,7 @@ object FieldMetaData {
       val setter = property._3
       val annotations = property._4
 
-      val colAnnotation = annotations.find(a => a.isInstanceOf[ColumnBase]).map(a => a.asInstanceOf[ColumnBase])
+      val colAnnotation = annotations.collectFirst{case a: ColumnBase => a}
       
       /*
        * Retrieve the member in use, its class and its generic type
