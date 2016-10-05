@@ -204,12 +204,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   private def _writeIndexDeclarationIfApplicable(columnAttributes: Seq[ColumnAttribute], cols: Seq[FieldMetaData], name: Option[String]): Option[String] = {
 
     val unique = columnAttributes.find(_.isInstanceOf[Unique])
-    val indexed = columnAttributes.find(_.isInstanceOf[Indexed]).flatMap{ i => 
-      i match {
-        case idx: Indexed => Some(idx)
-        case _ => None
-      }
-    }
+    val indexed = columnAttributes.collectFirst{case i: Indexed => i}
   
     (unique, indexed) match {
       case (None,    None)                   => None
@@ -298,10 +293,11 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       Utils.mapSampleObject(
         t.asInstanceOf[Table[AnyRef]],
         (z:AnyRef) => {
-          val id = ked.asInstanceOf[KeyedEntityDef[AnyRef,AnyRef]].getId(z)
-          if(id.isInstanceOf[CompositeKey]) {
-            val compositeCols = id.asInstanceOf[CompositeKey]._fields
-            res.append((t, compositeCols))
+          ked.asInstanceOf[KeyedEntityDef[AnyRef,AnyRef]].getId(z) match {
+            case id: CompositeKey =>
+              val compositeCols = id._fields
+              res.append((t, compositeCols))
+            case _ =>
           }
         }
       )

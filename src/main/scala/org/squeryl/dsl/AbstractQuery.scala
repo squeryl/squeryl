@@ -248,44 +248,34 @@ abstract class AbstractQuery[R](
 
   override def toString = dumpAst + "\n" + _genStatement(true)
 
-  protected def createSubQueryable[U](q: Queryable[U]): SubQueryable[U] =
-    if(q.isInstanceOf[View[_]]) {
-      val v = q.asInstanceOf[View[U]]
+  protected def createSubQueryable[U](q: Queryable[U]): SubQueryable[U] = q match {
+    case v: View[_] =>
       val vxn = v.viewExpressionNode
       vxn.sample =
         v.posoMetaData.createSample(FieldReferenceLinker.createCallBack(vxn))
       
       new SubQueryable(v, vxn.sample, vxn.resultSetMapper, false, vxn)
-    }
-    else if(q.isInstanceOf[OptionalQueryable[_]]) {
-      val oqr = q.asInstanceOf[OptionalQueryable[U]]
+    case oqr: OptionalQueryable[U @unchecked] =>
       val sq = createSubQueryable[U](oqr.queryable)
       sq.node.inhibited = oqr.inhibited
       val oqCopy = new OptionalQueryable(sq.queryable)
       oqCopy.inhibited = oqr.inhibited
       new SubQueryable(oqCopy.asInstanceOf[Queryable[U]], Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
-    }
-    else if(q.isInstanceOf[OuterJoinedQueryable[_]]) {
-      val ojq = q.asInstanceOf[OuterJoinedQueryable[U]]
+    case ojq: OuterJoinedQueryable[U @unchecked] =>
       val sq = createSubQueryable[U](ojq.queryable)
       sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
       sq.node.inhibited = ojq.inhibited
       new SubQueryable(sq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
-    }
-    else if(q.isInstanceOf[InnerJoinedQueryable[_]]) {
-      val ijq = q.asInstanceOf[InnerJoinedQueryable[U]]
+    case ijq: InnerJoinedQueryable[_] =>
       val sq = createSubQueryable[U](ijq.queryable)
       sq.node.joinKind = Some((ijq.leftRightOrFull, "inner"))
       new SubQueryable(sq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
-    }
-    else if(q.isInstanceOf[DelegateQuery[_]]) {
-      createSubQueryable(q.asInstanceOf[DelegateQuery[U]].q)
-    }      
-    else {
-      val qr = q.asInstanceOf[AbstractQuery[U]]
+    case dq: DelegateQuery[_] =>
+      createSubQueryable(dq.q)
+    case qr: AbstractQuery[U] =>
       val copy = qr.copy(false, Nil)
       new SubQueryable(copy, copy.ast.sample.asInstanceOf[U], copy.resultSetMapper, true, copy.ast)
-    }
+  }
 
   protected class SubQueryable[U]
     (val queryable: Queryable[U],

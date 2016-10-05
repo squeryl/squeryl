@@ -478,14 +478,18 @@ trait DatabaseAdapter {
     if(v.isInstanceOf[Product1[_]])
        v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
 
-    if(v.isInstanceOf[java.util.Date] && ! v.isInstanceOf[java.sql.Date]  && ! v.isInstanceOf[Timestamp])
-       v = new java.sql.Date(v.asInstanceOf[java.util.Date].getTime)
-    else if(v.isInstanceOf[scala.math.BigDecimal])
-       v = v.asInstanceOf[scala.math.BigDecimal].bigDecimal
-    else if(v.isInstanceOf[scala.Enumeration#Value])
-       v = v.asInstanceOf[scala.Enumeration#Value].id.asInstanceOf[AnyRef]
-    else if(v.isInstanceOf[java.util.UUID])
-       v = convertFromUuidForJdbc(v.asInstanceOf[UUID])
+    v match {
+      case x: java.util.Date if (! v.isInstanceOf[java.sql.Date] && ! v.isInstanceOf[Timestamp]) =>
+         v = new java.sql.Date(x.getTime)
+      case x: scala.math.BigDecimal =>
+         v = x.bigDecimal
+      case x: scala.Enumeration#Value =>
+         v = x.id.asInstanceOf[AnyRef]
+      case x: java.util.UUID =>
+         v = convertFromUuidForJdbc(x)
+      case _ =>
+    }
+
     v
   }
 

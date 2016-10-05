@@ -259,10 +259,11 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       if(node.parent == None)
         node.parent = parent
 
-      if(node.isInstanceOf[UniqueIdInAliaseRequired]) {
-        val nxn = node.asInstanceOf[UniqueIdInAliaseRequired]
-        nxn.uniqueId = Some(idGen)
-        idGen += 1
+      node match {
+        case nxn: UniqueIdInAliaseRequired =>
+          nxn.uniqueId = Some(idGen)
+          idGen += 1
+        case _ =>
       }
     })
 

@@ -94,16 +94,13 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       val o = classOf[java.lang.Object]
 
       val field =
-        members.filter(m => m.isInstanceOf[Field]).
-           map(m=> m.asInstanceOf[Field]).filter(f=> f.getType != o).headOption
+        members.collectFirst{case f: Field if f.getType != o => f}
 
       val getter =
-        members.filter(m => m.isInstanceOf[Method] && m.getName == name).
-          map(m=> m.asInstanceOf[Method]).filter(m=> m.getReturnType != o).headOption
+        members.collectFirst{case m: Method if (m.getName == name) && (m.getReturnType != o) => m}
 
       val setter =
-        members.filter(m => m.isInstanceOf[Method] && m.getName.endsWith("_$eq")).
-          map(m=> m.asInstanceOf[Method]).filter(m=> m.getParameterTypes.apply(0) != o).headOption
+        members.collectFirst{case m: Method if m.getName.endsWith("_$eq") && (m.getParameterTypes.apply(0) != o) => m}
 
       val property = (field, getter, setter, a)
 

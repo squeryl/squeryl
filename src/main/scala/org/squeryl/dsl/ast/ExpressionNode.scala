@@ -608,14 +608,14 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
     (isConstantEmptyList && // not in Empty is always true, so we remove the condition
       (! isIn.get))
 
-  def isConstantEmptyList =
-    if(ast.isInstanceOf[ConstantExpressionNodeList[_]]) {
-      ast.asInstanceOf[ConstantExpressionNodeList[_]].isEmpty
-    }
-    else if(ast.isInstanceOf[ListExpressionNode]) {
-      ast.asInstanceOf[ListExpressionNode].children.isEmpty
-    }
-    else false
+  def isConstantEmptyList: Boolean = ast match {
+    case a: ConstantExpressionNodeList[_] =>
+      a.isEmpty
+    case a: ListExpressionNode =>
+      a.children.isEmpty
+    case _ =>
+      false
+  }
 
   override def doWrite(sw: StatementWriter) =
     if(isConstantEmptyList && isIn.get)
