@@ -33,7 +33,7 @@ val Scala211 = "2.11.8"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.0-RC1", Scala211, "2.10.6")
+crossScalaVersions := Seq("2.12.0", Scala211, "2.10.6")
 
 scalacOptions ++= {
   Seq("-unchecked", "-deprecation") ++ (
@@ -114,7 +114,7 @@ libraryDependencies ++= Seq(
   "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.14.2" % "test",
-  "org.json4s" %% "json4s-scalap" % "3.4.1",
+  "org.json4s" %% "json4s-scalap" % "3.4.2",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 
