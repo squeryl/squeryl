@@ -1,5 +1,5 @@
-[![maven central](https://maven-badges.herokuapp.com/maven-central/org.squeryl/squeryl_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.squeryl/squeryl_2.11)
-[![javadoc](http://javadoc-badge.appspot.com/org.squeryl/squeryl_2.11.svg?label=scaladoc)](http://javadoc-badge.appspot.com/org.squeryl/squeryl_2.11)
+[![maven central](https://maven-badges.herokuapp.com/maven-central/org.squeryl/squeryl_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.squeryl/squeryl_2.12)
+[![javadoc](http://javadoc-badge.appspot.com/org.squeryl/squeryl_2.12.svg?label=scaladoc)](http://javadoc-badge.appspot.com/org.squeryl/squeryl_2.12)
 
 ## How to build
 1. Download or clone repository:  
@@ -16,6 +16,6 @@ Documentation can be found at [The Squeryl Website][1] and [Scaladoc] [3]. Quest
 
 [![Build Status](https://travis-ci.org/squeryl/squeryl.svg?branch=master)](https://travis-ci.org/squeryl/squeryl)
 
-[1]: http://squeryl.org
+[1]: https://squeryl.github.io
 [2]: https://groups.google.com/forum/#!forum/squeryl
-[3]: http://squeryl.org/api/index.html#package
+[3]: http://javadoc-badge.appspot.com/org.squeryl/squeryl_2.12
