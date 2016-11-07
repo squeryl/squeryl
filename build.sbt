@@ -114,7 +114,7 @@ libraryDependencies ++= Seq(
   "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.14.2" % "test",
-  "org.json4s" %% "json4s-scalap" % "3.4.2",
+  "org.json4s" %% "json4s-scalap" % "3.5.0",
   "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 
