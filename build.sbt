@@ -33,7 +33,7 @@ val Scala211 = "2.11.8"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.0", Scala211, "2.10.6")
+crossScalaVersions := Seq("2.12.1", Scala211, "2.10.6")
 
 scalacOptions ++= {
   Seq("-unchecked", "-deprecation") ++ (
