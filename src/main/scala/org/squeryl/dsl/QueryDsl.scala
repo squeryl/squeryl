@@ -137,7 +137,7 @@ trait QueryDsl
   def &[A,T](i: =>TypedExpression[A,T]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
     
-  implicit def typedExpression2OrderByArg[E <% TypedExpression[_,_]](e: E) = new OrderByArg(e)
+  implicit def typedExpression2OrderByArg[E](e: E)(implicit E: E => TypedExpression[_, _]): OrderByArg = new OrderByArg(e)
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
 

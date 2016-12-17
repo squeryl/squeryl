@@ -196,13 +196,13 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 
   def mapper: OutMapper[A1]
 
-  def :=[B <% TypedExpression[A1,T1]] (b: B) =     
+  def :=[B] (b: B)(implicit B: B => TypedExpression[A1, T1]): UpdateAssignment =
     new UpdateAssignment(_fieldMetaData, b : TypedExpression[A1,T1])  
 
   def :=(q: Query[Measures[A1]]) =
     new UpdateAssignment(_fieldMetaData, q.ast)
 
-  def defaultsTo[B <% TypedExpression[A1,T1]](b: B) /*(implicit restrictUsageWithinSchema: Schema) */ =
+  def defaultsTo[B](b: B)(implicit B: B => TypedExpression[A1, T1]): DefaultValueAssignment =
     new DefaultValueAssignment(_fieldMetaData, b : TypedExpression[A1,T1])
 
   /**
