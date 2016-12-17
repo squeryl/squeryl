@@ -65,7 +65,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
     checkLeftJoinQuery(aQuery)
   }
 
-  def checkLeftJoinQuery(q: Query[(A, Option[B])]) {
+  def checkLeftJoinQuery(q: Query[(A, Option[B])]) = {
     q.headOption.map { (result) =>
       val (_, b) = result
 
@@ -73,7 +73,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
     }
   }
 
-  def checkJoinQuery(q: Query[(A, B)]) {
+  def checkJoinQuery(q: Query[(A, B)]) = {
     q.headOption should not equal(None)
   }
 

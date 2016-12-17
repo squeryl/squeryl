@@ -42,7 +42,7 @@ class LocalH2SinkStatisticsListener(val h2Session: AbstractSession) extends Stat
 
   private val _worker = new Thread {
 
-    override def run() {
+    override def run() = {
       h2Session.bindToCurrentThread
       while(!_closed) {
         val op = _queue.take

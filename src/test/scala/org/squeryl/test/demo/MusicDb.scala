@@ -170,7 +170,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
 
   var sharedTestData : TestData = null
 
-  override def prePopulate(){
+  override def prePopulate() = {
     sharedTestData = new TestData()
   }
 

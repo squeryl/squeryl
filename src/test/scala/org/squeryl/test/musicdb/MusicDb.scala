@@ -107,7 +107,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   
   var sharedTestInstance : TestData = null
   
-  override def prePopulate(){
+  override def prePopulate() = {
     sharedTestInstance = new TestData(schema)
   }
 

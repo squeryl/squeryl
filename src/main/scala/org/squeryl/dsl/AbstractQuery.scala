@@ -205,7 +205,7 @@ abstract class AbstractQuery[R](
 
     var rowCount = 0
     
-    def close {
+    def close(): Unit = {
       stmt.close
       rs.close
     }

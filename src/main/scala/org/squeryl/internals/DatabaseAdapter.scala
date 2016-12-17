@@ -167,7 +167,7 @@ trait DatabaseAdapter {
     writePaginatedQueryDeclaration(() => qen.page, qen, sw)
   }
 
-  def writeUnionQueryOptions(qen: QueryExpressionElements, sw: StatementWriter) {
+  def writeUnionQueryOptions(qen: QueryExpressionElements, sw: StatementWriter): Unit = {
     if (! supportsUnionQueryOptions)
       Utils.throwError("Database adapter does not support query options on a union query")
 
@@ -327,7 +327,7 @@ trait DatabaseAdapter {
     sw.write(")")
   }                     
      
-  def fillParamsInto(params: Iterable[StatementParam], s: PreparedStatement) {    
+  def fillParamsInto(params: Iterable[StatementParam], s: PreparedStatement): Unit = {
     var i = 1;
     for(p <- params) {
       setParamInto(s, p, i)

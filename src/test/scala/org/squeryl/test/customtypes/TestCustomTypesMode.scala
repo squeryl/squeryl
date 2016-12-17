@@ -32,7 +32,7 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
 
   var sharedTestObjects : TestData = null
 
-  override def prePopulate(){
+  override def prePopulate(): Unit = {
     sharedTestObjects = new TestData(schema)
   }
 

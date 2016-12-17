@@ -251,7 +251,7 @@ trait FieldMapper {
   
   initialize
   
-  protected def initialize {
+  protected def initialize() = {
     import PrimitiveTypeSupport._
     
     register(byteTEF)
@@ -359,7 +359,7 @@ trait FieldMapper {
     }
   }
   
-  private [squeryl] def register[P,A](m: NonPrimitiveJdbcMapper[P,A,_]) {
+  private [squeryl] def register[P,A](m: NonPrimitiveJdbcMapper[P,A,_]): Unit = {
     
     val z = new FieldAttributesBasedOnType(
         makeMapper(m), 
@@ -373,7 +373,7 @@ trait FieldMapper {
       Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
   }
   
-  private [squeryl] def register[S,J](m: ArrayJdbcMapper[S,J]) {
+  private [squeryl] def register[S,J](m: ArrayJdbcMapper[S,J]): Unit = {
     val f = m.thisTypedExpressionFactory
     val z = new FieldAttributesBasedOnType(
         makeMapper(m), 
@@ -387,7 +387,7 @@ trait FieldMapper {
       Utils.throwError("field type "+ z.clasz + " already registered, handled by " + m.getClass.getCanonicalName)
   }
   
-  private def register[A](pm: PrimitiveJdbcMapper[A]) {
+  private def register[A](pm: PrimitiveJdbcMapper[A]): Unit = {
     val f = pm.thisTypedExpressionFactory
     val z = new FieldAttributesBasedOnType(
         makeMapper(pm), 

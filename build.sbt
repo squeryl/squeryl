@@ -36,7 +36,7 @@ scalaVersion := Scala211
 crossScalaVersions := Seq("2.12.1", Scala211, "2.10.6")
 
 scalacOptions ++= {
-  Seq("-unchecked", "-deprecation") ++ (
+  Seq("-unchecked", "-deprecation", "-Xfuture") ++ (
   if(scalaVersion.value.startsWith("2.11"))
     Seq("-feature",
     "-language:implicitConversions",

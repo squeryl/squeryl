@@ -12,7 +12,7 @@ abstract class SchemaTester extends DbTestBase {
 
   def prePopulate() = {}
 
-  override def beforeAll(){
+  override def beforeAll() = {
 
     super.beforeAll()
 
@@ -31,7 +31,7 @@ abstract class SchemaTester extends DbTestBase {
     }
   }
 
-  override def afterAll(){
+  override def afterAll() = {
     super.afterAll()
 
     sessionCreator().foreach { _ =>
@@ -51,7 +51,7 @@ abstract class DbTestBase extends FunSuite with BeforeAndAfterAll with BeforeAnd
 
   def ignoredTests : List[String] = Nil
 
-  override def beforeAll(){
+  override def beforeAll() = {
     val c = sessionCreator()
     if(c.isDefined) {
       SessionFactory.concreteFactory = c

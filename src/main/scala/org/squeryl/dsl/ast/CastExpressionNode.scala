@@ -4,7 +4,7 @@ import org.squeryl.internals._
 
 class CastExpressionNode(expr: ExpressionNode,
                          typ: String) extends ExpressionNode {
-  override def doWrite(sw: StatementWriter) {
+  override def doWrite(sw: StatementWriter) = {
     sw.write("cast(")
     expr.write(sw)
     sw.write(" as " + sw.databaseAdapter.quoteIdentifier(typ) + ")")

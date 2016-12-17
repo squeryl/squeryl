@@ -25,7 +25,7 @@ import org.squeryl._
 
 object FieldReferenceLinker {
 
-  def clearThreadLocalState() {
+  def clearThreadLocalState(): Unit = {
     _yieldValues.remove()
     __lastAccessedFieldReference.remove()
     _compositeKeyMembers.remove()

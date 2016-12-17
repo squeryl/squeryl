@@ -401,7 +401,7 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 
   var sharedTestInstance : TestInstance = null
 
-  override def prePopulate() {
+  override def prePopulate() = {
     sharedTestInstance = new TestInstance(schema)
   }
 

@@ -11,7 +11,7 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
 
  import LeftJoinSchema._
 
- override def prePopulate {
+ override def prePopulate(): Unit = {
 
    months.insert(new Month(1, "Jan"))
    months.insert(new Month(2, "Feb"))

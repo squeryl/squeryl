@@ -107,13 +107,13 @@ trait ExpressionNode {
 }
 
 class ListExpressionNode(override val children: List[ExpressionNode]) extends ExpressionNode {
-  override def doWrite(sw: StatementWriter) {
+  override def doWrite(sw: StatementWriter) = {
     sw.writeNodesWithSeparator(children, ", ", false)
   }
 }
 
 class RowValueConstructorNode(override val children: List[ExpressionNode]) extends ExpressionNode {
-  override def doWrite(sw: StatementWriter) {
+  override def doWrite(sw: StatementWriter) = {
     // sw.write("ROW")
     sw.write("(")
     sw.writeNodesWithSeparator(children, ", ", false)
@@ -228,7 +228,7 @@ object TrueLogicalBoolean extends LogicalBoolean {
 
   override def or(b: LogicalBoolean) = this
 
-  override def doWrite(sw: StatementWriter) {
+  override def doWrite(sw: StatementWriter) = {
     sw.write("(1=1)")
   }
 
@@ -240,7 +240,7 @@ object FalseLogicalBoolean extends LogicalBoolean {
 
   override def or(b: LogicalBoolean) = b
 
-  override def doWrite(sw: StatementWriter) {
+  override def doWrite(sw: StatementWriter) = {
     sw.write("(1=0)")
   }
 
