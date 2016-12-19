@@ -454,22 +454,23 @@ object FieldMetaData {
 
       val isOption = v.isInstanceOf[Some[_]]
 
-      val typeOfFieldOrTypeOfOption =
-        if(!isOption)
+      val typeOfFieldOrTypeOfOption = v match {
+        case Some(x) =>
+          x.getClass
+        case _ =>
           v.getClass
-        else
-          v.asInstanceOf[Option[AnyRef]].get.getClass
+      }
 
-      val primitiveFieldType =
-        if(v.isInstanceOf[Product1[_]])
-          v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
-        else if(isOption && v.asInstanceOf[Option[AnyRef]].get.isInstanceOf[Product1[_]]) {
+      val primitiveFieldType = v match {
+        case p: Product1[_] =>
+          p._1.getClass
+        case Some(x: Product1[_]) =>
           //if we get here, customTypeFactory has not had a chance to get created
           customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, typeOfFieldOrTypeOfOption)
-          v.asInstanceOf[Option[AnyRef]].get.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef].getClass
-        }
-        else
+          x._1.asInstanceOf[AnyRef].getClass
+        case _ =>
           typeOfFieldOrTypeOfOption
+      }
 
       if(typeOfFieldOrTypeOfOption == None.getClass) {
         Utils.throwError(
