@@ -35,6 +35,12 @@ scalaVersion := Scala211
 
 crossScalaVersions := Seq("2.12.1", Scala211, "2.10.6")
 
+scalacOptions in (Compile, doc) ++= {
+  val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
+  val hash = sys.process.Process("git rev-parse HEAD").lines_!.head
+  Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
+}
+
 scalacOptions ++= {
   Seq("-unchecked", "-deprecation", "-Xfuture") ++ (
   if(scalaVersion.value.startsWith("2.11"))
