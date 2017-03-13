@@ -4,7 +4,7 @@ description := "A Scala ORM and DSL for talking with Databases using minimum ver
 
 organization := "org.squeryl"
 
-version := "0.9.7"
+version := "0.9.8"
 
 javacOptions := Seq("-source", "1.6", "-target", "1.6")
 
