@@ -29,7 +29,7 @@ parallelExecution := false
 
 publishMavenStyle := true
 
-val Scala211 = "2.11.8"
+val Scala211 = "2.11.9"
 
 scalaVersion := Scala211
 
