@@ -75,12 +75,14 @@ trait SelectElement extends ExpressionNode {
   def inhibitAliasOnSelectElementReference: Boolean = {
 
     def shouldInhibit(e: ExpressionNode): Boolean =
-      e.parent forall ({ p =>
-        if(p.isInstanceOf[QueryExpressionElements])
-          p.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference
-        else
-          shouldInhibit(p)
-      })
+      e.parent.forall { p =>
+        p match {
+          case elements: QueryExpressionElements =>
+            elements.inhibitAliasOnSelectElementReference
+          case _ =>
+            shouldInhibit(p)
+        }
+      }
 
     shouldInhibit(origin)
   }

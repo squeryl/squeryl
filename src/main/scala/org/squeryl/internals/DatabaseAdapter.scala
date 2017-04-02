@@ -475,8 +475,11 @@ trait DatabaseAdapter {
       
     var v = r
         
-    if(v.isInstanceOf[Product1[_]])
-       v = v.asInstanceOf[Product1[Any]]._1.asInstanceOf[AnyRef]
+    v match {
+      case product: Product1[_] =>
+        v = product._1.asInstanceOf[AnyRef]
+      case _ =>
+    }
 
     v match {
       case x: java.util.Date if (! v.isInstanceOf[java.sql.Date] && ! v.isInstanceOf[Timestamp]) =>

@@ -424,11 +424,13 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     for(ca <- colAss) ca match {
       case dva:DefaultValueAssignment    => {
 
-        if(! dva.value.isInstanceOf[ConstantTypedExpression[_,_]])
-          org.squeryl.internals.Utils.throwError("error in declaration of column "+ table.prefixedName + "." + dva.left.nameOfProperty + ", " +
+        dva.value match {
+          case x: ConstantTypedExpression[_, _] =>
+            dva.left._defaultValue = Some(x)
+          case _ =>
+            org.squeryl.internals.Utils.throwError("error in declaration of column "+ table.prefixedName + "." + dva.left.nameOfProperty + ", " +
                 "only constant expressions are supported in 'defaultsTo' declaration")
-
-        dva.left._defaultValue = Some(dva.value.asInstanceOf[ConstantTypedExpression[_,_]])
+        }
       }
       case caa:ColumnAttributeAssignment => {
 

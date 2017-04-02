@@ -28,12 +28,14 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
   private [squeryl] def cteRoot: Option[QueryExpressionElements] = {
     def loop(current: Option[ExpressionNode]): Option[QueryExpressionElements] = {
       current.flatMap { c =>
-        c.isInstanceOf[QueryExpressionNode[_]] match {
-          case true => c.asInstanceOf[QueryExpressionNode[_]]
-            .commonTableExpressions
-            .find(sameRoot_?)
-            .orElse(loop(c.parent))
-          case false => loop(c.parent)
+        c match {
+          case value: QueryExpressionNode[_] =>
+            value
+              .commonTableExpressions
+              .find(sameRoot_?)
+              .orElse(loop(c.parent))
+          case _ =>
+            loop(c.parent)
         }
       }
     }
@@ -53,11 +55,13 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
      _queryYield.queryElements
 
   val commonTableExpressions = ctes.map { q =>
-    if (! q.ast.isInstanceOf[QueryExpressionNode[_]]) {
-      Utils.throwError("A common table expression AST must be a QueryExpressionNode, not a " +
-        q.getClass.getSimpleName)
+    q.ast match {
+      case x: QueryExpressionNode[_] =>
+        x
+      case _ =>
+        Utils.throwError("A common table expression AST must be a QueryExpressionNode, not a " +
+          q.getClass.getSimpleName)
     }
-    q.ast.asInstanceOf[QueryExpressionNode[_]]
   }.toList
 
   private val unionClauses =
@@ -161,10 +165,11 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
       visitDescendants((node,parent,i) => {
         node.parent = parent
 
-        if(node.isInstanceOf[UniqueIdInAliaseRequired]) {
-          val nxn = node.asInstanceOf[UniqueIdInAliaseRequired]
-          nxn.uniqueId = Some(idGen)
-          idGen += 1
+        node match {
+          case nxn: UniqueIdInAliaseRequired =>
+            nxn.uniqueId = Some(idGen)
+            idGen += 1
+          case _ =>
         }
       })
 
