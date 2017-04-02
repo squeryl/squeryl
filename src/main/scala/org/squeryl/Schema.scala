@@ -187,12 +187,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     createColumnGroupConstraintsAndIndexes
   }
 
-  private def _indexDeclarationsFor(t: Table[_]) = {
-    val d0 =
-      for(fmd <- t.posoMetaData.fieldsMetaData)
-        yield _writeIndexDeclarationIfApplicable(fmd.columnAttributes.toSeq, Seq(fmd), None)
-
-    d0.filter(_ != None).map(_.get).toList
+  private def _indexDeclarationsFor(t: Table[_]): List[String] = {
+    t.posoMetaData.fieldsMetaData.flatMap{ fmd =>
+      _writeIndexDeclarationIfApplicable(fmd.columnAttributes.toSeq, Seq(fmd), None)
+    }(collection.breakOut)
   }
   
 

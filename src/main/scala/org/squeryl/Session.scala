@@ -297,11 +297,13 @@ object Session {
   }
 
   def currentSession: AbstractSession =
-    if(SessionFactory.externalTransactionManagementAdapter != None) {
-      SessionFactory.externalTransactionManagementAdapter.get.apply getOrElse org.squeryl.internals.Utils.throwError("SessionFactory.externalTransactionManagementAdapter was unable to supply a Session for the current scope")
+    SessionFactory.externalTransactionManagementAdapter match {
+      case Some(a) =>
+        a.apply getOrElse org.squeryl.internals.Utils.throwError("SessionFactory.externalTransactionManagementAdapter was unable to supply a Session for the current scope")
+      case None =>
+        currentSessionOption.getOrElse(
+          throw new IllegalStateException("No session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'\n Usually this error occurs when a statement is executed outside of a transaction/inTrasaction block"))
     }
-    else currentSessionOption.getOrElse(
-      throw new IllegalStateException("No session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'\n Usually this error occurs when a statement is executed outside of a transaction/inTrasaction block"))
 
   def hasCurrentSession =
     currentSessionOption != None
