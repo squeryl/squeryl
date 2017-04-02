@@ -321,10 +321,8 @@ class FieldMetaData(
       val actualValue =
         if(!isOption)
           v0
-        else if(v0 == null)
-          None
         else
-          Some(v0)
+          Option(v0)
 
 
       if(setter != None)
@@ -607,10 +605,7 @@ object FieldMetaData {
 	                  else Some(oType.asInstanceOf[Class[_]])
 	                trueTypeOption flatMap { trueType =>
 	                  val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)
-	                  if (deduced != null)
-	                    Some(deduced)
-	                  else
-	                    None //Couldn't create default for type param
+	                  Option(deduced) // Couldn't create default for type param if null
 	                }
 	              } else{
 	            	  None //Type parameter is not a Class
