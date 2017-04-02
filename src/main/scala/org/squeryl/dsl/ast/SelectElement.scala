@@ -75,12 +75,12 @@ trait SelectElement extends ExpressionNode {
   def inhibitAliasOnSelectElementReference: Boolean = {
 
     def shouldInhibit(e: ExpressionNode): Boolean =
-      e.parent map ({ p =>
+      e.parent forall ({ p =>
         if(p.isInstanceOf[QueryExpressionElements])
           p.asInstanceOf[QueryExpressionElements].inhibitAliasOnSelectElementReference
         else
           shouldInhibit(p)
-      }) getOrElse true
+      })
 
     shouldInhibit(origin)
   }
@@ -348,7 +348,7 @@ class ExportedSelectElement
     }
   }
 
-  private def isDirectOuterReference: Boolean = outerScopes.exists((outer) => outer == selectElement.parentQueryable)
+  private def isDirectOuterReference: Boolean = outerScopes.contains(selectElement.parentQueryable)
 
   private def outerTarget: Option[SelectElement] = {
     val q =
@@ -363,7 +363,7 @@ class ExportedSelectElement
 
   private def innerTarget: Option[SelectElement] =
     if(parent == None)
-      return None
+      None
     else {
       val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]
 
