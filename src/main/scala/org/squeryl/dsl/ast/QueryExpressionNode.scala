@@ -113,7 +113,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
   override def children =
     List(
       selectList.toList,
-      commonTableExpressions.toList,
+      commonTableExpressions,
       views.toList,
       subQueries.toList,
       tableExpressions.filter(e=> e.joinExpression != None).map(_.joinExpression.get).toList,  
