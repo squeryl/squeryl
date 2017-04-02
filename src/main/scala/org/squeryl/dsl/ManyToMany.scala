@@ -236,7 +236,7 @@ class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O]
 trait OneToMany[M] extends Query[M] {
 
   /**
-   * @param the object on the 'many side' to be associated with this
+   * @param m the object on the 'many side' to be associated with this
    *
    *  Sets the foreign key of 'm' to refer to the primary key of the 'one' instance
    *
