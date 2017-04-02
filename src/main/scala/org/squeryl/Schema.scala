@@ -197,7 +197,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   private def _writeColumnGroupAttributeAssignments: Seq[String] =
     for(cgaa <- _columnGroupAttributeAssignments)
       yield _writeIndexDeclarationIfApplicable(cgaa.columnAttributes, cgaa.columns, cgaa.name).
-        getOrElse(org.squeryl.internals.Utils.throwError("emtpy attribute list should not be possible to create with DSL (Squeryl bug)."))
+        getOrElse(org.squeryl.internals.Utils.throwError("empty attribute list should not be possible to create with DSL (Squeryl bug)."))
 
   private def _writeIndexDeclarationIfApplicable(columnAttributes: Seq[ColumnAttribute], cols: Seq[FieldMetaData], name: Option[String]): Option[String] = {
 
