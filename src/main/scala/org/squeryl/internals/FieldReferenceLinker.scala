@@ -42,7 +42,7 @@ object FieldReferenceLinker {
     }
     else {
       val r = _yieldValues.get.remove(0).asInstanceOf[T]
-      if (_yieldValues.get.size == 0) {
+      if (_yieldValues.get.isEmpty) {
         _yieldValues.remove()
       }
       r

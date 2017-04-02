@@ -264,7 +264,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       memberTypes.append(property._3.get.getParameterTypes.apply(0))
 
     //not a property if it has no getter, setter or field
-    if(memberTypes.size == 0)
+    if(memberTypes.isEmpty)
       return false
 
     //verify that all types are compatible :

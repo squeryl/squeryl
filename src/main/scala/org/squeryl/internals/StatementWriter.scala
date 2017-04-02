@@ -75,7 +75,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
   def addParam(p: StatementParam) = _paramList.append(p)
 
   override def toString =
-    if(_paramList.size == 0)
+    if(_paramList.isEmpty)
       statement
     else
       _paramList.mkString(statement+"\njdbcParams:[",",","]")

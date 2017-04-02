@@ -50,7 +50,7 @@ trait QueryExpressionElements extends ExpressionNode {
       case None => false
       case Some(e:ExpressionNode) =>
         if (e.inhibited) false
-        else if (e.children.size == 0) true  // for constant
+        else if (e.children.isEmpty) true  // for constant
         else (e.children.exists(! _.inhibited))
     }
 
