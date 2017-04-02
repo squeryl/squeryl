@@ -16,7 +16,6 @@
 package org.squeryl.internals
  
 
-import java.lang.Class
 import java.lang.annotation.Annotation
 import net.sf.cglib.proxy.{Factory, Callback, CallbackFilter, Enhancer, NoOp}
 import java.lang.reflect.{Member, Constructor, Method, Field, Modifier}
