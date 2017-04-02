@@ -239,20 +239,20 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     if(property._4.find(an => an.isInstanceOf[Transient]) != None)
       return false
 
-    val hasAField = property._1.map { field =>
+    val hasAField = property._1.exists { field =>
       !Modifier.isStatic(field.getModifiers)
-    } getOrElse false
+    }
 
-    val hasGetter = property._2.map { getter =>
+    val hasGetter = property._2.exists { getter =>
       !Modifier.isStatic(getter.getModifiers) &&
         !classOf[java.lang.Void].isAssignableFrom(getter.getReturnType) &&
         getter.getParameterTypes.length == 0
-    } getOrElse false
+    }
 
-    val hasSetter = property._3.map { setter =>
+    val hasSetter = property._3.exists { setter =>
       !Modifier.isStatic(setter.getModifiers) &&
         property._3.get.getParameterTypes.length == 1
-    } getOrElse false
+    }
 
     val memberTypes = new ArrayBuffer[Class[_]]
 
