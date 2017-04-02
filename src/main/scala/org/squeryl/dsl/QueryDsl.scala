@@ -434,9 +434,9 @@ trait QueryDsl
     }
 
     private def _viewReferedInExpression(v: View[_], ee: EqualityExpression) =
-      ee.filterDescendantsOfType[SelectElementReference[Any,Any]].filter(
+      ee.filterDescendantsOfType[SelectElementReference[Any, Any]].exists(
         _.selectElement.origin.asInstanceOf[ViewExpressionNode[_]].view == v
-      ).headOption != None
+      )
 
 
     private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable, false)
