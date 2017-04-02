@@ -190,7 +190,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
         org.squeryl.internals.Utils.throwError("inner classes are not supported, except when outer class is a singleton (object)\ninner class is : " + cn)
     }
 
-    val res = new Array[Object](params.size)
+    val res = new Array[Object](params.length)
 
     for(i <- 0 to params.length -1) {
       val v = FieldMetaData.createDefaultValue(schema.fieldMapper, c, params(i), None, None)
