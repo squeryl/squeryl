@@ -29,11 +29,11 @@ parallelExecution := false
 
 publishMavenStyle := true
 
-val Scala211 = "2.11.8"
+val Scala211 = "2.11.11"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.1", Scala211, "2.10.6")
+crossScalaVersions := Seq("2.12.2", Scala211, "2.10.6")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
