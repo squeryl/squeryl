@@ -118,19 +118,19 @@ trait FieldMapper {
     
     val intArrayTEF = new ArrayTEF[Int, TIntArray] {
       val sample = Array(0)
-      def toWrappedJDBCType(element: Int) : java.lang.Object = new java.lang.Integer(element)
+      def toWrappedJDBCType(element: Int) : java.lang.Object = java.lang.Integer.valueOf(element)
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Int] = elements.map(i => i.asInstanceOf[java.lang.Integer].toInt)
     }
     
     val longArrayTEF = new ArrayTEF[Long, TLongArray] {
       val sample = Array(0L)
-      def toWrappedJDBCType(element: Long) : java.lang.Object = new java.lang.Long(element)
+      def toWrappedJDBCType(element: Long) : java.lang.Object = java.lang.Long.valueOf(element)
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Long] = elements.map(i => i.asInstanceOf[java.lang.Long].toLong)
     }
     
     val doubleArrayTEF = new ArrayTEF[Double, TDoubleArray] {
       val sample : Array[Double] = Array(0.0)
-      def toWrappedJDBCType(element: Double) : java.lang.Object = new java.lang.Double(element)
+      def toWrappedJDBCType(element: Double) : java.lang.Object = java.lang.Double.valueOf(element)
       def fromWrappedJDBCType(elements: Array[java.lang.Object]) : Array[Double] = elements.map(i => i.asInstanceOf[java.lang.Double].toDouble)
     }
 
