@@ -1237,6 +1237,15 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     passed('testForUpdate)
   }
 
+  test("PaginatedForUpdate") {
+    val testInstance = sharedTestInstance; import testInstance._
+    val t = professors.where(p => p.id === tournesol.id).page(0, 1).forUpdate.single
+
+    assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
+    assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
+
+    passed('testForUpdate)
+  }
 
 
   test("PartialUpdate1") {
