@@ -162,9 +162,9 @@ trait DatabaseAdapter {
       sw.pushPendingNextLine
     }
 
-    writeEndOfQueryHint(() => qen.isForUpdate, qen, sw)
-
     writePaginatedQueryDeclaration(() => qen.page, qen, sw)
+
+    writeEndOfQueryHint(() => qen.isForUpdate, qen, sw)
   }
 
   def writeUnionQueryOptions(qen: QueryExpressionElements, sw: StatementWriter): Unit = {
