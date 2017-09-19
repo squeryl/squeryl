@@ -17,7 +17,7 @@ matrix:
     before_install:
     - echo "sbt.version=1.0.0" > project/build.properties
 jdk:
-- oraclejdk7
+- openjdk7
 addons:
   postgresql: '9.3'
 before_script:
