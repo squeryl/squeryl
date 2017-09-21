@@ -131,7 +131,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
     new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "=")
 
   def <>[A2,T2](q: Query[Measures[A2]])(implicit tef: TypedExpressionFactory[A2,T2], ev: CanCompare[T1, T2]) = 
-    new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "=")
+    new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "<>")
   
   def gt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
   def lt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
