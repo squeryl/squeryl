@@ -5,14 +5,14 @@ scala:
 - 2.11.11
 matrix:
   include:
-  - scala: 2.12.3
+  - scala: 2.12.4
     jdk: oraclejdk8
   - scala: 2.13.0-M1
     jdk: oraclejdk8
   - dist: trusty
     group: edge
     sudo: required
-    scala: 2.12.3
+    scala: 2.12.4
     jdk: oraclejdk9
     before_install:
     - echo "sbt.version=1.0.0" > project/build.properties
