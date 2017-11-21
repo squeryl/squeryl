@@ -15,6 +15,8 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
+import org.squeryl.Query
+
 import ast._
 import org.squeryl.internals.{AttributeValidOnMultipleColumn, FieldMetaData}
 
@@ -45,6 +47,18 @@ trait CompositeKey {
   }
 
   def is(attributes: AttributeValidOnMultipleColumn*) = new CompositeKeyAttributeAssignment(this, attributes)
+
+  protected def inQueryExpr(ast: ExpressionNode): LogicalBoolean =
+    new InclusionOperator(
+      new RowValueConstructorNode(members.toList),
+      new RightHandSideOfIn(ast)
+    )
+
+  protected def notInQueryExpr(ast: ExpressionNode): LogicalBoolean =
+    new ExclusionOperator(
+      new RowValueConstructorNode(members.toList),
+      new RightHandSideOfIn(ast)
+    )
 
   protected def inExpr(cks: Iterable[CompositeKey]): LogicalBoolean = {
     new InclusionOperator(
@@ -93,6 +107,12 @@ case class CompositeKey2[A1,A2](val a1:A1, val a2: A2)(
   def notIn(cks: CompositeKey2[A1, A2]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2)*) = notInExpr(cks map (ck => new CompositeKey2(ck._1, ck._2)))
 
+  def inQuery(q: Query[CompositeKey2[A1, A2]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey2[A1, A2]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
+
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2)
 
 }
@@ -116,6 +136,12 @@ case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3)(
   def notIn(cks: CompositeKey3[A1, A2, A3]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3)*) = notInExpr(cks map (ck => new CompositeKey3(ck._1, ck._2, ck._3)))
 
+  def inQuery(q: Query[CompositeKey3[A1, A2, A3]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey3[A1, A2, A3]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
+
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3)
 }
 
@@ -138,6 +164,12 @@ case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4:
 
   def notIn(cks: CompositeKey4[A1, A2, A3, A4]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4)*) = notInExpr(cks map (ck => new CompositeKey4(ck._1, ck._2, ck._3, ck._4)))
+
+  def inQuery(q: Query[CompositeKey4[A1, A2, A3, A4]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey4[A1, A2, A3, A4]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4)
 }
@@ -164,6 +196,12 @@ case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val 
   def notIn(cks: CompositeKey5[A1, A2, A3, A4, A5]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5)*) = notInExpr(cks map (ck => new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5)))
 
+  def inQuery(q: Query[CompositeKey5[A1, A2, A3, A4, A5]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey5[A1, A2, A3, A4, A5]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
+
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5)
 }
 case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6)(
@@ -187,6 +225,12 @@ case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, v
 
   def notIn(cks: CompositeKey6[A1, A2, A3, A4, A5, A6]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6)*) = notInExpr(cks map (ck => new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6)))
+
+  def inQuery(q: Query[CompositeKey6[A1, A2, A3, A4, A5, A6]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey6[A1, A2, A3, A4, A5, A6]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6)
 }
@@ -213,6 +257,12 @@ case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3
 
   def notIn(cks: CompositeKey7[A1, A2, A3, A4, A5, A6, A7]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7)*) = notInExpr(cks map (ck => new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7)))
+
+  def inQuery(q: Query[CompositeKey7[A1, A2, A3, A4, A5, A6, A7]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey7[A1, A2, A3, A4, A5, A6, A7]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7)
 }
@@ -241,6 +291,12 @@ case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3:
   def notIn(cks: CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8)*) = notInExpr(cks map (ck => new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8)))
 
+  def inQuery(q: Query[CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
+
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7, a8)
 }
 
@@ -268,6 +324,12 @@ case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val 
 
   def notIn(cks: CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8, A9)*) = notInExpr(cks map (ck => new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8, ck._9)))
+
+  def inQuery(q: Query[CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9]]): LogicalBoolean =
+    inQueryExpr(q.copy(false, Nil).ast)
+
+  def notInQuery(q: Query[CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9]]): LogicalBoolean =
+    notInQueryExpr(q.copy(false, Nil).ast)
 
   protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7, a8, a9)
 }
