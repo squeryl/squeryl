@@ -12,7 +12,7 @@ matrix:
   - scala: 2.12.4
     jdk: oraclejdk9
     before_install:
-    - echo "sbt.version=1.0.2" > project/build.properties
+    - echo "sbt.version=1.0.4" > project/build.properties
 jdk:
 - openjdk7
 addons:
