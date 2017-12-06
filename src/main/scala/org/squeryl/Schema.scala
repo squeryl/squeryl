@@ -92,7 +92,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
       
     def snakify(name: String) =
-      name.replaceAll("^([^A-Za-z_])", "_$1").replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase
+      name.replaceAll("^([^A-Za-z_])", "_$1").replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([^A-Z])([A-Z])", "$1_$2").toLowerCase
   }
 
   def columnNameFromPropertyName(propertyName: String) = propertyName
