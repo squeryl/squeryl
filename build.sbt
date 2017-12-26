@@ -29,11 +29,11 @@ parallelExecution := false
 
 publishMavenStyle := true
 
-val Scala211 = "2.11.11"
+val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.4", Scala211, "2.10.6", "2.13.0-M2")
+crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7", "2.13.0-M2")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
@@ -114,12 +114,12 @@ pomIncludeRepository := { _ => false }
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.2.5",
-  "com.h2database" % "h2" % "1.4.193" % "provided",
-  "mysql" % "mysql-connector-java" % "5.1.41" % "provided",
-  "postgresql" % "postgresql" % "9.1-901.jdbc4" % "provided",
-  "net.sourceforge.jtds" % "jtds" % "1.2.4" % "provided",
+  "com.h2database" % "h2" % "1.4.196" % "provided",
+  "mysql" % "mysql-connector-java" % "5.1.45" % "provided",
+  "org.postgresql" % "postgresql" % "42.1.4.jre7" % "provided",
+  "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.16.1" % "test",
+  "org.xerial" % "sqlite-jdbc" % "3.21.0.1" % "test",
   "org.json4s" %% "json4s-scalap" % "3.5.3",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 )
