@@ -3,18 +3,14 @@ sudo: false
 scala:
 - 2.10.7
 - 2.11.12
+- 2.12.4
+- 2.13.0-M2
 matrix:
   include:
   - scala: 2.12.4
-    jdk: oraclejdk8
-  - scala: 2.13.0-M2
-    jdk: oraclejdk8
-  - scala: 2.12.4
     jdk: oraclejdk9
-    before_install:
-    - echo "sbt.version=1.0.4" > project/build.properties
 jdk:
-- openjdk7
+- oraclejdk8
 addons:
   postgresql: '9.3'
 before_script:
@@ -25,10 +21,10 @@ before_script:
 - mysql -e "CREATE DATABASE squeryl;" -usqueryl -psqueryl
 - cp org.squeryl.tests.cfg.travis org.squeryl.tests.cfg
 script:
-- sbt ++${TRAVIS_SCALA_VERSION} test:compile
+- sbt "++${TRAVIS_SCALA_VERSION}!" test:compile
 - rm -r src/test/scala/org/squeryl/oracle/
 - rm -r src/test/scala/org/squeryl/mssql/
-- sbt ++${TRAVIS_SCALA_VERSION} test
+- sbt "++${TRAVIS_SCALA_VERSION}!" test
 env:
   global:
   - secure: B/esoBi0gr3+/83hoVYfWrcQtOtVoBwI4qK7PjDeH89gV1tiyNUOp/E9+Lxt1RyJ4kQuiFaA241Toshy69f9AyUL4NCUo42noYEX7v66VppkAY3MfrCPKGAN9/urQF/ZELFiQblmAX3UzD91xluFzHjYpLcRDYe0vtYWN8EqJLw=

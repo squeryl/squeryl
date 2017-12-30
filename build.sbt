@@ -37,7 +37,7 @@ crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7", "2.13.0-M2")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
-  val hash = sys.process.Process("git rev-parse HEAD").lines_!.head
+  val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
   Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
 }
 
