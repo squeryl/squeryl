@@ -21,7 +21,7 @@ before_script:
 - mysql -e "CREATE DATABASE squeryl;" -usqueryl -psqueryl
 - cp org.squeryl.tests.cfg.travis org.squeryl.tests.cfg
 script:
-- sbt "++${TRAVIS_SCALA_VERSION}!" test:compile
+- sbt "++${TRAVIS_SCALA_VERSION}!" scalafmtSbtCheck scalafmtCheck test:scalafmtCheck test:compile
 - rm -r src/test/scala/org/squeryl/oracle/
 - rm -r src/test/scala/org/squeryl/mssql/
 - sbt "++${TRAVIS_SCALA_VERSION}!" test

@@ -16,7 +16,7 @@
 package org.squeryl.adapters
 
 import org.squeryl.Schema
-import org.squeryl.internals.{StatementWriter, FieldMetaData, DatabaseAdapter}
+import org.squeryl.internals.{DatabaseAdapter, FieldMetaData, StatementWriter}
 import org.squeryl.dsl.ast._
 import java.sql.SQLException
 
@@ -31,27 +31,30 @@ class DerbyAdapter extends DatabaseAdapter {
 
     var res = "  " + quoteIdentifier(fmd.columnName) + " " + databaseTypeFor(fmd)
 
-    for(d <- fmd.defaultValue) {
+    for (d <- fmd.defaultValue) {
       val v = convertToJdbcValue(d.value.asInstanceOf[AnyRef])
-      if(v.isInstanceOf[String])
+      if (v.isInstanceOf[String])
         res += " default '" + v + "'"
       else
         res += " default " + v
     }
 
-    if(!fmd.isOption)
+    if (!fmd.isOption)
       res += " not null"
 
-    if(isPrimaryKey)
+    if (isPrimaryKey)
       res += " primary key"
 
-    if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
+    if (supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " generated always as identity"
 
     res
   }
 
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {
+  override def writePaginatedQueryDeclaration(
+    page: () => Option[(Int, Int)],
+    qen: QueryExpressionElements,
+    sw: StatementWriter) = {
     page().foreach(p => {
       sw.write("offset ")
       sw.write(p._1.toString)
@@ -61,7 +64,7 @@ class DerbyAdapter extends DatabaseAdapter {
       sw.pushPendingNextLine
     })
   }
-  
+
   override def isTableDoesNotExistException(e: SQLException) =
     e.getSQLState == "42Y55"
 

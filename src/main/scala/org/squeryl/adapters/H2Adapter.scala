@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@ package org.squeryl.adapters
 
 import org.squeryl.Schema
 import java.sql.SQLException
-import org.squeryl.internals.{FieldMetaData, DatabaseAdapter}
+import org.squeryl.internals.{DatabaseAdapter, FieldMetaData}
 
 class H2Adapter extends DatabaseAdapter {
 
@@ -28,21 +28,21 @@ class H2Adapter extends DatabaseAdapter {
 
     var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)
 
-    for(d <- fmd.defaultValue) {
+    for (d <- fmd.defaultValue) {
       val v = convertToJdbcValue(d.value.asInstanceOf[AnyRef])
-      if(v.isInstanceOf[String])
+      if (v.isInstanceOf[String])
         res += " default '" + v + "'"
       else
-        res += " default " + v 
+        res += " default " + v
     }
-    
-    if(!fmd.isOption)
+
+    if (!fmd.isOption)
       res += " not null"
 
-    if(isPrimaryKey)
+    if (isPrimaryKey)
       res += " primary key"
 
-    if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
+    if (supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " auto_increment"
 
     res

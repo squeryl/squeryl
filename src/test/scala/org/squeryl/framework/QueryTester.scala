@@ -1,6 +1,6 @@
 package org.squeryl.framework
 
-import org.squeryl.{Session, Query}
+import org.squeryl.{Query, Session}
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest.Matchers
 
@@ -21,39 +21,39 @@ trait QueryTester extends Matchers {
   }
 
   def loggerOn =
-    Session.currentSession.setLogger((s:String) => println(s))
+    Session.currentSession.setLogger((s: String) => println(s))
 
-  def log(queryName: Symbol, query:Query[_]) = {
+  def log(queryName: Symbol, query: Query[_]) = {
 
     println(queryName + " :")
     println(query)
 
-    for(r <- query.asInstanceOf[Query[Any]])
+    for (r <- query.asInstanceOf[Query[Any]])
       println("-->" + r)
   }
 
-  def assertEquals[E](expected:E, actual:E, s:Symbol): Unit =
+  def assertEquals[E](expected: E, actual: E, s: Symbol): Unit =
     assertEquals(expected, actual, s.toString)
 
-  def assertEquals[E](expected:E, actual:E, msg:String): Unit = {
+  def assertEquals[E](expected: E, actual: E, msg: String): Unit = {
     actual should equal(expected)
   }
 
-  def validateQuery[R,S](name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
-    validateQuery[R,S](logQueries, name, q, mapFunc, expected)
+  def validateQuery[R, S](name: Symbol, q: Query[R], mapFunc: R => S, expected: List[S]): Unit =
+    validateQuery[R, S](logQueries, name, q, mapFunc, expected)
 
-  def validateQuery[R,S](logFirst: Boolean, name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit = {
+  def validateQuery[R, S](logFirst: Boolean, name: Symbol, q: Query[R], mapFunc: R => S, expected: List[S]): Unit = {
 
-    if(validateFirstAndExit >= 1)
+    if (validateFirstAndExit >= 1)
       return
 
 //    if(dumpAst)
 //      println(q.dumpAst)
 
-    if(logFirst || logQueries)
+    if (logFirst || logQueries)
       log(name, q)
 
-    if(doNotExecute)
+    if (doNotExecute)
       return
 
     val r = q.toList.map(mapFunc)
@@ -70,13 +70,11 @@ trait QueryTester extends Matchers {
 //      org.squeryl.internals.Utils.org.squeryl.internals.Utils.throwError(msg)
 //    }
 
-    if(validateFirstAndExit >= 0)
+    if (validateFirstAndExit >= 0)
       validateFirstAndExit += 1
   }
 
   def passed(s: Symbol) = {} //println(s )
 }
-
-
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")

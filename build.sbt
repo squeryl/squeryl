@@ -12,16 +12,17 @@ javacOptions := Seq("-source", "1.6", "-target", "1.6")
 version := {
   val v = version.value
   val release = Option(System.getProperty("release")) == Some("true")
-  if(release)
+  if (release)
     v
   else {
     val suffix = Option(System.getProperty("suffix"))
     val i = (v.indexOf('-'), v.length) match {
       case (x, l) if x < 0 => l
-      case (x, l) if v substring (x+1) matches """\d+""" => l //patch level, not RCx
+      case (x, l) if v substring (x + 1) matches """\d+""" =>
+        l //patch level, not RCx
       case (x, _) => x
     }
-    v.substring(0,i) + "-" + (suffix getOrElse "SNAPSHOT")
+    v.substring(0, i) + "-" + (suffix getOrElse "SNAPSHOT")
   }
 }
 
@@ -43,14 +44,15 @@ scalacOptions in (Compile, doc) ++= {
 
 scalacOptions ++= {
   Seq("-unchecked", "-deprecation", "-Xfuture") ++ (
-  if(scalaVersion.value.startsWith("2.11"))
-    Seq("-feature",
-    "-language:implicitConversions",
-    "-language:postfixOps",
-    "-language:reflectiveCalls",
-    "-language:existentials")
-  else
-    Nil
+    if (scalaVersion.value.startsWith("2.11"))
+      Seq(
+        "-feature",
+        "-language:implicitConversions",
+        "-language:postfixOps",
+        "-language:reflectiveCalls",
+        "-language:existentials")
+    else
+      Nil
   )
 }
 
@@ -59,13 +61,14 @@ val unusedWarnings = Seq(
   "-Ywarn-unused-import"
 )
 
-scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
-  case Some((2, v)) if v >= 11 => unusedWarnings
-}.toList.flatten
+scalacOptions ++= PartialFunction
+  .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
+    case Some((2, v)) if v >= 11 => unusedWarnings
+  }
+  .toList
+  .flatten
 
-Seq(Compile, Test).flatMap(c =>
-  scalacOptions in (c, console) --= unusedWarnings
-)
+Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings)
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
@@ -91,11 +94,7 @@ pomExtra := (<scm>
 credentials ~= { c =>
   (Option(System.getenv().get("SONATYPE_USERNAME")), Option(System.getenv().get("SONATYPE_PASSWORD"))) match {
     case (Some(username), Some(password)) =>
-      c :+ Credentials(
-        "Sonatype Nexus Repository Manager",
-        "oss.sonatype.org",
-        username,
-        password)
+      c :+ Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)
     case _ => c
   }
 }
@@ -110,7 +109,9 @@ publishTo := {
 
 publishArtifact in Test := false
 
-pomIncludeRepository := { _ => false }
+pomIncludeRepository := { _ =>
+  false
+}
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.2.5",

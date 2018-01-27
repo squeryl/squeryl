@@ -1,16 +1,15 @@
 package org.squeryl.postgres
 
-
 import org.squeryl.test._
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.PostgreSqlAdapter
 import org.squeryl.Session
 import org.squeryl.test.arrays.PrimitiveArrayTest
 
-trait Postgresql_Connection extends DBConnector{
-  
-  def sessionCreator() : Option[() => Session] = {
-    if(config.hasProps("postgresql.connectionString", "postgresql.user", "postgresql.password")){
+trait Postgresql_Connection extends DBConnector {
+
+  def sessionCreator(): Option[() => Session] = {
+    if (config.hasProps("postgresql.connectionString", "postgresql.user", "postgresql.password")) {
       Class.forName("org.postgresql.Driver")
 
       Some(() => {
@@ -22,7 +21,7 @@ trait Postgresql_Connection extends DBConnector{
         c.setAutoCommit(false)
         Session.create(c, new PostgreSqlAdapter)
       })
-    }else{
+    } else {
       None
     }
   }
@@ -34,7 +33,7 @@ class Postgresql_NestedLeftOuterJoinTest extends NestedLeftOuterJoinTest with Po
 class Postgresql_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Postgresql_Connection
 class Postgresql_TransactionTests extends TransactionTests with Postgresql_Connection
 class Postgresql_SchoolDb2 extends schooldb2.SchoolDb2Tests with Postgresql_Connection
-class Postgresql_SchoolDb extends schooldb.SchoolDbTestRun with Postgresql_Connection{
+class Postgresql_SchoolDb extends schooldb.SchoolDbTestRun with Postgresql_Connection {
   override val ignoredTests = List("blobTest", "OuterJoinMixed1", "assertColumnNameChangeWithDeclareSyntax")
 }
 //class Postgresql_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Postgresql_Connection
@@ -47,6 +46,4 @@ class Postgresql_ConnectionClosing extends ConnectionClosingTest with Postgresql
 
 class Postgresql_CommonTableExpressions extends schooldb.CommonTableExpressions with Postgresql_Connection
 
-
 class Postgresql_LogicalBooleanObjTests extends LogicalBooleanObjTests with Postgresql_Connection
-

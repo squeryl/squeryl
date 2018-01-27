@@ -1,6 +1,6 @@
 package org.squeryl.framework
 
-import org.squeryl.{SessionFactory, Schema}
+import org.squeryl.{Schema, SessionFactory}
 
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest._
@@ -8,7 +8,7 @@ import org.scalatest._
 abstract class SchemaTester extends DbTestBase {
   self: DBConnector =>
 
-  def schema : Schema
+  def schema: Schema
 
   def prePopulate() = {}
 
@@ -20,10 +20,10 @@ abstract class SchemaTester extends DbTestBase {
       transaction {
         schema.drop
         schema.create
-        try{
+        try {
           prePopulate
-        }catch{
-          case e : Exception =>
+        } catch {
+          case e: Exception =>
             println(e.getMessage)
             println(e.getStackTrace)
         }
@@ -48,22 +48,20 @@ abstract class DbTestBase extends FunSuite with BeforeAndAfterAll with BeforeAnd
   def isIgnored(testName: String) =
     sessionCreator().isEmpty || ignoredTests.exists(_ == testName)
 
-
-  def ignoredTests : List[String] = Nil
+  def ignoredTests: List[String] = Nil
 
   override def beforeAll() = {
     val c = sessionCreator()
-    if(c.isDefined) {
+    if (c.isDefined) {
       SessionFactory.concreteFactory = c
     }
   }
 
-  override protected def runTest(testName: String,args: org.scalatest.Args): org.scalatest.Status = {
-    if(isIgnored(testName))
+  override protected def runTest(testName: String, args: org.scalatest.Args): org.scalatest.Status = {
+    if (isIgnored(testName))
       org.scalatest.SucceededStatus
     else
       super.runTest(testName, args)
   }
 
 }
-

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,42 +19,39 @@ import java.sql.ResultSet
 import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.SelectElement
 
-
-
 trait ResultSetUtils {
 
-  def dumpRow(rs:ResultSet) = {
+  def dumpRow(rs: ResultSet) = {
     val md = rs.getMetaData
-   (for(i <- 1 to md.getColumnCount)
-      yield "#" + i + "->"+rs.getObject(i)+":"+_simpleClassName(md.getColumnClassName(i)))
-    .mkString("ResultSetRow:[",",","]")
+    (for (i <- 1 to md.getColumnCount)
+      yield "#" + i + "->" + rs.getObject(i) + ":" + _simpleClassName(md.getColumnClassName(i)))
+      .mkString("ResultSetRow:[", ",", "]")
   }
 
   private def _simpleClassName(className: String) = {
     val idx = className.lastIndexOf(".")
-    if(idx < 0)
+    if (idx < 0)
       className
     else
       className.substring(idx + 1, className.length)
   }
 
-  def dumpRowValues(rs:ResultSet) = {
+  def dumpRowValues(rs: ResultSet) = {
     val md = rs.getMetaData
-   (for(i <- 1 to md.getColumnCount)
-      yield ""+rs.getObject(i)).mkString("[",",","]")
-  }  
+    (for (i <- 1 to md.getColumnCount)
+      yield "" + rs.getObject(i)).mkString("[", ",", "]")
+  }
 }
 
 object ResultSetUtils extends ResultSetUtils
-
 
 trait OutMapper[T] extends ResultSetUtils {
 
   override def toString =
     Utils.failSafeString(
       "$OM(" + index + "," +
-      jdbcClass.getSimpleName + ")" +
-      (if(isActive) "*" else "")
+        jdbcClass.getSimpleName + ")" +
+        (if (isActive) "*" else "")
     )
 
   var index: Int = -1
@@ -63,22 +60,21 @@ trait OutMapper[T] extends ResultSetUtils {
 
   def jdbcClass =
     sample match {
-      case Some(x:AnyRef) => x.getClass
-      case x:AnyRef  => x.getClass
+      case Some(x: AnyRef) => x.getClass
+      case x: AnyRef => x.getClass
     }
 
   def map(rs: ResultSet): T =
-    if(isActive)
+    if (isActive)
       try {
         doMap(rs)
-      }
-      catch {
-        case e:Exception => throw new RuntimeException(
-            "Exception while mapping column with OutMapper:\n" + this + 
-            "\nand resultSet :\n" + Utils.failSafeString(dumpRow(rs)), 
+      } catch {
+        case e: Exception =>
+          throw new RuntimeException(
+            "Exception while mapping column with OutMapper:\n" + this +
+              "\nand resultSet :\n" + Utils.failSafeString(dumpRow(rs)),
             e)
-      }
-    else
+      } else
       sample
 
   def isNull(rs: ResultSet) =
@@ -98,17 +94,17 @@ object NoOpOutMapper extends OutMapper[Any] {
 
   def sample = throw new UnsupportedOperationException(" cannot use NoOpOutMapper")
 
-  override def typeOfExpressionToString = "NoOpOutMapper"  
+  override def typeOfExpressionToString = "NoOpOutMapper"
 }
 
-class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, selectElement: SelectElement)  {
+class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, selectElement: SelectElement) {
 
-  if(index <= 0)
+  if (index <= 0)
     org.squeryl.internals.Utils.throwError("invalid Jdbc index " + index)
 
   def map(obj: AnyRef, rs: ResultSet): Unit = {
 
-    if(selectElement.isActive) {
+    if (selectElement.isActive) {
       fieldMetaData.setFromResultSet(obj, rs, index)
     }
   }
@@ -119,7 +115,7 @@ class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, sele
 
 class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
 
-  override def toString = outMappers.mkString("(",",",")") 
+  override def toString = outMappers.mkString("(", ",", ")")
 
   def typeOfExpressionToString(idx: Int) = outMappers.apply(idx).typeOfExpressionToString
 
@@ -131,8 +127,8 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
 
   def isActive(i: Int) = outMappers.apply(i).isActive
 
-  def isNull(i:Int, rs: ResultSet) = outMappers.apply(i).isNull(rs)
-  
+  def isNull(i: Int, rs: ResultSet) = outMappers.apply(i).isNull(rs)
+
   def mapToTuple[T](rs: ResultSet): T = {
     val size = outMappers.size
     val m = outMappers
@@ -144,30 +140,262 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
       case 5 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs))
       case 6 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs))
       case 7 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs))
-      case 8 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs))
-      case 9 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs))
-      case 10 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs))
-      case 11 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs))
-      case 12 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs))
-      case 13 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs))
-      case 14 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs))
-      case 15 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs))
-      case 16 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs))
-      case 17 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs))
-      case 18 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs))
-      case 19 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs))
-      case 20 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs))
-      case 21 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs))
-      case 22 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs), m(21).map(rs))
+      case 8 =>
+        (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs))
+      case 9 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs))
+      case 10 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs))
+      case 11 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs))
+      case 12 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs))
+      case 13 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs))
+      case 14 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs))
+      case 15 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs))
+      case 16 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs))
+      case 17 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs),
+          m(16).map(rs))
+      case 18 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs),
+          m(16).map(rs),
+          m(17).map(rs))
+      case 19 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs),
+          m(16).map(rs),
+          m(17).map(rs),
+          m(18).map(rs))
+      case 20 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs),
+          m(16).map(rs),
+          m(17).map(rs),
+          m(18).map(rs),
+          m(19).map(rs))
+      case 21 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs),
+          m(16).map(rs),
+          m(17).map(rs),
+          m(18).map(rs),
+          m(19).map(rs),
+          m(20).map(rs))
+      case 22 =>
+        (
+          m(0).map(rs),
+          m(1).map(rs),
+          m(2).map(rs),
+          m(3).map(rs),
+          m(4).map(rs),
+          m(5).map(rs),
+          m(6).map(rs),
+          m(7).map(rs),
+          m(8).map(rs),
+          m(9).map(rs),
+          m(10).map(rs),
+          m(11).map(rs),
+          m(12).map(rs),
+          m(13).map(rs),
+          m(14).map(rs),
+          m(15).map(rs),
+          m(16).map(rs),
+          m(17).map(rs),
+          m(18).map(rs),
+          m(19).map(rs),
+          m(20).map(rs),
+          m(21).map(rs))
 
-      case z:Any => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
+      case z: Any => org.squeryl.internals.Utils.throwError("tuples of size " + size + " and greater are not supported")
     }
-    
+
     res.asInstanceOf[T]
   }
 }
 
-class ResultSetMapper extends ResultSetUtils {  
+class ResultSetMapper extends ResultSetUtils {
 
   private val _yieldValuePushers = new ArrayBuffer[YieldValuePusher]
 
@@ -176,7 +404,7 @@ class ResultSetMapper extends ResultSetUtils {
   var groupKeysMapper: Option[ColumnToTupleMapper] = None
 
   var groupMeasuresMapper: Option[ColumnToTupleMapper] = None
-  
+
 //  val createTrace = {
 //    new Exception().getStackTrace.map(s=>s.toString).mkString("\n")
 //  }
@@ -185,11 +413,10 @@ class ResultSetMapper extends ResultSetUtils {
 
   override def toString =
     'ResultSetMapper + ":" + Integer.toHexString(System.identityHashCode(this)) +
-     _fieldMapper.mkString("(",",",")") +
-    "-" + groupKeysMapper.getOrElse("") +
-    "-" + groupMeasuresMapper.getOrElse("") +
-    (if(isActive) "*" else "")
-
+      _fieldMapper.mkString("(", ",", ")") +
+      "-" + groupKeysMapper.getOrElse("") +
+      "-" + groupMeasuresMapper.getOrElse("") +
+      (if (isActive) "*" else "")
 
   def addColumnMapper(cm: ColumnToFieldMapper) =
     _fieldMapper.append(cm)
@@ -197,12 +424,12 @@ class ResultSetMapper extends ResultSetUtils {
   def addYieldValuePusher(yvp: YieldValuePusher) =
     _yieldValuePushers.append(yvp)
 
-  def pushYieldedValues(resultSet: ResultSet):Unit = {
+  def pushYieldedValues(resultSet: ResultSet): Unit = {
 
-    if(!isActive)
+    if (!isActive)
       return
 
-    for(yvp <- _yieldValuePushers)
+    for (yvp <- _yieldValuePushers)
       yvp.push(resultSet)
   }
 
@@ -213,22 +440,22 @@ class ResultSetMapper extends ResultSetUtils {
 
     //decide based on the nullity of the first non Option field :
 
-    if(_firstNonOption != None) {
+    if (_firstNonOption != None) {
       return rs.getObject(_firstNonOption.get.index) == null
     }
 
-    //if we get here all fields are optional, decide on the first Option that is not null :    
-    for(c2fm <- _fieldMapper) {
+    //if we get here all fields are optional, decide on the first Option that is not null :
+    for (c2fm <- _fieldMapper) {
       assert(c2fm.fieldMetaData.isOption)
-      if(rs.getObject(c2fm.index) != null)
+      if (rs.getObject(c2fm.index) != null)
         return false
     }
 
     //outMappers
-    for(col2TupleMapper <- List(groupKeysMapper, groupMeasuresMapper).filter(_ != None).map(_.get);
-        outMapper <- col2TupleMapper.outMappers) {
+    for (col2TupleMapper <- List(groupKeysMapper, groupMeasuresMapper).filter(_ != None).map(_.get);
+      outMapper <- col2TupleMapper.outMappers) {
 
-      if(outMapper.isActive && rs.getObject(outMapper.index) != null)
+      if (outMapper.isActive && rs.getObject(outMapper.index) != null)
         return false
     }
 
@@ -238,39 +465,36 @@ class ResultSetMapper extends ResultSetUtils {
     true
   }
 
-  def map(o: AnyRef, resultSet: ResultSet):Unit = {
+  def map(o: AnyRef, resultSet: ResultSet): Unit = {
 
-    if(!isActive)
+    if (!isActive)
       return
 
     try {
-      for(fm <- _fieldMapper)
-        fm.map(o, resultSet)      
-    }
-    catch {
-      case e:Exception=> {
+      for (fm <- _fieldMapper)
+        fm.map(o, resultSet)
+    } catch {
+      case e: Exception => {
         throw new RuntimeException("could not map row :\n" + dumpRow(resultSet) + "\n with mapper :\n" + this, e)
       }
     }
   }
 }
 
-class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper: OutMapper[_])  {
-
+class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper: OutMapper[_]) {
 
   mapper.index = index
   mapper.isActive = true
 
   def push(rs: ResultSet) = {
 
-    if(selectElement.isActive) {
+    if (selectElement.isActive) {
       val v = mapper.map(rs)
       FieldReferenceLinker.pushYieldValue(v.asInstanceOf[AnyRef])
     }
   }
 
-
   override def toString =
-    "$(" + index + "->&("+selectElement.writeToString+")" +
-    (if(mapper.isActive) "*" else "")
+    "$(" + index + "->&(" + selectElement.writeToString + ")" +
+      (if (mapper.isActive) "*" else "")
 }

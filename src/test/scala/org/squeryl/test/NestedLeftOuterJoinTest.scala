@@ -21,25 +21,25 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
   def schema = TestSchema
 
   def testInnerJoin() = {
-    val q0 = from(TestSchema.b)( b => select(b) )
+    val q0 = from(TestSchema.b)(b => select(b))
 
-    val q1 = from(TestSchema.a, q0) ( (a, b) =>
-      where(a.id === b.aId)
-      select(a, b)
-    )
+    val q1 = from(TestSchema.a, q0)(
+      (a, b) =>
+        where(a.id === b.aId)
+          select (a, b))
 
     checkJoinQuery(q1)
 
     val q2 =
-      join(TestSchema.a, q0) ( (a, b) =>
-        select(a, b)
-          on(a.id === b.aId)
-      )
+      join(TestSchema.a, q0)(
+        (a, b) =>
+          select(a, b)
+            on (a.id === b.aId))
 
     checkJoinQuery(q2)
   }
 
-  test("InnerJoin"){
+  test("InnerJoin") {
 
     TestSchema.a.insert(new A(1, "a one"))
 
@@ -47,20 +47,19 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
 
     testInnerJoin
 
+    val q0 = from(TestSchema.b)(b => select(b))
 
-    val q0 = from(TestSchema.b)( b => select(b) )
-
-    val q1 = from(TestSchema.a, q0) ( (a, b) =>
-      where(a.id === b.aId)
-      select(a, b)
-    )
+    val q1 = from(TestSchema.a, q0)(
+      (a, b) =>
+        where(a.id === b.aId)
+          select (a, b))
 
     checkJoinQuery(q1)
 
-    val aQuery = join(TestSchema.a, q0.leftOuter) ( (a, b) =>
-      select(a, b)
-        on(a.id === b.map(_.aId))
-    )
+    val aQuery = join(TestSchema.a, q0.leftOuter)(
+      (a, b) =>
+        select(a, b)
+          on (a.id === b.map(_.aId)))
 
     checkLeftJoinQuery(aQuery)
   }
@@ -69,13 +68,12 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
     q.headOption.map { (result) =>
       val (_, b) = result
 
-      b should not equal(None)
+      b should not equal (None)
     }
   }
 
   def checkJoinQuery(q: Query[(A, B)]) = {
-    q.headOption should not equal(None)
+    q.headOption should not equal (None)
   }
-
 
 }

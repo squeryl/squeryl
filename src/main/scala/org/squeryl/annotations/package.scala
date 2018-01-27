@@ -18,6 +18,7 @@ package org.squeryl
 import annotation.meta.field
 
 package object annotations {
+
   /**
    * The preferred way to define column metadata is not not define them (!)
    * Squeryl has default mappings for all Java primitive types.
