@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@ package org.squeryl.adapters
 
 import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.internals.{DatabaseAdapter, StatementWriter}
 import org.squeryl.dsl.ast.ExpressionNode
 import org.squeryl.internals.ConstantStatementParam
 import org.squeryl.InternalFieldMapper
@@ -31,10 +31,12 @@ class MySQLAdapter extends DatabaseAdapter {
   override def binaryTypeDeclaration = "blob"
 
   override def timestampTypeDeclaration = "datetime"
-  
+
   override def writeForeignKeyDeclaration(
-    foreignKeyTable: Table[_], foreignKeyColumnName: String,
-    primaryKeyTable: Table[_], primaryKeyColumnName: String,
+    foreignKeyTable: Table[_],
+    foreignKeyColumnName: String,
+    primaryKeyTable: Table[_],
+    primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
     referentialAction2: Option[ReferentialAction],
     fkId: Int) = {
@@ -52,8 +54,8 @@ class MySQLAdapter extends DatabaseAdapter {
     sb.append("(")
     sb.append(primaryKeyColumnName)
     sb.append(")")
-    
-    val f =  (ra:ReferentialAction) => {
+
+    val f = (ra: ReferentialAction) => {
       sb.append(" on ")
       sb.append(ra.event)
       sb.append(" ")
@@ -70,7 +72,7 @@ class MySQLAdapter extends DatabaseAdapter {
     "alter table " + foreignKeyTable.prefixedName + " drop foreign key " + fkName
 
   override def isTableDoesNotExistException(e: SQLException) =
-    e.getErrorCode == 1051 
+    e.getErrorCode == 1051
 
   /**
    *
@@ -90,19 +92,18 @@ class MySQLAdapter extends DatabaseAdapter {
    *  foreign key (courseId) references Course(id)	Error Code: 1005
    *  Can't create table 'test.#sql-57c_42' (errno: 150)
    *
-   * 
+   *
    *  http://bytes.com/topic/mysql/answers/865699-cant-create-table-errno-150-foreign-key-constraints
    *
-   * 
+   *
    */
-
   override def supportsForeignKeyConstraints = false
 
   override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
-    sw.write(" regexp ?)")    
-    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))    
+    sw.write(" regexp ?)")
+    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))
   }
 
   override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {

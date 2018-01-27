@@ -19,21 +19,18 @@ import org.squeryl.Session
 import org.squeryl.adapters.H2Adapter
 import org.squeryl.logging.StatsSchemaTypeMode._
 
-
 object UsageProfileConsolidator {
 
-  def main(args : Array[String]) : Unit =
-    if(args.length < 2) {
+  def main(args: Array[String]): Unit =
+    if (args.length < 2) {
       printUsage
-    }
-    else {
+    } else {
 
       val (dst, src) = args.map(new java.io.File(_)).splitAt(1)
 
       val notExists = src.filterNot(_.exists)
-      if(notExists.size > 0)
+      if (notExists.size > 0)
         org.squeryl.internals.Utils.throwError("Files don't exist : \n" + notExists.mkString(",\n"))
-
 
       Class.forName("org.h2.Driver");
 
@@ -42,7 +39,7 @@ object UsageProfileConsolidator {
         new H2Adapter)
 
       using(dstDb) {
-        for(src_i <- src) {
+        for (src_i <- src) {
 
           val srcDb_i = new Session(
             java.sql.DriverManager.getConnection("jdbc:h2:" + src_i.getAbsolutePath, "sa", ""),
@@ -62,9 +59,9 @@ object UsageProfileConsolidator {
       }
     }
 
-
   def printUsage = {
     println("Usage : ")
-    println("java org.squeryl.logging.UsageProfileConsolidator <h2FileForConsolidatedStatsProfile> <list of h2 files to consolidate>")
+    println(
+      "java org.squeryl.logging.UsageProfileConsolidator <h2FileForConsolidatedStatsProfile> <list of h2 files to consolidate>")
   }
 }

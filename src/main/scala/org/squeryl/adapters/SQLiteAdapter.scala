@@ -31,21 +31,21 @@ class SQLiteAdapter extends DatabaseAdapter {
 
     var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)
 
-    for(d <- fmd.defaultValue) {
+    for (d <- fmd.defaultValue) {
       val v = convertToJdbcValue(d.value.asInstanceOf[AnyRef])
-      if(v.isInstanceOf[String])
+      if (v.isInstanceOf[String])
         res += " default '" + v + "'"
       else
-        res += " default " + v 
+        res += " default " + v
     }
-    
-    if(!fmd.isOption)
+
+    if (!fmd.isOption)
       res += " not null"
 
-    if(isPrimaryKey)
+    if (isPrimaryKey)
       res += " primary key"
 
-    if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
+    if (supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " autoincrement"
 
     res
@@ -89,7 +89,6 @@ class SQLiteAdapter extends DatabaseAdapter {
     }) getOrElse Seq.empty[FieldMetaData]
   }
 
-
   override def intTypeDeclaration: String = "INTEGER"
 
   override def longTypeDeclaration = "INTEGER"
@@ -107,7 +106,7 @@ class SQLiteAdapter extends DatabaseAdapter {
   override def supportsCommonTableExpressions = false
 
   override def writeEndOfQueryHint(isForUpdate: () => Boolean, qen: QueryExpressionElements, sw: StatementWriter) =
-    if(isForUpdate()) {
+    if (isForUpdate()) {
       sw.pushPendingNextLine
     }
 

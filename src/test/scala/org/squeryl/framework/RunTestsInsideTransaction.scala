@@ -6,9 +6,9 @@ import org.squeryl.Session
 trait RunTestsInsideTransaction extends DbTestBase {
   self: DBConnector =>
 
-  override protected def runTest(testName: String,args: org.scalatest.Args): org.scalatest.Status = {
+  override protected def runTest(testName: String, args: org.scalatest.Args): org.scalatest.Status = {
 
-    if(isIgnored(testName))
+    if (isIgnored(testName))
       super.runTest(testName, args)
     else {
       // each test occur from within a transaction, that way when the test completes _all_ changes
@@ -24,4 +24,3 @@ trait RunTestsInsideTransaction extends DbTestBase {
   }
 
 }
-

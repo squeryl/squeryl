@@ -8,9 +8,9 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 class NamingConventionTransformsTest extends FunSuite with Matchers {
 
   object FooSchema extends Schema
-  
+
   def snakify(name: String) = FooSchema.NamingConventionTransforms.snakify(name)
-  
+
   test("replace CamelCase with underscore") {
     assert(snakify("MyTableName") == "my_table_name")
     assert(snakify("TableName") == "table_name")
@@ -36,7 +36,7 @@ class NamingConventionTransformsTest extends FunSuite with Matchers {
     assert(snakify("Editor2TOC") == "editor2_toc")
     assert(snakify("HTML5Editor2TOC") == "html5_editor2_toc")
   }
-  
+
   test("prepend underscore if it starts with a number") {
     assert(snakify("12MyTableName") == "_12_my_table_name")
     assert(snakify("12TableName") == "_12_table_name")

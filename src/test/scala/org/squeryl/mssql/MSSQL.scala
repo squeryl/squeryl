@@ -5,9 +5,9 @@ import org.squeryl.adapters.MSSQLServer
 import org.squeryl.framework.DBConnector
 import org.squeryl.Session
 
-trait MSSQL_Connection extends DBConnector{
-  def sessionCreator() : Option[() => Session] = {
-    if(config.hasProps("mssql.connectionString")) {
+trait MSSQL_Connection extends DBConnector {
+  def sessionCreator(): Option[() => Session] = {
+    if (config.hasProps("mssql.connectionString")) {
       Class.forName("net.sourceforge.jtds.jdbc.Driver")
 
       Some(() => {
@@ -17,7 +17,7 @@ trait MSSQL_Connection extends DBConnector{
         c.setAutoCommit(false)
         Session.create(c, new MSSQLServer)
       })
-    }else{
+    } else {
       None
     }
   }

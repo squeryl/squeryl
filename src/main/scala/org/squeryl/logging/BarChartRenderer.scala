@@ -6,41 +6,45 @@ import org.squeryl.InternalFieldMapper._
 
 object BarChartRenderer {
 
-  class Stat(val title: String, val xAxisLabel: String, val lines: Iterable[StatLine], measureFromLike: StatLine => String) {
+  class Stat(
+    val title: String,
+    val xAxisLabel: String,
+    val lines: Iterable[StatLine],
+    measureFromLike: StatLine => String) {
 
     def queryLabelsJSArray =
-      lines.map(sl => "'" + sl.statement.definitionOrCallSite + "'").mkString("[",",","]")
+      lines.map(sl => "'" + sl.statement.definitionOrCallSite + "'").mkString("[", ",", "]")
 
     def measuresJSArray =
-      lines.map(measureFromLike(_)).mkString("[",",","]")
+      lines.map(measureFromLike(_)).mkString("[", ",", "]")
   }
 
   def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = {
 
-
-
     val page =
       BarChartRenderer.page(
         new Stat(
-          "Top "+n+" statements with longest avg",
+          "Top " + n + " statements with longest avg",
           "avg time",
           StatsSchema.topRankingStatements(n, Measure.AvgExecTime),
           sl => sl.avgExecTime.toString),
         new Stat(
-          "Top "+n+" most called statements",
+          "Top " + n + " most called statements",
           "invocation count",
           StatsSchema.topRankingStatements(n, Measure.InvocationCount),
           sl => sl.invocationCount.toString),
         new Stat(
-          "Top "+n+" statements incurring most cummulative execution time",
+          "Top " + n + " statements incurring most cummulative execution time",
           "cummulative execution time",
           StatsSchema.topRankingStatements(n, Measure.CumulativeExecutionTime),
-          sl => sl.cumulativeExecutionTime.toString),
+          sl => sl.cumulativeExecutionTime.toString
+        ),
         new Stat(
-          "Top "+n+" statements with highest avg row count",
+          "Top " + n + " statements with highest avg row count",
           "avg row count",
           StatsSchema.topRankingStatements(n, Measure.AvgResultSetSize),
-          sl => sl.avgRowCount.toString)
+          sl => sl.avgRowCount.toString
+        )
       )
 
     val ps = new PrintStream(new FileOutputStream(staticHtmlFile))
@@ -77,7 +81,7 @@ object BarChartRenderer {
   def funcCalls(stats: Seq[Stat]) = {
     val sb = new java.lang.StringBuilder
     var i = 0
-    for(s <- stats) {
+    for (s <- stats) {
       i += 1
       sb.append("drawBarGraph('chart")
       sb.append(i)
@@ -92,8 +96,7 @@ object BarChartRenderer {
       sb.append(");\n")
     }
     sb.toString
-   }
-
+  }
 
   def page(stats: Stat*) = """
     <html xmlns="http://www.w3.org/1999/xhtml">

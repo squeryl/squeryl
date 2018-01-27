@@ -2,13 +2,13 @@ package org.squeryl.test.demo
 
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@ package org.squeryl.test.demo
  * limitations under the License.
  ***************************************************************************** */
 import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.squeryl.{Query, KeyedEntity, Schema}
+import org.squeryl.{KeyedEntity, Query, Schema}
 import org.squeryl.dsl.GroupWithMeasures
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 
@@ -26,10 +26,10 @@ class MusicDbObject extends KeyedEntity[Long] {
   val id: Long = 0
 }
 
-case class Artist(val name:String) extends MusicDbObject {
+case class Artist(val name: String) extends MusicDbObject {
 
   // this returns a Query[Song] which is also an Iterable[Song] :
-  def songs = from(MusicDb.songs)(s => where(s.artistId === id) select(s))
+  def songs = from(MusicDb.songs)(s => where(s.artistId === id) select (s))
 
   def newSong(title: String, filePath: Option[String], year: Int) =
     MusicDb.songs.insert(new Song(title, id, filePath, year))
@@ -43,11 +43,11 @@ class Song(val title: String, val artistId: Long, val filePath: Option[String], 
   // constructor where every Option[T] member gets initialized with Some(t:T).
   // or else Squeryl will not be able to reflect the type of the field, and an exception will
   // be thrown at table instantiation time.
-  def this() = this("", 0, Some(""),0)
+  def this() = this("", 0, Some(""), 0)
 
   // the schema can be imported in the scope, to lighten the syntax :
   import MusicDb._
-  
+
   // An alternative (shorter) syntax for single table queries :
   def artist = artists.where(a => a.id === artistId).single
 
@@ -61,13 +61,13 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
 
   import MusicDb._
 
-  // a two table join : 
+  // a two table join :
   def songsInPlaylistOrder =
-    from(playlistElements, songs)((ple, s) =>
-      where(ple.playlistId === id and ple.songId === s.id)
-      select(s)
-      orderBy(ple.songNumber asc)
-    )
+    from(playlistElements, songs)(
+      (ple, s) =>
+        where(ple.playlistId === id and ple.songId === s.id)
+          select (s)
+          orderBy (ple.songNumber asc))
 
   def addSong(s: Song) = {
 
@@ -76,11 +76,11 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     // The nvl function in this example changed the return type to Int, from
     // Option[Int], since the 'max' function (like all aggregates, 'count' being the only exception).
     val nextSongNumber: Int =
-      from(playlistElements)(ple =>
-        where(ple.playlistId === id)
-        compute(nvl(max(ple.songNumber), 0))
-      )    
-    
+      from(playlistElements)(
+        ple =>
+          where(ple.playlistId === id)
+            compute (nvl(max(ple.songNumber), 0)))
+
     playlistElements.insert(new PlaylistElement(nextSongNumber, id, s.id))
   }
 
@@ -88,50 +88,47 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     playlistElements.deleteWhere(ple => ple.songId === song.id)
 
   def removeSongOfArtist(artist: Artist) =
-    playlistElements.deleteWhere(ple =>
-      (ple.playlistId === id) and
-      (ple.songId in from(songsOf(artist.id))(s => select(s.id)))
-    )
+    playlistElements.deleteWhere(
+      ple =>
+        (ple.playlistId === id) and
+          (ple.songId in from(songsOf(artist.id))(s => select(s.id))))
 
   // New concept : a group query with aggregate functions return GroupWithMeasures[K,M]
   // where K and M are tuples whose members correspond to the group by list and compute list
   // respectively.
-  def _songCountByArtistId: Query[GroupWithMeasures[Long,Long]] =
-    from(artists, songs)((a,s) =>
-      where(a.id === s.artistId)
-      groupBy(a.id)
-      compute(count)
-    )
+  def _songCountByArtistId: Query[GroupWithMeasures[Long, Long]] =
+    from(artists, songs)(
+      (a, s) =>
+        where(a.id === s.artistId)
+          groupBy (a.id)
+          compute (count))
 
   // Queries are nestable just as they would in SQL
-  def songCountForAllArtists  =
-    from(_songCountByArtistId, artists)((sca,a) =>
-      where(sca.key === a.id)
-      select((a, sca.measures))
-    )
+  def songCountForAllArtists =
+    from(_songCountByArtistId, artists)(
+      (sca, a) =>
+        where(sca.key === a.id)
+          select ((a, sca.measures)))
 
   // Unlike SQL, a function that returns a query can be nested
   // as if it were a query, notice the nesting of 'songsOf'
   // allowing DRY persistence layers as reuse is enhanced.
   def latestSongFrom(artistId: Long) =
-    from(songsOf(artistId))(s =>
-      select(s)
-      orderBy(s.id desc)
-    ).headOption
+    from(songsOf(artistId))(
+      s =>
+        select(s)
+          orderBy (s.id desc)).headOption
 
   def songsOf(artistId: Long) =
-    from(playlistElements, songs)((ple,s) =>
-      where(id === ple.playlistId and ple.songId === s.id and s.artistId === artistId)
-      select(s)
-    )
+    from(playlistElements, songs)(
+      (ple, s) =>
+        where(id === ple.playlistId and ple.songId === s.id and s.artistId === artistId)
+          select (s))
 }
-
 
 class PlaylistElement(var songNumber: Int, var playlistId: Long, var songId: Long)
 
-
 class Rating(var userId: Long, var appreciationScore: Int, var songId: Int)
-
 
 object MusicDb extends Schema {
 
@@ -145,7 +142,7 @@ object MusicDb extends Schema {
   override def drop = super.drop
 }
 
-class TestData{
+class TestData {
   import MusicDb._
 
   val herbyHancock = artists.insert(new Artist("Herby Hancock"))
@@ -156,7 +153,7 @@ class TestData{
   val watermelonMan = herbyHancock.newSong("Watermelon Man", None, 1962)
   val besameMama = mongoSantaMaria.newSong("Besame Mama", Some("c:/MyMusic/besameMama.flac"), 1998)
   val freedomSound = ponchoSanchez.newSong("Freedom Sound", None, 1997)
-  val funkifyYouLife = theMeters.newSong("Funkify Your Life", None,1969)
+  val funkifyYouLife = theMeters.newSong("Funkify Your Life", None, 1969)
   val goodOldFunkyMusic = theMeters.newSong("Good old Funky Music", None, 1968)
   val funkAndLatinJazz = playlists.insert(new Playlist("Funk and Latin Jazz", "c:/myPlayLists/funkAndLatinJazz"))
 }
@@ -168,12 +165,11 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
 
   import schema._
 
-  var sharedTestData : TestData = null
+  var sharedTestData: TestData = null
 
   override def prePopulate() = {
     sharedTestData = new TestData()
   }
-
 
   test("kick tires") {
     val testData = sharedTestData; import testData._
@@ -183,19 +179,19 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     funkAndLatinJazz.addSong(freedomSound)
 
     val decadeOf1960 = playlists.insert(new Playlist("1960s", "c:/myPlayLists/funkAndLatinJazz"))
-    
+
     decadeOf1960.addSong(watermelonMan)
     decadeOf1960.addSong(funkifyYouLife)
     decadeOf1960.addSong(goodOldFunkyMusic)
 
     //Session.currentSession.setLogger(m => println(m))
 
-    // Nesting a query in a where clause : 
+    // Nesting a query in a where clause :
     val songsFromThe60sInFunkAndLatinJazzPlaylist =
-      from(songs)(s=>
-        where(s.id in from(funkAndLatinJazz.songsInPlaylistOrder)(s2 => select(s2.id)))
-        select(s)
-      )
+      from(songs)(
+        s =>
+          where(s.id in from(funkAndLatinJazz.songsInPlaylistOrder)(s2 => select(s2.id)))
+            select (s))
 
     val songIds =
       songsFromThe60sInFunkAndLatinJazzPlaylist.map(_.id).toSet
@@ -203,39 +199,36 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     assert(songIds == funkAndLatinJazz.songsInPlaylistOrder.map(_.id).toSet)
 
     // Nesting in From clause :
-    from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
-      where(s.id === 123)
-      select(s)
-    )
-    
+    from(funkAndLatinJazz.songsInPlaylistOrder)(
+      s =>
+        where(s.id === 123)
+          select (s))
+
     // Left Outer Join :
-    join(songs, ratings.leftOuter)((s,r) =>
-      select((s, r))
-      on(s.id === r.map(_.songId))
-    )
+    join(songs, ratings.leftOuter)(
+      (s, r) =>
+        select((s, r))
+          on (s.id === r.map(_.songId)))
 
+    update(songs)(
+      s =>
+        where(s.title === "Watermelon Man")
+          set (s.title := "The Watermelon Man",
+          s.year := s.year plus 1))
 
-    update(songs)(s =>
-      where(s.title === "Watermelon Man")
-      set(s.title := "The Watermelon Man",
-          s.year  := s.year plus 1)
-    )
-
-    for(s <- funkAndLatinJazz.songsOf(herbyHancock.id))
+    for (s <- funkAndLatinJazz.songsOf(herbyHancock.id))
       println("herby " + s.title)
-    
+
     val c = funkAndLatinJazz.removeSongOfArtist(herbyHancock)
 
     assert(c == 1, "expected 1, got " + c + "playList.id:" + funkAndLatinJazz.id + ", artist.id:" + herbyHancock.id)
 
-
     funkAndLatinJazz._songCountByArtistId.toList
 
-    
     val q = funkAndLatinJazz.songCountForAllArtists
 
     //println(q.dumpAst)
-    
+
     q.toList
   }
 }

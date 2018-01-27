@@ -9,17 +9,17 @@ import org.squeryl.{AbstractSession, Session}
 import java.sql.Connection
 
 /*
- * To run on command line : 
- * 
+ * To run on command line :
+ *
  * org.scalatest.tools.Runner -s org.squeryl.h2.H2_SchoolDb -eNDXEHLOW
- * 
+ *
  * org.scalatest.tools.Runner -s org.squeryl.h2.H2_SchoolDb -eNDXEHLOW -n SingleTestRun
- * 
+ *
  * */
 
 trait H2_ConnectionCommon extends DBConnector {
-  def connectToDbCommon(sessionFunc: Connection => AbstractSession) : Option[() => AbstractSession] = {
-    if(config.hasProps("h2.connectionString", "h2.user", "h2.password")){
+  def connectToDbCommon(sessionFunc: Connection => AbstractSession): Option[() => AbstractSession] = {
+    if (config.hasProps("h2.connectionString", "h2.user", "h2.password")) {
       Class.forName("org.h2.Driver")
       Some(() => {
         val c = java.sql.DriverManager.getConnection(
@@ -29,19 +29,18 @@ trait H2_ConnectionCommon extends DBConnector {
         )
         sessionFunc(c)
       })
-    }else{
+    } else {
       None
     }
   }
 }
 
 trait H2_Connection extends DBConnector with H2_ConnectionCommon {
-  def sessionCreator() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
+  def sessionCreator(): Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
 }
 
-
 trait H2_LazyConnection extends DBConnector with H2_ConnectionCommon {
-  def sessionCreator() : Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
+  def sessionCreator(): Option[() => AbstractSession] = connectToDbCommon(Session.create(_, new H2Adapter))
 
 }
 
@@ -82,4 +81,3 @@ class H2_LazyConnectionClosing extends ConnectionClosingTest with H2_LazyConnect
   def dbSpecificSelectNow: String = "select now()"
 }
 class H2_LazyLogicalBooleanObjTests extends LogicalBooleanObjTests with H2_LazyConnection
-

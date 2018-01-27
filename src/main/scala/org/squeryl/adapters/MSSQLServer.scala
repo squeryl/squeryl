@@ -16,7 +16,7 @@
 package org.squeryl.adapters
 
 import java.sql.SQLException
-import org.squeryl.internals.{StatementWriter, FieldMetaData, DatabaseAdapter}
+import org.squeryl.internals.{DatabaseAdapter, FieldMetaData, StatementWriter}
 import org.squeryl.dsl.ast._
 import org.squeryl.{Schema}
 
@@ -26,14 +26,13 @@ class MSSQLServer extends DatabaseAdapter {
 
   override def intTypeDeclaration = "int"
   override def stringTypeDeclaration = "varchar"
-  override def stringTypeDeclaration(length:Int) = "varchar("+length+")"
+  override def stringTypeDeclaration(length: Int) = "varchar(" + length + ")"
   override def booleanTypeDeclaration = "bit"
   override def doubleTypeDeclaration = "float"
   override def longTypeDeclaration = "bigint"
   override def bigDecimalTypeDeclaration = "decimal"
-  override def bigDecimalTypeDeclaration(precision:Int, scale:Int) = "numeric(" + precision + "," + scale + ")"
+  override def bigDecimalTypeDeclaration(precision: Int, scale: Int) = "numeric(" + precision + "," + scale + ")"
   override def binaryTypeDeclaration = "varbinary(8000)"
-
 
   override def dateTypeDeclaration = "date"
   override def floatTypeDeclaration = "real"
@@ -44,13 +43,13 @@ class MSSQLServer extends DatabaseAdapter {
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
     var res = "  " + quoteIdentifier(fmd.columnName) + " " + databaseTypeFor(fmd)
-    if(!fmd.isOption)
+    if (!fmd.isOption)
       res += " not null"
 
-    if(isPrimaryKey)
+    if (isPrimaryKey)
       res += " primary key"
 
-    if(supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
+    if (supportsAutoIncrementInColumnDeclaration && fmd.isAutoIncremented)
       res += " IDENTITY(1,1)"
 
     res
@@ -62,11 +61,11 @@ class MSSQLServer extends DatabaseAdapter {
   override def writeEndOfQueryHint(isForUpdate: () => Boolean, qen: QueryExpressionElements, sw: StatementWriter) = {}
 
   override def writeEndOfFromHint(qen: QueryExpressionElements, sw: StatementWriter) =
-    if(qen.isForUpdate) {
+    if (qen.isForUpdate) {
       sw.write("with(updlock, rowlock)")
       sw.pushPendingNextLine
     }
-  
+
   override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
     sw.writeNodesWithSeparator(fn.args, " + ", false)
 
@@ -132,7 +131,7 @@ class MSSQLServer extends DatabaseAdapter {
 //    }
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-    if(qen.page == None)
+    if (qen.page == None)
       super.writeQuery(qen, sw)
     else {
       val page = qen.page.get
@@ -143,7 +142,10 @@ class MSSQLServer extends DatabaseAdapter {
         super.writeQuery(qen, sw, false, Some(" TOP " + (beginOffset + pageSize) + " "))
       }
     }
-  
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
+
+  override def writePaginatedQueryDeclaration(
+    page: () => Option[(Int, Int)],
+    qen: QueryExpressionElements,
+    sw: StatementWriter) = {}
   override def quoteIdentifier(s: String) = "[" + s + "]"
 }
