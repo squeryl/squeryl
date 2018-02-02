@@ -113,7 +113,7 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 libraryDependencies ++= Seq(
-  "cglib" % "cglib-nodep" % "3.2.5",
+  "cglib" % "cglib-nodep" % "3.2.6",
   "com.h2database" % "h2" % "1.4.196" % "provided",
   "mysql" % "mysql-connector-java" % "5.1.45" % "provided",
   "org.postgresql" % "postgresql" % "42.1.4.jre7" % "provided",
@@ -121,7 +121,7 @@ libraryDependencies ++= Seq(
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.21.0.1" % "test",
   "org.json4s" %% "json4s-scalap" % "3.5.3",
-  "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
 libraryDependencies ++= {
