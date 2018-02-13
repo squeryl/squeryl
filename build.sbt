@@ -33,7 +33,7 @@ val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7", "2.13.0-M2")
+crossScalaVersions := Seq("2.12.4", Scala211, "2.10.7", "2.13.0-M3")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
@@ -121,7 +121,7 @@ libraryDependencies ++= Seq(
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.21.0.1" % "test",
   "org.json4s" %% "json4s-scalap" % "3.5.3",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.5-M1" % "test"
 )
 
 libraryDependencies ++= {
