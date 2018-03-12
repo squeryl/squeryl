@@ -377,7 +377,7 @@ class ConstantTypedExpression[A1,T1](val value: A1, val nativeJdbcValue: AnyRef,
 class ConstantExpressionNodeList[T](val value: Traversable[T], mapper: OutMapper[_]) extends ExpressionNode {
 
   def isEmpty =
-    value == Nil
+    value.isEmpty
 
   def doWrite(sw: StatementWriter) =
     if(sw.isForDisplay)
