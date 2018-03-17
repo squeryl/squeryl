@@ -18,10 +18,13 @@ package org.squeryl
 import dsl._
 import ast._
 import internals._
-import reflect.{Manifest}
+
+import reflect.Manifest
 import java.sql.SQLException
 import java.io.PrintWriter
-import collection.mutable.{HashMap, HashSet, ArrayBuffer}
+import java.util.regex.Pattern
+
+import collection.mutable.{ArrayBuffer, HashMap, HashSet}
 import org.squeryl.internals.FieldMapper
 
 class Schema(implicit val fieldMapper: FieldMapper) {
@@ -90,9 +93,13 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     @deprecated("use snakify() instead as of 0.9.5beta","0.9.5")
     def camelCase2underScore(name: String) =
       name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
-      
-    def snakify(name: String) =
-      name.replaceAll("^([^A-Za-z_])", "_$1").replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase
+
+    private final val FIRST_PATTERN = Pattern.compile("^([^A-Za-z_])")
+    private final val SECOND_PATTERN = Pattern.compile("([A-Z]+)([A-Z][a-z])")
+    private final val THIRD_PATTERN = Pattern.compile("([a-z0-9])([A-Z])")
+
+    def snakify(name: String): String =
+      THIRD_PATTERN.matcher(SECOND_PATTERN.matcher(FIRST_PATTERN.matcher(name).replaceAll("_$1")).replaceAll("$1_$2")).replaceAll("$1_$2").toLowerCase
   }
 
   def columnNameFromPropertyName(propertyName: String) = propertyName
