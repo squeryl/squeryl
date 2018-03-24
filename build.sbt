@@ -41,18 +41,16 @@ scalacOptions in (Compile, doc) ++= {
   Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
 }
 
-scalacOptions ++= {
-  Seq("-unchecked", "-deprecation", "-Xfuture") ++ (
-  if(scalaVersion.value.startsWith("2.11"))
-    Seq("-feature",
-    "-language:implicitConversions",
-    "-language:postfixOps",
-    "-language:reflectiveCalls",
-    "-language:existentials")
-  else
-    Nil
-  )
-}
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-deprecation",
+  "-Xfuture",
+  "-feature",
+  "-language:implicitConversions",
+  "-language:postfixOps",
+  "-language:reflectiveCalls",
+  "-language:existentials"
+)
 
 val unusedWarnings = Seq(
   "-Ywarn-unused",
