@@ -15,13 +15,13 @@
  ***************************************************************************** */
 package org.squeryl.adapters
 
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.{Session, Table}
 import java.sql.SQLException
 import org.squeryl.dsl.ast._
 
-class DB2Adapter extends DatabaseAdapter {
+class DB2Adapter extends GenericAdapter {
 
   override def booleanTypeDeclaration = "char(1)"
 
@@ -84,7 +84,7 @@ class DB2Adapter extends DatabaseAdapter {
     e.getErrorCode == -204
   }
 
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], sw: StatementWriter) = {}
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
     if (qen.page == None)

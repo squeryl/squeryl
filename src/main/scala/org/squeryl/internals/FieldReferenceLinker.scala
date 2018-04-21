@@ -257,7 +257,7 @@ object FieldReferenceLinker {
 		  if(!visited.containsKey(o)) {
 			  val clazz = o.getClass
 			  val clazzName = clazz.getName
-			  //println("Looking at " + clazzName)
+
 			  if(!clazzName.startsWith("java.") && 
 					  !clazzName.startsWith("net.sf.cglib.") && 
 					  !clazzName.startsWith("scala.Enumeration")) {

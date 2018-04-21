@@ -53,6 +53,7 @@ scalacOptions ++= Seq(
 )
 
 val unusedWarnings = Seq(
+  "-Xfatal-warnings",
   "-Ywarn-unused",
   "-Ywarn-unused-import"
 )

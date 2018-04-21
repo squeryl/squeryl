@@ -21,12 +21,12 @@ import java.sql.SQLException
 import collection.Set
 import collection.immutable.List
 import collection.mutable.HashSet
-import org.squeryl.internals.{FieldMetaData, StatementWriter, DatabaseAdapter}
+import org.squeryl.internals.{FieldMetaData, StatementWriter}
 import org.squeryl.internals.ConstantStatementParam
 import org.squeryl.InternalFieldMapper
 
 
-class OracleAdapter extends DatabaseAdapter {
+class OracleAdapter extends GenericAdapter {
 
   override def intTypeDeclaration = "number"
   override def stringTypeDeclaration = "varchar2"
@@ -67,7 +67,7 @@ class OracleAdapter extends DatabaseAdapter {
       execFailSafeExecute("drop sequence " + fmd.sequenceName, e=>e.getErrorCode == 2289)
   }
 
-  override def createSequenceName(fmd: FieldMetaData) = {
+  override def createSequenceName(fmd: FieldMetaData): String = {
     
     val prefix = "s_" + fmd.columnName.take(6) + "_" + fmd.parentMetaData.viewOrTable.name.take(10)
 
@@ -102,10 +102,10 @@ class OracleAdapter extends DatabaseAdapter {
     sw.write(colVals.mkString("(",",",")"));
   }
 
-  override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter) =
+  override def writeConcatFunctionCall(fn: FunctionNode, sw: StatementWriter): Unit =
     sw.writeNodesWithSeparator(fn.args, " || ", false)
 
-  override def writeJoin(queryableExpressionNode: QueryableExpressionNode, sw: StatementWriter) = {
+  override def writeJoin(queryableExpressionNode: QueryableExpressionNode, sw: StatementWriter): Unit = {
     sw.write(queryableExpressionNode.joinKind.get._1)
     sw.write(" ")
     sw.write(queryableExpressionNode.joinKind.get._2)
@@ -117,10 +117,10 @@ class OracleAdapter extends DatabaseAdapter {
     queryableExpressionNode.joinExpression.get.write(sw)
   }
 
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], sw: StatementWriter): Unit = {}
 
-  override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-    if(qen.page == None)
+  override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter): Unit =
+    if(qen.page.isEmpty)
       super.writeQuery(qen, sw)
     else {        
       sw.write("select sq____1.* from (")
@@ -152,10 +152,10 @@ class OracleAdapter extends DatabaseAdapter {
       }
     }
 
-  override def isTableDoesNotExistException(e: SQLException) =
+  override def isTableDoesNotExistException(e: SQLException): Boolean =
     e.getErrorCode == 942
 
-  def legalOracleSuffixChars =
+  def legalOracleSuffixChars: List[Char] =
     OracleAdapter.legalOracleSuffixChars
 
   def paddingPossibilities(start: String, padLength: Int): Iterable[String] =
@@ -194,7 +194,7 @@ class OracleAdapter extends DatabaseAdapter {
         s
     }
     catch {
-      case e:CouldNotShrinkIdentifierException =>
+      case _: CouldNotShrinkIdentifierException =>
         org.squeryl.internals.Utils.throwError("could not make a unique identifier with '" + s + "'")
     }
 

@@ -51,7 +51,7 @@ abstract class TransactionTests extends DbTestBase {
         doSomething(true)
       }
       catch {
-        case e: Exception => {}
+        case _: Exception =>
       }
 
       // fails with "no session exception"

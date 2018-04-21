@@ -15,19 +15,18 @@
  ***************************************************************************** */
 package org.squeryl.adapters
 
-import org.squeryl.Schema
-import org.squeryl.internals.{StatementWriter, FieldMetaData, DatabaseAdapter}
+import org.squeryl.internals.{StatementWriter, FieldMetaData}
 import org.squeryl.dsl.ast._
 import java.sql.SQLException
 
-class DerbyAdapter extends DatabaseAdapter {
+class DerbyAdapter extends GenericAdapter {
 
   override def intTypeDeclaration = "integer"
   override def binaryTypeDeclaration = "blob(1M)"
 
   override def isFullOuterJoinSupported = false
 
-  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
+  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean): String = {
 
     var res = "  " + quoteIdentifier(fmd.columnName) + " " + databaseTypeFor(fmd)
 
@@ -51,7 +50,7 @@ class DerbyAdapter extends DatabaseAdapter {
     res
   }
 
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], sw: StatementWriter): Unit = {
     page().foreach(p => {
       sw.write("offset ")
       sw.write(p._1.toString)
@@ -62,11 +61,11 @@ class DerbyAdapter extends DatabaseAdapter {
     })
   }
   
-  override def isTableDoesNotExistException(e: SQLException) =
+  override def isTableDoesNotExistException(e: SQLException): Boolean =
     e.getSQLState == "42Y55"
 
-  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) =
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter): Unit =
     throw new UnsupportedOperationException("Derby does not support a regex scalar function")
 
-  override def quoteIdentifier(s: String) = "\"" + s + "\""
+  override def quoteIdentifier(s: String): String = "\"" + s + "\""
 }

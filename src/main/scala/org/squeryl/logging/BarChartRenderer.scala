@@ -1,6 +1,5 @@
 package org.squeryl.logging
 
-import xml.Unparsed
 import java.io.{FileOutputStream, PrintStream}
 import org.squeryl.InternalFieldMapper._
 
@@ -94,8 +93,9 @@ object BarChartRenderer {
     sb.toString
    }
 
-
-  def page(stats: Stat*) = """
+  def page(stats: Stat*) = {
+    stats.unused
+    """
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -123,5 +123,6 @@ object BarChartRenderer {
       </body>
     </html>
     """
+  }
 
 }

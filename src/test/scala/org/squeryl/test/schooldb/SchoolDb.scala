@@ -1898,7 +1898,7 @@ abstract class Issue14 extends DbTestBase with QueryTester {
         val seqName = (new OracleAdapter).createSequenceName(Issue14Schema.professors.posoMetaData.findFieldMetaDataForProperty("id").get)
         try {stmt.execute("create sequence " + seqName)}
         catch {
-          case e:SQLException => {} 
+          case _: SQLException =>
         }
       }
       transaction {

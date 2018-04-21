@@ -16,11 +16,14 @@
 package org.squeryl.internals
 
 import java.sql.{ResultSet, SQLException, Statement}
+
 import org.squeryl.dsl.boilerplate.Query1
 import org.squeryl.Queryable
 import org.squeryl.dsl.fsm.QueryElements
-import org.squeryl.dsl.ast.{QueryExpressionElements, LogicalBoolean}
+import org.squeryl.dsl.ast.{LogicalBoolean, QueryExpressionElements}
 import java.sql.Connection
+
+import scala.util.Try
 
 object Utils {
 
@@ -36,25 +39,21 @@ object Utils {
   def failSafeString(s: =>String, valueOnFail: String) =
     _failSafeString(s _, valueOnFail)
 
-  private def _failSafeString(s: ()=>String, valueOnFail: String) =
-    try {
-      s()
-    }
-    catch {
-      case e:Exception => valueOnFail
-    }
+  private def _failSafeString(s: () => String, valueOnFail: String): String =
+    Try(s()).getOrElse(valueOnFail)
+
 
   def close(s: Statement) =
     try {s.close}
-    catch {case e:SQLException => {}}
+    catch {case _:SQLException => {}}
 
   def close(rs: ResultSet) =
     try {rs.close}
-    catch {case e:SQLException => {}}
+    catch {case _:SQLException => {}}
 
   def close(c: Connection) =
     try {c.close}
-    catch {case e:SQLException => {}}
+    catch {case _:SQLException => {}}
     
   private class DummyQueryElements[Cond](override val whereClause: Option[()=>LogicalBoolean]) extends QueryElements[Cond]
   

@@ -18,10 +18,10 @@ package org.squeryl.adapters
 import org.squeryl.dsl.ast.FunctionNode
 import java.sql.{ResultSet, SQLException}
 import java.util.UUID
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter, FieldMetaData}
+import org.squeryl.internals.{StatementWriter, FieldMetaData}
 import org.squeryl.{Session, Table}
 
-class PostgreSqlAdapter extends DatabaseAdapter {
+class PostgreSqlAdapter extends GenericAdapter {
 
   /**
    * NB: You can override `usePostgresSequenceNamingScheme` to return true in a

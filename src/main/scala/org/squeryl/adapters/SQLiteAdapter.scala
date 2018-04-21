@@ -18,16 +18,16 @@ package org.squeryl.adapters
 import java.sql.SQLException
 
 import org.squeryl.dsl.CompositeKey
-import org.squeryl.dsl.ast.{ExpressionNode, QueryExpressionElements}
+import org.squeryl.dsl.ast.ExpressionNode
 import org.squeryl._
 import org.squeryl.internals._
 
-class SQLiteAdapter extends DatabaseAdapter {
+class SQLiteAdapter extends GenericAdapter {
 
   override def uuidTypeDeclaration = "uuid"
   override def isFullOuterJoinSupported = false
 
-  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
+  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean): String = {
 
     var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)
 
@@ -51,14 +51,14 @@ class SQLiteAdapter extends DatabaseAdapter {
     res
   }
 
-  override def writeCreateTable[T](t: Table[T], sw: StatementWriter, schema: Schema): Unit = {
+  override def writeCreateTable[T](t: Table[T], sw: StatementWriter): Unit = {
     sw.write("create table ")
     sw.write(quoteName(t.prefixedName))
     sw.write(" (\n")
     sw.writeIndented {
       sw.writeLinesWithSeparator(
         t.posoMetaData.fieldsMetaData.map(
-          fmd => writeColumnDeclaration(fmd, fmd.declaredAsPrimaryKeyInSchema, schema)
+          fmd => writeColumnDeclaration(fmd, fmd.declaredAsPrimaryKeyInSchema)
         ),
         ","
       )
@@ -106,12 +106,12 @@ class SQLiteAdapter extends DatabaseAdapter {
 
   override def supportsCommonTableExpressions = false
 
-  override def writeEndOfQueryHint(isForUpdate: () => Boolean, qen: QueryExpressionElements, sw: StatementWriter) =
+  override def writeEndOfQueryHint(isForUpdate: () => Boolean, sw: StatementWriter): Unit =
     if(isForUpdate()) {
       sw.pushPendingNextLine
     }
 
-  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter): Unit = {
     sw.write("(")
     left.write(sw)
     sw.write(" LIKE ?)")
