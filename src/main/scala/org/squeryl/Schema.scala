@@ -36,7 +36,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    */
   private val _tables = new ArrayBuffer[Table[_]] 
   
-  def tables: Seq[Table[_]] = _tables.toSeq
+  def tables: collection.Seq[Table[_]] = _tables.toSeq
   
   private val _tableTypes = new HashMap[Class[_], Table[_]]
 
@@ -201,12 +201,12 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   }
   
 
-  private def _writeColumnGroupAttributeAssignments: Seq[String] =
+  private def _writeColumnGroupAttributeAssignments: collection.Seq[String] =
     for(cgaa <- _columnGroupAttributeAssignments)
       yield _writeIndexDeclarationIfApplicable(cgaa.columnAttributes, cgaa.columns, cgaa.name).
         getOrElse(org.squeryl.internals.Utils.throwError("empty attribute list should not be possible to create with DSL (Squeryl bug)."))
 
-  private def _writeIndexDeclarationIfApplicable(columnAttributes: Seq[ColumnAttribute], cols: Seq[FieldMetaData], name: Option[String]): Option[String] = {
+  private def _writeIndexDeclarationIfApplicable(columnAttributes: collection.Seq[ColumnAttribute], cols: collection.Seq[FieldMetaData], name: Option[String]): Option[String] = {
 
     val unique = columnAttributes.find(_.isInstanceOf[Unique])
     val indexed = columnAttributes.collectFirst{case i: Indexed => i}
@@ -421,7 +421,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       org.squeryl.internals.Utils.throwError("on function called with null argument in " + this.getClass.getName +
             " tables must be initialized before declarations.")
 
-    val colAss: Seq[BaseColumnAttributeAssignment] =
+    val colAss: collection.Seq[BaseColumnAttributeAssignment] =
       Utils.mapSampleObject(table, declarations)
 
     // all fields that have a single 'is' declaration are first reset :
@@ -513,7 +513,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   
   protected def transient = IsTransient()
 
-  class ColGroupDeclaration(cols: Seq[FieldMetaData]) {
+  class ColGroupDeclaration(cols: collection.Seq[FieldMetaData]) {
 
     def are(columnAttributes: AttributeValidOnMultipleColumn*) =
       new ColumnGroupAttributeAssignment(cols, columnAttributes)
@@ -523,7 +523,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   // POSO Life Cycle Callbacks :
 
-  def callbacks: Seq[LifecycleEvent] = Nil
+  def callbacks: collection.Seq[LifecycleEvent] = Nil
 
 ////2.9.x approach for LyfeCycle events :
 //  def delayedInit(body: => Unit) = {

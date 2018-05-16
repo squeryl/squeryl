@@ -17,7 +17,7 @@ package org.squeryl.dsl.ast
 
 import org.squeryl.internals.StatementWriter
 
-class UpdateStatement(_whereClause: Option[()=>LogicalBoolean], uas: Seq[UpdateAssignment])
+class UpdateStatement(_whereClause: Option[()=>LogicalBoolean], uas: collection.Seq[UpdateAssignment])
    extends ExpressionNode {
 
   val whereClause: Option[LogicalBoolean] =

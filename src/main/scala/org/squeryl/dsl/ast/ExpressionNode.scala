@@ -248,10 +248,10 @@ object FalseLogicalBoolean extends LogicalBoolean {
 
 object LogicalBoolean {
 
-  def and(conditions: Seq[LogicalBoolean]): LogicalBoolean =
+  def and(conditions: collection.Seq[LogicalBoolean]): LogicalBoolean =
     conditions.fold(TrueLogicalBoolean)(_ and _)
 
-  def or(conditions: Seq[LogicalBoolean]): LogicalBoolean =
+  def or(conditions: collection.Seq[LogicalBoolean]): LogicalBoolean =
     conditions.fold(FalseLogicalBoolean)(_ or _)
 
 }
@@ -268,7 +268,7 @@ trait BaseColumnAttributeAssignment {
   def isIdFieldOfKeyedEntityWithoutUniquenessConstraint =
     isIdFieldOfKeyedEntity && ! (columnAttributes.exists(_.isInstanceOf[PrimaryKey]) || columnAttributes.exists(_.isInstanceOf[Unique]))
 
-  def columnAttributes: Seq[ColumnAttribute]
+  def columnAttributes: collection.Seq[ColumnAttribute]
 
   def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
     findAttribute[A](m) != None
@@ -277,7 +277,7 @@ trait BaseColumnAttributeAssignment {
     columnAttributes.find(ca => m.runtimeClass.isAssignableFrom(ca.getClass))
 }
 
-class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], columnAttributes_ : Seq[ColumnAttribute])
+class ColumnGroupAttributeAssignment(cols: collection.Seq[FieldMetaData], columnAttributes_ : collection.Seq[ColumnAttribute])
   extends BaseColumnAttributeAssignment {
 
   private val _columnAttributes = new ArrayBuffer[ColumnAttribute]
@@ -291,14 +291,14 @@ class ColumnGroupAttributeAssignment(cols: Seq[FieldMetaData], columnAttributes_
 
   def clearColumnAttributes = columns.foreach(_._clearColumnAttributes)
 
-  def columns: Seq[FieldMetaData] = cols
+  def columns: collection.Seq[FieldMetaData] = cols
 
   def isIdFieldOfKeyedEntity = false
 
   def name:Option[String] = None
 }
 
-class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes: Seq[ColumnAttribute])
+class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes: collection.Seq[ColumnAttribute])
   extends ColumnGroupAttributeAssignment(group._fields, _columnAttributes) {
 
   override def isIdFieldOfKeyedEntity = {
@@ -311,7 +311,7 @@ class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes
   override def name:Option[String] = group._propertyName
 }
 
-class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: Seq[ColumnAttribute])
+class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: collection.Seq[ColumnAttribute])
   extends BaseColumnAttributeAssignment {
 
   def clearColumnAttributes = left._clearColumnAttributes
@@ -390,7 +390,7 @@ class ConstantExpressionNodeList[T](val value: Iterable[T], mapper: OutMapper[_]
     }
 }
 
-class FunctionNode(val name: String, val args: Seq[ExpressionNode]) extends ExpressionNode {
+class FunctionNode(val name: String, val args: collection.Seq[ExpressionNode]) extends ExpressionNode {
         
   def doWrite(sw: StatementWriter) = {
 

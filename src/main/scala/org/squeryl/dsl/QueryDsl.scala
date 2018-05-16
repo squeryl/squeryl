@@ -239,7 +239,7 @@ trait QueryDsl
 
   def countDistinct(e: TypedExpression[_,_]*) = new CountFunction(e, true)
   
-  class CountFunction(_args: Seq[ExpressionNode], isDistinct: Boolean) 
+  class CountFunction(_args: collection.Seq[ExpressionNode], isDistinct: Boolean)
     extends FunctionNode("count",
       _args match {
         case Nil =>Seq(new TokenExpressionNode("*")) 
