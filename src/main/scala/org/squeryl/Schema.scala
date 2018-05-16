@@ -333,11 +333,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    *  }
    *
    */
-  def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]): Option[String] = {
-    fieldMetaData.unused
-    owner.unused
-    None
-  }
+  def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]): Option[String] = None
   
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName

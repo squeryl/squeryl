@@ -873,14 +873,10 @@ trait QueryDsl
         ev9: A9 => TypedExpression[A9, _]) =
     new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
 
-  implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup = {
-    t.unused
+  implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup =
     CompositeKeyLookup
-  }
 
-  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, _]): CanLookup = {
-    t.unused
+  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, _]): CanLookup =
     new SimpleKeyLookup[T](ev)
-  }
 
 }

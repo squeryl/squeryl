@@ -7,17 +7,14 @@ object BarChartRenderer {
 
   class Stat(val title: String, val xAxisLabel: String, val lines: Iterable[StatLine], measureFromLike: StatLine => String) {
 
-    def queryLabelsJSArray =
+    def queryLabelsJSArray: String =
       lines.map(sl => "'" + sl.statement.definitionOrCallSite + "'").mkString("[",",","]")
 
-    def measuresJSArray =
+    def measuresJSArray: String =
       lines.map(measureFromLike(_)).mkString("[",",","]")
   }
 
-  def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = {
-
-
-
+  def generateStatSummary(staticHtmlFile: java.io.File, n: Int): Unit = {
     val page =
       BarChartRenderer.page(
         new Stat(
@@ -31,7 +28,7 @@ object BarChartRenderer {
           StatsSchema.topRankingStatements(n, Measure.InvocationCount),
           sl => sl.invocationCount.toString),
         new Stat(
-          "Top "+n+" statements incurring most cummulative execution time",
+          "Top "+n+" statements incurring most cumulative execution time",
           "cummulative execution time",
           StatsSchema.topRankingStatements(n, Measure.CumulativeExecutionTime),
           sl => sl.cumulativeExecutionTime.toString),
@@ -44,7 +41,7 @@ object BarChartRenderer {
 
     val ps = new PrintStream(new FileOutputStream(staticHtmlFile))
     ps.print(page)
-    ps.close
+    ps.close()
   }
 
   val drawFunc = """
@@ -73,7 +70,7 @@ object BarChartRenderer {
     }
   """
 
-  def funcCalls(stats: Seq[Stat]) = {
+  def funcCalls(stats: Seq[Stat]): String = {
     val sb = new java.lang.StringBuilder
     var i = 0
     for(s <- stats) {
@@ -93,9 +90,8 @@ object BarChartRenderer {
     sb.toString
    }
 
-  def page(stats: Stat*) = {
-    stats.unused
-    """
+  def page(stats: Stat*): String = {
+    s"""
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -106,10 +102,10 @@ object BarChartRenderer {
         </script>
         <script type="text/javascript">
 
-          {Unparsed(drawFunc)}
+          {Unparsed($drawFunc)}
 
           function drawVisualization() {{
-            {Unparsed(funcCalls(stats))}
+            {Unparsed(${funcCalls(stats)})}
           }}
 
           google.setOnLoadCallback(drawVisualization);
