@@ -636,7 +636,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   /**
    * POC for raw SQL "facilities"
    */
-  class RawQuery(query: String, args: Seq[Any]) {
+  class RawQuery(query: String, args: collection.Seq[Any]) {
     
     private def prep = {
       // We'll pretend we don't care about connection, statement, resultSet leaks for now ...

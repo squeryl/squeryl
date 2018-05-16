@@ -20,11 +20,11 @@ import org.squeryl.internals.{AttributeValidOnMultipleColumn, FieldMetaData}
 
 trait CompositeKey {
 
-  private [squeryl] var _members: Option[Seq[SelectElementReference[_,_]]] = None
+  private [squeryl] var _members: Option[collection.Seq[SelectElementReference[_,_]]] = None
 
   private [squeryl] var _propertyName: Option[String] = None
 
-  private [squeryl] def _fields: Seq[FieldMetaData] =
+  private [squeryl] def _fields: collection.Seq[FieldMetaData] =
     if(_members == None)
       List.empty
     else

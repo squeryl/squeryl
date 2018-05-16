@@ -73,7 +73,7 @@ class SQLiteAdapter extends DatabaseAdapter {
     sw.write(")")
   }
 
-  private def _allCompositePrimaryKeys[T](t: Table[T]): Seq[FieldMetaData] = {
+  private def _allCompositePrimaryKeys[T](t: Table[T]): collection.Seq[FieldMetaData] = {
     (t.ked map { ked =>
       Utils.mapSampleObject(
         t.asInstanceOf[Table[AnyRef]],

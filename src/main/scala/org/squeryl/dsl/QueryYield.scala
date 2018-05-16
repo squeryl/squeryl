@@ -36,7 +36,7 @@ trait QueryYield[R] {
      Iterable[ExpressionNode],
      Iterable[Query[_]])
 
-  private [squeryl] var joinExpressions: Seq[()=>LogicalBoolean] = Nil
+  private [squeryl] var joinExpressions: collection.Seq[()=>LogicalBoolean] = Nil
 
   def on(lb1: =>LogicalBoolean) = {
     joinExpressions = Seq(lb1 _)
