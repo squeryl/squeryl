@@ -85,7 +85,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   }
 
   def findAllTablesFor[A](c: Class[A]) =
-    _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Traversable[Table[_]]]
+    _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Iterable[Table[_]]]
 
 
   object NamingConventionTransforms {

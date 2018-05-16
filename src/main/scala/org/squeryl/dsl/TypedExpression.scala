@@ -178,14 +178,13 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
   def is(columnAttributes: AttributeValidOnNumericalColumn*) =
     new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
   
-  
-  def in[A2,T2](t: Traversable[A2]): LogicalBoolean =
+  def in[A2,T2](t: Iterable[A2]): LogicalBoolean =
     new InclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toIn)
   
   def in[A2,T2](q: Query[A2]): LogicalBoolean =
     new InclusionOperator(this, new RightHandSideOfIn(q.copy(asRoot = false, Nil).ast))
   
-  def notIn[A2,T2](t: Traversable[A2]): LogicalBoolean =
+  def notIn[A2,T2](t: Iterable[A2]): LogicalBoolean =
     new ExclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toNotIn)
   
   def notIn[A2,T2](q: Query[A2]): LogicalBoolean =
