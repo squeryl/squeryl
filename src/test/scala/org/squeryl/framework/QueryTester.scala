@@ -14,16 +14,16 @@ trait QueryTester extends Matchers {
 
   var doNotExecute = false
 
-  def activateWorkbenchMode = {
+  def activateWorkbenchMode(): Unit = {
     logQueries = true
     dumpAst = true
     validateFirstAndExit = 0
   }
 
-  def loggerOn =
+  def loggerOn(): Unit =
     Session.currentSession.setLogger((s:String) => println(s))
 
-  def log(queryName: Symbol, query:Query[_]) = {
+  def log(queryName: Symbol, query:Query[_]): Unit = {
 
     println(queryName + " :")
     println(query)
@@ -35,8 +35,8 @@ trait QueryTester extends Matchers {
   def assertEquals[E](expected:E, actual:E, s:Symbol): Unit =
     assertEquals(expected, actual, s.toString)
 
-  def assertEquals[E](expected:E, actual:E, msg:String): Unit = {
-    actual should equal(expected)
+  def assertEquals[E](expected:E, actual:E, msg:String): Unit = withClue(msg) {
+    actual shouldBe expected
   }
 
   def validateQuery[R,S](name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
@@ -46,9 +46,6 @@ trait QueryTester extends Matchers {
 
     if(validateFirstAndExit >= 1)
       return
-
-//    if(dumpAst)
-//      println(q.dumpAst)
 
     if(logFirst || logQueries)
       log(name, q)
@@ -60,23 +57,11 @@ trait QueryTester extends Matchers {
 
     r should equal(expected)
 
-//    if(r == expected)
-//      println("query " + name + " passed.")
-//    else {
-//      val msg =
-//        "query : " + name + " failed,\n" +
-//        "expected " + expected + " got " + r + " \n query " + name +
-//        " was : \n" + q
-//      org.squeryl.internals.Utils.org.squeryl.internals.Utils.throwError(msg)
-//    }
-
     if(validateFirstAndExit >= 0)
       validateFirstAndExit += 1
   }
 
-  def passed(s: Symbol) = {} //println(s )
+  def passed(s: Symbol): Unit = println(s)
 }
-
-
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")

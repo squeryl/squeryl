@@ -16,11 +16,10 @@
 package org.squeryl.adapters
 
 import java.sql.SQLException
-import org.squeryl.internals.{StatementWriter, FieldMetaData, DatabaseAdapter}
+import org.squeryl.internals.{StatementWriter, FieldMetaData}
 import org.squeryl.dsl.ast._
-import org.squeryl.{Schema}
 
-class MSSQLServer extends DatabaseAdapter {
+class MSSQLServer extends GenericAdapter {
 
   override def isFullOuterJoinSupported = false
 
@@ -41,7 +40,7 @@ class MSSQLServer extends DatabaseAdapter {
 
   override def supportsUnionQueryOptions = false
 
-  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
+  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean): String = {
 
     var res = "  " + quoteIdentifier(fmd.columnName) + " " + databaseTypeFor(fmd)
     if(!fmd.isOption)
@@ -59,7 +58,7 @@ class MSSQLServer extends DatabaseAdapter {
   override def isTableDoesNotExistException(e: SQLException): Boolean =
     e.getErrorCode == 3701
 
-  override def writeEndOfQueryHint(isForUpdate: () => Boolean, qen: QueryExpressionElements, sw: StatementWriter) = {}
+  override def writeEndOfQueryHint(isForUpdate: () => Boolean, sw: StatementWriter) = {}
 
   override def writeEndOfFromHint(qen: QueryExpressionElements, sw: StatementWriter) =
     if(qen.isForUpdate) {
@@ -81,58 +80,8 @@ class MSSQLServer extends DatabaseAdapter {
     throw new UnsupportedOperationException("MSSQL does not yet support a regex function")
   }
 
-//SELECT TOP <pageSize> CustomerID,CompanyName,ContactName,ContactTitle
-//  FROM
-//  (SELECT TOP <currentPageNumber * pageSize>
-//          CustomerID,CompanyName,ContactName,ContactTitle
-//   FROM
-//     Customers AS T1 ORDER BY ContactName DESC)
-//  AS T2 ORDER BY ContactName ASC
-
-//  override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-//    if(qen.page == None)
-//      super.writeQuery(qen, sw)
-//    else {
-//      val page = qen.page.get
-//      val beginOffset = page._1
-//      val pageSize = page._2
-//      //val endOffset = pageSize + beginOffset
-//      val sl = qen.selectList.filter(e => ! e.inhibited)
-//      val ob =
-//        if(! qen.orderByClause.isEmpty && qen.parent == None )
-//          qen.orderByClause.filter(e => ! e.inhibited)
-//        else
-//          Nil
-//
-//      val obInverse = ob.map(_.asInstanceOf[OrderByExpression].inverse)
-//
-//      sw.write("select * from (")
-//      sw.nextLine
-//      sw.write("select TOP " + pageSize + " * ")
-//      sw.nextLine
-//      sw.write("from (")
-//      sw.nextLine
-//      sw.writeIndented {
-//        super.writeQuery(qen, sw, false, Some(" TOP " + (beginOffset + pageSize) + " "))
-//      }
-//      sw.write(") _____z1_____")
-//      if(ob != Nil) {
-//        sw.nextLine
-//        sw.write(" order by ")
-//        sw.write(ob.map(_.asInstanceOf[OrderByExpression].inverse).map(_.writeToString.replace('.','_')).mkString(","))
-//      }
-//      sw.write(") _____z2_____")
-//      if(ob != Nil) {
-//        sw.nextLine
-//        sw.write(" order by ")
-//        sw.write(ob.map(_.writeToString.replace('.','_')).mkString(","))
-//      }
-//
-//      println(sw.statement)
-//    }
-
-  override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-    if(qen.page == None)
+  override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter): Unit =
+    if(qen.page.isEmpty)
       super.writeQuery(qen, sw)
     else {
       val page = qen.page.get
@@ -140,10 +89,11 @@ class MSSQLServer extends DatabaseAdapter {
       val pageSize = page._2
 
       sw.writeIndented {
-        super.writeQuery(qen, sw, false, Some(" TOP " + (beginOffset + pageSize) + " "))
+        super.writeQuery(qen, sw, inverseOrderBy = false, Some(" TOP " + (beginOffset + pageSize) + " "))
       }
     }
   
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
-  override def quoteIdentifier(s: String) = "[" + s + "]"
+  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], sw: StatementWriter): Unit = {}
+
+  override def quoteIdentifier(s: String): String = "[" + s + "]"
 }

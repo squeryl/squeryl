@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************** */
-package org.squeryl;
+package org.squeryl
 
 import dsl.ast._
 import dsl.{CompositeKey, QueryDsl}
 import internals._
-import java.sql.{Statement}
+import java.sql.Statement
 import logging.StackMarker
 import collection.mutable.ArrayBuffer
-
-//private [squeryl] object DummySchema extends Schema
 
 class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String], ked: Option[KeyedEntityDef[T,_]]) extends View[T](n, c, schema, _prefix, ked) {
 
@@ -41,13 +39,14 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     val st =
       (_dbAdapter.supportsAutoIncrementInColumnDeclaration, posoMetaData.primaryKey) match {
-        case (true, a:Any) => sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
-        case (false, Some(Left(pk:FieldMetaData))) => {
+        case (true, _) =>
+          sess.connection.prepareStatement(sw.statement, Statement.RETURN_GENERATED_KEYS)
+        case (false, Some(Left(pk:FieldMetaData))) =>
           val autoIncPk = new Array[String](1)
           autoIncPk(0) = pk.columnName
           sess.connection.prepareStatement(sw.statement, autoIncPk)
-        }
-        case a:Any => sess.connection.prepareStatement(sw.statement)
+        case _ =>
+          sess.connection.prepareStatement(sw.statement)
       }
 
     try {
@@ -67,14 +66,14 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
             pk.setFromResultSet(o, rs, 1)
           }
           finally {
-            rs.close
+            rs.close()
           }
         }
-        case a:Any =>{}
+        case _ =>
       }
     }
     finally {
-      st.close
+      st.close()
     }
 
     val r = _callbacks.afterInsert(o).asInstanceOf[T]
@@ -216,7 +215,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
   private def _update(e: Iterable[T], checkOCC: Boolean):Unit = {
 
-    def buildFmds(t: T): Iterable[FieldMetaData] = {
+    val fieldsMetaData: Iterable[FieldMetaData] = {
       val pkList = posoMetaData.primaryKey.getOrElse(
         org.squeryl.internals.Utils.throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")).fold(
         pkMd => List(pkMd),
@@ -231,7 +230,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
             new EqualityExpression(InternalFieldMapper.intTEF.createConstant(1), InternalFieldMapper.intTEF.createConstant(1))
           })
 
-          fields getOrElse (internals.Utils.throwError("No PK fields found"))
+          fields getOrElse internals.Utils.throwError("No PK fields found")
         }
       )
 
@@ -242,7 +241,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
       ).flatten
     }
 
-    _batchedUpdateOrInsert(e, buildFmds _, false, checkOCC)
+    _batchedUpdateOrInsert(e, _ => fieldsMetaData, isInsert = false, checkOCC = checkOCC)
   }
 
   def update(s: T =>UpdateStatement):Int = {

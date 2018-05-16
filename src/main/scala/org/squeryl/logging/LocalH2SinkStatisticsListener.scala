@@ -72,7 +72,7 @@ class LocalH2SinkStatisticsListener(val h2Session: AbstractSession) extends Stat
   }
 
   def resultSetIterationEnded(invocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = _pushOp {
-    StatsSchema.recordEndOfIteration(invocationId, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean)
+    StatsSchema.recordEndOfIteration(invocationId, iterationEndTime: Long, rowCount: Int)
     h2Session.connection.commit
   }
 

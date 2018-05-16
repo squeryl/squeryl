@@ -72,10 +72,6 @@ trait QueryDsl
       
     }
   }
-  
-//  implicit def viewToIterable[R](t: View[R]): Iterable[R] = 
-//      queryToIterable(view2QueryAll(t))
-  
 
   def using[A](session: AbstractSession)(a: =>A): A =
     session.using(a _)
@@ -184,10 +180,10 @@ trait QueryDsl
   
   def not(b: LogicalBoolean) = new FunctionNode("not", Seq(b)) with LogicalBoolean
 
-  def upper[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1], ev2: T1 <:< TOptionString) = 
+  def upper[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1]): TypedExpressionConversion[A1, T1] =
     f.convert(new FunctionNode("upper", Seq(s)))
   
-  def lower[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1], ev2: T1 <:< TOptionString) = 
+  def lower[A1,T1](s: TypedExpression[A1,T1])(implicit f: TypedExpressionFactory[A1,T1]): TypedExpressionConversion[A1, T1] =
     f.convert(new FunctionNode("lower", Seq(s)))
 
   def exists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false, Nil).ast, "exists")
@@ -609,7 +605,7 @@ trait QueryDsl
     }
   }
 
-  def oneToManyRelation[O,M](ot: Table[O], mt: Table[M])(implicit kedO: KeyedEntityDef[O,_]) = new OneToManyRelationBuilder(ot,mt)
+  def oneToManyRelation[O,M](ot: Table[O], mt: Table[M]) = new OneToManyRelationBuilder(ot,mt)
 
   class OneToManyRelationBuilder[O,M](ot: Table[O], mt: Table[M]) {
     
@@ -877,16 +873,10 @@ trait QueryDsl
         ev9: A9 => TypedExpression[A9, _]) =
     new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
 
-  implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup = CompositeKeyLookup
+  implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup =
+    CompositeKeyLookup
 
-  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, _]): CanLookup = new SimpleKeyLookup[T](ev)
+  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, _]): CanLookup =
+    new SimpleKeyLookup[T](ev)
 
-  // Case statements :
-/*
-  def caseOf[A](expr: NumericalExpression[A]) = new CaseOfNumericalExpressionMatchStart(expr)
-
-  def caseOf[A](expr: NonNumericalExpression[A]) = new CaseOfNonNumericalExpressionMatchStart(expr)
-
-  def caseOf = new CaseOfConditionChainStart
-*/
 }

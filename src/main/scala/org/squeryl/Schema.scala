@@ -124,7 +124,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
     for(t <- _tables) {
       val sw = new StatementWriter(true, _dbAdapter)
-      _dbAdapter.writeCreateTable(t, sw, this)
+      _dbAdapter.writeCreateTable(t, sw)
       statementHandler(sw.statement + ";")
       _dbAdapter.postCreateTable(t, Some(statementHandler))
 
@@ -230,7 +230,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
     for(fk <- _activeForeignKeySpecs) {
       cs.connection.createStatement
-      dba.dropForeignKeyStatement(fk._1, dba.foreignKeyConstraintName(fk._1, fk._3.idWithinSchema), cs)
+      dba.dropForeignKeyStatement(fk._1, dba.foreignKeyConstraintName(fk._1, fk._3.idWithinSchema))
     }
   }
 
@@ -271,7 +271,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   private def _createTables = {
     for(t <- _tables) {
       val sw = new StatementWriter(_dbAdapter)
-      _dbAdapter.writeCreateTable(t, sw, this)
+      _dbAdapter.writeCreateTable(t, sw)
       _executeDdl(sw.statement)
       _dbAdapter.postCreateTable(t, None)
       for(indexDecl <- _indexDeclarationsFor(t))
@@ -472,18 +472,16 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     // Validate that autoIncremented is not used on other fields than KeyedEntity[A].id :
     // since it is not yet unsupported :
     for(ca <- colAss) ca match {
-      case cga:CompositeKeyAttributeAssignment => {}
-      case caa:ColumnAttributeAssignment => {
-        for(ca <- caa.columnAttributes if ca.isInstanceOf[AutoIncremented] && !(caa.left.isIdFieldOfKeyedEntity))
+      case caa:ColumnAttributeAssignment =>
+        for(ca <- caa.columnAttributes if ca.isInstanceOf[AutoIncremented] && !caa.left.isIdFieldOfKeyedEntity)
           org.squeryl.internals.Utils.throwError("Field " + caa.left.nameOfProperty + " of table " + table.name +
-                " is declared as autoIncremented, auto increment is currently only supported on KeyedEntity[A].id")
-      }
-      case dva:Any => {}
+            " is declared as autoIncremented, auto increment is currently only supported on KeyedEntity[A].id")
+      case _ =>
     }
   }
 
-  private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
-    _columnGroupAttributeAssignments.append(cga);
+  private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment): Unit =
+    _columnGroupAttributeAssignments.append(cga)
   
   def defaultColumnAttributesForKeyedEntityId(typeOfIdField: Class[_]) =
     if(typeOfIdField.isAssignableFrom(classOf[java.lang.Long]) || typeOfIdField.isAssignableFrom(classOf[java.lang.Integer]))
@@ -525,21 +523,6 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   def callbacks: Seq[LifecycleEvent] = Nil
 
-////2.9.x approach for LyfeCycle events :
-//  def delayedInit(body: => Unit) = {
-//
-//    body
-//
-//    (for(cb <- callbacks; t <- cb.target) yield (t, cb))
-//    .groupBy(_._1)
-//    .mapValues(_.map(_._2))
-//    .foreach(
-//     (t:Tuple2[View[_],Seq[LifecycleEvent]]) => {
-//       t._1._callbacks = new LifecycleEventInvoker(t._2, t._1)
-//     }
-//    )
-//  }
-
 ////2.8.x approach for LyfeCycle events :
   private [squeryl] lazy val _callbacks: Map[View[_],LifecycleEventInvoker] = {
     val m =
@@ -568,10 +551,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   protected def beforeUpdate[A]()(implicit m: Manifest[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeUpdate)
 
-  protected def beforeDelete[A](t: Table[A])(implicit ev : KeyedEntityDef[A,_]) =
+  protected def beforeDelete[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, BeforeDelete)
 
-  protected def beforeDelete[K, A]()(implicit m: Manifest[A], ked: KeyedEntityDef[A,K]) =
+  protected def beforeDelete[K, A]()(implicit m: Manifest[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeDelete)
    
   protected def afterSelect[A](t: Table[A]) =

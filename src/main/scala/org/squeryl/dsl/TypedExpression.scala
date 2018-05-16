@@ -18,7 +18,6 @@ package org.squeryl.dsl
 import org.squeryl.dsl.ast._
 import org.squeryl.internals._
 import org.squeryl.Session
-import org.squeryl.Schema
 import org.squeryl.internals.AttributeValidOnNumericalColumn
 import org.squeryl.Query
 import java.sql.ResultSet
@@ -101,8 +100,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 
   def div[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3, A4, T4]
          (e: TypedExpression[A2,T2])
-         (implicit f:  TypedExpressionFactory[A3,T3], 
-                   tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
+         (implicit tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
 
   def +[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3]
          (e: TypedExpression[A2,T2])
@@ -118,77 +116,79 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
 
   def /[T3 >: T1 <: TNumeric, T2 <: T3, A2, A3, A4, T4]
          (e: TypedExpression[A2,T2])
-         (implicit f:  TypedExpressionFactory[A3,T3], 
-                   tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
+         (implicit tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
 
-  def ===[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
-  def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
+  def ===[A2,T2](b: TypedExpression[A2,T2]) =
+    new EqualityExpression(this, b)
 
-  def isDistinctFrom[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "IS DISTINCT FROM")
-  def isNotDistinctFrom[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "IS NOT DISTINCT FROM")
-  
-  def ===[A2,T2](q: Query[Measures[A2]])(implicit tef: TypedExpressionFactory[A2,T2], ev: CanCompare[T1, T2]) = 
-    new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "=")
+  def <>[A2,T2](b: TypedExpression[A2,T2]) =
+    new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
 
-  def <>[A2,T2](q: Query[Measures[A2]])(implicit tef: TypedExpressionFactory[A2,T2], ev: CanCompare[T1, T2]) = 
-    new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "<>")
-  
-  def gt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
-  def lt[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
-  def gte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
-  def lte[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
-  
-  def gt [A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, ">")
-  def gte[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, ">=")
-  def lt [A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "<")
-  def lte[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(false, Nil).ast, "<=")  
-  
-  def > [A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = gt(q)
-  def >=[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = gte(q)
-  def < [A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = lt(q)
-  def <=[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean = lte(q)
+  def isDistinctFrom[A2,T2](b: TypedExpression[A2,T2]) =
+    new BinaryOperatorNodeLogicalBoolean(this, b, "IS DISTINCT FROM")
 
-  def >[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = gt(b)
-  def <[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = lt(b)
-  def >=[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = gte(b)
-  def <=[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = lte(b)
+  def isNotDistinctFrom[A2,T2](b: TypedExpression[A2,T2]) =
+    new BinaryOperatorNodeLogicalBoolean(this, b, "IS NOT DISTINCT FROM")
+  
+  def ===[A2,T2](q: Query[Measures[A2]]) =
+    new BinaryOperatorNodeLogicalBoolean(this, q.copy(asRoot = false, Nil).ast, "=")
+
+  def <>[A2,T2](q: Query[Measures[A2]]) =
+    new BinaryOperatorNodeLogicalBoolean(this, q.copy(asRoot = false, Nil).ast, "<>")
+  
+  def gt[A2,T2](b: TypedExpression[A2,T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">")
+  def lt[A2,T2](b: TypedExpression[A2,T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<")
+  def gte[A2,T2](b: TypedExpression[A2,T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, ">=")
+  def lte[A2,T2](b: TypedExpression[A2,T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<=")
+  
+  def gt [A2,T2](q: Query[A2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(asRoot = false, Nil).ast, ">")
+  def gte[A2,T2](q: Query[A2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(asRoot = false, Nil).ast, ">=")
+  def lt [A2,T2](q: Query[A2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(asRoot = false, Nil).ast, "<")
+  def lte[A2,T2](q: Query[A2]): LogicalBoolean = new BinaryOperatorNodeLogicalBoolean(this, q.copy(asRoot = false, Nil).ast, "<=")
+  
+  def > [A2,T2](q: Query[A2]): LogicalBoolean = gt(q)
+  def >=[A2,T2](q: Query[A2]): LogicalBoolean = gte(q)
+  def < [A2,T2](q: Query[A2]): LogicalBoolean = lt(q)
+  def <=[A2,T2](q: Query[A2]): LogicalBoolean = lte(q)
+
+  def >[A2,T2](b: TypedExpression[A2,T2]): BinaryOperatorNodeLogicalBoolean = gt(b)
+  def <[A2,T2](b: TypedExpression[A2,T2]): BinaryOperatorNodeLogicalBoolean = lt(b)
+  def >=[A2,T2](b: TypedExpression[A2,T2]): BinaryOperatorNodeLogicalBoolean = gte(b)
+  def <=[A2,T2](b: TypedExpression[A2,T2]): BinaryOperatorNodeLogicalBoolean = lte(b)
   
   //TODO: add T1 <:< TOption to isNull and isNotNull 
   def isNull= new PostfixOperatorNode("is null", this) with LogicalBoolean
   def isNotNull= new PostfixOperatorNode("is not null", this) with LogicalBoolean
   
   def between[A2,T2,A3,T3](b1: TypedExpression[A2,T2], 
-                           b2: TypedExpression[A3,T3])
-                          (implicit ev1: CanCompare[T1, T2], 
-                                    ev2: CanCompare[T2, T3]) = new BetweenExpression(this, b1, b2)
+                           b2: TypedExpression[A3,T3]) = new BetweenExpression(this, b1, b2)
   
-  def like[A2,T2 <: TOptionString](s: TypedExpression[A2,T2])(implicit ev: CanCompare[T1,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "like")
+  def like[A2,T2 <: TOptionString](s: TypedExpression[A2,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "like")
   
-  def ilike[A2,T2 <: TOptionString](s: TypedExpression[A2,T2])(implicit ev: CanCompare[T1,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "ilike")
+  def ilike[A2,T2 <: TOptionString](s: TypedExpression[A2,T2]) = new BinaryOperatorNodeLogicalBoolean(this, s, "ilike")
 
   def ||[A2,T2](e: TypedExpression[A2,T2]) = new ConcatOp[A1,A2,T1,T2](this, e)
     
   def regex(pattern: String) = new FunctionNode(pattern, Seq(this)) with LogicalBoolean {
 
-    override def doWrite(sw: StatementWriter) =
+    override def doWrite(sw: StatementWriter): Unit =
       Session.currentSession.databaseAdapter.writeRegexExpression(outer, pattern, sw)
   }
   
-  def is(columnAttributes: AttributeValidOnNumericalColumn*)(implicit restrictUsageWithinSchema: Schema) =
+  def is(columnAttributes: AttributeValidOnNumericalColumn*) =
     new ColumnAttributeAssignment(_fieldMetaData, columnAttributes)
   
+  def in[A2,T2](t: Iterable[A2]): LogicalBoolean =
+    new InclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toIn)
   
-  def in[A2,T2](t: Iterable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =  
-    new InclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t, mapper)).toIn)  
+  def in[A2,T2](q: Query[A2]): LogicalBoolean =
+    new InclusionOperator(this, new RightHandSideOfIn(q.copy(asRoot = false, Nil).ast))
   
-  def in[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =
-    new InclusionOperator(this, new RightHandSideOfIn(q.copy(false, Nil).ast))
+  def notIn[A2,T2](t: Iterable[A2]): LogicalBoolean =
+    new ExclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t)).toNotIn)
   
-  def notIn[A2,T2](t: Iterable[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =  
-    new ExclusionOperator(this, new RightHandSideOfIn(new ConstantExpressionNodeList(t, mapper)).toNotIn)
-  
-  def notIn[A2,T2](q: Query[A2])(implicit cc: CanCompare[T1,T2]): LogicalBoolean =
-    new ExclusionOperator(this, new RightHandSideOfIn(q.copy(false, Nil).ast))
+  def notIn[A2,T2](q: Query[A2]): LogicalBoolean =
+    new ExclusionOperator(this, new RightHandSideOfIn(q.copy(asRoot = false, Nil).ast))
   
   def ~ = this
 
@@ -215,9 +215,8 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
         this.asInstanceOf[SelectElementReference[_,_]]
       }
       catch { // TODO: validate this at compile time with a scalac plugin
-        case e:ClassCastException => {
-            throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
-        }
+        case e:ClassCastException =>
+          throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
       }
 
     val fmd =
@@ -225,9 +224,8 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
         ser.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData
       }
       catch { // TODO: validate this at compile time with a scalac plugin
-        case e:ClassCastException => {
+        case e:ClassCastException =>
           throw new RuntimeException("left side of assignment '" + Utils.failSafeString(this.toString)+ "' is invalid, make sure statement uses *only* closure argument.", e)
-        }
       }
     fmd
   }
@@ -238,11 +236,11 @@ class TypedExpressionConversion[A1,T1](val e: ExpressionNode, bf: TypedExpressio
   
   def mapper: OutMapper[A1] = bf.createOutMapper
   
-  override def inhibited = e.inhibited
+  override def inhibited: Boolean = e.inhibited
 
-  override def doWrite(sw: StatementWriter) = e.doWrite((sw))
+  override def doWrite(sw: StatementWriter): Unit = e.doWrite(sw)
 
-  override def children = e.children  
+  override def children: List[ExpressionNode] = e.children
 }
 
 trait Floatifier[T1,A2,T2] {
@@ -377,7 +375,7 @@ trait DeOptionizer[P1, A1, T1, A2 >: Option[A1] <: Option[A1], T2] extends JdbcM
 }
 
 class ConcatOp[A1,A2,T1,T2](val a1: TypedExpression[A1,T1], val a2: TypedExpression[A2,T2]) extends BinaryOperatorNode(a1,a2, "||") {
-  override def doWrite(sw: StatementWriter) =
+  override def doWrite(sw: StatementWriter): Unit =
       sw.databaseAdapter.writeConcatOperator(a1, a2, sw)   
 }
 
@@ -385,8 +383,8 @@ class ConcatOp[A1,A2,T1,T2](val a1: TypedExpression[A1,T1], val a2: TypedExpress
 class NvlNode[A,T](e1: TypedExpression[_,_], e2: TypedExpression[A,T]) 
   extends BinaryOperatorNode(e1,e2,"nvl", false) with TypedExpression[A,T] {
 
-   def mapper = e2.mapper
+   def mapper: OutMapper[A] = e2.mapper
 
-   override def doWrite(sw: StatementWriter) =
+   override def doWrite(sw: StatementWriter): Unit =
     sw.databaseAdapter.writeNvlCall(left, right, sw)         
 }

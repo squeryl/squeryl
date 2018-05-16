@@ -26,13 +26,9 @@ import java.sql.ResultSet
  */
 class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema, _prefix: Option[String], val ked: Option[KeyedEntityDef[T,_]]) extends Queryable[T] {
 
-
-//2.9.x approach for LyfeCycle events :
-//  private [squeryl] var _callbacks: PosoLifecycleEventListener = NoOpPosoLifecycleEventListener
-
 ////2.8.x approach for LyfeCycle events :
   private [squeryl] lazy val _callbacks =
-    schema._callbacks.get(this).getOrElse(NoOpPosoLifecycleEventListener)
+    schema._callbacks.getOrElse(this, NoOpPosoLifecycleEventListener)
 
 
   def name = schema.tableNameFromClassName(_name)
@@ -85,7 +81,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     if(o == null)
       o = _createInstanceOfRowObject
     
-    resultSetMapper.map(o, resultSet);
+    resultSetMapper.map(o, resultSet)
     val t = o.asInstanceOf[T]
     _setPersisted(t)
     _callbacks.afterSelect(t.asInstanceOf[AnyRef]).asInstanceOf[T]

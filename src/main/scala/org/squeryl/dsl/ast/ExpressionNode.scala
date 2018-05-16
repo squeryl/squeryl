@@ -303,10 +303,10 @@ class CompositeKeyAttributeAssignment(val group: CompositeKey, _columnAttributes
 
   override def isIdFieldOfKeyedEntity = {
     val fmdHead = group._fields.head
-    fmdHead.parentMetaData.viewOrTable.ked.map(_.idPropertyName == group._propertyName).getOrElse(false)
+    fmdHead.parentMetaData.viewOrTable.ked.exists(_.idPropertyName == group._propertyName)
   }
 
-  assert(group._propertyName != None)
+  assert(group._propertyName.isDefined)
 
   override def name:Option[String] = group._propertyName
 }
@@ -374,7 +374,7 @@ class ConstantTypedExpression[A1,T1](val value: A1, val nativeJdbcValue: AnyRef,
   override def toString = 'ConstantTypedExpression + ":" + value
 }
 
-class ConstantExpressionNodeList[T](val value: Iterable[T], mapper: OutMapper[_]) extends ExpressionNode {
+class ConstantExpressionNodeList[T](val value: Iterable[T]) extends ExpressionNode {
 
   def isEmpty =
     value == Nil

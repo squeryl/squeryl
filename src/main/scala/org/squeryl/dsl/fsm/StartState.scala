@@ -61,11 +61,9 @@ trait WhereState[Cond]
   def select[R](yieldClosure: =>R): SelectState[R] =
     new BaseQueryYield[R](this, yieldClosure _)
 
-  def set(updateAssignments: UpdateAssignment*)(implicit cond: Cond =:= Conditioned) =
-    new UpdateStatement(whereClause, updateAssignments)
+  def set(updateAssignments: UpdateAssignment*) = new UpdateStatement(whereClause, updateAssignments)
   
-  def setAll(updateAssignments: UpdateAssignment*)(implicit cond: Cond =:= Unconditioned) =
-    new UpdateStatement(whereClause, updateAssignments)    
+  def setAll(updateAssignments: UpdateAssignment*) = new UpdateStatement(whereClause, updateAssignments)
 }
 
 trait HavingState[G]

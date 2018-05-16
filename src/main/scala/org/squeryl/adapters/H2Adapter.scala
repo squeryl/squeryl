@@ -15,16 +15,15 @@
  ***************************************************************************** */
 package org.squeryl.adapters
 
-import org.squeryl.Schema
 import java.sql.SQLException
-import org.squeryl.internals.{FieldMetaData, DatabaseAdapter}
+import org.squeryl.internals.FieldMetaData
 
-class H2Adapter extends DatabaseAdapter {
+class H2Adapter extends GenericAdapter {
 
   override def uuidTypeDeclaration = "uuid"
   override def isFullOuterJoinSupported = false
 
-  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
+  override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean): String = {
 
     var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)
 

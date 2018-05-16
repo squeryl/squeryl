@@ -71,7 +71,7 @@ trait KeyedEntity[K] extends PersistenceStatus {
 
   def id: K
 
-  override def hashCode =
+  override def hashCode: Int =
     if(isPersisted)
       id.hashCode
     else
@@ -147,7 +147,7 @@ class ForeignKeyDeclaration(val idWithinSchema: Int, val foreignKeyColumnName: S
   private var _referentialActions: Option[(Option[ReferentialAction],Option[ReferentialAction])] = None
 
   private [squeryl] def _isActive =
-    _referentialActions != None
+    _referentialActions.isDefined
 
   private [squeryl] def _referentialAction1: Option[ReferentialAction] =
     _referentialActions.get._1
@@ -158,26 +158,26 @@ class ForeignKeyDeclaration(val idWithinSchema: Int, val foreignKeyColumnName: S
   /**
    * Causes the foreign key to have no constraint 
    */
-  def unConstrainReference()(implicit ev: Schema) =
+  def unConstrainReference(): Unit =
     _referentialActions = None
 
   /**
    * Will cause a foreign key constraint to be created at schema creation time :
    * alter table <tableOfForeignKey> add foreign key (<foreignKey>) references <tableOfPrimaryKey>(<primaryKey>)
    */
-  def constrainReference()(implicit ev: Schema) =
+  def constrainReference(): Unit =
     _referentialActions = Some((None, None))
 
   /**
    * Does the same as constrainReference, plus adds a ReferentialAction (ex.: foreignKeyDeclaration.constrainReference(onDelete cascade)) 
    */
-  def constrainReference(a1: ReferentialAction)(implicit ev: Schema) =
+  def constrainReference(a1: ReferentialAction): Unit =
     _referentialActions = Some((Some(a1), None))
 
   /**
    * Does the same as constrainReference, plus adds two ReferentialActions
    * (ex.: foreignKeyDeclaration.constrainReference(onDelete cascade, onUpdate restrict)) 
    */
-  def constrainReference(a1: ReferentialAction, a2: ReferentialAction)(implicit ev: Schema) =
+  def constrainReference(a1: ReferentialAction, a2: ReferentialAction): Unit =
     _referentialActions = Some((Some(a1), Some(a2)))
 }

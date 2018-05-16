@@ -512,7 +512,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         passed('testUpperAndLowerFuncs)
     }
     catch {
-      case e: UnsupportedOperationException => println("testUpperAndLowerFuncs: regex not supported by database adapter")
+      case _: UnsupportedOperationException => println("testUpperAndLowerFuncs: regex not supported by database adapter")
     }
   }
 

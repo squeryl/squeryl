@@ -281,7 +281,7 @@ class FieldMetaData(
         res
     }
     catch {
-      case e: IllegalArgumentException => org.squeryl.internals.Utils.throwError(wrappedFieldType.getName + " used on " + o.getClass.getName)
+      case _: IllegalArgumentException => org.squeryl.internals.Utils.throwError(wrappedFieldType.getName + " used on " + o.getClass.getName)
     }
     
   def getNativeJdbcValue(o:AnyRef): AnyRef = {
@@ -355,7 +355,7 @@ class FieldMetaData(
 
 trait FieldMetaDataFactory {
 
-  def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
+  def hideFromYieldInspection(o: AnyRef, f: Field): Boolean
 
   def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
 
@@ -366,7 +366,9 @@ object FieldMetaData {
 
   private val _EMPTY_ARRAY = new Array[Object](0)
   
-  var factory = new FieldMetaDataFactory {   
+  var factory = new FieldMetaDataFactory {
+
+    override def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
 
     def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef =
       () => {
@@ -424,7 +426,7 @@ object FieldMetaData {
       var customTypeFactory: Option[AnyRef=>Product1[Any] with AnyRef] = None
 
       if(classOf[Product1[Any]].isAssignableFrom(clsOfField))
-        customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, clsOfField)
+        customTypeFactory = _createCustomTypeFactory(fieldMapper, clsOfField)
 
       if(customTypeFactory != None) {
         val f = customTypeFactory.get
@@ -438,12 +440,7 @@ object FieldMetaData {
          */
         v = createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
 
-      val deductionFailed =
-        v match {
-          case Some(None) => true
-          case null => true
-          case a:Any  => false
-        }
+      val deductionFailed = v == Some(None) || v == null
 
       if(deductionFailed) {
         val errorMessage = "Could not deduce Option[] type of field '" + name + "' of class " + parentMetaData.clasz.getName
@@ -464,7 +461,7 @@ object FieldMetaData {
           p._1.getClass
         case Some(x: Product1[_]) =>
           //if we get here, customTypeFactory has not had a chance to get created
-          customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, typeOfFieldOrTypeOfOption)
+          customTypeFactory = _createCustomTypeFactory(fieldMapper, typeOfFieldOrTypeOfOption)
           x._1.asInstanceOf[AnyRef].getClass
         case _ =>
           typeOfFieldOrTypeOfOption
@@ -500,7 +497,7 @@ object FieldMetaData {
    * that creates an instance of a custom type with it, the factory accepts null to create
    * default values for non nullable primitive types (int, long, etc...)
    */
-  private def _createCustomTypeFactory(fieldMapper: FieldMapper, ownerClass: Class[_], typeOfField: Class[_]): Option[AnyRef=>Product1[Any] with AnyRef] = {
+  private def _createCustomTypeFactory(fieldMapper: FieldMapper, typeOfField: Class[_]): Option[AnyRef=>Product1[Any] with AnyRef] = {
     // run through the given class hierarchy and return the first method
     // which is called "value" and doesn't return java.lang.Object
     @tailrec

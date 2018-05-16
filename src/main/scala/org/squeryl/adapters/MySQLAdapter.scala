@@ -17,12 +17,12 @@ package org.squeryl.adapters
 
 import org.squeryl.{ReferentialAction, Table}
 import java.sql.SQLException
-import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
+import org.squeryl.internals.StatementWriter
 import org.squeryl.dsl.ast.ExpressionNode
 import org.squeryl.internals.ConstantStatementParam
 import org.squeryl.InternalFieldMapper
 
-class MySQLAdapter extends DatabaseAdapter {
+class MySQLAdapter extends GenericAdapter {
 
   override def isFullOuterJoinSupported = false
 
