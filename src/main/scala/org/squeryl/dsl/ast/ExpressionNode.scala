@@ -374,7 +374,7 @@ class ConstantTypedExpression[A1,T1](val value: A1, val nativeJdbcValue: AnyRef,
   override def toString = 'ConstantTypedExpression + ":" + value
 }
 
-class ConstantExpressionNodeList[T](val value: Traversable[T], mapper: OutMapper[_]) extends ExpressionNode {
+class ConstantExpressionNodeList[T](val value: Iterable[T], mapper: OutMapper[_]) extends ExpressionNode {
 
   def isEmpty =
     value == Nil

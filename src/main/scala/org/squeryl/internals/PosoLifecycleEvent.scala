@@ -33,7 +33,7 @@ class LifecycleEventInvoker(i:Iterable[LifecycleEvent], owner: View[_]) extends 
   override def hasBeforeDelete = _beforeDelete != Nil
   override def hasAfterDelete = _afterDelete != Nil
 
-  private def applyFuncs(fs: Traversable[AnyRef=>AnyRef], a: AnyRef) = {
+  private def applyFuncs(fs: Iterable[AnyRef=>AnyRef], a: AnyRef) = {
 
     var res = a
 
@@ -58,10 +58,10 @@ class LifecycleEventInvoker(i:Iterable[LifecycleEvent], owner: View[_]) extends 
 
 trait BaseLifecycleEventPercursor {
 
-  protected def createLCEMap[A](t: Traversable[View[_]], e: PosoLifecycleEvent.Value, f: A=>A) =
+  protected def createLCEMap[A](t: Iterable[View[_]], e: PosoLifecycleEvent.Value, f: A=>A) =
     new LifecycleEvent(t, e, f.asInstanceOf[AnyRef=>AnyRef])
 
-  protected def createLCECall[A](t: Traversable[View[_]], e: PosoLifecycleEvent.Value, f: A=>Unit) =
+  protected def createLCECall[A](t: Iterable[View[_]], e: PosoLifecycleEvent.Value, f: A=>Unit) =
     createLCEMap[A](
       t,
       e,
@@ -96,7 +96,7 @@ class LifecycleEventPercursorClass[A](target: Class[_], schema: Schema, e: PosoL
 
 }
 
-class LifecycleEvent(val target: Traversable[View[_]], val e: PosoLifecycleEvent.Value, val callback: AnyRef=>AnyRef)
+class LifecycleEvent(val target: Iterable[View[_]], val e: PosoLifecycleEvent.Value, val callback: AnyRef=>AnyRef)
 
 
 trait PosoLifecycleEventListener {
