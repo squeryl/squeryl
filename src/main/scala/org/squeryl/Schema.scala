@@ -197,7 +197,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   private def _indexDeclarationsFor(t: Table[_]): List[String] = {
     t.posoMetaData.fieldsMetaData.flatMap{ fmd =>
       _writeIndexDeclarationIfApplicable(fmd.columnAttributes.toSeq, Seq(fmd), None)
-    }(collection.breakOut)
+    }.toList
   }
   
 
@@ -547,7 +547,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       .groupBy(_._1)
       .mapValues(_.map(_._2))
       .map(
-       (t:Tuple2[View[_],Seq[LifecycleEvent]]) => {
+       (t:Tuple2[View[_],collection.Seq[LifecycleEvent]]) => {
          (t._1, new LifecycleEventInvoker(t._2, t._1)): (View[_],LifecycleEventInvoker)
        })
       .toMap

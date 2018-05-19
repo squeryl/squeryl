@@ -282,7 +282,7 @@ class ColumnGroupAttributeAssignment(cols: collection.Seq[FieldMetaData], column
 
   private val _columnAttributes = new ArrayBuffer[ColumnAttribute]
 
-  _columnAttributes.appendAll(columnAttributes_)
+  _columnAttributes ++= columnAttributes_
 
   def columnAttributes = _columnAttributes 
 

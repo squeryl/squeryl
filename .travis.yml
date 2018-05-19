@@ -36,3 +36,8 @@ cache:
 before_cache:
 - find $HOME/.sbt -name "*.lock" | xargs rm
 - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+matrix:
+  include:
+  - scala: 2.13.0-M4
+    script:
+    - sbt "++${TRAVIS_SCALA_VERSION}!" compile
