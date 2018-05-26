@@ -32,13 +32,6 @@ trait QueryTester extends Matchers {
       println("-->" + r)
   }
 
-  def assertEquals[E](expected:E, actual:E, s:Symbol): Unit =
-    assertEquals(expected, actual, s.toString)
-
-  def assertEquals[E](expected:E, actual:E, msg:String): Unit = {
-    actual should equal(expected)
-  }
-
   def validateQuery[R,S](name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
     validateQuery[R,S](logQueries, name, q, mapFunc, expected)
 

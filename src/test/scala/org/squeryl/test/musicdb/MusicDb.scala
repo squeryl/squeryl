@@ -127,15 +127,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       )
 
     val r = q.map(q0 => (q0.key._1, q0.measures)).toSet
-
-    assertEquals(
-      Set((herbyHancock.id, 1),
-          (ponchoSanchez.id,1),
-          (mongoSantaMaria.id,1),
-          (alainCaron.id, 0),
-          (hossamRamzy.id, 0)),
-      r, 'testJoinWithCompute)
-
+    r shouldBe Set((herbyHancock.id, 1), (ponchoSanchez.id,1), (mongoSantaMaria.id,1), (alainCaron.id, 0), (hossamRamzy.id, 0))
     passed('testJoinWithCompute)
   }
 
@@ -150,18 +142,11 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         on(a.id === s.map(_.authorId))
       ).toList
 
-
     val artistIdsWithoutSongs = q.filter(_._2 == None).map(_._1.id).toSet
-
-    assertEquals(
-      Set(alainCaron.id,hossamRamzy.id),
-      artistIdsWithoutSongs, 'testOuterJoinWithSubQuery)
+    artistIdsWithoutSongs shouldBe Set(alainCaron.id,hossamRamzy.id)
 
     val artistIdsWithSongs = q.filter(_._2 != None).map(_._1.id).toSet
-    
-    assertEquals(
-      Set(herbyHancock.id,ponchoSanchez.id,mongoSantaMaria.id),
-      artistIdsWithSongs, 'testOuterJoinWithSubQuery)
+    artistIdsWithSongs shouldBe Set(herbyHancock.id,ponchoSanchez.id,mongoSantaMaria.id)
 
     passed('testOuterJoinWithSubQuery)
   }
@@ -466,7 +451,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
       val testInstance = sharedTestInstance; import testInstance._
 
-      assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
+      List(mongoSantaMaria.firstName, ponchoSanchez.firstName) shouldBe q.toList
 
       passed('testCustomRegexFunctionSupport)
     }
@@ -483,7 +468,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
       val testInstance = sharedTestInstance; import testInstance._
 
-      assertEquals(List(mongoSantaMaria.firstName, ponchoSanchez.firstName), q.toList, 'testCustomRegexFunctionSupport)
+      List(mongoSantaMaria.firstName, ponchoSanchez.firstName) shouldBe q.toList
 
       passed('testRegexFunctionSupport)
     }
@@ -507,7 +492,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
         val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s.toUpperCase + s.toLowerCase)
 
-        assertEquals(expected, q.toList, 'testUpperAndLowerFuncs)
+        expected shouldBe q.toList
 
         passed('testUpperAndLowerFuncs)
     }
@@ -529,7 +514,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
       val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s + "zozo")
 
-      assertEquals(expected, q.toList, 'testConcatFunc)
+      expected shouldBe q.toList
 
       passed('testConcatFunc)
     }
@@ -555,7 +540,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     artists.update(mongo)
     mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
 
-    assertEquals(new Timestamp(cal.getTimeInMillis), mongo.timeOfLastUpdate, 'testTimestamp)
+    new Timestamp(cal.getTimeInMillis) shouldBe mongo.timeOfLastUpdate
 
     val mustBeSome =
       artists.where(a =>
@@ -624,7 +609,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val res = artists.where(_.firstName === mongoSantaMaria.firstName).single.timeOfLastUpdate
     //val res = mongo.timeOfLastUpdate
 
-    assertEquals(cal.getTime, res, 'testTimestampPartialUpdate)
+    cal.getTime shouldBe res
 
     passed('testTimestampPartialUpdate)
   }
@@ -655,7 +640,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       mongo = shouldBeSome.get
 
       if(!dbAdapter.isInstanceOf[MySQLAdapter]) {
-        assertEquals(tX2, mongo.timeOfLastUpdate, 'testTimestampDownToMillis)
+        tX2 shouldBe mongo.timeOfLastUpdate
       }
       
       passed('testTimestampDownToMillis)
@@ -854,9 +839,8 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       where(s.genre in (gs))
       select(s)
     )
-    assertEquals(mainstream.size, 
-                 songs.where(s => s.genre === gs(0) or s.genre === gs(1)).size, 
-                 "expected 2 Jazz/Rock pieces")
+
+    mainstream.size shouldBe songs.where(s => s.genre === gs(0) or s.genre === gs(1)).size
   }
 
   test("Enums with groupBy", SingleTestRun){
@@ -881,10 +865,8 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         where(Option(s.genre) === genreFilter.?)
         select(s)
       )
-    assertEquals(listSongs(Some(Jazz)).size, 
-                 songs.where(s => s.genre === Jazz).size, 
-                 "expected all Jazz pieces")
-    assertEquals(listSongs(None).size, songs.allRows.size, "expected all songs")
+    listSongs(Some(Jazz)).size shouldBe songs.where(s => s.genre === Jazz).size
+    listSongs(None).size shouldBe songs.allRows.size
   }
   
   test("Enums"){
@@ -904,7 +886,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val q = songs.where(_.genre === Jazz).map(_.id).toSet
 
-    assertEquals(q, Set(watermelonMan.id, freedomSound.id), "testEnum failed")
+    q shouldBe Set(watermelonMan.id, freedomSound.id)
 
     var wmm = songs.where(_.id === watermelonMan.id).single
     
@@ -915,7 +897,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(Genre.Latin, wmm.genre, "testEnum failed")
+    Genre.Latin shouldBe wmm.genre
 
     update(songs)(s =>
       where(s.id === watermelonMan.id)
@@ -924,13 +906,13 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(Genre.Jazz, wmm.genre, "testEnum failed")
+    Genre.Jazz shouldBe wmm.genre
 
     //test for  Option[Enumeration] :
 
     val q2 = songs.where(_.secondaryGenre === Some(Genre.Latin)).map(_.id).toSet
 
-    assertEquals(q2, Set(watermelonMan.id, freedomSound.id), "testEnum failed")
+    q2 shouldBe Set(watermelonMan.id, freedomSound.id)
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
@@ -941,7 +923,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(Some(Genre.Rock), wmm.secondaryGenre, "testEnum failed")
+    Some(Genre.Rock) shouldBe wmm.secondaryGenre
 
     update(songs)(s =>
       where(s.id === watermelonMan.id)
@@ -950,7 +932,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(None, wmm.secondaryGenre, "testEnum failed")
+    None shouldBe wmm.secondaryGenre
 
 
     update(songs)(s =>
@@ -960,7 +942,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     wmm = songs.where(_.id === watermelonMan.id).single
 
-    assertEquals(Some(Genre.Latin), wmm.secondaryGenre, "testEnum failed")
+    Some(Genre.Latin) shouldBe wmm.secondaryGenre
 
     passed('testEnums)
   }
@@ -971,15 +953,15 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val q1 = dynamicWhereOnArtists(None, None)
 
-    assertEquals(allArtists.map(_.id).toSet, q1.map(_.id).toSet, 'testDynamicWhereClause1)
+    allArtists.map(_.id).toSet shouldBe q1.map(_.id).toSet
 
     val q2 = dynamicWhereOnArtists(None, Some("S%"))
 
-    assertEquals(Set(ponchoSanchez.id, mongoSantaMaria.id), q2.map(_.id).toSet, 'testDynamicWhereClause1)
+    Set(ponchoSanchez.id, mongoSantaMaria.id) shouldBe q2.map(_.id).toSet
 
     val q3 = dynamicWhereOnArtists(Some("Poncho"), Some("S%"))
 
-    assertEquals(Set(ponchoSanchez.id), q3.map(_.id).toSet, 'testDynamicWhereClause1)
+    Set(ponchoSanchez.id) shouldBe q3.map(_.id).toSet
 
     passed('testDynamicWhereClause1)
 
@@ -1003,7 +985,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val q = artists.where(_.firstName in Nil).toList
 
-    assertEquals(Nil, q, 'testInTautology)
+    Nil shouldBe q
 
     passed('testInTautology)
   }
@@ -1014,7 +996,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
    val q = artists.where(_.firstName notIn Nil).map(_.id).toSet
 
-    assertEquals(allArtists, q, 'testNotInTautology)
+    allArtists shouldBe q
 
     passed('testNotInTautology)
   }
@@ -1028,7 +1010,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val r1 = cds.where(_.id in q1).single
 
-    assertEquals(congaBlue.id, r1.id, 'testAggregateQueryOnRightHandSideOfInOperator)
+    congaBlue.id shouldBe r1.id
 
     val q2 =
       from(cds)(cd =>
@@ -1039,7 +1021,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 //    println(q2.statement)
 //    println(cds.toList)
 //    println(cds.where(_.title in q2).statement)
-    assertEquals(congaBlue.title, r2.title, 'testAggregateQueryOnRightHandSideOfInOperator)
+    congaBlue.title shouldBe r2.title
 
     // should compile (valid SQL even though phony...) :
     artists.where(_.age in from(artists)(a=> compute(count)))
@@ -1068,7 +1050,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val r1 = q2.single
 
-    assertEquals(congaBlue.id, r1.id, 'testAggregateComputeInSubQuery)
+    congaBlue.id shouldBe r1.id
 
 
     val q3 =

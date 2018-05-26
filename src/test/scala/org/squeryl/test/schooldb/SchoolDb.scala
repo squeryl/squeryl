@@ -491,7 +491,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         compute(countDistinct(cs.courseId))
       )
 
-    //assertEquals(4L, q: Long, 'testCountSignatures)
+    //4L shouldBe q: Long
     (q:Long) should equal(4L)
 
     val q2 =
@@ -499,7 +499,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         compute(count(cs.courseId))
       )
 
-    //assertEquals(5L, q2: Long, 'testCountSignatures)
+    //5L shouldBe q2: Long
     (q2:Long) should equal(5L)
 
     val q3 =
@@ -507,7 +507,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         compute(count)
       )
 
-    //assertEquals(5L, q3: Long, 'testCountSignatures)
+    //5L shouldBe q3: Long
     (q3:Long) should equal(5L)
 
     //passed('testCountSignatures)
@@ -538,7 +538,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val profTournesol = q1.single
 
-    assertEquals(tournesol.id, profTournesol.id, 'testDeepNest)
+    tournesol.id shouldBe profTournesol.id
 
     passed('testDeepNest)
   }
@@ -574,7 +574,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val profTournesol = q1.single
 
-    assertEquals(tournesol.id, profTournesol.id, 'testDeepNest)
+    tournesol.id shouldBe profTournesol.id
 
     passed('testDeepNest)
   }
@@ -593,9 +593,9 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val h = q.head
 
-    assertEquals(oneTwoThreePieIXStreet.id, h.id, 'testOptionStringInWhereClause)
+    oneTwoThreePieIXStreet.id shouldBe h.id
 
-    assertEquals(Some("A"), h.appNumberSuffix, 'testOptionStringInWhereClause)
+    Some("A") shouldBe h.appNumberSuffix
 
     passed('testOptionStringInWhereClause)
   }
@@ -605,7 +605,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     var c = courses.where(_.id === counterpoint.id).single
 
-    assertEquals(c.rawData(0), 5, 'blobTest)
+    c.rawData(0) shouldBe 5
 
     c.rawData(0) = 3
 
@@ -613,13 +613,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     c = courses.where(_.id === counterpoint.id).single
 
-    assertEquals(c.rawData(0), 3, 'blobTest)
+    c.rawData(0) shouldBe 3
 
     val data = Array.fill(2)(2.toByte)
     courses.update(c => where(c.id === counterpoint.id) set(c.rawData := data))
     c = courses.where(_.id === counterpoint.id).single
-    assertEquals(2, c.rawData(0), 'blobTest)
-    assertEquals(2, c.rawData(1), 'blobTest)
+    2 shouldBe c.rawData(0)
+    2 shouldBe c.rawData(1)
 
     passed('blobTest)
   }
@@ -726,7 +726,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s.id)
       ).toSet
 
-    assertEquals(Set(xiao.id,georgi.id), r, 'testInOpWithStringList)
+    Set(xiao.id,georgi.id) shouldBe r
 
     passed('testInOpWithStringList)
   }
@@ -816,8 +816,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select((&(lower(s.name)), &(upper("zaza"))))
       ).single
 
-    assertEquals("gontran", s._1, 'testServerSideFunctionCall)
-    assertEquals("ZAZA", s._2, 'testServerSideFunctionCall)
+    "gontran" shouldBe s._1
+    "ZAZA" shouldBe s._2
 
     passed('testServerSideFunctionCall)
   }
@@ -903,7 +903,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       val r1 = z1.toSet
       val r2 = z2.toSet
       
-    assertEquals(r1, r2, "result of isNull and === None differ")      
+    r1 shouldBe r2
   }
 
 //  test("NotOperator"){
@@ -1353,7 +1353,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val after = professors.where(p => p.id === tournesol.id).single.yearlySalary
 
-    assertEquals(expected, after, 'testPartialUpdateWithSubQueryInSetClause)
+    expected shouldBe after
 
     update(professors)(p =>
       where(p.id === tournesol.id)
@@ -1392,7 +1392,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val actualVersionNumber =
       from(courses)(c => where(c.id === heatTransfer.id) select(c)).single.occVersionNumberZ
 
-    assertEquals(expectedVersionNumber, actualVersionNumber, "optimistic CC failed")
+    expectedVersionNumber shouldBe actualVersionNumber
 
     passed('testOptimisticCC1)
   }
@@ -1411,12 +1411,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val streetNames = List("Van Horne", "Sherbrooke", "St-Urbain", "St-Dominique")
 
     val q = addresses.where(a => a.streetName in streetNames)
-
-    assertEquals(4, q.Count : Long, "batched update test failed")
+    q.Count.toLong shouldBe 4
 
     addresses.delete(q)
-
-    assertEquals(0, q.Count : Long, "batched update test failed")
+    q.Count.toLong shouldBe 0
 
     passed('testBatchInserts1)
   }
@@ -1443,12 +1441,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val updatedStreetNames = List("Van HorneZ", "SherbrookeZ", "St-UrbainZ", "St-DominiqueZ")
 
     val updatedQ = addresses.where(a => a.streetName in updatedStreetNames)
-
-    assertEquals(4, updatedQ.Count : Long, "batched update test failed")
+    updatedQ.Count.toLong shouldBe 4
 
     addresses.delete(updatedQ)
-
-    assertEquals(0, updatedQ.Count : Long, "batched update test failed")
+    updatedQ.Count.toLong shouldBe 0
 
     passed('testBatchUpdate1)
   }
@@ -1479,9 +1475,9 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val pt = professors.where(_.yearlySalaryBD.between(75, 80))
 
-    assertEquals(1, pt.Count : Long, 'testBigDecimal)
+    pt.Count.toLong shouldBe 1
 
-    assertEquals(tournesol.id, pt.single.id, 'testBigDecimal)
+    tournesol.id shouldBe pt.single.id
 
 
     val babaZula = professors.insert(new Professor("Baba Zula", 80.0F, Some(70.5F), 80.0F, Some(260.1234567F : BigDecimal)))
@@ -1493,7 +1489,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula2 = professors.where(_.weightInBD === Some(261.123456111: BigDecimal))
 
-    assertEquals(BigDecimal(261.123456111), babaZula2.single.weightInBD.get, 'testBigDecimal)
+    BigDecimal(261.123456111) shouldBe babaZula2.single.weightInBD.get
 
     update(professors)(p=>
       where(p.id === babaZula.id)
@@ -1502,7 +1498,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula3 = professors.where(_.weightInBD === Some(261.1234561112: BigDecimal))
 
-    assertEquals(1, babaZula3.Count : Long, 'testBigDecimal)
+    babaZula3.Count.toLong shouldBe 1
 
     update(professors)(p=>
       where(p.id === babaZula.id)
@@ -1511,8 +1507,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula4 = professors.where(_.weightInBD === Some(532.2469122224: BigDecimal))
 
-    assertEquals(BigDecimal(532.2469122224), babaZula4.single.weightInBD.get, 'testBigDecimal)
-    assertEquals(1, babaZula4.Count : Long, 'testBigDecimal)
+    BigDecimal(532.2469122224) shouldBe babaZula4.single.weightInBD.get
+    babaZula4.Count.toLong shouldBe 1
 
     update(professors)(p=>
       where(p.id === babaZula.id)
@@ -1521,8 +1517,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val babaZula5 = professors.where(_.yearlySalaryBD === 170)
 
-    assertEquals(BigDecimal(170), babaZula5.single.yearlySalaryBD, 'testBigDecimal)
-    assertEquals(1, babaZula5.Count : Long, 'testBigDecimal)
+    BigDecimal(170) shouldBe babaZula5.single.yearlySalaryBD
+    babaZula5.Count.toLong shouldBe 1
   }
 
   test("YieldInspectionResidue") {
@@ -1552,7 +1548,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val res = q3.single
 
-    assertEquals(5, res.id,'testInWithCompute)
+    5 shouldBe res.id
     //println("------------->" + res.id)
     passed('testInWithCompute)
   }
@@ -1567,7 +1563,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val allStuents = students.allRows.map(_.id).toSet
     val allStudentsQ = q.map(_.id).toSet
 
-    assertEquals(allStuents, allStudentsQ, 'testIsNotNullWithInhibition)
+    allStuents shouldBe allStudentsQ
 
 
     val q2 =
@@ -1576,7 +1572,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s)
       )
 
-    assertEquals(0, q2.size, 'testIsNotNullWithInhibition)
+    0 shouldBe q2.size
 
     passed('testInWithCompute)
   }

@@ -226,7 +226,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
           select(&(from(subjects)(s2 => where(s2.name === s.name) select(s2.name))))
       )
 
-    assertEquals(1, q.toList.length, "Could not find row")
+    1 shouldBe q.toList.length
   }
 
   test("equality using query value") {
@@ -240,7 +240,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
         select(s.name)
       )
 
-    assertEquals(1, q.toList.length, "Could not find row")
+    1 shouldBe q.toList.length
   }
 
   test("associate comment"){
@@ -267,7 +267,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
     
-    assertEquals(95.0F, cs2.grade, 'testUpdateWithCompositePK)
+    95.0F shouldBe cs2.grade
 
     passed('testUpdateWithCompositePK)
   }
@@ -276,23 +276,23 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val seedData = seedDataDef
     import seedData._
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
+    courseAssignments.Count.toLong shouldBe 0
 
     professeurTournesol.courses.associate(physicsCourse)
 
     val c1 = professeurTournesol.courses.single : Course
 
-    assertEquals(c1.id,  physicsCourse.id, 'testMany2ManyAssociationFromLeftSide)
+    c1.id shouldBe  physicsCourse.id
 
     val ca = professeurTournesol.courses.associations.single : CourseAssignment
 
-    assertEquals(ca.courseId,  physicsCourse.id, 'testMany2ManyAssociationFromLeftSide)
+    ca.courseId shouldBe  physicsCourse.id
 
-    assertEquals(professeurTournesol.courses.dissociateAll, 1, 'testMany2ManyAssociationFromLeftSide)
+    professeurTournesol.courses.dissociateAll shouldBe 1
 
-    assertEquals(professeurTournesol.courses.dissociateAll, 0, 'testMany2ManyAssociationFromLeftSide)
+    professeurTournesol.courses.dissociateAll shouldBe 0
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
+    courseAssignments.Count.toLong shouldBe 0L
 
     passed('testMany2ManyAssociationFromLeftSide)
   }
@@ -301,23 +301,23 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val seedData = seedDataDef
     import seedData._
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
+    courseAssignments.Count.toLong shouldBe 0L
 
     physicsCourse.professors.associate(professeurTournesol)
 
     val profT = physicsCourse.professors.single : Professor
 
-    assertEquals(professeurTournesol.lastName, profT.lastName, 'testMany2ManyAssociationsFromRightSide)
+    professeurTournesol.lastName shouldBe profT.lastName
 
     val ca = professeurTournesol.courses.associations.single : CourseAssignment
 
-    assertEquals(ca.courseId,  physicsCourse.id, 'testMany2ManyAssociationsFromRightSide)
+    ca.courseId shouldBe  physicsCourse.id
 
-    assertEquals(physicsCourse.professors.dissociateAll, 1, 'testMany2ManyAssociationsFromRightSide)
+    physicsCourse.professors.dissociateAll shouldBe 1
 
-    assertEquals(physicsCourse.professors.dissociateAll, 0, 'testMany2ManyAssociationsFromRightSide)
+    physicsCourse.professors.dissociateAll shouldBe 0
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
+    courseAssignments.Count.toLong shouldBe 0
 
     passed('testMany2ManyAssociationsFromRightSide)
   }
@@ -334,38 +334,22 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     philosophy.courses.associate(philosophyCourse2PMWednesday)
     philosophy.courses.associate(philosophyCourse3PMFriday)
 
-    assertEquals(
-      philosophy.courses.map(_.id).toSet,
-      Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id, philosophyCourse3PMFriday.id),
-      'testOneToMany)
-
-    assertEquals(
-      philosophyCourse2PMWednesday.subject.single.name,
-      philosophy.name,
-      'testOneToMany)
+    philosophy.courses.map(_.id).toSet shouldBe Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id, philosophyCourse3PMFriday.id)
+    philosophy.name shouldBe philosophyCourse2PMWednesday.subject.single.name
 
     // verify that a reassociation does an update and not an insert :
     val pk1 = philosophyCourse3PMFriday.id
 
     computationTheory.courses.associate(philosophyCourse3PMFriday)
 
-    assertEquals(
-      pk1,
-      philosophyCourse3PMFriday.id,
-      'testOneToMany)
+    pk1 shouldBe philosophyCourse3PMFriday.id
 
     // verify that the reassociation worked, which means that
     // 1) : the set of philosophy.courses was reduced properly
-    assertEquals(
-      philosophy.courses.map(_.id).toSet,
-      Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id),
-      'testOneToMany)
+    philosophy.courses.map(_.id).toSet shouldBe Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id)
 
     // 2) philosophyCourse3PMFriday.subject points to the proper subject
-    assertEquals(
-      computationTheory.name,
-      philosophyCourse3PMFriday.subject.single.name,
-      'testOneToMany)
+    computationTheory.name shouldBe philosophyCourse3PMFriday.subject.single.name
 
     passed('testOneToMany)
   }
@@ -388,18 +372,14 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     _existsAndEquals(qA2.headOption, a)
 
-    //println(qA2.statement)
-
     val qA3 =
       courseAssignments.where(_.id === a.id)
 
     _existsAndEquals(qA3.headOption, a)
 
     courseAssignments.delete(compositeKey(a.courseId, a.professorId))
+    qA3.Count.toLong shouldBe 0L
 
-    assertEquals(0L, qA3.Count: Long, 'testCompositeEquality)
-
-    //println(ca2.statement)
     passed('testCompositeEquality)
   }
 
@@ -408,18 +388,17 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     if(oca == None)
       org.squeryl.internals.Utils.throwError("query returned no rows")
 
-    assertEquals(ca.id, oca.get.id, 'testCompositeEquality)
+    ca.id shouldBe oca.get.id
   }
 
   test("UniquenessConstraint"){
     val seedData = seedDataDef
     import seedData._
-    
-    assertEquals(0, courseAssignments.Count : Long, 'testUniquenessConstraint)
+
+    courseAssignments.Count.toLong shouldBe 0
 
     physicsCourse.professors.associate(professeurTournesol)
-
-    assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
+    courseAssignments.Count.toLong shouldBe 1
 
     var exceptionThrown = false
 
@@ -444,7 +423,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     if(! exceptionThrown)
       org.squeryl.internals.Utils.throwError('testUniquenessConstraint + " failed, unique constraint violation occured")
 
-    assertEquals(1, courseAssignments.Count : Long, 'testUniquenessConstraint)
+    courseAssignments.Count.toLong shouldBe 1
 
     passed('testUniquenessConstraint)
   }
@@ -491,7 +470,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
     
-    assertEquals(95.0F, cs2.grade, 'testUpdateWithCompositePK)
+    95.0F shouldBe cs2.grade
     
     from(courseSubscriptions)(p => compute(avg(p.grade)))
    

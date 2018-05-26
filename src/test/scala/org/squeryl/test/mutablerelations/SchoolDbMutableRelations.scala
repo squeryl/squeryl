@@ -110,23 +110,23 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     val i = instance
     import i._
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
+    courseAssignments.Count.toLong shouldBe 0
 
     professeurTournesol.courses.associate(physicsCourse)
 
     val c1 = professeurTournesol.courses.head : Course
 
-    assertEquals(c1.id,  physicsCourse.id, 'testMany2ManyAssociationFromLeftSide)
+    c1.id shouldBe  physicsCourse.id
 
     val ca = professeurTournesol.courses.associations.head : CourseAssignment
 
-    assertEquals(ca.courseId,  physicsCourse.id, 'testMany2ManyAssociationFromLeftSide)
+    ca.courseId shouldBe  physicsCourse.id
 
-    assertEquals(professeurTournesol.courses.dissociateAll, 1, 'testMany2ManyAssociationFromLeftSide)
+    professeurTournesol.courses.dissociateAll shouldBe 1
 
-    assertEquals(professeurTournesol.courses.dissociateAll, 0, 'testMany2ManyAssociationFromLeftSide)
+    professeurTournesol.courses.dissociateAll shouldBe 0
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationFromLeftSide)
+    courseAssignments.Count.toLong shouldBe 0
 
     passed('testMany2ManyAssociationFromLeftSide)
   }
@@ -137,25 +137,25 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     val i = instance
     import i._
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
+    courseAssignments.Count.toLong shouldBe 0
 
     physicsCourse.professors.associate(professeurTournesol)
 
     val profT = physicsCourse.professors.head : Professor
 
-    assertEquals(professeurTournesol.lastName, profT.lastName, 'testMany2ManyAssociationsFromRightSide)
+    professeurTournesol.lastName shouldBe profT.lastName
 
     professeurTournesol.courses.refresh
 
     val ca = professeurTournesol.courses.associations.head : CourseAssignment
 
-    assertEquals(ca.courseId,  physicsCourse.id, 'testMany2ManyAssociationsFromRightSide)
+    ca.courseId shouldBe  physicsCourse.id
 
-    assertEquals(physicsCourse.professors.dissociateAll, 1, 'testMany2ManyAssociationsFromRightSide)
+    physicsCourse.professors.dissociateAll shouldBe 1
 
-    assertEquals(physicsCourse.professors.dissociateAll, 0, 'testMany2ManyAssociationsFromRightSide)
+    physicsCourse.professors.dissociateAll shouldBe 0
 
-    assertEquals(0, courseAssignments.Count : Long, 'testMany2ManyAssociationsFromRightSide)
+    courseAssignments.Count.toLong shouldBe 0
 
     // test dissociate :
     physicsCourse.professors.associate(professeurTournesol)
@@ -164,8 +164,8 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     professeurTournesol.courses.refresh
 
-    assertEquals(physicsCourse.professors.dissociate(professeurTournesol), true, 'testMany2ManyAssociationsFromRightSide)
-    assertEquals(physicsCourse.professors.dissociate(professeurTournesol), false, 'testMany2ManyAssociationsFromRightSide)
+    physicsCourse.professors.dissociate(professeurTournesol) shouldBe true
+    physicsCourse.professors.dissociate(professeurTournesol) shouldBe false
 
     passed('testMany2ManyAssociationsFromRightSide)
   }
@@ -201,53 +201,36 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
         sCnt += 1
       }
       if(s0.id == philosophy.id)
-        assertEquals(3, sCnt, 'testOneToMany)
+        3 shouldBe sCnt
       else if(s0.id == chemistry.id)
-        assertEquals(2, sCnt, 'testOneToMany)
+        2 shouldBe sCnt
       else
         org.squeryl.internals.Utils.throwError("unknown subject : " + s0)
     }
 
-    assertEquals(5, cnt, 'testOneToMany)
+    5 shouldBe cnt
 
-    assertEquals(
-      philosophy.courses.map(_.id).toSet,
-      Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id, philosophyCourse3PMFriday.id),
-      'testOneToMany)
+    philosophy.courses.map(_.id).toSet shouldBe Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id, philosophyCourse3PMFriday.id)
 
     // no need to refresh :
     //philosophyCourse2PMWednesday.subject.refresh
     // since the relation is lazy and we haven't touched it yet...
-
-    assertEquals(
-      philosophyCourse2PMWednesday.subject.one.get.name,
-      philosophy.name,
-      'testOneToMany)
+    philosophyCourse2PMWednesday.subject.one.get.name shouldBe philosophy.name
 
     // verify that a reassociation does an update and not an insert :
     val pk1 = philosophyCourse3PMFriday.id
 
     computationTheory.courses.associate(philosophyCourse3PMFriday)
-
-    assertEquals(
-      pk1,
-      philosophyCourse3PMFriday.id,
-      'testOneToMany)
+    pk1 shouldBe philosophyCourse3PMFriday.id
 
     philosophy.courses.refresh
 
     // verify that the reassociation worked, which means that
     // 1) : the set of philosophy.courses was reduced properly
-    assertEquals(
-      philosophy.courses.map(_.id).toSet,
-      Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id),
-      'testOneToMany)
+    philosophy.courses.map(_.id).toSet shouldBe Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id)
 
     // 2) philosophyCourse3PMFriday.subject points to the proper subject
-    assertEquals(
-      computationTheory.name,
-      philosophyCourse3PMFriday.subject.one.get.name,
-      'testOneToMany)
+    computationTheory.name shouldBe philosophyCourse3PMFriday.subject.one.get.name
 
     passed('testOneToMany)
   }
