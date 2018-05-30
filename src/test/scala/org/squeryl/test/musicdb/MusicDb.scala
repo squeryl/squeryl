@@ -128,7 +128,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val r = q.map(q0 => (q0.key._1, q0.measures)).toSet
     r shouldBe Set((herbyHancock.id, 1), (ponchoSanchez.id,1), (mongoSantaMaria.id,1), (alainCaron.id, 0), (hossamRamzy.id, 0))
-    passed('testJoinWithCompute)
   }
 
   test("OuterJoinWithSubQuery"){
@@ -147,8 +146,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val artistIdsWithSongs = q.filter(_._2 != None).map(_._1.id).toSet
     artistIdsWithSongs shouldBe Set(herbyHancock.id,ponchoSanchez.id,mongoSantaMaria.id)
-
-    passed('testOuterJoinWithSubQuery)
   }
 
   test("OuterJoinInOuter", SingleTestRun){
@@ -171,8 +168,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
           select(a, j2)
             on(a.id === j2_.map(_._1.id))
       ).toList
-
-    passed('testOuterJoinInOuter)
   }
 
   lazy val songsFeaturingPoncho =
@@ -493,8 +488,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s.toUpperCase + s.toLowerCase)
 
         expected shouldBe q.toList
-
-        passed('testUpperAndLowerFuncs)
     }
     catch {
       case e: UnsupportedOperationException => println("testUpperAndLowerFuncs: regex not supported by database adapter")
@@ -515,8 +508,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       val expected = List(mongoSantaMaria.firstName, ponchoSanchez.firstName).map(s=> s + "zozo")
 
       expected shouldBe q.toList
-
-      passed('testConcatFunc)
     }
 
   test("Timestamp"){
@@ -550,8 +541,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       ).headOption
 
     assert(mustBeSome != None, "testTimestamp failed");
-
-    passed('testTimestamp)
   }
 
   private def _truncateTimestampInTimeOfLastUpdate(p: Person) = {
@@ -610,8 +599,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     //val res = mongo.timeOfLastUpdate
 
     cal.getTime shouldBe res
-
-    passed('testTimestampPartialUpdate)
   }
 
   test("TimestampDownToMillis"){
@@ -642,8 +629,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       if(!dbAdapter.isInstanceOf[MySQLAdapter]) {
         tX2 shouldBe mongo.timeOfLastUpdate
       }
-      
-      passed('testTimestampDownToMillis)
     }
   }
 
@@ -673,7 +658,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     artists.update(ac)
     ac = artists.where(a=> a.id === alainCaron.id).single
     assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
-    passed('testUpdate1 )
   }
 
   test("KeyedEntityImplicitLookup"){
@@ -682,7 +666,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val ac = artists.lookup(alainCaron.id).get
 
     assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
-    passed('testKeyedEntityImplicitLookup)
   }
 
   test("DeleteVariations"){
@@ -699,8 +682,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
 
     assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
-
-    passed('testDeleteVariations)
   }
 
   def inhibitedArtistsInQuery(inhibit: Boolean) =
@@ -728,10 +709,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val ponchoSongs = List(besameMama.title, freedomSound.title, watermelonMan.title)
 
-    validateQuery('songsNotInhibited, songsNotInhibited, (s:Song)=>s.title,
-      ponchoSongs)
-
-    passed('testDynamicQuery1)
+    validateQuery('songsNotInhibited, songsNotInhibited, (s:Song)=>s.title, ponchoSongs)
   }
 
   def inhibitedSongsInQuery(inhibit: Boolean) =
@@ -764,8 +742,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     validateQuery('inhibitedSongsInQuery, songArtistsTuples,  (t:(Option[Song],Person)) => (t._1.get.id, t._2.id),
       expected.toList
     )
-
-    passed('testDynamicQuery2)
   }
 
   test("PaginatedQuery1"){
@@ -787,8 +763,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     assertionFailed('testPaginatedQuery1, p1, ep1)
     assertionFailed('testPaginatedQuery1, p2, ep2)
     assertionFailed('testPaginatedQuery1, p3, ep3)
-
-    passed('testPaginatedQuery1)
   }
 
 
@@ -813,8 +787,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     assertionFailed('testBetweenOperator, p1, ep1)
     assertionFailed('testBetweenOperator, p2, ep2)
     assertionFailed('testBetweenOperator, p3, ep3)
-
-    passed('testBetweenOperator)
   }
 
 //  test("leakTest"){
@@ -943,8 +915,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     wmm = songs.where(_.id === watermelonMan.id).single
 
     Some(Genre.Latin) shouldBe wmm.secondaryGenre
-
-    passed('testEnums)
   }
 
   test("DynamicWhereClause1"){
@@ -962,8 +932,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val q3 = dynamicWhereOnArtists(Some("Poncho"), Some("S%"))
 
     Set(ponchoSanchez.id) shouldBe q3.map(_.id).toSet
-
-    passed('testDynamicWhereClause1)
 
     /// Non compilation Test (should not compile):
     // val z1 = from(artists)(a => select(&(nvl(a.age,a.age)))).toList : List[Option[Int]]
@@ -986,8 +954,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val q = artists.where(_.firstName in Nil).toList
 
     Nil shouldBe q
-
-    passed('testInTautology)
   }
 
   test("NotInTautology"){
@@ -997,8 +963,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
    val q = artists.where(_.firstName notIn Nil).map(_.id).toSet
 
     allArtists shouldBe q
-
-    passed('testNotInTautology)
   }
 
   test("AggregateQueryOnRightHandSideOfInOperator"){
@@ -1031,8 +995,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     //shouldn't compile :
     //artists.where(_.age in from(artists)(a=> compute(max(a.name))))
-
-    passed('testAggregateQueryOnRightHandSideOfInOperator)
   }
 
   test("AggregateComputeInSubQuery"){
@@ -1065,8 +1027,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       )
     // should run without exception against the Db :
     q4.toList
-
-    passed('testAggregateComputeInSubQuery)
   }
   
   test("OptionalOuterJoin"){

@@ -389,8 +389,6 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
       (gaitan.id,None))
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testNewOuterJoin1 )
   }
 }
 
@@ -431,19 +429,10 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
             on(s2.name === s3.name))) and s.name === "Xiao")
         select(s))
 
-    /*
-    val q =
-      from(qStudents)(s =>
-        withCte(qStudents)
-        select(s))
-    */
-
     val res = for (s <- q) yield s.name
     val expected = List("Xiao")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('commonTableExpressions)
   }
 }
 
@@ -464,8 +453,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     professors.insert(p)
 
     professors.lookup(p.id)
-
-    passed('testAvgBigDecimal)
   }
 
   test("StringKeyedEntities"){
@@ -539,8 +526,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val profTournesol = q1.single
 
     tournesol.id shouldBe profTournesol.id
-
-    passed('testDeepNest)
   }
 
 //  test("alternatePKnameForKeyedEntity-issue55") {
@@ -548,10 +533,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 //  }
 
   test("KeyedEntityIdRenaming"){
-
     postalCodes.insert(PostalCode("J0B-2C0"))
-
-    passed('testKeyedEntityIdRenaming)
   }
 
   test("update to null") {
@@ -575,8 +557,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val profTournesol = q1.single
 
     tournesol.id shouldBe profTournesol.id
-
-    passed('testDeepNest)
   }
 
   test("assertColumnNameChangeWithDeclareSyntax") {
@@ -596,8 +576,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     oneTwoThreePieIXStreet.id shouldBe h.id
 
     Some("A") shouldBe h.appNumberSuffix
-
-    passed('testOptionStringInWhereClause)
   }
 
   test("blobTest"){
@@ -620,8 +598,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     c = courses.where(_.id === counterpoint.id).single
     2 shouldBe c.rawData(0)
     2 shouldBe c.rawData(1)
-
-    passed('blobTest)
   }
 
   test("nullCompoundKey"){
@@ -629,8 +605,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       val newRow = row.copy(description = "Cancelled")
       courseOfferings.update(newRow)
     }
-
-    passed('nullCompoundKey)
   }
 
   /**
@@ -727,8 +701,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       ).toSet
 
     Set(xiao.id,georgi.id) shouldBe r
-
-    passed('testInOpWithStringList)
   }
   
   test("transient annotation") {
@@ -799,13 +771,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val pk = addresses.posoMetaData.primaryKey
     assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
-
-    passed('testMetaData )
   }
 
   test("OptionAndNonOptionMixInComputeTuple"){
     val _:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
-    passed('testOptionAndNonOptionMixInComputeTuple)
   }
 
   test("testServerSideFunctionCall") {
@@ -818,8 +787,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     "gontran" shouldBe s._1
     "ZAZA" shouldBe s._2
-
-    passed('testServerSideFunctionCall)
   }
 
   test("ConcatWithOptionalCols"){
@@ -829,14 +796,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       // see: https://issues.apache.org/jira/browse/DERBY-1306
 
       addressesOfStudentsOlderThan24.toList
-
-      passed('testConcatWithOptionalCols )
     }
   }
 
   test("ScalarOptionQuery"){
     avgStudentAge
-    passed('testScalarOptionQuery )
   }
 
   test("LikeOperator"){
@@ -936,8 +900,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(mandarinCourse2011.startDate == feb2011,
       'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse2011.startDate)
-
-    passed('testDateTypeMapping )
   }
 
   test("java.sql.DateTypeMapping2"){
@@ -999,8 +961,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(groupTh.finalExamDate == Some(may2009),
       'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
-
-    passed('testDateOptionMapping )
   }
 
   test("DateComparisonInWhereClause"){
@@ -1028,8 +988,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(expected == result,
       'testDateComparisonInWhereClause + " expected " + expected + " got " + result)
-
-    passed('testDateComparisonInWhereClause )
   }
 
   test("DateOptionComparisonInWhereClause"){
@@ -1076,8 +1034,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(expected == result3,
       'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result3)
-
-    passed('testDateOptionComparisonInWhereClause )
   }
 
   test("NVLFunction"){
@@ -1098,8 +1054,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(expected == result,
       'testNVLFunction + " expected " + expected + " got " + result)
-
-    passed('testNVLFunction )
   }
 
   test("LongTypeMapping", SingleTestRun){
@@ -1133,8 +1087,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     ht.update
 
     assert(ht.meaninglessLongOption == Some(1234), "expected Some(1234), got " + ht.meaninglessLongOption)
-
-    passed('testLongTypeMapping)
   }
 
   test("BooleanTypeMapping"){
@@ -1166,8 +1118,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(! ht.confirmed, "expected false, got " + ht.confirmed)
-
-    passed('testBooleanTypeMapping)
   }
 
   test("BooleanOptionMapping"){
@@ -1193,8 +1143,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     g.update
     g = students.where(s => s.id === gontran.id).single
     assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
-
-    passed('testBooleanOptionMapping)
   }
 
   test("FloatType"){
@@ -1223,8 +1171,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     t = professors.where(p => p.id === tournesol.id).single
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
-
-    passed('testFloatType)
   }
 
   test("ForUpdate") {
@@ -1233,8 +1179,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
-
-    passed('testForUpdate)
   }
 
   test("PaginatedForUpdate") {
@@ -1243,8 +1187,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
     assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
-
-    passed('testForUpdate)
   }
 
 
@@ -1289,8 +1231,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val afterReset = q.toList
 
     assert(b4 == afterReset, "expected " + afterReset + " got " + b4)
-
-    passed('testPartialUpdate1)
   }
 
   test("PartialUpdateWithInclusionOperator ") {
@@ -1300,8 +1240,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       set(c.meaninglessLong := 0L,
           c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
     )
-
-    passed('testPartialUpdateWithInclusionOperator)
   }
 
   test("HavingClause") {
@@ -1314,8 +1252,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert(q.statement.indexOf("Having") != -1)
     q.toList
-
-    passed('testHavingClause)
   }
 
   test("HavingClause2") {
@@ -1361,8 +1297,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     )
 
     professors.delete(zarnitsyn.id)
-
-    passed('testPartialUpdateWithSubQueryInSetClause)
   }
 
   test("OptimisticCC1") {
@@ -1393,8 +1327,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       from(courses)(c => where(c.id === heatTransfer.id) select(c)).single.occVersionNumberZ
 
     expectedVersionNumber shouldBe actualVersionNumber
-
-    passed('testOptimisticCC1)
   }
 
   test("BatchInserts1") {
@@ -1415,8 +1347,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     addresses.delete(q)
     q.Count.toLong shouldBe 0
-
-    passed('testBatchInserts1)
   }
 
   test("BatchUpdate1") {
@@ -1445,8 +1375,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     addresses.delete(updatedQ)
     updatedQ.Count.toLong shouldBe 0
-
-    passed('testBatchUpdate1)
   }
   
   test("BatchUpdateAndInsert2") {
@@ -1466,8 +1394,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     courses2.update(c0.map(_.copy(confirmed = true)))
     
     assert(c.filter(_.confirmed).size == 2)
-    
-    passed('BatchUpdateAndInsert2)
   }
 
   test("BigDecimal") {
@@ -1527,8 +1453,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val r = FieldReferenceLinker.takeLastAccessedFieldReference
 
     assert(r == None, "!!!!!!!!!!!!")
-
-    passed('testYieldInspectionResidue)
   }
 
   test("InWithCompute") {
@@ -1549,8 +1473,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val res = q3.single
 
     5 shouldBe res.id
-    //println("------------->" + res.id)
-    passed('testInWithCompute)
   }
 
   test("IsNotNullWithInhibition") {
@@ -1573,8 +1495,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
 
     0 shouldBe q2.size
-
-    passed('testInWithCompute)
   }
   
   test("NewJoin1") {
@@ -1582,8 +1502,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
          select(s,a1,a2).
          on(s.addressId === a1.map(_.id), s.addressId === a2.id)
        })
-
-    passed('testNewJoin1)
   }
 
   test("NewLeftOuterJoin1")  {
@@ -1610,8 +1528,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       (gaitan.id,None))
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testNewOuterJoin1 )
   }
 
 
@@ -1646,8 +1562,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       (gaitan.id,None,None))
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testNewOuterJoin2 )
   }
 
   test("Boolean2LogicalBooleanConversion") {
@@ -1659,8 +1573,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
 
     assert(multilingualStudents == Set(xiao.id,gontran.id,gaitan.id))
-
-    passed('testBoolean2LogicalBooleanConversion)
   }
 
   test("AvgBigDecimal") {
@@ -1686,9 +1598,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     assert((expectedAvgSal - avgSalary.get.doubleValue) < 0.01, 'testAvgBigDecimal)
     assert((expectedAvgWeight - avgWeight.get.doubleValue) < 0.01, 'testAvgBigDecimal)
-
-
-    passed('testAvgBigDecimal)
   }
 
   test("NewLeftOuterJoin3")  {
@@ -1718,8 +1627,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       (gaitan.id,None,4))
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testNewOuterJoin3 )
   }
   
   test("TestYieldInspectionLeakViaCGLIB") {
@@ -1745,8 +1652,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testExists)
   }
 
   test("NotExists")  {
@@ -1759,8 +1664,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List("Gaitan")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testNotExists)
   }
 
   test("VeryNestedExists")  {
@@ -1777,8 +1680,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testVeryNestedExists)
   }
 
   test("VeryVeryNestedExists"){
@@ -1799,9 +1700,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('testVeryVeryNestedExists)
-
   }
 
   test("selectFromExists"){
@@ -1822,9 +1720,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List("Xiao")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('selectFromExists)
-
   }
   
   test("UpdateSetAll") {
@@ -1857,8 +1752,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List("Xiao")
 
     assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
-
-    passed('commonTableExpressions)
   }
 }
 
@@ -1894,7 +1787,7 @@ abstract class Issue14 extends DbTestBase with QueryTester {
         val seqName = (new OracleAdapter).createSequenceName(Issue14Schema.professors.posoMetaData.findFieldMetaDataForProperty("id").get)
         try {stmt.execute("create sequence " + seqName)}
         catch {
-          case e:SQLException => {} 
+          case e:SQLException => {}
         }
       }
       transaction {

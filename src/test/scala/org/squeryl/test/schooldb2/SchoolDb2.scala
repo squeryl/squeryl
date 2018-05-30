@@ -268,8 +268,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
     
     95.0F shouldBe cs2.grade
-
-    passed('testUpdateWithCompositePK)
   }
 
   test("Many2ManyAssociationFromLeftSide"){
@@ -293,8 +291,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     professeurTournesol.courses.dissociateAll shouldBe 0
 
     courseAssignments.Count.toLong shouldBe 0L
-
-    passed('testMany2ManyAssociationFromLeftSide)
   }
 
   test("Many2ManyAssociationsFromRightSide"){
@@ -318,8 +314,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     physicsCourse.professors.dissociateAll shouldBe 0
 
     courseAssignments.Count.toLong shouldBe 0
-
-    passed('testMany2ManyAssociationsFromRightSide)
   }
 
   test("OneToMany"){
@@ -350,8 +344,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     // 2) philosophyCourse3PMFriday.subject points to the proper subject
     computationTheory.name shouldBe philosophyCourse3PMFriday.subject.single.name
-
-    passed('testOneToMany)
   }
 
   test("CompositeEquality"){
@@ -379,8 +371,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     courseAssignments.delete(compositeKey(a.courseId, a.professorId))
     qA3.Count.toLong shouldBe 0L
-
-    passed('testCompositeEquality)
   }
 
   private def _existsAndEquals(oca: Option[CourseAssignment], ca: CourseAssignment) = {
@@ -424,8 +414,6 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
       org.squeryl.internals.Utils.throwError('testUniquenessConstraint + " failed, unique constraint violation occured")
 
     courseAssignments.Count.toLong shouldBe 1
-
-    passed('testUniquenessConstraint)
   }
 
 
@@ -448,12 +436,11 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   test("InFromSet"){
     val set = Set("foo", "bar", "baz")
     from(entries)(e => where(e.text.in(set))select(e)).toList
-    passed('testInFromSet)
   }
+
   test("InFromSeq"){
     val set = Set("foo", "bar", "baz").toSeq
     from(entries)(e => where(e.text.in(set))select(e)).toList
-    passed('testInFromSeq)
   }
   
   test("Inequality with query on right hand side", SingleTestRun) {
