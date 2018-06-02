@@ -990,54 +990,43 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(&(nvl(c.meaninglessLongOption, 5)))
       ).toList : List[Long]
 
-    val expected = List(5,5,5)
-
-    assert(expected == result,
-      'testNVLFunction + " expected " + expected + " got " + result)
+    result shouldBe List(5, 5, 5)
   }
 
   test("LongTypeMapping", SingleTestRun){
     val testInstance = sharedTestInstance; import testInstance._
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
-
-    assert(ht.meaninglessLong == 3, "expected 3, got " + ht.meaninglessLong)
-    assert(ht.meaninglessLongOption == Some(1234), "expected Some(1234), got " + ht.meaninglessLongOption)
+    ht.meaninglessLong shouldBe 3
+    ht.meaninglessLongOption shouldBe Some(1234)
 
     ht.meaninglessLong = -3
     ht.meaninglessLongOption = None
-
     ht.update
 
     ht = courses.where(c => c.id === heatTransfer.id).single
-
-    assert(ht.meaninglessLong == -3, "expected -3, got " + ht.meaninglessLong)
-    assert(ht.meaninglessLongOption == None, "expected None, got " + ht.meaninglessLongOption)
+    ht.meaninglessLong shouldBe -3
+    ht.meaninglessLongOption shouldBe empty
 
     ht.meaninglessLongOption = Some(4321)
-
     ht.update
 
     ht = courses.where(c => c.id === heatTransfer.id).single
+    ht.meaninglessLongOption shouldBe Some(4321)
 
-    assert(ht.meaninglessLongOption == Some(4321), "expected Some(4321), got " + ht.meaninglessLongOption)
 
     ht.meaninglessLongOption = Some(1234)
-
     ht.update
 
-    assert(ht.meaninglessLongOption == Some(1234), "expected Some(1234), got " + ht.meaninglessLongOption)
+    ht = courses.where(c => c.id === heatTransfer.id).single
+    ht.meaninglessLongOption shouldBe Some(1234)
   }
 
   test("BooleanTypeMapping"){
     val testInstance = sharedTestInstance; import testInstance._
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
-
-    assert(! ht.confirmed, "expected false, got " + ht.confirmed)
-
-//    ht.confirmed = true
-//    courses.update(ht)
+    ht.confirmed shouldBe false
 
     update(courses)(c =>
       where(c.id === heatTransfer.id)
@@ -1045,10 +1034,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     )
 
     ht = courses.where(c => c.id === heatTransfer.id).single
-    assert(ht.confirmed, "expected true, got " + ht.confirmed)
-
-//    ht.confirmed = false
-//    courses.update(ht)
+    ht.confirmed shouldBe true
 
     update(courses)(c =>
       where(c.id === heatTransfer.id)
@@ -1056,77 +1042,75 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     )
 
     ht = courses.where(c => c.id === heatTransfer.id).single
-
-    assert(! ht.confirmed, "expected false, got " + ht.confirmed)
+    ht.confirmed shouldBe false
   }
 
   test("BooleanOptionMapping"){
     val testInstance = sharedTestInstance; import testInstance._
 
-    //println(students.where(s => s.id === gontran.id).dumpAst)
-
     var g = students.where(s => s.id === gontran.id).single
-
-    assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
+    g.isMultilingual shouldBe Some(true)
 
     g.isMultilingual = None
     g.update
     g = students.where(s => s.id === gontran.id).single
-    assert(g.isMultilingual == None, "expected None, got " + g.isMultilingual)
+    g.isMultilingual shouldBe empty
 
     g.isMultilingual = Some(false)
     g.update
     g = students.where(s => s.id === gontran.id).single
-    assert(! g.isMultilingual.get, "expected Some(false), got " + g.isMultilingual)
+    g.isMultilingual shouldBe Some(false)
 
     g.isMultilingual = Some(true)
     g.update
     g = students.where(s => s.id === gontran.id).single
-    assert(g.isMultilingual.get, "expected Some(true), got " + g.isMultilingual)
+    g.isMultilingual shouldBe Some(true)
   }
 
   test("FloatType"){
     val testInstance = sharedTestInstance; import testInstance._
 
     var t = professors.where(p => p.id === tournesol.id).single
-
-    assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
-    assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
+    t.yearlySalary shouldBe 80.0
+    t.weight shouldBe Some(70.5)
 
     t.yearlySalary = 90.5F
     t.weight = Some(75.7F)
     t.update
+
     t = professors.where(p => p.id === tournesol.id).single
-    assert(t.yearlySalary == 90.5, "expected 90.5, got " + t.yearlySalary)
-    assert(t.weight == Some(75.7F), "expected Some(75.7), got " + t.weight)
+    t.yearlySalary shouldBe 90.5
+    t.weight shouldBe Some(75.7F)
 
     t.weight = None
     t.update
+
     t = professors.where(p => p.id === tournesol.id).single
-    assert(t.weight == None, "expected None, got " + t.weight)
+    t.weight shouldBe empty
 
     t.yearlySalary = 80.0F
     t.weight = Some(70.5F)
     professors.update(t)
+
     t = professors.where(p => p.id === tournesol.id).single
-    assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
-    assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
+    t.yearlySalary shouldBe 80.0
+    t.weight shouldBe Some(70.5)
   }
 
   test("ForUpdate") {
     val testInstance = sharedTestInstance; import testInstance._
-    val t = professors.where(p => p.id === tournesol.id).forUpdate.single
 
-    assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
-    assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
+    val t = professors.where(p => p.id === tournesol.id).forUpdate.single
+    t.yearlySalary shouldBe 80.0
+    t.weight shouldBe Some(70.5)
   }
 
   test("PaginatedForUpdate") {
     val testInstance = sharedTestInstance; import testInstance._
-    val t = professors.where(p => p.id === tournesol.id).page(0, 1).forUpdate.single
 
-    assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
-    assert(t.weight == Some(70.5), "expected Some(70.5), got " + t.weight)
+    val t = professors.where(p => p.id === tournesol.id).page(0, 1).forUpdate.single
+    t.yearlySalary shouldBe 80.0
+    t.weight shouldBe Some(70.5)
   }
 
 
@@ -1153,8 +1137,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expectedAfter = List((1,123,None), (2,123,Some(1690)), (3,123,None), (4,123,None))
     val after = q.toList
 
-    assert(nRows == 4)
-    assert(expectedAfter == after, "expected " + expectedAfter + " got " + after)
+    nRows shouldBe 4
+    expectedAfter shouldBe after
 
     // alternative syntax :
     nRows =
@@ -1163,14 +1147,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         set(c.meaninglessLong := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
       )
-
-    assert(nRows == 4)
+    nRows shouldBe 4
 
     courses.forceUpdate(initialHT)
-
     val afterReset = q.toList
-
-    assert(b4 == afterReset, "expected " + afterReset + " got " + b4)
+    afterReset shouldBe b4
   }
 
   test("PartialUpdateWithInclusionOperator ") {
@@ -1190,8 +1171,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         having(p.yearlySalary gt 75.0F)
       )
 
-    assert(q.statement.indexOf("Having") != -1)
-    q.toList
+    q.statement should include ("Having")
   }
 
   test("HavingClause2") {
@@ -1210,7 +1190,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
     q.toList
 
-    assert(q.statement.indexOf("Having") != -1)
+    q.statement should include ("Having")
   }
 
   test("PartialUpdateWithSubQueryInSetClause") {
@@ -1327,13 +1307,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     
     val c = courses2.where(_.name like "Programming %")
     val c0 = c.toList
-    
-    assert(c0.size == 2)
-    assert(c0.filter(_.confirmed).size == 0)
+    c0 should have size 2
+    c0.filter(_.confirmed) shouldBe empty
 
     courses2.update(c0.map(_.copy(confirmed = true)))
-    
-    assert(c.filter(_.confirmed).size == 2)
+    c.filter(_.confirmed) should have size 2
   }
 
   test("BigDecimal") {
@@ -1390,9 +1368,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("YieldInspectionResidue") {
     from(students)(s => where(s.lastName === "Jimbao Gallois") select(s.name)).single
 
-    val r = FieldReferenceLinker.takeLastAccessedFieldReference
-
-    assert(r == None, "!!!!!!!!!!!!")
+    FieldReferenceLinker.takeLastAccessedFieldReference shouldBe empty
   }
 
   test("InWithCompute") {
@@ -1467,7 +1443,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       (gontran.id,Some(oneHutchissonStreet.id)),
       (gaitan.id,None))
 
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe expected
   }
 
 
@@ -1501,18 +1477,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       (gontran.id,Some(oneHutchissonStreet.id),Some(oneHutchissonStreet.id)),
       (gaitan.id,None,None))
 
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe expected
   }
 
   test("Boolean2LogicalBooleanConversion") {
     val testInstance = sharedTestInstance; import testInstance._
 
     val multilingualStudents = students.where(_.isMultilingual === Option(true)).map(_.id).toSet
-
-    //println(multilingualStudents)
-    //List(Student:1:Xiao, Student:4:Gontran, Student:5:Gaitan)
-
-    assert(multilingualStudents == Set(xiao.id,gontran.id,gaitan.id))
+    multilingualStudents shouldBe Set(xiao.id,gontran.id,gaitan.id)
   }
 
   test("AvgBigDecimal") {
@@ -1535,15 +1507,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val expectedAvgWeight = expectedAvgWeight_.sum / expectedAvgWeight_.size
 
-
-    assert((expectedAvgSal - avgSalary.get.doubleValue) < 0.01, 'testAvgBigDecimal)
-    assert((expectedAvgWeight - avgWeight.get.doubleValue) < 0.01, 'testAvgBigDecimal)
+    avgSalary.get.doubleValue shouldBe expectedAvgSal
+    avgWeight.get.doubleValue shouldBe expectedAvgWeight
   }
 
   test("NewLeftOuterJoin3")  {
     val testInstance = sharedTestInstance; import testInstance._
-
-    //loggerOn
 
     val leftOuterJoinStudentAddressesAndCourseSubs =
       join(students, addresses.leftOuter,courseSubscriptions)((s,a,cs) =>
@@ -1551,8 +1520,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         orderBy(s.id, cs.courseId)
         on(s.addressId === a.map(_.id), s.id === cs.studentId)
       )
-
-    //println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
 
     val res =
       (for(t <- leftOuterJoinStudentAddressesAndCourseSubs)
@@ -1565,8 +1532,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       (pratap.id,Some(oneTwoThreePieIXStreet.id),3),
       (gontran.id,Some(oneHutchissonStreet.id),2),
       (gaitan.id,None,4))
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe expected
   }
   
   test("TestYieldInspectionLeakViaCGLIB") {
@@ -1589,9 +1555,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
 
     val res = for (s <- studentsWithAnAddress) yield s.name
-    val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Xiao", "Georgi", "Pratap", "Gontran")
   }
 
   test("NotExists")  {
@@ -1601,9 +1565,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s)
       )
     val res = for (s <- studentsWithNoAddress) yield s.name
-    val expected = List("Gaitan")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Gaitan")
   }
 
   test("VeryNestedExists")  {
@@ -1617,9 +1579,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s))
 
     val res = for (s <- studentsWithAnAddress) yield s.name
-    val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Xiao", "Georgi", "Pratap", "Gontran")
   }
 
   test("VeryVeryNestedExists"){
@@ -1637,9 +1597,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
 
     val res = for (s <- studentsWithAnAddress) yield s.name
-    val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Xiao", "Georgi", "Pratap", "Gontran")
   }
 
   test("selectFromExists"){
@@ -1657,9 +1615,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       )
 
     val res = for (s <- qAStudentIfHeHasAnAddress) yield s.name
-    val expected = List("Xiao")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Xiao")
   }
   
   test("UpdateSetAll") {
@@ -1667,8 +1623,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val expected:Long = from(students)(s => compute(count))
     val is:Long = from(students)(s => where(s.age === 30)compute(count))
-
-    assert(expected == is, "expected :\n " + expected + "\ngot : \n " + is)
+    is shouldBe expected
   }
 
   test("commonTableExpressions") {
@@ -1689,9 +1644,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s))
 
     val res = for (s <- q) yield s.name
-    val expected = List("Xiao")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Xiao")
   }
 }
 

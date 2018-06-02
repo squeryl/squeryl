@@ -535,7 +535,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         a.timeOfLastUpdate.between(tX1, tX2)
       ).headOption
 
-    assert(mustBeSome != None, "testTimestamp failed");
+    mustBeSome shouldBe defined
   }
 
   private def _truncateTimestampInTimeOfLastUpdate(p: Person) = {
@@ -544,18 +544,15 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val cal = Calendar.getInstance
 
     cal.setTime(t1)
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);    
+    cal.set(Calendar.SECOND, 0)
+    cal.set(Calendar.MILLISECOND, 0)
 
     p.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
     val testInstance = sharedTestInstance; import testInstance._
     artists.update(p)
-    //cal
 
     val out = artists.where(_.firstName === mongoSantaMaria.firstName).single
-
-    assert(new Timestamp(cal.getTimeInMillis) == out.timeOfLastUpdate)
-
+    new Timestamp(cal.getTimeInMillis) shouldBe out.timeOfLastUpdate
     out
   }
 
@@ -634,15 +631,12 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   
   test("validateScalarQuery1") {
     val cdCount: Long = countCds2(cds)
-    assert(cdCount == 2, "exprected 2, got " + cdCount + " from " + countCds2(cds))
-
+    cdCount shouldBe 2
   }
 
   test("validateScalarQueryConversion1") {
-    
     val d:Option[Double] = avgSongCountForAllArtists
-    //println("d=" + d)
-    assert(d.get == 1.0, "expected " + 1.0 +"got "  +d)
+    d should contain (1.0)
   }
 
   test("Update1"){
@@ -651,32 +645,25 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     var ac = artists.where(a=> a.id === alainCaron.id).single
     ac.lastName = "Karon"
     artists.update(ac)
+
     ac = artists.where(a=> a.id === alainCaron.id).single
-    assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
+    ac.lastName shouldBe "Karon"
   }
 
   test("KeyedEntityImplicitLookup"){
     val testInstance = sharedTestInstance; import testInstance._
 
-    val ac = artists.lookup(alainCaron.id).get
-
-    assert(ac.id == alainCaron.id, "expected " + alainCaron.id + " got " + ac.id)
+    artists.lookup(alainCaron.id).get.id shouldBe alainCaron.id
   }
 
   test("DeleteVariations"){
     var artistForDelete = artists.insert(new Person("Delete", "Me", None))
-
-    assert(artists.delete(artistForDelete.id), "delete returned false, expected true")
-
-    assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
+    artists.delete(artistForDelete.id) shouldBe true
+    artists.lookup(artistForDelete.id) shouldBe empty
 
     artistForDelete = artists.insert(new Person("Delete", "Me", None))
-
-    val c = artists.deleteWhere(a => a.id === artistForDelete.id)
-
-    assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
-
-    assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
+    artists.deleteWhere(a => a.id === artistForDelete.id) shouldBe 1
+    artists.lookup(artistForDelete.id) shouldBe empty
   }
 
   def inhibitedArtistsInQuery(inhibit: Boolean) =
@@ -695,10 +682,8 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       ).toList.map(s => s.id)
 
     val q = inhibitedArtistsInQuery(true)
-    //println(q.dumpAst)
     val songsInhibited = q.toList.map(s => s.id)
-
-    assert(allSongs == songsInhibited, "query inhibition failed, expected "+allSongs+", got " + songsInhibited)
+    songsInhibited shouldBe allSongs
 
     val songsNotInhibited = inhibitedArtistsInQuery(false)
 
@@ -717,13 +702,10 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   test("DynamicQuery2"){
     val testInstance = sharedTestInstance; import testInstance._
     val q = inhibitedSongsInQuery(true)
-    //println(q.dumpAst)
-    val t = q.single
-    val poncho = t._2
 
-    assert(ponchoSanchez.id == poncho.id, 'inhibitedSongsInQuery + " failed, expected " + ponchoSanchez.id + " got " + poncho.id)
-
-    assert(t._1 == None, "inhibited table in query should have returned None, returned " + t._1)
+    val (song, person) = q.single
+    song shouldBe empty
+    person.id shouldBe ponchoSanchez.id
 
     val songArtistsTuples = inhibitedSongsInQuery(false)
 
@@ -781,16 +763,12 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val allKnownGenres = from(songs)(s =>
       groupBy(s.genre)
     ).map(_.key).toSet
-    
-    
-    assert(allKnownGenres == Set(Genre.Jazz, Genre.Latin))
+    allKnownGenres shouldBe Set(Genre.Jazz, Genre.Latin)
     
     val allKnownSecondaryGenres = from(songs)(s =>
       groupBy(s.secondaryGenre)
     ).map(_.key).toSet
-    
-    
-    assert(allKnownSecondaryGenres == Set(None, Some(Genre.Latin)))
+    allKnownSecondaryGenres shouldBe Set(None, Some(Genre.Latin))
   }
   
   test("Enums Inhibit"){
