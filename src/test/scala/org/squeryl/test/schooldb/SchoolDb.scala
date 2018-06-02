@@ -388,7 +388,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
       (gontran.id,Some(oneHutchissonStreet.id)),
       (gaitan.id,None))
 
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe expected
   }
 }
 
@@ -430,9 +430,7 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
         select(s))
 
     val res = for (s <- q) yield s.name
-    val expected = List("Xiao")
-
-    assert(expected == res, "expected :\n " + expected + "\ngot : \n " + res)
+    res shouldBe List("Xiao")
   }
 }
 
@@ -444,7 +442,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("cast"){
     val q =
       from(addresses)(a => where(a.id === "1".cast[Int, TInt]("int4")) select(a))
-    assert(q.toList.size == 1)
+    q.toList should have size 1
   }
 
   test("DecimalNull", SingleTestRun) {
@@ -468,8 +466,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         )
         select(c)
      ).toList
-     
-     assert(q.size == 4)
+     q should have size 4
   }
 
   test("CountSignatures"){
@@ -704,21 +701,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
   
   test("transient annotation") {
-    
-
-    val s = schools.insert(new School(123,"EB123",0, "transient !"))
+    val s = schools.insert(School(123,"EB123",0, "transient !"))
     
     val s2 = schools.lookup(s.id).get
-    
-    assert(s.id == s2.id)
-    
-    assert(s2.transientField != "transient !")
-    
+    s.id shouldBe s2.id
+    s2.transientField should not be "transient !"
   }
   
   test("lifecycleCallbacks") {
-
-
     beforeInsertsOfPerson.clear
     beforeInsertsOfKeyedEntity.clear
     beforeInsertsOfProfessor.clear
@@ -729,48 +719,45 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     transformedStudents.clear
 
     val s1 = students.insert(new Student("z1", "z2", Some(4), 1, Some(4), Some(true)))
-    val sOpt = from(students)(s => where(s.name === "z1" and s.lastName === "z2") select(s)).headOption
+    beforeInsertsOfPerson should contain (s1)
+    transformedStudents should contain (s1)
+    beforeInsertsOfKeyedEntity should not contain s1
+    beforeInsertsOfProfessor should not contain s1
+    afterInsertsOfProfessor should not contain s1
 
-    assert(sOpt.isDefined && sOpt.map(_.gender == 2).getOrElse(false))
-    assert(beforeInsertsOfPerson.exists(_ == s1))
-    assert(transformedStudents.exists(_ == s1))
-    assert(sOpt.isDefined && afterSelectsOfStudent.exists(_ == sOpt.get))
-    assert(! beforeInsertsOfKeyedEntity.exists(_ == s1))
-    assert(!beforeInsertsOfProfessor.exists(_ == s1))
-    assert(!afterInsertsOfProfessor.exists(_ == s1))
+    from(students)(s => where(s.name === "z1" and s.lastName === "z2") select(s)).headOption match {
+      case None => fail()
+      case Some(sOptValue) =>
+        afterSelectsOfStudent should contain (sOptValue)
+        sOptValue.gender shouldBe 2
+    }
 
-    val s2 = schools.insert(new School(0,"EB",0, ""))
-
-    //assert(!beforeInsertsOfPerson.exists(_ == s2))
-    assert(beforeInsertsOfKeyedEntity.exists(_ == s2))
-    assert(!beforeInsertsOfProfessor.exists(_ == s2))
-    assert(!afterInsertsOfProfessor.exists(_ == s2))
-    assert(afterInsertsOfSchool.exists(_ == s2))
+    val s2 = schools.insert(School(0,"EB",0, ""))
+    beforeInsertsOfKeyedEntity should contain (s2)
+    beforeInsertsOfProfessor should not contain s2
+    afterInsertsOfProfessor should not contain s2
+    afterInsertsOfSchool should contain (s2)
 
     schools.delete(s2.id)
-    assert(beforeDeleteOfSchool.exists(_ == s2))
-    assert(afterDeleteOfSchool.exists(_ == s2))
+    beforeDeleteOfSchool should contain (s2)
+    afterDeleteOfSchool should contain (s2)
 
     val s3 = professors.insert(new Professor("z",3.0F,Some(2),BigDecimal(3),Some(BigDecimal(3))))
+    beforeInsertsOfPerson should contain (s3)
+    beforeInsertsOfKeyedEntity should contain (s3)
+    beforeInsertsOfProfessor should contain (s3)
+    afterInsertsOfProfessor should contain (s3)
 
-    assert(beforeInsertsOfPerson.exists(_ == s3))
-    assert(beforeInsertsOfKeyedEntity.exists(_ == s3))
-    assert(beforeInsertsOfProfessor.exists(_ == s3))
-    assert(afterInsertsOfProfessor.exists(_ == s3))
-
-    assert(professors.allRows.map(System.identityHashCode(_)).toSet == professorsCreatedWithFactory.toSet)
+    professors.allRows.map(System.identityHashCode) should contain theSameElementsAs professorsCreatedWithFactory
   }
 
 
   test("MetaData"){
-    professors.posoMetaData.primaryKey.get.left.get
+    professors.posoMetaData.primaryKey shouldBe defined
+    addresses.posoMetaData.primaryKey shouldBe defined
 
-    new Student("Xiao", "Jimbao Gallois", Some(24), 2,Some(1), None)
     val fmd = addresses.posoMetaData.findFieldMetaDataForProperty("appNumberSuffix")
-    assert(fmd.get.fieldType.isAssignableFrom(classOf[String]), "'FieldMetaData " + fmd + " should be of type java.lang.String")
-
-    val pk = addresses.posoMetaData.primaryKey
-    assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
+    fmd.get.fieldType shouldBe classOf[String]
   }
 
   test("OptionAndNonOptionMixInComputeTuple"){
@@ -824,16 +811,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         select(s.id)
         orderBy(s.name)
       )
-      
-    val shouldBeRight =
-      try {
-        Left(q.singleOption)
-      }
-      catch {
-        case e: Exception => Right(e)
-      }
 
-    assert(shouldBeRight.isRight, "singleOption did not throw an exception when it should have") 
+    an [Exception] should be thrownBy q.singleOption
 
     val q2 =
       from(students)(s=>
@@ -885,21 +864,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("DateTypeMapping") {
     val testInstance = sharedTestInstance; import testInstance._
 
-    val mandarinCourse =
-      courses.where(c => c.id === mandarin.id).single
-
-    assert(mandarinCourse.startDate == feb2010,
-      'testDateTypeMapping + " failed, expected " + feb2010 + " got " + mandarinCourse.startDate)
+    val mandarinCourse = courses.where(c => c.id === mandarin.id).single
+    mandarinCourse.startDate shouldBe feb2010
 
     mandarinCourse.startDate = feb2011
-
     mandarinCourse.update
 
-    val mandarinCourse2011 =
-      courses.where(c => c.id === mandarin.id).single
-
-    assert(mandarinCourse2011.startDate == feb2011,
-      'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse2011.startDate)
+    val mandarinCourse2011 = courses.where(c => c.id === mandarin.id).single
+    mandarinCourse2011.startDate shouldBe feb2011
   }
 
   test("java.sql.DateTypeMapping2"){
@@ -911,56 +883,35 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val aDate = sqlDates.insert(SqlDate(0L, origDate))
 
     val storedDate = sqlDates.lookup(aDate.id).get
-
-    assert(storedDate.aDate == origDate ,"expected " + origDate + " got " + storedDate.aDate)
+    storedDate.aDate shouldBe origDate
   }
 
   test("DateOptionMapping"){
     val testInstance = sharedTestInstance; import testInstance._
 
-    var groupTh =
-      courses.where(c => c.id === groupTheory.id).single
-
-    assert(groupTh.finalExamDate == Some(may2009),
-      'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
-
+    var groupTh = courses.where(c => c.id === groupTheory.id).single
+    groupTh.finalExamDate should contain (may2009)
 
     // test date update :
     groupTh.finalExamDate = Some(feb2011)
-
     groupTh.update
 
-    groupTh =
-      courses.where(c => c.id === groupTheory.id).single
-
-    assert(groupTh.finalExamDate == Some(feb2011),
-      'testDateOptionMapping + " failed, expected " + Some(feb2011) + " got " + groupTh.finalExamDate)
-
+    groupTh = courses.where(c => c.id === groupTheory.id).single
+    groupTh.finalExamDate should contain (feb2011)
 
     // test date update to null :
-
     groupTh.finalExamDate = None
-
     groupTh.update
 
-    groupTh =
-      courses.where(c => c.id === groupTheory.id).single
-
-    assert(groupTh.finalExamDate == None,
-      'testDateOptionMapping + " failed, expected " + None + " got " + groupTh.finalExamDate)
-
+    groupTh = courses.where(c => c.id === groupTheory.id).single
+    groupTh.finalExamDate shouldBe empty
 
     // test date update from None to Some :
-
     groupTh.finalExamDate = Some(may2009)
-
     groupTh.update
 
-    groupTh =
-      courses.where(c => c.id === groupTheory.id).single
-
-    assert(groupTh.finalExamDate == Some(may2009),
-      'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
+    groupTh = courses.where(c => c.id === groupTheory.id).single
+    groupTh.finalExamDate should contain (may2009)
   }
 
   test("DateComparisonInWhereClause"){
@@ -983,11 +934,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         orderBy(List[ExpressionNode](c.startDate.asc, c.id.asc))
       ).toList
 
-    val expected = List(counterpoint.id,  mandarin.id)
     val result = mandarinAndCounterpointCourses.map(c=>c.id)
-
-    assert(expected == result,
-      'testDateComparisonInWhereClause + " expected " + expected + " got " + result)
+    result shouldBe List(counterpoint.id,  mandarin.id)
   }
 
   test("DateOptionComparisonInWhereClause"){
@@ -1000,8 +948,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 //    val mandarin = courses.insert(new Course("Mandarin 101", feb2010, None, 0, None, true))
 
     val jan2008 = dateFormat.parse("2008-01-01")
-
-    //Session.currentSession.setLogger(s => println(s))
 
     val result1 =
       from(courses)(c=>
@@ -1025,15 +971,9 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       ).toList.map(c=>c.id)
 
     val expected = List(groupTheory.id)
-
-    assert(expected == result1,
-      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result1)
-
-    assert(Nil == result2,
-      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result2)
-
-    assert(expected == result3,
-      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result3)
+    result1 shouldBe expected
+    result2 shouldBe empty
+    result3 shouldBe expected
   }
 
   test("NVLFunction"){

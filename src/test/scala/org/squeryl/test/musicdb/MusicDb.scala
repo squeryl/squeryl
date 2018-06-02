@@ -274,11 +274,6 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         compute(avg(sonCountPerArtist.measures))
     )
 
-
-  def assertionFailed(s: Symbol, actual: Any, expected: Any) =
-    assert(actual == expected, ""+s+" failed, got " + actual + " expected " + expected)
-
-
   private def _innerTx(songId: Long) = inTransaction {
 
     songs.where(_.id === songId).single
@@ -751,18 +746,9 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         orderBy(a.firstName asc)
       )
 
-    val p1 = q.page(0, 2).map(a=>a.firstName).toList
-    val p2 = q.page(2, 2).map(a=>a.firstName).toList
-    val p3 = q.page(4, 2).map(a=>a.firstName).toList
-
-
-    val ep1 = List(alainCaron.firstName, herbyHancock.firstName)
-    val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
-    val ep3 = List(ponchoSanchez.firstName)
-
-    assertionFailed('testPaginatedQuery1, p1, ep1)
-    assertionFailed('testPaginatedQuery1, p2, ep2)
-    assertionFailed('testPaginatedQuery1, p3, ep3)
+    q.page(0, 2).map(a=>a.firstName).toList shouldBe List(alainCaron.firstName, herbyHancock.firstName)
+    q.page(2, 2).map(a=>a.firstName).toList shouldBe List(hossamRamzy.firstName, mongoSantaMaria.firstName)
+    q.page(4, 2).map(a=>a.firstName).toList shouldBe List(ponchoSanchez.firstName)
   }
 
 
@@ -776,34 +762,10 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   test("BetweenOperator"){
     val testInstance = sharedTestInstance; import testInstance._
-    val p1 = _betweenArtists(alainCaron.firstName, herbyHancock.firstName)
-    val p2 = _betweenArtists(hossamRamzy.firstName, mongoSantaMaria.firstName)
-    val p3 = _betweenArtists(ponchoSanchez.firstName, "Zaza Napoli")
-
-    val ep1 = List(alainCaron.firstName, herbyHancock.firstName)
-    val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
-    val ep3 = List(ponchoSanchez.firstName)
-
-    assertionFailed('testBetweenOperator, p1, ep1)
-    assertionFailed('testBetweenOperator, p2, ep2)
-    assertionFailed('testBetweenOperator, p3, ep3)
+    _betweenArtists(alainCaron.firstName, herbyHancock.firstName) shouldBe List(alainCaron.firstName, herbyHancock.firstName)
+    _betweenArtists(hossamRamzy.firstName, mongoSantaMaria.firstName) shouldBe List(hossamRamzy.firstName, mongoSantaMaria.firstName)
+    _betweenArtists(ponchoSanchez.firstName, "Zaza Napoli") shouldBe List(ponchoSanchez.firstName)
   }
-
-//  test("leakTest"){
-//
-//    for(i <- 1 to 5000) {
-//
-//      new Thread(new Runnable {
-//        def run = {
-//          transaction {
-//
-//          //Session.currentSession.setLogger(println(_))
-//          from(artists)(a => select(a)).toList
-//        }
-//        }
-//      }).start
-//    }
-//  }
 
   test("Enums IN"){
     val gs = List(Jazz, Rock)

@@ -45,7 +45,7 @@ abstract class TransactionTests extends DbTestBase {
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1 )
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
 
       try {
         doSomething(true)
@@ -55,7 +55,7 @@ abstract class TransactionTests extends DbTestBase {
       }
 
       // fails with "no session exception"
-      assert(FooSchema.foos.where(f => f.value === "test").size ==1)
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
     }
   }
 
@@ -65,11 +65,11 @@ abstract class TransactionTests extends DbTestBase {
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value === "test").size ==1)//should equal(1)
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
 
       doSomething(false)
       // fails with "no session exception"
-      assert(FooSchema.foos.where(f => f.value === "test").size ==1) //should equal(1)
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
     }
   }
 
@@ -79,13 +79,13 @@ abstract class TransactionTests extends DbTestBase {
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
 
       doSomething(false)
     }
     transaction{
       // works!
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
     }
   }
   
@@ -96,7 +96,7 @@ abstract class TransactionTests extends DbTestBase {
     returnInTransaction
     transaction{
       // works!
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+      FooSchema.foos.where(f => f.value === "test").size shouldBe 1
     }
   }
   
@@ -107,7 +107,7 @@ abstract class TransactionTests extends DbTestBase {
    }    
    
    val sf2  = new SessionFactory {
-     def newSession: AbstractSession = Utils.throwError("inner inTransaction sould not be started")
+     def newSession: AbstractSession = Utils.throwError("inner inTransaction should not be started")
    }
    
    
