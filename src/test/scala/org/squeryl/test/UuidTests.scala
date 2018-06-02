@@ -65,7 +65,6 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
     testObject.save
     
     val fromDb = uuidWithOption.lookup(testObject.id).get
-    println(fromDb.optionalUuid)
     fromDb.optionalUuid should equal(None)
     
     val uuid = UUID.randomUUID()

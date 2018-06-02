@@ -466,28 +466,21 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
         where(p.grade lte from(courseSubscriptions)(p => compute(avg(p.grade))))
         select(p)
       ).toList
-      
-    assert(belowOrEqualToAvg.size == 1)
+    belowOrEqualToAvg should have size 1
     
     val belowAvg = 
       from(courseSubscriptions)(p =>
         where(p.grade lt from(courseSubscriptions)(p => compute(avg(p.grade))))
         select(p)
       ).toList
-      
-    assert(belowAvg.size == 0)    
+    belowAvg shouldBe empty
   }
   
   test ("#73 relations with Option[] on one side of the equality expression blow up") {
-
-    seedDataDef
+    seedDataDef()
         
     val cs = subjects.where(_.name === "Computer Science").single
-    
-    val compTheory = cs.childSubjects.single
-    
-    assert(compTheory.name == "Computation Theory")
-    
+    cs.childSubjects.single.name shouldBe "Computation Theory"
   }
 }
 
