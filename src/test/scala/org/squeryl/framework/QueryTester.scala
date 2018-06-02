@@ -66,10 +66,6 @@ trait QueryTester extends Matchers {
     if(validateFirstAndExit >= 0)
       validateFirstAndExit += 1
   }
-
-  def passed(s: Symbol) = {} //println(s )
 }
-
-
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")

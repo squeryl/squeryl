@@ -127,8 +127,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     professeurTournesol.courses.dissociateAll shouldBe 0
 
     courseAssignments.Count.toLong shouldBe 0
-
-    passed('testMany2ManyAssociationFromLeftSide)
   }
 
   test("Many2ManyAssociationFromRightSide"){
@@ -166,8 +164,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     physicsCourse.professors.dissociate(professeurTournesol) shouldBe true
     physicsCourse.professors.dissociate(professeurTournesol) shouldBe false
-
-    passed('testMany2ManyAssociationsFromRightSide)
   }
 
   test("OneToMany"){
@@ -231,7 +227,5 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     // 2) philosophyCourse3PMFriday.subject points to the proper subject
     computationTheory.name shouldBe philosophyCourse3PMFriday.subject.one.get.name
-
-    passed('testOneToMany)
   }
 }
