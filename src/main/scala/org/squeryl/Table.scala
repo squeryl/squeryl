@@ -153,7 +153,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
             if(b == 0) {
               val updateOrInsert = if(isInsert) "insert" else "update"
               throw new StaleUpdateException(
-                "Attemped to "+updateOrInsert+" stale object under optimistic concurrency control")
+                "Attempted to "+updateOrInsert+" stale object under optimistic concurrency control")
             }
       }
       finally {

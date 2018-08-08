@@ -134,7 +134,7 @@ class FieldMetaData(
   def defaultValue: Option[ConstantTypedExpression[_,_]] = _defaultValue
 
   /**
-   * The db column type declaration overriden in the schema, if None, it means that it is the default value for
+   * The db column type declaration overridden in the schema, if None, it means that it is the default value for
    * the adapter (see Correspondance of field types to database column types http://squeryl.org/schema-definition.html)  
    */
   def explicitDbTypeDeclaration: Option[String] = {
@@ -156,7 +156,7 @@ class FieldMetaData(
    * if it is defined, or the default length for Java primitive types.
    * The unit of the length is dependent on the type, the convention is
    * that numeric types have a length in byte, boolean is bits
-   * date has -1, and for string the lenght is in chars.  
+   * date has -1, and for string the length is in chars.  
    * double,long -> 8, float,int -> 4, byte -> 1, boolean -> 1
    * java.util.Date -> -1.
    *
@@ -235,7 +235,7 @@ class FieldMetaData(
    * 
    * <pre>
    * on(myKeyedEntityTable)(t =>declare(
-   *   id.is(autoIncremented)  // omiting primaryKey here has no effect, it is equivalent as id.is(primaryKey,autoIncremented)
+   *   id.is(autoIncremented)  // omitting primaryKey here has no effect, it is equivalent as id.is(primaryKey,autoIncremented)
    * ))
    * </pre>
    */

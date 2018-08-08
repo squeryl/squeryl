@@ -114,7 +114,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   }
 
   /**
-   * In the case custom DB type used it is benefitial to explicitly cast value to its type, because it invokes
+   * In the case custom DB type used it is beneficial to explicitly cast value to its type, because it invokes
    * proper cast function. For example, it is possible to insert Scala String into a DB ENUM using dbType.
    */
   override protected def writeValue(o: AnyRef, fmd: FieldMetaData, sw: StatementWriter): String =

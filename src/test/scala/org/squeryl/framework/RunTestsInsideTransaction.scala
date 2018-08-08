@@ -12,7 +12,7 @@ trait RunTestsInsideTransaction extends DbTestBase {
       super.runTest(testName, args)
     else {
       // each test occur from within a transaction, that way when the test completes _all_ changes
-      // made during the test are reverted so each test gets a clean enviroment to test against
+      // made during the test are reverted so each test gets a clean environment to test against
       transaction {
         val res = super.runTest(testName, args)
 

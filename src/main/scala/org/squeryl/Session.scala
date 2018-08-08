@@ -81,7 +81,7 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
         } catch {
           case e: SQLException => {
             Utils.close(connection)
-            if (txOk) throw e // if an exception occured b4 the commit/rollback we don't want to obscure the original exception
+            if (txOk) throw e // if an exception occurred b4 the commit/rollback we don't want to obscure the original exception
           }
         }
         try {
@@ -89,7 +89,7 @@ class LazySession(val connectionFunc: () => Connection, val databaseAdapter: Dat
             connection.close
         } catch {
           case e: SQLException => {
-            if (txOk) throw e // if an exception occured b4 the close we don't want to obscure the original exception
+            if (txOk) throw e // if an exception occurred b4 the close we don't want to obscure the original exception
           }
         }
       }
@@ -149,7 +149,7 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
       } catch {
         case e: SQLException => {
           Utils.close(connection)
-          if (txOk) throw e // if an exception occured b4 the commit/rollback we don't want to obscure the original exception
+          if (txOk) throw e // if an exception occurred b4 the commit/rollback we don't want to obscure the original exception
         }
       }
       try {
@@ -157,7 +157,7 @@ class Session(val connection: Connection, val databaseAdapter: DatabaseAdapter, 
           connection.close
       } catch {
         case e: SQLException => {
-          if (txOk) throw e // if an exception occured b4 the close we don't want to obscure the original exception
+          if (txOk) throw e // if an exception occurred b4 the close we don't want to obscure the original exception
         }
       }
     }

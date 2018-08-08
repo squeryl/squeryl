@@ -315,7 +315,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    * Use this method to override the DatabaseAdapter's default column type for the given field
    * (FieldMetaData), returning None means that no override will take place.
    *
-   * There are two levels at which db column type can be overriden, in order of precedence :
+   * There are two levels at which db column type can be overridden, in order of precedence :
    *
    *   on(professors)(p => declare(
    *      s.yearlySalary is(dbType("real"))

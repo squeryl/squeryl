@@ -180,7 +180,7 @@ class OracleAdapter extends DatabaseAdapter {
     for(p <- possibilities if !scope.contains(p))
       return p
 
-    if(s.length == padLength) // at this point 's' is completely 'random like', not helpfull to add it in the error message
+    if(s.length == padLength) // at this point 's' is completely 'random like', not helpful to add it in the error message
       throw new CouldNotShrinkIdentifierException
 
     makeUniqueInScope(s, scope, padLength + 1)
