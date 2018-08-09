@@ -103,4 +103,70 @@ trait FromSignatures {
           t10:Queryable[T10]
           )(f:Function10[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,QueryYield[R]]): Query[R] =
     new Query10[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,R](t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,f,true,Nil)
+
+  def from[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,R](
+          t1:Queryable[T1],
+          t2:Queryable[T2],
+          t3:Queryable[T3],
+          t4:Queryable[T4],
+          t5:Queryable[T5],
+          t6:Queryable[T6],
+          t7:Queryable[T7],
+          t8:Queryable[T8],
+          t9:Queryable[T9],
+          t10:Queryable[T10],
+          t11:Queryable[T11]
+          )(f:Function11[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,QueryYield[R]]): Query[R] =
+    new Query11[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,R](t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,f,true,Nil)
+
+  def from[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,R](
+          t1:Queryable[T1],
+          t2:Queryable[T2],
+          t3:Queryable[T3],
+          t4:Queryable[T4],
+          t5:Queryable[T5],
+          t6:Queryable[T6],
+          t7:Queryable[T7],
+          t8:Queryable[T8],
+          t9:Queryable[T9],
+          t10:Queryable[T10],
+          t11:Queryable[T11],
+          t12:Queryable[T12]
+          )(f:Function12[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,QueryYield[R]]): Query[R] =
+    new Query12[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,R](t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,f,true,Nil)
+
+  def from[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,R](
+          t1:Queryable[T1],
+          t2:Queryable[T2],
+          t3:Queryable[T3],
+          t4:Queryable[T4],
+          t5:Queryable[T5],
+          t6:Queryable[T6],
+          t7:Queryable[T7],
+          t8:Queryable[T8],
+          t9:Queryable[T9],
+          t10:Queryable[T10],
+          t11:Queryable[T11],
+          t12:Queryable[T12],
+          t13:Queryable[T13]
+          )(f:Function13[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,QueryYield[R]]): Query[R] =
+    new Query13[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,R](t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,f,true,Nil)
+
+  def from[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,R](
+          t1:Queryable[T1],
+          t2:Queryable[T2],
+          t3:Queryable[T3],
+          t4:Queryable[T4],
+          t5:Queryable[T5],
+          t6:Queryable[T6],
+          t7:Queryable[T7],
+          t8:Queryable[T8],
+          t9:Queryable[T9],
+          t10:Queryable[T10],
+          t11:Queryable[T11],
+          t12:Queryable[T12],
+          t13:Queryable[T13],
+          t14:Queryable[T14]
+          )(f:Function14[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,QueryYield[R]]): Query[R] =
+    new Query14[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,R](t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,f,true,Nil)
 }

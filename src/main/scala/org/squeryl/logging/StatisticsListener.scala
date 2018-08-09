@@ -15,9 +15,9 @@
  ******************************************************************************/
 package org.squeryl.logging
 
+import org.squeryl.internals.StatementWriter
 
-
-class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String) {
+class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val start: Long, val end: Long, val rowCount: Int, val jdbcStatement: String, val jdbcParams: Iterable[AnyRef]) {
 
   val uuid = {
     val tmp = java.util.UUID.randomUUID
@@ -27,6 +27,27 @@ class StatementInvocationEvent(_definitionOrCallSite: StackTraceElement, val sta
 
   def definitionOrCallSite =
     _definitionOrCallSite.toString
+}
+
+object StatementInvocationEvent {
+
+  def apply(start: Long, end: Long, rowCount: Int, sw: StatementWriter): StatementInvocationEvent = {
+    new StatementInvocationEvent(_deduceDefinitionSite, start, end, rowCount, sw.statement, sw.paramsValues)
+  }
+
+  private def _deduceDefinitionSite: StackTraceElement = {
+    val st = Thread.currentThread.getStackTrace
+    var i = 1
+    while(i < st.length) {
+      val e = st(i)
+      val cn = e.getClassName
+      if((cn.startsWith("org.squeryl.") && (!cn.startsWith("org.squeryl.tests."))) || cn.startsWith("scala."))
+        i = i + 1
+      else
+        return e
+    }
+    new StackTraceElement("unknown", "unknown", "unknown", -1)
+  }
 }
 
 trait StatisticsListener {
