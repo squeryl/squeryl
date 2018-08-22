@@ -53,8 +53,7 @@ scalacOptions ++= Seq(
 )
 
 val unusedWarnings = Seq(
-  "-Ywarn-unused",
-  "-Ywarn-unused-import"
+  "-Ywarn-unused"
 )
 
 scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
