@@ -55,7 +55,7 @@ object FieldReferenceLinker {
       a = new ArrayBuffer[AnyRef]
       _yieldValues.set(a)
     }
-    a.append(v)
+    a += v
   }
 
   def isYieldInspectionMode = {
