@@ -118,8 +118,16 @@ libraryDependencies ++= Seq(
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.21.0.1" % "test",
   "org.json4s" %% "json4s-scalap" % "3.6.1",
-  "org.scalatest" %% "scalatest" % "3.0.6-SNAP1" % "test",
 )
+
+libraryDependencies ++= {
+  if (scalaVersion.value == "2.13.0-M5") {
+    // TODO https://github.com/scalatest/scalatest/issues/1409
+    Nil
+  } else {
+    Seq("org.scalatest" %% "scalatest" % "3.0.6-SNAP1" % "test")
+  }
+}
 
 libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
