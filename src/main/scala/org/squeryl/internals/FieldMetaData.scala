@@ -70,7 +70,7 @@ class FieldMetaData(
    * This field is mutable only by the Schema trait, and only during the Schema instantiation,
    * so it can safely be considered immutable (read only) by the columnAttributes accessor 
    */
-  private val _columnAttributes = new HashSet[ColumnAttribute]
+  private[this] val _columnAttributes = new HashSet[ColumnAttribute]
 
 
   private [squeryl] def _clearColumnAttributes = {
@@ -84,7 +84,7 @@ class FieldMetaData(
    * In some circumstances (like in the test suite) a Schema instance must run on multiple database types,
    * this Map keeps the sequence names 'per schema'
    */
-  private val _sequenceNamePerDBAdapter = new HashMap[Class[_],String]
+  private[this] val _sequenceNamePerDBAdapter = new HashMap[Class[_],String]
 
   def sequenceName: String = {
 
@@ -364,7 +364,7 @@ trait FieldMetaDataFactory {
 
 object FieldMetaData {
 
-  private val _EMPTY_ARRAY = new Array[Object](0)
+  private[this] val _EMPTY_ARRAY = new Array[Object](0)
   
   var factory = new FieldMetaDataFactory {   
 

@@ -22,7 +22,7 @@ import org.squeryl.{Session, View}
 class ViewExpressionNode[U](val view: View[U])
   extends QueryableExpressionNode {
 
-  private val _selectElements = new HashMap[FieldMetaData,SelectElement]
+  private[this] val _selectElements = new HashMap[FieldMetaData,SelectElement]
 
   def isChild(q: QueryableExpressionNode) = false
 
@@ -67,7 +67,7 @@ class ViewExpressionNode[U](val view: View[U])
 
   def owns(aSample: AnyRef) = aSample eq sample.asInstanceOf[AnyRef]
 
-  private var _sample: Option[U] = None
+  private[this] var _sample: Option[U] = None
 
   private[squeryl] def sample_=(d:U) =
     _sample = Some(d)

@@ -27,7 +27,7 @@ import org.squeryl.dsl.ArrayJdbcMapper
 trait FieldMapper {
   outer =>
     
-  private val registry = new HashMap[Class[_],FieldAttributesBasedOnType[_]]
+  private[this] val registry = new HashMap[Class[_],FieldAttributesBasedOnType[_]]
 
   implicit def thisFieldMapper = this
 

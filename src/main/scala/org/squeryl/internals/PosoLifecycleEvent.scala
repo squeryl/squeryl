@@ -15,15 +15,15 @@ class LifecycleEventInvoker(i:Iterable[LifecycleEvent], owner: View[_]) extends 
 
   import PosoLifecycleEvent._
 
-  private val _beforeInsert = i.filter(_.e == BeforeInsert).map(_.callback)
-  private val _afterInsert = i.filter(_.e == AfterInsert).map(_.callback)
-  private val _beforeDelete = i.filter(_.e == BeforeDelete).map(_.callback)
-  private val _afterDelete = i.filter(_.e == AfterDelete).map(_.callback)
-  private val _beforeUpdate = i.filter(_.e == BeforeUpdate).map(_.callback)
-  private val _afterUpdate = i.filter(_.e == AfterUpdate).map(_.callback)
-  private val _afterSelect = i.filter(_.e == AfterSelect).map(_.callback)
+  private[this] val _beforeInsert = i.filter(_.e == BeforeInsert).map(_.callback)
+  private[this] val _afterInsert = i.filter(_.e == AfterInsert).map(_.callback)
+  private[this] val _beforeDelete = i.filter(_.e == BeforeDelete).map(_.callback)
+  private[this] val _afterDelete = i.filter(_.e == AfterDelete).map(_.callback)
+  private[this] val _beforeUpdate = i.filter(_.e == BeforeUpdate).map(_.callback)
+  private[this] val _afterUpdate = i.filter(_.e == AfterUpdate).map(_.callback)
+  private[this] val _afterSelect = i.filter(_.e == AfterSelect).map(_.callback)
 
-  private val _factory: AnyRef=>AnyRef = {
+  private[this] val _factory: AnyRef=>AnyRef = {
 
     val f = i.filter(_.e == Create).map(_.callback)
     if(f.size > 1) org.squeryl.internals.Utils.throwError(owner.name + " has more than one factory defined.")

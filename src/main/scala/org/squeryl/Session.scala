@@ -24,7 +24,7 @@ import scala.util.control.ControlThrowable
 
 class LazySession(val connectionFunc: () => Connection, val databaseAdapter: DatabaseAdapter, val statisticsListener: Option[StatisticsListener] = None) extends AbstractSession {
 
-  private var _connection: Option[Connection] = None
+  private[this] var _connection: Option[Connection] = None
 
   def hasConnection = _connection != None
 
@@ -200,7 +200,7 @@ trait AbstractSession {
 
   def unbindFromCurrentThread = Session.currentSession = None
 
-  private var _logger: String => Unit = null
+  private[this] var _logger: String => Unit = null
 
   def logger_=(f: String => Unit) = _logger = f
 
@@ -212,9 +212,9 @@ trait AbstractSession {
 
   var logUnclosedStatements = false
 
-  private val _statements = new ArrayBuffer[Statement]
+  private[this] val _statements = new ArrayBuffer[Statement]
 
-  private val _resultSets = new ArrayBuffer[ResultSet]
+  private[this] val _resultSets = new ArrayBuffer[ResultSet]
 
   private [squeryl] def _addStatement(s: Statement) = _statements.append(s)
 
@@ -282,7 +282,7 @@ object Session {
    * will pollute the users threads and will cause problems for e.g. Tomcat and
    * other servlet engines.
    */
-  private val _currentSessionThreadLocal = new ThreadLocal[AbstractSession]
+  private[this] val _currentSessionThreadLocal = new ThreadLocal[AbstractSession]
   
   def create(c: Connection, a: DatabaseAdapter) =
     new Session(c,a)

@@ -280,7 +280,7 @@ trait BaseColumnAttributeAssignment {
 class ColumnGroupAttributeAssignment(cols: collection.Seq[FieldMetaData], columnAttributes_ : collection.Seq[ColumnAttribute])
   extends BaseColumnAttributeAssignment {
 
-  private val _columnAttributes = new ArrayBuffer[ColumnAttribute]
+  private[this] val _columnAttributes = new ArrayBuffer[ColumnAttribute]
 
   _columnAttributes ++= columnAttributes_
 
@@ -487,7 +487,7 @@ trait UniqueIdInAliaseRequired  {
 
 trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequired {
 
-  private var _inhibited = false
+  private[this] var _inhibited = false
 
   override def inhibited = _inhibited
 
@@ -536,7 +536,7 @@ trait QueryableExpressionNode extends ExpressionNode with UniqueIdInAliaseRequir
 
 class OrderByArg(val e: ExpressionNode) {
 
-  private var _ascending = true
+  private[this] var _ascending = true
 
   private [squeryl] def isAscending = _ascending
 

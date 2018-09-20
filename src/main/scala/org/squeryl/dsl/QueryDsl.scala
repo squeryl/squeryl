@@ -267,7 +267,7 @@ trait QueryDsl
   
   class CountSubQueryableQuery(q: Queryable[_]) extends Query[Long] with ScalarQuery[Long] {
 
-    private val _inner:Query[Measures[Long]] =
+    private[this] val _inner:Query[Measures[Long]] =
       from(q)(r => compute(_countFunc))
 
     def iterator = _inner.map(m => m.measures).iterator
@@ -404,7 +404,7 @@ trait QueryDsl
     
     schema._addRelation(this)
     
-    private val (_leftEqualityExpr, _rightEqualityExpr) = {
+    private[this] val (_leftEqualityExpr, _rightEqualityExpr) = {
 
       var e2: Option[Tuple2[EqualityExpression,EqualityExpression]] = None
 
@@ -439,9 +439,9 @@ trait QueryDsl
       )
 
 
-    private val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable, false)
+    private[this] val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable, false)
 
-    private val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr, thisTable, false)
+    private[this] val (rightPkFmd, rightFkFmd) = _splitEquality(_rightEqualityExpr, thisTable, false)
 
     val leftForeignKeyDeclaration =
       schema._createForeignKeyDeclaration(leftFkFmd.columnName, leftPkFmd.columnName)
@@ -628,7 +628,7 @@ trait QueryDsl
 
     //we obtain the FieldMetaDatas from the 'via' function by creating an EqualityExpression AST and then extract the FieldMetaDatas from it,
     // the FieldMetaData will serve to set fields (primary and foreign keys on the objects in the relation) 
-    private val (_leftPkFmd, _rightFkFmd) = {
+    private[this] val (_leftPkFmd, _rightFkFmd) = {
 
       var ee: Option[EqualityExpression] = None
       

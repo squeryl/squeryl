@@ -169,9 +169,9 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
 
 class ResultSetMapper extends ResultSetUtils {  
 
-  private val _yieldValuePushers = new ArrayBuffer[YieldValuePusher]
+  private[this] val _yieldValuePushers = new ArrayBuffer[YieldValuePusher]
 
-  private val _fieldMapper = new ArrayBuffer[ColumnToFieldMapper]
+  private[this] val _fieldMapper = new ArrayBuffer[ColumnToFieldMapper]
 
   var groupKeysMapper: Option[ColumnToTupleMapper] = None
 

@@ -41,7 +41,7 @@ trait OneToManyRelation[O,M] extends Relation[O,M] {
 
 class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
 
-  private val _buffer = new ArrayBuffer[M]
+  private[this] val _buffer = new ArrayBuffer[M]
 
   refresh
   
@@ -68,7 +68,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
 
 class StatefulManyToOne[O](val relation: ManyToOne[O]) {
 
-  private var _one: Option[O] = None
+  private[this] var _one: Option[O] = None
 
   refresh
 
@@ -189,7 +189,7 @@ trait ManyToMany[O,A] extends Query[O] {
 
 class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O] {
   
-  private val _map = new HashMap[O,A]
+  private[this] val _map = new HashMap[O,A]
 
   refresh
 

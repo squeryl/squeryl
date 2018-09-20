@@ -72,7 +72,7 @@ class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Cl
     else
       (t:T) => {}
 
-  private val _posoFactory =
+  private[this] val _posoFactory =
     FieldMetaData.factory.createPosoFactory(posoMetaData)
   
   private [squeryl] def _createInstanceOfRowObject =

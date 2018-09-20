@@ -144,7 +144,7 @@ trait ReferentialAction {
  */
 class ForeignKeyDeclaration(val idWithinSchema: Int, val foreignKeyColumnName: String, val referencedPrimaryKey: String) {
 
-  private var _referentialActions: Option[(Option[ReferentialAction],Option[ReferentialAction])] = None
+  private[this] var _referentialActions: Option[(Option[ReferentialAction],Option[ReferentialAction])] = None
 
   private [squeryl] def _isActive =
     _referentialActions != None

@@ -29,7 +29,7 @@ trait CustomType[T] extends Product1[T] {
 
 trait CustomTypesMode extends QueryDsl with FieldMapper {
   
-  private val ps = PrimitiveTypeSupport
+  private[this] val ps = PrimitiveTypeSupport
     
   val stringTEF = new NonPrimitiveJdbcMapper[String,StringField,TString](ps.stringTEF, this) {
     def convertFromJdbc(v: String) = new StringField(v)

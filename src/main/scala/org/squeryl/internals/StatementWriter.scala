@@ -68,7 +68,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   def params: Iterable[StatementParam] = _paramList
 
-  private val _stringBuilder = new java.lang.StringBuilder(256)
+  private[this] val _stringBuilder = new java.lang.StringBuilder(256)
 
   def statement = _stringBuilder.toString
 
@@ -80,9 +80,9 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     else
       _paramList.mkString(statement+"\njdbcParams:[",",","]")
   
-  private val INDENT_INCREMENT = 2
+  private[this] val INDENT_INCREMENT = 2
   
-  private var indentWidth = 0
+  private[this] var indentWidth = 0
 
   def indent(width: Int) = indentWidth += width
   def unindent(width: Int) = indentWidth -= width
@@ -107,7 +107,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     _writeIndentSpaces
   }
 
-  private var _lazyPendingLine: Option[() => Unit] = None
+  private[this] var _lazyPendingLine: Option[() => Unit] = None
 
   def pushPendingNextLine =
    _lazyPendingLine = Some(()=> nextLine)

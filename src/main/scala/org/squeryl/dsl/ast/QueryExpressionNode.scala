@@ -64,12 +64,12 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
     }
   }.toList
 
-  private val unionClauses =
+  private[this] val unionClauses =
       _query.unions map (kindAndQ => new UnionExpressionNode(kindAndQ._1, kindAndQ._2.ast))
 
-  private var _selectList: Iterable[SelectElement] = Iterable.empty
+  private[this] var _selectList: Iterable[SelectElement] = Iterable.empty
 
-  private var _sample: Option[AnyRef] = None
+  private[this] var _sample: Option[AnyRef] = None
 
   private def _isPrimitiveType(o: AnyRef) = // AnyRef can not be primitive.
     List("java.lang.Boolean",

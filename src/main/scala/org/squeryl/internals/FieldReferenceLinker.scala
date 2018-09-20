@@ -70,9 +70,9 @@ object FieldReferenceLinker {
 
   def inspectedQueryExpressionNode = _yieldInspectionTL.get.queryExpressionNode
   
-  private val _yieldValues = new ThreadLocal[ArrayBuffer[AnyRef]]
+  private[this] val _yieldValues = new ThreadLocal[ArrayBuffer[AnyRef]]
   
-  private val __lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]]
+  private[this] val __lastAccessedFieldReference = new ThreadLocal[Option[SelectElement]]
 
   private [squeryl] def _lastAccessedFieldReference: Option[SelectElement] = {
     val fr = __lastAccessedFieldReference.get
@@ -86,7 +86,7 @@ object FieldReferenceLinker {
       __lastAccessedFieldReference.set(se)
     }
   
-  private val _compositeKeyMembers = new ThreadLocal[Option[ArrayBuffer[SelectElement]]]
+  private[this] val _compositeKeyMembers = new ThreadLocal[Option[ArrayBuffer[SelectElement]]]
 
   /**
    * _lastAccessedFieldReference is unique per thread, AST construction can be nested and can interfere with
@@ -106,7 +106,7 @@ object FieldReferenceLinker {
   
   class YieldInspection {
     
-    private val _utilizedFields = new ArrayBuffer[SelectElement]
+    private[this] val _utilizedFields = new ArrayBuffer[SelectElement]
     var _on = false
     var queryExpressionNode: QueryExpressionNode[_] = null
     var _resultSetMapper: ResultSetMapper = null
@@ -129,7 +129,7 @@ object FieldReferenceLinker {
     
     def resultSetMapper = _resultSetMapper
 
-    private var _reentranceDepth = 0
+    private[this] var _reentranceDepth = 0
 
      def reentranceDepth = _reentranceDepth
 
@@ -151,7 +151,7 @@ object FieldReferenceLinker {
     }
   }
   
-  private val _yieldInspectionTL = new ThreadLocal[YieldInspection]
+  private[this] val _yieldInspectionTL = new ThreadLocal[YieldInspection]
 
   def putLastAccessedSelectElement(e: SelectElement) = {
     if (isYieldInspectionMode) {

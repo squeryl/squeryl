@@ -34,17 +34,17 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   /**
    * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
    */
-  private val _tables = new ArrayBuffer[Table[_]] 
+  private[this] val _tables = new ArrayBuffer[Table[_]] 
   
   def tables: collection.Seq[Table[_]] = _tables.toSeq
   
-  private val _tableTypes = new HashMap[Class[_], Table[_]]
+  private[this] val _tableTypes = new HashMap[Class[_], Table[_]]
 
-  private val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
+  private[this] val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
 
-  private val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[_,_,_]]
+  private[this] val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[_,_,_]]
 
-  private val _columnGroupAttributeAssignments = new ArrayBuffer[ColumnGroupAttributeAssignment]
+  private[this] val _columnGroupAttributeAssignments = new ArrayBuffer[ColumnGroupAttributeAssignment]
 
   private [squeryl] val _namingScope = new HashSet[String] 
 
@@ -379,7 +379,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   protected def onDelete = new ReferentialEvent("delete")
 
-  private var _fkIdGen = 1 
+  private[this] var _fkIdGen = 1 
 
   private [squeryl] def _createForeignKeyDeclaration(fkColName: String, pkColName: String) = {
     val fkd = new ForeignKeyDeclaration(_fkIdGen, fkColName, pkColName)

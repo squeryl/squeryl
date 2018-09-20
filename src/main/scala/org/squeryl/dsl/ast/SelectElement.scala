@@ -181,7 +181,7 @@ class FieldSelectElement
   def prepareColumnMapper(index: Int) =
     columnMapper = Some(new ColumnToFieldMapper(index, fieldMetaData, this))
 
-  private var columnMapper: Option[ColumnToFieldMapper] = None
+  private[this] var columnMapper: Option[ColumnToFieldMapper] = None
 
   def prepareMapper(jdbcIndex: Int) =
     if(columnMapper != None) {

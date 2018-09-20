@@ -206,7 +206,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
   def createSample(cb: Callback) =
     FieldReferenceLinker.executeAndRestoreLastAccessedFieldReference(_builder(cb))
 
-  private val _builder: (Callback) => T = {
+  private[this] val _builder: (Callback) => T = {
 
 
     val e = new Enhancer
