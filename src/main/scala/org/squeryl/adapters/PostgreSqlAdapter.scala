@@ -134,7 +134,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def writeCompositePrimaryKeyConstraint(t: Table[_], cols: Iterable[FieldMetaData]) =
   {
     // alter table TableName add primary key (col1, col2) ;
-    val sb = new StringBuilder(256)
+    val sb = new java.lang.StringBuilder(256)
     sb.append("alter table ")
     sb.append(quoteName(t.prefixedName))
     sb.append(" add primary key (")

@@ -39,7 +39,7 @@ class MySQLAdapter extends DatabaseAdapter {
     referentialAction2: Option[ReferentialAction],
     fkId: Int) = {
 
-    val sb = new StringBuilder(256)
+    val sb = new java.lang.StringBuilder(256)
 
     sb.append("alter table ")
     sb.append(foreignKeyTable.prefixedName)

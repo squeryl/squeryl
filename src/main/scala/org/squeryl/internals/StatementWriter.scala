@@ -68,7 +68,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
 
   def params: Iterable[StatementParam] = _paramList
 
-  private val _stringBuilder = new StringBuilder(256)
+  private val _stringBuilder = new java.lang.StringBuilder(256)
 
   def statement = _stringBuilder.toString
 

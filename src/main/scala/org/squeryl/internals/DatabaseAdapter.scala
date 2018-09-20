@@ -276,7 +276,7 @@ trait DatabaseAdapter {
 
     val dbTypeDeclaration = databaseTypeFor(fmd)
 
-    val sb = new StringBuilder(128)
+    val sb = new java.lang.StringBuilder(128)
   
     sb.append("  ")
     sb.append(quoteName(fmd.columnName))
@@ -719,7 +719,7 @@ trait DatabaseAdapter {
     referentialAction2: Option[ReferentialAction],
     fkId: Int) = {
     
-    val sb = new StringBuilder(256)
+    val sb = new java.lang.StringBuilder(256)
 
     sb.append("alter table ")
     sb.append(quoteName(foreignKeyTable.prefixedName))
@@ -770,7 +770,7 @@ trait DatabaseAdapter {
 
   def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
     //ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)
-    val sb = new StringBuilder(256)
+    val sb = new java.lang.StringBuilder(256)
     
     sb.append("alter table ")
     sb.append(quoteName(t.prefixedName))
@@ -807,7 +807,7 @@ trait DatabaseAdapter {
    * as part of the name to create a more meaningfull name for the constraint, when 'name' is None
    */
   def writeIndexDeclaration(columnDefs: collection.Seq[FieldMetaData], name:Option[String], nameOfCompositeKey: Option[String], isUnique: Boolean) = {                                    
-    val sb = new StringBuilder(256)
+    val sb = new java.lang.StringBuilder(256)
     sb.append("create ")
 
     if(isUnique)
