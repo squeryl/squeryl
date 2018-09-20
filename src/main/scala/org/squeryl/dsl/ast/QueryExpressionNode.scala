@@ -105,7 +105,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
 
   override def toString = {
     val sb = new java.lang.StringBuilder
-    sb.append('QueryExpressionNode + "[")
+    sb.append("'QueryExpressionNode[")
     if(_query.isRoot)
       sb.append("root:")
     sb.append(id)

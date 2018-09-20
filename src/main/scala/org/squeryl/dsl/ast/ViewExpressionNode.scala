@@ -79,7 +79,7 @@ class ViewExpressionNode[U](val view: View[U])
 
   override def toString = {
     val sb = new java.lang.StringBuilder
-    sb.append('ViewExpressionNode +"[")
+    sb.append("'ViewExpressionNode[")
     sb.append(sample)
     sb.append("]:")
     sb.append("rsm=")

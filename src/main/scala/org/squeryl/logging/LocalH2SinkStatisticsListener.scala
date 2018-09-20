@@ -60,7 +60,7 @@ class LocalH2SinkStatisticsListener(val h2Session: AbstractSession) extends Stat
       _queue.put(op _)
     }
     else
-      throw new IllegalStateException('LocalH2SinkStatisticsListener + " has been shutdown.")
+      throw new IllegalStateException("'LocalH2SinkStatisticsListener has been shutdown.")
 
   def generateStatSummary(staticHtmlFile: java.io.File, n: Int) = _pushOp {
     BarChartRenderer.generateStatSummary(staticHtmlFile, n)

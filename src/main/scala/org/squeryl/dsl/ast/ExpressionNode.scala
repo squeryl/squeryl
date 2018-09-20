@@ -249,10 +249,10 @@ object FalseLogicalBoolean extends LogicalBoolean {
 object LogicalBoolean {
 
   def and(conditions: collection.Seq[LogicalBoolean]): LogicalBoolean =
-    conditions.fold(TrueLogicalBoolean)(_ and _)
+    conditions.foldLeft[LogicalBoolean](TrueLogicalBoolean)(_ and _)
 
   def or(conditions: collection.Seq[LogicalBoolean]): LogicalBoolean =
-    conditions.fold(FalseLogicalBoolean)(_ or _)
+    conditions.foldLeft[LogicalBoolean](FalseLogicalBoolean)(_ or _)
 
 }
 
@@ -371,7 +371,7 @@ class ConstantTypedExpression[A1,T1](val value: A1, val nativeJdbcValue: AnyRef,
       else
         value.toString    
   
-  override def toString = 'ConstantTypedExpression + ":" + value
+  override def toString = "'ConstantTypedExpression:" + value
 }
 
 class ConstantExpressionNodeList[T](val value: Iterable[T], mapper: OutMapper[_]) extends ExpressionNode {
@@ -433,7 +433,7 @@ class BinaryOperatorNode
      _inhibitedByWhen || left.inhibited || right.inhibited
 
   override def toString =
-    'BinaryOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
+    "'BinaryOperatorNode:" + operatorToken + inhibitedFlagForAstDump
   
   def doWrite(sw: StatementWriter) = {
     sw.write("(")
@@ -456,7 +456,7 @@ class PrefixOperatorNode
 
   override def inhibited = _inhibitedByWhen || child.inhibited
 
-  override def toString = 'PrefixOperatorNode + ":" + operatorToken + inhibitedFlagForAstDump
+  override def toString = "'PrefixOperatorNode:" + operatorToken + inhibitedFlagForAstDump
 
   override def doWrite(sw: StatementWriter) = {
     sw.write("(")
@@ -474,11 +474,11 @@ class LeftOuterJoinNode
 
   override def doWrite(sw: StatementWriter) = {}
   
-  override def toString = 'LeftOuterJoin + ""  
+  override def toString = "'LeftOuterJoin"
 }
 
 class FullOuterJoinNode(left: ExpressionNode, right: ExpressionNode) extends BinaryOperatorNode(left, right, "full", false) {
-  override def toString = 'FullOuterJoin + ""
+  override def toString = "'FullOuterJoin"
 }
 
 trait UniqueIdInAliaseRequired  {
@@ -639,7 +639,7 @@ class UnionExpressionNode(val kind: String, val ast: ExpressionNode) extends Exp
   }
 
   override def toString = {
-    'UnionExpressionNode + "[with " + kind  + "]"
+    s"'UnionExpressionNode[with${kind}]"
   }
 
   override def children =
@@ -652,7 +652,7 @@ class QueryValueExpressionNode[A1, T1](val ast: ExpressionNode, override val map
   }
 
   override def toString = {
-    'QueryValueExpressionNode + ""
+    "'QueryValueExpressionNode"
   }
 
   override def children =

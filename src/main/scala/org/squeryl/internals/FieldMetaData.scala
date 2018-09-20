@@ -89,7 +89,7 @@ class FieldMetaData(
   def sequenceName: String = {
 
     val ai = _columnAttributes.collectFirst{case a: AutoIncremented => a}.
-      getOrElse(org.squeryl.internals.Utils.throwError(this + " is not declared as autoIncremented, hence it has no sequenceName"))
+      getOrElse(org.squeryl.internals.Utils.throwError(s"${this} is not declared as autoIncremented, hence it has no sequenceName"))
 
     if(ai.nameOfSequence != None) {
       return ai.nameOfSequence.get
@@ -334,7 +334,7 @@ class FieldMetaData(
       case e: Exception => {
         val typeOfV = if(v == null) "null" else v.getClass.getCanonicalName
         org.squeryl.internals.Utils.throwError(
-          this + " was invoked with value '" + v + "' of type " + typeOfV + " on object of type " + target.getClass.getName + " \n" + e)
+          this.toString + " was invoked with value '" + v + "' of type " + typeOfV + " on object of type " + target.getClass.getName + " \n" + e)
       }
     }
 

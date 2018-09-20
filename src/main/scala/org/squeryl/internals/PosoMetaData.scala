@@ -26,7 +26,7 @@ import org.squeryl._
 class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: View[T]) {
 
   override def toString =
-    'PosoMetaData + "[" + clasz.getSimpleName + "]" + fieldsMetaData.mkString("(",",",")")
+    "'PosoMetaData[" + clasz.getSimpleName + "]" + fieldsMetaData.mkString("(",",",")")
 
   def findFieldMetaDataForProperty(name: String) =
      _fieldsMetaData.find(fmd => fmd.nameOfProperty == name)

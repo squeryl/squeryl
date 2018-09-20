@@ -152,7 +152,7 @@ class TupleSelectElement
       columnToTupleMapper.get.activate(indexInTuple, jdbcIndex)
 
   override def toString =
-    'TupleSelectElement + ":" + indexInTuple + ":" + writeToString
+    "'TupleSelectElement:" + indexInTuple + ":" + writeToString
 }
 
 class FieldSelectElement
@@ -194,7 +194,7 @@ class FieldSelectElement
     fieldMetaData.displayType
   
   override def toString =
-    'FieldSelectElement + ":" +
+    "'FieldSelectElement:" +
        Utils.failSafeString(alias, fieldMetaData.nameOfProperty)
 }
 
@@ -223,7 +223,7 @@ class ValueSelectElement
     }
 
   override def toString =
-    'ValueSelectElement + ":" + expression.writeToString  
+    "'ValueSelectElement:" + expression.writeToString  
 }
 
 /**
@@ -236,7 +236,7 @@ class SelectElementReference[A,T]
     extends TypedExpression[A,T] {
     
   override def toString =
-    'SelectElementReference + ":" + Utils.failSafeString(delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
+    "'SelectElementReference:" + Utils.failSafeString(delegateAtUseSite.alias) + ":" + selectElement.typeOfExpressionToString + inhibitedFlagForAstDump
 
   override def inhibited =
     selectElement.inhibited
@@ -304,7 +304,7 @@ class ExportedSelectElement
   }
 
   override def toString =
-    'ExportedSelectElement + ":" + alias + ",(selectElement=" + selectElement + ")"
+    "'ExportedSelectElement:" + alias + ",(selectElement=" + selectElement + ")"
 
   def alias:String =
     if (isDirectOuterReference)

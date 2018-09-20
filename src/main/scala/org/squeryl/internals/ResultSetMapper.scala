@@ -184,7 +184,7 @@ class ResultSetMapper extends ResultSetUtils {
   var isActive = false
 
   override def toString =
-    'ResultSetMapper + ":" + Integer.toHexString(System.identityHashCode(this)) +
+    "'ResultSetMapper:" + Integer.toHexString(System.identityHashCode(this)) +
      _fieldMapper.mkString("(",",",")") +
     "-" + groupKeysMapper.getOrElse("") +
     "-" + groupMeasuresMapper.getOrElse("") +

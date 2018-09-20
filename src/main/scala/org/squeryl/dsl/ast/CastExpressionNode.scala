@@ -12,5 +12,5 @@ class CastExpressionNode(expr: ExpressionNode,
 
   override def children = List(expr)
 
-  override def toString = 'CastExpressionNode + ":" + expr.toString + "::" + typ
+  override def toString = "'CastExpressionNode:" + expr.toString + "::" + typ
 }
