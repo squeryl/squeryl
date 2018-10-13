@@ -33,7 +33,7 @@ val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.7", Scala211, "2.10.7", "2.13.0-M4")
+crossScalaVersions := Seq("2.12.7", Scala211, "2.10.7", "2.13.0-M5")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
@@ -121,12 +121,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  if (scalaVersion.value == "2.13.0-M5") {
-    // TODO https://github.com/scalatest/scalatest/issues/1409
-    Nil
-  } else {
-    Seq("org.scalatest" %% "scalatest" % "3.0.6-SNAP1" % "test")
-  }
+  Seq("org.scalatest" %% "scalatest" % "3.0.6-SNAP3" % "test")
 }
 
 libraryDependencies ++= {
