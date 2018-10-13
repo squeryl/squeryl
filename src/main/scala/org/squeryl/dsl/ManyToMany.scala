@@ -156,7 +156,7 @@ trait ManyToMany[O,A] extends Query[O] {
   /**
    * Creates a new association object 'a' and calls associate(o,a)
    *
-   * Note that this method will fail if the association object has NOT NULL constraint fields appart from the
+   * Note that this method will fail if the association object has NOT NULL constraint fields apart from the
    * foreign keys in the relations
    *  
    */

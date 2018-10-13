@@ -107,7 +107,7 @@ abstract class TransactionTests extends DbTestBase {
    }    
    
    val sf2  = new SessionFactory {
-     def newSession: AbstractSession = Utils.throwError("inner inTransaction sould not be started")
+     def newSession: AbstractSession = Utils.throwError("inner inTransaction should not be started")
    }
    
    

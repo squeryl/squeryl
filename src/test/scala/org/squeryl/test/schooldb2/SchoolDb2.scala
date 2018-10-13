@@ -411,7 +411,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     }
 
     if(! exceptionThrown)
-      org.squeryl.internals.Utils.throwError('testUniquenessConstraint + " failed, unique constraint violation occured")
+      org.squeryl.internals.Utils.throwError('testUniquenessConstraint + " failed, unique constraint violation occurred")
 
     courseAssignments.Count.toLong shouldBe 1
   }

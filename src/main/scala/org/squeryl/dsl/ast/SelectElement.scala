@@ -323,7 +323,7 @@ class ExportedSelectElement
   /**
    * A root level query that has nested queries (or refers to queries in an outer scope) will
    * have SelectElements that are ExportedSelectElement, the 'actualSelectElement' points directly
-   * to the refered AST node, while 'target' refers to it indirectly (see target)
+   * to the referred AST node, while 'target' refers to it indirectly (see target)
    */
   override def actualSelectElement: SelectElement =
     selectElement.actualSelectElement

@@ -141,7 +141,7 @@ object MusicDb extends Schema {
   val playlistElements = table[PlaylistElement]
   val ratings = table[Rating]
 
-  // drop (schema) is normaly protected... for safety, here we live dangerously !
+  // drop (schema) is normally protected... for safety, here we live dangerously !
   override def drop = super.drop
 }
 

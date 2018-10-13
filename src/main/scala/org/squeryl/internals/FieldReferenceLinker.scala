@@ -195,7 +195,7 @@ object FieldReferenceLinker {
    * It is assumed that yield invocation for inspection will never be nested, since
    * a query is completely built (and it's yield inspection is done) before it can
    * be nested, this is unlikely to change, but documenting this assumption was
-   * deemed usefull, because this method would stop working (without complaining)
+   * deemed useful, because this method would stop working (without complaining)
    * if (the assumption) was broken.   
    */
 

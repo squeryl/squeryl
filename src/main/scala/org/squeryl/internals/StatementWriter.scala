@@ -26,7 +26,7 @@ trait StatementParam
 case class ConstantStatementParam(p: ConstantTypedExpression[_,_]) extends StatementParam
 case class FieldStatementParam(v: AnyRef, fmd: FieldMetaData) extends StatementParam
 /*
- * ParamWithMapper is a workadound to accomodate the ConstantExpressionNodeList, ideally 'in' and 'notIn' would grab the TEF in scope :
+ * ParamWithMapper is a workadound to accommodate the ConstantExpressionNodeList, ideally 'in' and 'notIn' would grab the TEF in scope :
  * 
  * def in[A2,T2](t: Traversable[A2])(implicit cc: CanCompare[T1,T2], tef: TypedExpressionFactory[A2,T2]): LogicalBoolean =  
  *   new InclusionOperator(this, new RightHandSideOfIn(new zConstantExpressionNodeList(t, mapper)).toIn)
