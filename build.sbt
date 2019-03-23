@@ -52,16 +52,21 @@ scalacOptions ++= Seq(
   "-language:existentials"
 )
 
-val unusedWarnings = Seq(
-  "-Ywarn-unused"
+val unusedWarnings = Def.setting(
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 10)) =>
+      Nil
+    case Some((2, 11)) =>
+      Seq("-Ywarn-unused-import")
+    case _ =>
+      Seq("-Ywarn-unused:imports")
+  }
 )
 
-scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)){
-  case Some((2, v)) if v >= 11 => unusedWarnings
-}.toList.flatten
+scalacOptions ++= unusedWarnings.value
 
 Seq(Compile, Test).flatMap(c =>
-  scalacOptions in (c, console) --= unusedWarnings
+  scalacOptions in (c, console) --= unusedWarnings.value
 )
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
