@@ -33,7 +33,7 @@ val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.8", Scala211, "2.10.7", "2.13.0-M5")
+crossScalaVersions := Seq("2.12.8", Scala211, "2.10.7", "2.13.0-RC1")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
@@ -126,13 +126,13 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.0.7" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.0.8-RC2" % "test")
 }
 
 libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.1.0")
+      Seq("org.scala-lang.modules" %% "scala-xml" % "1.2.0")
     case _ =>
       Nil
   }
