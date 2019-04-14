@@ -572,7 +572,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   test("TestTimestampImplicit"){
-    val _: Option[Timestamp] =
+    val x: Option[Timestamp] =
       from(artists)(a=>
         compute(min(a.timeOfLastUpdate))
       )

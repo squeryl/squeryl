@@ -774,7 +774,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("OptionAndNonOptionMixInComputeTuple"){
-    val _:Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
+    val x: Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
   }
 
   test("testServerSideFunctionCall") {
