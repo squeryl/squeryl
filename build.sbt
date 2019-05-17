@@ -134,7 +134,10 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.0.8-RC2" % "test")
+  if (scalaVersion.value == "2.13.0-RC2")
+    Nil
+  else
+    Seq("org.scalatest" %% "scalatest" % "3.0.8-RC2" % "test")
 }
 
 libraryDependencies ++= {
