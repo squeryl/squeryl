@@ -458,8 +458,8 @@ trait QueryDsl
         case e:SQLException =>
           if(Session.currentSession.databaseAdapter.isNotNullConstraintViolation(e))
             throw new RuntimeException(
-              "the " + 'associate + " method created and inserted association object of type " +
-              posoMetaData.clasz.getName + " that has NOT NULL colums, plase use the other signature of " + 'ManyToMany +
+              "the 'associate method created and inserted association object of type " +
+              posoMetaData.clasz.getName + " that has NOT NULL colums, plase use the other signature of 'ManyToMany" +
               " that takes the association object as argument : associate(o,a) for association objects that have NOT NULL columns", e)
           else
             throw e
