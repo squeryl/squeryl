@@ -44,13 +44,21 @@ scalacOptions in (Compile, doc) ++= {
 scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
-  "-Xfuture",
   "-feature",
   "-language:implicitConversions",
   "-language:postfixOps",
   "-language:reflectiveCalls",
   "-language:existentials"
 )
+
+scalacOptions ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, v)) if v <= 12 =>
+      Seq("-Xfuture")
+    case _ =>
+      Nil
+  }
+}
 
 val unusedWarnings = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value) match {
