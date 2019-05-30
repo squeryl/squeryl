@@ -33,7 +33,7 @@ val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.8", Scala211, "2.10.7", "2.13.0-RC2")
+crossScalaVersions := Seq("2.12.8", Scala211, "2.10.7", "2.13.0-RC3")
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
@@ -134,7 +134,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.1.0-SNAP11" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.0.8-RC5" % "test")
 }
 
 libraryDependencies ++= {
