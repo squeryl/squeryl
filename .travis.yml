@@ -1,6 +1,6 @@
 language: scala
 sudo: false
-dist: trusty
+dist: xenial
 scala:
 - 2.10.7
 - 2.11.12
@@ -9,11 +9,12 @@ scala:
 matrix:
   include:
   - scala: 2.12.8
-    jdk: oraclejdk11
+    jdk: openjdk11
 jdk:
-- oraclejdk8
-addons:
-  postgresql: '9.3'
+- openjdk8
+services:
+  - mysql
+  - postgresql
 before_script:
 - psql -c "CREATE ROLE squeryl WITH SUPERUSER LOGIN PASSWORD 'squeryl';" -U postgres
 - psql -c "CREATE DATABASE squeryl;" -U postgres
