@@ -5,16 +5,11 @@ scala:
 - 2.10.7
 - 2.11.12
 - 2.12.8
+- 2.13.0
 matrix:
   include:
   - scala: 2.12.8
     jdk: openjdk11
-  - scala: 2.13.0
-    script:
-    - sbt
-      "++${TRAVIS_SCALA_VERSION}!"
-      'set libraryDependencies ~= {_.filter(_.configurations != Some("test"))}'
-      compile
 jdk:
 - openjdk8
 services:
