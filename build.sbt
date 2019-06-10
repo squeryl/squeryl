@@ -133,22 +133,8 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-scalap" % "3.6.6",
 )
 
-// TODO remove when scalatest_2.13 released
-conflictWarning := {
-  if (scalaBinaryVersion.value == "2.13") {
-    ConflictWarning.disable
-  } else {
-    conflictWarning.value
-  }
-}
-
 libraryDependencies ++= {
-  if (scalaBinaryVersion.value == "2.13") {
-    // TODO remove when scalatest_2.13 released
-    Seq("org.scalatest" % "scalatest_2.13.0-RC3" % "3.0.8-RC5" % "test")
-  } else {
-    Seq("org.scalatest" %% "scalatest" % "3.0.8-RC5" % "test")
-  }
+  Seq("org.scalatest" %% "scalatest" % "3.0.8" % "test")
 }
 
 libraryDependencies ++= {
