@@ -129,7 +129,7 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "42.1.4.jre7" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.27.2.1" % "test",
+  "org.xerial" % "sqlite-jdbc" % "3.28.0" % "test",
   "org.json4s" %% "json4s-scalap" % "3.6.6",
 )
 
