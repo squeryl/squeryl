@@ -125,7 +125,7 @@ pomIncludeRepository := { _ => false }
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.2.12",
   "com.h2database" % "h2" % "1.4.199" % "provided",
-  "mysql" % "mysql-connector-java" % "5.1.47" % "provided",
+  "mysql" % "mysql-connector-java" % "5.1.48" % "provided",
   "org.postgresql" % "postgresql" % "42.1.4.jre7" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
