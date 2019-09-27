@@ -4,11 +4,11 @@ dist: xenial
 scala:
 - 2.10.7
 - 2.11.12
-- 2.12.8
-- 2.13.0
+- 2.12.10
+- 2.13.1
 matrix:
   include:
-  - scala: 2.12.8
+  - scala: 2.12.10
     jdk: openjdk11
 jdk:
 - openjdk8
