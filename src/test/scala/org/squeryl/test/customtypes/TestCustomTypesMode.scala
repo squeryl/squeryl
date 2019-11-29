@@ -20,7 +20,7 @@ import org.squeryl.framework._
 import org.squeryl.customtypes._
 
 import CustomTypesMode._
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 
 abstract class TestCustomTypesMode extends SchemaTester with Matchers with QueryTester with RunTestsInsideTransaction {

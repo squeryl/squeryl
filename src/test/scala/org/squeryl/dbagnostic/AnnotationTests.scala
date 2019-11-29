@@ -18,10 +18,10 @@ package org.squeryl.dbagnostic
 
 import org.squeryl.KeyedEntity
 import org.squeryl.annotations.{Row, Column}
-import org.squeryl.Schema
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
+import org.squeryl.Schema
 import org.squeryl.test.PrimitiveTypeModeForTests
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 
 @Row("T_TOASTER")
@@ -65,7 +65,7 @@ class DescendantOfKeyedObject extends KeyedObject {
   //val pouf = "pouf"
 }
 
-class AnnotationTests extends FunSuite with Matchers {
+class AnnotationTests extends AnyFunSuite with Matchers {
 
 
   class C(
