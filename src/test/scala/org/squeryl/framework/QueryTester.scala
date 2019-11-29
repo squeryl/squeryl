@@ -2,7 +2,7 @@ package org.squeryl.framework
 
 import org.squeryl.{Session, Query}
 import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 trait QueryTester extends Matchers {
 

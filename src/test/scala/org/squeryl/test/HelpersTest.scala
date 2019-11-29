@@ -1,11 +1,11 @@
 package org.squeryl.test
 
-import org.scalatest.FunSuite
-import org.scalatest.Matchers
 import org.squeryl.Schema
 import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class NamingConventionTransformsTest extends FunSuite with Matchers {
+class NamingConventionTransformsTest extends AnyFunSuite with Matchers {
 
   object FooSchema extends Schema
   
