@@ -134,7 +134,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.1.2" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.2.0" % "test")
 }
 
 libraryDependencies ++= {
