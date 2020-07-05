@@ -26,10 +26,10 @@ object UuidTests {
   }
 
   object TestSchema extends Schema {
-    val uuidAsProperty = table[UuidAsProperty]
-    val uuidAsId = table[UuidAsId]
-    val uuidAsForeignKey = table[UuidAsForeignKey]
-    val uuidWithOption = table[UuidWithOption]
+    val uuidAsProperty = table[UuidAsProperty]()
+    val uuidAsId = table[UuidAsId]()
+    val uuidAsForeignKey = table[UuidAsForeignKey]()
+    val uuidWithOption = table[UuidWithOption]()
 
     val uuidOneToMany = oneToManyRelation(uuidAsId, uuidAsForeignKey).via(_.id === _.foreignUuid)
 

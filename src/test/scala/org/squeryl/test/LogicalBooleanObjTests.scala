@@ -10,7 +10,7 @@ object LogicalBooleanObjTests {
   class Dummy(val id:Int, val p1:Int, val p2:Int) extends KeyedEntity[Int]
 
   object TestSchema extends Schema {
-    val dummy = table[Dummy]
+    val dummy = table[Dummy]()
   }
 
 }

@@ -46,7 +46,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
   refresh
   
   def refresh = {
-    _buffer.clear
+    _buffer.clear()
     for(m <- relation.iterator.toSeq)
       _buffer.append(m)
   }
@@ -61,7 +61,7 @@ class StatefulOneToMany[M](val relation: OneToMany[M]) extends Iterable[M] {
 
   def deleteAll: Int = {
     val r = relation.deleteAll
-    _buffer.clear
+    _buffer.clear()
     r
   }
 }
@@ -194,7 +194,7 @@ class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O]
   refresh
 
   def refresh = {
-    _map.clear
+    _map.clear()
     for(e <- relation.associationMap.iterator.toSeq)
       _map.put(e._1, e._2)
   }
@@ -224,7 +224,7 @@ class StatefulManyToMany[O,A](val relation: ManyToMany[O,A]) extends Iterable[O]
 
   def dissociateAll: Int = {
     val r = relation.dissociateAll
-    _map.clear
+    _map.clear()
     r
   }
 

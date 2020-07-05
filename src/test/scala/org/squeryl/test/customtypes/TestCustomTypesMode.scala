@@ -78,9 +78,9 @@ object HospitalDb extends HospitalDb
 
 class HospitalDb extends Schema {
   
-  val patients = table[Patient]
+  val patients = table[Patient]()
 
-  val patientInfo = table[PatientInfo]
+  val patientInfo = table[PatientInfo]()
 
   val patienttoPatientInfo =
       oneToManyRelation(patients, patientInfo).

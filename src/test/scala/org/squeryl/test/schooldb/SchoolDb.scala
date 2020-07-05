@@ -174,7 +174,7 @@ class SchoolDb extends Schema {
 
 
   
-  val courses2 = table[Course2]
+  val courses2 = table[Course2]()
 
 
 //  override val name = {
@@ -198,31 +198,31 @@ class SchoolDb extends Schema {
     "T_" + n
 
   val stringKeyedEntities =
-    table[StringKeyedEntity]
+    table[StringKeyedEntity]()
 
-  val professors = table[Professor]
+  val professors = table[Professor]()
   
-  val students = table[Student] //(implicitly[Manifest[Student]],personKEDO)
+  val students = table[Student]() //(implicitly[Manifest[Student]],personKEDO)
   
   val addresses = table[Address]("AddressexageratelyLongName")
 
-  val courses = table[Course]
+  val courses = table[Course]()
 
-  val courseSubscriptions = table[CourseSubscription]
+  val courseSubscriptions = table[CourseSubscription]()
 
-  val courseAssigments = table[CourseAssignment]
+  val courseAssigments = table[CourseAssignment]()
 
-  val courseOfferings = table[CourseOffering]
+  val courseOfferings = table[CourseOffering]()
 
-  val schools = table[School]
+  val schools = table[School]()
 
-  val postalCodes = table[PostalCode]
+  val postalCodes = table[PostalCode]()
 
   
-  val tests = table[YieldInspectionTest]
-  val others = table[YieldInspectionAnother]
+  val tests = table[YieldInspectionTest]()
+  val others = table[YieldInspectionAnother]()
 
-  val sqlDates = table[SqlDate]
+  val sqlDates = table[SqlDate]()
   
 // uncomment to test : when http://www.assembla.com/spaces/squeryl/tickets/14-assertion-fails-on-self-referring-onetomanyrelationship
 //  an unverted constraint gets created, unless expr. is inverted : child.parentSchoolId === parent.id
@@ -286,22 +286,22 @@ class SchoolDb extends Schema {
 
   override def callbacks = Seq(
     // We'll change the gender of z1 z2 student
-    beforeInsert[Student]
+    beforeInsert[Student]()
       map(s => {if (s.name == "z1" && s.lastName == "z2"){val s2 = studentTransform(s); transformedStudents.append(s2); s2} else s}),
 
-    beforeInsert[Person]
+    beforeInsert[Person]()
       map(p => {beforeInsertsOfPerson.append(p); p}),
 
-    beforeInsert[Professor]
+    beforeInsert[Professor]()
       call(beforeInsertsOfProfessor.append(_)),
 
-    beforeInsert[KeyedEntity[_]]
+    beforeInsert[KeyedEntity[_]]()
       call(beforeInsertsOfKeyedEntity.append(_)),
       
-    afterSelect[Student]
+    afterSelect[Student]()
       call(afterSelectsOfStudent.append(_)),
 
-    afterInsert[Professor]
+    afterInsert[Professor]()
       call(afterInsertsOfProfessor.append(_)),
 
     afterInsert(schools)
@@ -719,14 +719,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("lifecycleCallbacks") {
 
 
-    beforeInsertsOfPerson.clear
-    beforeInsertsOfKeyedEntity.clear
-    beforeInsertsOfProfessor.clear
-    afterSelectsOfStudent.clear
-    afterInsertsOfProfessor.clear
-    beforeDeleteOfSchool.clear
-    professorsCreatedWithFactory.clear
-    transformedStudents.clear
+    beforeInsertsOfPerson.clear()
+    beforeInsertsOfKeyedEntity.clear()
+    beforeInsertsOfProfessor.clear()
+    afterSelectsOfStudent.clear()
+    afterInsertsOfProfessor.clear()
+    beforeDeleteOfSchool.clear()
+    professorsCreatedWithFactory.clear()
+    transformedStudents.clear()
 
     val s1 = students.insert(new Student("z1", "z2", Some(4), 1, Some(4), Some(true)))
     val sOpt = from(students)(s => where(s.name === "z1" and s.lastName === "z2") select(s)).headOption
@@ -774,7 +774,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("OptionAndNonOptionMixInComputeTuple"){
-    val x: Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky
+    val x: Product4[Option[Float],Option[Float],Option[Double], Long] = avgStudentAgeFunky()
   }
 
   test("testServerSideFunctionCall") {
@@ -800,7 +800,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("ScalarOptionQuery"){
-    avgStudentAge
+    avgStudentAge()
   }
 
   test("LikeOperator"){

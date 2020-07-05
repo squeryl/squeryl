@@ -643,7 +643,7 @@ trait DatabaseAdapter {
     sw.indent
     sw.nextLine
     for(z <- us.values.zipi) {
-      val col = colsToUpdate.next
+      val col = colsToUpdate.next()
       sw.write(quoteName(col.columnName))
       sw.write(" = ")
       val v = z.element

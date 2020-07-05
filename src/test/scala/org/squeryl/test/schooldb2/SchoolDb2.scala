@@ -92,15 +92,15 @@ class SchoolDb2 extends Schema {
     def idPropertyName = "id"
   }
   
-  val entries = table[Entry]
+  val entries = table[Entry]()
   val comments = table[Comment]("commentz")
 
   val entryToComments = oneToManyRelation(entries, comments).via(
     (e,c) => e.id === c.entryId)
   
-  val professors = table[Professor]
+  val professors = table[Professor]()
 
-  val students = table[Student]
+  val students = table[Student]()
 
 
   on(students)(s => declare(
@@ -110,9 +110,9 @@ class SchoolDb2 extends Schema {
     columns(s.id, s.firstName, s.lastName) are(indexed)  
   ))
 
-  val courses = table[Course]
+  val courses = table[Course]()
 
-  val subjects = table[Subject]
+  val subjects = table[Subject]()
 
   val courseAssignments =
     manyToManyRelation(professors, courses, "CourseAssignmentZ").
@@ -138,7 +138,7 @@ class SchoolDb2 extends Schema {
     
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
-    foreignKeyDeclaration.constrainReference
+    foreignKeyDeclaration.constrainReference()
 
   //now we will redefine some of the foreign key constraints :
   //if we delete a subject, we want all courses to be deleted
@@ -152,14 +152,14 @@ class SchoolDb2 extends Schema {
     super.drop
   }
 
-  val as = table[ASTConstructionInterferenceA]
-  val bs = table[ASTConstructionInterferenceB]
+  val as = table[ASTConstructionInterferenceA]()
+  val bs = table[ASTConstructionInterferenceB]()
 
   val aToB =
     oneToManyRelation(as, bs).
     via((a, b) => a.id === b.aId)
 
-  aToB.foreignKeyDeclaration.unConstrainReference
+  aToB.foreignKeyDeclaration.unConstrainReference()
 }
 
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
@@ -252,7 +252,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("UpdateWithCompositePK"){
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
 
     val xiao = {students.lookup(xiaoJimbao.id)
@@ -271,7 +271,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("Many2ManyAssociationFromLeftSide"){
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
 
     courseAssignments.Count.toLong shouldBe 0
@@ -294,7 +294,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("Many2ManyAssociationsFromRightSide"){
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
 
     courseAssignments.Count.toLong shouldBe 0L
@@ -317,7 +317,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("OneToMany"){
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
 
     val philosophyCourse10AMWednesday = new Course
@@ -347,7 +347,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("CompositeEquality"){
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
     
     val a = physicsCourse.professors.associate(professeurTournesol)
@@ -382,7 +382,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
 
   test("UniquenessConstraint"){
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
 
     courseAssignments.Count.toLong shouldBe 0
@@ -444,7 +444,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   }
   
   test("Inequality with query on right hand side", SingleTestRun) {
-    val seedData = seedDataDef
+    val seedData = seedDataDef()
     import seedData._
    
     val xiao = students.lookup(xiaoJimbao.id).get
@@ -480,7 +480,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   
   test ("#73 relations with Option[] on one side of the equality expression blow up") {
 
-    seedDataDef
+    seedDataDef()
         
     val cs = subjects.where(_.name === "Computer Science").single
     

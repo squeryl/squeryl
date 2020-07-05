@@ -42,7 +42,7 @@ trait Query[R] extends Queryable[R] {
    */
   def single: R = {
     val i = iterator
-    val r = i.next
+    val r = i.next()
     if(i.hasNext)
       org.squeryl.internals.Utils.throwError("single called on query returning more than one row : \n" + statement)
     r
@@ -56,7 +56,7 @@ trait Query[R] extends Queryable[R] {
     val i = iterator
     val res = 
       if(i.hasNext)
-        Some(i.next)
+        Some(i.next())
       else 
         None
 
@@ -68,7 +68,7 @@ trait Query[R] extends Queryable[R] {
   def headOption = {
     val i = iterator
     if(i.hasNext)
-      Some(i.next)
+      Some(i.next())
     else
       None
   }

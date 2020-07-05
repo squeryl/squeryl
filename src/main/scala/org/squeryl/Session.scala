@@ -228,9 +228,9 @@ trait AbstractSession {
       }
       Utils.close(s)
     })
-    _statements.clear
+    _statements.clear()
     _resultSets.foreach(rs => Utils.close(rs))
-    _resultSets.clear
+    _resultSets.clear()
 
     FieldReferenceLinker.clearThreadLocalState()
   }
@@ -269,7 +269,7 @@ object SessionFactory {
         throw new IllegalStateException("org.squeryl.SessionFactory not initialized, SessionFactory.concreteFactory must be assigned a \n"+
               "function for creating new org.squeryl.Session, before transaction can be used.\n" +
               "Alternatively SessionFactory.externalTransactionManagementAdapter can initialized, please refer to the documentation.")
-      ).apply        
+      ).apply()        
 }
 
 object Session {
@@ -299,7 +299,7 @@ object Session {
   def currentSession: AbstractSession =
     SessionFactory.externalTransactionManagementAdapter match {
       case Some(a) =>
-        a.apply getOrElse org.squeryl.internals.Utils.throwError("SessionFactory.externalTransactionManagementAdapter was unable to supply a Session for the current scope")
+        a.apply() getOrElse org.squeryl.internals.Utils.throwError("SessionFactory.externalTransactionManagementAdapter was unable to supply a Session for the current scope")
       case None =>
         currentSessionOption.getOrElse(
           throw new IllegalStateException("No session is bound to current thread, a session must be created via Session.create \nand bound to the thread via 'work' or 'bindToCurrentThread'\n Usually this error occurs when a statement is executed outside of a transaction/inTrasaction block"))

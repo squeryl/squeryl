@@ -98,7 +98,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
 
     if(it.hasNext) {
 
-      val e0 = it.next
+      val e0 = it.next()
       val fmds = fmdCallback(e0)
       val sess = Session.currentSession
       val dba = _dbAdapter
@@ -128,7 +128,7 @@ class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _p
         var updateCount = 1
 
         while(it.hasNext) {
-          val eN0 = it.next.asInstanceOf[AnyRef]
+          val eN0 = it.next().asInstanceOf[AnyRef]
           val eN =
             if(isInsert)
               _callbacks.beforeInsert(eN0)

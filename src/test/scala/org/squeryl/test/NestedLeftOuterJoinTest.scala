@@ -5,8 +5,8 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl.framework._
 
 object TestSchema extends Schema {
-  val a = table[A]
-  val b = table[B]
+  val a = table[A]()
+  val b = table[B]()
 
   override def drop = super.drop
 }
@@ -45,7 +45,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
 
     TestSchema.b.insert(new B(1, "b one", 1))
 
-    testInnerJoin
+    testInnerJoin()
 
 
     val q0 = from(TestSchema.b)( b => select(b) )

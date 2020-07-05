@@ -21,7 +21,7 @@ class UpdateStatement(_whereClause: Option[()=>LogicalBoolean], uas: collection.
    extends ExpressionNode {
 
   val whereClause: Option[LogicalBoolean] =
-    _whereClause.map(_.apply)
+    _whereClause.map(_.apply())
 
   override def children = whereClause.toList ++ values
 

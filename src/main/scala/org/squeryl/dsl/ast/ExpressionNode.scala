@@ -164,7 +164,7 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
     val nonInh = children.filter(c => ! c.inhibited).iterator
 
     sw.write("(")
-    nonInh.next.write(sw)
+    nonInh.next().write(sw)
     sw.write(" ")
     if(nonInh.hasNext) {
       sw.write(operatorToken)
@@ -175,7 +175,7 @@ class BinaryOperatorNodeLogicalBoolean(left: ExpressionNode, right: ExpressionNo
       if(rightArgInParent)
         sw.write("(")
 
-      nonInh.next.write(sw)
+      nonInh.next().write(sw)
       
       if(rightArgInParent)
         sw.write(")")      

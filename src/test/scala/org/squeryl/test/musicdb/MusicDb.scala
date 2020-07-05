@@ -65,11 +65,11 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 
 class MusicDb extends Schema with Matchers {
 
-  val songs = table[Song]
+  val songs = table[Song]()
 
-  val artists = table[Person]
+  val artists = table[Person]()
 
-  val cds = table[Cd]
+  val cds = table[Cd]()
 
   override def drop = {
     Session.cleanupResources

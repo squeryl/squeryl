@@ -124,6 +124,6 @@ class IteratorConcatenation[R](first: Iterator[R], second: Iterator[R]) extends 
   
   def next() = {
     _hasNext
-    currentIterator.next
+    currentIterator.next()
   }
 }

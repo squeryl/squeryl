@@ -93,11 +93,11 @@ abstract class AbstractQuery[R](
     if(qy.joinExpressions != Nil) {
       val sqIterator = subQueryables.iterator
       val joinExprsIterator = qy.joinExpressions.iterator 
-      sqIterator.next // get rid of the first one
+      sqIterator.next() // get rid of the first one
 
       while(sqIterator.hasNext) {
-        val nthQueryable = sqIterator.next
-        val nthJoinExpr = joinExprsIterator.next
+        val nthQueryable = sqIterator.next()
+        val nthJoinExpr = joinExprsIterator.next()
         nthQueryable.node.joinExpression = Some(nthJoinExpr())
       }
     }

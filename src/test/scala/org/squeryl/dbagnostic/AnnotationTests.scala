@@ -84,11 +84,11 @@ class AnnotationTests extends AnyFunSuite with Matchers {
 
     import PrimitiveTypeModeForTests._
     
-    val descendantOfKeyedObjects = table[DescendantOfKeyedObject]
+    val descendantOfKeyedObjects = table[DescendantOfKeyedObject]()
 
-    val nailCutters = table[NailCutter]
+    val nailCutters = table[NailCutter]()
 
-    val toasters = table[Toaster]
+    val toasters = table[Toaster]()
   }
 
   //test("MetaData"){

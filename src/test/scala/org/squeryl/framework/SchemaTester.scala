@@ -23,7 +23,7 @@ abstract class SchemaTester extends DbTestBase {
         schema.drop
         schema.create
         try{
-          prePopulate
+          prePopulate()
         }catch{
           case e : Exception =>
             println(e.getMessage)

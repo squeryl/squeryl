@@ -59,7 +59,7 @@ trait QueryDsl
       val hasFirst = i.hasNext
                   
       lazy val firstRow = 
-        if(hasFirst) Some(i.next) else None    
+        if(hasFirst) Some(i.next()) else None    
       
       override def head = firstRow.get
       

@@ -54,7 +54,7 @@ object StatementHasher {
   private case class StatementCaseClass4HashGeneration(sql: String, definitionOrCallSite: String)
 
   def hash(sql: String, definitionOrCallSite: String): Int =
-    StatementCaseClass4HashGeneration(sql, definitionOrCallSite).hashCode
+    StatementCaseClass4HashGeneration(sql, definitionOrCallSite).hashCode()
 }
 
 class Statement(val sql: String, val definitionOrCallSite: String, val hash: Int, var statementHashCollisionNumber: Int) extends KeyedEntity[CompositeKey2[Int,Int]] {
@@ -86,7 +86,7 @@ object StatsSchema extends Schema {
 
   val statements = table[Statement]("Statementz")
 
-  val statementInvocations = table[StatementInvocation]
+  val statementInvocations = table[StatementInvocation]()
 
   def invocationStats =
     from(statementInvocations)((si) =>

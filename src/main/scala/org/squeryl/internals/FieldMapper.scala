@@ -249,7 +249,7 @@ trait FieldMapper {
     }  
   }
   
-  initialize
+  initialize()
   
   protected def initialize() = {
     import PrimitiveTypeSupport._

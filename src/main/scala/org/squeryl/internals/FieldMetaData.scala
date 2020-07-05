@@ -74,7 +74,7 @@ class FieldMetaData(
 
 
   private [squeryl] def _clearColumnAttributes = {
-    _columnAttributes.clear
+    _columnAttributes.clear()
   }
 
   private [squeryl] def _addColumnAttribute(ca: ColumnAttribute) =

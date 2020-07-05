@@ -135,11 +135,11 @@ class Rating(var userId: Long, var appreciationScore: Int, var songId: Int)
 
 object MusicDb extends Schema {
 
-  val artists = table[Artist]
-  val songs = table[Song]
-  val playlists = table[Playlist]
-  val playlistElements = table[PlaylistElement]
-  val ratings = table[Rating]
+  val artists = table[Artist]()
+  val songs = table[Song]()
+  val playlists = table[Playlist]()
+  val playlistElements = table[PlaylistElement]()
+  val ratings = table[Rating]()
 
   // drop (schema) is normally protected... for safety, here we live dangerously !
   override def drop = super.drop

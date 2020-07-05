@@ -389,7 +389,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   }
 
   def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
-    foreignKeyDeclaration.constrainReference
+    foreignKeyDeclaration.constrainReference()
 
   /**
    * @return a Tuple2 with (LengthOfDecimal, Scale) that will determine the storage

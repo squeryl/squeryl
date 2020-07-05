@@ -48,13 +48,13 @@ class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedE
 
 object SchoolDb2 extends Schema {
 
-  val professors = table[Professor]
+  val professors = table[Professor]()
 
-  val students = table[Student]
+  val students = table[Student]()
 
-  val courses = table[Course]
+  val courses = table[Course]()
 
-  val subjects = table[Subject]
+  val subjects = table[Subject]()
 
   val courseAssignments =
     manyToManyRelation(professors, courses).
@@ -70,7 +70,7 @@ object SchoolDb2 extends Schema {
 
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
-    foreignKeyDeclaration.constrainReference
+    foreignKeyDeclaration.constrainReference()
 
   override def drop = {
     Session.cleanupResources
