@@ -23,7 +23,7 @@ trait QueryTester extends Matchers {
   def loggerOn =
     Session.currentSession.setLogger((s:String) => println(s))
 
-  def log(queryName: Symbol, query:Query[_]) = {
+  def log(queryName: String, query:Query[_]) = {
 
     println(queryName + " :")
     println(query)
@@ -32,10 +32,10 @@ trait QueryTester extends Matchers {
       println("-->" + r)
   }
 
-  def validateQuery[R,S](name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
+  def validateQuery[R,S](name: String, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit =
     validateQuery[R,S](logQueries, name, q, mapFunc, expected)
 
-  def validateQuery[R,S](logFirst: Boolean, name: Symbol, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit = {
+  def validateQuery[R,S](logFirst: Boolean, name: String, q:Query[R], mapFunc: R=>S, expected: List[S]): Unit = {
 
     if(validateFirstAndExit >= 1)
       return

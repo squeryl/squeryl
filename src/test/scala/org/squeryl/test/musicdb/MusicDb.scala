@@ -275,7 +275,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     )
 
 
-  def assertionFailed(s: Symbol, actual: Any, expected: Any) =
+  def assertionFailed(s: String, actual: Any, expected: Any) =
     assert(actual == expected, ""+s+" failed, got " + actual + " expected " + expected)
 
 
@@ -346,7 +346,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testInstance = sharedTestInstance; import testInstance._
     val q = songCountPerAlbumIdJoinedWithAlbumNested
 
-    validateQuery('songCountPerAlbumIdJoinedWithAlbumNested, q,
+    validateQuery("songCountPerAlbumIdJoinedWithAlbumNested", q,
       (t:(String,Long)) => (t._1,t._2),
       expectedSongCountPerAlbum)
 
@@ -356,21 +356,21 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     def basicSelectUsingWhereOnQueryableNested =
       basicSelectUsingWhereOnQueryable.where(a=> a.id === testInstance.mongoSantaMaria.id)
 
-    validateQuery('basicSelectUsingWhereOnQueryable, basicSelectUsingWhereOnQueryable, (a:Person)=>a.id, List(mongoSantaMaria.id))
+    validateQuery("basicSelectUsingWhereOnQueryable", basicSelectUsingWhereOnQueryable, (a:Person)=>a.id, List(mongoSantaMaria.id))
 
-    validateQuery('basicSelectUsingWhereOnQueryableNested, basicSelectUsingWhereOnQueryableNested, (a:Person)=>a.id, List(mongoSantaMaria.id))
+    validateQuery("basicSelectUsingWhereOnQueryableNested", basicSelectUsingWhereOnQueryableNested, (a:Person)=>a.id, List(mongoSantaMaria.id))
 
-    validateQuery('poncho, poncho, (a:Person)=>a.lastName, List(ponchoSanchez.lastName))
+    validateQuery("poncho", poncho, (a:Person)=>a.lastName, List(ponchoSanchez.lastName))
 
     val ponchoSongs = List(besameMama.title, freedomSound.title, watermelonMan.title)
 
-    validateQuery('songsFeaturingPoncho, songsFeaturingPoncho, (s:Song)=>s.title,
+    validateQuery("songsFeaturingPoncho", songsFeaturingPoncho, (s:Song)=>s.title,
       ponchoSongs)
 
-    validateQuery('songsFeaturingPonchoNestedInWhere, songsFeaturingPonchoNestedInWhere, (s:Song)=>s.title,
+    validateQuery("songsFeaturingPonchoNestedInWhere", songsFeaturingPonchoNestedInWhere, (s:Song)=>s.title,
       ponchoSongs)
 
-    validateQuery('songCountPerAlbum, songCountPerAlbum(cds),
+    validateQuery("songCountPerAlbum", songCountPerAlbum(cds),
       (g:GroupWithMeasures[String,Long]) => (g.key,g.measures),
       expectedSongCountPerAlbum)
 
@@ -380,14 +380,14 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         select(&(cd.year plus 1))
       )
 
-    validateQuery('yearOfCongaBluePlus1, yearOfCongaBluePlus1, identity[Int], List(1999))
+    validateQuery("yearOfCongaBluePlus1", yearOfCongaBluePlus1, identity[Int], List(1999))
 
-    validateQuery('songCountPerAlbumFeaturingPoncho, songCountPerAlbumFeaturingPoncho,
+    validateQuery("songCountPerAlbumFeaturingPoncho", songCountPerAlbumFeaturingPoncho,
       (g:GroupWithMeasures[String,Long]) => (g.key,g.measures),
       List((congaBlue.title,2), (freedomSoundAlbum.title, 1))
     )
 
-    validateQuery('songsFeaturingPonchoNestedInFrom, songsFeaturingPonchoNestedInFrom,
+    validateQuery("songsFeaturingPonchoNestedInFrom", songsFeaturingPonchoNestedInFrom,
       (t:(Song,String)) => (t._1.id,t._2),
       List((besameMama.id, ponchoSanchez.firstName),
            (freedomSound.id, ponchoSanchez.firstName),
@@ -403,28 +403,28 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     def selfJoinNested4LevelPartialSelect =
       from(selfJoinNested3Level)(a => where(a.id gt -1) select(a.lastName))
 
-    validateQuery('selfJoinNested4LevelPartialSelect, selfJoinNested4LevelPartialSelect,
+    validateQuery("selfJoinNested4LevelPartialSelect", selfJoinNested4LevelPartialSelect,
       identity[String], List(ponchoSanchez.lastName))
 
-    validateQuery('selfJoinNested3Level, selfJoinNested3Level, (a:Person)=>a.lastName, List(ponchoSanchez.lastName))
+    validateQuery("selfJoinNested3Level", selfJoinNested3Level, (a:Person)=>a.lastName, List(ponchoSanchez.lastName))
 
-    validateQuery('songCountPerAlbumIdJoinedWithAlbum, songCountPerAlbumIdJoinedWithAlbum,
+    validateQuery("songCountPerAlbumIdJoinedWithAlbum", songCountPerAlbumIdJoinedWithAlbum,
       (t:(String,Long)) => (t._1,t._2),
       expectedSongCountPerAlbum)
 
-    validateQuery('artistsInvolvedInSongsm, artistsInvolvedInSongs(List(watermelonMan.id)),
+    validateQuery("artistsInvolvedInSongsm", artistsInvolvedInSongs(List(watermelonMan.id)),
       (a:Person) => a.id, List(ponchoSanchez.id, herbyHancock.id))
 
-    validateQuery('countCds, countCds(cds), (m:Measures[Long]) => m.measures, List(2))
+    validateQuery("countCds", countCds(cds), (m:Measures[Long]) => m.measures, List(2))
 
-    validateQuery('countCds2, countCds2(cds), identity[Long], List(2))
+    validateQuery("countCds2", countCds2(cds), identity[Long], List(2))
   }
 
 
   test("exerciseASTRenderingOfExportSelectElements"){
     val nestedCountCDs = from(from(countCds(cds))(m => select(m)))(m => select(m))
 
-    validateQuery('countCds, nestedCountCDs, (m:Measures[Long]) => m.measures, List(2))
+    validateQuery("countCds", nestedCountCDs, (m:Measures[Long]) => m.measures, List(2))
   }
 /* TODO: REFACTOR Z
   implicit def sExpr[E <% StringExpression[_]](s: E) = new RegexCall(s)
@@ -622,7 +622,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       artists.update(mongo)
       val shouldBeSome = artists.where(a => a.firstName === mongoSantaMaria.firstName and a.timeOfLastUpdate === tX2).headOption
 
-      if(shouldBeSome == None) org.squeryl.internals.Utils.throwError('testTimestampDownToMillis + " failed.")
+      if(shouldBeSome == None) org.squeryl.internals.Utils.throwError("testTimestampDownToMillis" + " failed.")
 
       mongo = shouldBeSome.get
 
@@ -657,7 +657,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     ac.lastName = "Karon"
     artists.update(ac)
     ac = artists.where(a=> a.id === alainCaron.id).single
-    assert(ac.lastName == "Karon", 'testUpdate1 + " failed, expected Karon, got " + ac.lastName)
+    assert(ac.lastName == "Karon", "testUpdate1" + " failed, expected Karon, got " + ac.lastName)
   }
 
   test("KeyedEntityImplicitLookup"){
@@ -709,7 +709,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val ponchoSongs = List(besameMama.title, freedomSound.title, watermelonMan.title)
 
-    validateQuery('songsNotInhibited, songsNotInhibited, (s:Song)=>s.title, ponchoSongs)
+    validateQuery("songsNotInhibited", songsNotInhibited, (s:Song)=>s.title, ponchoSongs)
   }
 
   def inhibitedSongsInQuery(inhibit: Boolean) =
@@ -726,7 +726,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val t = q.single
     val poncho = t._2
 
-    assert(ponchoSanchez.id == poncho.id, 'inhibitedSongsInQuery + " failed, expected " + ponchoSanchez.id + " got " + poncho.id)
+    assert(ponchoSanchez.id == poncho.id, "inhibitedSongsInQuery" + " failed, expected " + ponchoSanchez.id + " got " + poncho.id)
 
     assert(t._1 == None, "inhibited table in query should have returned None, returned " + t._1)
 
@@ -739,7 +739,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         orderBy(s.title, a.id desc)
       )
 
-    validateQuery('inhibitedSongsInQuery, songArtistsTuples,  (t:(Option[Song],Person)) => (t._1.get.id, t._2.id),
+    validateQuery("inhibitedSongsInQuery", songArtistsTuples,  (t:(Option[Song],Person)) => (t._1.get.id, t._2.id),
       expected.toList
     )
   }
@@ -760,9 +760,9 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
     val ep3 = List(ponchoSanchez.firstName)
 
-    assertionFailed('testPaginatedQuery1, p1, ep1)
-    assertionFailed('testPaginatedQuery1, p2, ep2)
-    assertionFailed('testPaginatedQuery1, p3, ep3)
+    assertionFailed("testPaginatedQuery1", p1, ep1)
+    assertionFailed("testPaginatedQuery1", p2, ep2)
+    assertionFailed("testPaginatedQuery1", p3, ep3)
   }
 
 
@@ -784,9 +784,9 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val ep2 = List(hossamRamzy.firstName, mongoSantaMaria.firstName)
     val ep3 = List(ponchoSanchez.firstName)
 
-    assertionFailed('testBetweenOperator, p1, ep1)
-    assertionFailed('testBetweenOperator, p2, ep2)
-    assertionFailed('testBetweenOperator, p3, ep3)
+    assertionFailed("testBetweenOperator", p1, ep1)
+    assertionFailed("testBetweenOperator", p2, ep2)
+    assertionFailed("testBetweenOperator", p3, ep3)
   }
 
 //  test("leakTest"){

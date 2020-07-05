@@ -48,10 +48,10 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
   test("Queries"){
     val testObjects = sharedTestObjects; import testObjects._
 
-    validateQuery('simpleSelect, simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
-    validateQuery('simpleSelect1, patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
-    validateQuery('simpleSelect2, patients.where(_.age < 40), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
-    validateQuery('simpleSelect3, patients.where(_.age < Some(new Age(40))), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
+    validateQuery("simpleSelect", simpleSelect, (p:Patient)=>p.id.value, List(joseCuervo.id.value))
+    validateQuery("simpleSelect1", patients.where(_.age > 70), (p:Patient)=>p.id.value, List(joseCuervo.id.value))
+    validateQuery("simpleSelect2", patients.where(_.age < 40), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
+    validateQuery("simpleSelect3", patients.where(_.age < Some(new Age(40))), (p:Patient)=>p.id.value, List(raoulEspinoza.id.value))
   }
 
   test("OneToMany"){

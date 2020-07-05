@@ -102,7 +102,7 @@ class AnnotationTests extends AnyFunSuite with Matchers {
     val _isPersistedFmd = descendantOfKeyedObjects.posoMetaData.findFieldMetaDataForProperty("_isPersisted")
 
     if(_isPersistedFmd != None)
-      fail('testMetaData + " failed, @transient annotation of field _isPersisted was not effective.")
+      fail("testMetaData" + " failed, @transient annotation of field _isPersisted was not effective.")
 
     if(descendantOfKeyedObjects.findFieldMetaDataForProperty("id") == None)
       fail("PosoMetaData has failed to build immutable field 'id'.")

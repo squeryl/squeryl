@@ -812,7 +812,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         orderBy(s.name)
       )
 
-    validateQuery('testLikeOperator, q, identity[Int], List(gaitan.id,georgi.id,gontran.id))
+    validateQuery("testLikeOperator", q, identity[Int], List(gaitan.id,georgi.id,gontran.id))
     
   }
 
@@ -889,7 +889,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       courses.where(c => c.id === mandarin.id).single
 
     assert(mandarinCourse.startDate == feb2010,
-      'testDateTypeMapping + " failed, expected " + feb2010 + " got " + mandarinCourse.startDate)
+      "testDateTypeMapping" + " failed, expected " + feb2010 + " got " + mandarinCourse.startDate)
 
     mandarinCourse.startDate = feb2011
 
@@ -899,7 +899,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       courses.where(c => c.id === mandarin.id).single
 
     assert(mandarinCourse2011.startDate == feb2011,
-      'testDateTypeMapping + " failed, expected " + feb2011 + " got " + mandarinCourse2011.startDate)
+      "testDateTypeMapping" + " failed, expected " + feb2011 + " got " + mandarinCourse2011.startDate)
   }
 
   test("java.sql.DateTypeMapping2"){
@@ -922,7 +922,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == Some(may2009),
-      'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
+      "testDateOptionMapping" + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
 
 
     // test date update :
@@ -934,7 +934,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == Some(feb2011),
-      'testDateOptionMapping + " failed, expected " + Some(feb2011) + " got " + groupTh.finalExamDate)
+      "testDateOptionMapping" + " failed, expected " + Some(feb2011) + " got " + groupTh.finalExamDate)
 
 
     // test date update to null :
@@ -947,7 +947,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == None,
-      'testDateOptionMapping + " failed, expected " + None + " got " + groupTh.finalExamDate)
+      "testDateOptionMapping" + " failed, expected " + None + " got " + groupTh.finalExamDate)
 
 
     // test date update from None to Some :
@@ -960,7 +960,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       courses.where(c => c.id === groupTheory.id).single
 
     assert(groupTh.finalExamDate == Some(may2009),
-      'testDateOptionMapping + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
+      "testDateOptionMapping" + " failed, expected " + Some(may2009) + " got " + groupTh.finalExamDate)
   }
 
   test("DateComparisonInWhereClause"){
@@ -987,7 +987,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val result = mandarinAndCounterpointCourses.map(c=>c.id)
 
     assert(expected == result,
-      'testDateComparisonInWhereClause + " expected " + expected + " got " + result)
+      "testDateComparisonInWhereClause" + " expected " + expected + " got " + result)
   }
 
   test("DateOptionComparisonInWhereClause"){
@@ -1027,13 +1027,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List(groupTheory.id)
 
     assert(expected == result1,
-      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result1)
+      "testDateOptionComparisonInWhereClause" + " expected " + expected + " got " + result1)
 
     assert(Nil == result2,
-      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result2)
+      "testDateOptionComparisonInWhereClause" + " expected " + expected + " got " + result2)
 
     assert(expected == result3,
-      'testDateOptionComparisonInWhereClause + " expected " + expected + " got " + result3)
+      "testDateOptionComparisonInWhereClause" + " expected " + expected + " got " + result3)
   }
 
   test("NVLFunction"){
@@ -1053,7 +1053,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expected = List(5,5,5)
 
     assert(expected == result,
-      'testNVLFunction + " expected " + expected + " got " + result)
+      "testNVLFunction" + " expected " + expected + " got " + result)
   }
 
   test("LongTypeMapping", SingleTestRun){
@@ -1596,8 +1596,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val expectedAvgWeight = expectedAvgWeight_.sum / expectedAvgWeight_.size
 
 
-    assert((expectedAvgSal - avgSalary.get.doubleValue) < 0.01, 'testAvgBigDecimal)
-    assert((expectedAvgWeight - avgWeight.get.doubleValue) < 0.01, 'testAvgBigDecimal)
+    assert((expectedAvgSal - avgSalary.get.doubleValue) < 0.01, "testAvgBigDecimal")
+    assert((expectedAvgWeight - avgWeight.get.doubleValue) < 0.01, "testAvgBigDecimal")
   }
 
   test("NewLeftOuterJoin3")  {
