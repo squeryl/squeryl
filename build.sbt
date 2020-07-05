@@ -41,6 +41,17 @@ scalacOptions in (Compile, doc) ++= {
   Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
 }
 
+scalacOptions ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, v)) if v >= 11 =>
+      Seq(
+        "-Xsource:3",
+      )
+    case _ =>
+      Nil
+  }
+}
+
 scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
