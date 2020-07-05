@@ -78,19 +78,19 @@ trait QueryDsl
   
 
   def using[A](session: AbstractSession)(a: =>A): A =
-    session.using(a _)
+    session.using(() => a)
 
   def transaction[A](sf: SessionFactory)(a: =>A) =
-    sf.newSession.withinTransaction(a _)
+    sf.newSession.withinTransaction(() => a)
   
   def inTransaction[A](sf: SessionFactory)(a: =>A) =
     if(! Session.hasCurrentSession)
-      sf.newSession.withinTransaction(a _)
+      sf.newSession.withinTransaction(() => a)
     else
       a
 
    def transaction[A](s: AbstractSession)(a: =>A) =
-     s.withinTransaction(a _)
+     s.withinTransaction(() => a)
    
   /**
    * 'transaction' causes a new transaction to begin and commit after the block execution, or rollback
@@ -99,13 +99,13 @@ trait QueryDsl
    */
   def transaction[A](a: =>A): A =
     if(! Session.hasCurrentSession)
-      SessionFactory.newSession.withinTransaction(a _)
+      SessionFactory.newSession.withinTransaction(() => a)
     else {
       val s = Session.currentSession
       val res =
         try {
           s.unbindFromCurrentThread
-          SessionFactory.newSession.withinTransaction(a _)
+          SessionFactory.newSession.withinTransaction(() => a)
         }
         finally {
           s.bindToCurrentThread
@@ -121,7 +121,7 @@ trait QueryDsl
    */
   def inTransaction[A](a: =>A): A =
     if(! Session.hasCurrentSession)
-      SessionFactory.newSession.withinTransaction(a _)
+      SessionFactory.newSession.withinTransaction(() => a)
     else {
       a
     }
@@ -129,13 +129,13 @@ trait QueryDsl
   implicit def __thisDsl:QueryDsl = this  
 
   def where(b: =>LogicalBoolean): WhereState[Conditioned] =
-    new fsm.QueryElementsImpl[Conditioned](Some(b _), Nil)
+    new fsm.QueryElementsImpl[Conditioned](Some(() => b), Nil)
 
   def withCte(queries: Query[_]*): WithState =
     new fsm.WithState(queries.toList.map(_.copy(false, Nil)))
 
   def &[A,T](i: =>TypedExpression[A,T]): A =
-    FieldReferenceLinker.pushExpressionOrCollectValue[A](i _)
+    FieldReferenceLinker.pushExpressionOrCollectValue[A](() => i)
     
   implicit def typedExpression2OrderByArg[E](e: E)(implicit E: E => TypedExpression[_, _]): OrderByArg = new OrderByArg(e)
 

@@ -57,7 +57,7 @@ class LocalH2SinkStatisticsListener(val h2Session: AbstractSession) extends Stat
 
   private def _pushOp(op: =>Unit) =
     if(!_closed) {
-      _queue.put(op _)
+      _queue.put(() => op)
     }
     else
       throw new IllegalStateException("'LocalH2SinkStatisticsListener has been shutdown.")

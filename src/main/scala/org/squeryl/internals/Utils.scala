@@ -31,10 +31,10 @@ object Utils {
    * Also used to allow dumping (ex. for logging) a Query AST *before* it is completely built.
    */
   def failSafeString(s: =>String) =
-    _failSafeString(s _, "cannot evaluate")
+    _failSafeString(() => s, "cannot evaluate")
 
   def failSafeString(s: =>String, valueOnFail: String) =
-    _failSafeString(s _, valueOnFail)
+    _failSafeString(() => s, valueOnFail)
 
   private def _failSafeString(s: ()=>String, valueOnFail: String) =
     try {
@@ -122,7 +122,7 @@ class IteratorConcatenation[R](first: Iterator[R], second: Iterator[R]) extends 
 
   def hasNext = _hasNext
   
-  def next = {
+  def next() = {
     _hasNext
     currentIterator.next
   }

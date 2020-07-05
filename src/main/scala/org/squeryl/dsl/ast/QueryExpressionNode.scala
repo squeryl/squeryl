@@ -88,7 +88,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
       case Some(p:Product) =>
         if(p.getClass.getName.startsWith("scala.Tuple")) {
           val z = (for(i <- 0 to (p.productArity - 1)) yield p.productElement(i))
-          ! z.exists(o => _isPrimitiveType(o.asInstanceOf[AnyRef]))
+          !(z.exists(o => _isPrimitiveType(o.asInstanceOf[AnyRef])))
         }
         else
           true

@@ -232,7 +232,7 @@ abstract class AbstractQuery[R](
       _hasNext
     }
 
-    def next: R = {
+    def next(): R = {
       if(!_nextCalled)
         _next
       if(!_hasNext)

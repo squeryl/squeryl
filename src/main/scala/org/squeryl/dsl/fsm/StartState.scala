@@ -59,7 +59,7 @@ trait WhereState[Cond]
   self: QueryElements[_] =>
 
   def select[R](yieldClosure: =>R): SelectState[R] =
-    new BaseQueryYield[R](this, yieldClosure _)
+    new BaseQueryYield[R](this, () => yieldClosure)
 
   def set(updateAssignments: UpdateAssignment*)(implicit cond: Cond =:= Conditioned) =
     new UpdateStatement(whereClause, updateAssignments)
@@ -86,7 +86,7 @@ trait GroupByState[K]
   self: GroupQueryYield[K] =>
 
   def having(b: => LogicalBoolean) = {
-    _havingClause = Some(b _)
+    _havingClause = Some(() => b)
     this
   }
 }
@@ -98,7 +98,7 @@ class WithState(override val commonTableExpressions: List[Query[_]])
   with QueryElements[Unconditioned] {
 
   def where(b: =>LogicalBoolean): WhereState[Conditioned] =
-    new QueryElementsImpl[Conditioned](Some(b _), commonTableExpressions)
+    new QueryElementsImpl[Conditioned](Some(() => b), commonTableExpressions)
 }
 
 private [squeryl] class QueryElementsImpl[Cond](
