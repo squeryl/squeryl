@@ -195,3 +195,24 @@ dependsOn(macros)
 ThisBuild / semanticdbEnabled := {
   scalaBinaryVersion.value != "2.10"
 }
+
+Compile / sourceGenerators += task {
+  val dir = (Compile / sourceManaged).value
+  val size = 22
+  Seq(
+    "JoinSignatures.scala" -> JoinSignatures.value(size),
+    "FromSignatures.scala" -> FromSignatures.value(size),
+    "STuple.scala" -> STuple.value(size),
+    "ComputeMeasuresSignaturesFromGroupByState.scala" -> ComputeMeasuresSignaturesFromGroupByState.value(size),
+    "Query.scala" -> Query.value(size),
+  ).map { case (fileName, value) =>
+    val f = dir / "org" / "squeryl" / "dsl" / "boilerplate" / fileName
+    IO.write(f, value)
+    f
+  }
+}
+
+Compile / packageSrc / mappings ++= (Compile / managedSources).value.map { f =>
+  // to merge generated sources into sources.jar as well
+  (f, f.relativeTo((Compile / sourceManaged).value).get.getPath)
+}
