@@ -31,7 +31,13 @@ class MySQLAdapter extends DatabaseAdapter {
   override def binaryTypeDeclaration = "blob"
 
   override def timestampTypeDeclaration = "datetime"
-  
+
+  override def quoteIdentifier(s: String): String = {
+    val escapeBackticks = s.replace("`", "``")
+    val backtickQuote = s"`$escapeBackticks`"
+    backtickQuote
+  }
+
   override def writeForeignKeyDeclaration(
     foreignKeyTable: Table[_], foreignKeyColumnName: String,
     primaryKeyTable: Table[_], primaryKeyColumnName: String,
