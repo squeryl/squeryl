@@ -14,8 +14,6 @@
 ## For more information
 Documentation can be found at [The Squeryl Website][1] and [Scaladoc][3]. Questions can be directed to the [Google Group][2]
 
-[![Build Status](https://travis-ci.org/squeryl/squeryl.svg?branch=master)](https://travis-ci.org/squeryl/squeryl)
-
 [1]: https://www.squeryl.org
 [2]: https://groups.google.com/forum/#!forum/squeryl
 [3]: https://javadoc-badge.appspot.com/org.squeryl/squeryl_2.12/org/squeryl/index.html?javadocio=true

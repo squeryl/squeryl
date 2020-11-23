@@ -1,0 +1,50 @@
+name: CI
+on:
+  pull_request:
+  push:
+  schedule:
+  - cron: '0 6 * * 4'
+jobs:
+  test:
+    timeout-minutes: 50
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: squeryl
+          MYSQL_USER: squeryl
+          MYSQL_PASSWORD: squeryl
+        options: --health-cmd "mysqladmin ping -h localhost" --health-interval 20s --health-timeout 10s --health-retries 10
+      postgres:
+        image: postgres:13.1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: squeryl
+        ports:
+          - 5432:5432
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - java: 11
+          - java: 8
+    runs-on: ubuntu-latest
+    steps:
+    - run: mysql -h 127.0.0.1 -e 'GRANT ALL ON *.* TO squeryl@"localhost"IDENTIFIED BY "squeryl";FLUSH PRIVILEGES;' -uroot -proot
+    - run: |
+       export PGPASSWORD="postgres"
+       psql -h 127.0.0.1 -c "CREATE ROLE squeryl WITH SUPERUSER LOGIN PASSWORD 'squeryl';" -U postgres
+    - uses: actions/checkout@v2.3.4
+    - run: cp org.squeryl.tests.cfg.ci org.squeryl.tests.cfg
+    - uses: olafurpg/setup-scala@v10
+      with:
+        java-version: "adopt@1.${{ matrix.java }}"
+    - uses: coursier/cache-action@v5
+    - run: sbt -v "+ test:compile"
+    - run: rm -r src/test/scala/org/squeryl/oracle/
+    - run: rm -r src/test/scala/org/squeryl/mssql/
+    - run: sbt -v "+ test"
