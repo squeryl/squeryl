@@ -90,7 +90,7 @@ Seq(Compile, Test).flatMap(c =>
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-homepage := Some(url("http://squeryl.org"))
+homepage := Some(url("https://squeryl.org"))
 
 pomExtra := (<scm>
                <url>git@github.com:squeryl/squeryl.git</url>
