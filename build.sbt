@@ -30,8 +30,9 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
+val Scala3 = "3.0.0-M3"
 
-scalaVersion := Scala211
+scalaVersion := Scala3
 
 crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.4")
 
@@ -141,12 +142,12 @@ libraryDependencies ++= Seq(
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test",
-  "org.json4s" %% "json4s-scalap" % "3.6.10",
+  // "org.json4s" %% "json4s-scalap" % "3.6.10",
 )
 
-libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.2.3" % "test")
-}
+// libraryDependencies ++= {
+//   Seq("org.scalatest" %% "scalatest" % "3.2.3" % "test")
+// }
 
 libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
