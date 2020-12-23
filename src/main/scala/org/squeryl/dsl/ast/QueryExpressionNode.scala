@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
   private [squeryl] def sameRoot_?(e: QueryExpressionNode[_]) =
     _query.root.isDefined && _query.root == e._query.root
 
-  def tableExpressions: Iterable[QueryableExpressionNode] = 
+  def tableExpressions: Iterable[QueryableExpressionNode] =
     List(views.filter(v => ! v.inhibited),
          subQueries.filter(v => ! v.inhibited)).flatten
 
@@ -54,7 +54,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
   val (whereClause, havingClause, groupByClause, orderByClause, ctes) =
      _queryYield.queryElements
 
-  val commonTableExpressions = ctes.map { q =>
+  val commonTableExpressions: List[QueryExpressionNode[_]] = ctes.map { q =>
     q.ast match {
       case x: QueryExpressionNode[_] =>
         x
@@ -98,9 +98,9 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
 
   def sample:AnyRef = _sample.get
 
-  def owns(aSample: AnyRef) = 
+  def owns(aSample: AnyRef) =
     _sample != None && _sample.get.eq(aSample)
-  
+
   def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) = throw new UnsupportedOperationException("implement me")
 
   override def toString = {
@@ -270,4 +270,3 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
     }
   }
 }
-
