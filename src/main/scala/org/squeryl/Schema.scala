@@ -19,7 +19,7 @@ import dsl._
 import ast._
 import internals._
 
-import reflect.Manifest
+import reflect.ClassTag
 import java.sql.SQLException
 import java.io.PrintWriter
 import java.util.regex.Pattern
@@ -338,10 +338,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
-  protected def table[T]()(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
+  protected def table[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
     table(tableNameFromClass(manifestT.runtimeClass))(manifestT, ked)
 
-  protected def table[T](name: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
+  protected def table[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
     _addTable(t)
@@ -349,7 +349,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     t
   }
 
-  protected def table[T](name: String, prefix: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
+  protected def table[T](name: String, prefix: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef)
     _addTable(t)
@@ -559,43 +559,43 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   protected def beforeInsert[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, BeforeInsert)
 
-  protected def beforeInsert[A]()(implicit m: Manifest[A]) =
+  protected def beforeInsert[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeInsert)
 
   protected def beforeUpdate[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, BeforeUpdate)
 
-  protected def beforeUpdate[A]()(implicit m: Manifest[A]) =
+  protected def beforeUpdate[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeUpdate)
 
   protected def beforeDelete[A](t: Table[A])(implicit ev : KeyedEntityDef[A,_]) =
     new LifecycleEventPercursorTable[A](t, BeforeDelete)
 
-  protected def beforeDelete[K, A]()(implicit m: Manifest[A], ked: KeyedEntityDef[A,K]) =
+  protected def beforeDelete[K, A]()(implicit m: ClassTag[A], ked: KeyedEntityDef[A,K]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeDelete)
 
   protected def afterSelect[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterSelect)
 
-  protected def afterSelect[A]()(implicit m: Manifest[A]) =
+  protected def afterSelect[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterSelect)
 
   protected def afterInsert[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterInsert)
 
-  protected def afterInsert[A]()(implicit m: Manifest[A]) =
+  protected def afterInsert[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterInsert)
 
   protected def afterUpdate[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterUpdate)
 
-  protected def afterUpdate[A]()(implicit m: Manifest[A]) =
+  protected def afterUpdate[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterUpdate)
 
   protected def afterDelete[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterDelete)
 
-  protected def afterDelete[A]()(implicit m: Manifest[A]) =
+  protected def afterDelete[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterDelete)
 
   protected def factoryFor[A](table: Table[A]) =
@@ -607,14 +607,14 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    *
    * @return a instance of ActiveRecord associated to the given object.
    */
-  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: Manifest[A]): ActiveRecord[A] =
+  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: ClassTag[A]): ActiveRecord[A] =
     new ActiveRecord(a, queryDsl, m)
 
   /**
    * Active Record pattern implementation. Enables the user to insert an object in its
    * existent table with a convenient {{{save}}} method.
    */
-  class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
+  class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: ClassTag[A]) {
 
     private def _performAction(action: (Table[A]) => Unit) =
       _tableTypes get (m.runtimeClass) map { (table: Table[_]) =>

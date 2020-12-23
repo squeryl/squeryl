@@ -78,7 +78,7 @@ class StatLine(val statement: Statement, val avgExecTime: Double, val invocation
 object Measure extends Enumeration {
    type Measure = Value
    val AvgExecTime, InvocationCount, CumulativeExecutionTime, AvgResultSetSize = Value
-} 
+}
 
 object StatsSchema extends Schema {
 
@@ -112,7 +112,7 @@ object StatsSchema extends Schema {
   on(statements)(s=> declare(
     s.sql is(dbType("clob")),
     s.definitionOrCallSite is(dbType("varchar(512)"))
-  ))  
+  ))
 
   def recordStatementInvocation(sie: StatementInvocationEvent) = {
 
