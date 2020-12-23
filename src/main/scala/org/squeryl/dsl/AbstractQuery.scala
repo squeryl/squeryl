@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ abstract class AbstractQuery[R](
   ) extends Query[R] {
 
   private [squeryl] var selectDistinct = false
-  
+
   private [squeryl] var isForUpdate = false
 
   private [squeryl] var page: Option[(Int,Int)] = None
@@ -60,7 +60,7 @@ abstract class AbstractQuery[R](
    * unique IDs of node that needs them for example.
    *
    * After this call, the query (and it's AST) becomes immutable by virtue of the unaccessibility
-   * of it's public methods 
+   * of it's public methods
    */
   val definitionSite: Option[StackTraceElement] =
     if(!isRoot) None
@@ -92,7 +92,7 @@ abstract class AbstractQuery[R](
 
     if(qy.joinExpressions != Nil) {
       val sqIterator = subQueryables.iterator
-      val joinExprsIterator = qy.joinExpressions.iterator 
+      val joinExprsIterator = qy.joinExpressions.iterator
       sqIterator.next() // get rid of the first one
 
       while(sqIterator.hasNext) {
@@ -127,7 +127,7 @@ abstract class AbstractQuery[R](
 
   def ast: QueryExpressionNode[R]
 
-  def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]) = {
+  def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R] = {
     val c = createCopy(asRoot, newUnions)
     c.selectDistinct = selectDistinct
     c.page = page
@@ -170,7 +170,7 @@ abstract class AbstractQuery[R](
       c.unionPage = page
     else
       c.page = page
-    c    
+    c
   }
 
   def forUpdate = {
@@ -179,7 +179,7 @@ abstract class AbstractQuery[R](
       c.unionIsForUpdate = true
     else
       c.isForUpdate = true;
-    c    
+    c
   }
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
@@ -199,12 +199,12 @@ abstract class AbstractQuery[R](
 
     s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
     s._addResultSet(rs) // same for the result set
-    
+
     var _nextCalled = false;
     var _hasNext = false;
 
     var rowCount = 0
-    
+
     def close(): Unit = {
       stmt.close
       rs.close
@@ -221,7 +221,7 @@ abstract class AbstractQuery[R](
           s.statisticsListener.get.resultSetIterationEnded(statEx.uuid, System.currentTimeMillis, rowCount, true)
         }
       }
-      
+
       rowCount = rowCount + 1
       _nextCalled = true
     }
@@ -253,7 +253,7 @@ abstract class AbstractQuery[R](
       val vxn = v.viewExpressionNode
       vxn.sample =
         v.posoMetaData.createSample(FieldReferenceLinker.createCallBack(vxn))
-      
+
       new SubQueryable(v, vxn.sample, vxn.resultSetMapper, false, vxn)
     case oqr: OptionalQueryable[U @unchecked] =>
       val sq = createSubQueryable[U](oqr.queryable)
@@ -305,10 +305,10 @@ abstract class AbstractQuery[R](
         queryable.give(resultSetMapper, rs)
   }
 
-  private def createUnion(kind: String, q: Query[R]): Query[R] = 
+  private def createUnion(kind: String, q: Query[R]): Query[R] =
     copy(true, List((kind, q)))
 
-  def union(q: Query[R]): Query[R] = createUnion("Union", q) 
+  def union(q: Query[R]): Query[R] = createUnion("Union", q)
 
   def unionAll(q: Query[R]): Query[R] = createUnion("Union All", q)
 
