@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,10 +34,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   /**
    * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
    */
-  private[this] val _tables = new ArrayBuffer[Table[_]] 
-  
+  private[this] val _tables = new ArrayBuffer[Table[_]]
+
   def tables: collection.Seq[Table[_]] = _tables.toSeq
-  
+
   private[this] val _tableTypes = new HashMap[Class[_], Table[_]]
 
   private[this] val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_,_]]
@@ -46,7 +46,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   private[this] val _columnGroupAttributeAssignments = new ArrayBuffer[ColumnGroupAttributeAssignment]
 
-  private [squeryl] val _namingScope = new HashSet[String] 
+  private [squeryl] val _namingScope = new HashSet[String]
 
   private [squeryl] def _addRelation(r: OneToManyRelation[_,_]) =
     _oneToManyRelations.append(r)
@@ -89,7 +89,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
 
   object NamingConventionTransforms {
-    
+
     @deprecated("use snakify() instead as of 0.9.5beta","0.9.5")
     def camelCase2underScore(name: String) =
       name.toList.map(c => if(c.isUpper) "_" + c else c).mkString
@@ -138,7 +138,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     }
 
     val constraints = _foreignKeyConstraints.toList
-    
+
     if(constraints != Nil)
       statementHandler("-- foreign key constraints :")
 
@@ -149,7 +149,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
     if(compositePKs != Nil)
       statementHandler("-- composite key indexes :")
-    
+
     for(cpk <- compositePKs) {
       val createConstraintStmt = _dbAdapter.writeCompositePrimaryKeyConstraint(cpk._1, cpk._2)
       statementHandler(createConstraintStmt + ";")
@@ -182,7 +182,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       _dbAdapter.dropTable(t)
       _dbAdapter.postDropTable(t)
     }
-  }  
+  }
 
   def create = {
     _createTables
@@ -199,7 +199,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       _writeIndexDeclarationIfApplicable(fmd.columnAttributes.toSeq, Seq(fmd), None)
     }.toList
   }
-  
+
 
   private def _writeColumnGroupAttributeAssignments: collection.Seq[String] =
     for(cgaa <- _columnGroupAttributeAssignments)
@@ -210,7 +210,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
     val unique = columnAttributes.find(_.isInstanceOf[Unique])
     val indexed = columnAttributes.collectFirst{case i: Indexed => i}
-  
+
     (unique, indexed) match {
       case (None,    None)                   => None
       case (Some(_), None)                   => Some(_dbAdapter.writeIndexDeclaration(cols, None,    name, true))
@@ -218,7 +218,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       case (Some(_), Some(Indexed(idxName))) => Some(_dbAdapter.writeIndexDeclaration(cols, idxName, name, true))
     }
   }
-  
+
   def createColumnGroupConstraintsAndIndexes =
     for(statement <- _writeColumnGroupAttributeAssignments)
       _executeDdl(statement)
@@ -254,7 +254,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
       s.close
     }
   }
-  
+
   private def _foreignKeyConstraints =
     for(fk <- _activeForeignKeySpecs) yield {
       val fkDecl = fk._3
@@ -267,7 +267,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
          fkDecl.idWithinSchema
       )
     }
-  
+
   private def _createTables = {
     for(t <- _tables) {
       val sw = new StatementWriter(_dbAdapter)
@@ -283,16 +283,16 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     for(cpk <- _allCompositePrimaryKeys) {
       val createConstraintStmt = _dbAdapter.writeCompositePrimaryKeyConstraint(cpk._1, cpk._2)
       _executeDdl(createConstraintStmt)
-    }  
+    }
 
   /**
    * returns an Iterable of (Table[_],Iterable[FieldMetaData]), the list of
-   * all tables whose PK is a composite, with the columns that are part of the PK : Iterable[FieldMetaData] 
+   * all tables whose PK is a composite, with the columns that are part of the PK : Iterable[FieldMetaData]
    */
   private def _allCompositePrimaryKeys = {
-    
+
     val res = new ArrayBuffer[(Table[_],Iterable[FieldMetaData])]
-    
+
     for(t <- _tables; ked <- t.ked) {
 
       Utils.mapSampleObject(
@@ -334,13 +334,13 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    *
    */
   def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]): Option[String] = None
-  
+
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
   protected def table[T]()(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
     table(tableNameFromClass(manifestT.runtimeClass))(manifestT, ked)
-  
+
   protected def table[T](name: String)(implicit manifestT: Manifest[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
@@ -359,7 +359,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   private [squeryl] def _addTable(t:Table[_]) =
     _tables.append(t)
-    
+
   private [squeryl] def _addTableType(typeT: Class[_], t: Table[_]) =
     _tableTypes += ((typeT, t))
 
@@ -374,12 +374,12 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     def event = ev.eventName
     def action = token
   }
-  
+
   protected def onUpdate = new ReferentialEvent("update")
 
   protected def onDelete = new ReferentialEvent("delete")
 
-  private[this] var _fkIdGen = 1 
+  private[this] var _fkIdGen = 1
 
   private [squeryl] def _createForeignKeyDeclaration(fkColName: String, pkColName: String) = {
     val fkd = new ForeignKeyDeclaration(_fkIdGen, fkColName, pkColName)
@@ -397,13 +397,13 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    * Can be overridden by the Column Annotation, ex.: Column(length=22, scale=20)
    * default is (20,16)
    */
-  
+
   def defaultSizeOfBigDecimal = (20,16)
 
   /**
    * @return the default database storage (column) length for String columns for this Schema,
    * Can be overridden by the Column Annotation ex.: Column(length=256)
-   * default is 128 
+   * default is 128
    */
   def defaultLengthOfString = 128
 
@@ -414,7 +414,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   /**
    * protected since table declarations must only be done inside a Schema
-   */  
+   */
   protected def on[A](table: Table[A]) (declarations: A=>Seq[BaseColumnAttributeAssignment]) = {
 
     if(table == null)
@@ -456,7 +456,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
         _addColumnGroupAttributeAssignment(ctaa)
       }
-      
+
       case a:Any => org.squeryl.internals.Utils.throwError("did not match on " + a.getClass.getName)
     }
 
@@ -484,19 +484,19 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
     _columnGroupAttributeAssignments.append(cga);
-  
+
   def defaultColumnAttributesForKeyedEntityId(typeOfIdField: Class[_]) =
     if(typeOfIdField.isAssignableFrom(classOf[java.lang.Long]) || typeOfIdField.isAssignableFrom(classOf[java.lang.Integer]))
       Set(new PrimaryKey, new AutoIncremented(None))
     else
       Set(new PrimaryKey)
-  
+
   protected def unique = Unique()
 
   protected def primaryKey = PrimaryKey()
 
   protected def autoIncremented = AutoIncremented(None)
-  
+
   protected def autoIncremented(sequenceName: String) = AutoIncremented(Some(sequenceName))
 
   protected def indexed = Indexed(None)
@@ -508,9 +508,9 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   protected def uninsertable = Uninsertable()
 
   protected def unupdatable = Unupdatable()
-  
+
   protected def named(name: String) = Named(name)
-  
+
   protected def transient = IsTransient()
 
   class ColGroupDeclaration(cols: collection.Seq[FieldMetaData]) {
@@ -573,10 +573,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   protected def beforeDelete[K, A]()(implicit m: Manifest[A], ked: KeyedEntityDef[A,K]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeDelete)
-   
+
   protected def afterSelect[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, AfterSelect)
-    
+
   protected def afterSelect[A]()(implicit m: Manifest[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, AfterSelect)
 
@@ -615,12 +615,12 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    * existent table with a convenient {{{save}}} method.
    */
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
-    
+
     private def _performAction(action: (Table[A]) => Unit) =
-      _tableTypes get (m.runtimeClass) map { table: Table[_] =>
+      _tableTypes get (m.runtimeClass) map { (table: Table[_]) =>
         queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
       }
-    
+
     /**
      * Same as {{{table.insert(a)}}}
      */
@@ -629,10 +629,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
     /**
      * Same as {{{table.update(a)}}}
-     */  
+     */
     def update(implicit ked: KeyedEntityDef[A,_]) =
       _performAction(_.update(a))
-      
+
   }
 
 }
