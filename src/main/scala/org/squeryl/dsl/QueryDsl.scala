@@ -137,7 +137,7 @@ trait QueryDsl
   def &[A,T](i: =>TypedExpression[A,T]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](() => i)
 
-  implicit def typedExpression2OrderByArg[E](e: E)(implicit E: E => TypedExpression[_, _]): OrderByArg = new OrderByArg(e)
+  implicit def typedExpression2OrderByArg[E](e: E)(implicit evE: E => TypedExpression[_, _]): OrderByArg = new OrderByArg(evE(e))
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg): OrderByExpression = new OrderByExpression(a)
 
@@ -313,7 +313,7 @@ trait QueryDsl
 
   implicit def singleColComputeQuery2ScalarQuery[T](cq: Query[Measures[T]]): ScalarQuery[T] = new ScalarMeasureQuery[T](cq)
 
-  implicit def singleColComputeQuery2Scalar[T](cq: Query[Measures[T]]): ScalarMeasureQuery[T] = new ScalarMeasureQuery[T](cq).head
+  implicit def singleColComputeQuery2Scalar[T](cq: Query[Measures[T]]): T = new ScalarMeasureQuery[T](cq).head
 
   class ScalarMeasureQuery[T](q: Query[Measures[T]]) extends Query[T] with ScalarQuery[T] {
 
