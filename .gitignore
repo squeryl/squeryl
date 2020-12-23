@@ -4,6 +4,7 @@
 pom.xml
 target
 project/boot/
+project/metals.sbt
 *_managed
 .idea/ant.xml
 .idea/compiler.xml
