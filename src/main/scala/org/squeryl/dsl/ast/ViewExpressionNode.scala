@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,14 +28,14 @@ class ViewExpressionNode[U](val view: View[U])
 
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] = {
 
-    val export = ! forScope.isChild(this)
+    val exportElement = ! forScope.isChild(this)
 
     view.posoMetaData.fieldsMetaData.map(fmd =>
-      getOrCreateSelectElement(fmd, export)
+      getOrCreateSelectElement(fmd, exportElement)
     )
   }
 
-  private def getOrCreateSelectElement(fmd: FieldMetaData, export: Boolean): SelectElement = {
+  private def getOrCreateSelectElement(fmd: FieldMetaData, exportElement: Boolean): SelectElement = {
 
     val e = _selectElements.get(fmd)
     val n =
@@ -47,7 +47,7 @@ class ViewExpressionNode[U](val view: View[U])
         r
       }
 
-    if(export)
+    if(exportElement)
       new ExportedSelectElement(n)
     else
       n
