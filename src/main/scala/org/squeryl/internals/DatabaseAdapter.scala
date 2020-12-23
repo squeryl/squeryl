@@ -40,7 +40,7 @@ trait DatabaseAdapter {
     def zipi = this
   }
 
-  implicit def zipIterable[T](i: Iterable[T]) = new ZipIterable(i)
+  implicit def zipIterable[T](i: Iterable[T]): ZipIterable[T] = new ZipIterable(i)
 
   def writeQuery(qen: QueryExpressionElements, sw: StatementWriter):Unit =
     writeQuery(qen, sw, false, None)
@@ -394,7 +394,7 @@ trait DatabaseAdapter {
     }
   }
 
-  implicit def string2StatementWriter(s: String) = {
+  implicit def string2StatementWriter(s: String): StatementWriter = {
     val sw = new StatementWriter(this)
     sw.write(s)
     sw

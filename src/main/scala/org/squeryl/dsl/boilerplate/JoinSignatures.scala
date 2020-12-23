@@ -21,16 +21,16 @@ import org.squeryl.{Queryable, Query}
 
 trait JoinSignatures {
   self: FromSignatures =>
-  
+
   class JoinPrecursor[A](q: Queryable[A]) {
     def leftOuter = new OuterJoinedQueryable[A](q, "left")
     def rightOuter = new OuterJoinedQueryable[A](q, "right")
     def fullOuter = new OuterJoinedQueryable[A](q, "full")
   }
 
-  implicit def queryable2JoinPrecursor[A](q: Queryable[A]) = new JoinPrecursor[A](q)
+  implicit def queryable2JoinPrecursor[A](q: Queryable[A]): JoinPrecursor[A] = new JoinPrecursor[A](q)
 
-  implicit def queryable2RightInnerJoinedQueryable[A](q: Queryable[A]) = new InnerJoinedQueryable[A](q, "")
+  implicit def queryable2RightInnerJoinedQueryable[A](q: Queryable[A]): InnerJoinedQueryable[A] = new InnerJoinedQueryable[A](q, "")
 
   def join[A,B1,C](q: Queryable[A], q1: JoinedQueryable[B1])(f: Function2[A,B1,JoinQueryYield1[C]]): Query[C] =
     from(q,q1)(
@@ -53,7 +53,7 @@ trait JoinSignatures {
       (a:A,b1:B1,b2:B2,b3:B3,b4:B4) => f(a,b1,b2,b3,b4).queryYield
     )
 
-  def join[A,B1,B2,B3,B4,B5,C](          
+  def join[A,B1,B2,B3,B4,B5,C](
           q: Queryable[A],
           q1: JoinedQueryable[B1],
           q2: JoinedQueryable[B2],
