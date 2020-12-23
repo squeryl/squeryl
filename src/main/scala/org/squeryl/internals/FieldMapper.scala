@@ -23,6 +23,7 @@ import java.util.Date
 import java.util.UUID
 import org.squeryl.dsl._
 import org.squeryl.dsl.ArrayJdbcMapper
+import reflect.Selectable.reflectiveSelectable
 
 trait FieldMapper {
   outer =>
