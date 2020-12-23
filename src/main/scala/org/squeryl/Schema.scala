@@ -29,7 +29,7 @@ import org.squeryl.internals.FieldMapper
 
 class Schema(implicit val fieldMapper: FieldMapper) {
 
-  protected implicit def thisSchema = this
+  protected implicit def thisSchema: Schema = this
 
   /**
    * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
@@ -607,7 +607,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    *
    * @return a instance of ActiveRecord associated to the given object.
    */
-  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: ClassTag[A]) =
+  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: ClassTag[A]): ActiveRecord[A] =
     new ActiveRecord(a, queryDsl, m)
 
   /**
