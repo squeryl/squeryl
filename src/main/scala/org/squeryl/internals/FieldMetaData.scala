@@ -88,7 +88,7 @@ class FieldMetaData(
 
   def sequenceName: String = {
 
-    val ai = _columnAttributes.collectFirst{case a: AutoIncremented => a}.
+    val ai: AutoIncremented = _columnAttributes.collectFirst{case a: AutoIncremented => a}.
       getOrElse(org.squeryl.internals.Utils.throwError(s"${this} is not declared as autoIncremented, hence it has no sequenceName"))
 
     if(ai.nameOfSequence != None) {
