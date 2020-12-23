@@ -855,8 +855,7 @@ trait DatabaseAdapter {
 
   def databaseTypeFor(fieldMapper: FieldMapper, c: Class[_]): String = {
     val ar = fieldMapper.sampleValueFor(c)
-    val decl =
-      if(ar.isInstanceOf[Enumeration#Value])
+    val decl: String = if(ar.isInstanceOf[Enumeration#Value])
         intTypeDeclaration
       else if(classOf[String].isAssignableFrom(c))
         stringTypeDeclaration
@@ -888,8 +887,7 @@ trait DatabaseAdapter {
         doubleArrayTypeDeclaration
       else if(classOf[scala.Array[String]].isAssignableFrom(c))
         stringArrayTypeDeclaration
-      else
-        Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
+      else Utils.throwError("unsupported type " + ar.getClass.getCanonicalName)
 
       decl
   }
