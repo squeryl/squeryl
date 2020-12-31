@@ -364,7 +364,7 @@ trait FieldMetaDataFactory {
 
 object FieldMetaData {
 
-  private[this] val _EMPTY_ARRAY = new Array[Object]()
+  private[this] val _EMPTY_ARRAY = new Array[Object](0)
 
   var factory = new FieldMetaDataFactory {
 
