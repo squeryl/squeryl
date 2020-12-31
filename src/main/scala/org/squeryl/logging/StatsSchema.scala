@@ -46,7 +46,7 @@ class StatementInvocation(
     new CompositeKey2(statementHash, statementHashCollisionNumber)
 
   def executeTime =
-    end minus start
+    end - start
 }
 
 object StatementHasher {
