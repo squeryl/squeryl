@@ -296,12 +296,12 @@ trait FieldMapper {
     registry.put(z.clasz.getSuperclass, z)
   }
 
-  protected type MapperForReflection = {
+  protected trait MapperForReflection {
     def map(rs:ResultSet,i:Int): Any
     def convertToJdbc(v: AnyRef): AnyRef
   }
 
-  protected def makeMapper(fa0: JdbcMapper[_,_]) = new {
+  protected def makeMapper(fa0: JdbcMapper[_,_]) = new MapperForReflection {
     val fa = fa0.asInstanceOf[JdbcMapper[AnyRef,AnyRef]]
 
     def map(rs:ResultSet,i:Int) = fa.map(rs, i)
