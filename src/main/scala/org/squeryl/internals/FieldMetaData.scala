@@ -24,7 +24,8 @@ import collection.mutable.{HashMap, HashSet}
 import org.squeryl.Session
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.customtypes.CustomType
-import org.json4s.scalap.scalasig._
+// FIXME
+// import org.json4s.scalap.scalasig._
 import java.lang.reflect.Member
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.customtypes.CustomType
@@ -378,7 +379,7 @@ object FieldMetaData {
 
       val fieldMapper = parentMetaData.schema.fieldMapper
 
-      val field  = property._1
+      val field = property._1
       val getter = property._2
       val setter = property._3
       val annotations = property._4
@@ -551,30 +552,31 @@ object FieldMetaData {
   }
 
   def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
-    val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
-    scalaSigOption flatMap { scalaSig =>
-      val result = scalaSig.symbols.filter { sym =>
-        member.getName == sym.name
-      }.collect {
-        case sym: MethodSymbol => sym.infoType
-      }.collect {
-        case tpe: NullaryMethodType => tpe.resultType
-      }.collect {
-        case TypeRefType(_, _, Seq(TypeRefType(_, tpe, _))) =>
-          PartialFunction.condOpt(tpe.name){
-            case "Int" => classOf[scala.Int]
-            case "Short" => classOf[scala.Short]
-            case "Long" => classOf[scala.Long]
-            case "Double" => classOf[scala.Double]
-            case "Float" => classOf[scala.Float]
-            case "Boolean" => classOf[scala.Boolean]
-            case "Byte" => classOf[scala.Byte]
-            case "Char" => classOf[scala.Char]
-          }
-      }
-      assert(result.size <= 1)
-      result.headOption.flatten
-    }
+    // val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
+    // scalaSigOption flatMap { scalaSig =>
+    //   val result = scalaSig.symbols.filter { sym =>
+    //     member.getName == sym.name
+    //   }.collect {
+    //     case sym: MethodSymbol => sym.infoType
+    //   }.collect {
+    //     case tpe: NullaryMethodType => tpe.resultType
+    //   }.collect {
+    //     case TypeRefType(_, _, Seq(TypeRefType(_, tpe, _))) =>
+    //       PartialFunction.condOpt(tpe.name){
+    //         case "Int" => classOf[scala.Int]
+    //         case "Short" => classOf[scala.Short]
+    //         case "Long" => classOf[scala.Long]
+    //         case "Double" => classOf[scala.Double]
+    //         case "Float" => classOf[scala.Float]
+    //         case "Boolean" => classOf[scala.Boolean]
+    //         case "Byte" => classOf[scala.Byte]
+    //         case "Char" => classOf[scala.Char]
+    //       }
+    //   }
+    //   assert(result.size <= 1)
+    //   result.headOption.flatten
+    // }
+    ???
   }
 
   def createDefaultValue(fieldMapper: FieldMapper, member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
