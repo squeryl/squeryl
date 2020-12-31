@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ trait ResultSetUtils {
     val md = rs.getMetaData
    (for(i <- 1 to md.getColumnCount)
       yield ""+rs.getObject(i)).mkString("[",",","]")
-  }  
+  }
 }
 
 object ResultSetUtils extends ResultSetUtils
@@ -74,8 +74,8 @@ trait OutMapper[T] extends ResultSetUtils {
       }
       catch {
         case e:Exception => throw new RuntimeException(
-            "Exception while mapping column with OutMapper:\n" + this + 
-            "\nand resultSet :\n" + Utils.failSafeString(dumpRow(rs)), 
+            "Exception while mapping column with OutMapper:\n" + this +
+            "\nand resultSet :\n" + Utils.failSafeString(dumpRow(rs)),
             e)
       }
     else
@@ -98,7 +98,7 @@ object NoOpOutMapper extends OutMapper[Any] {
 
   def sample = throw new UnsupportedOperationException(" cannot use NoOpOutMapper")
 
-  override def typeOfExpressionToString = "NoOpOutMapper"  
+  override def typeOfExpressionToString = "NoOpOutMapper"
 }
 
 class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, selectElement: SelectElement)  {
@@ -119,7 +119,7 @@ class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, sele
 
 class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
 
-  override def toString = outMappers.mkString("(",",",")") 
+  override def toString = outMappers.mkString("(",",",")")
 
   def typeOfExpressionToString(idx: Int) = outMappers.apply(idx).typeOfExpressionToString
 
@@ -132,7 +132,7 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
   def isActive(i: Int) = outMappers.apply(i).isActive
 
   def isNull(i:Int, rs: ResultSet) = outMappers.apply(i).isNull(rs)
-  
+
   def mapToTuple[T](rs: ResultSet): T = {
     val size = outMappers.size
     val m = outMappers
@@ -160,14 +160,14 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
       case 21 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs))
       case 22 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs), m(21).map(rs))
 
-      case z:Any => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
+      case _ => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
     }
-    
+
     res.asInstanceOf[T]
   }
 }
 
-class ResultSetMapper extends ResultSetUtils {  
+class ResultSetMapper extends ResultSetUtils {
 
   private[this] val _yieldValuePushers = new ArrayBuffer[YieldValuePusher]
 
@@ -176,7 +176,7 @@ class ResultSetMapper extends ResultSetUtils {
   var groupKeysMapper: Option[ColumnToTupleMapper] = None
 
   var groupMeasuresMapper: Option[ColumnToTupleMapper] = None
-  
+
 //  val createTrace = {
 //    new Exception().getStackTrace.map(s=>s.toString).mkString("\n")
 //  }
@@ -217,7 +217,7 @@ class ResultSetMapper extends ResultSetUtils {
       return rs.getObject(_firstNonOption.get.index) == null
     }
 
-    //if we get here all fields are optional, decide on the first Option that is not null :    
+    //if we get here all fields are optional, decide on the first Option that is not null :
     for(c2fm <- _fieldMapper) {
       assert(c2fm.fieldMetaData.isOption)
       if(rs.getObject(c2fm.index) != null)
@@ -245,7 +245,7 @@ class ResultSetMapper extends ResultSetUtils {
 
     try {
       for(fm <- _fieldMapper)
-        fm.map(o, resultSet)      
+        fm.map(o, resultSet)
     }
     catch {
       case e:Exception=> {
