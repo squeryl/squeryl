@@ -17,7 +17,8 @@ package org.squeryl.logging
 
 import org.squeryl.KeyedEntity
 import org.squeryl.Schema
-import org.squeryl.dsl.CompositeKey2
+import org.squeryl.Queryable
+import org.squeryl.dsl.{ CompositeKey2, GroupWithMeasures }
 
 object StatsSchemaTypeMode extends org.squeryl.PrimitiveTypeMode
 import StatsSchemaTypeMode._
@@ -91,7 +92,8 @@ object StatsSchema extends Schema {
   def invocationStats =
     from(statementInvocations)((si) =>
       groupBy(si.statementHash, si.statementHashCollisionNumber)
-      compute(avg(si.executeTime), count, sum(si.executeTime), nvl(avg(si.rowCount),0))
+      // TODO if this requires explicit implicit values, then the same will happen in user code
+      compute(avg(si.executeTime)(optionDoubleTEF), count, sum(si.executeTime)(optionLongTEF), nvl(avg(si.rowCount)(optionFloatTEF),0)(optionFloatTEF))
     )
 
   import Measure._
