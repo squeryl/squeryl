@@ -401,7 +401,7 @@ object FieldMetaData {
        */
       var v: AnyRef =
         if(sampleInstance4OptionTypeDeduction != null) {
-          field flatMap { f =>
+          field.flatMap { f =>
             f.get(sampleInstance4OptionTypeDeduction) match {
             case a: AnyRef => Some(a)
             case _ => None
