@@ -145,9 +145,11 @@ libraryDependencies ++= Seq(
   // "org.json4s" %% "json4s-scalap" % "3.6.10",
 )
 
-// libraryDependencies ++= {
-//   Seq("org.scalatest" %% "scalatest" % "3.2.3" % "test")
-// }
+libraryDependencies ++= {
+  // scalatest seems to have been published with the xml 2.13 dependency which causes problems
+  // with the 2.0.0-M3 we're using below
+  Seq("org.scalatest" %% "scalatest" % "3.2.3" % "test" exclude("org.scala-lang.modules", "scala-xml_2.13"))
+}
 
 libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
