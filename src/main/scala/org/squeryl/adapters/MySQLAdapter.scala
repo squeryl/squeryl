@@ -112,4 +112,6 @@ class MySQLAdapter extends DatabaseAdapter {
     right.write(sw)
     sw.write(")")
   }
+  
+  override def quoteIdentifier(s: String) = "`" + s + "`"
 }
