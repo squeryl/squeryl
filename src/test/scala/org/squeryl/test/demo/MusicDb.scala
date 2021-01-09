@@ -77,8 +77,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     // Option[Int], since the 'max' function (like all aggregates, 'count' being the only exception).
     val nextSongNumber: Int =
       from(playlistElements)(ple =>
-        where(ple.playlistId ==== id)
-        compute(nvl(max(ple.songNumber), 0))
+        where(ple.playlistId ==== id).compute[Int](nvl(max(ple.songNumber)(optionIntTEF), 0))
       )
 
     playlistElements.insert(new PlaylistElement(nextSongNumber, id, s.id))
