@@ -509,7 +509,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   def avgStudentAgeFunky() =
     from(students)(s =>
-      compute(avg(s.age), avg(s.age) + 3, avg(s.age) / count, count + 6)
+      compute(avg(s.age)(optionFloatTEF), avg(s.age)((optionFloatTEF)).+(3)(optionFloatTEF), avg(s.age)((optionFloatTEF)) / count, count + 6)
     )
 
   def addressesOfStudentsOlderThan24 =
@@ -1283,11 +1283,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     professors.where(p => p.id ==== tournesol.id).single.yearlySalary
 
-    val expected:Float = from(professors)(p0=> where(tournesol.id ==== p0.id or p0.id ==== zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123)))
+    val expected:Float = from(professors)(p0=> where(tournesol.id ==== p0.id or p0.id ==== zarnitsyn.id) compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF)))
 
     update(professors)(p =>
       where(p.id ==== tournesol.id)
-      set(p.yearlySalary := from(professors)(p0=> where(p.id ==== p0.id or p0.id ==== zarnitsyn.id) compute(nvl(avg(p0.yearlySalary), 123))))
+      set(p.yearlySalary := from(professors)(p0=> where(p.id ==== p0.id or p0.id ==== zarnitsyn.id) compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF))))
     )
 
     val after = professors.where(p => p.id ==== tournesol.id).single.yearlySalary
