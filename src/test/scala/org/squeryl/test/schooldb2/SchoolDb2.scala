@@ -30,19 +30,19 @@ class Course(val subjectId: Long) extends SchoolDb2Object {
   lazy val subject = SchoolDb2.subjectToCourses.right(this)
 }
 
-class Student(val firstName: String, val lastName: String) extends SchoolDb2Object {  
-  
+class Student(val firstName: String, val lastName: String) extends SchoolDb2Object {
+
   lazy val courses = SchoolDb2.courseSubscriptions.right(this)
 
   def fullName = compositeKey(firstName, lastName)
 }
 
 class Subject(val name: String, val parentSubjectId: Option[Long]) extends SchoolDb2Object {
-  
+
   lazy val courses = SchoolDb2.subjectToCourses.left(this)
-  
+
   lazy val childSubjects = SchoolDb2.subjectToParentSubject.left(this)
-  
+
   lazy val parentSubject = SchoolDb2.subjectToParentSubject.right(this)
 }
 
@@ -91,13 +91,13 @@ class SchoolDb2 extends Schema {
     def isPersisted(a:SchoolDb2Object) = a.id > 0
     def idPropertyName = "id"
   }
-  
+
   val entries = table[Entry]()
   val comments = table[Comment]("commentz")
 
   val entryToComments = oneToManyRelation(entries, comments).via(
     (e,c) => e.id === c.entryId)
-  
+
   val professors = table[Professor]()
 
   val students = table[Student]()
@@ -107,7 +107,7 @@ class SchoolDb2 extends Schema {
     s.firstName is(indexed),
     s.lastName defaultsTo("!"),
     s.fullName is(unique, indexed),
-    columns(s.id, s.firstName, s.lastName) are(indexed)  
+    columns(s.id, s.firstName, s.lastName) are(indexed)
   ))
 
   val courses = table[Course]()
@@ -125,17 +125,17 @@ class SchoolDb2 extends Schema {
   val subjectToCourses =
     oneToManyRelation(subjects, courses).
     via((s,c) => s.id === c.subjectId)
-    
+
   val bossToProfessors =
     oneToManyRelation(professors, professors).
     via((boss,p) => boss.id === p.bossId)
 
-    
+
   val subjectToParentSubject =
     oneToManyRelation(subjects, subjects).
     via((subject,childSubject) => Option(subject.id) === childSubject.parentSubjectId)
- 
-    
+
+
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
     foreignKeyDeclaration.constrainReference()
@@ -165,12 +165,13 @@ class SchoolDb2 extends Schema {
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
   self: DBConnector =>
 
-  val schema = new SchoolDb2
-  
-  import schema._
+  val schoolDb2 = new SchoolDb2
 
-  def seedDataDef() = new {
-    
+  override val schema = new SchoolDb2
+
+  import schoolDb2._
+
+  trait SeedData {
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
 
@@ -187,6 +188,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val xiaoJimbao = students.insert(new Student("Xiao", "Jimbao"))
   }
 
+  def seedDataDef() = new SeedData
 
 //  def testAll = {
 //
@@ -256,7 +258,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     import seedData._
 
     val xiao = {students.lookup(xiaoJimbao.id)
-      
+
     }.get
 
     val courseSubscription = xiao.courses.assign(chemistryCourse)
@@ -266,7 +268,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     courseSubscriptions.update(courseSubscription)
 
     val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
-    
+
     95.0F shouldBe cs2.grade
   }
 
@@ -349,7 +351,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   test("CompositeEquality"){
     val seedData = seedDataDef()
     import seedData._
-    
+
     val a = physicsCourse.professors.associate(professeurTournesol)
 
     val qA = courseAssignments.lookup(compositeKey(a.courseId, a.professorId))
@@ -399,7 +401,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
         Some(s.connection.setSavepoint)
       else
         None
-    
+
     try {
       physicsCourse.professors.associate(professeurTournesol)
     }
@@ -442,11 +444,11 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val set = Set("foo", "bar", "baz").toSeq
     from(entries)(e => where(e.text.in(set))select(e)).toList
   }
-  
+
   test("Inequality with query on right hand side", SingleTestRun) {
     val seedData = seedDataDef()
     import seedData._
-   
+
     val xiao = students.lookup(xiaoJimbao.id).get
 
     val courseSubscription = xiao.courses.assign(chemistryCourse)
@@ -456,38 +458,37 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     courseSubscriptions.update(courseSubscription)
 
     val cs2 = courseSubscriptions.lookup(courseSubscription.id).get
-    
+
     95.0F shouldBe cs2.grade
-    
+
     from(courseSubscriptions)(p => compute(avg(p.grade)))
-   
-    val belowOrEqualToAvg = 
+
+    val belowOrEqualToAvg =
       from(courseSubscriptions)(p =>
         where(p.grade lte from(courseSubscriptions)(p => compute(avg(p.grade))))
         select(p)
       ).toList
-      
+
     assert(belowOrEqualToAvg.size == 1)
-    
-    val belowAvg = 
+
+    val belowAvg =
       from(courseSubscriptions)(p =>
         where(p.grade lt from(courseSubscriptions)(p => compute(avg(p.grade))))
         select(p)
       ).toList
-      
-    assert(belowAvg.size == 0)    
+
+    assert(belowAvg.size == 0)
   }
-  
+
   test ("#73 relations with Option[] on one side of the equality expression blow up") {
 
     seedDataDef()
-        
+
     val cs = subjects.where(_.name === "Computer Science").single
-    
+
     val compTheory = cs.childSubjects.single
-    
+
     assert(compTheory.name == "Computation Theory")
-    
+
   }
 }
-

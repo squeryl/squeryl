@@ -176,7 +176,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
   test("OneToMany"){
 
     import SchoolDb2._
-    
+
     import schoolDb2._
 
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
