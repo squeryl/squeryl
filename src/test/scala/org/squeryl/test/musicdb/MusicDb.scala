@@ -160,21 +160,19 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val j2 =
       join(artists, firstSongs, cds.leftOuter) (
         (a, fs, cd) =>
-          select(a, cd)
-            on(a.id === fs.measures,  cd.map(_.mainArtist) === a.id)
+          select(a, cd).on(a.id ==== fs.measures,  cd.map(_.mainArtist) ==== a.id)
       ) : Query[(Person, Option[Cd])]
 
     val _ =
       join(artists, j2.leftOuter) (
         (a, j2_) =>
-          select(a, j2)
-            on(a.id === j2_.map(_._1.id))
+          select(a, j2).on(a.id ==== j2_.map(_._1.id))
       ).toList
   }
 
   lazy val songsFeaturingPoncho =
     from(songs, artists)((s,a) =>
-      where(a.firstName === "Poncho" and s.interpretId === a.id)
+      where(a.firstName ==== "Poncho" and s.interpretId ==== a.id)
       select(s)
       orderBy(s.title, a.id desc)
     )
