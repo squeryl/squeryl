@@ -1535,7 +1535,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   test("#62 CompositeKey with Option members generate sql with = null instead of is null")  {
     // this should not blow up :
-    val q = students.where(_.dummyKey ==== (None: Option[Int], None: Option[Int]))
+    val q = students.where(_.dummyKey === (None: Option[Int], None: Option[Int]))
 
     q.toList
   }
