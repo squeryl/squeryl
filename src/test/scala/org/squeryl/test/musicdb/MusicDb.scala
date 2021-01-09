@@ -271,7 +271,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         groupBy(a.id) compute(count)
       )
     )((sonCountPerArtist) =>
-        compute(avg(sonCountPerArtist.measures))
+        compute(avg(sonCountPerArtist.measures)(optionDoubleTEF))
     )
 
 
