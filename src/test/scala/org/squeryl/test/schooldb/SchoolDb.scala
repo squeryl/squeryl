@@ -1049,8 +1049,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val result =
       from(courses)(c=>
-        where(nvl(c.meaninglessLongOption, 3) <> 1234 and nvl(c.meaninglessLongOption, 3) ==== 3)
-        select(&(nvl(c.meaninglessLongOption, 5)))
+        where(nvl(c.meaninglessLongOption, 3)(optionLongTEF) <> 1234 and nvl(c.meaninglessLongOption, 3)(optionLongTEF) ==== 3)
+        select(&(nvl(c.meaninglessLongOption, 5)(optionLongTEF)))
       ).toList : List[Long]
 
     val expected = List(5,5,5)
@@ -1209,7 +1209,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     var nRows = courses.update(c =>
        where(c.id gt -1)
        set(c.meaninglessLong := 123L,
-           c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
+           c.meaninglessLongOption :=  c.meaninglessLongOption.+(456L)(optionLongTEF))
               // when meaninglessLongOption is null,the SQL addition will have a null result
     )
 
@@ -1224,7 +1224,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       update(courses)(c =>
         where(c.id gt -1)
         set(c.meaninglessLong := 0L,
-            c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
+            c.meaninglessLongOption :=  c.meaninglessLongOption.-(456L)(optionLongTEF))
       )
 
     assert(nRows == 4)
@@ -1241,7 +1241,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     update(courses)(c =>
       where(c.id in from(courses)(c0=> where(c0.id lt -1) select(c0.id)))
       set(c.meaninglessLong := 0L,
-          c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
+          c.meaninglessLongOption :=  c.meaninglessLongOption.-(456L)(optionLongTEF))
     )
   }
 
