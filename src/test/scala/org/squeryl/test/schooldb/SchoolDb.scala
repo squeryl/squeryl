@@ -361,7 +361,7 @@ class TestInstance(schema : SchoolDb){
 abstract class FullOuterJoinTests extends SchoolDbTestBase{
   self: DBConnector =>
 
-  import schema._
+  import schoolDb._
 
 
 
@@ -395,12 +395,14 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  lazy val schema = new SchoolDb
+  val schoolDb = new SchoolDb
+
+  override lazy val schema = schoolDb
 
   var sharedTestInstance : TestInstance = null
 
   override def prePopulate() = {
-    sharedTestInstance = new TestInstance(schema)
+    sharedTestInstance = new TestInstance(schoolDb)
   }
 
 }
@@ -408,7 +410,7 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 abstract class CommonTableExpressions extends SchoolDbTestBase {
   self: DBConnector =>
 
-  import schema._
+  import schoolDb._
 
   test("commonTableExpressions") {
     val qStudents = from(students) ((s) =>
@@ -439,7 +441,7 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
 abstract class SchoolDbTestRun extends SchoolDbTestBase {
   self: DBConnector =>
 
-  import schema._
+  import schoolDb._
 
   test("cast"){
     val q =
@@ -1350,7 +1352,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchUpdate1") {
-    import schema._
+    import schoolDb._
 
     addresses.insert(List(
       new Address("St-Dominique",14, None,None,None),
@@ -1378,7 +1380,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchUpdateAndInsert2") {
-    import schema._
+    import schoolDb._
 
 
     courses2.insert(

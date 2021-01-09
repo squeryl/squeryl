@@ -164,9 +164,11 @@ class TestData{
 abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  val schema = MusicDb
+  val musicdb = MusicDb
 
-  import schema._
+  override val schema = musicdb
+
+  import musicdb._
 
   var sharedTestData : TestData = null
 
