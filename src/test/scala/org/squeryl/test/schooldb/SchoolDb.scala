@@ -509,7 +509,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   def avgStudentAgeFunky() =
     from(students)(s =>
-      compute(avg(s.age)(optionFloatTEF), avg(s.age)((optionFloatTEF)).+(3)(optionFloatTEF), avg(s.age)((optionFloatTEF)) / count, count + 6)
+      compute(avg(s.age)(optionFloatTEF), avg(s.age)((optionFloatTEF)).+(3)(optionFloatTEF), avg(s.age)((optionFloatTEF))./(count), count.+(6)(longTEF))
     )
 
   def addressesOfStudentsOlderThan24 =

@@ -377,7 +377,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     def yearOfCongaBluePlus1 =
       from(cds)(cd =>
         where(cd.title ==== testInstance.congaBlue.title)
-        select(&(cd.year plus 1))
+        select(&(cd.year.plus(1)(intTEF)))
       )
 
     validateQuery("yearOfCongaBluePlus1", yearOfCongaBluePlus1, identity[Int], List(1999))

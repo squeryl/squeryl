@@ -219,7 +219,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     update(songs)(s =>
       where(s.title ==== "Watermelon Man")
       set(s.title := "The Watermelon Man",
-          s.year  := s.year plus 1)
+          s.year  := s.year.plus(1)(intTEF))
     )
 
     for(s <- funkAndLatinJazz.songsOf(herbyHancock.id))
