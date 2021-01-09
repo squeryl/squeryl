@@ -154,7 +154,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val firstSongs =
       from(songs)(s =>
         groupBy(s.authorId)
-          compute(min(s.id))
+          compute(min(s.id)(optionIntTEF))
       )
 
     val j2 =
@@ -936,7 +936,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     /// Non compilation Test (should not compile):
     // val z1 = from(artists)(a => select(&(nvl(a.age,a.age)))).toList : List[Option[Int]]
 
-    from(artists)(a => select(&(nvl(a.age,0)))).toList : List[Int]
+    from(artists)(a => select(&(nvl(a.age,0)(optionIntTEF)))).toList : List[Int]
   }
 
   def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
@@ -969,7 +969,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testInstance = sharedTestInstance; import testInstance._
     val q1 =
       from(cds)(cd =>
-        compute(min(cd.id))
+        compute(min(cd.id)(optionIntTEF))
       )
 
     val r1 = cds.where(_.id in q1).single
@@ -991,7 +991,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     artists.where(_.age in from(artists)(a=> compute(count)))
 
     // should compile, since SQL allows comparing nullable cols against non nullable ones :
-    artists.where(_.id in from(artists)(a=> compute(max(a.age))))
+    artists.where(_.id in from(artists)(a=> compute(max(a.age)(optionIntTEF))))
 
     //shouldn't compile :
     //artists.where(_.age in from(artists)(a=> compute(max(a.name))))
@@ -1001,7 +1001,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testInstance = sharedTestInstance; import testInstance._
     val q1 =
       from(cds)(cd =>
-        compute(min(cd.id))
+        compute(min(cd.id)(optionIntTEF))
       )
 
     val q2 =
