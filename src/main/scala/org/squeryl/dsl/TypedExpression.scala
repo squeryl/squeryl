@@ -122,6 +122,7 @@ trait TypedExpression[A1,T1] extends ExpressionNode {
                    tf: Floatifier[T3,A4,T4]): TypedExpression[A4,T4] = tf.floatify(new BinaryOperatorNode(this, e, "/"))
 
   def ===[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
+  def ====[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new EqualityExpression(this, b)
   def <>[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "<>")
 
   def isDistinctFrom[A2,T2](b: TypedExpression[A2,T2])(implicit ev: CanCompare[T1, T2]) = new BinaryOperatorNodeLogicalBoolean(this, b, "IS DISTINCT FROM")
