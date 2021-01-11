@@ -284,7 +284,7 @@ trait FieldMapper {
      * in FieldMetaData.canonicalEnumerationValueFor(i: Int)
      */
     val z = new FieldAttributesBasedOnType[Any](
-        new {
+        new MapperForReflection {
           def map(rs:ResultSet,i:Int) = rs.getInt(i)
           def convertToJdbc(v: AnyRef) = v
         },
