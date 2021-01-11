@@ -32,9 +32,9 @@ publishMavenStyle := true
 val Scala211 = "2.11.12"
 val Scala3 = "3.0.0-M3"
 
-scalaVersion := Scala3
+scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.4")
+crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.4", Scala3)
 
 scalacOptions in (Compile, doc) ++= {
   val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
@@ -153,8 +153,10 @@ libraryDependencies ++= {
 
 libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 | scalaMajor == 3=>
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
       Seq("org.scala-lang.modules" %% "scala-xml" % "2.0.0-M3")
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
+      Seq("org.scala-lang.modules" %% "scala-xml" % "1.3.0")
     case _ =>
       Nil
   }
