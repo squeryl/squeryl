@@ -20,7 +20,9 @@ object FooSchema extends Schema {
 
 abstract class TransactionTests extends DbTestBase {
   self: DBConnector =>
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  
   def throwExc(except: Boolean): Int = {
     if(except) throw new Exception()
     return 1
@@ -45,7 +47,7 @@ abstract class TransactionTests extends DbTestBase {
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value ==== "test").size == 1 )
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1 )
 
       try {
         doSomething(true)
@@ -55,7 +57,7 @@ abstract class TransactionTests extends DbTestBase {
       }
 
       // fails with "no session exception"
-      assert(FooSchema.foos.where(f => f.value ==== "test").size ==1)
+      assert(FooSchema.foos.where(f => f.value === "test").size ==1)
     }
   }
 
@@ -65,11 +67,11 @@ abstract class TransactionTests extends DbTestBase {
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value ==== "test").size ==1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size ==1)//should equal(1)
 
       doSomething(false)
       // fails with "no session exception"
-      assert(FooSchema.foos.where(f => f.value ==== "test").size ==1) //should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size ==1) //should equal(1)
     }
   }
 
@@ -79,13 +81,13 @@ abstract class TransactionTests extends DbTestBase {
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value ==== "test").size == 1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
 
       doSomething(false)
     }
     transaction{
       // works!
-      assert(FooSchema.foos.where(f => f.value ==== "test").size == 1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
     }
   }
 
@@ -96,7 +98,7 @@ abstract class TransactionTests extends DbTestBase {
     returnInTransaction
     transaction{
       // works!
-      assert(FooSchema.foos.where(f => f.value ==== "test").size == 1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
     }
   }
 

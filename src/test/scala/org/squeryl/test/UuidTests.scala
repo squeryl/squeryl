@@ -31,7 +31,7 @@ object UuidTests {
     val uuidAsForeignKey = table[UuidAsForeignKey]()
     val uuidWithOption = table[UuidWithOption]()
 
-    val uuidOneToMany = oneToManyRelation(uuidAsId, uuidAsForeignKey).via(_.id ==== _.foreignUuid)
+    val uuidOneToMany = oneToManyRelation(uuidAsId, uuidAsForeignKey).via(_.id === _.foreignUuid)
 
     override def drop = {
       Session.cleanupResources
@@ -43,6 +43,8 @@ object UuidTests {
 
 abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
   import UuidTests._
 
   final def schema = TestSchema
@@ -53,7 +55,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
     val testObject = new UuidAsProperty
     testObject.save
 
-    testObject.uuid should equal(uuidAsProperty.where(_.id ==== testObject.id).single.uuid)
+    testObject.uuid should equal(uuidAsProperty.where(_.id === testObject.id).single.uuid)
 
     testObject.uuid should equal(uuidAsProperty.where(_.uuid in List(testObject.uuid)).single.uuid)
   }
@@ -71,14 +73,14 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
     val uuid = UUID.randomUUID()
 
     update(uuidWithOption)(p =>
-      where(p.id ==== testObject.id)
+      where(p.id === testObject.id)
       set(p.optionalUuid := Some(uuid))
     )
 
     uuidWithOption.lookup(testObject.id).get.optionalUuid should equal(Some(uuid))
 
     update(uuidWithOption)(p =>
-      where(p.id ==== testObject.id)
+      where(p.id === testObject.id)
       set(p.optionalUuid := None)
     )
 
@@ -92,7 +94,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
 
     testObject.save
 
-    testObject.id should equal(uuidAsId.where(_.id ==== testObject.id).single.id)
+    testObject.id should equal(uuidAsId.where(_.id === testObject.id).single.id)
 
     testObject.id should equal(uuidAsId.where(_.id in List(testObject.id)).single.id)
 
@@ -109,7 +111,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
     val secondaryObject = new UuidAsForeignKey(primaryObject.id)
     uuidAsForeignKey.insert(secondaryObject)
 
-    secondaryObject.id should equal(uuidAsForeignKey.where(_.id ==== secondaryObject.id).single.id)
+    secondaryObject.id should equal(uuidAsForeignKey.where(_.id === secondaryObject.id).single.id)
 
     List(secondaryObject.id) should equal(primaryObject.foreigns.map(_.id).toList)
   }

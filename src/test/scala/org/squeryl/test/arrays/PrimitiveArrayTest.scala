@@ -5,7 +5,8 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 
 abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   val schema = PrimitiveArraySchema
 
@@ -58,7 +59,7 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
 
     transaction {
       update(swimmers)(s =>
-        where(s.id ==== 1)
+        where(s.id === 1)
           set (s.lap_times := Array(11.69), s.scores := Array(1, 2, 3, 4, 5), s.orgids := Array(13L), s.tags := Array("and things")))
     }
 

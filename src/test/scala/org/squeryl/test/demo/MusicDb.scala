@@ -29,7 +29,7 @@ class MusicDbObject extends KeyedEntity[Long] {
 case class Artist(val name:String) extends MusicDbObject {
 
   // this returns a Query[Song] which is also an Iterable[Song] :
-  def songs = from(MusicDb.songs)(s => where(s.artistId ==== id) select(s))
+  def songs = from(MusicDb.songs)(s => where(s.artistId === id) select(s))
 
   def newSong(title: String, filePath: Option[String], year: Int) =
     MusicDb.songs.insert(new Song(title, id, filePath, year))
@@ -49,7 +49,7 @@ class Song(val title: String, val artistId: Long, val filePath: Option[String], 
   import MusicDb._
 
   // An alternative (shorter) syntax for single table queries :
-  def artist = artists.where(a => a.id ==== artistId).single
+  def artist = artists.where(a => a.id === artistId).single
 
   // Another alternative for lookup by primary key, since Artist is a
   // KeyedEntity[Long], it's table has a lookup[Long](k: Long)
@@ -64,7 +64,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   // a two table join :
   def songsInPlaylistOrder =
     from(playlistElements, songs)((ple, s) =>
-      where(ple.playlistId ==== id and ple.songId ==== s.id)
+      where(ple.playlistId === id and ple.songId === s.id)
       select(s)
       orderBy(ple.songNumber asc)
     )
@@ -77,18 +77,18 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     // Option[Int], since the 'max' function (like all aggregates, 'count' being the only exception).
     val nextSongNumber: Int =
       from(playlistElements)(ple =>
-        where(ple.playlistId ==== id).compute[Int](nvl(max(ple.songNumber)(optionIntTEF), 0))
+        where(ple.playlistId === id).compute[Int](nvl(max(ple.songNumber)(optionIntTEF), 0))
       )
 
     playlistElements.insert(new PlaylistElement(nextSongNumber, id, s.id))
   }
 
   def removeSong(song: Song) =
-    playlistElements.deleteWhere(ple => ple.songId ==== song.id)
+    playlistElements.deleteWhere(ple => ple.songId === song.id)
 
   def removeSongOfArtist(artist: Artist) =
     playlistElements.deleteWhere(ple =>
-      (ple.playlistId ==== id) and
+      (ple.playlistId === id) and
       (ple.songId in from(songsOf(artist.id))(s => select(s.id)))
     )
 
@@ -97,7 +97,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   // respectively.
   def _songCountByArtistId: Query[GroupWithMeasures[Long,Long]] =
     from(artists, songs)((a,s) =>
-      where(a.id ==== s.artistId)
+      where(a.id === s.artistId)
       groupBy(a.id)
       compute(count)
     )
@@ -105,7 +105,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   // Queries are nestable just as they would in SQL
   def songCountForAllArtists  =
     from(_songCountByArtistId, artists)((sca,a) =>
-      where(sca.key ==== a.id)
+      where(sca.key === a.id)
       select((a, sca.measures))
     )
 
@@ -120,7 +120,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
 
   def songsOf(artistId: Long) =
     from(playlistElements, songs)((ple,s) =>
-      where(id ==== ple.playlistId and ple.songId ==== s.id and s.artistId ==== artistId)
+      where(id === ple.playlistId and ple.songId === s.id and s.artistId === artistId)
       select(s)
     )
 }
@@ -162,7 +162,9 @@ class TestData{
 
 abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  
   val musicdb = MusicDb
 
   override val schema = musicdb
@@ -205,19 +207,19 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
 
     // Nesting in From clause :
     from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
-      where(s.id ==== 123)
+      where(s.id === 123)
       select(s)
     )
 
     // Left Outer Join :
     join(songs, ratings.leftOuter)((s,r) =>
       select((s, r))
-      on(s.id ==== r.map(_.songId))
+      on(s.id === r.map(_.songId))
     )
 
 
     update(songs)(s =>
-      where(s.title ==== "Watermelon Man")
+      where(s.title === "Watermelon Man")
       set(s.title := "The Watermelon Man",
           s.year  := s.year.plus(1)(intTEF))
     )

@@ -96,7 +96,7 @@ class SchoolDb2 extends Schema {
   val comments = table[Comment]("commentz")
 
   val entryToComments = oneToManyRelation(entries, comments).via(
-    (e,c) => e.id ==== c.entryId)
+    (e,c) => e.id === c.entryId)
 
   val professors = table[Professor]()
 
@@ -116,24 +116,24 @@ class SchoolDb2 extends Schema {
 
   val courseAssignments =
     manyToManyRelation(professors, courses, "CourseAssignmentZ").
-    via[CourseAssignment]((p,c,a) => (p.id ==== a.professorId, a.courseId ==== c.id))
+    via[CourseAssignment]((p,c,a) => (p.id === a.professorId, a.courseId === c.id))
 
   val courseSubscriptions =
     manyToManyRelation(courses, students).
-    via[CourseSubscription]((c,s,cs) => (cs.studentId ==== s.id, c.id ==== cs.courseId))
+    via[CourseSubscription]((c,s,cs) => (cs.studentId === s.id, c.id === cs.courseId))
 
   val subjectToCourses =
     oneToManyRelation(subjects, courses).
-    via((s,c) => s.id ==== c.subjectId)
+    via((s,c) => s.id === c.subjectId)
 
   val bossToProfessors =
     oneToManyRelation(professors, professors).
-    via((boss,p) => boss.id ==== p.bossId)
+    via((boss,p) => boss.id === p.bossId)
 
 
   val subjectToParentSubject =
     oneToManyRelation(subjects, subjects).
-    via((subject,childSubject) => Option(subject.id) ==== childSubject.parentSubjectId)
+    via((subject,childSubject) => Option(subject.id) === childSubject.parentSubjectId)
 
 
   // the default constraint for all foreign keys in this schema :
@@ -157,14 +157,16 @@ class SchoolDb2 extends Schema {
 
   val aToB =
     oneToManyRelation(as, bs).
-    via((a, b) => a.id ==== b.aId)
+    via((a, b) => a.id === b.aId)
 
   aToB.foreignKeyDeclaration.unConstrainReference()
 }
 
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
   self: DBConnector =>
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  
   val schoolDb2 = new SchoolDb2
 
   override val schema = new SchoolDb2
@@ -224,8 +226,8 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     val q: Query[String] =
       from(subjects)(s =>
-        where(s.name ==== "Philosophy")
-          select(&(from(subjects)(s2 => where(s2.name ==== s.name) select(s2.name))))
+        where(s.name === "Philosophy")
+          select(&(from(subjects)(s2 => where(s2.name === s.name) select(s2.name))))
       )
 
     1 shouldBe q.toList.length
@@ -237,7 +239,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val q: Query[String] =
       from(subjects)(s =>
         where(
-          s.name ==== from(subjects)(s2 => where(s2.name ==== "Philosophy") select(s2.name))
+          s.name === from(subjects)(s2 => where(s2.name === "Philosophy") select(s2.name))
         )
         select(s.name)
       )
@@ -250,7 +252,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val comment = Comment("A single comment")
     entry.comments.associate(comment)
 
-    from(entry.comments)(c => where(c.id ==== comment.id) select(c))
+    from(entry.comments)(c => where(c.id === comment.id) select(c))
   }
 
   test("UpdateWithCompositePK"){
@@ -484,7 +486,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     seedDataDef()
 
-    val cs = subjects.where(_.name ==== "Computer Science").single
+    val cs = subjects.where(_.name === "Computer Science").single
 
     val compTheory = cs.childSubjects.single
 
