@@ -24,8 +24,6 @@ import collection.mutable.{HashMap, HashSet}
 import org.squeryl.Session
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.customtypes.CustomType
-// FIXME
-// import org.json4s.scalap.scalasig._
 import java.lang.reflect.Member
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.customtypes.CustomType
@@ -551,34 +549,6 @@ object FieldMetaData {
     }
   }
 
-  def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
-    // val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
-    // scalaSigOption flatMap { scalaSig =>
-    //   val result = scalaSig.symbols.filter { sym =>
-    //     member.getName == sym.name
-    //   }.collect {
-    //     case sym: MethodSymbol => sym.infoType
-    //   }.collect {
-    //     case tpe: NullaryMethodType => tpe.resultType
-    //   }.collect {
-    //     case TypeRefType(_, _, Seq(TypeRefType(_, tpe, _))) =>
-    //       PartialFunction.condOpt(tpe.name){
-    //         case "Int" => classOf[scala.Int]
-    //         case "Short" => classOf[scala.Short]
-    //         case "Long" => classOf[scala.Long]
-    //         case "Double" => classOf[scala.Double]
-    //         case "Float" => classOf[scala.Float]
-    //         case "Boolean" => classOf[scala.Boolean]
-    //         case "Byte" => classOf[scala.Byte]
-    //         case "Char" => classOf[scala.Char]
-    //       }
-    //   }
-    //   assert(result.size <= 1)
-    //   result.headOption.flatten
-    // }
-    ???
-  }
-
   def createDefaultValue(fieldMapper: FieldMapper, member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
     if (p.isAssignableFrom(classOf[Option[Any]])) {
       /*
@@ -602,7 +572,7 @@ object FieldMetaData {
                     * if that's what we find then we need to get the real value from @ScalaSignature
                     */
                     val trueTypeOption =
-                    if (classOf[Object] == oType) optionTypeFromScalaSig(member)
+                    if (classOf[Object] == oType) OptionType.optionTypeFromScalaSig(member)
                     else Some(oType.asInstanceOf[Class[_]])
                     trueTypeOption flatMap { trueType =>
                       val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)

@@ -141,8 +141,7 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "42.2.18" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test",
-  // "org.json4s" %% "json4s-scalap" % "3.6.10",
+  "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test"
 )
 
 libraryDependencies ++= {
@@ -151,12 +150,19 @@ libraryDependencies ++= {
   Seq("org.scalatest" %% "scalatest" % "3.2.3" % "test" exclude("org.scala-lang.modules", "scala-xml_2.13"))
 }
 
+
 libraryDependencies ++= {
+  val scalap = "org.json4s" %% "json4s-scalap" % "3.6.10"
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
       Seq("org.scala-lang.modules" %% "scala-xml" % "2.0.0-M3")
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.3.0")
+      Seq(
+        "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+        scalap
+      )
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 10 =>
+      Seq(scalap)
     case _ =>
       Nil
   }
