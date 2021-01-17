@@ -41,7 +41,7 @@ object Tag {
 
     // retrieve bossId field Symbol
     val bossIdField: Symbol = uns.symbol.memberField("bossId")
-    // println("tree: " + bossIdField.asType)
+    // println("tpe: " + bossIdField.tpe)
     println("tree: " + bossIdField.tree)
     println("tree.symbol: " + bossIdField.tree.symbol)
     // tree: ValDef(bossId,TypeTree[AppliedType(TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module scala),class Option),List(TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module scala),class Long)))],EmptyTree)
@@ -49,8 +49,18 @@ object Tag {
     val bossIdValDef = ValDef(bossIdField, None)
     println("bossIdValDef:" + bossIdValDef)
     println("tpt:" + bossIdValDef.tpt)
+    val bossIdType: TypeRepr = bossIdValDef.tpt.tpe
+    println("tpe:" + bossIdType)
     // I could go through this to see if it's an Option[Something]
     // TypeTree[AppliedType(TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module scala),class Option),List(TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module scala),class Long)))]
+
+    val isOptionLong = bossIdType =:= TypeRepr.of[Option[Long]]
+    println("isOptionLong: " + isOptionLong)
+
+    val isOptionInt = bossIdType =:= TypeRepr.of[Option[Int]]
+    println("isOptionInt: " + isOptionInt)
+
+    // if only I could use TypeRepr.of[T] on the member field
 
     val bossIdTypeRepr = repr.select(bossIdField) // that didn't do what I thought it would
     println("bossIdTypeRepr: " + bossIdTypeRepr)
