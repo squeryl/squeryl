@@ -2,6 +2,9 @@ package org.squeryl
 
 import scala.quoted.{Expr, Quotes, Type}
 import scala.quoted.staging._
+import org.squeryl.internals.Tag
+
+class Professor(val lastName: String, var bossId: Option[Long]=None)
 
 object BorisMain extends App {
 
@@ -18,12 +21,12 @@ object BorisMain extends App {
   //   println(tpe)
   //   Expr("")
 
-  class Professor(val lastName: String, @org.squeryl.annotations.OptionType(classOf[Long]) var bossId: Option[Long]=None)
+
 
   def main() =
     // println(Tag.tag[Int])
     // println(Tag.tag[List])
-    println(Tag.tag[Option[Int]])
+    // println(Tag.tag[Option[Int]])
     println(Tag.tag[Professor])
 
 }
