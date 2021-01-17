@@ -13,7 +13,7 @@ trait SchoolDb2Object {
 
 object SchoolDb2 extends SchoolDb2
 
-class Professor(val lastName: String, var bossId: Option[Long]=None) extends SchoolDb2Object {
+class Professor(val lastName: String, @org.squeryl.annotations.OptionType(classOf[Long]) var bossId: Option[Long]=None) extends SchoolDb2Object {
 
   lazy val courses = SchoolDb2.courseAssignments.left(this)
 }

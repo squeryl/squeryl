@@ -155,7 +155,10 @@ libraryDependencies ++= {
   val scalap = "org.json4s" %% "json4s-scalap" % "3.6.10"
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
-      Seq("org.scala-lang.modules" %% "scala-xml" % "2.0.0-M3")
+      Seq(
+        "org.scala-lang.modules" %% "scala-xml" % "2.0.0-M3",
+        "org.scala-lang" %% "scala3-staging" % scalaVersion.value
+      )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "1.3.0",

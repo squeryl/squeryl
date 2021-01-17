@@ -20,6 +20,6 @@ import java.lang.reflect.Member
 protected[internals] object OptionType {
 
   // FIXME how to implement this in scala3?
-  def optionTypeFromScalaSig(member: Member): Option[Class[_]] = ???
+  def optionTypeFromScalaSig(member: Member): Option[Class[_]] = None // throw Exception("not implemented in scala 3")
 
 }

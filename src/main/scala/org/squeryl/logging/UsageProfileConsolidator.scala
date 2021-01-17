@@ -22,7 +22,7 @@ import org.squeryl.logging.StatsSchemaTypeMode._
 
 object UsageProfileConsolidator {
 
-  def main(args : Array[String]) : Unit =
+  def bla(args : Array[String]) : Unit =
     if(args.length < 2) {
       printUsage
     }
