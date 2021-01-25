@@ -51,8 +51,17 @@ object Tag {
     println("tpt:" + bossIdValDef.tpt)
     val bossIdType: TypeRepr = bossIdValDef.tpt.tpe
     println("tpe:" + bossIdType)
+    println("dealias:" + bossIdType.dealias)
+    println("simplified:" + bossIdType.simplified)
+    println("classSymbol:" + bossIdType.classSymbol)
+    println("typeSymbol:" + bossIdType.typeSymbol)
+    println("termSymbol:" + bossIdType.termSymbol)
+
     // I could go through this to see if it's an Option[Something]
     // TypeTree[AppliedType(TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module scala),class Option),List(TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class <root>)),module scala),class Long)))]
+
+    val isOption = bossIdType.typeSymbol == TypeRepr.of[Option[_]].typeSymbol
+    println("isOption: " + isOption)
 
     val isOptionLong = bossIdType =:= TypeRepr.of[Option[Long]]
     println("isOptionLong: " + isOptionLong)
@@ -65,7 +74,7 @@ object Tag {
     val bossIdTypeRepr = repr.select(bossIdField) // that didn't do what I thought it would
     println("bossIdTypeRepr: " + bossIdTypeRepr)
 
-    println("bossIdTypeRepr: " + repr.baseType(bossIdField))
+    println("baseType: " + repr.baseType(bossIdField))
 
 
     // val isOptionLong = bossIdTypeRepr =:= TypeRepr.of[Option[_]]

@@ -19,50 +19,32 @@ object TypeInfo {
     given qctx0.type = qctx0
     import qctx0.reflect.{given, _}
 
-    // val uns = TypeTree.of[T]
-    // val symbol = uns.symbol
-    // val innerClassOfOptionFields: Map[String, Class[Any]] = symbol.memberFields.flatMap { m =>
-    //   // we only support val fields for now
-    //   if(m.isValDef){
-    //     val tpe = ValDef(m, None).tpt.tpe
-    //     // only if the field is an Option[_]
-    //     if(tpe.typeSymbol == TypeRepr.of[Option[Any]].typeSymbol){
-    //       val containedClass: Option[Class[Any]] =
-    //         if(tpe =:= TypeRepr.of[Option[Int]]) Some(classOf[Int].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Short]])  Some(classOf[Short].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Long]])  Some(classOf[Long].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Double]])  Some(classOf[Double].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Float]])  Some(classOf[Float].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Boolean]])  Some(classOf[Boolean].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Byte]])  Some(classOf[Byte].asInstanceOf[Class[Any]])
-    //         else if(tpe =:= TypeRepr.of[Option[Char]])  Some(classOf[Char].asInstanceOf[Class[Any]])
-    //         else None
-    //
-    //       containedClass.map(clazz => (m.name -> clazz))
-    //     } else None
-    //   } else None
-    // }.toMap
+    val uns = TypeTree.of[T]
+    val symbol = uns.symbol
+    val innerClassOfOptionFields: Map[String, Class[_]] = symbol.memberFields.flatMap { m =>
+      // we only support val fields for now
+      if(m.isValDef){
+        val tpe = ValDef(m, None).tpt.tpe
+        // only if the field is an Option[_]
+        if(tpe.typeSymbol == TypeRepr.of[Option[_]].typeSymbol){
+          val containedClass: Option[Class[_]] =
+            if(tpe =:= TypeRepr.of[Option[Int]]) Some(classOf[Int])
+            else if(tpe =:= TypeRepr.of[Option[Short]])  Some(classOf[Short])
+            else if(tpe =:= TypeRepr.of[Option[Long]])  Some(classOf[Long])
+            else if(tpe =:= TypeRepr.of[Option[Double]])  Some(classOf[Double])
+            else if(tpe =:= TypeRepr.of[Option[Float]])  Some(classOf[Float])
+            else if(tpe =:= TypeRepr.of[Option[Boolean]])  Some(classOf[Boolean])
+            else if(tpe =:= TypeRepr.of[Option[Byte]])  Some(classOf[Byte])
+            else if(tpe =:= TypeRepr.of[Option[Char]])  Some(classOf[Char])
+            else None
 
-    val result2: Map[String, Class[_]] = Map(
-      "bossId" -> classOf[scala.Long],
-      "test" -> classOf[scala.Int]
-    )
+          containedClass.map(clazz => (m.name -> clazz))
+        } else None
+      } else None
+    }.toMap
 
-    println(result2)
 
-    Expr(result2)
+    Expr(innerClassOfOptionFields)
   }
 
-  // val result2: Map[String, Class[_]] = Map(
-  //   "bossId" -> classOf[scala.Long].asInstanceOf[Class[Any]],
-  //   "test" -> classOf[scala.Int].asInstanceOf[Class[Any]]
-  // )
-
-  // def fieldsInfo[T <: AnyKind: Type](using qctx0: Quotes): Expr[Map[String, Class[_]]] = {
-  //   val result = Map("bossId" -> classOf[scala.Long])
-  //   Expr(result)
-  // }
-
 }
-
-// `Found: (result : Map[String, Class[?]]) Required: Map[String, Class[Any]]`

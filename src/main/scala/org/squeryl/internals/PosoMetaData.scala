@@ -97,6 +97,11 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       val field =
         members.collectFirst{case f: Field if f.getType != o => f}
 
+
+      // val inner =
+      //   members.collectFirst{case f: Field if f.getType != o => (innerTypeOfOptionField)}
+
+
       val getter =
         members.collectFirst{case m: Method if (m.getName == name) && (m.getReturnType != o) => m}
 
