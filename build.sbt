@@ -35,8 +35,8 @@ scalaVersion := Scala211
 
 crossScalaVersions := Seq("2.12.13", Scala211, "2.10.7", "2.13.4")
 
-scalacOptions in (Compile, doc) ++= {
-  val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
+Compile / doc / scalacOptions ++= {
+  val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
   val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
   Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
 }
@@ -85,7 +85,7 @@ val unusedWarnings = Def.setting(
 scalacOptions ++= unusedWarnings.value
 
 Seq(Compile, Test).flatMap(c =>
-  scalacOptions in (c, console) --= unusedWarnings.value
+  c / console / scalacOptions --= unusedWarnings.value
 )
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
@@ -129,7 +129,7 @@ publishTo := {
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
 
-publishArtifact in Test := false
+Test / publishArtifact := false
 
 pomIncludeRepository := { _ => false }
 
