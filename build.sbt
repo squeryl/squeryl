@@ -33,7 +33,7 @@ val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.13", Scala211, "2.10.7", "2.13.5")
+crossScalaVersions := Seq("2.12.13", Scala211, "2.13.5", "2.13.5")
 
 Compile / doc / scalacOptions ++= {
   val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
