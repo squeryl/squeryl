@@ -30,7 +30,7 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
-val Scala3 = "3.0.0-M3"
+val Scala3 = "3.0.0-RC1"
 
 scalaVersion := Scala211
 
@@ -145,9 +145,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  // scalatest seems to have been published with the xml 2.13 dependency which causes problems
-  // with the 2.0.0-M3 we're using below
-  Seq("org.scalatest" %% "scalatest" % "3.2.3" % "test" exclude("org.scala-lang.modules", "scala-xml_2.13"))
+  Seq("org.scalatest" %% "scalatest" % "3.2.6" % "test")
 }
 
 
@@ -156,7 +154,7 @@ libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
       Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.0.0-M3",
+        "org.scala-lang.modules" %% "scala-xml" % "2.0.0-M5",
         "org.scala-lang" %% "scala3-staging" % scalaVersion.value
       )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
