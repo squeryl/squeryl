@@ -19,6 +19,7 @@ import org.squeryl.KeyedEntity
 import org.squeryl.Schema
 import org.squeryl.Queryable
 import org.squeryl.dsl.{ CompositeKey2, GroupWithMeasures }
+import org.squeryl.Query
 
 object StatsSchemaTypeMode extends org.squeryl.PrimitiveTypeMode
 import StatsSchemaTypeMode._
@@ -89,11 +90,10 @@ object StatsSchema extends Schema {
 
   val statementInvocations = table[StatementInvocation]()
 
-  def invocationStats =
+  def invocationStats: Query[GroupWithMeasures[Product2[Int,Int],Product4[Option[Double],Long,Option[Long],Float]]] =
     from(statementInvocations)((si) =>
-      groupBy(si.statementHash, si.statementHashCollisionNumber)
       // TODO if this requires explicit implicit values, then the same will happen in user code
-      compute(avg(si.executeTime)(optionDoubleTEF), count, sum(si.executeTime)(optionLongTEF), nvl(avg(si.rowCount)(optionFloatTEF),0)(optionFloatTEF))
+      groupBy(si.statementHash, si.statementHashCollisionNumber).compute(avg(si.executeTime)(optionDoubleTEF), count, sum(si.executeTime)(optionLongTEF), nvl(avg(si.rowCount)(optionFloatTEF),0)(optionFloatTEF))
     )
 
   import Measure._
@@ -101,8 +101,7 @@ object StatsSchema extends Schema {
   def topRankingStatements(topN: Int, measure: Measure) =
     from(invocationStats, statements)((si,s)=>
       where(si.key._1 === s.hash and si.key._2 === s.statementHashCollisionNumber)
-      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4))
-      orderBy(measure match {
+      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4)).orderBy(measure match {
         case AvgExecTime => si.measures._1.desc
         case InvocationCount => si.measures._2.desc
         case CumulativeExecutionTime => si.measures._3.desc
@@ -127,8 +126,7 @@ object StatsSchema extends Schema {
   def recordEndOfIteration(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
 
     update(statementInvocations)(si =>
-      where(si.id === statementInvocationId)
-      set(si.iterationEndTime := Some(iterationEndTime), si.rowCount := Some(rowCount))
+      where(si.id === statementInvocationId).set(si.iterationEndTime := Some(iterationEndTime), si.rowCount := Some(rowCount))
     )
   }
 
@@ -147,8 +145,7 @@ object StatsSchema extends Schema {
         val q =
           from(statements)(st =>
             where(st.hash === s.hash)
-            select(st)
-            orderBy(st.statementHashCollisionNumber)
+            select(st).orderBy(st.statementHashCollisionNumber)
           )
 
         var lastCollisionNum = -1
