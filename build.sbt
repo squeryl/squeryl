@@ -30,7 +30,7 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
-val Scala3 = "3.0.0-RC1"
+val Scala3 = "3.0.0-RC2"
 
 scalaVersion := Scala211
 
@@ -145,7 +145,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.2.6" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.2.7" % "test")
 }
 
 
@@ -153,10 +153,7 @@ libraryDependencies ++= {
   val scalap = "org.json4s" %% "json4s-scalap" % "3.6.10"
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
-      Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.0.0-M5",
-        "org.scala-lang" %% "scala3-staging" % scalaVersion.value
-      )
+      Seq("org.scala-lang.modules" %% "scala-xml" % "2.0.0-RC1")
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
