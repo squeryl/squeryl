@@ -32,7 +32,7 @@ publishMavenStyle := true
 val Scala211 = "2.11.12"
 val Scala3 = "3.0.0-RC2"
 
-scalaVersion := Scala211
+scalaVersion := Scala3
 
 crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.4", Scala3)
 
