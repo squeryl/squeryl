@@ -1,7 +1,7 @@
 package org.squeryl
 
 // import scala.quoted.staging._
-import org.squeryl.internals.{ TypeInfo, Tag }
+import org.squeryl.internals.{ TypeInfo, Tag, EraseValue }
 
 class Professor(
   val lastName: String,
@@ -17,5 +17,6 @@ object BorisMain extends App {
   val fields = TypeInfo.fieldsInfo[Professor]
   println(fields)
 
+  println(EraseValue.sizeOf[Int])
 
 }
