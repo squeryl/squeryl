@@ -6,13 +6,6 @@ import scala.quoted.{Quotes, Type}
 
 object TypeInfo {
 
-  given ToExpr[Class[_]] with {
-    def apply(x: Class[_])(using Quotes) = {
-      import quotes.reflect._
-      Ref(defn.Predef_classOf).appliedToType(TypeRepr.typeConstructorOf(x)).asExpr.asInstanceOf[Expr[Class[_]]]
-    }
-  }
-
   inline def fieldsInfo[T <: AnyKind]: Map[String, Class[_]] = ${ fieldsInfo[T] }
 
   def fieldsInfo[T <: AnyKind: Type](using qctx0: Quotes): Expr[Map[String, Class[_]]] = {
