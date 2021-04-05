@@ -24,7 +24,7 @@ import collection.mutable.ArrayBuffer
 
 //private [squeryl] object DummySchema extends Schema
 
-class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String], ked: Option[KeyedEntityDef[T,_]]) extends View[T](n, c, schema, _prefix, ked) {
+class Table[T] private [squeryl] (n: String, c: Class[T], val schema: Schema, _prefix: Option[String], ked: Option[KeyedEntityDef[T,_]], optionalFieldsInfo: Option[Map[String, Class[_]]]) extends View[T](n, c, schema, _prefix, ked, optionalFieldsInfo) {
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 

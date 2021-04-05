@@ -34,6 +34,7 @@ class SrfView[T](
     classOfT,
     schema,
     prefix,
+    None, 
     None) {
   override def viewExpressionNode: ViewExpressionNode[T] = new SrfViewExpressionNode[T](this, args)
 }

@@ -19,4 +19,5 @@ object BorisMain extends App {
 
   println(EraseValue.sizeOf[Int])
 
+  // val professor = Professor("Pr", Some(1), Some(2L), None)
 }

@@ -343,7 +343,16 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   protected def table[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
+    val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, None)
+    _addTable(t)
+    _addTableType(typeT, t)
+    t
+  }
+
+  protected def tableScala3[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
+    val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
+    val optionalFieldsInfo = TypeInfo.fieldsInfo[T]
+    val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, Some(optionalFieldsInfo))
     _addTable(t)
     _addTableType(typeT, t)
     t
@@ -351,7 +360,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
 
   protected def table[T](name: String, prefix: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef)
+    val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef, None)
     _addTable(t)
     _addTableType(typeT, t)
     t

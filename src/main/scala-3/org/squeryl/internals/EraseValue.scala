@@ -14,5 +14,4 @@ object EraseValue {
             case _: Double => 8
         }
 
-
 }
