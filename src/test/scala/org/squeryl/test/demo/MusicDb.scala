@@ -66,7 +66,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     from(playlistElements, songs)((ple, s) =>
       where(ple.playlistId === id and ple.songId === s.id)
       select(s)
-      orderBy(ple.songNumber asc)
+      .orderBy(ple.songNumber asc)
     )
 
   def addSong(s: Song) = {
@@ -98,8 +98,8 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def _songCountByArtistId: Query[GroupWithMeasures[Long,Long]] =
     from(artists, songs)((a,s) =>
       where(a.id === s.artistId)
-      groupBy(a.id)
-      compute(count)
+      .groupBy(a.id)
+      .compute(count)
     )
 
   // Queries are nestable just as they would in SQL
@@ -115,7 +115,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def latestSongFrom(artistId: Long) =
     from(songsOf(artistId))(s =>
       select(s)
-      orderBy(s.id desc)
+      .orderBy(s.id desc)
     ).headOption
 
   def songsOf(artistId: Long) =
@@ -214,13 +214,13 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     // Left Outer Join :
     join(songs, ratings.leftOuter)((s,r) =>
       select((s, r))
-      on(s.id === r.map(_.songId))
+      .on(s.id === r.map(_.songId))
     )
 
 
     update(songs)(s =>
       where(s.title === "Watermelon Man")
-      set(s.title := "The Watermelon Man",
+      .set(s.title := "The Watermelon Man",
           s.year  := s.year.plus(1)(intTEF))
     )
 
