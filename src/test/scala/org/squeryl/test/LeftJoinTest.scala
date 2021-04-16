@@ -39,7 +39,8 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
      )
 
      val mainquery = join(months, subquery)((m, sq) =>
-       select(m, sq.measures).on (m.id === sq.key))
+       select(m, sq.measures)
+      .on(m.id === sq.key))
 
      val res = transaction { mainquery.toList }
 
@@ -53,7 +54,8 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
 
      val mainquery =
        join(months, subquery.leftOuter)((m, sq) =>
-         select(m, sq).on (m.id === sq.map(_.key))
+         select(m, sq)
+         .on(m.id === sq.map(_.key))
        )
 
      val res = transaction {

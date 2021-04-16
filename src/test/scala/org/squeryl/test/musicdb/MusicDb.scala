@@ -154,7 +154,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val firstSongs =
       from(songs)(s =>
         groupBy(s.authorId)
-          compute(min(s.id)(optionIntTEF))
+        .compute(min(s.id)(optionIntTEF))
       )
 
     val j2 =
@@ -173,7 +173,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   lazy val songsFeaturingPoncho =
     from(songs, artists)((s,a) =>
       where(a.firstName === "Poncho" and s.interpretId === a.id)
-      select(s)
+      .select(s)
       .orderBy(s.title, a.id desc)
     )
 
@@ -182,7 +182,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       where(
         s.interpretId in from(artists)(a => where(a.firstName === "Poncho") select(a.id))
       )
-      select(s)
+      .select(s)
       .orderBy(s.title asc)
     ).distinct
 
@@ -199,34 +199,34 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   lazy val songCountPerAlbumFeaturingPoncho = songCountPerAlbum(
       from(songs, artists, cds)((s, a, cd) =>
         where(a.firstName === "Poncho" and s.interpretId === a.id and s.cdId === cd.id)
-        select(cd)
+        .select(cd)
       ).distinct
     )
 
   lazy val songsFeaturingPonchoNestedInFrom =
     from(songs, poncho)((s,a) =>
       where(s.interpretId === a.id)
-      select((s,a.firstName))
+      .select((s,a.firstName))
       .orderBy(s.title)
     )
 
   def songCountPerAlbumId(cds: Queryable[Cd]) =
     from(cds, songs)((cd, song) =>
       where(song.cdId === cd.id)
-      groupBy(cd.id) compute(count)
+      .groupBy(cd.id) compute(count)
     )
 
   lazy val songCountPerAlbumIdJoinedWithAlbum  =
     from(songCountPerAlbumId(cds), cds)((sc, cd) =>
       where(sc.key === cd.id)
-      select((cd.title, sc.measures))
+      .select((cd.title, sc.measures))
       .orderBy(cd.title)
     )
 
   lazy val songCountPerAlbumIdJoinedWithAlbumZ  =
     from(songCountPerAlbumId(cds), cds)((sc, cd) =>
       where(sc.key === cd.id)
-      select((cd, sc))
+      .select((cd, sc))
       .orderBy(cd.title)
     )
 
@@ -242,12 +242,12 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     from(
       from(songs)(s =>
         where((s.authorId in songIds) or (s.interpretId in songIds))
-        select(s)
+        .select(s)
       ),
       artists
     )((s,a) =>
       where(s.authorId === a.id or s.interpretId === a.id)
-      select(a)
+      .select(a)
       .orderBy(a.lastName desc)
     ).distinct
 
@@ -256,7 +256,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       where(
         s.title in from(songs)(s => where(s.id === 123) select(s.title))
       )
-      select(s)
+      .select(s)
       .orderBy(s.title asc)
     )
 
@@ -269,7 +269,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     from(
       from(artists, songs)((a,s) =>
         where(s.authorId === a.id)
-        groupBy(a.id) compute(count)
+        .groupBy(a.id) compute(count)
       )
     )((sonCountPerArtist) =>
         compute(avg(sonCountPerArtist.measures)(optionDoubleTEF))
@@ -502,7 +502,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       val q =
         from(artists)(a=>
           where(a.firstName in(Seq(mongoSantaMaria.firstName, ponchoSanchez.firstName)))
-          select(&(a.firstName || "zozo"))
+          .select(&(a.firstName || "zozo"))
           .orderBy(a.firstName)
         )
 
@@ -688,7 +688,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   def inhibitedArtistsInQuery(inhibit: Boolean) =
     from(songs, artists.inhibitWhen(inhibit))((s,a) =>
       where(a.get.firstName === "Poncho" and s.interpretId === a.get.id)
-      select(s)
+      .select(s)
       .orderBy(s.title, a.get.id desc)
     )
 
@@ -716,7 +716,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   def inhibitedSongsInQuery(inhibit: Boolean) =
     from(songs.inhibitWhen(inhibit), artists)((s,a) =>
       where(a.firstName === "Poncho" and s.get.interpretId === a.id)
-      select((s, a))
+      .select((s, a))
       .orderBy(s.get.title, a.id desc)
     )
 
@@ -736,7 +736,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val expected =
       from(songs, artists)((s,a) =>
         where(a.firstName === "Poncho" and s.interpretId === a.id)
-        select((s.id, a.id))
+        .select((s.id, a.id))
         .orderBy(s.title, a.id desc)
       )
 
@@ -770,7 +770,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   private def _betweenArtists(s1: String, s2: String) =
      from(artists)(a =>
        where(a.firstName between(s1, s2))
-       select(a)
+       .select(a)
        .orderBy(a.firstName asc)
      ).map(a=>a.firstName).toList
 
@@ -1039,13 +1039,13 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
      */
     val hossam = join(artists, cds.leftOuter)((a,c) =>
       where(a.id === hossamRamzy.id)
-      select((a, c))
+      .select((a, c))
       .on(a.id === c.map(_.mainArtist))).toList
     hossam.size should be (1)
     hossam.head._2 should be (None)
     join(artists, cds)((a,c) =>
       where(a.id === ponchoSanchez.id)
-      select((a, c))
+      .select((a, c))
       .on(a.id === c.mainArtist)).toList.size should be > (1)
     /*
      * Since we know the hossam exists, a proper left outer join
@@ -1053,7 +1053,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
      */
     val query1 = join(artists, cds.leftOuter.inhibitWhen(false))((a, c) =>
       where(a.id === hossamRamzy.id)
-      select((a,c))
+      .select((a,c))
       .on(c.map(_.mainArtist) === a.id))
     query1.toList.size should be > (0)
     /*
@@ -1062,7 +1062,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
      */
     val query2 = join(artists, cds.leftOuter.inhibitWhen(true))((a, c) =>
       where(a.id === ponchoSanchez.id)
-      select((a,c))
+      .select((a,c))
       .on(c.map(_.mainArtist) === a.id))
     query2.toList.size should be (1)
   }

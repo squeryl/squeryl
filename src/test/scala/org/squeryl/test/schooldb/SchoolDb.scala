@@ -432,7 +432,7 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
               from(qStudents)(s4 =>
                 where (s4.name === "Xiao")
                 select (s4))))
-            select(s2)
+            .select(s2)
             .on(s2.name === s3.name))) and s.name === "Xiao")
         select(s))
 
@@ -817,7 +817,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(students)(s=>
         where(s.name like "G%")
-        select(s.id)
+        .select(s.id)
         .orderBy(s.name)
       )
 
@@ -830,7 +830,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(students)(s=>
         where(s.name like "G%")
-        select(s.id)
+        .select(s.id)
         .orderBy(s.name)
       )
 
@@ -847,7 +847,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q2 =
       from(students)(s=>
         where(s.name like "Gontran")
-        select(s.id)
+        .select(s.id)
         .orderBy(s.name)
       )
 
@@ -989,7 +989,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val mandarinAndCounterpointCourses =
       from(courses)(c=>
         where(c.startDate > jan2010 and c.startDate < mar2010)
-        select(c)
+        .select(c)
         .orderBy(List[ExpressionNode](c.startDate.asc, c.id.asc))
       ).toList
 
@@ -1016,21 +1016,21 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val result1 =
       from(courses)(c=>
         where(c.finalExamDate >= Option(jan2008) and c.finalExamDate.isNotNull)
-        select(c)
+        .select(c)
         .orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result2 =
       from(courses)(c=>
         where(c.finalExamDate <= Some(jan2009))
-        select(c)
+        .select(c)
         .orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result3 =
       from(courses)(c=>
         where(c.finalExamDate >= Some(feb2009))
-        select(c)
+        .select(c)
         .orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
@@ -1290,11 +1290,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     professors.where(p => p.id === tournesol.id).single.yearlySalary
 
-    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF)))
+    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id).compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF)))
 
     update(professors)(p =>
       where(p.id === tournesol.id)
-      .set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF))))
+      .set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id).compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF))))
     )
 
     val after = professors.where(p => p.id === tournesol.id).single.yearlySalary

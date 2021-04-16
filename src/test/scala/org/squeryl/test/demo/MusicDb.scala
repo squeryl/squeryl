@@ -65,7 +65,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def songsInPlaylistOrder =
     from(playlistElements, songs)((ple, s) =>
       where(ple.playlistId === id and ple.songId === s.id)
-      select(s)
+      .select(s)
       .orderBy(ple.songNumber asc)
     )
 
