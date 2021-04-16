@@ -349,6 +349,10 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     t
   }
 
+  protected inline def inlineTableScala3[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
+    val optionalFieldsInfo = org.squeryl.internals.TypeInfo.fieldsInfo[Professor]
+    tableScala3(tableNameFromClass(manifestT.runtimeClass), optionalFieldsInfo)(manifestT, ked)
+
   protected def tableScala3[T](optionalFieldsInfo: Map[String, Class[_]])(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
     tableScala3(tableNameFromClass(manifestT.runtimeClass), optionalFieldsInfo)(manifestT, ked)
 

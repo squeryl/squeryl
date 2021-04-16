@@ -107,7 +107,8 @@ class SchoolDb2 extends Schema {
   val entryToComments = oneToManyRelation(entries, comments).via(
     (e,c) => e.id === c.entryId)
 
-  val professors = tableScala3[Professor](org.squeryl.internals.TypeInfo.fieldsInfo[Professor])
+  val professors = inlineTableScala3[Professor]()
+  // val professors = tableScala3[Professor](org.squeryl.internals.TypeInfo.fieldsInfo[Professor])
 
   val students = table[Student]()
 
