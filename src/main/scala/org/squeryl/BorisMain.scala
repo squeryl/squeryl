@@ -13,11 +13,11 @@ class Professor(
 object BorisMain extends App {
 
   // println(Tag.tag[Professor])
-  println("hello")
-  val fields = TypeInfo.fieldsInfo[Professor]
-  println(fields)
+  // println("hello")
+  // val fields = TypeInfo.fieldsInfo[Professor]
+  // println(fields)
 
-  println(EraseValue.sizeOf[Int])
+  // println(EraseValue.sizeOf[Int])
 
   // val professor = Professor("Pr", Some(1), Some(2L), None)
 }

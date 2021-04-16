@@ -13,7 +13,13 @@ trait SchoolDb2Object {
 
 object SchoolDb2 extends SchoolDb2
 
-class Professor(val lastName: String, @org.squeryl.annotations.OptionType(classOf[Long]) var bossId: Option[Long]=None) extends SchoolDb2Object {
+class Professor(
+  val lastName: String, 
+  var bossId: Option[Long] = None
+) extends SchoolDb2Object {
+
+  // would need this to make it compile without the Option reflection
+  // def this() = this("", Some(1L))
 
   lazy val courses = SchoolDb2.courseAssignments.left(this)
 }
@@ -38,6 +44,9 @@ class Student(val firstName: String, val lastName: String) extends SchoolDb2Obje
 }
 
 class Subject(val name: String, val parentSubjectId: Option[Long]) extends SchoolDb2Object {
+
+  // would need this to make it compile without the Option reflection
+  def this() = this("", Some(1L))
 
   lazy val courses = SchoolDb2.subjectToCourses.left(this)
 
@@ -98,7 +107,7 @@ class SchoolDb2 extends Schema {
   val entryToComments = oneToManyRelation(entries, comments).via(
     (e,c) => e.id === c.entryId)
 
-  val professors = table[Professor]()
+  val professors = tableScala3[Professor](org.squeryl.internals.TypeInfo.fieldsInfo[Professor])
 
   val students = table[Student]()
 

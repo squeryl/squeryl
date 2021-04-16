@@ -356,7 +356,7 @@ trait FieldMetaDataFactory {
 
   def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
 
-  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean): FieldMetaData
+  def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean, optionFieldInnerClass: Option[Class[_]]): FieldMetaData
 
   def createPosoFactory(posoMetaData: PosoMetaData[_]): ()=>AnyRef
 }
@@ -373,7 +373,7 @@ object FieldMetaData {
         c._1.newInstance(c._2 :_*).asInstanceOf[AnyRef];
       }
 
-    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean) = {
+    def build(parentMetaData: PosoMetaData[_], name: String, property: (Option[Field], Option[Method], Option[Method], Set[Annotation]), sampleInstance4OptionTypeDeduction: AnyRef, isOptimisticCounter: Boolean, optionFieldInnerClass: Option[Class[_]]) = {
 
       val fieldMapper = parentMetaData.schema.fieldMapper
 
@@ -411,7 +411,7 @@ object FieldMetaData {
                 case _ => None
               }
             }
-          }.getOrElse(createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation))
+          }.getOrElse(createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation, optionFieldInnerClass))
         } else null
 
       if(v != null && v == None) // can't deduce the type from None keep trying
@@ -434,7 +434,7 @@ object FieldMetaData {
          * If we have not yet been able to deduce the value of the field, delegate to createDefaultValue
          * in order to do so.
          */
-        v = createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
+        v = createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation, optionFieldInnerClass)
 
       val deductionFailed =
         v match {
@@ -527,7 +527,7 @@ object FieldMetaData {
         .format(pType.getName, typeOfField.getName))
 
       val c = typeOfField.getConstructor(pType)
-      val defaultValue = createDefaultValue(fieldMapper, c, pType, None, None)
+      val defaultValue = createDefaultValue(fieldMapper, c, pType, None, None, None)
 
       if(defaultValue == null) None
       else
@@ -549,13 +549,13 @@ object FieldMetaData {
     }
   }
 
-  def createDefaultValue(fieldMapper: FieldMapper, member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
+  def createDefaultValue(fieldMapper: FieldMapper, member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column], optionalFieldInfo: Option[Class[_]]): Object = {
     if (p.isAssignableFrom(classOf[Option[Any]])) {
       /*
       * First we'll look at the annotation if it exists as it's the lowest cost.
       */
       optionFieldsInfo.flatMap(ann =>
-        if(ann.optionType != classOf[Object]) Some(createDefaultValue(fieldMapper, member, ann.optionType, None, None))
+        if(ann.optionType != classOf[Object]) Some(createDefaultValue(fieldMapper, member, ann.optionType, None, None, None))
         else None
       ).orElse {
         /*
@@ -572,10 +572,13 @@ object FieldMetaData {
                     * if that's what we find then we need to get the real value from @ScalaSignature
                     */
                     val trueTypeOption =
-                    if (classOf[Object] == oType) OptionType.optionTypeFromScalaSig(member)
-                    else Some(oType.asInstanceOf[Class[_]])
+                    if (classOf[Object] == oType){ 
+                      OptionType.optionTypeFromScalaSig(member) // scala 2
+                      .orElse(optionalFieldInfo) // scala 3
+
+                    } else Some(oType.asInstanceOf[Class[_]])
                     trueTypeOption flatMap { trueType =>
-                      val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)
+                      val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo, None)
                       Option(deduced) // Couldn't create default for type param if null
                     }
                   } else{

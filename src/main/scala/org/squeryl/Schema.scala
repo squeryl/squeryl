@@ -349,9 +349,15 @@ class Schema(implicit val fieldMapper: FieldMapper) {
     t
   }
 
-  protected def tableScala3[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
+  protected def tableScala3[T](optionalFieldsInfo: Map[String, Class[_]])(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
+    tableScala3(tableNameFromClass(manifestT.runtimeClass), optionalFieldsInfo)(manifestT, ked)
+
+  protected def tableScala3[T](name: String, optionalFieldsInfo: Map[String, Class[_]])(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
-    val optionalFieldsInfo = TypeInfo.fieldsInfo[T]
+    // this doesn't not work because I think it's compiled too early
+    // it must be inserted at call site
+    // val optionalFieldsInfo = TypeInfo.fieldsInfo[T]
+    println(s"tableScala3: ${optionalFieldsInfo}")
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, Some(optionalFieldsInfo))
     _addTable(t)
     _addTableType(typeT, t)

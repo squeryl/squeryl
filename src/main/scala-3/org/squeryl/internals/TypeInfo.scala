@@ -14,6 +14,7 @@ object TypeInfo {
     val uns = TypeTree.of[T]
     val symbol = uns.symbol
     val innerClassOfOptionFields: Map[String, Class[_]] = symbol.memberFields.flatMap { m =>
+      println(m)
       // we only support val fields for now
       if(m.isValDef){
         val tpe = ValDef(m, None).tpt.tpe
@@ -35,7 +36,7 @@ object TypeInfo {
       } else None
     }.toMap
 
-
+    println(innerClassOfOptionFields)
     Expr(innerClassOfOptionFields)
   }
 
