@@ -46,7 +46,7 @@ class Student(val firstName: String, val lastName: String) extends SchoolDb2Obje
 class Subject(val name: String, val parentSubjectId: Option[Long]) extends SchoolDb2Object {
 
   // would need this to make it compile without the Option reflection
-  def this() = this("", Some(1L))
+  // def this() = this("", Some(1L))
 
   lazy val courses = SchoolDb2.subjectToCourses.left(this)
 
@@ -107,8 +107,7 @@ class SchoolDb2 extends Schema {
   val entryToComments = oneToManyRelation(entries, comments).via(
     (e,c) => e.id === c.entryId)
 
-  val professors = inlineTableScala3[Professor]()
-  // val professors = tableScala3[Professor](org.squeryl.internals.TypeInfo.fieldsInfo[Professor])
+  val professors = table[Professor]()
 
   val students = table[Student]()
 

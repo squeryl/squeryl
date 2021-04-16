@@ -76,8 +76,6 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val fmds = new ArrayBuffer[FieldMetaData];
 
-    println(name2MembersMap.keys)
-
     for(e <- name2MembersMap) {
       val name = e._1
       val v = e._2
@@ -115,9 +113,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
           (for(k <- viewOrTable.ked;
               counterProp <- k.optimisticCounterPropertyName if counterProp == name) yield true).isDefined
         try {
-          // println(viewOrTable.optionalFieldsInfo)
           val optionFieldInnerClass = viewOrTable.optionalFieldsInfo.flatMap(_.get(name))
-          println(s"${name} -> ${optionFieldInnerClass}")
           val r = FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimisitcCounter, optionFieldInnerClass)
           fmds.append(r)
         }
