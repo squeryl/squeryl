@@ -374,8 +374,8 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
     val leftOuterJoinStudentAddresses =
       join(addresses.leftOuter, students)((a,s) =>
         select((s,a))
-        orderBy(s.id)
-        on(s.addressId === a.map(_.id))
+        .orderBy(s.id)
+        .on(s.addressId === a.map(_.id))
       )
 
     val res =
@@ -432,8 +432,8 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
               from(qStudents)(s4 =>
                 where (s4.name === "Xiao")
                 select (s4))))
-            select(s2)
-            on(s2.name === s3.name))) and s.name === "Xiao")
+            .select(s2)
+            .on(s2.name === s3.name))) and s.name === "Xiao")
         select(s))
 
     val res = for (s <- q) yield s.name
@@ -552,7 +552,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(students)(p =>
       where(p.id === rejan.id)
-      set(p.isMultilingual := None)
+      .set(p.isMultilingual := None)
     )
   }
 
@@ -817,8 +817,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(students)(s=>
         where(s.name like "G%")
-        select(s.id)
-        orderBy(s.name)
+        .select(s.id)
+        .orderBy(s.name)
       )
 
     validateQuery("testLikeOperator", q, identity[Int], List(gaitan.id,georgi.id,gontran.id))
@@ -830,8 +830,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(students)(s=>
         where(s.name like "G%")
-        select(s.id)
-        orderBy(s.name)
+        .select(s.id)
+        .orderBy(s.name)
       )
 
     val shouldBeRight =
@@ -847,8 +847,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q2 =
       from(students)(s=>
         where(s.name like "Gontran")
-        select(s.id)
-        orderBy(s.name)
+        .select(s.id)
+        .orderBy(s.name)
       )
 
     q2.singleOption should equal(Some(gontran.id))
@@ -989,8 +989,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val mandarinAndCounterpointCourses =
       from(courses)(c=>
         where(c.startDate > jan2010 and c.startDate < mar2010)
-        select(c)
-        orderBy(List[ExpressionNode](c.startDate.asc, c.id.asc))
+        .select(c)
+        .orderBy(List[ExpressionNode](c.startDate.asc, c.id.asc))
       ).toList
 
     val expected = List(counterpoint.id,  mandarin.id)
@@ -1016,22 +1016,22 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val result1 =
       from(courses)(c=>
         where(c.finalExamDate >= Option(jan2008) and c.finalExamDate.isNotNull)
-        select(c)
-        orderBy(c.finalExamDate, c.id asc)
+        .select(c)
+        .orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result2 =
       from(courses)(c=>
         where(c.finalExamDate <= Some(jan2009))
-        select(c)
-        orderBy(c.finalExamDate, c.id asc)
+        .select(c)
+        .orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val result3 =
       from(courses)(c=>
         where(c.finalExamDate >= Some(feb2009))
-        select(c)
-        orderBy(c.finalExamDate, c.id asc)
+        .select(c)
+        .orderBy(c.finalExamDate, c.id asc)
       ).toList.map(c=>c.id)
 
     val expected = List(groupTheory.id)
@@ -1111,7 +1111,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(courses)(c =>
       where(c.id === heatTransfer.id)
-      set(c.confirmed := true)
+      .set(c.confirmed := true)
     )
 
     ht = courses.where(c => c.id === heatTransfer.id).single
@@ -1122,7 +1122,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(courses)(c =>
       where(c.id === heatTransfer.id)
-      set(c.confirmed := false)
+      .set(c.confirmed := false)
     )
 
     ht = courses.where(c => c.id === heatTransfer.id).single
@@ -1208,14 +1208,14 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(courses)(c =>
         select((c.id, c.meaninglessLong, c.meaninglessLongOption))
-        orderBy(c.id)
+        .orderBy(c.id)
       )
 
     val b4 = q.toList
 
     var nRows = courses.update(c =>
        where(c.id gt -1)
-       set(c.meaninglessLong := 123L,
+       .set(c.meaninglessLong := 123L,
            c.meaninglessLongOption :=  c.meaninglessLongOption.+(456L)(optionLongTEF))
               // when meaninglessLongOption is null,the SQL addition will have a null result
     )
@@ -1230,7 +1230,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     nRows =
       update(courses)(c =>
         where(c.id gt -1)
-        set(c.meaninglessLong := 0L,
+        .set(c.meaninglessLong := 0L,
             c.meaninglessLongOption :=  c.meaninglessLongOption.-(456L)(optionLongTEF))
       )
 
@@ -1247,7 +1247,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(courses)(c =>
       where(c.id in from(courses)(c0=> where(c0.id lt -1) select(c0.id)))
-      set(c.meaninglessLong := 0L,
+      .set(c.meaninglessLong := 0L,
           c.meaninglessLongOption :=  c.meaninglessLongOption.-(456L)(optionLongTEF))
     )
   }
@@ -1257,7 +1257,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(professors)(p=>
         groupBy(p.id, p.yearlySalary)
-        having(p.yearlySalary gt 75.0F)
+        .having(p.yearlySalary gt 75.0F)
       )
 
     assert(q.statement.indexOf("Having") != -1)
@@ -1290,11 +1290,11 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     professors.where(p => p.id === tournesol.id).single.yearlySalary
 
-    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF)))
+    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id).compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF)))
 
     update(professors)(p =>
       where(p.id === tournesol.id)
-      set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id) compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF))))
+      .set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id).compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF))))
     )
 
     val after = professors.where(p => p.id === tournesol.id).single.yearlySalary
@@ -1303,7 +1303,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(professors)(p =>
       where(p.id === tournesol.id)
-      set(p.yearlySalary := 80.0F)
+      .set(p.yearlySalary := 80.0F)
     )
 
     professors.delete(zarnitsyn.id)
@@ -1420,7 +1420,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(professors)(p=>
       where(p.id === babaZula.id)
-      set(p.weightInBD := Some(261.123456111 : BigDecimal))
+      .set(p.weightInBD := Some(261.123456111 : BigDecimal))
     )
 
     val babaZula2 = professors.where(_.weightInBD === Some(261.123456111: BigDecimal))
@@ -1429,7 +1429,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(professors)(p=>
       where(p.id === babaZula.id)
-      set(p.weightInBD := Some(261.1234561112 : BigDecimal))
+      .set(p.weightInBD := Some(261.1234561112 : BigDecimal))
     )
 
     val babaZula3 = professors.where(_.weightInBD === Some(261.1234561112: BigDecimal))
@@ -1438,7 +1438,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(professors)(p=>
       where(p.id === babaZula.id)
-      set(p.weightInBD := p.weightInBD plus 10 minus 5 times 4 div 2) // FIXME: mulitiplications aren't done first
+      .set(p.weightInBD := p.weightInBD plus 10 minus 5 times 4 div 2) // FIXME: mulitiplications aren't done first
     )
 
     val babaZula4 = professors.where(_.weightInBD === Some(532.2469122224: BigDecimal))
@@ -1521,8 +1521,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val leftOuterJoinStudentAddresses =
       join(students, addresses.leftOuter)((s,a) =>
         select((s,a))
-        orderBy(s.id)
-        on(s.addressId === a.map(_.id))
+        .orderBy(s.id)
+        .on(s.addressId === a.map(_.id))
       )
 
     val res =
@@ -1555,8 +1555,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val leftOuterJoinStudentAddresses =
       join(students, addresses.leftOuter,addresses.leftOuter)((s,a,a2) =>
         select((s,a,a2))
-        orderBy(s.id)
-        on(s.addressId === a.map(_.id), s.addressId === a2.map(_.id))
+        .orderBy(s.id)
+        .on(s.addressId === a.map(_.id), s.addressId === a2.map(_.id))
       )
 
     val res =
@@ -1617,8 +1617,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val leftOuterJoinStudentAddressesAndCourseSubs =
       join(students, addresses.leftOuter,courseSubscriptions)((s,a,cs) =>
         select((s,a,cs))
-        orderBy(s.id, cs.courseId)
-        on(s.addressId === a.map(_.id), s.id === cs.studentId)
+        .orderBy(s.id, cs.courseId)
+        .on(s.addressId === a.map(_.id), s.id === cs.studentId)
       )
 
     //println(leftOuterJoinStudentAddressesAndCourseSubs.statement)
@@ -1646,7 +1646,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
       join(group, others)((g, o)=>
         select(g.measures.get, o)
-        on(g.key === o.testId)
+        .on(g.key === o.testId)
         ).toList
   }
 
@@ -1754,7 +1754,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
                 where (s4.name === "Xiao")
                 select (s4))))
             select(s2)
-            on(s2.name === s3.name))) and s.name === "Xiao")
+            .on(s2.name === s3.name))) and s.name === "Xiao")
         select(s))
 
     val res = for (s <- q) yield s.name
