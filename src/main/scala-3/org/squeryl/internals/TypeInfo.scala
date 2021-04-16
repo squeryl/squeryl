@@ -1,7 +1,6 @@
 package org.squeryl.internals
 
 import scala.quoted._
-import scala.quoted.staging._
 import scala.quoted.{Quotes, Type}
 
 object TypeInfo {
