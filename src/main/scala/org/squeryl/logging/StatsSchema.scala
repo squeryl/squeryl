@@ -101,7 +101,7 @@ object StatsSchema extends Schema {
   def topRankingStatements(topN: Int, measure: Measure) =
     from(invocationStats, statements)((si,s)=>
       where(si.key._1 === s.hash and si.key._2 === s.statementHashCollisionNumber)
-      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4)).orderBy(measure match {
+      .select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4)).orderBy(measure match {
         case AvgExecTime => si.measures._1.desc
         case InvocationCount => si.measures._2.desc
         case CumulativeExecutionTime => si.measures._3.desc
@@ -145,7 +145,7 @@ object StatsSchema extends Schema {
         val q =
           from(statements)(st =>
             where(st.hash === s.hash)
-            select(st).orderBy(st.statementHashCollisionNumber)
+            .select(st).orderBy(st.statementHashCollisionNumber)
           )
 
         var lastCollisionNum = -1
