@@ -338,43 +338,6 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
-  // protected def table[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
-  //   table(tableNameFromClass(manifestT.runtimeClass))(manifestT, ked)
-
-  // protected def table[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-  //   val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
-  //   val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, None)
-  //   _addTable(t)
-  //   _addTableType(typeT, t)
-  //   t
-  // }
-
-  // protected inline def inlineTableScala3[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
-  //   val optionalFieldsInfo = org.squeryl.internals.TypeInfo.fieldsInfo[Professor]
-  //   tableScala3(tableNameFromClass(manifestT.runtimeClass), optionalFieldsInfo)(manifestT, ked)
-
-  // protected def tableScala3[T](optionalFieldsInfo: Map[String, Class[_]])(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
-  //   tableScala3(tableNameFromClass(manifestT.runtimeClass), optionalFieldsInfo)(manifestT, ked)
-
-  // protected def tableScala3[T](name: String, optionalFieldsInfo: Map[String, Class[_]])(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-  //   val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
-  //   // this doesn't not work because I think it's compiled too early
-  //   // it must be inserted at call site
-  //   // val optionalFieldsInfo = TypeInfo.fieldsInfo[T]
-  //   println(s"tableScala3: ${optionalFieldsInfo}")
-  //   val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, Some(optionalFieldsInfo))
-  //   _addTable(t)
-  //   _addTableType(typeT, t)
-  //   t
-  // }
-
-  // protected def table[T](name: String, prefix: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-  //   val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
-  //   val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef, None)
-  //   _addTable(t)
-  //   _addTableType(typeT, t)
-  //   t
-  // }
 
   private [squeryl] def _addTable(t:Table[_]) =
     _tables.append(t)
