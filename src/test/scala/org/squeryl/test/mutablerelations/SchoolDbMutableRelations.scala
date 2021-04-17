@@ -203,8 +203,8 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
 
     val s = from(subjects)(s0 =>
-      where(s0.id notIn(Seq(computationTheory.id, physics.id)))
-      select(s0)
+      where(s0.id.notIn(Seq(computationTheory.id, physics.id)))
+      .select(s0)
     )
 
     var cnt = 0
@@ -215,6 +215,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
         cnt += 1
         sCnt += 1
       }
+      
       if(s0.id == philosophy.id)
         3 shouldBe sCnt
       else if(s0.id == chemistry.id)
