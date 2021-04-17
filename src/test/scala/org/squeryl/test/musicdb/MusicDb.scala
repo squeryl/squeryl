@@ -378,7 +378,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     def yearOfCongaBluePlus1 =
       from(cds)(cd =>
         where(cd.title === testInstance.congaBlue.title)
-        select(&(cd.year.plus(1)(intTEF)))
+        .select(&(cd.year.plus(1)(intTEF)))
       )
 
     validateQuery("yearOfCongaBluePlus1", yearOfCongaBluePlus1, identity[Int], List(1999))
@@ -479,7 +479,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         val q =
           from(artists)(a=>
             where(a.firstName.regex(".*on.*"))
-            select(&(upper(a.firstName) || lower(a.firstName)))
+            .select(&(upper(a.firstName) || lower(a.firstName)))
             .orderBy(a.firstName)
           )
 
@@ -810,7 +810,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val gs = List(Jazz, Rock)
     val mainstream = from(songs)(s =>
       where(s.genre in (gs))
-      select(s)
+      .select(s)
     )
 
     mainstream.size shouldBe songs.where(s => s.genre === gs(0) or s.genre === gs(1)).size
@@ -836,7 +836,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     def listSongs(genreFilter: Option[Genre]) =
       from(songs)(s =>
         where(Option(s.genre) === genreFilter.?)
-        select(s)
+        .select(s)
       )
     listSongs(Some(Jazz)).size shouldBe songs.where(s => s.genre === Jazz).size
     listSongs(None).size shouldBe songs.allRows.size
@@ -849,7 +849,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         where(s.genre in (
            from(songs)(s2 => select(s2.genre))
         ))
-        select(s.genre)
+        .select(s.genre)
       )
 
     testAssemblaIssue9.map(_.id).toSet
@@ -946,7 +946,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
           (a.firstName === firstName.?) and
           (a.lastName like lastName.?)
         )
-        select(a)
+        .select(a)
       )
 
 // TODO: REFACTOR Z (reintroduce case statements tests)
@@ -1008,7 +1008,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val q2 =
       from(cds, q1)((cd, q)=>
         where(cd.id === q.measures.get)
-        select(cd)
+        .select(cd)
       )
 
     val r1 = q2.single
@@ -1024,7 +1024,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val q4 =
       from(cds, q3)((cd, q)=>
         where(cd.id === q.key)
-        select(cd)
+        .select(cd)
       )
     // should run without exception against the Db :
     q4.toList
@@ -1078,17 +1078,17 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     //Left inhibit
     from(artists)(a =>
       where((a.age === 1000000).inhibitWhen(true) and a.id === hossamRamzy.id)
-      select(a)).toList.size should be (1)
+      .select(a)).toList.size should be (1)
     //Right inhibit
     from(artists)(a =>
       where(a.id === hossamRamzy.id and (a.age === 1000000).inhibitWhen(true))
-      select(a)).toList.size should be (1)
+      .select(a)).toList.size should be (1)
   }
 
   test("Inhibit both sides of LogicalBoolean"){
     from(artists)(a =>
       where((a.age === 1000000).inhibitWhen(true) and (a.id between (999, 1000)).inhibitWhen(true))
-      select(a)).toList.size should be > (0)
+      .select(a)).toList.size should be > (0)
   }
 
   test("Inhibit right hand side of enum"){

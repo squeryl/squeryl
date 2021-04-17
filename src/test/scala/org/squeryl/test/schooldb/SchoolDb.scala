@@ -420,7 +420,7 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
   test("commonTableExpressions") {
     val qStudents = from(students) ((s) =>
       where(s.name === "Xiao")
-      select(s))
+      .select(s))
     val qAddresses = from(addresses)(a => select(a))
 
     val q =
@@ -431,10 +431,10 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
             where(s2.name === "Xiao" and exists(
               from(qStudents)(s4 =>
                 where (s4.name === "Xiao")
-                select (s4))))
+                .select (s4))))
             .select(s2)
             .on(s2.name === s3.name))) and s.name === "Xiao")
-        select(s))
+        .select(s))
 
     val res = for (s <- q) yield s.name
     val expected = List("Xiao")
@@ -603,7 +603,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     c.rawData(0) shouldBe 3
 
     val data = Array.fill(2)(2.toByte)
-    courses.update(c => where(c.id === counterpoint.id) set(c.rawData := data))
+    courses.update(c => where(c.id === counterpoint.id).set(c.rawData := data))
     c = courses.where(_.id === counterpoint.id).single
     2 shouldBe c.rawData(0)
     2 shouldBe c.rawData(1)
@@ -706,7 +706,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val r =
       from(students)(s=>
         where(s.name in Seq("Xiao", "Georgi"))
-        select(s.id)
+        .select(s.id)
       ).toSet
 
     Set(xiao.id,georgi.id) shouldBe r
@@ -791,7 +791,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val s =
       from(students)(s =>
         where(lower(s.name) === lower("GONtran"))
-        select((&(lower(s.name)), &(upper("zaza"))))
+        .select((&(lower(s.name)), &(upper("zaza"))))
       ).single
 
     "gontran" shouldBe s._1
@@ -1057,7 +1057,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val result =
       from(courses)(c=>
         where(nvl(c.meaninglessLongOption, 3)(optionLongTEF) <> 1234 and nvl(c.meaninglessLongOption, 3)(optionLongTEF) === 3)
-        select(&(nvl(c.meaninglessLongOption, 5)(optionLongTEF)))
+        .select(&(nvl(c.meaninglessLongOption, 5)(optionLongTEF)))
       ).toList : List[Long]
 
     val expected = List(5,5,5)
@@ -1476,7 +1476,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q3 =
       from(students)(s =>
         where(s.age.isNotNull and s.age.in(q2))
-        select(s)
+        .select(s)
       )
 
     val res = q3.single
@@ -1488,7 +1488,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(students)(s =>
         where(s.id.isNull.inhibitWhen(true)) // should return all students
-        select(s)
+        .select(s)
       )
 
     val allStuents = students.allRows.map(_.id).toSet
@@ -1500,7 +1500,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q2 =
       from(students)(s =>
         where(s.id.isNull.inhibitWhen(false)) // should return all students
-        select(s)
+        .select(s)
       )
 
     0 shouldBe q2.size
@@ -1653,8 +1653,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("Exists")  {
     val studentsWithAnAddress =
       from(students)(s =>
-        where(exists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
-          select(s)
+        where(exists(from(addresses)((a) => where(s.addressId === a.id).select(a.id))))
+        .select(s)
       )
 
     val res = for (s <- studentsWithAnAddress) yield s.name
@@ -1666,8 +1666,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   test("NotExists")  {
     val studentsWithNoAddress =
       from(students)(s =>
-        where(notExists(from(addresses)((a) => where(s.addressId === a.id) select(a.id))))
-        select(s)
+        where(notExists(from(addresses)((a) => where(s.addressId === a.id).select(a.id))))
+        .select(s)
       )
     val res = for (s <- studentsWithNoAddress) yield s.name
     val expected = List("Gaitan")
@@ -1682,8 +1682,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       from(qStudentsFromStudents)(s =>
         where(exists(from(addresses)((a) =>
           where(s.addressId === a.id)
-          select(a.id))))
-        select(s))
+          .select(a.id))))
+        .select(s))
 
     val res = for (s <- studentsWithAnAddress) yield s.name
     val expected = List("Xiao", "Georgi", "Pratap", "Gontran")
@@ -1700,9 +1700,9 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
             where(s.addressId in
               (from(addresses) ( (a2) =>
                 where(a2.id === a.id and s.addressId === a2.id)
-                select(a2.id))))
-            select(a.id))))
-          select(s)
+                .select(a2.id))))
+            .select(a.id))))
+          .select(s)
       )
 
     val res = for (s <- studentsWithAnAddress) yield s.name
@@ -1716,13 +1716,13 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val studentsWithAnAddress =
       from(qStudents)(s =>
         where(exists(from(addresses)((a) =>
-          where(s.addressId === a.id) select(a))))
-          select(s)
+          where(s.addressId === a.id).select(a))))
+          .select(s)
       )
     val qAStudentIfHeHasAnAddress =
       from(studentsWithAnAddress)(s =>
         where(s.name === "Xiao")
-        select(s)
+        .select(s)
       )
 
     val res = for (s <- qAStudentIfHeHasAnAddress) yield s.name
@@ -1752,10 +1752,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
             where(s2.name === "Xiao" and exists(
               from(qStudents)(s4 =>
                 where (s4.name === "Xiao")
-                select (s4))))
-            select(s2)
+                .select (s4))))
+            .select(s2)
             .on(s2.name === s3.name))) and s.name === "Xiao")
-        select(s))
+        .select(s))
 
     val res = for (s <- q) yield s.name
     val expected = List("Xiao")

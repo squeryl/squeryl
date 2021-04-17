@@ -236,7 +236,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val q: Query[String] =
       from(subjects)(s =>
         where(s.name === "Philosophy")
-          select(&(from(subjects)(s2 => where(s2.name === s.name) select(s2.name))))
+          .select(&(from(subjects)(s2 => where(s2.name === s.name).select(s2.name))))
       )
 
     1 shouldBe q.toList.length
@@ -248,9 +248,9 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val q: Query[String] =
       from(subjects)(s =>
         where(
-          s.name === from(subjects)(s2 => where(s2.name === "Philosophy") select(s2.name))
+          s.name === from(subjects)(s2 => where(s2.name === "Philosophy").select(s2.name))
         )
-        select(s.name)
+        .select(s.name)
       )
 
     1 shouldBe q.toList.length
@@ -477,7 +477,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val belowOrEqualToAvg =
       from(courseSubscriptions)(p =>
         where(p.grade lte from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade))))
-        select(p)
+        .select(p)
       ).toList
 
     assert(belowOrEqualToAvg.size == 1)
@@ -485,7 +485,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val belowAvg =
       from(courseSubscriptions)(p =>
         where(p.grade lt from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade))))
-        select(p)
+        .select(p)
       ).toList
 
     assert(belowAvg.size == 0)

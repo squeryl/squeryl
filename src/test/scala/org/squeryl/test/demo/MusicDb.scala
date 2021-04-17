@@ -106,7 +106,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def songCountForAllArtists  =
     from(_songCountByArtistId, artists)((sca,a) =>
       where(sca.key === a.id)
-      select((a, sca.measures))
+      .select((a, sca.measures))
     )
 
   // Unlike SQL, a function that returns a query can be nested
@@ -121,7 +121,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def songsOf(artistId: Long) =
     from(playlistElements, songs)((ple,s) =>
       where(id === ple.playlistId and ple.songId === s.id and s.artistId === artistId)
-      select(s)
+      .select(s)
     )
 }
 
@@ -197,7 +197,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     val songsFromThe60sInFunkAndLatinJazzPlaylist =
       from(songs)(s=>
         where(s.id in from(funkAndLatinJazz.songsInPlaylistOrder)(s2 => select(s2.id)))
-        select(s)
+        .select(s)
       )
 
     val songIds =
@@ -208,7 +208,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     // Nesting in From clause :
     from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
       where(s.id === 123)
-      select(s)
+      .select(s)
     )
 
     // Left Outer Join :
