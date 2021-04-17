@@ -426,7 +426,7 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
     val q =
       from(qStudents)(s =>
         withCte(qStudents, qAddresses)
-        where(exists(
+        .where(exists(
           join(qStudents, qStudents)((s2, s3) =>
             where(s2.name === "Xiao" and exists(
               from(qStudents)(s4 =>
@@ -1747,7 +1747,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(qStudents)(s =>
         withCte(qStudents, qAddresses)
-        where(exists(
+        .where(exists(
           join(qStudents, qStudents)((s2, s3) =>
             where(s2.name === "Xiao" and exists(
               from(qStudents)(s4 =>
