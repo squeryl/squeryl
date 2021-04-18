@@ -4,7 +4,7 @@ description := "A Scala ORM and DSL for talking with Databases using minimum ver
 
 organization := "org.squeryl"
 
-version := "0.9.16"
+version := "0.9.17"
 
 javacOptions := Seq("-source", "1.7", "-target", "1.7")
 
@@ -34,10 +34,10 @@ val Scala3 = "3.0.0-RC2"
 
 scalaVersion := Scala3
 
-crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.4", Scala3)
+crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.5", Scala3)
 
-scalacOptions in (Compile, doc) ++= {
-  val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
+Compile / doc / scalacOptions ++= {
+  val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
   val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
   Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
 }
@@ -86,7 +86,7 @@ val unusedWarnings = Def.setting(
 scalacOptions ++= unusedWarnings.value
 
 Seq(Compile, Test).flatMap(c =>
-  scalacOptions in (c, console) --= unusedWarnings.value
+  c / console / scalacOptions --= unusedWarnings.value
 )
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
@@ -130,18 +130,18 @@ publishTo := {
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
 
-publishArtifact in Test := false
+Test / publishArtifact := false
 
 pomIncludeRepository := { _ => false }
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.3.0",
   "com.h2database" % "h2" % "1.4.200" % "provided",
-  "mysql" % "mysql-connector-java" % "8.0.22" % "provided",
-  "org.postgresql" % "postgresql" % "42.2.18" % "provided",
+  "mysql" % "mysql-connector-java" % "8.0.23" % "provided",
+  "org.postgresql" % "postgresql" % "42.2.19" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test"
+  "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test",
 )
 
 libraryDependencies ++= {

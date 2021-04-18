@@ -34,7 +34,12 @@ jobs:
           - java: 8
     runs-on: ubuntu-latest
     steps:
-    - run: mysql -h 127.0.0.1 -e 'GRANT ALL ON *.* TO squeryl@"localhost"IDENTIFIED BY "squeryl";FLUSH PRIVILEGES;' -uroot -proot
+    - run: |
+        while ! mysqladmin ping -h"127.0.0.1" ; do
+          echo "await mysql start"
+          sleep 1
+        done
+        mysql -h 127.0.0.1 -e 'GRANT ALL ON *.* TO squeryl@"localhost"IDENTIFIED BY "squeryl";FLUSH PRIVILEGES;' -uroot -proot
     - run: |
        export PGPASSWORD="postgres"
        psql -h 127.0.0.1 -c "CREATE ROLE squeryl WITH SUPERUSER LOGIN PASSWORD 'squeryl';" -U postgres
@@ -43,7 +48,7 @@ jobs:
     - uses: olafurpg/setup-scala@v10
       with:
         java-version: "adopt@1.${{ matrix.java }}"
-    - uses: coursier/cache-action@v5
+    - uses: coursier/cache-action@v6
     - run: sbt -v "+ test:compile"
     - run: rm -r src/test/scala/org/squeryl/oracle/
     - run: rm -r src/test/scala/org/squeryl/mssql/
