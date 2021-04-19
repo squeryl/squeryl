@@ -21,7 +21,7 @@ import fsm._
 import org.squeryl.internals._
 import org.squeryl._
 import java.sql.{SQLException, ResultSet}
-
+import reflect.ClassTag
 
 trait BaseQueryDsl {
   implicit def noneKeyedEntityDef[A,K]: OptionalKeyedEntityDef[A,K] = new OptionalKeyedEntityDef[A,K] {
@@ -39,7 +39,7 @@ trait QueryDsl
   with BaseQueryDsl {
   outerQueryDsl =>
   
-  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:Manifest[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
+  implicit def kedForKeyedEntities[A,K](implicit ev: A <:< KeyedEntity[K], m:ClassTag[A]): KeyedEntityDef[A,K] = new KeyedEntityDef[A,K] {
     def getId(a:A) = a.id
     def isPersisted(a:A) = a.isPersisted
     def idPropertyName = "id"
@@ -378,8 +378,8 @@ trait QueryDsl
       kedL: KeyedEntityDef[L,_],
       kedR: KeyedEntityDef[R,_]) {
 
-    def via[A](f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression])(implicit manifestA: Manifest[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
-      val m2m = new ManyToManyRelationImpl(l,r,manifestA.runtimeClass.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
+    def via[A](f: (L,R,A)=>Tuple2[EqualityExpression,EqualityExpression])(implicit ClassTagA: ClassTag[A], schema: Schema, kedA: KeyedEntityDef[A,_]) = {
+      val m2m = new ManyToManyRelationImpl(l,r,ClassTagA.runtimeClass.asInstanceOf[Class[A]], f, schema, nameOverride, kedL, kedR, kedA)
       schema._addTable(m2m)
       m2m
     }

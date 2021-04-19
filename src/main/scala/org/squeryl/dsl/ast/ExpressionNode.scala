@@ -21,6 +21,7 @@ import scala.collection.mutable.ArrayBuffer
 import org.squeryl.internals._
 import org.squeryl.dsl._
 import org.squeryl.Session
+import reflect.ClassTag
 
 trait ExpressionNode {
 
@@ -68,11 +69,11 @@ trait ExpressionNode {
     _filterDescendants(this, new ArrayBuffer[ExpressionNode], predicate)
 
 
-  def filterDescendantsOfType[T](implicit manifest: Manifest[T]) =
+  def filterDescendantsOfType[T](implicit ClassTag: ClassTag[T]) =
     _filterDescendants(
       this,
       new ArrayBuffer[ExpressionNode],
-      (n:ExpressionNode)=> manifest.runtimeClass.isAssignableFrom(n.getClass)
+      (n:ExpressionNode)=> ClassTag.runtimeClass.isAssignableFrom(n.getClass)
     ).asInstanceOf[Iterable[T]]
 
   /**
@@ -270,10 +271,10 @@ trait BaseColumnAttributeAssignment {
 
   def columnAttributes: collection.Seq[ColumnAttribute]
 
-  def hasAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+  def hasAttribute[A <: ColumnAttribute](implicit m: ClassTag[A]) =
     findAttribute[A](m) != None
 
-  def findAttribute[A <: ColumnAttribute](implicit m: Manifest[A]) =
+  def findAttribute[A <: ColumnAttribute](implicit m: ClassTag[A]) =
     columnAttributes.find(ca => m.runtimeClass.isAssignableFrom(ca.getClass))
 }
 
