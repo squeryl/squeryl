@@ -62,7 +62,7 @@ class FieldMetaData(
     if(sampleValue == null)
       org.squeryl.internals.Utils.throwError("classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field")
     else
-      enumeration flatMap { e: Enumeration =>
+      enumeration flatMap { (e: Enumeration) =>
         e.values find { _.id == id }
       } get
 
