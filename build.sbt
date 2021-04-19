@@ -169,3 +169,12 @@ libraryDependencies ++= {
       Nil
   }
 }
+
+
+lazy val macros = project.in(file("macros"))
+  .settings(
+    scalaVersion := Scala3
+  )
+
+
+dependsOn(macros)
