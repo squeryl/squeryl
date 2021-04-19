@@ -617,7 +617,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: Manifest[A]) {
     
     private def _performAction(action: (Table[A]) => Unit) =
-      _tableTypes get (m.runtimeClass) map { table: Table[_] =>
+      _tableTypes get (m.runtimeClass) map { (table: Table[_]) =>
         queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
       }
     
