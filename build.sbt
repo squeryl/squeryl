@@ -32,9 +32,12 @@ publishMavenStyle := true
 val Scala211 = "2.11.12"
 val Scala3 = "3.0.0-RC2"
 
-scalaVersion := Scala3
+ThisBuild / scalaVersion := Scala211
+scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.12", Scala211, "2.10.7", "2.13.5", Scala3)
+val supportedVersions = Seq("2.12.12", Scala211, "2.10.7", "2.13.5", Scala3)
+
+crossScalaVersions := supportedVersions
 
 Compile / doc / scalacOptions ++= {
   val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
@@ -173,8 +176,8 @@ libraryDependencies ++= {
 
 lazy val macros = project.in(file("macros"))
   .settings(
-    scalaVersion := Scala3
+    crossScalaVersions := supportedVersions
   )
 
-
+  
 dependsOn(macros)
