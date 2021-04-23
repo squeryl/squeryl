@@ -399,22 +399,21 @@ object FieldMetaData {
        * it is not None, we can use it to deduce the Option type.   
        */
       var v: AnyRef =
-         if(sampleInstance4OptionTypeDeduction != null) {
-           field flatMap { f =>
-             f.get(sampleInstance4OptionTypeDeduction) match {
-               case a: AnyRef => Some(a)
-               case _ => None
-             }
-           } orElse {
-	             getter flatMap { _.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY : _*) match {
-	               case a: AnyRef => Some(a)
-	               case _ => None
-	             }
-             }
-           } getOrElse
-            createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation)
-         }
-         else null
+        if(sampleInstance4OptionTypeDeduction != null) {
+          field.flatMap { f: Field =>
+            f.get(sampleInstance4OptionTypeDeduction) match {
+              case a: AnyRef => Some(a)
+              case _ => None
+            }
+          }.orElse {
+            getter flatMap {
+              _.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY : _*) match {
+                case a: AnyRef => Some(a)
+                case _ => None
+              }
+            }
+          }.getOrElse(createDefaultValue(fieldMapper, member, clsOfField, Some(typeOfField), colAnnotation))
+        } else null
 
       if(v != null && v == None) // can't deduce the type from None keep trying
         v = null
@@ -581,41 +580,41 @@ object FieldMetaData {
   def createDefaultValue(fieldMapper: FieldMapper, member: Member, p: Class[_], t: Option[Type], optionFieldsInfo: Option[Column]): Object = {
     if (p.isAssignableFrom(classOf[Option[Any]])) {
       /*
-       * First we'll look at the annotation if it exists as it's the lowest cost.
-       */
-       optionFieldsInfo.flatMap(ann => 
-         if(ann.optionType != classOf[Object])
-           Some(createDefaultValue(fieldMapper, member, ann.optionType, None, None))
-          else None).orElse{
-	      /*
-	       * Next we'll try the Java generic type.  This will fail if the generic parameter is a primitive as
-	       * we'll see Object instead of scala.X
-	       */
-	      t match {
-	        case Some(pt: ParameterizedType) => {
-	          pt.getActualTypeArguments.toList match {
-	            case oType :: Nil => {
-	              if(classOf[Class[_]].isInstance(oType)) {
-	                /*
-	                 * Primitive types are seen by Java reflection as classOf[Object], 
-	                 * if that's what we find then we need to get the real value from @ScalaSignature
-	                 */
-	                val trueTypeOption = 
-	                  if (classOf[Object] == oType) optionTypeFromScalaSig(member)
-	                  else Some(oType.asInstanceOf[Class[_]])
-	                trueTypeOption flatMap { trueType =>
-	                  val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)
-	                  Option(deduced) // Couldn't create default for type param if null
-	                }
-	              } else{
-	            	  None //Type parameter is not a Class
-	              }
-	            }
-	            case _ => None //Not a single type parameter
-	          }
-	        }
-	        case _ => None //Not a parameterized type
-	      } 
+       +      * First we'll look at the annotation if it exists as it's the lowest cost.
+      */
+      optionFieldsInfo.flatMap(ann =>
+        if(ann.optionType != classOf[Object]) Some(createDefaultValue(fieldMapper, member, ann.optionType, None, None))
+        else None
+      ).orElse {
+        /*
+        * Next we'll try the Java generic type.  This will fail if the generic parameter is a primitive as
+        * we'll see Object instead of scala.X
+        */
+        t match {
+            case Some(pt: ParameterizedType) => {
+              pt.getActualTypeArguments.toList match {
+                case oType :: Nil => {
+                  if(classOf[Class[_]].isInstance(oType)) {
+                    /*
+                    * Primitive types are seen by Java reflection as classOf[Object],
+                    * if that's what we find then we need to get the real value from @ScalaSignature
+                    */
+                    val trueTypeOption =
+                    if (classOf[Object] == oType) optionTypeFromScalaSig(member)
+                    else Some(oType.asInstanceOf[Class[_]])
+                    trueTypeOption flatMap { trueType =>
+                      val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo)
+                      Option(deduced) // Couldn't create default for type param if null
+                    }
+                  } else{
+                  None //Type parameter is not a Class
+                  }
+                }
+                case _ => None //Not a single type parameter
+              }
+            }
+          case _ => None //Not a parameterized type
+        }
       }
     } 
     else {      

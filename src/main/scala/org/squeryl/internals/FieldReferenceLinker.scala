@@ -240,41 +240,40 @@ object FieldReferenceLinker {
    */
   private object _declaredFieldCache {
   
-	  @volatile var _cache: Map[Class[_], Array[Field]] =
-			  Map[Class[_], Array[Field]]()
+    @volatile var _cache: Map[Class[_], Array[Field]] =
+      Map[Class[_], Array[Field]]()
 
-	  def apply(cls: Class[_]) =
-	    _cache.get(cls) getOrElse {
-	      val declaredFields = cls.getDeclaredFields()
-	      _cache += ((cls, declaredFields))
-	      declaredFields
-	    }
-	  
+    def apply(cls: Class[_]) =
+      _cache.get(cls) getOrElse {
+        val declaredFields = cls.getDeclaredFields()
+          _cache += ((cls, declaredFields))
+        declaredFields
+      }
   }
 
   private def _populateSelectColsRecurse(visited: java.util.IdentityHashMap[AnyRef, AnyRef] , yi: YieldInspection,q: QueryExpressionElements, o: AnyRef): Unit =
-	  if(o != null && o != None) {
-		  if(!visited.containsKey(o)) {
-			  val clazz = o.getClass
-			  val clazzName = clazz.getName
-			  //println("Looking at " + clazzName)
-			  if(!clazzName.startsWith("java.") && 
-					  !clazzName.startsWith("net.sf.cglib.") && 
-					  !clazzName.startsWith("scala.Enumeration")) {
-				  visited.put(o,o)
-				  _populateSelectCols(yi, q, o)
-				  for(f <- _declaredFieldCache(clazz)) {
-					  f.setAccessible(true);
-					  val ob = f.get(o)
-					  if(!f.getName.startsWith("CGLIB$") && 
-					        !f.getType.getName.startsWith("scala.Function") && 
-					        !FieldMetaData.factory.hideFromYieldInspection(o, f)) {
-						  _populateSelectColsRecurse(visited, yi, q, ob)
-					  }
-				  }
-			  }
-		  }
-	  }
+    if(o != null && o != None) {
+      if(!visited.containsKey(o)) {
+        val clazz = o.getClass
+        val clazzName = clazz.getName
+        //println("Looking at " + clazzName)
+        if(!clazzName.startsWith("java.") &&
+        !clazzName.startsWith("net.sf.cglib.") &&
+        !clazzName.startsWith("scala.Enumeration")) {
+          visited.put(o,o)
+          _populateSelectCols(yi, q, o)
+          for(f <- _declaredFieldCache(clazz)) {
+            f.setAccessible(true);
+            val ob = f.get(o)
+            if(!f.getName.startsWith("CGLIB$") &&
+            !f.getType.getName.startsWith("scala.Function") &&
+            !FieldMetaData.factory.hideFromYieldInspection(o, f)) {
+              _populateSelectColsRecurse(visited, yi, q, ob)
+            }
+          }
+        }
+      }
+    }
   
   
   private def _populateSelectCols(yi: YieldInspection,q: QueryExpressionElements, sample: AnyRef): Unit = {
