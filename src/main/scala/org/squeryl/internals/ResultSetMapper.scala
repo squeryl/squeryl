@@ -160,7 +160,7 @@ class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
       case 21 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs))
       case 22 => (m(0).map(rs), m(1).map(rs), m(2).map(rs), m(3).map(rs), m(4).map(rs), m(5).map(rs), m(6).map(rs), m(7).map(rs), m(8).map(rs), m(9).map(rs), m(10).map(rs), m(11).map(rs), m(12).map(rs), m(13).map(rs), m(14).map(rs), m(15).map(rs), m(16).map(rs), m(17).map(rs), m(18).map(rs), m(19).map(rs), m(20).map(rs), m(21).map(rs))
 
-      case z:Any => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
+      case _ => org.squeryl.internals.Utils.throwError("tuples of size "+size+" and greater are not supported")
     }
     
     res.asInstanceOf[T]
