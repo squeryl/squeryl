@@ -855,7 +855,7 @@ trait DatabaseAdapter {
 
   def databaseTypeFor(fieldMapper: FieldMapper, c: Class[_]): String = {
     val ar = fieldMapper.sampleValueFor(c)
-    val decl = 
+    val decl: String = 
       if(ar.isInstanceOf[Enumeration#Value])                 
         intTypeDeclaration
       else if(classOf[String].isAssignableFrom(c))
