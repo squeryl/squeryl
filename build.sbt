@@ -30,7 +30,7 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
-val Scala3 = "3.0.0-RC2"
+val Scala3 = "3.0.0-RC3"
 
 ThisBuild / scalaVersion := Scala211
 scalaVersion := Scala211
@@ -148,7 +148,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.2.7" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.2.8" % "test")
 }
 
 
