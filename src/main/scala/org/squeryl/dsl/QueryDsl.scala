@@ -397,7 +397,7 @@ trait QueryDsl
       kedL: KeyedEntityDef[L,_],
       kedR: KeyedEntityDef[R,_],
       kedA: KeyedEntityDef[A,_])
-    extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None, Some(kedA)) with ManyToManyRelation[L,R,A] {
+    extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None, Some(kedA), None) with ManyToManyRelation[L,R,A] {
     thisTableOfA =>    
 
     def thisTable = thisTableOfA

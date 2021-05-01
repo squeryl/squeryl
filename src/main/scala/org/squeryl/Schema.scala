@@ -27,7 +27,7 @@ import java.util.regex.Pattern
 import collection.mutable.{ArrayBuffer, HashMap, HashSet}
 import org.squeryl.internals.FieldMapper
 
-class Schema(implicit val fieldMapper: FieldMapper) {
+class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSchema {
 
   protected implicit def thisSchema: Schema = this
 
@@ -337,25 +337,6 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
-
-  protected def table[T]()(implicit ClassTagT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
-    table(tableNameFromClass(ClassTagT.runtimeClass))(ClassTagT, ked)
-  
-  protected def table[T](name: String)(implicit ClassTagT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-    val typeT = ClassTagT.runtimeClass.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
-    _addTable(t)
-    _addTableType(typeT, t)
-    t
-  }
-
-  protected def table[T](name: String, prefix: String)(implicit ClassTagT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-    val typeT = ClassTagT.runtimeClass.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef)
-    _addTable(t)
-    _addTableType(typeT, t)
-    t
-  }
 
   private [squeryl] def _addTable(t:Table[_]) =
     _tables.append(t)

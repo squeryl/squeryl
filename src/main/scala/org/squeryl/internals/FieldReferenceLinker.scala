@@ -279,8 +279,8 @@ object FieldReferenceLinker {
   private def _populateSelectCols(yi: YieldInspection,q: QueryExpressionElements, sample: AnyRef): Unit = {
     val owner = _findQENThatOwns(sample, q)
     owner foreach { o =>
-      for(e <- o.getOrCreateAllSelectElements(q))
-    	  yi.addSelectElement(e)
+    for(e <- o.getOrCreateAllSelectElements(q))
+      yi.addSelectElement(e)
     }
   }
 

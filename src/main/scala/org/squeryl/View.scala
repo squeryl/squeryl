@@ -24,8 +24,7 @@ import java.sql.ResultSet
  * This class can be used for read only tables or (database) views
  * for an updatable view, or table use Table[T] 
  */
-class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema, _prefix: Option[String], val ked: Option[KeyedEntityDef[T,_]]) extends Queryable[T] {
-
+class View[T] private [squeryl](_name: String, private[squeryl] val classOfT: Class[T], schema: Schema, _prefix: Option[String], val ked: Option[KeyedEntityDef[T,_]], val optionalFieldsInfo: Option[Map[String, Class[_]]]) extends Queryable[T] {
 
 //2.9.x approach for LyfeCycle events :
 //  private [squeryl] var _callbacks: PosoLifecycleEventListener = NoOpPosoLifecycleEventListener

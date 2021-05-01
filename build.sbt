@@ -6,7 +6,7 @@ organization := "org.squeryl"
 
 version := "0.9.17"
 
-javacOptions := Seq("-source", "1.6", "-target", "1.6")
+javacOptions := Seq("-source", "1.7", "-target", "1.7")
 
 //only release *if* -Drelease=true is passed to JVM
 version := {
@@ -30,10 +30,14 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
+val Scala3 = "3.0.0-RC3"
 
+ThisBuild / scalaVersion := Scala211
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.13", Scala211, "2.10.7", "2.13.5")
+val supportedVersions = Seq("2.12.12", Scala211, "2.10.7", "2.13.5", Scala3)
+
+crossScalaVersions := supportedVersions
 
 Compile / doc / scalacOptions ++= {
   val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
@@ -136,23 +140,44 @@ pomIncludeRepository := { _ => false }
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.3.0",
   "com.h2database" % "h2" % "1.4.200" % "provided",
-  "mysql" % "mysql-connector-java" % "8.0.24" % "provided",
-  "org.postgresql" % "postgresql" % "42.2.20" % "provided",
+  "mysql" % "mysql-connector-java" % "8.0.23" % "provided",
+  "org.postgresql" % "postgresql" % "42.2.19" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test",
-  "org.json4s" %% "json4s-scalap" % "3.6.11",
 )
 
 libraryDependencies ++= {
   Seq("org.scalatest" %% "scalatest" % "3.2.8" % "test")
 }
 
+
+
 libraryDependencies ++= {
+  val scalap = "org.json4s" %% "json4s-scalap" % "3.6.10"
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.3.0")
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
+      Seq(
+        "org.scala-lang.modules" %% "scala-xml" % "2.0.0-RC1",
+        "org.scala-lang" %% "scala3-staging" % scalaVersion.value
+        )
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
+      Seq(
+        "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+        scalap
+      )
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 10 =>
+      Seq(scalap)
     case _ =>
       Nil
   }
 }
+
+
+lazy val macros = project.in(file("macros"))
+  .settings(
+    crossScalaVersions := supportedVersions
+  )
+
+  
+dependsOn(macros)
