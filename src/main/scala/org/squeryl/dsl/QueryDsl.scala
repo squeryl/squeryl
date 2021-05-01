@@ -139,7 +139,7 @@ trait QueryDsl
     
   implicit def typedExpression2OrderByArg[E](e: E)(implicit E: E => TypedExpression[_, _]): OrderByArg = new OrderByArg(e)
 
-  implicit def orderByArg2OrderByExpression(a: OrderByArg) = new OrderByExpression(a)
+  implicit def orderByArg2OrderByExpression(a: OrderByArg): OrderByExpression = new OrderByExpression(a)
 
   def sDevPopulation[T2 >: TOptionFloat, T1 <: T2, A1, A2]
          (b: TypedExpression[A1,T1])
@@ -194,15 +194,15 @@ trait QueryDsl
 
   def notExists[A1](query: Query[A1]) = new ExistsExpression(query.copy(false, Nil).ast, "not exists")
          
-  implicit val numericComparisonEvidence   = new CanCompare[TNumeric, TNumeric]         
-  implicit val dateComparisonEvidence      = new CanCompare[TOptionDate, TOptionDate]
-  implicit val timestampComparisonEvidence = new CanCompare[TOptionTimestamp, TOptionTimestamp]
-  implicit val stringComparisonEvidence    = new CanCompare[TOptionString, TOptionString]
-  implicit val booleanComparisonEvidence   = new CanCompare[TOptionBoolean, TOptionBoolean]
-  implicit val uuidComparisonEvidence      = new CanCompare[TOptionUUID, TOptionUUID]
-  implicit def enumComparisonEvidence[A]   = new CanCompare[TEnumValue[A],TEnumValue[A]]
-  
-  implicit def concatenationConversion[A1,A2,T1,T2](co: ConcatOp[A1,A2,T1,T2]): TypedExpression[String,TString] = 
+  implicit val numericComparisonEvidence: CanCompare[TNumeric, TNumeric]   = new CanCompare[TNumeric, TNumeric]
+  implicit val dateComparisonEvidence: CanCompare[TOptionDate, TOptionDate]      = new CanCompare[TOptionDate, TOptionDate]
+  implicit val timestampComparisonEvidence: CanCompare[TOptionTimestamp, TOptionTimestamp] = new CanCompare[TOptionTimestamp, TOptionTimestamp]
+  implicit val stringComparisonEvidence: CanCompare[TOptionString, TOptionString]    = new CanCompare[TOptionString, TOptionString]
+  implicit val booleanComparisonEvidence: CanCompare[TOptionBoolean, TOptionBoolean]   = new CanCompare[TOptionBoolean, TOptionBoolean]
+  implicit val uuidComparisonEvidence: CanCompare[TOptionUUID, TOptionUUID]      = new CanCompare[TOptionUUID, TOptionUUID]
+  implicit def enumComparisonEvidence[A]: CanCompare[TEnumValue[A],TEnumValue[A]]   = new CanCompare[TEnumValue[A],TEnumValue[A]]
+
+  implicit def concatenationConversion[A1,A2,T1,T2](co: ConcatOp[A1,A2,T1,T2]): TypedExpression[String,TString] =
     new ConcatOperationNode[String,TString](co.a1, co.a2, InternalFieldMapper.stringTEF.createOutMapper)
     
   implicit def concatenationConversionWithOption1[A1,A2,T1,T2](co: ConcatOp[Option[A1],A2,T1,T2]): TypedExpression[Option[String],TOptionString] = 
@@ -229,9 +229,9 @@ trait QueryDsl
 
   trait ScalarQuery[T] extends Query[T] with SingleColumnQuery[T] with SingleRowQuery[T]
 
-  implicit def scalarQuery2Scalar[T](sq: ScalarQuery[T]) = sq.head
+  implicit def scalarQuery2Scalar[T](sq: ScalarQuery[T]): T = sq.head
 
-  implicit def countQueryableToIntTypeQuery[R](q: Queryable[R]) = new CountSubQueryableQuery(q)
+  implicit def countQueryableToIntTypeQuery[R](q: Queryable[R]): CountSubQueryableQuery = new CountSubQueryableQuery(q)
 
   def count: CountFunction = count()
 
@@ -313,7 +313,7 @@ trait QueryDsl
 
   implicit def singleColComputeQuery2ScalarQuery[T](cq: Query[Measures[T]]): ScalarQuery[T] = new ScalarMeasureQuery[T](cq)
   
-  implicit def singleColComputeQuery2Scalar[T](cq: Query[Measures[T]]) = new ScalarMeasureQuery[T](cq).head
+  implicit def singleColComputeQuery2Scalar[T](cq: Query[Measures[T]]): T = new ScalarMeasureQuery[T](cq).head
 
   class ScalarMeasureQuery[T](q: Query[Measures[T]]) extends Query[T] with ScalarQuery[T] {
 
@@ -359,7 +359,7 @@ trait QueryDsl
   /**
    * Used for supporting 'inhibitWhen' dynamic queries
    */
-  implicit def queryable2OptionalQueryable[A](q: Queryable[A]) = new OptionalQueryable[A](q)
+  implicit def queryable2OptionalQueryable[A](q: Queryable[A]): OptionalQueryable[A] = new OptionalQueryable[A](q)
 
   //implicit def view2QueryAll[A](v: View[A]) = from(v)(a=> select(a))
 
@@ -804,14 +804,14 @@ trait QueryDsl
   implicit def t2te[A1,A2](t: (A1,A2))(
       implicit
         ev1: A1 => TypedExpression[A1, _],
-        ev2: A2 => TypedExpression[A2, _]) =
+        ev2: A2 => TypedExpression[A2, _]): CompositeKey2[A1,A2] =
     new CompositeKey2[A1,A2](t._1, t._2)
 
   implicit def t3te[A1,A2,A3](t: (A1,A2,A3))(
       implicit
         ev1: A1 => TypedExpression[A1, _],
         ev2: A2 => TypedExpression[A2, _],
-        ev3: A3 => TypedExpression[A3, _]) =
+        ev3: A3 => TypedExpression[A3, _]): CompositeKey3[A1,A2,A3] =
     new CompositeKey3[A1,A2,A3](t._1, t._2, t._3)
 
   implicit def t4te[A1,A2,A3,A4](t: (A1,A2,A3,A4))(
@@ -819,7 +819,7 @@ trait QueryDsl
         ev1: A1 => TypedExpression[A1, _],
         ev2: A2 => TypedExpression[A2, _],
         ev3: A3 => TypedExpression[A3, _],
-        ev4: A4 => TypedExpression[A4, _]) =
+        ev4: A4 => TypedExpression[A4, _]): CompositeKey4[A1,A2,A3,A4] =
     new CompositeKey4[A1,A2,A3,A4](t._1, t._2, t._3, t._4)
 
   implicit def t5te[A1,A2,A3,A4,A5](t: (A1,A2,A3,A4,A5))(
@@ -828,7 +828,7 @@ trait QueryDsl
         ev2: A2 => TypedExpression[A2, _],
         ev3: A3 => TypedExpression[A3, _],
         ev4: A4 => TypedExpression[A4, _],
-        ev5: A5 => TypedExpression[A5, _]) =
+        ev5: A5 => TypedExpression[A5, _]): CompositeKey5[A1,A2,A3,A4,A5] =
     new CompositeKey5[A1,A2,A3,A4,A5](t._1, t._2, t._3, t._4, t._5)
 
   implicit def t6te[A1,A2,A3,A4,A5,A6](t: (A1,A2,A3,A4,A5,A6))(
@@ -838,7 +838,7 @@ trait QueryDsl
         ev3: A3 => TypedExpression[A3, _],
         ev4: A4 => TypedExpression[A4, _],
         ev5: A5 => TypedExpression[A5, _],
-        ev6: A6 => TypedExpression[A6, _]) =
+        ev6: A6 => TypedExpression[A6, _]): CompositeKey6[A1,A2,A3,A4,A5,A6] =
     new CompositeKey6[A1,A2,A3,A4,A5,A6](t._1, t._2, t._3, t._4, t._5, t._6)
 
   implicit def t7te[A1,A2,A3,A4,A5,A6,A7](t: (A1,A2,A3,A4,A5,A6,A7))(
@@ -849,7 +849,7 @@ trait QueryDsl
         ev4: A4 => TypedExpression[A4, _],
         ev5: A5 => TypedExpression[A5, _],
         ev6: A6 => TypedExpression[A6, _],
-        ev7: A7 => TypedExpression[A7, _]) =
+        ev7: A7 => TypedExpression[A7, _]): CompositeKey7[A1,A2,A3,A4,A5,A6,A7] =
     new CompositeKey7[A1,A2,A3,A4,A5,A6,A7](t._1, t._2, t._3, t._4, t._5, t._6, t._7)
 
   implicit def t8te[A1,A2,A3,A4,A5,A6,A7,A8](t: (A1,A2,A3,A4,A5,A6,A7,A8))(
@@ -861,7 +861,7 @@ trait QueryDsl
         ev5: A5 => TypedExpression[A5, _],
         ev6: A6 => TypedExpression[A6, _],
         ev7: A7 => TypedExpression[A7, _],
-        ev8: A8 => TypedExpression[A8, _]) =
+        ev8: A8 => TypedExpression[A8, _]): CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8] =
     new CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
 
   implicit def t9te[A1,A2,A3,A4,A5,A6,A7,A8,A9](t: (A1,A2,A3,A4,A5,A6,A7,A8,A9))(
@@ -874,7 +874,7 @@ trait QueryDsl
         ev6: A6 => TypedExpression[A6, _],
         ev7: A7 => TypedExpression[A7, _],
         ev8: A8 => TypedExpression[A8, _],
-        ev9: A9 => TypedExpression[A9, _]) =
+        ev9: A9 => TypedExpression[A9, _]): CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9] =
     new CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
 
   implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup = CompositeKeyLookup

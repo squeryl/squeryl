@@ -29,7 +29,7 @@ trait FieldMapper {
     
   private[this] val registry = new HashMap[Class[_],FieldAttributesBasedOnType[_]]
 
-  implicit def thisFieldMapper = this
+  implicit def thisFieldMapper: FieldMapper = this
 
   /**
    * Extending classes will expose members of PrimitiveTypeSupport as implicit, to enable
