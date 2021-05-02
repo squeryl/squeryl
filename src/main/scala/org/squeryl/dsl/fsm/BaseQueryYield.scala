@@ -57,8 +57,10 @@ class BaseQueryYield[G]
 
   def unevaluatedHavingClause = _havingClause
 
-  //TODO: an array is probably more efficient, even if less 'lazy' :
-  protected var _orderByExpressions: () => List[()=>ExpressionNode] = null
+  // this used to be be protected, but that doesn't work anymore in scala 3.0.0,
+  // i.e. it cannot be used in OrderBySignatures. So it's now marked as public.
+  // TODO: an array is probably more efficient, even if less 'lazy' :
+  var _orderByExpressions: () => List[()=>ExpressionNode] = null
 
   def whereClause: Option[ExpressionNode] =
     queryElementzz.whereClause.map(b=>b())
