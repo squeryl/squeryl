@@ -36,7 +36,7 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
  test("return the correct results if an inner join is used"){
      val subquery = from(ordrs)((o) =>
        groupBy(o.monthId)
-         .compute (sum(o.qty))
+         .compute[Option[Int]](sum(o.qty))
          .orderBy (o.monthId))
 
      val mainquery = join(months, subquery)((m, sq) =>
@@ -52,7 +52,7 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
    test("return the correct results if a left outer join is used"){
      val subquery = from(ordrs)((o) =>
        groupBy(o.monthId)
-         .compute (sum(o.qty))
+         .compute[Option[Int]](sum(o.qty))
          .orderBy (o.monthId))
 
      val mainquery =

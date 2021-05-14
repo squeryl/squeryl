@@ -465,11 +465,11 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     
     95.0F shouldBe cs2.grade
     
-    from(courseSubscriptions)(p => compute(avg(p.grade)))
+    from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade)))
    
     val belowOrEqualToAvg = 
       from(courseSubscriptions)(p =>
-        where(p.grade lte from(courseSubscriptions)(p => compute(avg(p.grade))))
+        where(p.grade lte from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade))))
         .select(p)
       ).toList
       
@@ -477,7 +477,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     
     val belowAvg = 
       from(courseSubscriptions)(p =>
-        where(p.grade lt from(courseSubscriptions)(p => compute(avg(p.grade))))
+        where(p.grade lt from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade))))
         .select(p)
       ).toList
       

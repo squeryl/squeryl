@@ -513,7 +513,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   def avgStudentAge() =
     from(students)(s =>
-      compute(avg(s.age))
+      compute[Option[Double]](avg(s.age))
     )
 
   def avgStudentAgeFunky() =
@@ -1275,7 +1275,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         val v2 = v1.having(p.yearlySalary gt 75.0F)
 
 
-        val v3 = v2.compute(avg(p.yearlySalary))
+        val v3 = v2.compute[Option[Float]](avg(p.yearlySalary))
 
         v3
       }
@@ -1471,7 +1471,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val z0 =
       from(students)(s2 =>
         where(s2.age gt 0)
-        .compute(min(s2.age))
+        .compute[Option[Int]](min(s2.age))
       )
 
     val q2 = (z0 : Query[Measures[Option[Int]]] ):  Query[Option[Int]]
@@ -1645,7 +1645,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       tests.insert(List(YieldInspectionTest(1, 100), YieldInspectionTest(1,500), YieldInspectionTest(2,600)))
       others.insert(List(YieldInspectionAnother(1, "One", 1), YieldInspectionAnother(2, "Two", 2)))
 
-      val group = from(tests)(t=> groupBy(t.id) .compute(sum(t.num)))
+      val group = from(tests)(t=> groupBy(t.id) .compute[Option[Int]](sum(t.num)))
 
       join(group, others)((g, o)=>
         select(g.measures.get, o)

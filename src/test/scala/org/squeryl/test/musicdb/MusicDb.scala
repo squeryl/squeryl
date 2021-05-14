@@ -154,7 +154,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val firstSongs =
       from(songs)(s =>
         groupBy(s.authorId)
-          .compute(min(s.id))
+          .compute[Option[Int]](min(s.id))
       )
 
     val j2 =
@@ -274,7 +274,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
           .compute(count)
       )
     )((sonCountPerArtist) =>
-        compute(avg(sonCountPerArtist.measures))
+        compute[Option[Double]](avg(sonCountPerArtist.measures))
     )
 
 
@@ -972,7 +972,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testInstance = sharedTestInstance; import testInstance._
     val q1 =
       from(cds)(cd =>
-        compute(min(cd.id))
+        compute[Option[Int]](min(cd.id))
       )
 
     val r1 = cds.where(_.id in q1).single
@@ -1004,7 +1004,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val testInstance = sharedTestInstance; import testInstance._
     val q1 =
       from(cds)(cd =>
-        compute(min(cd.id))
+        compute[Option[Int]](min(cd.id))
       )
 
     val q2 =
