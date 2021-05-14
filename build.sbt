@@ -30,7 +30,7 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
-val Scala3 = "3.0.0-RC3"
+val Scala3 = "3.0.0"
 
 ThisBuild / scalaVersion := Scala211
 scalaVersion := Scala211
@@ -148,7 +148,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.2.8" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.2.9" % "test")
 }
 
 
@@ -158,7 +158,7 @@ libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
       Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.0.0-RC1",
+        "org.scala-lang.modules" %% "scala-xml" % "2.0.0",
         "org.scala-lang" %% "scala3-staging" % scalaVersion.value
         )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
