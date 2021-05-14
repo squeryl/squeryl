@@ -40,7 +40,8 @@ object SubQueryTestSchema{
 abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction{
   self: DBConnector =>
   import SubQueryTestSchema._
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   final def schema = TestSchema
 

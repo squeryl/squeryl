@@ -19,6 +19,8 @@ object LogicalBooleanObjTests {
 abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
   import org.squeryl.test.LogicalBooleanObjTests._
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   final def schema = TestSchema
 

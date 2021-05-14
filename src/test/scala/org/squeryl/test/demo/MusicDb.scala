@@ -163,6 +163,8 @@ class TestData{
 
 abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   val schema = MusicDb
 

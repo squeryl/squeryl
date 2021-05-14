@@ -164,6 +164,8 @@ class SchoolDb2 extends Schema {
 
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   val schema = new SchoolDb2
   

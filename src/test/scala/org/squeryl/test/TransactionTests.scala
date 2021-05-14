@@ -20,6 +20,8 @@ object FooSchema extends Schema {
 
 abstract class TransactionTests extends DbTestBase {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   def throwExc(except: Boolean): Int = {
     if(except) throw new Exception()

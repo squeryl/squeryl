@@ -360,6 +360,9 @@ class TestInstance(schema : SchoolDb){
 
 abstract class FullOuterJoinTests extends SchoolDbTestBase{
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
+
 
   import schema._
 
@@ -394,6 +397,8 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 
 abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   lazy val schema = new SchoolDb
 
@@ -407,6 +412,8 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 
 abstract class CommonTableExpressions extends SchoolDbTestBase {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   import schema._
 
@@ -438,6 +445,8 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
 
 abstract class SchoolDbTestRun extends SchoolDbTestBase {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   import schema._
 

@@ -17,6 +17,9 @@ class B(val id: Int, val name: String, val aId: Int) extends KeyedEntity[Int]
 
 abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
+
 
   def schema = TestSchema
 
