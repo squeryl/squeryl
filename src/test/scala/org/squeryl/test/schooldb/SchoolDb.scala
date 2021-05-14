@@ -866,7 +866,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
         .select(s.id)
       )
     
-    val z2 =
+    val z2 = {
       from(students)(s=>
         where({
           val a = s.isMultilingual.isNull
@@ -874,6 +874,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
           })
         .select(s.id)
       )
+    }
                 
       val r1 = z1.toSet
       val r2 = z2.toSet
