@@ -101,14 +101,16 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   import org.squeryl.test.PrimitiveTypeModeForTests._
 
-  val schema = new MusicDb
+  val musicDb = new MusicDb
 
-  import schema._
-  
+  override val schema = musicDb
+
+  import musicDb._
+
   var sharedTestInstance : TestData = null
   
   override def prePopulate() = {
-    sharedTestInstance = new TestData(schema)
+    sharedTestInstance = new TestData(musicDb)
   }
 
   lazy val poncho =

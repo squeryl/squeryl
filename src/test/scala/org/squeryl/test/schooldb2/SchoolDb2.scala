@@ -167,11 +167,13 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
 
-  val schema = new SchoolDb2
-  
-  import schema._
+  val schoolDb2 = new SchoolDb2
 
-  def seedDataDef() = new {
+  override val schema = new SchoolDb2
+
+  import schoolDb2._
+
+  class SeedData {
     
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
@@ -188,6 +190,8 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
     val xiaoJimbao = students.insert(new Student("Xiao", "Jimbao"))
   }
+
+  def seedDataDef() = new SeedData
 
 
 //  def testAll = {

@@ -26,14 +26,16 @@ import org.scalatest.matchers.should.Matchers
 abstract class TestCustomTypesMode extends SchemaTester with Matchers with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  val schema = new HospitalDb
+  private val hospitalDb = new HospitalDb()
 
-  import schema._
+  override val schema = hospitalDb
+
+  import hospitalDb._
 
   var sharedTestObjects : TestData = null
 
   override def prePopulate(): Unit = {
-    sharedTestObjects = new TestData(schema)
+    sharedTestObjects = new TestData(hospitalDb)
   }
 
 
