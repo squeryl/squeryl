@@ -72,14 +72,14 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
     
     update(uuidWithOption)(p =>
       where(p.id === testObject.id)
-      set(p.optionalUuid := Some(uuid))
+      .set(p.optionalUuid := Some(uuid))
     )
     
     uuidWithOption.lookup(testObject.id).get.optionalUuid should equal(Some(uuid))
 
     update(uuidWithOption)(p =>
       where(p.id === testObject.id)
-      set(p.optionalUuid := None)
+      .set(p.optionalUuid := None)
     )
     
     uuidWithOption.lookup(testObject.id).get.optionalUuid should equal(None)    

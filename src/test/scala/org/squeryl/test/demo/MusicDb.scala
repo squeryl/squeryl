@@ -21,7 +21,7 @@ import org.squeryl.dsl.GroupWithMeasures
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 
 // The root object of the schema. Inheriting KeyedEntity[T] is not mandatory
-// it just makes primary key methods available (delete and lookup) on tables.
+// it just makes primary key methods available (delete and lookup) .on tables.
 class MusicDbObject extends KeyedEntity[Long] {
   val id: Long = 0
 }
@@ -29,7 +29,7 @@ class MusicDbObject extends KeyedEntity[Long] {
 case class Artist(val name:String) extends MusicDbObject {
 
   // this returns a Query[Song] which is also an Iterable[Song] :
-  def songs = from(MusicDb.songs)(s => where(s.artistId === id) select(s))
+  def songs = from(MusicDb.songs)(s => where(s.artistId === id) .select(s))
 
   def newSong(title: String, filePath: Option[String], year: Int) =
     MusicDb.songs.insert(new Song(title, id, filePath, year))
@@ -65,8 +65,8 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def songsInPlaylistOrder =
     from(playlistElements, songs)((ple, s) =>
       where(ple.playlistId === id and ple.songId === s.id)
-      select(s)
-      orderBy(ple.songNumber asc)
+      .select(s)
+      .orderBy(ple.songNumber asc)
     )
 
   def addSong(s: Song) = {
@@ -78,7 +78,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     val nextSongNumber: Int =
       from(playlistElements)(ple =>
         where(ple.playlistId === id)
-        compute(nvl(max(ple.songNumber), 0))
+        .compute(nvl(max(ple.songNumber), 0))
       )    
     
     playlistElements.insert(new PlaylistElement(nextSongNumber, id, s.id))
@@ -99,15 +99,15 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def _songCountByArtistId: Query[GroupWithMeasures[Long,Long]] =
     from(artists, songs)((a,s) =>
       where(a.id === s.artistId)
-      groupBy(a.id)
-      compute(count)
+      .groupBy(a.id)
+      .compute(count)
     )
 
   // Queries are nestable just as they would in SQL
   def songCountForAllArtists  =
     from(_songCountByArtistId, artists)((sca,a) =>
       where(sca.key === a.id)
-      select((a, sca.measures))
+      .select((a, sca.measures))
     )
 
   // Unlike SQL, a function that returns a query can be nested
@@ -116,13 +116,13 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   def latestSongFrom(artistId: Long) =
     from(songsOf(artistId))(s =>
       select(s)
-      orderBy(s.id desc)
+      .orderBy(s.id desc)
     ).headOption
 
   def songsOf(artistId: Long) =
     from(playlistElements, songs)((ple,s) =>
       where(id === ple.playlistId and ple.songId === s.id and s.artistId === artistId)
-      select(s)
+      .select(s)
     )
 }
 
@@ -194,7 +194,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     val songsFromThe60sInFunkAndLatinJazzPlaylist =
       from(songs)(s=>
         where(s.id in from(funkAndLatinJazz.songsInPlaylistOrder)(s2 => select(s2.id)))
-        select(s)
+        .select(s)
       )
 
     val songIds =
@@ -205,19 +205,19 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     // Nesting in From clause :
     from(funkAndLatinJazz.songsInPlaylistOrder)(s=>
       where(s.id === 123)
-      select(s)
+      .select(s)
     )
     
     // Left Outer Join :
     join(songs, ratings.leftOuter)((s,r) =>
       select((s, r))
-      on(s.id === r.map(_.songId))
+      .on(s.id === r.map(_.songId))
     )
 
 
     update(songs)(s =>
       where(s.title === "Watermelon Man")
-      set(s.title := "The Watermelon Man",
+      .set(s.title := "The Watermelon Man",
           s.year  := s.year plus 1)
     )
 

@@ -25,7 +25,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
 
     val q1 = from(TestSchema.a, q0) ( (a, b) =>
       where(a.id === b.aId)
-      select(a, b)
+      .select(a, b)
     )
 
     checkJoinQuery(q1)
@@ -33,7 +33,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
     val q2 =
       join(TestSchema.a, q0) ( (a, b) =>
         select(a, b)
-          on(a.id === b.aId)
+          .on(a.id === b.aId)
       )
 
     checkJoinQuery(q2)
@@ -52,14 +52,14 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
 
     val q1 = from(TestSchema.a, q0) ( (a, b) =>
       where(a.id === b.aId)
-      select(a, b)
+      .select(a, b)
     )
 
     checkJoinQuery(q1)
 
     val aQuery = join(TestSchema.a, q0.leftOuter) ( (a, b) =>
       select(a, b)
-        on(a.id === b.map(_.aId))
+        .on(a.id === b.map(_.aId))
     )
 
     checkLeftJoinQuery(aQuery)

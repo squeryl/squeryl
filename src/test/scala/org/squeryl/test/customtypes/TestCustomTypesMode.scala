@@ -42,7 +42,7 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
   def simpleSelect =
     from(patients)(p =>
       where(p.age > 70)
-      select(p)
+      .select(p)
     )
 
   test("Queries"){
