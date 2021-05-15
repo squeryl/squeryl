@@ -79,7 +79,6 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     val nextSongNumber: Int =
       from(playlistElements)(ple =>
         where(ple.playlistId === id)
-        // .compute[Int](nvl(max(ple.songNumber)(optionIntTEF), 0))
         .compute[Int](nvl(max[TOptionInt, TInt, Int, Option[Int]](ple.songNumber), 0))
       )    
     
