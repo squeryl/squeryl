@@ -428,7 +428,7 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
     val q =
       from(qStudents)(s =>
         withCte(qStudents, qAddresses)
-        where(exists(
+        .where(exists(
           join(qStudents, qStudents)((s2, s3) =>
             where(s2.name === "Xiao" and exists(
               from(qStudents)(s4 =>
@@ -513,7 +513,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   def avgStudentAge() =
     from(students)(s =>
-      compute[Option[Double]](avg(s.age))
+      compute[Option[Float]](avg(s.age))
     )
 
   def avgStudentAgeFunky() =
@@ -521,7 +521,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       compute[Option[Float],Option[Float],Option[Double],Long](
         avg(s.age), 
         avg(s.age)(optionFloatTEF) + 3, 
-        avg(s.age)(optionDoubleTEF)./(count)(optionDoubleTEF, optionDoubleTEF),
+        avg(s.age)(optionFloatTEF)./(count)(optionDoubleTEF, optionDoubleTEF),
         count + 6
       )
     )
@@ -1756,7 +1756,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val q =
       from(qStudents)(s =>
         withCte(qStudents, qAddresses)
-        where(exists(
+        .where(exists(
           join(qStudents, qStudents)((s2, s3) =>
             where(s2.name === "Xiao" and exists(
               from(qStudents)(s4 =>
