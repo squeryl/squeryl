@@ -380,7 +380,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     def yearOfCongaBluePlus1 =
       from(cds)(cd =>
         where(cd.title === testInstance.congaBlue.title)
-        .select(&(cd.year plus 1))
+        .select(&[Int, TInt](cd.year.plus(1)))
       )
 
     validateQuery("yearOfCongaBluePlus1", yearOfCongaBluePlus1, identity[Int], List(1999))
@@ -939,7 +939,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     /// Non compilation Test (should not compile):
     // val z1 = from(artists)(a => select(&(nvl(a.age,a.age)))).toList : List[Option[Int]]
 
-    from(artists)(a => select(&(nvl(a.age,0)))).toList : List[Int]
+    from(artists)(a => select(&[Int, TInt](nvl(a.age,0)))).toList : List[Int]
   }
 
   def dynamicWhereOnArtists(firstName: Option[String], lastName: Option[String]) =
@@ -994,7 +994,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     artists.where(_.age in from(artists)(a=> compute(count)))
 
     // should compile, since SQL allows comparing nullable cols against non nullable ones :
-    artists.where(_.id in from(artists)(a=> compute(max(a.age))))
+    artists.where(_.id in from(artists)(a=> compute[Option[Int]](max(a.age))))
 
     //shouldn't compile :
     //artists.where(_.age in from(artists)(a=> compute(max(a.name))))

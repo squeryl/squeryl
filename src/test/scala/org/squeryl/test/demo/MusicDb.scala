@@ -19,6 +19,7 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl.{Query, KeyedEntity, Schema}
 import org.squeryl.dsl.GroupWithMeasures
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
+import org.squeryl.dsl.{ TOptionInt, TInt}
 
 // The root object of the schema. Inheriting KeyedEntity[T] is not mandatory
 // it just makes primary key methods available (delete and lookup) .on tables.
@@ -78,7 +79,8 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
     val nextSongNumber: Int =
       from(playlistElements)(ple =>
         where(ple.playlistId === id)
-        .compute(nvl(max(ple.songNumber), 0))
+        // .compute[Int](nvl(max(ple.songNumber)(optionIntTEF), 0))
+        .compute[Int](nvl(max[TOptionInt, TInt, Int, Option[Int]](ple.songNumber), 0))
       )    
     
     playlistElements.insert(new PlaylistElement(nextSongNumber, id, s.id))
@@ -222,7 +224,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     update(songs)(s =>
       where(s.title === "Watermelon Man")
       .set(s.title := "The Watermelon Man",
-          s.year  := s.year.plus 1)
+          s.year  := s.year.plus(1)(intTEF))
     )
 
     for(s <- funkAndLatinJazz.songsOf(herbyHancock.id))

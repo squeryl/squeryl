@@ -518,7 +518,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   def avgStudentAgeFunky() =
     from(students)(s =>
-      compute(avg(s.age), avg(s.age) + 3, avg(s.age) / count, count + 6)
+      compute[Option[Float],Option[Float],Option[Double],Long](
+        avg(s.age), 
+        avg(s.age)(optionFloatTEF) + 3, 
+        avg(s.age)(optionDoubleTEF)./(count)(optionDoubleTEF, optionDoubleTEF),
+        count + 6
+      )
     )
 
   def addressesOfStudentsOlderThan24 =
@@ -1058,8 +1063,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val result =
       from(courses)(c=>
-        where(nvl(c.meaninglessLongOption, 3) <> 1234 and nvl(c.meaninglessLongOption, 3) === 3)
-        .select(&(nvl(c.meaninglessLongOption, 5)))
+        where(nvl(c.meaninglessLongOption, 3)(optionLongTEF) <> 1234 and nvl(c.meaninglessLongOption, 3)(optionLongTEF) === 3)
+        .select(&(nvl(c.meaninglessLongOption, 5)(optionLongTEF)))
       ).toList : List[Long]
 
     val expected = List(5,5,5)
@@ -1218,7 +1223,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     var nRows = courses.update(c =>
        where(c.id gt -1)
        .set(c.meaninglessLong := 123L,
-           c.meaninglessLongOption :=  c.meaninglessLongOption + 456L)
+           c.meaninglessLongOption :=  c.meaninglessLongOption.+(456L)(optionLongTEF))
               // when meaninglessLongOption is null,the SQL addition will have a null result
     )
 
@@ -1233,7 +1238,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       update(courses)(c =>
         where(c.id gt -1)
         .set(c.meaninglessLong := 0L,
-            c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
+            c.meaninglessLongOption :=  c.meaninglessLongOption.-(456L)(optionLongTEF))
       )
 
     assert(nRows == 4)
@@ -1250,7 +1255,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     update(courses)(c =>
       where(c.id in from(courses)(c0=> where(c0.id lt -1) .select(c0.id)))
       .set(c.meaninglessLong := 0L,
-          c.meaninglessLongOption :=  c.meaninglessLongOption - 456L)
+          c.meaninglessLongOption :=  c.meaninglessLongOption.-(456L)(optionLongTEF))
     )
   }
 
@@ -1292,11 +1297,12 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     professors.where(p => p.id === tournesol.id).single.yearlySalary
 
-    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id) .compute(nvl(avg(p0.yearlySalary), 123)))
+    val expected:Float = from(professors)(p0=> where(tournesol.id === p0.id or p0.id === zarnitsyn.id).compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF)))
 
     update(professors)(p =>
       where(p.id === tournesol.id)
-      .set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id) .compute(nvl(avg(p0.yearlySalary), 123))))
+      .set(p.yearlySalary := from(professors)(p0=> where(p.id === p0.id or p0.id === zarnitsyn.id)
+      .compute(nvl(avg(p0.yearlySalary)(optionFloatTEF), 123)(optionFloatTEF))))
     )
 
     val after = professors.where(p => p.id === tournesol.id).single.yearlySalary
@@ -1450,7 +1456,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     update(professors)(p=>
       where(p.id === babaZula.id)
-      .set(p.yearlySalaryBD := p.yearlySalaryBD plus 10 minus 5 times 4 div 2) // FIXME: multiplications aren't done first
+      .set(p.yearlySalaryBD := p.yearlySalaryBD.plus(10)(bigDecimalTEF).minus(5)(bigDecimalTEF).times(4)(bigDecimalTEF).div(2)(bigDecimalTEF, bigDecimalTEF)) // FIXME: multiplications aren't done first
     )
 
     val babaZula5 = professors.where(_.yearlySalaryBD === 170)
