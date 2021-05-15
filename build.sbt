@@ -172,12 +172,3 @@ libraryDependencies ++= {
       Nil
   }
 }
-
-
-lazy val macros = project.in(file("macros"))
-  .settings(
-    crossScalaVersions := supportedVersions
-  )
-
-  
-dependsOn(macros)
