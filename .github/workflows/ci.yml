@@ -49,7 +49,7 @@ jobs:
       with:
         java-version: "adopt@1.${{ matrix.java }}"
     - uses: coursier/cache-action@v6
-    - run: sbt -v "+ test:compile"
+    - run: sbt -v "+ Test/compile"
     - run: rm -r src/test/scala/org/squeryl/oracle/
     - run: rm -r src/test/scala/org/squeryl/mssql/
     - run: sbt -v "+ test"
