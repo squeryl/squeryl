@@ -43,7 +43,7 @@ jobs:
     - run: |
        export PGPASSWORD="postgres"
        psql -h 127.0.0.1 -c "CREATE ROLE squeryl WITH SUPERUSER LOGIN PASSWORD 'squeryl';" -U postgres
-    - uses: actions/checkout@v2.3.5
+    - uses: actions/checkout@v2.4.0
     - run: cp org.squeryl.tests.cfg.ci org.squeryl.tests.cfg
     - uses: olafurpg/setup-scala@v13
       with:
