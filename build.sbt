@@ -109,25 +109,7 @@ pomExtra := (<scm>
                </developer>
              </developers>)
 
-credentials ~= { c =>
-  (Option(System.getenv().get("SONATYPE_USERNAME")), Option(System.getenv().get("SONATYPE_PASSWORD"))) match {
-    case (Some(username), Some(password)) =>
-      c :+ Credentials(
-        "Sonatype Nexus Repository Manager",
-        "oss.sonatype.org",
-        username,
-        password)
-    case _ => c
-  }
-}
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo := sonatypePublishToBundle.value
 
 Test / publishArtifact := false
 
