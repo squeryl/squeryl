@@ -6,7 +6,25 @@ organization := "org.squeryl"
 
 version := "0.9.18"
 
-javacOptions := Seq("-source", "1.6", "-target", "1.6")
+javacOptions := {
+  if (scala.util.Properties.isJavaAtLeast("17")) {
+    Seq("-source", "1.8", "-target", "1.8")
+  } else {
+    Seq("-source", "1.6", "-target", "1.6")
+  }
+}
+
+Test / fork := true
+
+// https://github.com/squeryl/squeryl/issues/340
+// TODO remove this workaround
+Test / javaOptions ++= {
+  if (scala.util.Properties.isJavaAtLeast("11")) {
+    Seq("--add-opens=java.base/java.lang=ALL-UNNAMED")
+  } else {
+    Nil
+  }
+}
 
 //only release *if* -Drelease=true is passed to JVM
 version := {
