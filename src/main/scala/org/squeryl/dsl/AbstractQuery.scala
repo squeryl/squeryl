@@ -218,7 +218,7 @@ abstract class AbstractQuery[R](
         stmt.close
 
         if(s.statisticsListener != None) {
-          s.statisticsListener.get.resultSetIterationEnded(statEx.uuid, System.currentTimeMillis, rowCount, true)
+          s.statisticsListener.get.resultSetIterationEnded(statEx, System.currentTimeMillis, rowCount, true)
         }
       }
       
