@@ -52,4 +52,9 @@ class H2Adapter extends DatabaseAdapter {
     e.getErrorCode == 42102
 
   override def supportsCommonTableExpressions = false
+
+  override def intArrayTypeDeclaration: String = "ARRAY"
+  override def longArrayTypeDeclaration: String = "ARRAY"
+  override def doubleArrayTypeDeclaration: String = "ARRAY"
+  override def stringArrayTypeDeclaration: String = "ARRAY"
 }
