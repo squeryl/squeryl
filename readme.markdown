@@ -16,4 +16,4 @@ Documentation can be found at [The Squeryl Website][1] and [Scaladoc][3]. Questi
 
 [1]: https://www.squeryl.org
 [2]: https://groups.google.com/forum/#!forum/squeryl
-[3]: https://javadoc-badge.appspot.com/org.squeryl/squeryl_2.12/org/squeryl/index.html?javadocio=true
+[3]: https://javadoc.io/doc/org.squeryl/squeryl_2.13
