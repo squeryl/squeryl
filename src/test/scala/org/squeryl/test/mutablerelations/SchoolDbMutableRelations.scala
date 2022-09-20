@@ -83,7 +83,7 @@ import org.squeryl.framework._
 abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  val schema = SchoolDb2
+  val schema: SchoolDb2.type = SchoolDb2
 
   def instance = new {
 

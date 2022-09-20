@@ -395,7 +395,7 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase{
 abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  lazy val schema = new SchoolDb
+  lazy val schema: SchoolDb = new SchoolDb
 
   var sharedTestInstance : TestInstance = null
 
