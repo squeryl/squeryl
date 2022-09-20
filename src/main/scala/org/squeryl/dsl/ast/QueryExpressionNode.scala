@@ -54,7 +54,7 @@ class QueryExpressionNode[R](val _query: AbstractQuery[R],
   val (whereClause, havingClause, groupByClause, orderByClause, ctes) =
      _queryYield.queryElements
 
-  val commonTableExpressions = ctes.map { q =>
+  val commonTableExpressions: List[QueryExpressionNode[_]] = ctes.map { q =>
     q.ast match {
       case x: QueryExpressionNode[_] =>
         x
