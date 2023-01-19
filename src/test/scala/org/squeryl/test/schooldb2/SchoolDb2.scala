@@ -165,7 +165,7 @@ class SchoolDb2 extends Schema {
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
   self: DBConnector =>
 
-  val schema = new SchoolDb2
+  val schema: SchoolDb2 = new SchoolDb2
   
   import schema._
 

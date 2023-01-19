@@ -127,7 +127,7 @@ abstract class AbstractQuery[R](
 
   def ast: QueryExpressionNode[R]
 
-  def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]) = {
+  def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R] = {
     val c = createCopy(asRoot, newUnions)
     c.selectDistinct = selectDistinct
     c.page = page

@@ -101,7 +101,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   import org.squeryl.test.PrimitiveTypeModeForTests._
 
-  val schema = new MusicDb
+  val schema: MusicDb = new MusicDb
 
   import schema._
   

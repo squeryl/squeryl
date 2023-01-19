@@ -51,7 +51,7 @@ val Scala211 = "2.11.12"
 
 scalaVersion := Scala211
 
-crossScalaVersions := Seq("2.12.16", Scala211, "2.10.7", "2.13.8")
+crossScalaVersions := Seq("2.12.17", Scala211, "2.10.7", "2.13.10")
 
 Compile / doc / scalacOptions ++= {
   val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
@@ -136,16 +136,16 @@ pomIncludeRepository := { _ => false }
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.3.0",
   "com.h2database" % "h2" % "1.4.200" % "provided",
-  "mysql" % "mysql-connector-java" % "8.0.30" % "provided",
-  "org.postgresql" % "postgresql" % "42.4.0" % "provided",
+  "mysql" % "mysql-connector-java" % "8.0.32" % "provided",
+  "org.postgresql" % "postgresql" % "42.5.1" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.36.0.3" % "test",
+  "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
   "org.json4s" %% "json4s-scalap" % "3.6.12",
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.2.12" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.2.15" % "test")
 }
 
 libraryDependencies ++= {
