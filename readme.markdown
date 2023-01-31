@@ -3,7 +3,7 @@
 
 ## How to build
 1. Download or clone repository:  
-     `git clone git://github.com/squeryl/squeryl.git`
+     `git clone git@github.com:squeryl/squeryl.git`
 2. Open a shell in the project's root directory and launch SBT with `./sbt`
    this will fetch the required version of Scala both for
    SBT itself and for Squeryl.
