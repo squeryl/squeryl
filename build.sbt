@@ -4,7 +4,7 @@ description := "A Scala ORM and DSL for talking with Databases using minimum ver
 
 organization := "org.squeryl"
 
-version := "0.9.18"
+version := "0.9.19"
 
 javacOptions := {
   if (scala.util.Properties.isJavaAtLeast("17")) {
