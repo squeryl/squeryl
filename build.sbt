@@ -30,7 +30,7 @@ parallelExecution := false
 publishMavenStyle := true
 
 val Scala211 = "2.11.12"
-val Scala3 = "3.0.0"
+val Scala3 = "3.2.2"
 
 ThisBuild / scalaVersion := Scala211
 scalaVersion := Scala211
