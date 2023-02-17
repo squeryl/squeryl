@@ -17,6 +17,9 @@ class B(val id: Int, val name: String, val aId: Int) extends KeyedEntity[Int]
 
 abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
+
 
   def schema = TestSchema
 
@@ -25,7 +28,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
 
     val q1 = from(TestSchema.a, q0) ( (a, b) =>
       where(a.id === b.aId)
-      select(a, b)
+      .select(a, b)
     )
 
     checkJoinQuery(q1)
@@ -33,7 +36,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
     val q2 =
       join(TestSchema.a, q0) ( (a, b) =>
         select(a, b)
-          on(a.id === b.aId)
+          .on(a.id === b.aId)
       )
 
     checkJoinQuery(q2)
@@ -52,14 +55,14 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
 
     val q1 = from(TestSchema.a, q0) ( (a, b) =>
       where(a.id === b.aId)
-      select(a, b)
+      .select(a, b)
     )
 
     checkJoinQuery(q1)
 
     val aQuery = join(TestSchema.a, q0.leftOuter) ( (a, b) =>
       select(a, b)
-        on(a.id === b.map(_.aId))
+        .on(a.id === b.map(_.aId))
     )
 
     checkLeftJoinQuery(aQuery)

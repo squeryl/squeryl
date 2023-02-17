@@ -29,7 +29,7 @@ trait FieldMapper {
     
   private[this] val registry = new HashMap[Class[_],FieldAttributesBasedOnType[_]]
 
-  implicit def thisFieldMapper = this
+  implicit def thisFieldMapper: FieldMapper = this
 
   /**
    * Extending classes will expose members of PrimitiveTypeSupport as implicit, to enable
@@ -283,7 +283,7 @@ trait FieldMapper {
      * in FieldMetaData.canonicalEnumerationValueFor(i: Int) 
      */
     val z = new FieldAttributesBasedOnType[Any](
-        new {
+        new MapperForReflection {
           def map(rs:ResultSet,i:Int) = rs.getInt(i)
           def convertToJdbc(v: AnyRef) = v
         }, 
@@ -293,14 +293,14 @@ trait FieldMapper {
         
     registry.put(z.clasz, z)
     registry.put(z.clasz.getSuperclass, z)
-  }  
-    
-  protected type MapperForReflection = {
+  }
+
+  protected trait MapperForReflection {
     def map(rs:ResultSet,i:Int): Any
     def convertToJdbc(v: AnyRef): AnyRef
   }
-   
-  protected def makeMapper(fa0: JdbcMapper[_,_]) = new {
+
+  protected def makeMapper(fa0: JdbcMapper[_,_]) = new MapperForReflection {
     val fa = fa0.asInstanceOf[JdbcMapper[AnyRef,AnyRef]]
     
     def map(rs:ResultSet,i:Int) = fa.map(rs, i)

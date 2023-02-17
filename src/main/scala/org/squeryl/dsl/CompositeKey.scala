@@ -93,7 +93,7 @@ case class CompositeKey2[A1,A2](val a1:A1, val a2: A2)(
   def notIn(cks: CompositeKey2[A1, A2]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2)*) = notInExpr(cks map (ck => new CompositeKey2(ck._1, ck._2)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2))
 
 }
 
@@ -116,7 +116,7 @@ case class CompositeKey3[A1,A2,A3](val a1:A1, val a2: A2, val a3: A3)(
   def notIn(cks: CompositeKey3[A1, A2, A3]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3)*) = notInExpr(cks map (ck => new CompositeKey3(ck._1, ck._2, ck._3)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3))
 }
 
 case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4: A4)(
@@ -139,7 +139,7 @@ case class CompositeKey4[A1,A2,A3,A4](val a1:A1, val a2: A2, val a3: A3, val a4:
   def notIn(cks: CompositeKey4[A1, A2, A3, A4]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4)*) = notInExpr(cks map (ck => new CompositeKey4(ck._1, ck._2, ck._3, ck._4)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3), ev4(a4))
 }
 
 
@@ -164,7 +164,7 @@ case class CompositeKey5[A1,A2,A3,A4,A5](val a1:A1, val a2: A2, val a3: A3, val 
   def notIn(cks: CompositeKey5[A1, A2, A3, A4, A5]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5)*) = notInExpr(cks map (ck => new CompositeKey5(ck._1, ck._2, ck._3, ck._4, ck._5)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3), ev4(a4), ev5(a5))
 }
 case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6)(
     implicit
@@ -188,7 +188,7 @@ case class CompositeKey6[A1,A2,A3,A4,A5,A6](val a1:A1, val a2: A2, val a3: A3, v
   def notIn(cks: CompositeKey6[A1, A2, A3, A4, A5, A6]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6)*) = notInExpr(cks map (ck => new CompositeKey6(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3), ev4(a4), ev5(a5), ev6(a6))
 }
 
 case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7)(
@@ -214,7 +214,7 @@ case class CompositeKey7[A1,A2,A3,A4,A5,A6,A7](val a1:A1, val a2: A2, val a3: A3
   def notIn(cks: CompositeKey7[A1, A2, A3, A4, A5, A6, A7]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7)*) = notInExpr(cks map (ck => new CompositeKey7(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3), ev4(a4), ev5(a5), ev6(a6), ev7(a7))
 }
 
 case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7, val a8: A8)(
@@ -241,7 +241,7 @@ case class CompositeKey8[A1,A2,A3,A4,A5,A6,A7,A8](val a1:A1, val a2: A2, val a3:
   def notIn(cks: CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8)*) = notInExpr(cks map (ck => new CompositeKey8(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7, a8)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3), ev4(a4), ev5(a5), ev6(a6), ev7(a7), ev8(a8))
 }
 
 case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val a3: A3, val a4: A4, val a5: A5, val a6: A6, val a7: A7, val a8: A8,val a9: A9)(
@@ -269,5 +269,5 @@ case class CompositeKey9[A1,A2,A3,A4,A5,A6,A7,A8,A9](val a1:A1, val a2: A2, val 
   def notIn(cks: CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9]*) = notInExpr(cks)
   def notInTuples(cks: (A1, A2, A3, A4, A5, A6, A7, A8, A9)*) = notInExpr(cks map (ck => new CompositeKey9(ck._1, ck._2, ck._3, ck._4, ck._5, ck._6, ck._7, ck._8, ck._9)))
 
-  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(a1, a2, a3, a4, a5, a6, a7, a8, a9)
+  protected def constantMembers: Iterable[TypedExpression[_,_]] = List(ev1(a1), ev2(a2), ev3(a3), ev4(a4), ev5(a5), ev6(a6), ev7(a7), ev8(a8), ev9(a9))
 }

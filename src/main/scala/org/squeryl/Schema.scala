@@ -27,9 +27,9 @@ import java.util.regex.Pattern
 import collection.mutable.{ArrayBuffer, HashMap, HashSet}
 import org.squeryl.internals.FieldMapper
 
-class Schema(implicit val fieldMapper: FieldMapper) {
+class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSchema {
 
-  protected implicit def thisSchema = this
+  protected implicit def thisSchema: Schema = this
 
   /**
    * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
@@ -338,25 +338,6 @@ class Schema(implicit val fieldMapper: FieldMapper) {
   def tableNameFromClass(c: Class[_]):String =
     c.getSimpleName
 
-  protected def table[T]()(implicit ClassTagT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] =
-    table(tableNameFromClass(ClassTagT.runtimeClass))(ClassTagT, ked)
-  
-  protected def table[T](name: String)(implicit ClassTagT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-    val typeT = ClassTagT.runtimeClass.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef)
-    _addTable(t)
-    _addTableType(typeT, t)
-    t
-  }
-
-  protected def table[T](name: String, prefix: String)(implicit ClassTagT: ClassTag[T], ked: OptionalKeyedEntityDef[T,_]): Table[T] = {
-    val typeT = ClassTagT.runtimeClass.asInstanceOf[Class[T]]
-    val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef)
-    _addTable(t)
-    _addTableType(typeT, t)
-    t
-  }
-
   private [squeryl] def _addTable(t:Table[_]) =
     _tables.append(t)
     
@@ -607,7 +588,7 @@ class Schema(implicit val fieldMapper: FieldMapper) {
    *
    * @return a instance of ActiveRecord associated to the given object.
    */
-  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: ClassTag[A]) =
+  implicit def anyRef2ActiveTransaction[A](a: A)(implicit queryDsl: QueryDsl, m: ClassTag[A]): ActiveRecord[A] =
     new ActiveRecord(a, queryDsl, m)
 
   /**

@@ -108,7 +108,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
           (for(k <- viewOrTable.ked; 
               counterProp <- k.optimisticCounterPropertyName if counterProp == name) yield true).isDefined
         try {
-          val r = FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimisitcCounter)
+          val optionFieldInnerClass = viewOrTable.optionalFieldsInfo.flatMap(_.get(name))
+          val r = FieldMetaData.factory.build(this, name, property, sampleInstance4OptionTypeDeduction, isOptimisitcCounter, optionFieldInnerClass)
           fmds.append(r)
         }
         catch {
@@ -192,7 +193,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     val res = new Array[Object](params.length)
 
     for(i <- 0 to params.length -1) {
-      val v = FieldMetaData.createDefaultValue(schema.fieldMapper, c, params(i), None, None)
+      val v = FieldMetaData.createDefaultValue(schema.fieldMapper, c, params(i), None, None, None)
       res(i) = v
     }
 

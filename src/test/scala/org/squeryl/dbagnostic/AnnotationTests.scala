@@ -18,7 +18,9 @@ package org.squeryl.dbagnostic
 
 import org.squeryl.KeyedEntity
 import org.squeryl.annotations.{Row, Column}
-import org.squeryl.Schema
+import org.squeryl.Schema
+
+
 import org.squeryl.test.PrimitiveTypeModeForTests
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers

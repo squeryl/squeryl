@@ -164,12 +164,16 @@ class SchoolDb2 extends Schema {
 
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
-  val schema: SchoolDb2 = new SchoolDb2
-  
-  import schema._
+  val schoolDb2 = new SchoolDb2
 
-  def seedDataDef() = new {
+  override val schema = new SchoolDb2
+
+  import schoolDb2._
+
+  class SeedData {
     
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
@@ -187,6 +191,8 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val xiaoJimbao = students.insert(new Student("Xiao", "Jimbao"))
   }
 
+  def seedDataDef() = new SeedData
+
 
 //  def testAll = {
 //
@@ -199,7 +205,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 //    val comment = Comment("A single comment")
 //    entry.comments.associate(comment)
 //
-//    from(entry.comments)(c => where(c.id === comment.id) select(c))
+//    from(entry.comments)(c => where(c.id === comment.id) .select(c))
 //
 //    seedData
 //
@@ -223,7 +229,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val q: Query[String] =
       from(subjects)(s =>
         where(s.name === "Philosophy")
-          select(&(from(subjects)(s2 => where(s2.name === s.name) select(s2.name))))
+          .select(&(from(subjects)(s2 => where(s2.name === s.name) .select(s2.name))))
       )
 
     1 shouldBe q.toList.length
@@ -235,9 +241,9 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val q: Query[String] =
       from(subjects)(s =>
         where(
-          s.name === from(subjects)(s2 => where(s2.name === "Philosophy") select(s2.name))
+          s.name === from(subjects)(s2 => where(s2.name === "Philosophy") .select(s2.name))
         )
-        select(s.name)
+        .select(s.name)
       )
 
     1 shouldBe q.toList.length
@@ -248,7 +254,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val comment = Comment("A single comment")
     entry.comments.associate(comment)
 
-    from(entry.comments)(c => where(c.id === comment.id) select(c))
+    from(entry.comments)(c => where(c.id === comment.id) .select(c))
   }
 
   test("UpdateWithCompositePK"){
@@ -359,7 +365,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     val qA2 =
       from(courseAssignments)(ca =>
         where(ca.id ===(a.courseId, a.professorId))
-        select(ca)
+        .select(ca)
       )
 
     _existsAndEquals(qA2.headOption, a)
@@ -459,20 +465,20 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
     
     95.0F shouldBe cs2.grade
     
-    from(courseSubscriptions)(p => compute(avg(p.grade)))
+    from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade)))
    
     val belowOrEqualToAvg = 
       from(courseSubscriptions)(p =>
-        where(p.grade lte from(courseSubscriptions)(p => compute(avg(p.grade))))
-        select(p)
+        where(p.grade lte from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade))))
+        .select(p)
       ).toList
       
     assert(belowOrEqualToAvg.size == 1)
     
     val belowAvg = 
       from(courseSubscriptions)(p =>
-        where(p.grade lt from(courseSubscriptions)(p => compute(avg(p.grade))))
-        select(p)
+        where(p.grade lt from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade))))
+        .select(p)
       ).toList
       
     assert(belowAvg.size == 0)    

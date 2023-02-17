@@ -28,9 +28,9 @@ trait JoinSignatures {
     def fullOuter = new OuterJoinedQueryable[A](q, "full")
   }
 
-  implicit def queryable2JoinPrecursor[A](q: Queryable[A]) = new JoinPrecursor[A](q)
+  implicit def queryable2JoinPrecursor[A](q: Queryable[A]): JoinPrecursor[A] = new JoinPrecursor[A](q)
 
-  implicit def queryable2RightInnerJoinedQueryable[A](q: Queryable[A]) = new InnerJoinedQueryable[A](q, "")
+  implicit def queryable2RightInnerJoinedQueryable[A](q: Queryable[A]): InnerJoinedQueryable[A] = new InnerJoinedQueryable[A](q, "")
 
   def join[A,B1,C](q: Queryable[A], q1: JoinedQueryable[B1])(f: Function2[A,B1,JoinQueryYield1[C]]): Query[C] =
     from(q,q1)(

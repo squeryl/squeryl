@@ -28,14 +28,14 @@ class ViewExpressionNode[U](val view: View[U])
 
   def getOrCreateAllSelectElements(forScope: QueryExpressionElements): Iterable[SelectElement] = {
 
-    val export = ! forScope.isChild(this)
+    val exportElement = ! forScope.isChild(this)
 
     view.posoMetaData.fieldsMetaData.map(fmd =>
-      getOrCreateSelectElement(fmd, export)
+      getOrCreateSelectElement(fmd, exportElement)
     )
   }
 
-  private def getOrCreateSelectElement(fmd: FieldMetaData, export: Boolean): SelectElement = {
+  private def getOrCreateSelectElement(fmd: FieldMetaData, exportElement: Boolean): SelectElement = {
 
     val e = _selectElements.get(fmd)
     val n =
@@ -47,7 +47,7 @@ class ViewExpressionNode[U](val view: View[U])
         r
       }
 
-    if(export)
+    if(exportElement)
       new ExportedSelectElement(n)
     else
       n

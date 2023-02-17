@@ -83,11 +83,15 @@ import org.squeryl.framework._
 abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  val schema: SchoolDb2.type = SchoolDb2
+  val schoolDb2: SchoolDb2.type = SchoolDb2
 
-  def instance = new {
+  override val schema = schoolDb2
 
-    import schema._
+  test("Many2ManyAssociationFromLeftSide"){
+
+    import SchoolDb2._
+
+    import schoolDb2._
 
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
@@ -100,15 +104,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     val chemistryCourse = courses.insert(new Course(chemistry.id))
     val physicsCourse = courses.insert(new Course(physics.id))
-  }
-
-
-  test("Many2ManyAssociationFromLeftSide"){
-
-    import SchoolDb2._
-
-    val i = instance
-    import i._
 
     courseAssignments.Count.toLong shouldBe 0
 
@@ -132,8 +127,20 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
   test("Many2ManyAssociationFromRightSide"){
 
     import SchoolDb2._
-    val i = instance
-    import i._
+
+    import schoolDb2._
+
+    val professeurTournesol = professors.insert(new Professor("Tournesol"))
+    val madProfessor = professors.insert(new Professor("Mad Professor"))
+
+    val philosophy = subjects.insert(new Subject("Philosophy"))
+    val chemistry = subjects.insert(new Subject("Chemistry"))
+    val physics = subjects.insert(new Subject("Physic"))
+    val computationTheory = subjects.insert(new Subject("Computation Theory"))
+
+
+    val chemistryCourse = courses.insert(new Course(chemistry.id))
+    val physicsCourse = courses.insert(new Course(physics.id))
 
     courseAssignments.Count.toLong shouldBe 0
 
@@ -169,8 +176,20 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
   test("OneToMany"){
 
     import SchoolDb2._
-    val i = instance
-    import i._
+
+    import schoolDb2._
+
+    val professeurTournesol = professors.insert(new Professor("Tournesol"))
+    val madProfessor = professors.insert(new Professor("Mad Professor"))
+
+    val philosophy = subjects.insert(new Subject("Philosophy"))
+    val chemistry = subjects.insert(new Subject("Chemistry"))
+    val physics = subjects.insert(new Subject("Physic"))
+    val computationTheory = subjects.insert(new Subject("Computation Theory"))
+
+
+    val chemistryCourse = courses.insert(new Course(chemistry.id))
+    val physicsCourse = courses.insert(new Course(physics.id))
 
     val philosophyCourse10AMWednesday = new Course
     val philosophyCourse2PMWednesday = new Course
@@ -185,7 +204,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     val s = from(subjects)(s0 =>
       where(s0.id notIn(Seq(computationTheory.id, physics.id)))
-      select(s0)
+      .select(s0)
     )
 
     var cnt = 0
