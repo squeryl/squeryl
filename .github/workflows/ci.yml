@@ -41,7 +41,7 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: temurin
     - run: |
-        sbt -v scalafmtSbt "+ scalafmtAll" "+ Test/compile"
+        sbt -v scalafmtSbt "+ scalafmtAll" "+ Test/compile" "++ 2.13.x" "scalafixAll RemoveUnused"
         git diff --exit-code
     - if: ${{ (github.event_name == 'pull_request') && failure() }}
       run: |

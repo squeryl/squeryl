@@ -182,3 +182,7 @@ lazy val macros = project
   )
 
 dependsOn(macros)
+
+ThisBuild / semanticdbEnabled := {
+  scalaBinaryVersion.value != "2.10"
+}

@@ -90,8 +90,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
   test("Many2ManyAssociationFromLeftSide") {
 
-    import SchoolDb2._
-
     import schoolDb2._
 
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
@@ -125,8 +123,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
   }
 
   test("Many2ManyAssociationFromRightSide") {
-
-    import SchoolDb2._
 
     import schoolDb2._
 
@@ -173,8 +169,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
   }
 
   test("OneToMany") {
-
-    import SchoolDb2._
 
     import schoolDb2._
 
