@@ -4,9 +4,29 @@ description := "A Scala ORM and DSL for talking with Databases using minimum ver
 
 organization := "org.squeryl"
 
-version := "0.9.17"
+version := "0.9.19"
 
-javacOptions := Seq("-source", "1.7", "-target", "1.7")
+javacOptions := {
+  if (scala.util.Properties.isJavaAtLeast("17")) {
+    Seq("-source", "1.8", "-target", "1.8")
+  } else if (scala.util.Properties.isJavaAtLeast("11")) {
+    Seq("-source", "1.7", "-target", "1.7")
+  } else {
+    Seq("-source", "1.6", "-target", "1.6")
+  }
+}
+
+Test / fork := true
+
+// https://github.com/squeryl/squeryl/issues/340
+// TODO remove this workaround
+Test / javaOptions ++= {
+  if (scala.util.Properties.isJavaAtLeast("11")) {
+    Seq("--add-opens=java.base/java.lang=ALL-UNNAMED")
+  } else {
+    Nil
+  }
+}
 
 //only release *if* -Drelease=true is passed to JVM
 version := {
@@ -35,7 +55,7 @@ val Scala3 = "3.3.0-RC2"
 ThisBuild / scalaVersion := Scala211
 scalaVersion := Scala211
 
-val supportedVersions = Seq("2.12.12", Scala211, "2.10.7", "2.13.5", Scala3)
+val supportedVersions = Seq("2.12.17", Scala211, "2.10.7", "2.13.10", Scala3)
 
 crossScalaVersions := supportedVersions
 
@@ -113,25 +133,7 @@ pomExtra := (<scm>
                </developer>
              </developers>)
 
-credentials ~= { c =>
-  (Option(System.getenv().get("SONATYPE_USERNAME")), Option(System.getenv().get("SONATYPE_PASSWORD"))) match {
-    case (Some(username), Some(password)) =>
-      c :+ Credentials(
-        "Sonatype Nexus Repository Manager",
-        "oss.sonatype.org",
-        username,
-        password)
-    case _ => c
-  }
-}
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo := sonatypePublishToBundle.value
 
 Test / publishArtifact := false
 
@@ -140,15 +142,15 @@ pomIncludeRepository := { _ => false }
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.3.0",
   "com.h2database" % "h2" % "1.4.200" % "provided",
-  "mysql" % "mysql-connector-java" % "8.0.25" % "provided",
-  "org.postgresql" % "postgresql" % "42.2.20" % "provided",
+  "mysql" % "mysql-connector-java" % "8.0.32" % "provided",
+  "org.postgresql" % "postgresql" % "42.5.4" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.34.0" % "test",
+  "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
 )
 
 libraryDependencies ++= {
-  Seq("org.scalatest" %% "scalatest" % "3.2.9" % "test")
+  Seq("org.scalatest" %% "scalatest" % "3.2.15" % "test")
 }
 
 
@@ -158,9 +160,14 @@ libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
       Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.0.0",
+        "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
         "org.scala-lang" %% "scala3-staging" % scalaVersion.value
         )
+    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 12 =>
+      Seq(
+        "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
+        scalap
+      )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "1.3.0",

@@ -400,7 +400,7 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
 
-  val schoolDb = new SchoolDb
+  val schoolDb: SchoolDb= new SchoolDb
 
   override lazy val schema = schoolDb
 
