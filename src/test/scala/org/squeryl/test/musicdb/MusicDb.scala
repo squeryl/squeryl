@@ -22,7 +22,6 @@ import adapters._
 import dsl._
 import framework._
 import java.util.Calendar
-import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest.matchers.should.Matchers
 
 object Genre extends Enumeration {

@@ -16,7 +16,6 @@
 package org.squeryl.internals
 
 import org.squeryl.dsl.ast._
-import org.squeryl.dsl._
 import org.squeryl._
 import dsl.CompositeKey
 import org.squeryl.{Schema, Session, Table}
