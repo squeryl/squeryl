@@ -25,22 +25,21 @@ protected[internals] object OptionType {
     scalaSigOption flatMap { scalaSig =>
       val result = scalaSig.symbols.filter { sym =>
         member.getName == sym.name
-      }.collect {
-        case sym: MethodSymbol => sym.infoType
-      }.collect {
-        case tpe: NullaryMethodType => tpe.resultType
-      }.collect {
-        case TypeRefType(_, _, Seq(TypeRefType(_, tpe, _))) =>
-          PartialFunction.condOpt(tpe.name){
-            case "Int" => classOf[scala.Int]
-            case "Short" => classOf[scala.Short]
-            case "Long" => classOf[scala.Long]
-            case "Double" => classOf[scala.Double]
-            case "Float" => classOf[scala.Float]
-            case "Boolean" => classOf[scala.Boolean]
-            case "Byte" => classOf[scala.Byte]
-            case "Char" => classOf[scala.Char]
-          }
+      }.collect { case sym: MethodSymbol =>
+        sym.infoType
+      }.collect { case tpe: NullaryMethodType =>
+        tpe.resultType
+      }.collect { case TypeRefType(_, _, Seq(TypeRefType(_, tpe, _))) =>
+        PartialFunction.condOpt(tpe.name) {
+          case "Int" => classOf[scala.Int]
+          case "Short" => classOf[scala.Short]
+          case "Long" => classOf[scala.Long]
+          case "Double" => classOf[scala.Double]
+          case "Float" => classOf[scala.Float]
+          case "Boolean" => classOf[scala.Boolean]
+          case "Byte" => classOf[scala.Byte]
+          case "Char" => classOf[scala.Char]
+        }
       }
       assert(result.size <= 1)
       result.headOption.flatten

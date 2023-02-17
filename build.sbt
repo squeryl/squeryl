@@ -32,16 +32,16 @@ Test / javaOptions ++= {
 version := {
   val v = version.value
   val release = Option(System.getProperty("release")) == Some("true")
-  if(release)
+  if (release)
     v
   else {
     val suffix = Option(System.getProperty("suffix"))
     val i = (v.indexOf('-'), v.length) match {
       case (x, l) if x < 0 => l
-      case (x, l) if v substring (x+1) matches """\d+""" => l //patch level, not RCx
+      case (x, l) if v substring (x + 1) matches """\d+""" => l // patch level, not RCx
       case (x, _) => x
     }
-    v.substring(0,i) + "-" + (suffix getOrElse "SNAPSHOT")
+    v.substring(0, i) + "-" + (suffix getOrElse "SNAPSHOT")
   }
 }
 
@@ -108,9 +108,7 @@ val unusedWarnings = Def.setting(
 
 scalacOptions ++= unusedWarnings.value
 
-Seq(Compile, Test).flatMap(c =>
-  c / console / scalacOptions --= unusedWarnings.value
-)
+Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value)
 
 licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
@@ -153,8 +151,6 @@ libraryDependencies ++= {
   Seq("org.scalatest" %% "scalatest" % "3.2.15" % "test")
 }
 
-
-
 libraryDependencies ++= {
   val scalap = "org.json4s" %% "json4s-scalap" % "3.6.10"
   CrossVersion.partialVersion(scalaVersion.value) match {
@@ -162,7 +158,7 @@ libraryDependencies ++= {
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
         "org.scala-lang" %% "scala3-staging" % scalaVersion.value
-        )
+      )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 12 =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
@@ -180,11 +176,10 @@ libraryDependencies ++= {
   }
 }
 
-
-lazy val macros = project.in(file("macros"))
+lazy val macros = project
+  .in(file("macros"))
   .settings(
     crossScalaVersions := supportedVersions
   )
 
-  
 dependsOn(macros)

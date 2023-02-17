@@ -35,6 +35,34 @@ jobs:
           - java: 8
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+    - uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3.10.0
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: temurin
+    - run: |
+        sbt -v scalafmtSbt "+ scalafmtAll" "+ Test/compile"
+        git diff --exit-code
+    - if: ${{ (github.event_name == 'pull_request') && failure() }}
+      run: |
+        REVIEWDOG_VERSION="0.14.1"
+        FILE_NAME="reviewdog_${REVIEWDOG_VERSION}_Linux_x86_64"
+        wget -q https://github.com/reviewdog/reviewdog/releases/download/v${REVIEWDOG_VERSION}/${FILE_NAME}.tar.gz &&
+        gunzip ${FILE_NAME}.tar.gz &&
+        tar -xf ${FILE_NAME}.tar &&
+        chmod +x ./reviewdog &&
+        ./reviewdog -version
+        export REVIEWDOG_GITHUB_API_TOKEN=${{ secrets.GITHUB_TOKEN }}
+        TMPFILE=$(mktemp)
+        git diff > "${TMPFILE}"
+        ./reviewdog \
+          -name="scalafmt" \
+          -f=diff \
+          -f.diff.strip=1 \
+          -reporter="github-pr-review" \
+          -filter-mode="diff_context" \
+          -fail-on-error="false" \
+          -level="warning" <"${TMPFILE}"
     - run: |
         while ! mysqladmin ping -h"127.0.0.1" ; do
           echo "await mysql start"
@@ -44,14 +72,8 @@ jobs:
     - run: |
        export PGPASSWORD="postgres"
        psql -h 127.0.0.1 -c "CREATE ROLE squeryl WITH SUPERUSER LOGIN PASSWORD 'squeryl';" -U postgres
-    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
     - run: cp org.squeryl.tests.cfg.ci org.squeryl.tests.cfg
-    - uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3.10.0
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: temurin
     - uses: coursier/cache-action@d1039466d0812d6370649b9afb02bbf5f646bacf # v6.4.3
-    - run: sbt -v "+ Test/compile"
     - run: rm -r src/test/scala/org/squeryl/oracle/
     - run: rm -r src/test/scala/org/squeryl/mssql/
     - run: sbt -v "+ test"

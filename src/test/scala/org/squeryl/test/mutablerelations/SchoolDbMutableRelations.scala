@@ -35,16 +35,16 @@ class Subject(val name: String) extends SchoolDb2Object {
   lazy val courses = SchoolDb2.subjectToCourses.leftStateful(this)
 }
 
-class CourseSubscription(val courseId: Long, val studentId: Long, val grade: Float) extends KeyedEntity[CompositeKey2[Long,Long]] {
+class CourseSubscription(val courseId: Long, val studentId: Long, val grade: Float)
+    extends KeyedEntity[CompositeKey2[Long, Long]] {
 
   def id = compositeKey(courseId, studentId)
 }
 
-class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedEntity[CompositeKey2[Long,Long]] {
+class CourseAssignment(val courseId: Long, val professorId: Long) extends KeyedEntity[CompositeKey2[Long, Long]] {
 
   def id = compositeKey(courseId, professorId)
 }
-
 
 object SchoolDb2 extends Schema {
 
@@ -57,16 +57,17 @@ object SchoolDb2 extends Schema {
   val subjects = table[Subject]()
 
   val courseAssignments =
-    manyToManyRelation(professors, courses).
-    via[CourseAssignment]((p,c,a) => (a.professorId === p.id, a.courseId === c.id))
+    manyToManyRelation(professors, courses).via[CourseAssignment]((p, c, a) =>
+      (a.professorId === p.id, a.courseId === c.id)
+    )
 
   val courseSubscriptions =
-    manyToManyRelation(courses, students).
-    via[CourseSubscription]((c,s,cs) => (cs.studentId === s.id, c.id === cs.courseId))
+    manyToManyRelation(courses, students).via[CourseSubscription]((c, s, cs) =>
+      (cs.studentId === s.id, c.id === cs.courseId)
+    )
 
   val subjectToCourses =
-    oneToManyRelation(subjects, courses).
-    via((s,c) => c.subjectId === s.id)
+    oneToManyRelation(subjects, courses).via((s, c) => c.subjectId === s.id)
 
   // the default constraint for all foreign keys in this schema :
   override def applyDefaultForeignKeyPolicy(foreignKeyDeclaration: ForeignKeyDeclaration) =
@@ -87,7 +88,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
   override val schema = schoolDb2
 
-  test("Many2ManyAssociationFromLeftSide"){
+  test("Many2ManyAssociationFromLeftSide") {
 
     import SchoolDb2._
 
@@ -100,7 +101,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     val chemistry = subjects.insert(new Subject("Chemistry"))
     val physics = subjects.insert(new Subject("Physic"))
     val computationTheory = subjects.insert(new Subject("Computation Theory"))
-
 
     val chemistryCourse = courses.insert(new Course(chemistry.id))
     val physicsCourse = courses.insert(new Course(physics.id))
@@ -109,13 +109,13 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     professeurTournesol.courses.associate(physicsCourse)
 
-    val c1 = professeurTournesol.courses.head : Course
+    val c1 = professeurTournesol.courses.head: Course
 
-    c1.id shouldBe  physicsCourse.id
+    c1.id shouldBe physicsCourse.id
 
-    val ca = professeurTournesol.courses.associations.head : CourseAssignment
+    val ca = professeurTournesol.courses.associations.head: CourseAssignment
 
-    ca.courseId shouldBe  physicsCourse.id
+    ca.courseId shouldBe physicsCourse.id
 
     professeurTournesol.courses.dissociateAll shouldBe 1
 
@@ -124,7 +124,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     courseAssignments.Count.toLong shouldBe 0
   }
 
-  test("Many2ManyAssociationFromRightSide"){
+  test("Many2ManyAssociationFromRightSide") {
 
     import SchoolDb2._
 
@@ -138,7 +138,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     val physics = subjects.insert(new Subject("Physic"))
     val computationTheory = subjects.insert(new Subject("Computation Theory"))
 
-
     val chemistryCourse = courses.insert(new Course(chemistry.id))
     val physicsCourse = courses.insert(new Course(physics.id))
 
@@ -146,15 +145,15 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     physicsCourse.professors.associate(professeurTournesol)
 
-    val profT = physicsCourse.professors.head : Professor
+    val profT = physicsCourse.professors.head: Professor
 
     professeurTournesol.lastName shouldBe profT.lastName
 
     professeurTournesol.courses.refresh
 
-    val ca = professeurTournesol.courses.associations.head : CourseAssignment
+    val ca = professeurTournesol.courses.associations.head: CourseAssignment
 
-    ca.courseId shouldBe  physicsCourse.id
+    ca.courseId shouldBe physicsCourse.id
 
     physicsCourse.professors.dissociateAll shouldBe 1
 
@@ -165,7 +164,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     // test dissociate :
     physicsCourse.professors.associate(professeurTournesol)
 
-    physicsCourse.professors.head : Professor
+    physicsCourse.professors.head: Professor
 
     professeurTournesol.courses.refresh
 
@@ -173,7 +172,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     physicsCourse.professors.dissociate(professeurTournesol) shouldBe false
   }
 
-  test("OneToMany"){
+  test("OneToMany") {
 
     import SchoolDb2._
 
@@ -186,7 +185,6 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
     val chemistry = subjects.insert(new Subject("Chemistry"))
     val physics = subjects.insert(new Subject("Physic"))
     val computationTheory = subjects.insert(new Subject("Computation Theory"))
-
 
     val chemistryCourse = courses.insert(new Course(chemistry.id))
     val physicsCourse = courses.insert(new Course(physics.id))
@@ -201,23 +199,19 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     chemistry.courses.associate(new Course)
 
-
-    val s = from(subjects)(s0 =>
-      where(s0.id notIn(Seq(computationTheory.id, physics.id)))
-      .select(s0)
-    )
+    val s = from(subjects)(s0 => where(s0.id notIn (Seq(computationTheory.id, physics.id))).select(s0))
 
     var cnt = 0
 
-    for(s0 <- s ) {
+    for (s0 <- s) {
       var sCnt = 0
-      for(c <- s0.courses) {
+      for (c <- s0.courses) {
         cnt += 1
         sCnt += 1
       }
-      if(s0.id == philosophy.id)
+      if (s0.id == philosophy.id)
         3 shouldBe sCnt
-      else if(s0.id == chemistry.id)
+      else if (s0.id == chemistry.id)
         2 shouldBe sCnt
       else
         org.squeryl.internals.Utils.throwError("unknown subject : " + s0)
@@ -225,10 +219,14 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
     5 shouldBe cnt
 
-    philosophy.courses.map(_.id).toSet shouldBe Set(philosophyCourse10AMWednesday.id, philosophyCourse2PMWednesday.id, philosophyCourse3PMFriday.id)
+    philosophy.courses.map(_.id).toSet shouldBe Set(
+      philosophyCourse10AMWednesday.id,
+      philosophyCourse2PMWednesday.id,
+      philosophyCourse3PMFriday.id
+    )
 
     // no need to refresh :
-    //philosophyCourse2PMWednesday.subject.refresh
+    // philosophyCourse2PMWednesday.subject.refresh
     // since the relation is lazy and we haven't touched it yet...
     philosophyCourse2PMWednesday.subject.one.get.name shouldBe philosophy.name
 

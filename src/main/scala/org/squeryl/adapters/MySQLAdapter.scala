@@ -38,11 +38,14 @@ class MySQLAdapter extends DatabaseAdapter {
   }
 
   override def writeForeignKeyDeclaration(
-    foreignKeyTable: Table[_], foreignKeyColumnName: String,
-    primaryKeyTable: Table[_], primaryKeyColumnName: String,
+    foreignKeyTable: Table[_],
+    foreignKeyColumnName: String,
+    primaryKeyTable: Table[_],
+    primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
     referentialAction2: Option[ReferentialAction],
-    fkId: Int) = {
+    fkId: Int
+  ) = {
 
     val sb = new java.lang.StringBuilder(256)
 
@@ -57,8 +60,8 @@ class MySQLAdapter extends DatabaseAdapter {
     sb.append("(")
     sb.append(primaryKeyColumnName)
     sb.append(")")
-    
-    val f =  (ra:ReferentialAction) => {
+
+    val f = (ra: ReferentialAction) => {
       sb.append(" on ")
       sb.append(ra.event)
       sb.append(" ")
@@ -75,7 +78,7 @@ class MySQLAdapter extends DatabaseAdapter {
     "alter table " + foreignKeyTable.prefixedName + " drop foreign key " + fkName
 
   override def isTableDoesNotExistException(e: SQLException) =
-    e.getErrorCode == 1051 
+    e.getErrorCode == 1051
 
   /**
    *
@@ -106,8 +109,8 @@ class MySQLAdapter extends DatabaseAdapter {
   override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
     sw.write("(")
     left.write(sw)
-    sw.write(" regexp ?)")    
-    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))    
+    sw.write(" regexp ?)")
+    sw.addParam(ConstantStatementParam(InternalFieldMapper.stringTEF.createConstant(pattern)))
   }
 
   override def writeConcatOperator(left: ExpressionNode, right: ExpressionNode, sw: StatementWriter) = {
