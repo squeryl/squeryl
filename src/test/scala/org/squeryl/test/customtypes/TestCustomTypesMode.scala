@@ -26,7 +26,7 @@ import org.scalatest.matchers.should.Matchers
 abstract class TestCustomTypesMode extends SchemaTester with Matchers with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  val schema = new HospitalDb
+  val schema: HospitalDb = new HospitalDb
 
   import schema._
 
