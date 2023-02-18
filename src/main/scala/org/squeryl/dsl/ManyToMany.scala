@@ -213,7 +213,7 @@ class StatefulManyToMany[O, A](val relation: ManyToMany[O, A]) extends Iterable[
 
   def dissociate(o: O): Boolean = {
     val b1 = relation.dissociate(o)
-    val b2 = _map.remove(o) != None
+    val b2 = _map.remove(o).isDefined
     assert(
       b1 == b2,
       "'MutableManyToMany out of sync " + o.asInstanceOf[AnyRef].getClass.getName + " with id=" +

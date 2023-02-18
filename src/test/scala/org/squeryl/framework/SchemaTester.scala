@@ -26,8 +26,7 @@ abstract class SchemaTester extends DbTestBase {
           prePopulate()
         } catch {
           case e: Exception =>
-            println(e.getMessage)
-            println(e.getStackTrace)
+            e.printStackTrace()
         }
       }
     }

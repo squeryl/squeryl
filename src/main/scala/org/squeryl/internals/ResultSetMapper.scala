@@ -456,7 +456,7 @@ class ResultSetMapper extends ResultSetUtils {
 
     // decide based on the nullity of the first non Option field :
 
-    if (_firstNonOption != None) {
+    if (_firstNonOption.isDefined) {
       return rs.getObject(_firstNonOption.get.index) == null
     }
 
@@ -469,7 +469,7 @@ class ResultSetMapper extends ResultSetUtils {
 
     // outMappers
     for (
-      col2TupleMapper <- List(groupKeysMapper, groupMeasuresMapper).filter(_ != None).map(_.get);
+      col2TupleMapper <- List(groupKeysMapper, groupMeasuresMapper).flatten;
       outMapper <- col2TupleMapper.outMappers
     ) {
 

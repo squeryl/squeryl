@@ -18,7 +18,7 @@ package org.squeryl.adapters
 import java.sql.SQLException
 import org.squeryl.internals.{StatementWriter, FieldMetaData, DatabaseAdapter}
 import org.squeryl.dsl.ast._
-import org.squeryl.{Schema}
+import org.squeryl.Schema
 
 class MSSQLServer extends DatabaseAdapter {
 
@@ -131,7 +131,7 @@ class MSSQLServer extends DatabaseAdapter {
 //    }
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-    if (qen.page == None)
+    if (qen.page.isEmpty)
       super.writeQuery(qen, sw)
     else {
       val page = qen.page.get

@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import org.squeryl.dsl.ast.{ExpressionNode}
+import org.squeryl.dsl.ast.ExpressionNode
 import collection.mutable.{HashSet, ArrayBuffer}
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.dsl.ast.ConstantExpressionNodeList
@@ -112,7 +112,7 @@ class StatementWriter(val isForDisplay: Boolean, val databaseAdapter: DatabaseAd
     _lazyPendingLine = Some(() => nextLine)
 
   private def _flushPendingNextLine =
-    if (_lazyPendingLine != None) {
+    if (_lazyPendingLine.isDefined) {
       val pl = _lazyPendingLine
       _lazyPendingLine = None
       val lpl = pl.get

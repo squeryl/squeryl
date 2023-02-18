@@ -53,7 +53,7 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
     val res = transaction {
       mainquery
         .map(e =>
-          if (e._2 == None) None
+          if (e._2.isEmpty) None
           else e._2.get.measures
         )
         .toSeq

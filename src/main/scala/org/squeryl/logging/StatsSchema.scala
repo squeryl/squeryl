@@ -44,7 +44,7 @@ class StatementInvocation(
     this(null, 0, 0, 0, 0, 0, 0, Some(0), Some(0))
 
   def statementId =
-    new CompositeKey2(statementHash, statementHashCollisionNumber)
+    CompositeKey2(statementHash, statementHashCollisionNumber)
 
   def executeTime =
     end - start
@@ -69,7 +69,7 @@ class Statement(val sql: String, val definitionOrCallSite: String, val hash: Int
   def this() = this("", "", 0, 0)
 
   def id =
-    new CompositeKey2(hash, statementHashCollisionNumber)
+    CompositeKey2(hash, statementHashCollisionNumber)
 }
 
 class StatLine(
@@ -155,7 +155,7 @@ object StatsSchema extends Schema {
     val storedStatement = statements.lookup(s.id)
 
     val result =
-      if (storedStatement == None) {
+      if (storedStatement.isEmpty) {
         statements.insert(s)
         s
       } else {
@@ -169,7 +169,7 @@ object StatsSchema extends Schema {
             st == s
           })
 
-        if (mathingStatement != None)
+        if (mathingStatement.isDefined)
           mathingStatement.get
         else {
           s.statementHashCollisionNumber = lastCollisionNum + 1

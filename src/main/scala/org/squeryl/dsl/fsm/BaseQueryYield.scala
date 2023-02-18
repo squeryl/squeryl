@@ -184,7 +184,7 @@ class GroupWithMeasuresQueryYield[K, M](
   }
 
   override def havingClause =
-    if (_having != None)
+    if (_having.isDefined)
       _having.map(c => c())
     else
       super.havingClause

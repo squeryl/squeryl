@@ -39,7 +39,7 @@ case class AutoIncremented(var nameOfSequence: Option[String])
     any.isInstanceOf[AutoIncremented]
 }
 
-case class Indexed(val nameOfIndex: Option[String])
+case class Indexed(nameOfIndex: Option[String])
     extends ColumnAttribute
     with MultipleColumnAttribute
     with AttributeValidOnNonNumericalColumn
@@ -52,7 +52,7 @@ case class PrimaryKey()
     with AttributeValidOnNumericalColumn
     with AttributeValidOnMultipleColumn
 
-case class DBType(val declaration: String, val explicit: Boolean = false)
+case class DBType(declaration: String, explicit: Boolean = false)
     extends ColumnAttribute
     with AttributeValidOnNonNumericalColumn
     with AttributeValidOnNumericalColumn {

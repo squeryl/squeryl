@@ -52,7 +52,7 @@ object UsageProfileConsolidator {
               (StatsSchema.statementInvocations.allRows, StatsSchema.statements.allRows)
             }
 
-          val stmtsToInsert = statements.filter(stmt => StatsSchema.statements.lookup(stmt.id) == None)
+          val stmtsToInsert = statements.filter(stmt => StatsSchema.statements.lookup(stmt.id).isEmpty)
           StatsSchema.statements.insert(stmtsToInsert)
 
           StatsSchema.statementInvocations.insert(invocations)

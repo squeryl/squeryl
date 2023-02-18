@@ -482,7 +482,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
       typeOfIdField
         .isAssignableFrom(classOf[java.lang.Long]) || typeOfIdField.isAssignableFrom(classOf[java.lang.Integer])
     )
-      Set(new PrimaryKey, new AutoIncremented(None))
+      Set(new PrimaryKey, AutoIncremented(None))
     else
       Set(new PrimaryKey)
 

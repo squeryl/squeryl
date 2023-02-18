@@ -145,13 +145,13 @@ class TupleSelectElement(
   def prepareColumnMapper(index: Int) = {}
 
   def typeOfExpressionToString: String =
-    if (columnToTupleMapper == None)
+    if (columnToTupleMapper.isEmpty)
       "unknown"
     else
       columnToTupleMapper.get.typeOfExpressionToString(indexInTuple)
 
   override def prepareMapper(jdbcIndex: Int) =
-    if (columnToTupleMapper != None)
+    if (columnToTupleMapper.isDefined)
       columnToTupleMapper.get.activate(indexInTuple, jdbcIndex)
 
   override def toString =
@@ -190,7 +190,7 @@ class FieldSelectElement(
   private[this] var columnMapper: Option[ColumnToFieldMapper] = None
 
   def prepareMapper(jdbcIndex: Int) =
-    if (columnMapper != None) {
+    if (columnMapper.isDefined) {
       resultSetMapper.addColumnMapper(columnMapper.get)
       resultSetMapper.isActive = true
       _isActive = true
@@ -220,13 +220,13 @@ class ValueSelectElement(
     yieldPusher = Some(new YieldValuePusher(index, this, mapper))
 
   def typeOfExpressionToString =
-    if (yieldPusher == None)
+    if (yieldPusher.isEmpty)
       "unknown"
     else
       yieldPusher.get.selectElement.typeOfExpressionToString
 
   override def prepareMapper(jdbcIndex: Int) =
-    if (yieldPusher != None) {
+    if (yieldPusher.isDefined) {
       resultSetMapper.addYieldValuePusher(yieldPusher.get)
       resultSetMapper.isActive = true
       _isActive = true
@@ -254,6 +254,7 @@ class SelectElementReference[A, T](val selectElement: SelectElement, val mapper:
 
   private def _useSite: QueryExpressionNode[_] = {
 
+    @tailrec
     def findQueryExpressionNode(e: ExpressionNode): QueryExpressionNode[_] = e match {
       case qe: QueryExpressionNode[_] => qe
       case _ =>
@@ -268,7 +269,7 @@ class SelectElementReference[A, T](val selectElement: SelectElement, val mapper:
   }
 
   lazy val delegateAtUseSite =
-    if (selectElement.parent == None)
+    if (selectElement.parent.isEmpty)
       selectElement
     else {
       val us = this._useSite
@@ -378,7 +379,7 @@ class ExportedSelectElement(val selectElement: SelectElement) extends SelectElem
   }
 
   private def innerTarget: Option[SelectElement] =
-    if (parent == None)
+    if (parent.isEmpty)
       None
     else {
       val parentOfThis = parent.get.asInstanceOf[QueryExpressionElements]

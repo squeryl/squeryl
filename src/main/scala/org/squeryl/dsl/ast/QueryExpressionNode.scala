@@ -88,7 +88,7 @@ class QueryExpressionNode[R](
       case None => throw new IllegalStateException("method cannot be called before initialization")
       case Some(p: Product) =>
         if (p.getClass.getName.startsWith("scala.Tuple")) {
-          val z = (for (i <- 0 to (p.productArity - 1)) yield p.productElement(i))
+          val z = (for (i <- 0 until p.productArity) yield p.productElement(i))
           !(z.exists(o => _isPrimitiveType(o.asInstanceOf[AnyRef])))
         } else
           true
@@ -98,7 +98,7 @@ class QueryExpressionNode[R](
   def sample: AnyRef = _sample.get
 
   def owns(aSample: AnyRef) =
-    _sample != None && _sample.get.eq(aSample)
+    _sample.isDefined && _sample.get.eq(aSample)
 
   def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) =
     throw new UnsupportedOperationException("implement me")
@@ -226,7 +226,7 @@ class QueryExpressionNode[R](
 
   def doWrite(sw: StatementWriter) = {
     def writeCompleteQuery = {
-      val isNotRoot = parent != None
+      val isNotRoot = parent.isDefined
       val isContainedInUnion = parent map (_.isInstanceOf[UnionExpressionNode]) getOrElse (false)
 
       if ((isNotRoot && !isContainedInUnion) || hasUnionQueryOptions) {
@@ -234,7 +234,7 @@ class QueryExpressionNode[R](
         sw.indent(1)
       }
 
-      if (!unionClauses.isEmpty) {
+      if (unionClauses.nonEmpty) {
         sw.write("(")
         sw.nextLine
         sw.indent(1)
@@ -242,7 +242,7 @@ class QueryExpressionNode[R](
 
       sw.databaseAdapter.writeQuery(this, sw)
 
-      if (!unionClauses.isEmpty) {
+      if (unionClauses.nonEmpty) {
         sw.unindent(1)
         sw.write(")")
         sw.nextLine

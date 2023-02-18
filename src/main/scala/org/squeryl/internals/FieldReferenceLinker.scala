@@ -79,7 +79,7 @@ object FieldReferenceLinker {
   }
 
   private[squeryl] def _lastAccessedFieldReference_=(se: Option[SelectElement]) =
-    if (se == None) {
+    if (se.isEmpty) {
       __lastAccessedFieldReference.remove()
     } else {
       __lastAccessedFieldReference.set(se)
@@ -258,11 +258,13 @@ object FieldReferenceLinker {
       Map[Class[_], Array[Field]]()
 
     def apply(cls: Class[_]) =
-      _cache.get(cls) getOrElse {
-        val declaredFields = cls.getDeclaredFields()
-        _cache += ((cls, declaredFields))
-        declaredFields
-      }
+      _cache.getOrElse(
+        cls, {
+          val declaredFields = cls.getDeclaredFields()
+          _cache += ((cls, declaredFields))
+          declaredFields
+        }
+      )
   }
 
   private def _populateSelectColsRecurse(
@@ -334,12 +336,12 @@ object FieldReferenceLinker {
         classOf[CompositeKey].isAssignableFrom(m.getReturnType)
 
       try {
-        if (fmd != None && yi != null)
+        if (fmd.isDefined && yi != null)
           yi.incrementReentranceDepth
 
         _intercept(o, m, args, proxy, fmd, yi, isComposite)
       } finally {
-        if (fmd != None && yi != null)
+        if (fmd.isDefined && yi != null)
           yi.decrementReentranceDepth
       }
     }
@@ -370,7 +372,7 @@ object FieldReferenceLinker {
         _compositeKeyMembers.remove()
       }
 
-      if (fmd != None) {
+      if (fmd.isDefined) {
 
         if (yi != null && yi.reentranceDepth == 1)
           yi.addSelectElement(viewExpressionNode.getOrCreateSelectElement(fmd.get, yi.queryExpressionNode))

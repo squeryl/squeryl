@@ -18,7 +18,7 @@ package org.squeryl;
 import dsl.ast._
 import dsl.{CompositeKey, QueryDsl}
 import internals._
-import java.sql.{Statement}
+import java.sql.Statement
 import logging.StackMarker
 import collection.mutable.ArrayBuffer
 
@@ -283,7 +283,7 @@ class Table[T] private[squeryl] (
     var idGen = 0
     us.visitDescendants((node, parent, i) => {
 
-      if (node.parent == None)
+      if (node.parent.isEmpty)
         node.parent = parent
 
       node match {
@@ -337,7 +337,7 @@ class Table[T] private[squeryl] (
       z.map(x => _callbacks.afterDelete(x.asInstanceOf[AnyRef]))
     }
 
-    if (Session.currentSessionOption map { ses => ses.databaseAdapter.verifyDeleteByPK } getOrElse true)
+    if (Session.currentSessionOption forall { ses => ses.databaseAdapter.verifyDeleteByPK })
       assert(
         deleteCount <= 1,
         "Query :\n" + q.dumpAst + "\nshould have deleted at most 1 row but has deleted " + deleteCount

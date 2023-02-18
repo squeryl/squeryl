@@ -29,7 +29,7 @@ class LazySession(
 
   private[this] var _connection: Option[Connection] = None
 
-  def hasConnection = _connection != None
+  def hasConnection = _connection.isDefined
 
   var originalAutoCommit = true
 
@@ -185,7 +185,7 @@ trait AbstractSession {
   protected[squeryl] def using[A](a: () => A): A = {
     val s = Session.currentSessionOption
     try {
-      if (s != None) s.get.unbindFromCurrentThread
+      if (s.isDefined) s.get.unbindFromCurrentThread
       try {
         this.bindToCurrentThread
         val r = a()
@@ -195,7 +195,7 @@ trait AbstractSession {
         this.cleanup
       }
     } finally {
-      if (s != None) s.get.bindToCurrentThread
+      if (s.isDefined) s.get.bindToCurrentThread
     }
   }
 
@@ -322,13 +322,13 @@ object Session {
     }
 
   def hasCurrentSession =
-    currentSessionOption != None
+    currentSessionOption.isDefined
 
   def cleanupResources =
     currentSessionOption foreach (_.cleanup)
 
   private[squeryl] def currentSession_=(s: Option[AbstractSession]) =
-    if (s == None) {
+    if (s.isEmpty) {
       _currentSessionThreadLocal.remove()
     } else {
       _currentSessionThreadLocal.set(s.get)

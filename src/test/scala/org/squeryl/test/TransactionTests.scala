@@ -25,7 +25,7 @@ abstract class TransactionTests extends DbTestBase {
 
   def throwExc(except: Boolean): Int = {
     if (except) throw new Exception()
-    return 1
+    1
   }
 
   def doSomething(except: Boolean): Int = {

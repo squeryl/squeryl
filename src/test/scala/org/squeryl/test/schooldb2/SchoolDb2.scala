@@ -3,7 +3,7 @@ package org.squeryl.test.schooldb2
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl._
 import dsl.{OneToMany, CompositeKey2}
-import java.sql.{Savepoint}
+import java.sql.Savepoint
 
 import org.squeryl.framework._
 
@@ -370,7 +370,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   private def _existsAndEquals(oca: Option[CourseAssignment], ca: CourseAssignment) = {
 
-    if (oca == None)
+    if (oca.isEmpty)
       org.squeryl.internals.Utils.throwError("query returned no rows")
 
     ca.id shouldBe oca.get.id
@@ -467,7 +467,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
         where(p.grade lt from(courseSubscriptions)(p => compute[Option[Float]](avg(p.grade)))).select(p)
       ).toList
 
-    assert(belowAvg.size == 0)
+    assert(belowAvg.isEmpty)
   }
 
   test("#73 relations with Option[] on one side of the equality expression blow up") {

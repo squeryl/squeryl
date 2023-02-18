@@ -16,7 +16,7 @@ package org.squeryl.test.schooldb
  * limitations under the License.
  ***************************************************************************** */
 import java.sql.SQLException
-import org.squeryl.annotations.{Column}
+import org.squeryl.annotations.Column
 import org.squeryl.framework._
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -97,7 +97,7 @@ case class Course(
   var meaninglessLong: Long,
   @Column("meaninglessLongOption")
   var meaninglessLongOption: Option[Long],
-  val confirmed: Boolean
+  confirmed: Boolean
 ) {
 
   val id: Int = 0
@@ -159,14 +159,14 @@ case class PostalCode(code: String) extends KeyedEntity[String] {
   def id = code
 }
 
-case class School(val addressId: Int, val name: String, val parentSchoolId: Long, val transientField: String)
+case class School(addressId: Int, name: String, parentSchoolId: Long, transientField: String)
     extends KeyedEntity[Long] {
   var id_field: Long = 0
 
   def id = id_field
 }
 
-case class SqlDate(val id: Long, val aDate: java.sql.Date) extends KeyedEntity[Long] {
+case class SqlDate(id: Long, aDate: java.sql.Date) extends KeyedEntity[Long] {
 
   def this() = this(0L, new java.sql.Date(0))
 
@@ -364,10 +364,10 @@ class TestInstance(schema: SchoolDb) {
   val feb2010 = dateFormat.parse("2010-02-01")
   val feb2011 = dateFormat.parse("2011-02-01")
 
-  val groupTheory = courses.insert(new Course("Group Theory", jan2009, Some(may2009), 0, None, false))
-  val heatTransfer = courses.insert(new Course("Heat Transfer", feb2009, None, 3, Some(1234), false))
-  val counterpoint = courses.insert(new Course("Counterpoint", feb2010, None, 0, None, true))
-  val mandarin = courses.insert(new Course("Mandarin 101", feb2010, None, 0, None, true))
+  val groupTheory = courses.insert(Course("Group Theory", jan2009, Some(may2009), 0, None, false))
+  val heatTransfer = courses.insert(Course("Heat Transfer", feb2009, None, 3, Some(1234), false))
+  val counterpoint = courses.insert(Course("Counterpoint", feb2010, None, 0, None, true))
+  val mandarin = courses.insert(Course("Mandarin 101", feb2010, None, 0, None, true))
 
   courseSubscriptions.insert(new CourseSubscription(groupTheory.id, xiao.id))
   courseSubscriptions.insert(new CourseSubscription(heatTransfer.id, gontran.id))
@@ -378,9 +378,9 @@ class TestInstance(schema: SchoolDb) {
   val tournesol = professors.insert(new Professor("tournesol", 80.0f, Some(70.5f), 80.0f, Some(70.5f)))
 
   val offering1 =
-    courseOfferings.insert(new CourseOffering(groupTheory.id, tournesol.id, oneHutchissonStreet.id, "Offered Daily"))
+    courseOfferings.insert(CourseOffering(groupTheory.id, tournesol.id, oneHutchissonStreet.id, "Offered Daily"))
   val offering2 =
-    courseOfferings.insert(new CourseOffering(groupTheory.id, tournesol.id, twoHutchissonStreet.id, "May be cancelled"))
+    courseOfferings.insert(CourseOffering(groupTheory.id, tournesol.id, twoHutchissonStreet.id, "May be cancelled"))
 
 }
 
@@ -723,7 +723,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
   test("transient annotation") {
 
-    val s = schools.insert(new School(123, "EB123", 0, "transient !"))
+    val s = schools.insert(School(123, "EB123", 0, "transient !"))
 
     val s2 = schools.lookup(s.id).get
 
@@ -755,7 +755,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(!beforeInsertsOfProfessor.exists(_ == s1))
     assert(!afterInsertsOfProfessor.exists(_ == s1))
 
-    val s2 = schools.insert(new School(0, "EB", 0, ""))
+    val s2 = schools.insert(School(0, "EB", 0, ""))
 
     // assert(!beforeInsertsOfPerson.exists(_ == s2))
     assert(beforeInsertsOfKeyedEntity.exists(_ == s2))
@@ -788,7 +788,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     )
 
     val pk = addresses.posoMetaData.primaryKey
-    assert(pk != None, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
+    assert(pk.isDefined, "MetaData of addresses should have 'id' as PK : \n" + addresses.posoMetaData)
   }
 
   test("OptionAndNonOptionMixInComputeTuple") {
@@ -952,7 +952,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     groupTh = courses.where(c => c.id === groupTheory.id).single
 
     assert(
-      groupTh.finalExamDate == None,
+      groupTh.finalExamDate.isEmpty,
       "testDateOptionMapping" + " failed, expected " + None + " got " + groupTh.finalExamDate
     )
 
@@ -1071,7 +1071,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     ht = courses.where(c => c.id === heatTransfer.id).single
 
     assert(ht.meaninglessLong == -3, "expected -3, got " + ht.meaninglessLong)
-    assert(ht.meaninglessLongOption == None, "expected None, got " + ht.meaninglessLongOption)
+    assert(ht.meaninglessLongOption.isEmpty, "expected None, got " + ht.meaninglessLongOption)
 
     ht.meaninglessLongOption = Some(4321)
 
@@ -1125,7 +1125,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     g.isMultilingual = None
     g.update
     g = students.where(s => s.id === gontran.id).single
-    assert(g.isMultilingual == None, "expected None, got " + g.isMultilingual)
+    assert(g.isMultilingual.isEmpty, "expected None, got " + g.isMultilingual)
 
     g.isMultilingual = Some(false)
     g.update
@@ -1156,7 +1156,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     t.weight = None
     t.update
     t = professors.where(p => p.id === tournesol.id).single
-    assert(t.weight == None, "expected None, got " + t.weight)
+    assert(t.weight.isEmpty, "expected None, got " + t.weight)
 
     t.yearlySalary = 80.0f
     t.weight = Some(70.5f)
@@ -1379,7 +1379,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     val c0 = c.toList
 
     assert(c0.size == 2)
-    assert(c0.filter(_.confirmed).size == 0)
+    assert(c0.filter(_.confirmed).isEmpty)
 
     courses2.update(c0.map(_.copy(confirmed = true)))
 
@@ -1441,7 +1441,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val r = FieldReferenceLinker.takeLastAccessedFieldReference
 
-    assert(r == None, "!!!!!!!!!!!!")
+    assert(r.isEmpty, "!!!!!!!!!!!!")
   }
 
   test("InWithCompute") {
@@ -1562,7 +1562,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 
     val expectedAvgSal = expectedAvgSal_.sum / expectedAvgSal_.size
 
-    val expectedAvgWeight_ = professors.allRows.map(_.weightInBD).filter(_ != None).map(_.get)
+    val expectedAvgWeight_ = professors.allRows.map(_.weightInBD).flatten
 
     val expectedAvgWeight = expectedAvgWeight_.sum / expectedAvgWeight_.size
 

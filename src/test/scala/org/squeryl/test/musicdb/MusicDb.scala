@@ -152,10 +152,10 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     val q =
       join(artistsQ, songs.leftOuter)((a, s) => select((a, s)).on(a.id === s.map(_.authorId))).toList
 
-    val artistIdsWithoutSongs = q.filter(_._2 == None).map(_._1.id).toSet
+    val artistIdsWithoutSongs = q.filter(_._2.isEmpty).map(_._1.id).toSet
     artistIdsWithoutSongs shouldBe Set(alainCaron.id, hossamRamzy.id)
 
-    val artistIdsWithSongs = q.filter(_._2 != None).map(_._1.id).toSet
+    val artistIdsWithSongs = q.filter(_._2.isDefined).map(_._1.id).toSet
     artistIdsWithSongs shouldBe Set(herbyHancock.id, ponchoSanchez.id, mongoSantaMaria.id)
   }
 
@@ -528,7 +528,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
         )
         .headOption
 
-    assert(mustBeSome != None, "testTimestamp failed");
+    assert(mustBeSome.isDefined, "testTimestamp failed");
   }
 
   private def _truncateTimestampInTimeOfLastUpdate(p: Person) = {
@@ -605,7 +605,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       val shouldBeSome =
         artists.where(a => a.firstName === mongoSantaMaria.firstName and a.timeOfLastUpdate === tX2).headOption
 
-      if (shouldBeSome == None) org.squeryl.internals.Utils.throwError("testTimestampDownToMillis" + " failed.")
+      if (shouldBeSome.isEmpty) org.squeryl.internals.Utils.throwError("testTimestampDownToMillis" + " failed.")
 
       mongo = shouldBeSome.get
 
@@ -656,7 +656,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     assert(artists.delete(artistForDelete.id), "delete returned false, expected true")
 
-    assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
+    assert(artists.lookup(artistForDelete.id).isEmpty, "object still exist after delete")
 
     artistForDelete = artists.insert(new Person("Delete", "Me", None))
 
@@ -664,7 +664,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     assert(c == 1, "deleteWhere failed, expected 1 row delete count, got " + c)
 
-    assert(artists.lookup(artistForDelete.id) == None, "object still exist after delete")
+    assert(artists.lookup(artistForDelete.id).isEmpty, "object still exist after delete")
   }
 
   def inhibitedArtistsInQuery(inhibit: Boolean) =
@@ -707,7 +707,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       "inhibitedSongsInQuery" + " failed, expected " + ponchoSanchez.id + " got " + poncho.id
     )
 
-    assert(t._1 == None, "inhibited table in query should have returned None, returned " + t._1)
+    assert(t._1.isEmpty, "inhibited table in query should have returned None, returned " + t._1)
 
     val songArtistsTuples = inhibitedSongsInQuery(false)
 

@@ -57,7 +57,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
       val sw = new StatementWriter(false, this)
       sw.write("create sequence ", quoteName(fmd.sequenceName))
 
-      if (printSinkWhenWriteOnlyMode == None) {
+      if (printSinkWhenWriteOnlyMode.isEmpty) {
         val st = Session.currentSession.connection.createStatement
         st.execute(sw.statement)
       } else
@@ -93,7 +93,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
 
     val autoIncPK = t.posoMetaData.fieldsMetaData.find(fmd => fmd.isAutoIncremented)
 
-    if (autoIncPK == None) {
+    if (autoIncPK.isEmpty) {
       super.writeInsert(o, t, sw)
       return
     }

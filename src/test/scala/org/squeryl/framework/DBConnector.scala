@@ -23,6 +23,6 @@ class FileConfigReader(fileName: String) {
   def getProp(key: String): String = Option(props.getProperty(key)).getOrElse("missing key: " + key)
 
   def hasProps(keys: String*): Boolean = {
-    keys.map { key => Option(props.getProperty(key)) }.flatten.size == keys.size
+    keys.flatMap { key => Option(props.getProperty(key)) }.size == keys.size
   }
 }

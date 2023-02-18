@@ -38,18 +38,18 @@ class View[T] private[squeryl] (
 
 ////2.8.x approach for LyfeCycle events :
   private[squeryl] lazy val _callbacks =
-    schema._callbacks.get(this).getOrElse(NoOpPosoLifecycleEventListener)
+    schema._callbacks.getOrElse(this, NoOpPosoLifecycleEventListener)
 
   def name = schema.tableNameFromClassName(_name)
 
   def prefix: Option[String] =
-    if (_prefix != None)
+    if (_prefix.isDefined)
       _prefix
     else
       schema.name
 
   def prefixedName =
-    if (prefix != None)
+    if (prefix.isDefined)
       prefix.get + "." + name
     else
       name
@@ -60,7 +60,7 @@ class View[T] private[squeryl] (
    * used for creating names for objects derived from a table, ex.: a sequence 
    */
   def prefixedPrefixedName(s: String) =
-    if (prefix != None)
+    if (prefix.isDefined)
       prefix.get + "." + s + name
     else
       s + name
