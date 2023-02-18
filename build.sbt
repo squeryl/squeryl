@@ -2,119 +2,89 @@ name := "squeryl"
 
 description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety"
 
-organization := "org.squeryl"
-
-version := "0.9.19"
-
-javacOptions := {
-  if (scala.util.Properties.isJavaAtLeast("17")) {
-    Seq("-source", "1.8", "-target", "1.8")
-  } else if (scala.util.Properties.isJavaAtLeast("11")) {
-    Seq("-source", "1.7", "-target", "1.7")
-  } else {
-    Seq("-source", "1.6", "-target", "1.6")
-  }
-}
-
-Test / fork := true
-
-// https://github.com/squeryl/squeryl/issues/340
-// TODO remove this workaround
-Test / javaOptions ++= {
-  if (scala.util.Properties.isJavaAtLeast("11")) {
-    Seq("--add-opens=java.base/java.lang=ALL-UNNAMED")
-  } else {
-    Nil
-  }
-}
-
-//only release *if* -Drelease=true is passed to JVM
-version := {
-  val v = version.value
-  val release = Option(System.getProperty("release")) == Some("true")
-  if (release)
-    v
-  else {
-    val suffix = Option(System.getProperty("suffix"))
-    val i = (v.indexOf('-'), v.length) match {
-      case (x, l) if x < 0 => l
-      case (x, l) if v substring (x + 1) matches """\d+""" => l // patch level, not RCx
-      case (x, _) => x
+val commonSettings = Def.settings(
+  organization := "org.squeryl",
+  version := "0.9.19",
+  javacOptions := {
+    if (scala.util.Properties.isJavaAtLeast("17")) {
+      Seq("-source", "1.8", "-target", "1.8")
+    } else if (scala.util.Properties.isJavaAtLeast("11")) {
+      Seq("-source", "1.7", "-target", "1.7")
+    } else {
+      Seq("-source", "1.6", "-target", "1.6")
     }
-    v.substring(0, i) + "-" + (suffix getOrElse "SNAPSHOT")
-  }
-}
-
-parallelExecution := false
-
-publishMavenStyle := true
-
-val Scala211 = "2.11.12"
-val Scala3 = "3.3.0-RC3"
-
-ThisBuild / scalaVersion := Scala211
-scalaVersion := Scala211
-
-val supportedVersions = Seq("2.12.17", Scala211, "2.10.7", "2.13.10", Scala3)
-
-crossScalaVersions := supportedVersions
-
-Compile / doc / scalacOptions ++= {
-  val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
-  val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
-  Seq("-sourcepath", base, "-doc-source-url", "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala")
-}
-
-scalacOptions ++= {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, v)) if v >= 11 =>
-      Seq(
-        "-Xsource:3",
-      )
-    case _ =>
+  },
+  Test / fork := true,
+  Test / javaOptions ++= {
+    // https://github.com/squeryl/squeryl/issues/340
+    // TODO remove this workaround
+    if (scala.util.Properties.isJavaAtLeast("11")) {
+      Seq("--add-opens=java.base/java.lang=ALL-UNNAMED")
+    } else {
       Nil
-  }
-}
-
-scalacOptions ++= Seq(
-  "-unchecked",
-  "-deprecation",
-  "-feature",
-  "-language:implicitConversions",
-  "-language:postfixOps",
-  "-language:reflectiveCalls",
-  "-language:existentials"
-)
-
-scalacOptions ++= {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, v)) if v <= 12 =>
-      Seq("-Xfuture")
-    case _ =>
-      Nil
-  }
-}
-
-val unusedWarnings = Def.setting(
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 10)) =>
-      Nil
-    case Some((2, 11)) =>
-      Seq("-Ywarn-unused-import")
-    case _ =>
-      Seq("-Ywarn-unused:imports")
-  }
-)
-
-scalacOptions ++= unusedWarnings.value
-
-Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value)
-
-licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
-
-homepage := Some(url("https://squeryl.org"))
-
-pomExtra := (<scm>
+    }
+  },
+  version := {
+    // only release *if* -Drelease=true is passed to JVM
+    val v = version.value
+    val release = Option(System.getProperty("release")) == Some("true")
+    if (release)
+      v
+    else {
+      val suffix = Option(System.getProperty("suffix"))
+      val i = (v.indexOf('-'), v.length) match {
+        case (x, l) if x < 0 => l
+        case (x, l) if v substring (x + 1) matches """\d+""" => l // patch level, not RCx
+        case (x, _) => x
+      }
+      v.substring(0, i) + "-" + (suffix getOrElse "SNAPSHOT")
+    }
+  },
+  parallelExecution := false,
+  publishMavenStyle := true,
+  crossScalaVersions := Seq("2.12.17", Scala211, "2.10.7", "2.13.10", "3.3.0-RC3"),
+  Compile / doc / scalacOptions ++= {
+    val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
+    val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
+    Seq(
+      "-sourcepath",
+      base,
+      "-doc-source-url",
+      "https://github.com/squeryl/squeryl/tree/" + hash + "€{FILE_PATH}.scala"
+    )
+  },
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v >= 11 =>
+        Seq(
+          "-Xsource:3",
+        )
+      case _ =>
+        Nil
+    }
+  },
+  scalacOptions ++= Seq(
+    "-unchecked",
+    "-deprecation",
+    "-feature",
+    "-language:implicitConversions",
+    "-language:postfixOps",
+    "-language:reflectiveCalls",
+    "-language:existentials"
+  ),
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        Seq("-Xfuture")
+      case _ =>
+        Nil
+    }
+  },
+  scalacOptions ++= unusedWarnings.value,
+  Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value),
+  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  homepage := Some(url("https://squeryl.org")),
+  pomExtra := (<scm>
                <url>git@github.com:squeryl/squeryl.git</url>
                <connection>scm:git:git@github.com:squeryl/squeryl.git</connection>
              </scm>
@@ -129,13 +99,27 @@ pomExtra := (<scm>
                  <name>Dave Whittaker</name>
                  <url>https://github.com/davewhittaker</url>
                </developer>
-             </developers>)
+             </developers>),
+  publishTo := sonatypePublishToBundle.value,
+  Test / publishArtifact := false,
+  pomIncludeRepository := { _ => false },
+  scalaVersion := Scala211
+)
 
-publishTo := sonatypePublishToBundle.value
+commonSettings
 
-Test / publishArtifact := false
+val Scala211 = "2.11.12"
 
-pomIncludeRepository := { _ => false }
+lazy val unusedWarnings = Def.setting(
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 10)) =>
+      Nil
+    case Some((2, 11)) =>
+      Seq("-Ywarn-unused-import")
+    case _ =>
+      Seq("-Ywarn-unused:imports")
+  }
+)
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.3.0",
@@ -175,10 +159,35 @@ libraryDependencies ++= {
   }
 }
 
+val disableMacrosProject: Def.Initialize[Boolean] = Def.setting(
+  scalaBinaryVersion.value != "3"
+)
+
+pomPostProcess := { node =>
+  import scala.xml._
+  import scala.xml.transform._
+  val rule = new RewriteRule {
+    override def transform(node: Node) = {
+      if (
+        (node.label == "dependency") &&
+        ((node \ "groupId").text == "org.squeryl") &&
+        (node \ "artifactId").text.startsWith((macros / moduleName).value) &&
+        disableMacrosProject.value
+      ) {
+        NodeSeq.Empty
+      } else {
+        node
+      }
+    }
+  }
+  new RuleTransformer(rule).transform(node)(0)
+}
+
 lazy val macros = project
   .in(file("macros"))
   .settings(
-    crossScalaVersions := supportedVersions
+    commonSettings,
+    publish / skip := disableMacrosProject.value,
   )
 
 dependsOn(macros)
