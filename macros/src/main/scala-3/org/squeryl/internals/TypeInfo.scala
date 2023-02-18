@@ -1,7 +1,8 @@
 package org.squeryl.internals
 
-import scala.quoted._
-import scala.quoted.{Quotes, Type}
+import scala.quoted.Expr
+import scala.quoted.Quotes
+import scala.quoted.Type
 
 object TypeInfo {
 
