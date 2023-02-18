@@ -88,8 +88,7 @@ class QueryExpressionNode[R](
       case None => throw new IllegalStateException("method cannot be called before initialization")
       case Some(p: Product) =>
         if (p.getClass.getName.startsWith("scala.Tuple")) {
-          val z = (for (i <- 0 until p.productArity) yield p.productElement(i))
-          !(z.exists(o => _isPrimitiveType(o.asInstanceOf[AnyRef])))
+          !(p.productIterator.exists(o => _isPrimitiveType(o.asInstanceOf[AnyRef])))
         } else
           true
       case Some(a: AnyRef) => !_isPrimitiveType(a)
