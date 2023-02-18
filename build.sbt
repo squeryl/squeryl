@@ -209,8 +209,12 @@ Compile / sourceGenerators += task {
     val f = dir / "org" / "squeryl" / "dsl" / "boilerplate" / fileName
     f -> value
   } ++ Seq(
-    (dir / "org" / "squeryl" / "dsl" / "CompositeKeyN.scala") -> CompositeKeyN.value(size),
-  )).map { case (f, value) =>
+    "CompositeKeyN.scala" -> CompositeKeyN.value(size),
+    "QueryYieldMethods.scala" -> QueryYieldMethods.value(size),
+  ).map { case (fileName, value) =>
+    val f = dir / "org" / "squeryl" / "dsl" / fileName
+    f -> value
+  }).map { case (f, value) =>
     IO.write(f, value)
     f
   }
