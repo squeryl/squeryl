@@ -9,8 +9,7 @@ object TypeInfo {
   inline def fieldsInfo[T <: AnyKind]: Map[String, Class[_]] = ${ fieldsInfo[T] }
 
   def fieldsInfo[T <: AnyKind: Type](using qctx0: Quotes): Expr[Map[String, Class[_]]] = {
-    given qctx0.type = qctx0
-    import qctx0.reflect.{given, _}
+    import qctx0.reflect.*
 
     val uns = TypeTree.of[T]
     val symbol = uns.symbol
