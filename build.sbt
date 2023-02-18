@@ -1,10 +1,11 @@
+import sbtrelease.ReleaseStateTransformations._
+
 name := "squeryl"
 
 description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety"
 
 val commonSettings = Def.settings(
   organization := "org.squeryl",
-  version := "0.9.19",
   javacOptions := {
     if (scala.util.Properties.isJavaAtLeast("17")) {
       Seq("-source", "1.8", "-target", "1.8")
@@ -24,22 +25,21 @@ val commonSettings = Def.settings(
       Nil
     }
   },
-  version := {
-    // only release *if* -Drelease=true is passed to JVM
-    val v = version.value
-    val release = Option(System.getProperty("release")) == Some("true")
-    if (release)
-      v
-    else {
-      val suffix = Option(System.getProperty("suffix"))
-      val i = (v.indexOf('-'), v.length) match {
-        case (x, l) if x < 0 => l
-        case (x, l) if v substring (x + 1) matches """\d+""" => l // patch level, not RCx
-        case (x, _) => x
-      }
-      v.substring(0, i) + "-" + (suffix getOrElse "SNAPSHOT")
-    }
-  },
+  releaseCrossBuild := true,
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    releaseStepCommandAndRemaining("+ publishSigned"),
+    releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+    setNextVersion,
+    commitNextVersion,
+    pushChanges
+  ),
   parallelExecution := false,
   publishMavenStyle := true,
   crossScalaVersions := Seq("2.12.17", Scala211, "2.10.7", "2.13.10", "3.3.0-RC3"),
