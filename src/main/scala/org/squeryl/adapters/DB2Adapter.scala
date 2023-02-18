@@ -16,7 +16,6 @@
 package org.squeryl.adapters
 
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
-import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.{Session, Table}
 import java.sql.SQLException
 import org.squeryl.dsl.ast._

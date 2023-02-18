@@ -19,10 +19,8 @@ import org.squeryl.dsl.ast._
 import org.squeryl.internals._
 import org.squeryl.Session
 import org.squeryl.Schema
-import org.squeryl.internals.AttributeValidOnNumericalColumn
 import org.squeryl.Query
 import java.sql.ResultSet
-import org.squeryl.internals.Utils
 
 sealed trait TNumeric
 sealed trait TOptionBigDecimal extends TNumeric
