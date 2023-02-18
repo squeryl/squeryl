@@ -16,7 +16,6 @@
 package org.squeryl.dsl
 
 import ast.{LogicalBoolean, ExpressionNode, QueryExpressionNode, SelectElement}
-import boilerplate._
 import org.squeryl.internals.ResultSetMapper
 import java.sql.ResultSet
 
