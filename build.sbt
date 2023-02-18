@@ -116,8 +116,10 @@ lazy val unusedWarnings = Def.setting(
       Nil
     case Some((2, 11)) =>
       Seq("-Ywarn-unused-import")
-    case _ =>
+    case Some((2, 12)) =>
       Seq("-Ywarn-unused:imports")
+    case _ =>
+      Seq("-Wunused:imports")
   }
 )
 
