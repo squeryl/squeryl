@@ -15,8 +15,6 @@
  ***************************************************************************** */
 package org.squeryl
 
-import dsl._
-import ast._
 import internals._
 import reflect.ClassTag
 
