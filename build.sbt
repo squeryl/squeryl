@@ -203,6 +203,9 @@ Compile / sourceGenerators += task {
     "JoinSignatures.scala" -> JoinSignatures.value(size),
     "FromSignatures.scala" -> FromSignatures.value(size),
     "STuple.scala" -> STuple.value(size),
+    "ComputeMeasuresSignaturesFromStartOrWhereState.scala" -> ComputeMeasuresSignaturesFromStartOrWhereState.value(
+      size
+    ),
     "ComputeMeasuresSignaturesFromGroupByState.scala" -> ComputeMeasuresSignaturesFromGroupByState.value(size),
     "Query.scala" -> Query.value(size),
   ).map { case (fileName, value) =>
