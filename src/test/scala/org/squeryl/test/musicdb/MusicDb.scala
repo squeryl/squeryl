@@ -66,7 +66,7 @@ class Song(
 }
 
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
-  override def toString = id + ":" + title
+  override def toString = s"${id}:${title}"
 }
 import org.squeryl.test.PrimitiveTypeModeForTests._
 
