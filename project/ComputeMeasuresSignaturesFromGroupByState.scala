@@ -1,18 +1,20 @@
 object ComputeMeasuresSignaturesFromGroupByState {
 
-  private[this] def T(n: Int) = (1 to n).map("T" + _).mkString(", ")
+  private[this] def method(n: Int): String = {
+    val T = (1 to n).map("T" + _).mkString(", ")
 
-  private[this] def method(n: Int): String = s"""
-  def compute[${T(n)}](
+    s"""
+  def compute[${T}](
     ${(1 to n).map(x => s"e${x}: => TypedExpression[T${x}, _]").mkString(", ")}
-  ): ComputeStateFromGroupByState[G, Product${n}[${T(n)}]] =
-    new GroupWithMeasuresQueryYield[G, Product${n}[${T(n)}]](
+  ): ComputeStateFromGroupByState[G, Product${n}[${T}]] =
+    new GroupWithMeasuresQueryYield[G, Product${n}[${T}]](
       this.queryElementzz,
       this.groupByClauseClosure,
       this.unevaluatedHavingClause,
       () => List(${(1 to n).map("e" + _).mkString(", ")})
     )
 """
+  }
 
   def value(size: Int) = s"""package org.squeryl.dsl.boilerplate
 
