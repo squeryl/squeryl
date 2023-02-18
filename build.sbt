@@ -199,7 +199,7 @@ ThisBuild / semanticdbEnabled := {
 Compile / sourceGenerators += task {
   val dir = (Compile / sourceManaged).value
   val size = 22
-  Seq(
+  (Seq(
     "JoinSignatures.scala" -> JoinSignatures.value(size),
     "FromSignatures.scala" -> FromSignatures.value(size),
     "STuple.scala" -> STuple.value(size),
@@ -207,6 +207,10 @@ Compile / sourceGenerators += task {
     "Query.scala" -> Query.value(size),
   ).map { case (fileName, value) =>
     val f = dir / "org" / "squeryl" / "dsl" / "boilerplate" / fileName
+    f -> value
+  } ++ Seq(
+    (dir / "org" / "squeryl" / "dsl" / "CompositeKeyN.scala") -> CompositeKeyN.value(size),
+  )).map { case (f, value) =>
     IO.write(f, value)
     f
   }
