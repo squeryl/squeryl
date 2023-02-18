@@ -13,7 +13,7 @@ object TypeInfo {
 
     val uns = TypeTree.of[T]
     val symbol = uns.symbol
-    val innerClassOfOptionFields: Map[String, Class[_]] = symbol.memberFields.flatMap { m =>
+    val innerClassOfOptionFields: Map[String, Class[_]] = symbol.fieldMembers.flatMap { m =>
       // we only support val fields for now
       if (m.isValDef) {
         val tpe = ValDef(m, None).tpt.tpe
