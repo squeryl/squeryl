@@ -203,6 +203,7 @@ Compile / sourceGenerators += task {
     "JoinSignatures.scala" -> JoinSignatures.value(size),
     "FromSignatures.scala" -> FromSignatures.value(size),
     "STuple.scala" -> STuple.value(size),
+    "GroupBySignatures.scala" -> GroupBySignatures.value(size),
     "ComputeMeasuresSignaturesFromStartOrWhereState.scala" -> ComputeMeasuresSignaturesFromStartOrWhereState.value(
       size
     ),
