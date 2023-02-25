@@ -457,30 +457,29 @@ class ResultSetMapper extends ResultSetUtils {
     // decide based on the nullity of the first non Option field :
 
     if (_firstNonOption.isDefined) {
-      return rs.getObject(_firstNonOption.get.index) == null
-    }
-
-    // if we get here all fields are optional, decide on the first Option that is not null :
-    for (c2fm <- _fieldMapper) {
-      assert(c2fm.fieldMetaData.isOption)
-      if (rs.getObject(c2fm.index) != null)
-        return false
-    }
-
-    // outMappers
-    for (
-      col2TupleMapper <- List(groupKeysMapper, groupMeasuresMapper).flatten;
-      outMapper <- col2TupleMapper.outMappers
+      rs.getObject(_firstNonOption.get.index) == null
+    } else if (
+      _fieldMapper.exists { c2fm =>
+        assert(c2fm.fieldMetaData.isOption)
+        rs.getObject(c2fm.index) != null
+      }
     ) {
-
-      if (outMapper.isActive && rs.getObject(outMapper.index) != null)
-        return false
+      // if we get here all fields are optional, decide on the first Option that is not null :
+      false
+    } else if (
+      List(groupKeysMapper, groupMeasuresMapper).flatten.exists { col2TupleMapper =>
+        col2TupleMapper.outMappers.exists { outMapper =>
+          outMapper.isActive && rs.getObject(outMapper.index) != null
+        }
+      }
+    ) {
+      false
+    } else {
+      // if we get here we have matched on a row wit all nulls OR we haven't matched,
+      // this is an extreme corner case, we will return None, in reality we should
+      // sometimes return a Some with all fields None
+      true
     }
-
-    // if we get here we have matched on a row wit all nulls OR we haven't matched,
-    // this is an extreme corner case, we will return None, in reality we should
-    // sometimes return a Some with all fields None
-    true
   }
 
   def map(o: AnyRef, resultSet: ResultSet): Unit = {
