@@ -288,17 +288,20 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     // verify that all types are compatible :
     val c = memberTypes.remove(0)
-    for (c0 <- memberTypes) {
-      if ((!c0.isAssignableFrom(c)) && (!c.isAssignableFrom(c0)))
-        return false
-    }
-
-    (hasAField, hasGetter, hasSetter) match {
-      case (true, false, false) => true
-      case (false, true, true) => true
-      case (true, true, true) => true
-      case (true, true, false) => true
-      case _ => false
+    if (
+      memberTypes.exists { c0 =>
+        (!c0.isAssignableFrom(c)) && (!c.isAssignableFrom(c0))
+      }
+    ) {
+      false
+    } else {
+      (hasAField, hasGetter, hasSetter) match {
+        case (true, false, false) => true
+        case (false, true, true) => true
+        case (true, true, true) => true
+        case (true, true, false) => true
+        case _ => false
+      }
     }
   }
 

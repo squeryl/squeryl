@@ -181,15 +181,17 @@ class OracleAdapter extends DatabaseAdapter {
     val prefix = s.substring(0, s.length - padLength)
     val possibilities = paddingPossibilities(prefix, padLength)
 
-    for (p <- possibilities if !scope.contains(p))
-      return p
+    possibilities.find(p => !scope.contains(p)) match {
+      case Some(p) =>
+        p
+      case None =>
+        if (
+          s.length == padLength
+        ) // at this point 's' is completely 'random like', not helpful to add it in the error message
+          throw new CouldNotShrinkIdentifierException
 
-    if (
-      s.length == padLength
-    ) // at this point 's' is completely 'random like', not helpful to add it in the error message
-      throw new CouldNotShrinkIdentifierException
-
-    makeUniqueInScope(s, scope, padLength + 1)
+        makeUniqueInScope(s, scope, padLength + 1)
+    }
   }
 
   def makeUniqueInScope(s: String, scope: scala.collection.Set[String]): String =
