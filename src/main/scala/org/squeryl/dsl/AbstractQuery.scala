@@ -25,18 +25,18 @@ import org.squeryl.logging._
 import java.io.Closeable
 
 abstract class AbstractQuery[R](
-    val isRoot:Boolean,
-    private [squeryl] val unions: List[(String, Query[R])]
-  ) extends Query[R] {
+  val isRoot: Boolean,
+  private[squeryl] val unions: List[(String, Query[R])]
+) extends Query[R] {
 
-  private [squeryl] var selectDistinct = false
-  
-  private [squeryl] var isForUpdate = false
+  private[squeryl] var selectDistinct = false
 
-  private [squeryl] var page: Option[(Int,Int)] = None
+  private[squeryl] var isForUpdate = false
 
-  private [squeryl] var unionIsForUpdate = false
-  private [squeryl] var unionPage: Option[(Int, Int)] = None
+  private[squeryl] var page: Option[(Int, Int)] = None
+
+  private[squeryl] var unionIsForUpdate = false
+  private[squeryl] var unionPage: Option[(Int, Int)] = None
 
   private var __root: Option[Query[R]] = None
 
@@ -44,9 +44,9 @@ abstract class AbstractQuery[R](
 
   val name = "query"
 
-  private def isUnionQuery = ! unions.isEmpty
+  private def isUnionQuery = unions.nonEmpty
 
-  override private [squeryl] def root = __root
+  override private[squeryl] def root = __root
 
   def give(rsm: ResultSetMapper, rs: ResultSet): R = {
     rsm.pushYieldedValues(rs)
@@ -63,16 +63,16 @@ abstract class AbstractQuery[R](
    * of it's public methods 
    */
   val definitionSite: Option[StackTraceElement] =
-    if(!isRoot) None
+    if (!isRoot) None
     else Some(_deduceDefinitionSite)
 
   private def _deduceDefinitionSite: StackTraceElement = {
     val st = Thread.currentThread.getStackTrace
     var i = 1
-    while(i < st.length) {
+    while (i < st.length) {
       val e = st(i)
       val cn = e.getClassName
-      if((cn.startsWith("org.squeryl.") && (!cn.startsWith("org.squeryl.tests."))) || cn.startsWith("scala."))
+      if ((cn.startsWith("org.squeryl.") && (!cn.startsWith("org.squeryl.tests."))) || cn.startsWith("scala."))
         i = i + 1
       else
         return e
@@ -85,37 +85,38 @@ abstract class AbstractQuery[R](
 
   protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
 
-
     val subQueries = new ArrayBuffer[QueryableExpressionNode]
 
     val views = new ArrayBuffer[ViewExpressionNode[_]]
 
-    if(qy.joinExpressions != Nil) {
+    if (qy.joinExpressions != Nil) {
       val sqIterator = subQueryables.iterator
-      val joinExprsIterator = qy.joinExpressions.iterator 
+      val joinExprsIterator = qy.joinExpressions.iterator
       sqIterator.next() // get rid of the first one
 
-      while(sqIterator.hasNext) {
+      while (sqIterator.hasNext) {
         val nthQueryable = sqIterator.next()
         val nthJoinExpr = joinExprsIterator.next()
         nthQueryable.node.joinExpression = Some(nthJoinExpr())
       }
     }
 
-    for(sq <- subQueryables)
-      if(! sq.isQuery)
+    for (sq <- subQueryables)
+      if (!sq.isQuery)
         views.append(sq.node.asInstanceOf[ViewExpressionNode[_]])
 
-    for(sq <- subQueryables)
-      if(sq.isQuery) {
+    for (sq <- subQueryables)
+      if (sq.isQuery) {
         val z = sq.node.asInstanceOf[QueryExpressionNode[_]]
-        if(! z.isUseableAsSubquery)
-          org.squeryl.internals.Utils.throwError("Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html")
+        if (!z.isUseableAsSubquery)
+          org.squeryl.internals.Utils.throwError(
+            "Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html"
+          )
         subQueries.append(z)
       }
 
     val qen = new QueryExpressionNode[R](this, qy, subQueries, views)
-    val (sl,d) = qy.invokeYieldForAst(qen, resultSetMapper)
+    val (sl, d) = qy.invokeYieldForAst(qen, resultSetMapper)
     qen.setOutExpressionNodesAndSample(sl, d)
 
 //    sl.filter(_.isInstanceOf[ExportedSelectElement]).
@@ -127,12 +128,12 @@ abstract class AbstractQuery[R](
 
   def ast: QueryExpressionNode[R]
 
-  def copy(asRoot:Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R] = {
+  def copy(asRoot: Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R] = {
     val c = createCopy(asRoot, newUnions)
     c.selectDistinct = selectDistinct
     c.page = page
 
-    if (! isRoot) {
+    if (!isRoot) {
       c.__root = __root
     } else {
       c.__root = Some(this)
@@ -141,7 +142,7 @@ abstract class AbstractQuery[R](
     c
   }
 
-  def createCopy(asRoot:Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R]
+  def createCopy(asRoot: Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R]
 
   def dumpAst = ast.dumpAst
 
@@ -170,7 +171,7 @@ abstract class AbstractQuery[R](
       c.unionPage = page
     else
       c.page = page
-    c    
+    c
   }
 
   def forUpdate = {
@@ -179,7 +180,7 @@ abstract class AbstractQuery[R](
       c.unionIsForUpdate = true
     else
       c.isForUpdate = true;
-    c    
+    c
   }
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
@@ -192,19 +193,22 @@ abstract class AbstractQuery[R](
     val beforeQueryExecute = System.currentTimeMillis
     val (rs, stmt) = _dbAdapter.executeQuery(s, sw)
 
-    lazy val statEx = new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
+    lazy val statEx =
+      new StatementInvocationEvent(definitionSite.get, beforeQueryExecute, System.currentTimeMillis, -1, sw.statement)
 
-    if(s.statisticsListener != None)
+    if (s.statisticsListener.isDefined)
       s.statisticsListener.get.queryExecuted(statEx)
 
-    s._addStatement(stmt) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
+    s._addStatement(
+      stmt
+    ) // if the iteration doesn't get completed, we must hang on to the statement to clean it up at session end.
     s._addResultSet(rs) // same for the result set
-    
+
     var _nextCalled = false;
     var _hasNext = false;
 
     var rowCount = 0
-    
+
     def close(): Unit = {
       stmt.close
       rs.close
@@ -213,33 +217,33 @@ abstract class AbstractQuery[R](
     def _next = {
       _hasNext = rs.next
 
-      if(!_hasNext) {// close it since we've completed the iteration
+      if (!_hasNext) { // close it since we've completed the iteration
         Utils.close(rs)
         stmt.close
 
-        if(s.statisticsListener != None) {
+        if (s.statisticsListener.isDefined) {
           s.statisticsListener.get.resultSetIterationEnded(statEx.uuid, System.currentTimeMillis, rowCount, true)
         }
       }
-      
+
       rowCount = rowCount + 1
       _nextCalled = true
     }
 
     def hasNext = {
-      if(!_nextCalled)
+      if (!_nextCalled)
         _next
       _hasNext
     }
 
     def next(): R = {
-      if(!_nextCalled)
+      if (!_nextCalled)
         _next
-      if(!_hasNext)
+      if (!_hasNext)
         throw new NoSuchElementException("next called with no rows available")
       _nextCalled = false
 
-      if(s.isLoggingEnabled)
+      if (s.isLoggingEnabled)
         s.log(ResultSetUtils.dumpRow(rs))
 
       give(resultSetMapper, rs)
@@ -251,16 +255,21 @@ abstract class AbstractQuery[R](
   protected def createSubQueryable[U](q: Queryable[U]): SubQueryable[U] = q match {
     case v: View[_] =>
       val vxn = v.viewExpressionNode
-      vxn.sample =
-        v.posoMetaData.createSample(FieldReferenceLinker.createCallBack(vxn))
-      
+      vxn.sample = v.posoMetaData.createSample(FieldReferenceLinker.createCallBack(vxn))
+
       new SubQueryable(v, vxn.sample, vxn.resultSetMapper, false, vxn)
     case oqr: OptionalQueryable[U @unchecked] =>
       val sq = createSubQueryable[U](oqr.queryable)
       sq.node.inhibited = oqr.inhibited
       val oqCopy = new OptionalQueryable(sq.queryable)
       oqCopy.inhibited = oqr.inhibited
-      new SubQueryable(oqCopy.asInstanceOf[Queryable[U]], Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
+      new SubQueryable(
+        oqCopy.asInstanceOf[Queryable[U]],
+        Some(sq.sample).asInstanceOf[U],
+        sq.resultSetMapper,
+        sq.isQuery,
+        sq.node
+      )
     case ojq: OuterJoinedQueryable[U @unchecked] =>
       val sq = createSubQueryable[U](ojq.queryable)
       sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
@@ -277,38 +286,37 @@ abstract class AbstractQuery[R](
       new SubQueryable(copy, copy.ast.sample.asInstanceOf[U], copy.resultSetMapper, true, copy.ast)
   }
 
-  protected class SubQueryable[U]
-    (val queryable: Queryable[U],
-     val sample: U,
-     val resultSetMapper: ResultSetMapper,
-     val isQuery:Boolean,
-     val node: QueryableExpressionNode) {
+  protected class SubQueryable[U](
+    val queryable: Queryable[U],
+    val sample: U,
+    val resultSetMapper: ResultSetMapper,
+    val isQuery: Boolean,
+    val node: QueryableExpressionNode
+  ) {
 
     def give(rs: ResultSet): U =
-      if(node.joinKind != None) {
-        if(node.isOuterJoined) {
+      if (node.joinKind.isDefined) {
+        if (node.isOuterJoined) {
 
           val isNoneInOuterJoin =
             (!isQuery) && resultSetMapper.isNoneInOuterJoin(rs)
 
-           if(isNoneInOuterJoin)
-             None.asInstanceOf[U]
-           else
-             Some(queryable.give(resultSetMapper, rs)).asInstanceOf[U]
-        }
-        else
+          if (isNoneInOuterJoin)
+            None.asInstanceOf[U]
+          else
+            Some(queryable.give(resultSetMapper, rs)).asInstanceOf[U]
+        } else
           queryable.give(resultSetMapper, rs)
-      }
-      else if((node.isRightJoined) && resultSetMapper.isNoneInOuterJoin(rs))
+      } else if ((node.isRightJoined) && resultSetMapper.isNoneInOuterJoin(rs))
         sample
       else
         queryable.give(resultSetMapper, rs)
   }
 
-  private def createUnion(kind: String, q: Query[R]): Query[R] = 
+  private def createUnion(kind: String, q: Query[R]): Query[R] =
     copy(true, List((kind, q)))
 
-  def union(q: Query[R]): Query[R] = createUnion("Union", q) 
+  def union(q: Query[R]): Query[R] = createUnion("Union", q)
 
   def unionAll(q: Query[R]): Query[R] = createUnion("Union All", q)
 

@@ -16,7 +16,6 @@
 package org.squeryl.adapters
 
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
-import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.{Session, Table}
 import java.sql.SQLException
 import org.squeryl.dsl.ast._
@@ -39,11 +38,10 @@ class DB2Adapter extends DatabaseAdapter {
     val sw = new StatementWriter(false, this)
     sw.write("create sequence ", sequenceName(t), " start with 1 increment by 1 nomaxvalue")
 
-    if(printSinkWhenWriteOnlyMode == None) {
+    if (printSinkWhenWriteOnlyMode.isEmpty) {
       val st = Session.currentSession.connection.createStatement
       st.execute(sw.statement)
-    }
-    else
+    } else
       printSinkWhenWriteOnlyMode.get.apply(sw.statement + ";")
   }
 
@@ -59,7 +57,7 @@ class DB2Adapter extends DatabaseAdapter {
 
     val autoIncPK = t.posoMetaData.fieldsMetaData.find(fmd => fmd.isAutoIncremented)
 
-    if (autoIncPK == None) {
+    if (autoIncPK.isEmpty) {
       super.writeInsert(o, t, sw)
       return
     }
@@ -84,10 +82,14 @@ class DB2Adapter extends DatabaseAdapter {
     e.getErrorCode == -204
   }
 
-  override def writePaginatedQueryDeclaration(page: () => Option[(Int, Int)], qen: QueryExpressionElements, sw: StatementWriter) = {}
+  override def writePaginatedQueryDeclaration(
+    page: () => Option[(Int, Int)],
+    qen: QueryExpressionElements,
+    sw: StatementWriter
+  ) = {}
 
   override def writeQuery(qen: QueryExpressionElements, sw: StatementWriter) =
-    if (qen.page == None)
+    if (qen.page.isEmpty)
       super.writeQuery(qen, sw)
     else {
       sw.write("select sq____1.* from (")
@@ -130,15 +132,14 @@ class DB2Adapter extends DatabaseAdapter {
   }
 
   private def _writeConcatOperand(e: ExpressionNode, sw: StatementWriter) = {
-    if (e.isInstanceOf[ConstantTypedExpression[_,_]]) {
-      val c = e.asInstanceOf[ConstantTypedExpression[Any,Any]]
+    if (e.isInstanceOf[ConstantTypedExpression[_, _]]) {
+      val c = e.asInstanceOf[ConstantTypedExpression[Any, Any]]
       sw.write("cast(")
       e.write(sw)
       sw.write(" as varchar(")
       sw.write(c.value.toString.length.toString)
       sw.write("))")
-    }
-    else
+    } else
       e.write(sw)
   }
 

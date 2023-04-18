@@ -6,21 +6,15 @@ import org.squeryl._
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
 import org.squeryl.test.PrimitiveTypeModeForTests._
 
-object SubQueryTestSchema{
-  class Entity(
-    val name: String) extends KeyedEntity[UUID] {
-    var id: UUID = new UUID(0,0)
+object SubQueryTestSchema {
+  class Entity(val name: String) extends KeyedEntity[UUID] {
+    var id: UUID = new UUID(0, 0)
   }
 
-  class EntityToTypeJoins(
-    val entityId: UUID,
-    val entType: String) {}
+  class EntityToTypeJoins(val entityId: UUID, val entType: String) {}
 
-  class EntityEdge(
-      val parentId: UUID,
-      val childId: UUID,
-      val relationship: String,
-      val distance: Int) extends KeyedEntity[Long]{
+  class EntityEdge(val parentId: UUID, val childId: UUID, val relationship: String, val distance: Int)
+      extends KeyedEntity[Long] {
     var id: Long = 0
 
   }
@@ -37,10 +31,11 @@ object SubQueryTestSchema{
   }
 }
 
-abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction{
+abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
   import SubQueryTestSchema._
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   final def schema = TestSchema
 
@@ -51,15 +46,16 @@ abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction
     val typeName = "mmmm"
     val relType = "owns"
 
-    val nameQuery = from(entity)(e => where(e.name === name)select(e))
+    val nameQuery = from(entity)(e => where(e.name === name) select (e))
 
     val nameQueryId = from(nameQuery)(i => select(i.id))
-    val typeQuery = from(entityType)((eType) => where(eType.entType === typeName) select(eType.entityId))
+    val typeQuery = from(entityType)((eType) => where(eType.entType === typeName).select(eType.entityId))
 
     val entEdges =
       from(entity, entityEdges)((e, edge) =>
-        where((e.id === edge.childId) and (edge.parentId in nameQueryId) and (e.id in typeQuery) and (edge.relationship === relType))
-        select(e, edge)
+        where(
+          (e.id === edge.childId) and (edge.parentId in nameQueryId) and (e.id in typeQuery) and (edge.relationship === relType)
+        ).select(e, edge)
       )
 
     from(entEdges)(ee => select(ee._1))

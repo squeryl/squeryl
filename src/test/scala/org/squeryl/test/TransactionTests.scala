@@ -20,103 +20,100 @@ object FooSchema extends Schema {
 
 abstract class TransactionTests extends DbTestBase {
   self: DBConnector =>
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   def throwExc(except: Boolean): Int = {
-    if(except) throw new Exception()
-    return 1
+    if (except) throw new Exception()
+    1
   }
 
-  def doSomething(except: Boolean) : Int = {
-    transaction{
+  def doSomething(except: Boolean): Int = {
+    transaction {
       throwExc(except)
     }
   }
-  
-  def returnInTransaction: Int =  
+
+  def returnInTransaction: Int =
     transaction {
       FooSchema.foos.insert(new Foo("test"))
       return 1
     }
 
-
-  test("No exception in transaction"){
+  test("No exception in transaction") {
     transaction {
       FooSchema.reset()
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1 )
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1)
 
       try {
         doSomething(true)
-      }
-      catch {
+      } catch {
         case e: Exception => {}
       }
 
       // fails with "no session exception"
-      assert(FooSchema.foos.where(f => f.value === "test").size ==1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1)
     }
   }
 
-  test("Returning in transaction"){
+  test("Returning in transaction") {
     transaction {
       FooSchema.reset()
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value === "test").size ==1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1) // should equal(1)
 
       doSomething(false)
       // fails with "no session exception"
-      assert(FooSchema.foos.where(f => f.value === "test").size ==1) //should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1) // should equal(1)
     }
   }
 
-  test("Returning out of transaction"){
+  test("Returning out of transaction") {
     transaction {
       FooSchema.reset()
     }
     transaction {
       FooSchema.foos.insert(new Foo("test"))
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1) // should equal(1)
 
       doSomething(false)
     }
-    transaction{
+    transaction {
       // works!
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1) // should equal(1)
     }
   }
-  
-  test("Returning inside transaction block"){
+
+  test("Returning inside transaction block") {
     transaction {
       FooSchema.reset()
     }
     returnInTransaction
-    transaction{
+    transaction {
       // works!
-      assert(FooSchema.foos.where(f => f.value === "test").size == 1)//should equal(1)
+      assert(FooSchema.foos.where(f => f.value === "test").size == 1) // should equal(1)
     }
   }
-  
+
   test("nested transactions with SessionFactory") {
 
-   val sf1  = new SessionFactory {
-     def newSession: AbstractSession = sessionCreator().get()
-   }    
-   
-   val sf2  = new SessionFactory {
-     def newSession: AbstractSession = Utils.throwError("inner inTransaction should not be started")
-   }
-   
-   
-   inTransaction(sf1) {
-     
-     inTransaction(sf2) {
-       
-     }
-   }
+    val sf1 = new SessionFactory {
+      def newSession: AbstractSession = sessionCreator().get()
+    }
+
+    val sf2 = new SessionFactory {
+      def newSession: AbstractSession = Utils.throwError("inner inTransaction should not be started")
+    }
+
+    inTransaction(sf1) {
+
+      inTransaction(sf2) {}
+    }
   }
-  
+
 }

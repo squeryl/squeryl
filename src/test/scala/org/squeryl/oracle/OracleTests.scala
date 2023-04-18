@@ -1,6 +1,5 @@
 package org.squeryl.oracle
 
-
 import org.squeryl.test._
 
 import org.squeryl.framework.DBConnector
@@ -8,9 +7,9 @@ import org.squeryl.adapters.OracleAdapter
 
 import org.squeryl.Session
 
-trait Oracle_Connection extends DBConnector{
-  def sessionCreator() : Option[() => Session] = {
-    if(config.hasProps("oracle.connectionString", "oracle.user", "oracle.password")){
+trait Oracle_Connection extends DBConnector {
+  def sessionCreator(): Option[() => Session] = {
+    if (config.hasProps("oracle.connectionString", "oracle.user", "oracle.password")) {
       Class.forName("oracle.jdbc.OracleDriver")
 
       Some(() => {
@@ -22,7 +21,7 @@ trait Oracle_Connection extends DBConnector{
         c.setAutoCommit(false)
         Session.create(c, new OracleAdapter)
       })
-    }else{
+    } else {
       None
     }
   }
@@ -33,7 +32,7 @@ class Oracle_UuidTests extends UuidTests with Oracle_Connection
 class Oracle_SchoolDbMutableRelations extends mutablerelations.SchoolDb2MetableRelations with Oracle_Connection
 class Oracle_TransactionTests extends TransactionTests with Oracle_Connection
 class Oracle_SchoolDb2 extends schooldb2.SchoolDb2Tests with Oracle_Connection
-class Oracle_SchoolDb extends schooldb.SchoolDbTestRun with Oracle_Connection{
+class Oracle_SchoolDb extends schooldb.SchoolDbTestRun with Oracle_Connection {
   override val ignoredTests = List("OuterJoinMixed1")
 }
 //class Oracle_TestCustomTypesMode extends customtypes.TestCustomTypesMode with Oracle_Connection

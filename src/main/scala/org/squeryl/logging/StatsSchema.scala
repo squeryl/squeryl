@@ -17,7 +17,7 @@ package org.squeryl.logging
 
 import org.squeryl.KeyedEntity
 import org.squeryl.Schema
-import org.squeryl.dsl.CompositeKey2
+import org.squeryl.dsl.{CompositeKey2, TypedExpression, TOptionFloat}
 
 object StatsSchemaTypeMode extends org.squeryl.PrimitiveTypeMode
 import StatsSchemaTypeMode._
@@ -34,7 +34,8 @@ class StatementInvocation(
   val hostId: Int,
   val sessionId: Int,
   val rowCount: Option[Int],
-  val iterationEndTime: Option[Long]) extends KeyedEntity[String] {
+  val iterationEndTime: Option[Long]
+) extends KeyedEntity[String] {
 
   def this(se: StatementInvocationEvent, _statementHash: Int, _hCollision: Int) =
     this(se.uuid, se.start, se.end, _statementHash, _hCollision, 0, 0, None, None)
@@ -43,10 +44,10 @@ class StatementInvocation(
     this(null, 0, 0, 0, 0, 0, 0, Some(0), Some(0))
 
   def statementId =
-    new CompositeKey2(statementHash, statementHashCollisionNumber)
+    CompositeKey2(statementHash, statementHashCollisionNumber)
 
   def executeTime =
-    end minus start
+    end - start
 }
 
 object StatementHasher {
@@ -57,28 +58,35 @@ object StatementHasher {
     StatementCaseClass4HashGeneration(sql, definitionOrCallSite).hashCode()
 }
 
-class Statement(val sql: String, val definitionOrCallSite: String, val hash: Int, var statementHashCollisionNumber: Int) extends KeyedEntity[CompositeKey2[Int,Int]] {
+class Statement(val sql: String, val definitionOrCallSite: String, val hash: Int, var statementHashCollisionNumber: Int)
+    extends KeyedEntity[CompositeKey2[Int, Int]] {
 
   def this(sql: String, definitionOrCallSite: String) = {
-    //TODO: support defining truncation rule in schena (on/declare)
+    // TODO: support defining truncation rule in schena (on/declare)
     this(sql, definitionOrCallSite, StatementHasher.hash(sql, definitionOrCallSite), 0)
   }
 
   def this() = this("", "", 0, 0)
 
   def id =
-    new CompositeKey2(hash, statementHashCollisionNumber)
+    CompositeKey2(hash, statementHashCollisionNumber)
 }
 
-class StatLine(val statement: Statement, val avgExecTime: Double, val invocationCount: Long, val cumulativeExecutionTime: Long, val avgRowCount: Float) {
+class StatLine(
+  val statement: Statement,
+  val avgExecTime: Double,
+  val invocationCount: Long,
+  val cumulativeExecutionTime: Long,
+  val avgRowCount: Float
+) {
   def definitionSite =
     statement.definitionOrCallSite
 }
 
 object Measure extends Enumeration {
-   type Measure = Value
-   val AvgExecTime, InvocationCount, CumulativeExecutionTime, AvgResultSetSize = Value
-} 
+  type Measure = Value
+  val AvgExecTime, InvocationCount, CumulativeExecutionTime, AvgResultSetSize = Value
+}
 
 object StatsSchema extends Schema {
 
@@ -90,29 +98,34 @@ object StatsSchema extends Schema {
 
   def invocationStats =
     from(statementInvocations)((si) =>
-      groupBy(si.statementHash, si.statementHashCollisionNumber)
-      compute(avg(si.executeTime), count, sum(si.executeTime), nvl(avg(si.rowCount),0))
+      groupBy(si.statementHash, si.statementHashCollisionNumber).compute[Option[Double], Long, Option[Long], Float](
+        avg(si.executeTime),
+        count,
+        sum(si.executeTime),
+        nvl(avg(si.rowCount): TypedExpression[Option[Float], TOptionFloat], 0)
+      )
     )
 
   import Measure._
 
   def topRankingStatements(topN: Int, measure: Measure) =
-    from(invocationStats, statements)((si,s)=>
+    from(invocationStats, statements)((si, s) =>
       where(si.key._1 === s.hash and si.key._2 === s.statementHashCollisionNumber)
-      select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4))
-      orderBy(measure match {
-        case AvgExecTime => si.measures._1.desc
-        case InvocationCount => si.measures._2.desc
-        case CumulativeExecutionTime => si.measures._3.desc
-        case AvgResultSetSize => si.measures._4.desc
-      })
-    )
-    .page(0, topN)
+        .select(new StatLine(s, si.measures._1.get, si.measures._2, si.measures._3.get, si.measures._4))
+        .orderBy(measure match {
+          case AvgExecTime => si.measures._1.desc
+          case InvocationCount => si.measures._2.desc
+          case CumulativeExecutionTime => si.measures._3.desc
+          case AvgResultSetSize => si.measures._4.desc
+        })
+    ).page(0, topN)
 
-  on(statements)(s=> declare(
-    s.sql is(dbType("clob")),
-    s.definitionOrCallSite is(dbType("varchar(512)"))
-  ))  
+  on(statements)(s =>
+    declare(
+      s.sql is (dbType("clob")),
+      s.definitionOrCallSite is (dbType("varchar(512)"))
+    )
+  )
 
   def recordStatementInvocation(sie: StatementInvocationEvent) = {
 
@@ -122,11 +135,16 @@ object StatsSchema extends Schema {
     si.id
   }
 
-  def recordEndOfIteration(statementInvocationId: String, iterationEndTime: Long, rowCount: Int, iterationCompleted: Boolean) = {
+  def recordEndOfIteration(
+    statementInvocationId: String,
+    iterationEndTime: Long,
+    rowCount: Int,
+    iterationCompleted: Boolean
+  ) = {
 
     update(statementInvocations)(si =>
       where(si.id === statementInvocationId)
-      set(si.iterationEndTime := Some(iterationEndTime), si.rowCount := Some(rowCount))
+        .set(si.iterationEndTime := Some(iterationEndTime), si.rowCount := Some(rowCount))
     )
   }
 
@@ -137,17 +155,12 @@ object StatsSchema extends Schema {
     val storedStatement = statements.lookup(s.id)
 
     val result =
-      if(storedStatement == None) {
+      if (storedStatement.isEmpty) {
         statements.insert(s)
         s
-      }
-      else {
+      } else {
         val q =
-          from(statements)(st =>
-            where(st.hash === s.hash)
-            select(st)
-            orderBy(st.statementHashCollisionNumber)
-          )
+          from(statements)(st => where(st.hash === s.hash).select(st).orderBy(st.statementHashCollisionNumber))
 
         var lastCollisionNum = -1
         val mathingStatement =
@@ -156,7 +169,7 @@ object StatsSchema extends Schema {
             st == s
           })
 
-        if(mathingStatement != None)
+        if (mathingStatement.isDefined)
           mathingStatement.get
         else {
           s.statementHashCollisionNumber = lastCollisionNum + 1

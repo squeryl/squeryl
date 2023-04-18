@@ -18,33 +18,38 @@ package org.squeryl
 import annotations.Transient
 import java.sql.SQLException
 
-@scala.annotation.implicitNotFound(msg = "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[${K}]")
-trait KeyedEntityDef[-A,K] extends OptionalKeyedEntityDef[A,K]{
-  
+@scala.annotation.implicitNotFound(msg =
+  "The method requires an implicit org.squeryl.KeyedEntityDef[${A}, ${K}] in scope, or that it extends the trait KeyedEntity[${K}]"
+)
+trait KeyedEntityDef[-A, K] extends OptionalKeyedEntityDef[A, K] {
+
   def getId(a: A): K
+
   /**
    * returns true if the given instance has been persisted
    */
-  def isPersisted(a: A):  Boolean
+  def isPersisted(a: A): Boolean
+
   /**
    * the (Scala) property/field name of the id 
    */
   def idPropertyName: String
+
   /**
    * the counter field name for OCC, None to disable OCC (optimistic concurrency control)
    */
   def optimisticCounterPropertyName: Option[String] = None
-  
-  private [squeryl] def isOptimistic = optimisticCounterPropertyName.isDefined
-  
+
+  private[squeryl] def isOptimistic = optimisticCounterPropertyName.isDefined
+
   /**
    * fulfills the contract of OptionalKeyedEntityDef
    */
   final def keyedEntityDef = Some(this)
 }
 
-trait OptionalKeyedEntityDef[-A,K] {
-  def keyedEntityDef: Option[KeyedEntityDef[A,K]]
+trait OptionalKeyedEntityDef[-A, K] {
+  def keyedEntityDef: Option[KeyedEntityDef[A, K]]
 }
 
 /**
@@ -72,39 +77,37 @@ trait KeyedEntity[K] extends PersistenceStatus {
   def id: K
 
   override def hashCode =
-    if(isPersisted)
+    if (isPersisted)
       id.hashCode
     else
       super.hashCode
 
-  override def equals(z: Any):Boolean = {
-    if(z == null)
+  override def equals(z: Any): Boolean = {
+    if (z == null)
       return false
     val ar = z.asInstanceOf[AnyRef]
-    if(!ar.getClass.isAssignableFrom(this.getClass))
+    if (!ar.getClass.isAssignableFrom(this.getClass))
       false
-    else if(isPersisted)
+    else if (isPersisted)
       id == ar.asInstanceOf[KeyedEntity[K]].id
     else
       super.equals(z)
   }
 }
 
-
 trait PersistenceStatus {
 
   @transient
   @Transient
-  private [squeryl] var _isPersisted = false
+  private[squeryl] var _isPersisted = false
 
   def isPersisted: Boolean = _isPersisted
 }
 
-trait IndirectKeyedEntity[K,T] extends KeyedEntity[K] {
-  
+trait IndirectKeyedEntity[K, T] extends KeyedEntity[K] {
+
   def idField: T
 }
-
 
 trait Optimistic {
   self: KeyedEntity[_] =>
@@ -120,7 +123,8 @@ object SquerylSQLException {
     new SquerylSQLException(message, None)
 }
 
-class SquerylSQLException(message: String, cause: Option[SQLException]) extends RuntimeException(message, cause.orNull) {
+class SquerylSQLException(message: String, cause: Option[SQLException])
+    extends RuntimeException(message, cause.orNull) {
   // Overridden to provide covariant return type as a convenience
   override def getCause: SQLException = cause.orNull
 }
@@ -132,7 +136,6 @@ trait EntityMember {
   def entityRoot[B]: Query[B]
 }
 
-
 trait ReferentialAction {
   def event: String
   def action: String
@@ -142,17 +145,21 @@ trait ReferentialAction {
  * ForeignKeyDeclaration are to be manipulated only during the Schema definition
  * (this is why all public methods have the implicit arg (implicit ev: Schema))
  */
-class ForeignKeyDeclaration(val idWithinSchema: Int, val foreignKeyColumnName: String, val referencedPrimaryKey: String) {
+class ForeignKeyDeclaration(
+  val idWithinSchema: Int,
+  val foreignKeyColumnName: String,
+  val referencedPrimaryKey: String
+) {
 
-  private[this] var _referentialActions: Option[(Option[ReferentialAction],Option[ReferentialAction])] = None
+  private[this] var _referentialActions: Option[(Option[ReferentialAction], Option[ReferentialAction])] = None
 
-  private [squeryl] def _isActive =
-    _referentialActions != None
+  private[squeryl] def _isActive =
+    _referentialActions.isDefined
 
-  private [squeryl] def _referentialAction1: Option[ReferentialAction] =
+  private[squeryl] def _referentialAction1: Option[ReferentialAction] =
     _referentialActions.get._1
 
-  private [squeryl] def _referentialAction2: Option[ReferentialAction] =
+  private[squeryl] def _referentialAction2: Option[ReferentialAction] =
     _referentialActions.get._2
 
   /**

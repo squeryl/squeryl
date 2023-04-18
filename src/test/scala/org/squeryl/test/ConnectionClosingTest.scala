@@ -8,7 +8,7 @@ abstract class ConnectionClosingTest extends DbTestBase {
 
   def dbSpecificSelectNow: String
 
-  test("Closing statement should close connection"){
+  test("Closing statement should close connection") {
     val session = SessionFactory.newSession
     val stmt = session.connection.prepareStatement(dbSpecificSelectNow)
     val rs = stmt.executeQuery

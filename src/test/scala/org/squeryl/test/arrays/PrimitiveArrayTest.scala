@@ -5,7 +5,8 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 
 abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
-
+  // repeat the import closer to call site to give priority to our `===` operator
+  import org.squeryl.test.PrimitiveTypeMode4Tests._
 
   val schema = PrimitiveArraySchema
 
@@ -15,7 +16,15 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
     transaction {
       schema.drop
       schema.create
-      swimmers.insert(new Swimmer(1, Array(10.55, 12.99, 15.32), Array(100, 110, 20), Array(9876543210L, 123456789L), Array("testing", "stuff")))
+      swimmers.insert(
+        new Swimmer(
+          1,
+          Array(10.55, 12.99, 15.32),
+          Array(100, 110, 20),
+          Array(9876543210L, 123456789L),
+          Array("testing", "stuff")
+        )
+      )
     }
 
     val query = from(swimmers)((s) => select(s))
@@ -44,7 +53,15 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
     transaction {
       schema.drop
       schema.create
-      swimmers.insert(new Swimmer(1, Array(10.55, 12.99, 15.32), Array(100, 110, 20), Array(9876543210L, 123456789L), Array("testing", "stuff")))
+      swimmers.insert(
+        new Swimmer(
+          1,
+          Array(10.55, 12.99, 15.32),
+          Array(100, 110, 20),
+          Array(9876543210L, 123456789L),
+          Array("testing", "stuff")
+        )
+      )
     }
 
     val query = from(swimmers)((s) => select(s))
@@ -58,8 +75,13 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
 
     transaction {
       update(swimmers)(s =>
-        where(s.id === 1)
-          set (s.lap_times := Array(11.69), s.scores := Array(1, 2, 3, 4, 5), s.orgids := Array(13L), s.tags := Array("and things")))
+        where(s.id === 1).set(
+          s.lap_times := Array(11.69),
+          s.scores := Array(1, 2, 3, 4, 5),
+          s.orgids := Array(13L),
+          s.tags := Array("and things")
+        )
+      )
     }
 
     from(swimmers)((s) => select(s))
@@ -87,4 +109,10 @@ object PrimitiveArraySchema extends Schema {
   override def drop = super.drop
 }
 
-class Swimmer(val id: Int, val lap_times: Array[Double], val scores: Array[Int], val orgids: Array[Long], val tags: Array[String])
+class Swimmer(
+  val id: Int,
+  val lap_times: Array[Double],
+  val scores: Array[Int],
+  val orgids: Array[Long],
+  val tags: Array[String]
+)
