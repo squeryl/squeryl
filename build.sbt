@@ -132,7 +132,7 @@ libraryDependencies ++= Seq(
   "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
   "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
   "org.scalatest" %% "scalatest-funsuite" % "3.2.15" % "test",
-  "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.15" % "test",
+  "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.16" % "test",
 )
 
 libraryDependencies ++= {
