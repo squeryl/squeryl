@@ -42,7 +42,7 @@ val commonSettings = Def.settings(
   ),
   parallelExecution := false,
   publishMavenStyle := true,
-  crossScalaVersions := Seq("2.12.18", Scala211, "2.10.7", "2.13.10", "3.3.0"),
+  crossScalaVersions := Seq("2.12.18", Scala211, "2.10.7", "2.13.11", "3.3.0"),
   Compile / doc / scalacOptions ++= {
     val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
     val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
@@ -195,6 +195,8 @@ dependsOn(macros)
 ThisBuild / semanticdbEnabled := {
   scalaBinaryVersion.value != "2.10"
 }
+
+ThisBuild / semanticdbVersion := "4.7.8"
 
 Compile / sourceGenerators += task {
   val dir = (Compile / sourceManaged).value
