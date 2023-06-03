@@ -196,6 +196,8 @@ ThisBuild / semanticdbEnabled := {
   scalaBinaryVersion.value != "2.10"
 }
 
+ThisBuild / semanticdbVersion := "4.7.8"
+
 Compile / sourceGenerators += task {
   val dir = (Compile / sourceManaged).value
   val size = 22
