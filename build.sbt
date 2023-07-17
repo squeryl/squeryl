@@ -149,7 +149,7 @@ libraryDependencies ++= {
       )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
       Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+        "org.scala-lang.modules" %% "scala-xml" % "1.3.1",
         scalap
       )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 10 =>
