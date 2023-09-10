@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 import org.squeryl.dsl._
 import org.squeryl._
 import adapters.{MSSQLServer, OracleAdapter, DerbyAdapter}
-import internals.{FieldMetaData, FieldReferenceLinker}
+import internals.{FieldMetaData, FieldReferenceLinker, LifecycleEvent}
 import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.ExpressionNode
 
@@ -44,14 +44,14 @@ object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
     def getId(a: Course) = a.id
     def isPersisted(a: Course) = a.id > 0
     def idPropertyName = "id"
-    override def optimisticCounterPropertyName = Some("occVersionNumber")
+    override def optimisticCounterPropertyName: Option[String] = Some("occVersionNumber")
   }
 
   implicit object course2KED extends KeyedEntityDef[Course2, Int] {
     def getId(a: Course2) = a.id
     def isPersisted(a: Course2) = a.id > 0
     def idPropertyName = "id"
-    override def optimisticCounterPropertyName = Some("occVersionNumber")
+    override def optimisticCounterPropertyName: Option[String] = Some("occVersionNumber")
   }
 
   implicit object courseOfferingKED extends KeyedEntityDef[CourseOffering, CompositeKey3[Int, Long, Int]] {
@@ -202,7 +202,7 @@ class SchoolDb extends Schema {
 //      None
 //  }
 
-  override val name = None
+  override val name: Option[String] = None
 
   override def columnNameFromPropertyName(n: String) =
     NamingConventionTransforms.snakify(n)
@@ -311,7 +311,7 @@ class SchoolDb extends Schema {
   // will contain the identityHashCode :
   val professorsCreatedWithFactory = new ArrayBuffer[Int]
 
-  override def callbacks = Seq(
+  override def callbacks: Seq[LifecycleEvent] = Seq(
     // We'll change the gender of z1 z2 student
     beforeInsert[Student]()
       map (s => {
@@ -421,7 +421,7 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 
   val schoolDb: SchoolDb = new SchoolDb
 
-  override lazy val schema = schoolDb
+  override lazy val schema: Schema = schoolDb
 
   var sharedTestInstance: TestInstance = null
 

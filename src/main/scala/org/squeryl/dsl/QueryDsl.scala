@@ -68,7 +68,7 @@ trait QueryDsl
 
       override def isEmpty = !hasFirst
 
-      def iterator =
+      def iterator: Iterator[R] =
         new IteratorConcatenation(firstRow.iterator, i)
 
     }
@@ -296,11 +296,11 @@ trait QueryDsl
     def statement: String = _inner.statement
 
     // Paginating a Count query makes no sense perhaps an org.squeryl.internals.Utils.throwError() would be more appropriate here:
-    def page(offset: Int, length: Int) = this
+    def page(offset: Int, length: Int): Query[Long] = this
 
-    def distinct = this
+    def distinct: Query[Long] = this
 
-    def forUpdate = _inner.forUpdate
+    def forUpdate: Query[Long] = _inner.forUpdate
 
     def dumpAst = _inner.dumpAst
 
@@ -309,7 +309,7 @@ trait QueryDsl
     protected[squeryl] def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
       _inner.invokeYield(rsm, rs).measures
 
-    override private[squeryl] def copy(asRoot: Boolean, newUnions: List[(String, Query[Long])]) =
+    override private[squeryl] def copy(asRoot: Boolean, newUnions: List[(String, Query[Long])]): Query[Long] =
       new CountSubQueryableQuery(q)
 
     def name = _inner.name
@@ -339,14 +339,14 @@ trait QueryDsl
 
     def iterator = q.map(m => m.measures).iterator
 
-    def distinct = this
+    def distinct: Query[T] = this
 
-    def forUpdate = q.forUpdate
+    def forUpdate: Query[T] = q.forUpdate
 
     def dumpAst = q.dumpAst
 
     // TODO: think about this : Paginating a Count query makes no sense perhaps an org.squeryl.internals.Utils.throwError() would be more appropriate here.
-    def page(offset: Int, length: Int) = this
+    def page(offset: Int, length: Int): Query[T] = this
 
     def statement: String = q.statement
 
@@ -441,7 +441,7 @@ trait QueryDsl
       with ManyToManyRelation[L, R, A] {
     thisTableOfA =>
 
-    def thisTable = thisTableOfA
+    def thisTable: Table[A] = thisTableOfA
 
     schema._addRelation(this)
 

@@ -74,7 +74,7 @@ class MSSQLServer extends DatabaseAdapter {
     binaryOpNode.doWrite(sw)
   }
 
-  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter): Unit = {
     // If you are keen enough you can implement a UDF and subclass this method to call out to it.
     // http://msdn.microsoft.com/en-us/magazine/cc163473.aspx
     throw new UnsupportedOperationException("MSSQL does not yet support a regex function")

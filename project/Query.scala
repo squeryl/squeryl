@@ -14,7 +14,7 @@ class Query${n}[${T}, R](
 
 ${(1 to n).map(x => s"  val sq${x} = createSubQueryable(t${x})").mkString("\n")}
 
-  def createCopy(root: Boolean, newUnions: List[(String, Query[R])]) =
+  def createCopy(root: Boolean, newUnions: List[(String, Query[R])]): AbstractQuery[R] =
     new Query${n}[${T}, R](${t}, f, root, copyUnions(unions ++ newUnions))
 
   def invokeYield(rsm: ResultSetMapper, rs: ResultSet): R =

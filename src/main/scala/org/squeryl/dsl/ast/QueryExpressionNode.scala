@@ -99,7 +99,7 @@ class QueryExpressionNode[R](
   def owns(aSample: AnyRef) =
     _sample.isDefined && _sample.get.eq(aSample)
 
-  def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements) =
+  def getOrCreateSelectElement(fmd: FieldMetaData, forScope: QueryExpressionElements): SelectElement =
     throw new UnsupportedOperationException("implement me")
 
   override def toString = {

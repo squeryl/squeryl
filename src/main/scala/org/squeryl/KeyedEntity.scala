@@ -45,7 +45,7 @@ trait KeyedEntityDef[-A, K] extends OptionalKeyedEntityDef[A, K] {
   /**
    * fulfills the contract of OptionalKeyedEntityDef
    */
-  final def keyedEntityDef = Some(this)
+  final def keyedEntityDef: Option[KeyedEntityDef[A, K]] = Some(this)
 }
 
 trait OptionalKeyedEntityDef[-A, K] {

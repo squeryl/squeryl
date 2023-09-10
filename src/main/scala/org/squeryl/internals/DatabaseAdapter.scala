@@ -800,7 +800,7 @@ trait DatabaseAdapter {
     sb.toString
   }
 
-  def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+  def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter): Unit = {
     sw.write("(")
     left.write(sw)
     sw.write(" ~ ?)")

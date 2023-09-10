@@ -152,7 +152,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
 
   val musicdb: MusicDb.type = MusicDb
 
-  override val schema = musicdb
+  override val schema: Schema = musicdb
 
   import musicdb._
 

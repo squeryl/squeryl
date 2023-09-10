@@ -113,7 +113,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   val musicDb: MusicDb = new MusicDb
 
-  override val schema = musicDb
+  override val schema: Schema = musicDb
 
   import musicDb._
 

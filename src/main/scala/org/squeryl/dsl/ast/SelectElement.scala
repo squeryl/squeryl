@@ -178,7 +178,7 @@ class FieldSelectElement(
     Session.currentSession.databaseAdapter.fieldAlias(origin, this)
     // origin.alias + "_" + fieldMetaData.columnName
 
-  val expression = new ExpressionNode {
+  val expression: ExpressionNode = new ExpressionNode {
 
     def doWrite(sw: StatementWriter) =
       sw.write(sw.quoteName(alias))
@@ -307,7 +307,7 @@ class ExportedSelectElement(val selectElement: SelectElement) extends SelectElem
 
   def origin = selectElement.origin
 
-  val expression = new ExpressionNode {
+  val expression: ExpressionNode = new ExpressionNode {
 
     def doWrite(sw: StatementWriter) =
       sw.write(sw.quoteName(alias))
