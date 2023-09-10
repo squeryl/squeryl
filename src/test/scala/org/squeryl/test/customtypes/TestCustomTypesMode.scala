@@ -27,7 +27,7 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
 
   private val hospitalDb = new HospitalDb()
 
-  override val schema = hospitalDb
+  override val schema: Schema = hospitalDb
 
   import hospitalDb._
 

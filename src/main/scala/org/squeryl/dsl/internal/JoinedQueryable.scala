@@ -21,12 +21,12 @@ import java.sql.ResultSet
 
 trait JoinedQueryable[A] extends Queryable[A] {
 
-  def name =
+  def name: String =
     throw new UnsupportedOperationException(
       "'OuterJoinedQueryable is a temporary class, not meant to become part of the ast"
     )
 
-  private[squeryl] def give(resultSetMapper: ResultSetMapper, rs: ResultSet) =
+  private[squeryl] def give(resultSetMapper: ResultSetMapper, rs: ResultSet): A =
     throw new UnsupportedOperationException(
       "'OuterJoinedQueryable is a temporary class, not meant to become part of the ast"
     )

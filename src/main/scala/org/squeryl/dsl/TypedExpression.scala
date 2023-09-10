@@ -409,7 +409,7 @@ trait DeOptionizer[P1, A1, T1, A2 >: Option[A1] <: Option[A1], T2] extends JdbcM
       r
     }
 
-    def sample = Option(deOptionizer.sample)
+    def sample: A2 = Option(deOptionizer.sample)
   }
 }
 

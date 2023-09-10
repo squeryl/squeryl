@@ -241,9 +241,9 @@ trait LogicalBoolean extends ExpressionNode {
 
 object TrueLogicalBoolean extends LogicalBoolean {
 
-  override def and(b: LogicalBoolean) = b
+  override def and(b: LogicalBoolean): LogicalBoolean = b
 
-  override def or(b: LogicalBoolean) = this
+  override def or(b: LogicalBoolean): LogicalBoolean = this
 
   override def doWrite(sw: StatementWriter) = {
     sw.write("(1=1)")
@@ -253,9 +253,9 @@ object TrueLogicalBoolean extends LogicalBoolean {
 
 object FalseLogicalBoolean extends LogicalBoolean {
 
-  override def and(b: LogicalBoolean) = this
+  override def and(b: LogicalBoolean): LogicalBoolean = this
 
-  override def or(b: LogicalBoolean) = b
+  override def or(b: LogicalBoolean): LogicalBoolean = b
 
   override def doWrite(sw: StatementWriter) = {
     sw.write("(1=0)")
@@ -304,7 +304,7 @@ class ColumnGroupAttributeAssignment(
 
   _columnAttributes ++= columnAttributes_
 
-  def columnAttributes = _columnAttributes
+  def columnAttributes: collection.Seq[ColumnAttribute] = _columnAttributes
 
   def addAttribute(a: ColumnAttribute) =
     _columnAttributes.append(a)
@@ -346,7 +346,7 @@ class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpression
 
   def clearColumnAttributes = left._clearColumnAttributes
 
-  def columnAttributes = Nil
+  def columnAttributes: Seq[ColumnAttribute] = Nil
 }
 
 class TokenExpressionNode(val token: String) extends ExpressionNode {

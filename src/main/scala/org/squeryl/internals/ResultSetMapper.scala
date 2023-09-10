@@ -94,7 +94,7 @@ object NoOpOutMapper extends OutMapper[Any] {
 
   def doMap(rs: ResultSet) = sample
 
-  def sample = throw new UnsupportedOperationException(" cannot use NoOpOutMapper")
+  def sample: Any = throw new UnsupportedOperationException(" cannot use NoOpOutMapper")
 
   override def typeOfExpressionToString = "NoOpOutMapper"
 }

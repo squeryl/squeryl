@@ -20,7 +20,7 @@ abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideT
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
 
-  def schema = TestSchema
+  def schema: Schema = TestSchema
 
   def testInnerJoin() = {
     val q0 = from(TestSchema.b)(b => select(b))

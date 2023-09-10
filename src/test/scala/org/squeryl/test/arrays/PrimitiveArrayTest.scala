@@ -1,6 +1,7 @@
 package org.squeryl.test.arrays
 
 import _root_.org.squeryl.framework._
+import org.squeryl.Schema
 import org.squeryl.test.PrimitiveTypeModeForTests._
 
 abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransaction {
@@ -8,7 +9,7 @@ abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransa
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
 
-  val schema = PrimitiveArraySchema
+  val schema: Schema = PrimitiveArraySchema
 
   import PrimitiveArraySchema._
 

@@ -155,7 +155,7 @@ abstract class AbstractQuery[R](
     sw.statement
   }
 
-  def distinct = {
+  def distinct: Query[R] = {
     if (isUnionQuery) {
       Utils.throwError("distinct is not supported on union queries")
     }
@@ -174,7 +174,7 @@ abstract class AbstractQuery[R](
     c
   }
 
-  def forUpdate = {
+  def forUpdate: Query[R] = {
     val c = copy(true, Nil)
     if (c.isUnionQuery)
       c.unionIsForUpdate = true
@@ -185,7 +185,7 @@ abstract class AbstractQuery[R](
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
 
-  def iterator = new Iterator[R] with Closeable {
+  def iterator: Iterator[R] = new Iterator[R] with Closeable {
 
     val sw = new StatementWriter(false, _dbAdapter)
     ast.write(sw)

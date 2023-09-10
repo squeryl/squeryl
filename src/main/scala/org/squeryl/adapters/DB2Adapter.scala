@@ -143,7 +143,7 @@ class DB2Adapter extends DatabaseAdapter {
       e.write(sw)
   }
 
-  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) = {
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter): Unit = {
     // If you are keen enough you can implement a UDF and subclass this method to call out to it.
     // See http://www.ibm.com/developerworks/data/library/techarticle/0301stolze/0301stolze.html for how.
     throw new UnsupportedOperationException("DB2 does not support a regex scalar function")

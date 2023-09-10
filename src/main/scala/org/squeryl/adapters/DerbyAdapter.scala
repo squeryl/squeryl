@@ -69,7 +69,7 @@ class DerbyAdapter extends DatabaseAdapter {
   override def isTableDoesNotExistException(e: SQLException) =
     e.getSQLState == "42Y55"
 
-  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter) =
+  override def writeRegexExpression(left: ExpressionNode, pattern: String, sw: StatementWriter): Unit =
     throw new UnsupportedOperationException("Derby does not support a regex scalar function")
 
   override def quoteIdentifier(s: String) = "\"" + s + "\""

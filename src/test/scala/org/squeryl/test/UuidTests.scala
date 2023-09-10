@@ -47,7 +47,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
 
-  final def schema = TestSchema
+  final def schema: Schema = TestSchema
 
   test("UuidAsProperty") {
     import TestSchema._

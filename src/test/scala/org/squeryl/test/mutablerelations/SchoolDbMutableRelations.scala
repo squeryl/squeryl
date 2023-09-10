@@ -86,7 +86,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
   val schoolDb2: SchoolDb2.type = SchoolDb2
 
-  override val schema = schoolDb2
+  override val schema: Schema = schoolDb2
 
   test("Many2ManyAssociationFromLeftSide") {
 

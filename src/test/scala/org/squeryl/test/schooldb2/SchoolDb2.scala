@@ -163,7 +163,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   val schoolDb2 = new SchoolDb2
 
-  override val schema = new SchoolDb2
+  override val schema: Schema = new SchoolDb2
 
   import schoolDb2._
 
