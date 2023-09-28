@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,13 +16,15 @@
 package org.squeryl.internals
 
 import java.lang.annotation.Annotation
-import java.lang.reflect.{Field, Method, Constructor, InvocationTargetException, Type, ParameterizedType}
+import java.lang.reflect.{Constructor, Field, InvocationTargetException, Method, ParameterizedType, Type}
 import java.sql.ResultSet
 import scala.annotation.tailrec
-import org.squeryl.annotations.{ColumnBase, Column}
+import org.squeryl.annotations.{Column, ColumnBase}
+
 import collection.mutable.{HashMap, HashSet}
-import org.squeryl.Session
+import org.squeryl.{Session, TargetsValuesSupertype}
 import org.squeryl.dsl.CompositeKey
+
 import java.lang.reflect.Member
 import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.customtypes.CustomType
@@ -212,12 +214,11 @@ class FieldMetaData(
 
   val resultSetHandler = createResultSetHandler
 
-  if (!isCustomType)
-    assert(
-      fieldType == wrappedFieldType,
-      "expected fieldType == wrappedFieldType in primitive type mode, got " +
-        fieldType.getName + " != " + wrappedFieldType.getName
-    )
+  if(!isCustomType)
+    assert(fieldType == wrappedFieldType ||
+      classOf[TargetsValuesSupertype].isAssignableFrom(fieldType) && fieldType.getSuperclass == wrappedFieldType,
+      "expected fieldType == wrappedFieldType in primitive type mode, got "+
+      fieldType.getName + " != " + wrappedFieldType.getName)
 
   override def toString =
     parentMetaData.clasz.getSimpleName + "." + columnName + ":" + displayType
@@ -478,6 +479,8 @@ object FieldMetaData {
       val isOption = v.isInstanceOf[Some[_]]
 
       val typeOfFieldOrTypeOfOption = v match {
+        case Some(sc:TargetsValuesSupertype) =>
+          sc.getClass.getSuperclass
         case Some(x) =>
           x.getClass
         case _ =>
@@ -485,6 +488,8 @@ object FieldMetaData {
       }
 
       val primitiveFieldType = v match {
+        case sc: TargetsValuesSupertype => sc.getClass.getSuperclass
+        case Some(sc: TargetsValuesSupertype) => sc.getClass.getSuperclass
         case p: Product1[_] =>
           p._1.getClass
         case Some(x: Product1[_]) =>

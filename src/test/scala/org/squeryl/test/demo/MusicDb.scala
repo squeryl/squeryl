@@ -1,25 +1,27 @@
 package org.squeryl.test.demo
 
-/*******************************************************************************
+/** *****************************************************************************
  * Copyright 2010 Maxime Lévesque
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ***************************************************************************** */
-import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.squeryl.{Query, KeyedEntity, Schema}
-import org.squeryl.dsl.GroupWithMeasures
+ * **************************************************************************** */
+
+import org.squeryl.dsl.{TInt, TOptionInt}
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
-import org.squeryl.dsl.{TOptionInt, TInt}
+import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.{KeyedEntity, Schema}
+
+import java.time.{Instant, ZonedDateTime}
 
 // The root object of the schema. Inheriting KeyedEntity[T] is not mandatory
 // it just makes primary key methods available (delete and lookup) .on tables.
@@ -33,20 +35,21 @@ case class Artist(name: String) extends MusicDbObject {
   def songs = from(MusicDb.songs)(s => where(s.artistId === id).select(s))
 
   def newSong(title: String, filePath: Option[String], year: Int) =
-    MusicDb.songs.insert(new Song(title, id, filePath, year))
+    MusicDb.songs.insert(new Song(title, id, filePath, year, Instant.now(), Some(Instant.now())))
 }
 
 // Option[] members are mapped to nullable database columns,
 // otherwise they have a NOT NULL constraint.
-class Song(val title: String, val artistId: Long, val filePath: Option[String], val year: Int) extends MusicDbObject {
+class Song(val title: String, val artistId: Long, val filePath: Option[String], val year: Int, val instant: Instant, val optionalInstant: Option[Instant]) extends MusicDbObject {
 
   // IMPORTANT : currently classes with Option[] members *must* provide a zero arg
   // constructor where every Option[T] member gets initialized with Some(t:T).
   // or else Squeryl will not be able to reflect the type of the field, and an exception will
   // be thrown at table instantiation time.
-  def this() = this("", 0, Some(""), 0)
+  def this() = this("", 0, Some(""), 0, Instant.now(), Some(Instant.now()))
 
   // the schema can be imported in the scope, to lighten the syntax :
+
   import MusicDb._
 
   // An alternative (shorter) syntax for single table queries :
@@ -94,8 +97,26 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   // New concept : a group query with aggregate functions return GroupWithMeasures[K,M]
   // where K and M are tuples whose members correspond to the group by list and compute list
   // respectively.
-  def _songCountByArtistId: Query[GroupWithMeasures[Long, Long]] =
-    from(artists, songs)((a, s) => where(a.id === s.artistId).groupBy(a.id).compute(count))
+  def _songCountByArtistId = {
+
+    val zonedNow = ZonedDateTime.now()
+    update(songs)(s =>
+      setAll(
+        s.instant := zonedNow,
+        s.optionalInstant := Some(zonedNow)
+      )
+    )
+    update(songs)(s =>
+      setAll(s.optionalInstant := None
+      )
+    )
+    from(artists, songs)((a, s) =>
+      where(a.id === s.artistId and s.optionalInstant.gte(zonedNow))
+        groupBy (a.id)
+        compute(count, max(s.optionalInstant))
+    )
+
+  }
 
   // Queries are nestable just as they would in SQL
   def songCountForAllArtists =

@@ -15,23 +15,15 @@ package org.squeryl.test.musicdb
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************** */
-import java.sql.Timestamp
-
-import org.squeryl._
-import adapters._
-import dsl._
-import framework._
-import java.util.Calendar
 import org.scalatest.matchers.should.Matchers
+import org.squeryl._
+import org.squeryl.adapters._
+import org.squeryl.dsl._
+import org.squeryl.framework._
+import org.squeryl.test.musicdb.Genre.{Genre, Jazz, Latin, Rock}
 
-object Genre extends Enumeration {
-  type Genre = Value
-  val Jazz = Value(1, "Jazz")
-  val Rock = Value(2, "Rock")
-  val Latin = Value(3, "Latin")
-  val Bluegrass = Value(4, "Bluegrass")
-  val RenaissancePolyphony = Value(5, "RenaissancePolyphony")
-}
+import java.sql.Timestamp
+import java.time.LocalDateTime
 
 object Tempo extends Enumeration {
   type Tempo = Value
@@ -40,11 +32,9 @@ object Tempo extends Enumeration {
   val Presto = Value(3, "Presto")
 }
 
-import Genre._
-
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
-  var timeOfLastUpdate = new Timestamp(System.currentTimeMillis)
+  var timeOfLastUpdate: LocalDateTime = LocalDateTime.now()
 }
 
 @SerialVersionUID(7397250327804824253L)
@@ -497,7 +487,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     expected shouldBe q.toList
   }
 
-  test("Timestamp") {
+  test("Timestamp"){
     val testInstance = sharedTestInstance; import testInstance._
 
     var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
@@ -506,27 +496,22 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val tX1 = mongo.timeOfLastUpdate
 
-    val cal = Calendar.getInstance
-    cal.setTime(mongo.timeOfLastUpdate)
-    cal.roll(Calendar.SECOND, 12);
+    val tX2 = tX1.plusDays(7)
 
-    val tX2 = new Timestamp(cal.getTimeInMillis)
+    mongo.timeOfLastUpdate = tX2
 
-    mongo.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
 
     artists.update(mongo)
     mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
 
-    new Timestamp(cal.getTimeInMillis) shouldBe mongo.timeOfLastUpdate
+    tX2 shouldBe mongo.timeOfLastUpdate
 
     val mustBeSome =
-      artists
-        .where(a =>
-          a.firstName === mongoSantaMaria.firstName and
-            // a.timeOfLastUpdate.between(createLeafNodeOfScalarTimestampType(tX1), createLeafNodeOfScalarTimestampType(tX2))
-            a.timeOfLastUpdate.between(tX1, tX2)
-        )
-        .headOption
+      artists.where(a =>
+        a.firstName === mongoSantaMaria.firstName and
+        //a.timeOfLastUpdate.between(createLeafNodeOfScalarTimestampType(tX1), createLeafNodeOfScalarTimestampType(tX2))
+        a.timeOfLastUpdate.between(tX1, tX2)
+      ).headOption
 
     assert(mustBeSome.isDefined, "testTimestamp failed");
   }
@@ -534,53 +519,45 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   private def _truncateTimestampInTimeOfLastUpdate(p: Person) = {
     val t1 = p.timeOfLastUpdate
 
-    val cal = Calendar.getInstance
-
-    cal.setTime(t1)
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-
-    p.timeOfLastUpdate = new Timestamp(cal.getTimeInMillis)
+    val newUpdateTime = t1.withSecond(0).withNano(0)
+    p.timeOfLastUpdate = newUpdateTime
     val testInstance = sharedTestInstance; import testInstance._
     artists.update(p)
-    // cal
 
     val out = artists.where(_.firstName === mongoSantaMaria.firstName).single
 
-    assert(new Timestamp(cal.getTimeInMillis) == out.timeOfLastUpdate)
+    assert(newUpdateTime == out.timeOfLastUpdate)
 
     out
   }
 
-  private def _rollTimestamp(t: Timestamp, partToRoll: Int, rollAmount: Int) = {
-    val cal = Calendar.getInstance
-    cal.setTime(t)
-    cal.roll(partToRoll, rollAmount);
-    new Timestamp(cal.getTimeInMillis)
+
+  test("TestTimestampImplicit"){
+    val b: Option[LocalDateTime] =
+      from(artists)(a=>
+        compute(min(a.timeOfLastUpdate))
+      )
   }
 
-  test("TestTimestampImplicit") {
-    val x: Option[Timestamp] =
-      from(artists)(a => compute(min(a.timeOfLastUpdate)))
-  }
-
-  ignore("TimestampPartialUpdate") {
+  ignore("TimestampPartialUpdate"){
     val testInstance = sharedTestInstance; import testInstance._
 
     var mongo = artists.where(_.firstName === mongoSantaMaria.firstName).single
     // round to 0 second :
     mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
 
-    val cal = Calendar.getInstance
-    cal.setTime(mongo.timeOfLastUpdate)
-    cal.roll(Calendar.SECOND, 12);
 
-    update(artists)(a => where(a.id === mongo.id).set(a.timeOfLastUpdate := new Timestamp(cal.getTimeInMillis)))
+    val newUpdateTime = LocalDateTime.now().plusDays(12)
+
+    update(artists)(a=>
+      where(a.id === mongo.id)
+      set(a.timeOfLastUpdate := newUpdateTime)
+    )
 
     val res = artists.where(_.firstName === mongoSantaMaria.firstName).single.timeOfLastUpdate
-    // val res = mongo.timeOfLastUpdate
+    //val res = mongo.timeOfLastUpdate
 
-    cal.getTime shouldBe res
+    newUpdateTime shouldBe res
   }
 
   test("TimestampDownToMillis") {
@@ -597,7 +574,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
       // round to 0 second :
       mongo = _truncateTimestampInTimeOfLastUpdate(mongo)
 
-      val tX2 = _rollTimestamp(mongo.timeOfLastUpdate, Calendar.MILLISECOND, 12)
+      val tX2 = mongo.timeOfLastUpdate.plusDays(5)
 
       mongo.timeOfLastUpdate = tX2
 

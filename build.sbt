@@ -5,16 +5,8 @@ name := "squeryl"
 description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety"
 
 val commonSettings = Def.settings(
-  organization := "org.squeryl",
-  javacOptions := {
-    if (scala.util.Properties.isJavaAtLeast("17")) {
-      Seq("-source", "1.8", "-target", "1.8")
-    } else if (scala.util.Properties.isJavaAtLeast("11")) {
-      Seq("-source", "1.7", "-target", "1.7")
-    } else {
-      Seq("-source", "1.6", "-target", "1.6")
-    }
-  },
+  organization := "com.github.novamage",
+  javacOptions := Seq("-source", "1.8", "-target", "1.8"),
   Test / fork := true,
   Test / javaOptions ++= {
     // https://github.com/squeryl/squeryl/issues/340
