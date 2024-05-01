@@ -196,7 +196,14 @@ ThisBuild / semanticdbEnabled := {
   scalaBinaryVersion.value != "2.10"
 }
 
-ThisBuild / semanticdbVersion := "4.8.10"
+ThisBuild / semanticdbVersion := {
+  scalaBinaryVersion.value match {
+    case "2.11" =>
+      "4.8.10"
+    case _ =>
+      "4.9.3"
+  }
+}
 
 Compile / sourceGenerators += task {
   val dir = (Compile / sourceManaged).value
