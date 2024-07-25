@@ -175,8 +175,8 @@ class FieldSelectElement(
       origin.alias + "." + fieldMetaData.columnName
 
   override def aliasSegment: String =
-    Session.currentSession.databaseAdapter.fieldAlias(origin, this)
-    // origin.alias + "_" + fieldMetaData.columnName
+  Session.currentSession.databaseAdapter.fieldAlias(origin, this)
+  // origin.alias + "_" + fieldMetaData.columnName
 
   val expression: ExpressionNode = new ExpressionNode {
 

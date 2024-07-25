@@ -317,8 +317,8 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       s.add(a)
 
   private def _includeFieldOrMethodType(c: Class[_]) =
-    schema.fieldMapper.isSupported(c)
-    // ! classOf[Query[_]].isAssignableFrom(c)
+  schema.fieldMapper.isSupported(c)
+  // ! classOf[Query[_]].isAssignableFrom(c)
 
   @tailrec
   private def _fillWithMembers(clasz: Class[_], members: ArrayBuffer[(Member, HashSet[Annotation])]): Unit = {
