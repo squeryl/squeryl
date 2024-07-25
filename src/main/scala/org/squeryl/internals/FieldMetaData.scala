@@ -535,14 +535,14 @@ object FieldMetaData {
     // which is called "value" and doesn't return java.lang.Object
     @tailrec
     def find(c: Class[_]): Option[Method] =
-      if (c != null)
-        c.getMethods.find(m => m.getName == "value" && m.getReturnType != classOf[java.lang.Object]) match {
-          case Some(m) => Some(m)
-          case None => find(c.getSuperclass)
-        }
-      else None
+    if (c != null)
+      c.getMethods.find(m => m.getName == "value" && m.getReturnType != classOf[java.lang.Object]) match {
+        case Some(m) => Some(m)
+        case None => find(c.getSuperclass)
+      }
+    else None
 
-      // invoke the given constructor and expose possible exceptions to the caller.
+    // invoke the given constructor and expose possible exceptions to the caller.
     def invoke(c: Constructor[_], value: AnyRef) =
       try {
         c.newInstance(value).asInstanceOf[Product1[Any] with AnyRef]
