@@ -144,11 +144,11 @@ libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
       Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.3.0",
+        "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
       )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 12 =>
       Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.3.0",
+        "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
         scalap
       )
     case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
