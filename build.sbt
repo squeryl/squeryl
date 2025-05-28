@@ -35,7 +35,7 @@ val commonSettings = Def.settings(
     commitReleaseVersion,
     tagRelease,
     releaseStepCommandAndRemaining("+ publishSigned"),
-    releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+    releaseStepCommandAndRemaining("sonaRelease"),
     setNextVersion,
     commitNextVersion,
     pushChanges
@@ -104,7 +104,7 @@ val commonSettings = Def.settings(
                  <url>https://github.com/davewhittaker</url>
                </developer>
              </developers>),
-  publishTo := sonatypePublishToBundle.value,
+  publishTo := (if (isSnapshot.value) None else localStaging.value),
   Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
   scalaVersion := Scala211
