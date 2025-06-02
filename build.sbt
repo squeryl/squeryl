@@ -6,6 +6,8 @@ import sbt.Keys.*
 val Scala211 = "2.11.12"
 val Scala213 = "2.13.16"
 
+wartremoverWarnings ++= Warts.unsafe
+
 name := "squeryl"
 
 description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety"
