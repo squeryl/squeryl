@@ -19,3 +19,7 @@ profileOfH2Tests.html
 *.trace.db
 .sbtconfig
 tags
+.bsp
+.idea
+.sdkmanrc
+.nexus_credentials

@@ -1,8 +1,18 @@
-import sbtrelease.ReleaseStateTransformations._
+import sbtrelease.ReleaseStateTransformations.*
+
+import sbt.*
+import sbt.Keys.*
+
+val Scala211 = "2.11.12"
+val Scala213 = "2.13.16"
 
 name := "squeryl"
 
 description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety"
+
+val ivyLocal = Resolver.file("ivyLocal", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
+val nexus = "Sonatype Nexus Repository Manager" at "https://nexus.criterionhcm.com/repository/maven-public/"
+val resolutionRepos = Seq(nexus, ivyLocal, Resolver.mavenLocal)
 
 val commonSettings = Def.settings(
   organization := "org.squeryl",
@@ -42,7 +52,7 @@ val commonSettings = Def.settings(
   ),
   parallelExecution := false,
   publishMavenStyle := true,
-  crossScalaVersions := Seq("2.12.20", Scala211, "2.10.7", "2.13.16", "3.3.6"),
+  crossScalaVersions := Seq("2.12.20", Scala211, "2.10.7", Scala213, "3.3.6"),
   Compile / doc / scalacOptions ++= {
     val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
     val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
@@ -88,31 +98,18 @@ val commonSettings = Def.settings(
   Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value),
   licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(url("https://squeryl.org")),
-  pomExtra := (<scm>
-               <url>git@github.com:squeryl/squeryl.git</url>
-               <connection>scm:git:git@github.com:squeryl/squeryl.git</connection>
-             </scm>
-             <developers>
-               <developer>
-                 <id>max-l</id>
-                 <name>Maxime Lévesque</name>
-                 <url>https://github.com/max-l</url>
-               </developer>
-               <developer>
-                 <id>davewhittaker</id>
-                 <name>Dave Whittaker</name>
-                 <url>https://github.com/davewhittaker</url>
-               </developer>
-             </developers>),
-  publishTo := (if (isSnapshot.value) None else localStaging.value),
+  organizationName := "Criterion Inc.",
+  resolvers += nexus,
+  externalResolvers := Resolver.combineDefaultResolvers(resolvers.value.toVector, mavenCentral = false),
+  publishTo := Some(
+    "Nexus Realm" at "https://nexus.criterionhcm.com/nexus/content/groups/criterionhcm/squeryl"
+  ),
+  credentials += Credentials(new File(baseDirectory.value, ".nexus_credentials")),
   Test / publishArtifact := false,
-  pomIncludeRepository := { _ => false },
-  scalaVersion := Scala211
+  scalaVersion := Scala213
 )
 
 commonSettings
-
-val Scala211 = "2.11.12"
 
 lazy val unusedWarnings = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value) match {
@@ -166,26 +163,6 @@ libraryDependencies ++= {
 val disableMacrosProject: Def.Initialize[Boolean] = Def.setting(
   scalaBinaryVersion.value != "3"
 )
-
-pomPostProcess := { node =>
-  import scala.xml._
-  import scala.xml.transform._
-  val rule = new RewriteRule {
-    override def transform(node: Node) = {
-      if (
-        (node.label == "dependency") &&
-        ((node \ "groupId").text == "org.squeryl") &&
-        (node \ "artifactId").text.startsWith((macros / moduleName).value) &&
-        disableMacrosProject.value
-      ) {
-        NodeSeq.Empty
-      } else {
-        node
-      }
-    }
-  }
-  new RuleTransformer(rule).transform(node)(0)
-}
 
 lazy val macros = project
   .in(file("macros"))
