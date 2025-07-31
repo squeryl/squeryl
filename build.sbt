@@ -129,7 +129,7 @@ lazy val unusedWarnings = Def.setting(
 
 libraryDependencies ++= Seq(
   "cglib" % "cglib-nodep" % "3.3.0",
-  "com.h2database" % "h2" % "1.4.200" % "provided",
+  "com.h2database" % "h2" % "2.3.232" % "provided",
   "com.mysql" % "mysql-connector-j" % "9.4.0" % "provided",
   "org.postgresql" % "postgresql" % "42.7.7" % "provided",
   "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
