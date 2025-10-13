@@ -149,12 +149,11 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import musicdb._
 
   val musicdb: MusicDb.type = MusicDb
 
   override val schema: Schema = musicdb
-
-  import musicdb._
 
   var sharedTestData: TestData = null
 
