@@ -1,10 +1,8 @@
 package org.squeryl.oracle
 
 import org.squeryl.test._
-
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.OracleAdapter
-
 import org.squeryl.Session
 
 trait Oracle_Connection extends DBConnector {

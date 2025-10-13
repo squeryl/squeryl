@@ -3,6 +3,7 @@ package org.squeryl.test.mutablerelations
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl._
 import org.squeryl.dsl.CompositeKey2
+import org.squeryl.framework._
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
   val id: Long = 0
@@ -78,8 +79,6 @@ object SchoolDb2 extends Schema {
     super.drop
   }
 }
-
-import org.squeryl.framework._
 
 abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
