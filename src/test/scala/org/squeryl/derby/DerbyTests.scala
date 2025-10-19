@@ -1,10 +1,8 @@
 package org.squeryl.derby
 
 import org.squeryl.test._
-
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.DerbyAdapter
-
 import org.squeryl.Session
 
 trait Derby_Connection extends DBConnector {

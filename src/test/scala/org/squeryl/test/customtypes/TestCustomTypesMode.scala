@@ -18,7 +18,6 @@ package org.squeryl.test.customtypes
 import org.squeryl.{KeyedEntity, Schema}
 import org.squeryl.framework._
 import org.squeryl.customtypes._
-
 import CustomTypesMode._
 import org.scalatest.matchers.should.Matchers
 
@@ -30,14 +29,13 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
   override val schema: Schema = hospitalDb
 
   import hospitalDb._
+  import CustomTypesMode._
 
   var sharedTestObjects: TestData = null
 
   override def prePopulate(): Unit = {
     sharedTestObjects = new TestData(hospitalDb)
   }
-
-  import CustomTypesMode._
 
   def simpleSelect =
     from(patients)(p => where(p.age > 70).select(p))
