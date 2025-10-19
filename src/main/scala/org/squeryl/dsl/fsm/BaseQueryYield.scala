@@ -20,7 +20,6 @@ import org.squeryl.dsl._
 import org.squeryl.dsl.boilerplate._
 import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
-
 import org.squeryl.Query
 
 class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure: () => G)
