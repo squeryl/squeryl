@@ -23,7 +23,6 @@ import boilerplate.{
   GroupBySignatures,
   OrderBySignatures
 }
-
 import org.squeryl.Query
 
 abstract sealed class Conditioned

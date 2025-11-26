@@ -18,7 +18,6 @@ package org.squeryl.dsl
 import ast.{LogicalBoolean, ExpressionNode, QueryExpressionNode, SelectElement}
 import org.squeryl.internals.ResultSetMapper
 import java.sql.ResultSet
-
 import org.squeryl.Query
 
 trait QueryYield[R] extends QueryYieldMethods[R] {

@@ -4,7 +4,6 @@ import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.squeryl._
 import dsl.{OneToMany, CompositeKey2}
 import java.sql.Savepoint
-
 import org.squeryl.framework._
 
 trait SchoolDb2Object {
@@ -160,12 +159,11 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import schoolDb2._
 
   val schoolDb2 = new SchoolDb2
 
   override val schema: Schema = new SchoolDb2
-
-  import schoolDb2._
 
   class SeedData {
 
