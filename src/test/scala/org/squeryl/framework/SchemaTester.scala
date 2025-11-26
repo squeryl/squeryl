@@ -1,7 +1,6 @@
 package org.squeryl.framework
 
 import org.squeryl.{SessionFactory, Schema}
-
 import org.squeryl.test.PrimitiveTypeModeForTests._
 import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
