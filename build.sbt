@@ -205,7 +205,7 @@ ThisBuild / semanticdbVersion := {
     case "2.11" =>
       "4.8.10"
     case _ =>
-      "4.13.10"
+      "4.14.2"
   }
 }
 
