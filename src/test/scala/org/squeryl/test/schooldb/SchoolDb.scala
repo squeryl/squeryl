@@ -26,6 +26,7 @@ import adapters.{MSSQLServer, OracleAdapter, DerbyAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker, LifecycleEvent}
 import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.ExpressionNode
+import AppSpecificTypeMode._
 
 object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
   implicit object personKED extends KeyedEntityDef[Student, Int] {
@@ -60,8 +61,6 @@ object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
     def idPropertyName = "id"
   }
 }
-
-import AppSpecificTypeMode._
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
 
@@ -388,7 +387,6 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
-
   import schoolDb._
 
   test("NewLeftOuterJoin1Reverse") {
@@ -435,7 +433,6 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
-
   import schoolDb._
 
   test("commonTableExpressions") {
@@ -468,7 +465,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
-
   import schoolDb._
 
   test("cast") {
