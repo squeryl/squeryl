@@ -18,9 +18,7 @@ package org.squeryl.logging
 import org.squeryl.KeyedEntity
 import org.squeryl.Schema
 import org.squeryl.dsl.{CompositeKey2, TypedExpression, TOptionFloat}
-
-object StatsSchemaTypeMode extends org.squeryl.PrimitiveTypeMode
-import StatsSchemaTypeMode._
+import org.squeryl.logging.StatsSchemaTypeMode._
 
 /**
  * id is a UUID generatted by java.util.UUID
