@@ -42,7 +42,7 @@ val commonSettings = Def.settings(
   ),
   parallelExecution := false,
   publishMavenStyle := true,
-  crossScalaVersions := Seq("2.12.21", Scala211, "2.10.7", "2.13.18", "3.3.7"),
+  crossScalaVersions := Seq(Scala212, "2.13.18", "3.3.7"),
   Compile / doc / scalacOptions ++= {
     val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
     val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
@@ -59,7 +59,7 @@ val commonSettings = Def.settings(
         Seq(
           "-Xsource:3-cross",
         )
-      case Some((2, 12 | 11)) =>
+      case Some((2, 12)) =>
         Seq(
           "-Xsource:3",
         )
@@ -107,19 +107,15 @@ val commonSettings = Def.settings(
   publishTo := (if (isSnapshot.value) None else localStaging.value),
   Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
-  scalaVersion := Scala211
+  scalaVersion := Scala212
 )
 
 commonSettings
 
-val Scala211 = "2.11.12"
+val Scala212 = "2.12.21"
 
 lazy val unusedWarnings = Def.setting(
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 10)) =>
-      Nil
-    case Some((2, 11)) =>
-      Seq("-Ywarn-unused-import")
     case Some((2, 12)) =>
       Seq("-Ywarn-unused:imports")
     case _ =>
@@ -140,24 +136,16 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= {
-  val scalap = "org.json4s" %% "json4s-scalap" % "3.6.12"
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((scalaMajor, scalaMinor)) if scalaMajor == 3 =>
+    case Some((3, _)) =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
       )
-    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 12 =>
+    case Some((2, _)) =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
-        scalap
+        "org.json4s" %% "json4s-scalap" % "3.6.12"
       )
-    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 11 =>
-      Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "1.3.1",
-        scalap
-      )
-    case Some((scalaMajor, scalaMinor)) if scalaMajor == 2 && scalaMinor >= 10 =>
-      Seq(scalap)
     case _ =>
       Nil
   }
@@ -196,18 +184,9 @@ lazy val macros = project
 
 dependsOn(macros)
 
-ThisBuild / semanticdbEnabled := {
-  scalaBinaryVersion.value != "2.10"
-}
+ThisBuild / semanticdbEnabled := true
 
-ThisBuild / semanticdbVersion := {
-  scalaBinaryVersion.value match {
-    case "2.11" =>
-      "4.8.10"
-    case _ =>
-      "4.14.2"
-  }
-}
+ThisBuild / semanticdbVersion := "4.14.2"
 
 Compile / sourceGenerators += task {
   val dir = (Compile / sourceManaged).value
