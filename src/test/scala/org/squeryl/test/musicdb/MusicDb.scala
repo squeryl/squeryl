@@ -23,15 +23,7 @@ import dsl._
 import framework._
 import java.util.Calendar
 import org.scalatest.matchers.should.Matchers
-
-object Genre extends Enumeration {
-  type Genre = Value
-  val Jazz = Value(1, "Jazz")
-  val Rock = Value(2, "Rock")
-  val Latin = Value(3, "Latin")
-  val Bluegrass = Value(4, "Bluegrass")
-  val RenaissancePolyphony = Value(5, "RenaissancePolyphony")
-}
+import org.squeryl.test.musicdb.Genre._
 
 object Tempo extends Enumeration {
   type Tempo = Value
@@ -39,8 +31,6 @@ object Tempo extends Enumeration {
   val Allegro = Value(2, "Allegro")
   val Presto = Value(3, "Presto")
 }
-
-import Genre._
 
 class MusicDbObject extends KeyedEntity[Int] {
   val id: Int = 0
