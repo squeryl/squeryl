@@ -154,8 +154,6 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
 
   override val schema: Schema = musicdb
 
-  import musicdb._
-
   var sharedTestData: TestData = null
 
   override def prePopulate() = {
@@ -169,7 +167,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     funkAndLatinJazz.addSong(besameMama)
     funkAndLatinJazz.addSong(freedomSound)
 
-    val decadeOf1960 = playlists.insert(new Playlist("1960s", "c:/myPlayLists/funkAndLatinJazz"))
+    val decadeOf1960 = musicdb.playlists.insert(new Playlist("1960s", "c:/myPlayLists/funkAndLatinJazz"))
 
     decadeOf1960.addSong(watermelonMan)
     decadeOf1960.addSong(funkifyYouLife)
@@ -179,7 +177,9 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
 
     // Nesting a query in a where clause :
     val songsFromThe60sInFunkAndLatinJazzPlaylist =
-      from(songs)(s => where(s.id in from(funkAndLatinJazz.songsInPlaylistOrder)(s2 => select(s2.id))).select(s))
+      from(musicdb.songs)(s =>
+        where(s.id in from(funkAndLatinJazz.songsInPlaylistOrder)(s2 => select(s2.id))).select(s)
+      )
 
     val songIds =
       songsFromThe60sInFunkAndLatinJazzPlaylist.map(_.id).toSet
@@ -190,9 +190,9 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
     from(funkAndLatinJazz.songsInPlaylistOrder)(s => where(s.id === 123).select(s))
 
     // Left Outer Join :
-    join(songs, ratings.leftOuter)((s, r) => select((s, r)).on(s.id === r.map(_.songId)))
+    join(musicdb.songs, musicdb.ratings.leftOuter)((s, r) => select((s, r)).on(s.id === r.map(_.songId)))
 
-    update(songs)(s =>
+    update(musicdb.songs)(s =>
       where(s.title === "Watermelon Man").set(s.title := "The Watermelon Man", s.year := s.year.plus(1)(intTEF))
     )
 
