@@ -5,7 +5,6 @@ import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.H2Adapter
 import org.squeryl.test.arrays.PrimitiveArrayTest
 import org.squeryl.{AbstractSession, Session}
-
 import java.sql.Connection
 
 /*

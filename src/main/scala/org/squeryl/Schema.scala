@@ -18,12 +18,10 @@ package org.squeryl
 import dsl._
 import ast._
 import internals._
-
 import reflect.ClassTag
 import java.sql.SQLException
 import java.io.PrintWriter
 import java.util.regex.Pattern
-
 import collection.mutable.{ArrayBuffer, HashMap, HashSet}
 import org.squeryl.internals.FieldMapper
 

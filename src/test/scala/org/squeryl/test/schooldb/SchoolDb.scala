@@ -353,7 +353,6 @@ abstract class FullOuterJoinTests extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
-
   import schoolDb._
 
   test("NewLeftOuterJoin1Reverse") {
@@ -400,7 +399,6 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
-
   import schoolDb._
 
   test("commonTableExpressions") {
@@ -433,7 +431,6 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
   import org.squeryl.test.PrimitiveTypeMode4Tests._
-
   import schoolDb._
 
   test("cast") {
