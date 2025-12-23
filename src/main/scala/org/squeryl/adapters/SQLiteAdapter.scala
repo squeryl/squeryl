@@ -16,7 +16,6 @@
 package org.squeryl.adapters
 
 import java.sql.SQLException
-
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.dsl.ast.{ExpressionNode, QueryExpressionElements}
 import org.squeryl._

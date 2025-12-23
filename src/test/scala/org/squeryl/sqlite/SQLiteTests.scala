@@ -1,10 +1,8 @@
 package org.squeryl.sqlite
 
 import org.squeryl.test._
-
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.SQLiteAdapter
-
 import org.squeryl.{AbstractSession, Session}
 import java.sql.Connection
 

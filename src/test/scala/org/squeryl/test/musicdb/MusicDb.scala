@@ -16,7 +16,6 @@ package org.squeryl.test.musicdb
  * limitations under the License.
  ***************************************************************************** */
 import java.sql.Timestamp
-
 import org.squeryl._
 import adapters._
 import dsl._
@@ -24,6 +23,7 @@ import framework._
 import java.util.Calendar
 import org.scalatest.matchers.should.Matchers
 import org.squeryl.test.musicdb.Genre._
+import org.squeryl.test.PrimitiveTypeModeForTests._
 
 object Tempo extends Enumeration {
   type Tempo = Value
@@ -58,7 +58,6 @@ class Song(
 class Cd(var title: String, var mainArtist: Int, var year: Int) extends MusicDbObject {
   override def toString = s"${id}:${title}"
 }
-import org.squeryl.test.PrimitiveTypeModeForTests._
 
 class MusicDb extends Schema with Matchers {
 
@@ -100,12 +99,11 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   self: DBConnector =>
 
   import org.squeryl.test.PrimitiveTypeModeForTests._
+  import musicDb._
 
   val musicDb: MusicDb = new MusicDb
 
   override val schema: Schema = musicDb
-
-  import musicDb._
 
   var sharedTestInstance: TestData = null
 
