@@ -144,7 +144,7 @@ libraryDependencies ++= {
     case Some((2, _)) =>
       Seq(
         "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
-        "org.json4s" %% "json4s-scalap" % "4.0.7"
+        "io.github.json4s" %% "json4s-scalap" % "4.1.0"
       )
     case _ =>
       Nil
