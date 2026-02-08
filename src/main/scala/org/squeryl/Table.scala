@@ -15,9 +15,9 @@
  ***************************************************************************** */
 package org.squeryl;
 
-import dsl.ast._
+import dsl.ast.*
 import dsl.{CompositeKey, QueryDsl}
-import internals._
+import internals.*
 import java.sql.Statement
 import logging.StackMarker
 import collection.mutable.ArrayBuffer
@@ -29,8 +29,8 @@ class Table[T] private[squeryl] (
   c: Class[T],
   val schema: Schema,
   _prefix: Option[String],
-  ked: Option[KeyedEntityDef[T, _]],
-  optionalFieldsInfo: Option[Map[String, Class[_]]]
+  ked: Option[KeyedEntityDef[T, ?]],
+  optionalFieldsInfo: Option[Map[String, Class[?]]]
 ) extends View[T](n, c, schema, _prefix, ked, optionalFieldsInfo) {
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
@@ -191,23 +191,23 @@ class Table[T] private[squeryl] (
    * @throws SquerylSQLException When a database error occurs or the update
    * does not result in 1 row
    */
-  def forceUpdate[K](o: T)(implicit ked: KeyedEntityDef[T, _]) =
+  def forceUpdate[K](o: T)(implicit ked: KeyedEntityDef[T, ?]) =
     _update(o, false, ked)
 
   /**
    * @throws SquerylSQLException When a database error occurs or the update
    * does not result in 1 row
    */
-  def update(o: T)(implicit ked: KeyedEntityDef[T, _]): Unit =
+  def update(o: T)(implicit ked: KeyedEntityDef[T, ?]): Unit =
     _update(o, true, ked)
 
-  def update(o: Iterable[T])(implicit ked: KeyedEntityDef[T, _]): Unit =
+  def update(o: Iterable[T])(implicit ked: KeyedEntityDef[T, ?]): Unit =
     _update(o, ked.isOptimistic)
 
-  def forceUpdate(o: Iterable[T])(implicit ked: KeyedEntityDef[T, _]): Unit =
+  def forceUpdate(o: Iterable[T])(implicit ked: KeyedEntityDef[T, ?]): Unit =
     _update(o, ked.isOptimistic)
 
-  private def _update(o: T, checkOCC: Boolean, ked: KeyedEntityDef[T, _]) = {
+  private def _update(o: T, checkOCC: Boolean, ked: KeyedEntityDef[T, ?]) = {
 
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
@@ -317,7 +317,7 @@ class Table[T] private[squeryl] (
     delete(dsl.from(this)(t => dsl.where(whereClause(t)).select(t)))
 
   def delete[K](k: K)(implicit ked: KeyedEntityDef[T, K], dsl: QueryDsl, toCanLookup: K => CanLookup): Boolean = {
-    import dsl._
+    import dsl.*
     val q = from(this)(a =>
       dsl.where {
         FieldReferenceLinker
@@ -349,7 +349,7 @@ class Table[T] private[squeryl] (
    * @throws SquerylSQLException When a database error occurs or the operation
    * does not result in 1 row
    */
-  def insertOrUpdate(o: T)(implicit ked: KeyedEntityDef[T, _]): T = {
+  def insertOrUpdate(o: T)(implicit ked: KeyedEntityDef[T, ?]): T = {
     if (ked.isPersisted(o))
       update(o)
     else

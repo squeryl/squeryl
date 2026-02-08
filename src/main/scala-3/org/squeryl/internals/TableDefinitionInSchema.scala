@@ -15,24 +15,24 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import org.squeryl._
+import org.squeryl.*
 import reflect.ClassTag
 
 trait TableDefinitionInSchema {
   self: Schema =>
 
-  protected inline def table[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] =
+  protected inline def table[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] =
     val optionalFieldsInfo = org.squeryl.internals.TypeInfo.fieldsInfo[T]
     table(tableNameFromClass(manifestT.runtimeClass))(optionalFieldsInfo)(manifestT, ked)
 
   protected def table[T](
     optionalFieldsInfo: Map[String, Class[_]]
-  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] =
+  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] =
     table(tableNameFromClass(manifestT.runtimeClass))(optionalFieldsInfo)(manifestT, ked)
 
   protected inline def table[T](name: String, prefix: String)(implicit
     manifestT: ClassTag[T],
-    ked: OptionalKeyedEntityDef[T, _]
+    ked: OptionalKeyedEntityDef[T, ?]
   ): Table[T] = {
     val optionalFieldsInfo = org.squeryl.internals.TypeInfo.fieldsInfo[T]
     table(name, prefix)(optionalFieldsInfo)(manifestT, ked)
@@ -40,7 +40,7 @@ trait TableDefinitionInSchema {
 
   protected def table[T](name: String, prefix: String)(
     optionalFieldsInfo: Map[String, Class[_]]
-  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] = {
+  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef, None)
     _addTable(t)
@@ -50,13 +50,13 @@ trait TableDefinitionInSchema {
 
   protected inline def table[T](
     name: String
-  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] =
+  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] =
     val optionalFieldsInfo = org.squeryl.internals.TypeInfo.fieldsInfo[T]
     table(name)(optionalFieldsInfo)(manifestT, ked)
 
   protected def table[T](name: String)(
     optionalFieldsInfo: Map[String, Class[_]]
-  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] = {
+  )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, Some(optionalFieldsInfo))
     _addTable(t)

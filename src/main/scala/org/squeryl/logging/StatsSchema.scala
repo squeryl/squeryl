@@ -18,7 +18,7 @@ package org.squeryl.logging
 import org.squeryl.KeyedEntity
 import org.squeryl.Schema
 import org.squeryl.dsl.{CompositeKey2, TypedExpression, TOptionFloat}
-import org.squeryl.logging.StatsSchemaTypeMode._
+import org.squeryl.logging.StatsSchemaTypeMode.*
 
 /**
  * id is a UUID generatted by java.util.UUID
@@ -104,7 +104,7 @@ object StatsSchema extends Schema {
       )
     )
 
-  import Measure._
+  import Measure.*
 
   def topRankingStatements(topN: Int, measure: Measure) =
     from(invocationStats, statements)((si, s) =>

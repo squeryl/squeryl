@@ -20,8 +20,8 @@ import net.sf.cglib.proxy.{Callback, CallbackFilter, Enhancer, Factory, NoOp}
 
 import java.lang.reflect.{Constructor, Field, Member, Method, Modifier}
 import collection.mutable.{ArrayBuffer, HashSet}
-import org.squeryl.annotations._
-import org.squeryl._
+import org.squeryl.annotations.*
+import org.squeryl.*
 
 import scala.annotation.tailrec
 
@@ -58,7 +58,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val sampleInstance4OptionTypeDeduction =
       try {
-        constructor._1.newInstance(constructor._2: _*).asInstanceOf[AnyRef];
+        constructor._1.newInstance(constructor._2*).asInstanceOf[AnyRef];
       } catch {
         case e: IllegalArgumentException =>
           throw new RuntimeException("invalid constructor choice " + constructor._1, e)
@@ -182,7 +182,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
   def _const = {
 
-    val r = new ArrayBuffer[(Constructor[_], Array[Object])]
+    val r = new ArrayBuffer[(Constructor[?], Array[Object])]
 
 //    for(ct <- clasz.getConstructors)
 //      println("CT: " + ct.getParameterTypes.map(c=>c.getName).mkString(","))
@@ -190,12 +190,12 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     for (ct <- clasz.getConstructors)
       _tryToCreateParamArray(r, ct)
 
-    r.sortWith((a: (Constructor[_], Array[Object]), b: (Constructor[_], Array[Object])) => a._2.length < b._2.length)
+    r.sortWith((a: (Constructor[?], Array[Object]), b: (Constructor[?], Array[Object])) => a._2.length < b._2.length)
   }
 
-  def _tryToCreateParamArray(r: ArrayBuffer[(Constructor[_], Array[Object])], c: Constructor[_]): Unit = {
+  def _tryToCreateParamArray(r: ArrayBuffer[(Constructor[?], Array[Object])], c: Constructor[?]): Unit = {
 
-    val params: Array[Class[_]] = c.getParameterTypes
+    val params: Array[Class[?]] = c.getParameterTypes
 
     if (params.length >= 1) {
       val cn = clasz.getName
@@ -227,7 +227,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
 
     val e = new Enhancer
     e.setSuperclass(clasz)
-    val pc: Array[Class[_]] = constructor._1.getParameterTypes
+    val pc: Array[Class[?]] = constructor._1.getParameterTypes
     e.setUseFactory(true)
 
     (callB: Callback) => {
@@ -272,7 +272,7 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
       property._3.get.getParameterTypes.length == 1
     }
 
-    val memberTypes = new ArrayBuffer[Class[_]]
+    val memberTypes = new ArrayBuffer[Class[?]]
 
     if (hasAField)
       memberTypes.append(property._1.get.getType)
@@ -315,12 +315,12 @@ class PosoMetaData[T](val clasz: Class[T], val schema: Schema, val viewOrTable: 
     for (a <- m.getAnnotations if _includeAnnotation(a))
       s.add(a)
 
-  private def _includeFieldOrMethodType(c: Class[_]) =
+  private def _includeFieldOrMethodType(c: Class[?]) =
     schema.fieldMapper.isSupported(c)
-    // ! classOf[Query[_]].isAssignableFrom(c)
+  // ! classOf[Query[_]].isAssignableFrom(c)
 
   @tailrec
-  private def _fillWithMembers(clasz: Class[_], members: ArrayBuffer[(Member, HashSet[Annotation])]): Unit = {
+  private def _fillWithMembers(clasz: Class[?], members: ArrayBuffer[(Member, HashSet[Annotation])]): Unit = {
 
     for (
       m <- clasz.getMethods if (m.getDeclaringClass != classOf[Object]) && _includeFieldOrMethodType(m.getReturnType)

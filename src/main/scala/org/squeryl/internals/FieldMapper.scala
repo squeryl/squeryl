@@ -21,14 +21,14 @@ import java.sql.ResultSet
 import java.sql.Timestamp
 import java.util.Date
 import java.util.UUID
-import org.squeryl.dsl._
+import org.squeryl.dsl.*
 
 import scala.annotation.tailrec
 
 trait FieldMapper {
   outer =>
 
-  private[this] val registry = new HashMap[Class[_], FieldAttributesBasedOnType[_]]
+  private[this] val registry = new HashMap[Class[?], FieldAttributesBasedOnType[?]]
 
   implicit def thisFieldMapper: FieldMapper = this
 
@@ -280,7 +280,7 @@ trait FieldMapper {
   initialize()
 
   protected def initialize() = {
-    import PrimitiveTypeSupport._
+    import PrimitiveTypeSupport.*
 
     register(byteTEF)
     register(intTEF)
@@ -329,7 +329,7 @@ trait FieldMapper {
     def convertToJdbc(v: AnyRef): AnyRef
   }
 
-  protected def makeMapper(fa0: JdbcMapper[_, _]) = new MapperForReflection {
+  protected def makeMapper(fa0: JdbcMapper[?, ?]) = new MapperForReflection {
     val fa = fa0.asInstanceOf[JdbcMapper[AnyRef, AnyRef]]
 
     def map(rs: ResultSet, i: Int): AnyRef = fa.map(rs, i)
@@ -345,30 +345,30 @@ trait FieldMapper {
     val mapper: MapperForReflection,
     val defaultLength: Int,
     val sample: A,
-    val nativeJdbcType: Class[_]
+    val nativeJdbcType: Class[?]
   ) {
 
-    val clasz: Class[_] = sample.asInstanceOf[AnyRef].getClass
+    val clasz: Class[?] = sample.asInstanceOf[AnyRef].getClass
 
     override def toString =
       clasz.getCanonicalName + " --> " + mapper.getClass.getCanonicalName
   }
 
-  def nativeJdbcValueFor(nonNativeType: Class[_], r: AnyRef) =
+  def nativeJdbcValueFor(nonNativeType: Class[?], r: AnyRef) =
     get(nonNativeType).mapper.convertToJdbc(r)
 
-  def isSupported(c: Class[_]) =
+  def isSupported(c: Class[?]) =
     lookup(c).isDefined ||
-      c.isAssignableFrom(classOf[Some[_]]) ||
+      c.isAssignableFrom(classOf[Some[?]]) ||
       classOf[Product1[Any]].isAssignableFrom(c)
 
-  def defaultColumnLength(c: Class[_]) =
+  def defaultColumnLength(c: Class[?]) =
     get(c).defaultLength
 
-  def nativeJdbcTypeFor(c: Class[_]) =
+  def nativeJdbcTypeFor(c: Class[?]) =
     get(c).nativeJdbcType
 
-  def resultSetHandlerFor(c: Class[_]): (ResultSet, Int) => AnyRef = {
+  def resultSetHandlerFor(c: Class[?]): (ResultSet, Int) => AnyRef = {
     val fa = get(c)
     (rs: ResultSet, i: Int) => {
       val z = fa.mapper.map(rs, i)
@@ -377,17 +377,17 @@ trait FieldMapper {
     }
   }
 
-  private def get(c: Class[_]) =
+  private def get(c: Class[?]) =
     lookup(c).getOrElse(
       Utils.throwError(
         "Usupported native type " + c.getCanonicalName + "," + c.getName + "\n" + registry.mkString("\n")
       )
     )
 
-  def sampleValueFor(c: Class[_]): AnyRef =
+  def sampleValueFor(c: Class[?]): AnyRef =
     get(c).sample.asInstanceOf[AnyRef]
 
-  def trySampleValueFor(c: Class[_]): AnyRef = {
+  def trySampleValueFor(c: Class[?]): AnyRef = {
     val r = lookup(c).map(_.sample)
     r match {
       case Some(x: AnyRef) => x
@@ -395,7 +395,7 @@ trait FieldMapper {
     }
   }
 
-  private[squeryl] def register[P, A](m: NonPrimitiveJdbcMapper[P, A, _]): Unit = {
+  private[squeryl] def register[P, A](m: NonPrimitiveJdbcMapper[P, A, ?]): Unit = {
 
     val z =
       new FieldAttributesBasedOnType(makeMapper(m), m.defaultColumnLength, m.sample, m.primitiveMapper.nativeJdbcType)
@@ -426,7 +426,7 @@ trait FieldMapper {
   }
 
   @tailrec
-  private def lookup(c: Class[_]): Option[FieldAttributesBasedOnType[_]] = {
+  private def lookup(c: Class[?]): Option[FieldAttributesBasedOnType[?]] = {
     if (!c.isPrimitive)
       registry.get(c)
     else

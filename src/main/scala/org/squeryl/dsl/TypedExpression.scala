@@ -15,8 +15,8 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
-import org.squeryl.dsl.ast._
-import org.squeryl.internals._
+import org.squeryl.dsl.ast.*
+import org.squeryl.internals.*
 import org.squeryl.Session
 import org.squeryl.Schema
 import org.squeryl.Query
@@ -236,7 +236,7 @@ trait TypedExpression[A1, T1] extends ExpressionNode {
   private[squeryl] def _fieldMetaData = {
     val ser =
       try {
-        this.asInstanceOf[SelectElementReference[_, _]]
+        this.asInstanceOf[SelectElementReference[?, ?]]
       } catch { // TODO: validate this at compile time with a scalac plugin
         case e: ClassCastException => {
           throw new RuntimeException(
@@ -284,13 +284,13 @@ trait Floatifier[T1, A2, T2] {
 trait IdentityFloatifier[A1, T1] extends Floatifier[T1, A1, T1]
 
 trait FloatTypedExpressionFactory[A1, T1] extends TypedExpressionFactory[A1, T1] with IdentityFloatifier[A1, T1] {
-  self: JdbcMapper[_, A1] =>
+  self: JdbcMapper[?, A1] =>
   def floatify(v: ExpressionNode): TypedExpressionConversion[A1, T1] = convert(v)
 }
 
 trait JdbcMapper[P, A] {
-  self: TypedExpressionFactory[A, _] =>
-  def thisTypedExpressionFactory: TypedExpressionFactory[A, _] = this
+  self: TypedExpressionFactory[A, ?] =>
+  def thisTypedExpressionFactory: TypedExpressionFactory[A, ?] = this
   def extractNativeJdbcValue(rs: ResultSet, i: Int): P
   def convertFromJdbc(v: P): A
   def convertToJdbc(v: A): P
@@ -299,12 +299,12 @@ trait JdbcMapper[P, A] {
 }
 
 trait ArrayJdbcMapper[P, A] extends JdbcMapper[P, A] {
-  self: TypedExpressionFactory[A, _] =>
+  self: TypedExpressionFactory[A, ?] =>
   def nativeJdbcType = sample.asInstanceOf[AnyRef].getClass
 }
 
 trait PrimitiveJdbcMapper[A] extends JdbcMapper[A, A] {
-  self: TypedExpressionFactory[A, _] =>
+  self: TypedExpressionFactory[A, ?] =>
   def extractNativeJdbcValue(rs: ResultSet, i: Int): A
   def convertFromJdbc(v: A) = v
   def convertToJdbc(v: A) = v
@@ -329,7 +329,7 @@ abstract class NonPrimitiveJdbcMapper[P, A, T](
 }
 
 trait TypedExpressionFactory[A, T] {
-  self: JdbcMapper[_, A] =>
+  self: JdbcMapper[?, A] =>
 
   def thisAnyRefMapper = this.asInstanceOf[JdbcMapper[AnyRef, A]]
 
@@ -358,7 +358,7 @@ trait TypedExpressionFactory[A, T] {
 
   def defaultColumnLength: Int
 
-  def thisMapper: JdbcMapper[_, A] = this
+  def thisMapper: JdbcMapper[?, A] = this
 
   private def zis = this
 
@@ -374,7 +374,7 @@ trait TypedExpressionFactory[A, T] {
 trait IntegralTypedExpressionFactory[A1, T1, A2, T2]
     extends TypedExpressionFactory[A1, T1]
     with Floatifier[T1, A2, T2] {
-  self: JdbcMapper[_, A1] =>
+  self: JdbcMapper[?, A1] =>
 
   def floatify(v: ExpressionNode): TypedExpressionConversion[A2, T2] = floatifyer.convert(v)
   def floatifyer: TypedExpressionFactory[A2, T2]
@@ -419,7 +419,7 @@ class ConcatOp[A1, A2, T1, T2](val a1: TypedExpression[A1, T1], val a2: TypedExp
     sw.databaseAdapter.writeConcatOperator(a1, a2, sw)
 }
 
-class NvlNode[A, T](e1: TypedExpression[_, _], e2: TypedExpression[A, T])
+class NvlNode[A, T](e1: TypedExpression[?, ?], e2: TypedExpression[A, T])
     extends BinaryOperatorNode(e1, e2, "nvl", false)
     with TypedExpression[A, T] {
 

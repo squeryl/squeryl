@@ -38,9 +38,9 @@ class MySQLAdapter extends DatabaseAdapter {
   }
 
   override def writeForeignKeyDeclaration(
-    foreignKeyTable: Table[_],
+    foreignKeyTable: Table[?],
     foreignKeyColumnName: String,
-    primaryKeyTable: Table[_],
+    primaryKeyTable: Table[?],
     primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
     referentialAction2: Option[ReferentialAction],
@@ -74,7 +74,7 @@ class MySQLAdapter extends DatabaseAdapter {
     sb.toString
   }
 
-  override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
+  override def writeDropForeignKeyStatement(foreignKeyTable: Table[?], fkName: String) =
     "alter table " + foreignKeyTable.prefixedName + " drop foreign key " + fkName
 
   override def isTableDoesNotExistException(e: SQLException) =

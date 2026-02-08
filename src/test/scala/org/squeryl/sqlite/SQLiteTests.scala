@@ -1,6 +1,6 @@
 package org.squeryl.sqlite
 
-import org.squeryl.test._
+import org.squeryl.test.*
 
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.SQLiteAdapter

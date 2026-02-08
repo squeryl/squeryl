@@ -79,7 +79,7 @@ class AnnotationTests extends AnyFunSuite with Matchers {
 
   class ToastersInc extends Schema()(PrimitiveTypeModeForTests) {
 
-    import PrimitiveTypeModeForTests._
+    import PrimitiveTypeModeForTests.*
 
     val descendantOfKeyedObjects = table[DescendantOfKeyedObject]()
 
@@ -93,7 +93,7 @@ class AnnotationTests extends AnyFunSuite with Matchers {
   def reflectionBrokenIn_2_9_0_RCx = {
 
     val ti = new ToastersInc
-    import ti._
+    import ti.*
 
     val _isPersistedFmd = descendantOfKeyedObjects.posoMetaData.findFieldMetaDataForProperty("_isPersisted")
 

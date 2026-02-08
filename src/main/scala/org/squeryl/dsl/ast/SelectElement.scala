@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl.dsl.ast
 
-import org.squeryl.internals._
+import org.squeryl.internals.*
 import org.squeryl.Session
 import org.squeryl.dsl.TypedExpression
 import scala.annotation.tailrec
@@ -125,7 +125,7 @@ trait SelectElement extends ExpressionNode {
 }
 
 class TupleSelectElement(
-  val origin: QueryExpressionNode[_],
+  val origin: QueryExpressionNode[?],
   val expression: ExpressionNode,
   indexInTuple: Int,
   isGroupTuple: Boolean
@@ -159,7 +159,7 @@ class TupleSelectElement(
 }
 
 class FieldSelectElement(
-  val origin: ViewExpressionNode[_],
+  val origin: ViewExpressionNode[?],
   val fieldMetaData: FieldMetaData,
   val resultSetMapper: ResultSetMapper
 ) extends SelectElement
@@ -176,7 +176,7 @@ class FieldSelectElement(
 
   override def aliasSegment: String =
     Session.currentSession.databaseAdapter.fieldAlias(origin, this)
-    // origin.alias + "_" + fieldMetaData.columnName
+  // origin.alias + "_" + fieldMetaData.columnName
 
   val expression: ExpressionNode = new ExpressionNode {
 
@@ -207,8 +207,8 @@ class FieldSelectElement(
 class ValueSelectElement(
   val expression: ExpressionNode,
   val resultSetMapper: ResultSetMapper,
-  mapper: OutMapper[_],
-  val origin: QueryExpressionNode[_]
+  mapper: OutMapper[?],
+  val origin: QueryExpressionNode[?]
 ) extends SelectElement
     with UniqueIdInAliaseRequired {
 
@@ -252,11 +252,11 @@ class SelectElementReference[A, T](val selectElement: SelectElement, val mapper:
   override def inhibited =
     selectElement.inhibited
 
-  private def _useSite: QueryExpressionNode[_] = {
+  private def _useSite: QueryExpressionNode[?] = {
 
     @tailrec
-    def findQueryExpressionNode(e: ExpressionNode): QueryExpressionNode[_] = e match {
-      case qe: QueryExpressionNode[_] => qe
+    def findQueryExpressionNode(e: ExpressionNode): QueryExpressionNode[?] = e match {
+      case qe: QueryExpressionNode[?] => qe
       case _ =>
         e.parent match {
           case Some(e_) => findQueryExpressionNode(e_)
@@ -349,15 +349,15 @@ class ExportedSelectElement(val selectElement: SelectElement) extends SelectElem
     outerTarget.getOrElse(org.squeryl.internals.Utils.throwError("could not find the target of : " + selectElement))
   )
 
-  private def outerScopes: List[QueryExpressionNode[_]] = outerScopes0(this, Nil)
+  private def outerScopes: List[QueryExpressionNode[?]] = outerScopes0(this, Nil)
 
   @tailrec
   private def outerScopes0(
     current: ExpressionNode,
-    scopes: List[QueryExpressionNode[_]]
-  ): List[QueryExpressionNode[_]] = {
+    scopes: List[QueryExpressionNode[?]]
+  ): List[QueryExpressionNode[?]] = {
     current.parent match {
-      case Some(s: QueryExpressionNode[_]) => outerScopes0(s, scopes :+ s)
+      case Some(s: QueryExpressionNode[?]) => outerScopes0(s, scopes :+ s)
       case Some(n) => outerScopes0(n, scopes)
       case None => scopes
     }

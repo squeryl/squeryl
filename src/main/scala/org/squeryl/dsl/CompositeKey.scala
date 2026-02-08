@@ -15,12 +15,12 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
-import ast._
+import ast.*
 import org.squeryl.internals.{AttributeValidOnMultipleColumn, FieldMetaData}
 
 trait CompositeKey {
 
-  private[squeryl] var _members: Option[collection.Seq[SelectElementReference[_, _]]] = None
+  private[squeryl] var _members: Option[collection.Seq[SelectElementReference[?, ?]]] = None
 
   private[squeryl] var _propertyName: Option[String] = None
 
@@ -30,9 +30,9 @@ trait CompositeKey {
     else
       _members.get.map(_.selectElement.asInstanceOf[FieldSelectElement].fieldMetaData)
 
-  protected def constantMembers: Iterable[TypedExpression[_, _]]
+  protected def constantMembers: Iterable[TypedExpression[?, ?]]
 
-  protected def members: Iterable[TypedExpression[_, _]] =
+  protected def members: Iterable[TypedExpression[?, ?]] =
     _members.getOrElse(constantMembers)
 
   private[squeryl] def buildEquality(ck: CompositeKey): LogicalBoolean = {

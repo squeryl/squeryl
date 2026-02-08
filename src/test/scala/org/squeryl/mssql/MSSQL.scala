@@ -1,6 +1,6 @@
 package org.squeryl.mssql
 
-import org.squeryl.test._
+import org.squeryl.test.*
 import org.squeryl.adapters.MSSQLServer
 import org.squeryl.framework.DBConnector
 import org.squeryl.Session

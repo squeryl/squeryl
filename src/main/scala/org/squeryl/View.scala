@@ -17,7 +17,7 @@ package org.squeryl
 
 import dsl.ast.ViewExpressionNode
 import dsl.{TypedExpression, QueryDsl}
-import internals._
+import internals.*
 import java.sql.ResultSet
 
 /**
@@ -29,8 +29,8 @@ class View[T] private[squeryl] (
   private[squeryl] val classOfT: Class[T],
   schema: Schema,
   _prefix: Option[String],
-  val ked: Option[KeyedEntityDef[T, _]],
-  val optionalFieldsInfo: Option[Map[String, Class[_]]]
+  val ked: Option[KeyedEntityDef[T, ?]],
+  val optionalFieldsInfo: Option[Map[String, Class[?]]]
 ) extends Queryable[T] {
 
 //2.9.x approach for LyfeCycle events :
@@ -98,7 +98,7 @@ class View[T] private[squeryl] (
 
   def lookup[K](k: K)(implicit ked: KeyedEntityDef[T, K], dsl: QueryDsl, toCanLookup: K => CanLookup): Option[T] = {
     // TODO: find out why scalac won't let dsl be passed to another method
-    import dsl._
+    import dsl.*
 
     val q = from(this)(a =>
       dsl.where {
@@ -125,7 +125,7 @@ class View[T] private[squeryl] (
     lookup(k).getOrElse(throw new NoSuchElementException("Found no row with key '" + k + "' in " + name + "."))
 
   def allRows(implicit dsl: QueryDsl): Iterable[T] = {
-    import dsl._
+    import dsl.*
     dsl.queryToIterable(from(this)(a => select(a)))
   }
 
@@ -138,4 +138,4 @@ private[squeryl] case object CompositeKeyLookup extends CanLookup
 
 private[squeryl] case object UnknownCanLookup extends CanLookup
 
-private[squeryl] case class SimpleKeyLookup[T](convert: T => TypedExpression[T, _]) extends CanLookup
+private[squeryl] case class SimpleKeyLookup[T](convert: T => TypedExpression[T, ?]) extends CanLookup

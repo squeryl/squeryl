@@ -22,7 +22,7 @@ import org.squeryl.dsl.ast.ConstantExpressionNodeList
 
 trait StatementParam
 
-case class ConstantStatementParam(p: ConstantTypedExpression[_, _]) extends StatementParam
+case class ConstantStatementParam(p: ConstantTypedExpression[?, ?]) extends StatementParam
 case class FieldStatementParam(v: AnyRef, fmd: FieldMetaData) extends StatementParam
 /*
  * ParamWithMapper is a workadound to accommodate the ConstantExpressionNodeList, ideally 'in' and 'notIn' would grab the TEF in scope :
@@ -33,7 +33,7 @@ case class FieldStatementParam(v: AnyRef, fmd: FieldMetaData) extends StatementP
  * type inferencer doesn't like it, so I grab the mapper that is available, which is JDBC compatible, so in practive it should work
  * all the time...
  * */
-case class ConstantExpressionNodeListParam(v: AnyRef, l: ConstantExpressionNodeList[_]) extends StatementParam
+case class ConstantExpressionNodeListParam(v: AnyRef, l: ConstantExpressionNodeList[?]) extends StatementParam
 
 /**
  * @param isForDisplay: when true, users of StatementWriter should write

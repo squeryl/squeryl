@@ -28,11 +28,11 @@ import org.squeryl.dsl.ast.ConstantTypedExpression
 import org.squeryl.customtypes.CustomType
 
 class FieldMetaData(
-  val parentMetaData: PosoMetaData[_],
+  val parentMetaData: PosoMetaData[?],
   val nameOfProperty: String,
-  val fieldType: Class[_], // if isOption, this fieldType is the type param of Option, i.e. the T in Option[T]
+  val fieldType: Class[?], // if isOption, this fieldType is the type param of Option, i.e. the T in Option[T]
   val wrappedFieldType: Class[
-    _
+    ?
   ], // in primitive type mode fieldType == wrappedFieldType, in custom type mode wrappedFieldType is the 'real'
   // type, i.e. the (primitive) type that jdbc understands
   val customTypeFactory: Option[AnyRef => Product1[Any] with AnyRef],
@@ -85,7 +85,7 @@ class FieldMetaData(
    * In some circumstances (like in the test suite) a Schema instance must run on multiple database types,
    * this Map keeps the sequence names 'per schema'
    */
-  private[this] val _sequenceNamePerDBAdapter = new HashMap[Class[_], String]
+  private[this] val _sequenceNamePerDBAdapter = new HashMap[Class[?], String]
 
   def sequenceName: String = {
 
@@ -137,11 +137,11 @@ class FieldMetaData(
       })
   }
 
-  private[squeryl] var _defaultValue: Option[ConstantTypedExpression[_, _]] = None
+  private[squeryl] var _defaultValue: Option[ConstantTypedExpression[?, ?]] = None
 
   def columnAttributes: Iterable[ColumnAttribute] = _columnAttributes
 
-  def defaultValue: Option[ConstantTypedExpression[_, _]] = _defaultValue
+  def defaultValue: Option[ConstantTypedExpression[?, ?]] = _defaultValue
 
   /**
    * The db column type declaration overridden in the schema, if None, it means that it is the default value for
@@ -285,7 +285,7 @@ class FieldMetaData(
         if (res == None)
           null
         else
-          res.asInstanceOf[Option[_]].get.asInstanceOf[AnyRef]
+          res.asInstanceOf[Option[?]].get.asInstanceOf[AnyRef]
       } else
         res
     } catch {
@@ -320,7 +320,7 @@ class FieldMetaData(
           val f = customTypeFactory.get
 
           v match {
-            case r: CustomType[_] =>
+            case r: CustomType[?] =>
               f(if (r == null) null else r._1.asInstanceOf[AnyRef])
             case _ =>
               f(v)
@@ -366,15 +366,15 @@ trait FieldMetaDataFactory {
   def hideFromYieldInspection(o: AnyRef, f: Field): Boolean = false
 
   def build(
-    parentMetaData: PosoMetaData[_],
+    parentMetaData: PosoMetaData[?],
     name: String,
     property: (Option[Field], Option[Method], Option[Method], Set[Annotation]),
     sampleInstance4OptionTypeDeduction: AnyRef,
     isOptimisticCounter: Boolean,
-    optionFieldInnerClass: Option[Class[_]]
+    optionFieldInnerClass: Option[Class[?]]
   ): FieldMetaData
 
-  def createPosoFactory(posoMetaData: PosoMetaData[_]): () => AnyRef
+  def createPosoFactory(posoMetaData: PosoMetaData[?]): () => AnyRef
 }
 
 object FieldMetaData {
@@ -383,19 +383,19 @@ object FieldMetaData {
 
   var factory = new FieldMetaDataFactory {
 
-    def createPosoFactory(posoMetaData: PosoMetaData[_]): () => AnyRef =
+    def createPosoFactory(posoMetaData: PosoMetaData[?]): () => AnyRef =
       () => {
         val c = posoMetaData.constructor
-        c._1.newInstance(c._2: _*).asInstanceOf[AnyRef];
+        c._1.newInstance(c._2*).asInstanceOf[AnyRef];
       }
 
     def build(
-      parentMetaData: PosoMetaData[_],
+      parentMetaData: PosoMetaData[?],
       name: String,
       property: (Option[Field], Option[Method], Option[Method], Set[Annotation]),
       sampleInstance4OptionTypeDeduction: AnyRef,
       isOptimisticCounter: Boolean,
-      optionFieldInnerClass: Option[Class[_]]
+      optionFieldInnerClass: Option[Class[?]]
     ) = {
 
       val fieldMapper = parentMetaData.schema.fieldMapper
@@ -430,7 +430,7 @@ object FieldMetaData {
             }
           }.orElse {
             getter flatMap {
-              _.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY: _*) match {
+              _.invoke(sampleInstance4OptionTypeDeduction, _EMPTY_ARRAY*) match {
                 case a: AnyRef => Some(a)
                 case _ => None
               }
@@ -475,7 +475,7 @@ object FieldMetaData {
         org.squeryl.internals.Utils.throwError(errorMessage)
       }
 
-      val isOption = v.isInstanceOf[Some[_]]
+      val isOption = v.isInstanceOf[Some[?]]
 
       val typeOfFieldOrTypeOfOption = v match {
         case Some(x) =>
@@ -485,9 +485,9 @@ object FieldMetaData {
       }
 
       val primitiveFieldType = v match {
-        case p: Product1[_] =>
+        case p: Product1[?] =>
           p._1.getClass
-        case Some(x: Product1[_]) =>
+        case Some(x: Product1[?]) =>
           // if we get here, customTypeFactory has not had a chance to get created
           customTypeFactory = _createCustomTypeFactory(fieldMapper, parentMetaData.clasz, typeOfFieldOrTypeOfOption)
           x._1.asInstanceOf[AnyRef].getClass
@@ -528,13 +528,13 @@ object FieldMetaData {
    */
   private def _createCustomTypeFactory(
     fieldMapper: FieldMapper,
-    ownerClass: Class[_],
-    typeOfField: Class[_]
+    ownerClass: Class[?],
+    typeOfField: Class[?]
   ): Option[AnyRef => Product1[Any] with AnyRef] = {
     // run through the given class hierarchy and return the first method
     // which is called "value" and doesn't return java.lang.Object
     @tailrec
-    def find(c: Class[_]): Option[Method] =
+    def find(c: Class[?]): Option[Method] =
       if (c != null)
         c.getMethods.find(m => m.getName == "value" && m.getReturnType != classOf[java.lang.Object]) match {
           case Some(m) => Some(m)
@@ -542,8 +542,8 @@ object FieldMetaData {
         }
       else None
 
-      // invoke the given constructor and expose possible exceptions to the caller.
-    def invoke(c: Constructor[_], value: AnyRef) =
+    // invoke the given constructor and expose possible exceptions to the caller.
+    def invoke(c: Constructor[?], value: AnyRef) =
       try {
         c.newInstance(value).asInstanceOf[Product1[Any] with AnyRef]
       } catch {
@@ -571,7 +571,7 @@ object FieldMetaData {
     })
   }
 
-  def defaultFieldLength(fieldType: Class[_], fmd: FieldMetaData) = {
+  def defaultFieldLength(fieldType: Class[?], fmd: FieldMetaData) = {
     if (classOf[String].isAssignableFrom(fieldType))
       fmd.schema.defaultLengthOfString
     else if (
@@ -587,10 +587,10 @@ object FieldMetaData {
   def createDefaultValue(
     fieldMapper: FieldMapper,
     member: Member,
-    p: Class[_],
+    p: Class[?],
     t: Option[Type],
     optionFieldsInfo: Option[Column],
-    optionalFieldInfo: Option[Class[_]]
+    optionalFieldInfo: Option[Class[?]]
   ): Object = {
     if (p.isAssignableFrom(classOf[Option[Any]])) {
       /*
@@ -611,7 +611,7 @@ object FieldMetaData {
             case Some(pt: ParameterizedType) => {
               pt.getActualTypeArguments.toList match {
                 case oType :: Nil => {
-                  if (classOf[Class[_]].isInstance(oType)) {
+                  if (classOf[Class[?]].isInstance(oType)) {
                     /*
                      * Primitive types are seen by Java reflection as classOf[Object],
                      * if that's what we find then we need to get the real value from @ScalaSignature
@@ -622,7 +622,7 @@ object FieldMetaData {
                           .optionTypeFromScalaSig(member) // scala 2
                           .orElse(optionalFieldInfo) // scala 3
 
-                      } else Some(oType.asInstanceOf[Class[_]])
+                      } else Some(oType.asInstanceOf[Class[?]])
                     trueTypeOption flatMap { trueType =>
                       val deduced = createDefaultValue(fieldMapper, member, trueType, None, optionFieldsInfo, None)
                       Option(deduced) // Couldn't create default for type param if null

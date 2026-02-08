@@ -17,8 +17,8 @@ package org.squeryl.dsl.ast
 
 import scala.collection.mutable.ArrayBuffer
 
-import org.squeryl.internals._
-import org.squeryl.dsl._
+import org.squeryl.internals.*
+import org.squeryl.dsl.*
 import org.squeryl.Session
 import reflect.ClassTag
 
@@ -97,12 +97,12 @@ trait ExpressionNode {
   }
 
   def ? : this.type = {
-    if (!this.isInstanceOf[ConstantTypedExpression[_, _]])
+    if (!this.isInstanceOf[ConstantTypedExpression[?, ?]])
       throw new UnsupportedOperationException(
         "the '?' operator (shorthand for 'p.inhibitWhen(p == None))' can only be used on a constant query argument"
       )
 
-    val c = this.asInstanceOf[ConstantTypedExpression[_, _]]
+    val c = this.asInstanceOf[ConstantTypedExpression[?, ?]]
 
     inhibitWhen(c.value == None)
   }
@@ -128,12 +128,12 @@ class RowValueConstructorNode(override val children: List[ExpressionNode]) exten
   }
 }
 
-class EqualityExpression(override val left: TypedExpression[_, _], override val right: TypedExpression[_, _])
+class EqualityExpression(override val left: TypedExpression[?, ?], override val right: TypedExpression[?, ?])
     extends BinaryOperatorNodeLogicalBoolean(left, right, "=") {
 
   override def doWrite(sw: StatementWriter) =
     right match {
-      case c: ConstantTypedExpression[_, _] =>
+      case c: ConstantTypedExpression[?, ?] =>
         if (c.value == None) {
           left.write(sw)
           sw.write(" is null")
@@ -143,7 +143,7 @@ class EqualityExpression(override val left: TypedExpression[_, _], override val 
 
 }
 
-class InclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[_])
+class InclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[?])
     extends BinaryOperatorNodeLogicalBoolean(left, right, "in", true) {
 
   override def doWrite(sw: StatementWriter) =
@@ -153,7 +153,7 @@ class InclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[_])
       super.doWrite(sw)
 }
 
-class ExclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[_])
+class ExclusionOperator(left: ExpressionNode, right: RightHandSideOfIn[?])
     extends BinaryOperatorNodeLogicalBoolean(left, right, "not in", true)
 
 class BinaryOperatorNodeLogicalBoolean(
@@ -339,7 +339,7 @@ class ColumnAttributeAssignment(val left: FieldMetaData, val columnAttributes: c
   def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity
 }
 
-class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpression[_, _])
+class DefaultValueAssignment(val left: FieldMetaData, val value: TypedExpression[?, ?])
     extends BaseColumnAttributeAssignment {
 
   def isIdFieldOfKeyedEntity = left.isIdFieldOfKeyedEntity
@@ -359,7 +359,7 @@ private[squeryl] class InputOnlyConstantExpressionNode(v: Any)
 class ConstantTypedExpression[A1, T1](
   val value: A1,
   val nativeJdbcValue: AnyRef,
-  i: Option[TypedExpressionFactory[A1, _]]
+  i: Option[TypedExpressionFactory[A1, ?]]
 ) extends TypedExpression[A1, T1] {
 
   private def needsQuote = value.isInstanceOf[String]
@@ -373,8 +373,8 @@ class ConstantTypedExpression[A1, T1](
   def jdbcClass =
     i.map(_.jdbcSample).getOrElse(nativeJdbcValue).getClass
 
-    if (nativeJdbcValue != null) nativeJdbcValue.getClass
-    else mapper.jdbcClass
+  if (nativeJdbcValue != null) nativeJdbcValue.getClass
+  else mapper.jdbcClass
 
   def doWrite(sw: StatementWriter) = {
     if (sw.isForDisplay) {
@@ -396,7 +396,7 @@ class ConstantTypedExpression[A1, T1](
   override def toString = "'ConstantTypedExpression:" + value
 }
 
-class ConstantExpressionNodeList[T](val value: Iterable[T], mapper: OutMapper[_]) extends ExpressionNode {
+class ConstantExpressionNodeList[T](val value: Iterable[T], mapper: OutMapper[?]) extends ExpressionNode {
 
   def isEmpty =
     value == Nil
@@ -635,7 +635,7 @@ class RightHandSideOfIn[A](val ast: ExpressionNode, val isIn: Option[Boolean] = 
         (!isIn.get))
 
   def isConstantEmptyList: Boolean = ast match {
-    case a: ConstantExpressionNodeList[_] =>
+    case a: ConstantExpressionNodeList[?] =>
       a.isEmpty
     case a: ListExpressionNode =>
       a.children.isEmpty

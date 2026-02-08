@@ -2,7 +2,7 @@ package org.squeryl.logging
 
 import org.squeryl.{AbstractSession, Session}
 import org.squeryl.adapters.H2Adapter
-import org.squeryl.InternalFieldMapper._
+import org.squeryl.InternalFieldMapper.*
 
 object LocalH2SinkStatisticsListener {
 

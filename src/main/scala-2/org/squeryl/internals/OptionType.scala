@@ -15,12 +15,12 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import org.json4s.scalap.scalasig._
+import org.json4s.scalap.scalasig.*
 import java.lang.reflect.Member
 
 protected[internals] object OptionType {
 
-  def optionTypeFromScalaSig(member: Member): Option[Class[_]] = {
+  def optionTypeFromScalaSig(member: Member): Option[Class[?]] = {
     val scalaSigOption = ScalaSigParser.parse(member.getDeclaringClass())
     scalaSigOption flatMap { scalaSig =>
       val result = scalaSig.symbols.filter { sym =>

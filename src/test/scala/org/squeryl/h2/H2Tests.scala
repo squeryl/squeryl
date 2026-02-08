@@ -1,6 +1,6 @@
 package org.squeryl.h2
 
-import org.squeryl.test._
+import org.squeryl.test.*
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.H2Adapter
 import org.squeryl.test.arrays.PrimitiveArrayTest

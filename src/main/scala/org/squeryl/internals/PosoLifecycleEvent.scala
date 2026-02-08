@@ -7,9 +7,9 @@ object PosoLifecycleEvent extends Enumeration {
   val BeforeInsert, AfterInsert, BeforeDelete, AfterDelete, BeforeUpdate, AfterUpdate, AfterSelect, Create = Value
 }
 
-class LifecycleEventInvoker(i: Iterable[LifecycleEvent], owner: View[_]) extends PosoLifecycleEventListener {
+class LifecycleEventInvoker(i: Iterable[LifecycleEvent], owner: View[?]) extends PosoLifecycleEventListener {
 
-  import PosoLifecycleEvent._
+  import PosoLifecycleEvent.*
 
   private[this] val _beforeInsert = i.filter(_.e == BeforeInsert).map(_.callback)
   private[this] val _afterInsert = i.filter(_.e == AfterInsert).map(_.callback)
@@ -53,10 +53,10 @@ class LifecycleEventInvoker(i: Iterable[LifecycleEvent], owner: View[_]) extends
 
 trait BaseLifecycleEventPercursor {
 
-  protected def createLCEMap[A](t: Iterable[View[_]], e: PosoLifecycleEvent.Value, f: A => A) =
+  protected def createLCEMap[A](t: Iterable[View[?]], e: PosoLifecycleEvent.Value, f: A => A) =
     new LifecycleEvent(t, e, f.asInstanceOf[AnyRef => AnyRef])
 
-  protected def createLCECall[A](t: Iterable[View[_]], e: PosoLifecycleEvent.Value, f: A => Unit) =
+  protected def createLCECall[A](t: Iterable[View[?]], e: PosoLifecycleEvent.Value, f: A => Unit) =
     createLCEMap[A](
       t,
       e,
@@ -67,7 +67,7 @@ trait BaseLifecycleEventPercursor {
     )
 }
 
-class PosoFactoryPercursorTable[A](target: View[_]) extends BaseLifecycleEventPercursor {
+class PosoFactoryPercursorTable[A](target: View[?]) extends BaseLifecycleEventPercursor {
   def is(f: => A) = new LifecycleEvent(
     Seq(target),
     PosoLifecycleEvent.Create,
@@ -78,7 +78,7 @@ class PosoFactoryPercursorTable[A](target: View[_]) extends BaseLifecycleEventPe
   )
 }
 
-class LifecycleEventPercursorTable[A](target: View[_], e: PosoLifecycleEvent.Value)
+class LifecycleEventPercursorTable[A](target: View[?], e: PosoLifecycleEvent.Value)
     extends BaseLifecycleEventPercursor {
 
   def call(f: A => Unit) = createLCECall(Seq(target), e, f)
@@ -86,7 +86,7 @@ class LifecycleEventPercursorTable[A](target: View[_], e: PosoLifecycleEvent.Val
   def map(a: A => A) = createLCEMap(Seq(target), e, a)
 }
 
-class LifecycleEventPercursorClass[A](target: Class[_], schema: Schema, e: PosoLifecycleEvent.Value)
+class LifecycleEventPercursorClass[A](target: Class[?], schema: Schema, e: PosoLifecycleEvent.Value)
     extends BaseLifecycleEventPercursor {
 
   def call(f: A => Unit) = createLCECall(schema.findAllTablesFor(target), e, f)
@@ -95,7 +95,7 @@ class LifecycleEventPercursorClass[A](target: Class[_], schema: Schema, e: PosoL
 
 }
 
-class LifecycleEvent(val target: Iterable[View[_]], val e: PosoLifecycleEvent.Value, val callback: AnyRef => AnyRef)
+class LifecycleEvent(val target: Iterable[View[?]], val e: PosoLifecycleEvent.Value, val callback: AnyRef => AnyRef)
 
 trait PosoLifecycleEventListener {
 

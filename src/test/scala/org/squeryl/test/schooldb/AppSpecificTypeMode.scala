@@ -1,7 +1,7 @@
 package org.squeryl.test.schooldb
 
-import org.squeryl.dsl._
-import org.squeryl._
+import org.squeryl.dsl.*
+import org.squeryl.*
 
 object AppSpecificTypeMode extends org.squeryl.PrimitiveTypeMode {
   implicit object personKED extends KeyedEntityDef[Student, Int] {

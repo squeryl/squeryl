@@ -1,8 +1,8 @@
 package org.squeryl.test
 
-import org.squeryl._
-import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.squeryl.framework._
+import org.squeryl.*
+import org.squeryl.test.PrimitiveTypeModeForTests.*
+import org.squeryl.framework.*
 
 object TestSchema extends Schema {
   val a = table[A]()
@@ -18,7 +18,7 @@ class B(val id: Int, val name: String, val aId: Int) extends KeyedEntity[Int]
 abstract class NestedLeftOuterJoinTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   def schema: Schema = TestSchema
 

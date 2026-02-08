@@ -17,16 +17,16 @@ package org.squeryl.test.schooldb
  ***************************************************************************** */
 import java.sql.SQLException
 import org.squeryl.annotations.Column
-import org.squeryl.framework._
+import org.squeryl.framework.*
 import java.util.Date
 import java.text.SimpleDateFormat
-import org.squeryl.dsl._
-import org.squeryl._
+import org.squeryl.dsl.*
+import org.squeryl.*
 import adapters.{MSSQLServer, OracleAdapter, DerbyAdapter}
 import internals.{FieldMetaData, FieldReferenceLinker, LifecycleEvent}
 import collection.mutable.ArrayBuffer
 import org.squeryl.dsl.ast.ExpressionNode
-import org.squeryl.test.schooldb.AppSpecificTypeMode._
+import org.squeryl.test.schooldb.AppSpecificTypeMode.*
 
 object SingleTestRun extends org.scalatest.Tag("SingleTestRun")
 
@@ -246,7 +246,7 @@ class SchoolDb extends Schema {
 
   // disable the override, since the above is good for Oracle only, this is not a usage demo, but
   // a necessary hack to test the dbType override mechanism and still allow the test suite can run on all database :
-  override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]) =
+  override def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[?]) =
     if (
       fieldMetaData.nameOfProperty == "yearlySalary" && Session.currentSession.databaseAdapter
         .isInstanceOf[OracleAdapter]
@@ -266,7 +266,7 @@ class SchoolDb extends Schema {
 
   val beforeInsertsOfPerson = new ArrayBuffer[Person]
   val transformedStudents = new ArrayBuffer[Student]
-  val beforeInsertsOfKeyedEntity = new ArrayBuffer[KeyedEntity[_]]
+  val beforeInsertsOfKeyedEntity = new ArrayBuffer[KeyedEntity[?]]
   val beforeInsertsOfProfessor = new ArrayBuffer[Professor]
   val afterSelectsOfStudent = new ArrayBuffer[Student]
   val afterInsertsOfProfessor = new ArrayBuffer[Professor]
@@ -287,7 +287,7 @@ class SchoolDb extends Schema {
       map (p => { beforeInsertsOfPerson.append(p); p }),
     beforeInsert[Professor]()
       call (beforeInsertsOfProfessor.append(_)),
-    beforeInsert[KeyedEntity[_]]()
+    beforeInsert[KeyedEntity[?]]()
       call (beforeInsertsOfKeyedEntity.append(_)),
     afterSelect[Student]()
       call (afterSelectsOfStudent.append(_)),
@@ -307,7 +307,7 @@ class SchoolDb extends Schema {
 }
 
 class TestInstance(schema: SchoolDb) {
-  import schema._
+  import schema.*
   val oneHutchissonStreet = addresses.insert(new Address("Hutchisson", 1, None, None, None))
   val twoHutchissonStreet = addresses.insert(new Address("Hutchisson", 2, None, None, None))
   val oneTwoThreePieIXStreet = addresses.insert(new Address("Pie IX", 123, None, Some(4), Some("A")))
@@ -352,12 +352,12 @@ class TestInstance(schema: SchoolDb) {
 abstract class FullOuterJoinTests extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
-  import schoolDb._
+  import schoolDb.*
 
   test("NewLeftOuterJoin1Reverse") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     // loggerOn
 
@@ -399,9 +399,9 @@ abstract class SchoolDbTestBase extends SchemaTester with QueryTester with RunTe
 abstract class CommonTableExpressions extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
-  import schoolDb._
+  import schoolDb.*
 
   test("commonTableExpressions") {
     val qStudents = from(students)((s) => where(s.name === "Xiao").select(s))
@@ -432,9 +432,9 @@ abstract class CommonTableExpressions extends SchoolDbTestBase {
 abstract class SchoolDbTestRun extends SchoolDbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
-  import schoolDb._
+  import schoolDb.*
 
   test("cast") {
     val q =
@@ -507,7 +507,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     )
 
   test("DeepNest1") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val q = from(professors)(p0 => select(p0))
 
@@ -527,7 +527,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("update to null") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val rejan = students.insert(new Student("Réjean", "Plourde", Some(24), 2, Some(oneHutchissonStreet.id), Some(true)))
 
@@ -535,7 +535,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("DeepNest2") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val q = from(from(from(professors)(p0 => select(p0)))(p1 => select(p1)))(p2 => select(p2))
 
@@ -553,7 +553,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("OptionStringInWhereClause") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val q =
       from(addresses)(a => where(a.appNumberSuffix === Some("A")).select(a))
@@ -566,7 +566,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("blobTest") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     var c = courses.where(_.id === counterpoint.id).single
 
@@ -609,8 +609,8 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       st
     }
 
-    import org.squeryl.internals._
-    import org.squeryl.dsl.ast._
+    import org.squeryl.internals.*
+    import org.squeryl.dsl.ast.*
 
     def toSeq[A](t: Table[A]) = {
       val st = prep
@@ -634,7 +634,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       res.toSeq
     }
 
-    def toTuple[A1, A2]()(implicit f1: TypedExpressionFactory[A1, _], f2: TypedExpressionFactory[A2, _]) = {
+    def toTuple[A1, A2]()(implicit f1: TypedExpressionFactory[A1, ?], f2: TypedExpressionFactory[A2, ?]) = {
 
       val st = prep
       val rs = st.executeQuery
@@ -679,7 +679,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
    */
   test("InOpWithStringList") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
     val r =
       from(students)(s => where(s.name in Seq("Xiao", "Georgi")).select(s.id)).toSet
 
@@ -784,7 +784,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("LikeOperator") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
     val q =
       from(students)(s => where(s.name like "G%").select(s.id).orderBy(s.name))
 
@@ -793,7 +793,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("SingleOption") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
     val q =
       from(students)(s => where(s.name like "G%").select(s.id).orderBy(s.name))
 
@@ -849,7 +849,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
 //  }
 
   test("DateTypeMapping") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val mandarinCourse =
       courses.where(c => c.id === mandarin.id).single
@@ -886,7 +886,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("DateOptionMapping") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     var groupTh =
       courses.where(c => c.id === groupTheory.id).single
@@ -936,7 +936,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("DateComparisonInWhereClause") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
 //    val feb2010 = dateFormat.parse("2010-02-01")
 // ...
@@ -962,7 +962,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("DateOptionComparisonInWhereClause") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 //    val jan2009 = dateFormat.parse("2009-01-01")
 //...
 //    val groupTheory = courses.insert(new Course("Group Theory", jan2009, Some(may2009), 0, None, false))
@@ -1021,7 +1021,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("LongTypeMapping", SingleTestRun) {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
 
@@ -1054,7 +1054,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BooleanTypeMapping") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     var ht = courses.where(c => c.id === heatTransfer.id).single
 
@@ -1079,7 +1079,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BooleanOptionMapping") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     // println(students.where(s => s.id === gontran.id).dumpAst)
 
@@ -1104,7 +1104,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("FloatType") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     var t = professors.where(p => p.id === tournesol.id).single
 
@@ -1132,7 +1132,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("ForUpdate") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
     val t = professors.where(p => p.id === tournesol.id).forUpdate.single
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
@@ -1140,7 +1140,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("PaginatedForUpdate") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
     val t = professors.where(p => p.id === tournesol.id).page(0, 1).forUpdate.single
 
     assert(t.yearlySalary == 80.0, "expected 80.0, got " + t.yearlySalary)
@@ -1148,7 +1148,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("PartialUpdate1") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val initialHT = courses.where(c => c.id === heatTransfer.id).single
 
@@ -1219,7 +1219,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("PartialUpdateWithSubQueryInSetClause") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val zarnitsyn = professors.insert(new Professor("zarnitsyn", 60.0f, Some(70.5f), 60.0f, Some(70.5f)))
 
@@ -1249,7 +1249,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("OptimisticCC1") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     Session.currentSession.connection.commit // we commit to release all locks
 
@@ -1304,7 +1304,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchUpdate1") {
-    import schoolDb._
+    import schoolDb.*
 
     addresses.insert(
       List(
@@ -1336,7 +1336,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BatchUpdateAndInsert2") {
-    import schoolDb._
+    import schoolDb.*
 
     courses2.insert(Seq(Course2(0, "Programming 101", false, 0), Course2(0, "Programming 102", false, 0)))
 
@@ -1352,7 +1352,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("BigDecimal") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val pt = professors.where(_.yearlySalaryBD.between(75, 80))
 
@@ -1451,7 +1451,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("NewLeftOuterJoin1") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     // loggerOn
 
@@ -1481,7 +1481,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("NewLeftOuterJoin2") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     // loggerOn
 
@@ -1506,7 +1506,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("Boolean2LogicalBooleanConversion") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     val multilingualStudents = students.where(_.isMultilingual === Option(true)).map(_.id).toSet
 
@@ -1536,7 +1536,7 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("NewLeftOuterJoin3") {
-    val testInstance = sharedTestInstance; import testInstance._
+    val testInstance = sharedTestInstance; import testInstance.*
 
     // loggerOn
 

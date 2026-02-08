@@ -1,7 +1,7 @@
 package org.squeryl.framework
 
 import org.squeryl.{Session, Query}
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 import org.scalatest.matchers.should.Matchers
 
 trait QueryTester extends Matchers {
@@ -23,7 +23,7 @@ trait QueryTester extends Matchers {
   def loggerOn =
     Session.currentSession.setLogger((s: String) => println(s))
 
-  def log(queryName: String, query: Query[_]) = {
+  def log(queryName: String, query: Query[?]) = {
 
     println(queryName + " :")
     println(query)

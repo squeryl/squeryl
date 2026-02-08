@@ -123,7 +123,7 @@ trait ManyToManyRelation[L, R, A] extends Relation[L, R] {
  */
 trait ManyToMany[O, A] extends Query[O] {
 
-  def kedL: KeyedEntityDef[O, _]
+  def kedL: KeyedEntityDef[O, ?]
 
   /**
    * @param a: the association object

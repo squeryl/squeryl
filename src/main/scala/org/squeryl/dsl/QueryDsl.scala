@@ -15,11 +15,11 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
-import ast._
-import boilerplate._
-import fsm._
-import org.squeryl.internals._
-import org.squeryl._
+import ast.*
+import boilerplate.*
+import fsm.*
+import org.squeryl.internals.*
+import org.squeryl.*
 import java.sql.{SQLException, ResultSet}
 import reflect.ClassTag
 
@@ -130,13 +130,13 @@ trait QueryDsl
   def where(b: => LogicalBoolean): WhereState[Conditioned] =
     new fsm.QueryElementsImpl[Conditioned](Some(() => b), Nil)
 
-  def withCte(queries: Query[_]*): WithState =
+  def withCte(queries: Query[?]*): WithState =
     new fsm.WithState(queries.toList.map(_.copy(false, Nil)))
 
   def &[A, T](i: => TypedExpression[A, T]): A =
     FieldReferenceLinker.pushExpressionOrCollectValue[A](() => i)
 
-  implicit def typedExpression2OrderByArg[E](e: E)(implicit ev: E => TypedExpression[_, _]): OrderByArg =
+  implicit def typedExpression2OrderByArg[E](e: E)(implicit ev: E => TypedExpression[?, ?]): OrderByArg =
     new OrderByArg(ev(e))
 
   implicit def orderByArg2OrderByExpression(a: OrderByArg): OrderByExpression = new OrderByExpression(a)
@@ -174,7 +174,7 @@ trait QueryDsl
   def nvl[T4 <: TNonOption, T1 >: TOption, T3 >: T1, T2 <: T3, A1, A2, A3](
     a: TypedExpression[A1, T1],
     b: TypedExpression[A2, T2]
-  )(implicit d: DeOptionizer[_, A3, T4, _, T3]): TypedExpression[A3, T4] = new NvlNode(a, d.deOptionizer.convert(b))
+  )(implicit d: DeOptionizer[?, A3, T4, ?, T3]): TypedExpression[A3, T4] = new NvlNode(a, d.deOptionizer.convert(b))
 
   def not(b: LogicalBoolean) = new FunctionNode("not", Seq(b)) with LogicalBoolean
 
@@ -253,9 +253,9 @@ trait QueryDsl
 
   def count: CountFunction = count()
 
-  def count(e: TypedExpression[_, _]*) = new CountFunction(e, false)
+  def count(e: TypedExpression[?, ?]*) = new CountFunction(e, false)
 
-  def countDistinct(e: TypedExpression[_, _]*) = new CountFunction(e, true)
+  def countDistinct(e: TypedExpression[?, ?]*) = new CountFunction(e, true)
 
   class CountFunction(_args: collection.Seq[ExpressionNode], isDistinct: Boolean)
       extends FunctionNode(
@@ -284,7 +284,7 @@ trait QueryDsl
 
   private def _countFunc = count
 
-  class CountSubQueryableQuery(q: Queryable[_]) extends Query[Long] with ScalarQuery[Long] {
+  class CountSubQueryableQuery(q: Queryable[?]) extends Query[Long] with ScalarQuery[Long] {
 
     private[this] val _inner: Query[Measures[Long]] =
       from(q)(r => compute(_countFunc))
@@ -386,14 +386,14 @@ trait QueryDsl
   def update[A](t: Table[A])(s: A => UpdateStatement): Int = t.update(s)
 
   def manyToManyRelation[L, R](l: Table[L], r: Table[R])(implicit
-    kedL: KeyedEntityDef[L, _],
-    kedR: KeyedEntityDef[R, _]
+    kedL: KeyedEntityDef[L, ?],
+    kedR: KeyedEntityDef[R, ?]
   ) =
     new ManyToManyRelationBuilder(l, r, None, kedL, kedR)
 
   def manyToManyRelation[L, R](l: Table[L], r: Table[R], nameOfMiddleTable: String)(implicit
-    kedL: KeyedEntityDef[L, _],
-    kedR: KeyedEntityDef[R, _]
+    kedL: KeyedEntityDef[L, ?],
+    kedR: KeyedEntityDef[R, ?]
   ) =
     new ManyToManyRelationBuilder(l, r, Some(nameOfMiddleTable), kedL, kedR)
 
@@ -401,13 +401,13 @@ trait QueryDsl
     l: Table[L],
     r: Table[R],
     nameOverride: Option[String],
-    kedL: KeyedEntityDef[L, _],
-    kedR: KeyedEntityDef[R, _]
+    kedL: KeyedEntityDef[L, ?],
+    kedR: KeyedEntityDef[R, ?]
   ) {
 
     def via[A](
       f: (L, R, A) => Tuple2[EqualityExpression, EqualityExpression]
-    )(implicit ClassTagA: ClassTag[A], schema: Schema, kedA: KeyedEntityDef[A, _]) = {
+    )(implicit ClassTagA: ClassTag[A], schema: Schema, kedA: KeyedEntityDef[A, ?]) = {
       val m2m = new ManyToManyRelationImpl(
         l,
         r,
@@ -434,9 +434,9 @@ trait QueryDsl
     f: (L, R, A) => Tuple2[EqualityExpression, EqualityExpression],
     schema: Schema,
     nameOverride: Option[String],
-    kedL: KeyedEntityDef[L, _],
-    kedR: KeyedEntityDef[R, _],
-    kedA: KeyedEntityDef[A, _]
+    kedL: KeyedEntityDef[L, ?],
+    kedR: KeyedEntityDef[R, ?],
+    kedA: KeyedEntityDef[A, ?]
   ) extends Table[A](nameOverride.getOrElse(schema.tableNameFromClass(aClass)), aClass, schema, None, Some(kedA), None)
       with ManyToManyRelation[L, R, A] {
     thisTableOfA =>
@@ -456,10 +456,10 @@ trait QueryDsl
 
       val e2_ = e2.get
 
-      if (e2_._1.filterDescendantsOfType[ConstantTypedExpression[_, _]].nonEmpty)
+      if (e2_._1.filterDescendantsOfType[ConstantTypedExpression[?, ?]].nonEmpty)
         invalidBindingExpression
 
-      if (e2_._2.filterDescendantsOfType[ConstantTypedExpression[_, _]].nonEmpty)
+      if (e2_._2.filterDescendantsOfType[ConstantTypedExpression[?, ?]].nonEmpty)
         invalidBindingExpression
 
       // invert Pair[EqualityExpression,EqualityExpression] if it has been declared in reverse :
@@ -473,10 +473,10 @@ trait QueryDsl
       }
     }
 
-    private def _viewReferedInExpression(v: View[_], ee: EqualityExpression) =
+    private def _viewReferedInExpression(v: View[?], ee: EqualityExpression) =
       ee.filterDescendantsOfType[SelectElementReference[Any, Any]]
         .exists(
-          _.selectElement.origin.asInstanceOf[ViewExpressionNode[_]].view == v
+          _.selectElement.origin.asInstanceOf[ViewExpressionNode[?]].view == v
         )
 
     private[this] val (leftPkFmd, leftFkFmd) = _splitEquality(_leftEqualityExpr, thisTable, false)
@@ -649,12 +649,12 @@ trait QueryDsl
     }
   }
 
-  def oneToManyRelation[O, M](ot: Table[O], mt: Table[M])(implicit kedO: KeyedEntityDef[O, _]) =
+  def oneToManyRelation[O, M](ot: Table[O], mt: Table[M])(implicit kedO: KeyedEntityDef[O, ?]) =
     new OneToManyRelationBuilder(ot, mt)
 
   class OneToManyRelationBuilder[O, M](ot: Table[O], mt: Table[M]) {
 
-    def via(f: (O, M) => EqualityExpression)(implicit schema: Schema, kedM: KeyedEntityDef[M, _]) =
+    def via(f: (O, M) => EqualityExpression)(implicit schema: Schema, kedM: KeyedEntityDef[M, ?]) =
       new OneToManyRelationImpl(ot, mt, f, schema, kedM)
 
   }
@@ -664,7 +664,7 @@ trait QueryDsl
     val rightTable: Table[M],
     f: (O, M) => EqualityExpression,
     schema: Schema,
-    kedM: KeyedEntityDef[M, _]
+    kedM: KeyedEntityDef[M, ?]
   ) extends OneToManyRelation[O, M] {
 
     schema._addRelation(this)
@@ -687,7 +687,7 @@ trait QueryDsl
       val ee_ = ee.get // here we have the equality AST (_ee) contains a left and right node, SelectElementReference
       // that refer to FieldSelectElement, who in turn refer to the FieldMetaData
 
-      if (ee_.filterDescendantsOfType[ConstantTypedExpression[_, _]].nonEmpty)
+      if (ee_.filterDescendantsOfType[ConstantTypedExpression[?, ?]].nonEmpty)
         invalidBindingExpression
 
       // now the Tuple with the left and right FieldMetaData
@@ -749,7 +749,7 @@ trait QueryDsl
    */
   private def _splitEquality(
     ee: EqualityExpression,
-    rightTable: Table[_],
+    rightTable: Table[?],
     isSelfReference: Boolean
   ): (FieldMetaData, FieldMetaData) = {
 
@@ -774,66 +774,66 @@ trait QueryDsl
   // Composite key syntactic sugar :
 
   def compositeKey[A1, A2](a1: A1, a2: A2)(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?]
   ) =
     CompositeKey2(a1, a2)
 
   def compositeKey[A1, A2, A3](a1: A1, a2: A2, a3: A3)(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?]
   ) =
     CompositeKey3(a1, a2, a3)
 
   def compositeKey[A1, A2, A3, A4](a1: A1, a2: A2, a3: A3, a4: A4)(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?]
   ) =
     CompositeKey4(a1, a2, a3, a4)
 
   def compositeKey[A1, A2, A3, A4, A5](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5)(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?]
   ) =
     CompositeKey5(a1, a2, a3, a4, a5)
 
   def compositeKey[A1, A2, A3, A4, A5, A6](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6)(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?]
   ) =
     CompositeKey6(a1, a2, a3, a4, a5, a6)
 
   def compositeKey[A1, A2, A3, A4, A5, A6, A7](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7)(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _],
-    ev7: A7 => TypedExpression[A7, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?],
+    ev7: A7 => TypedExpression[A7, ?]
   ) =
     CompositeKey7(a1, a2, a3, a4, a5, a6, a7)
 
   def compositeKey[A1, A2, A3, A4, A5, A6, A7, A8](a1: A1, a2: A2, a3: A3, a4: A4, a5: A5, a6: A6, a7: A7, a8: A8)(
     implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _],
-    ev7: A7 => TypedExpression[A7, _],
-    ev8: A8 => TypedExpression[A8, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?],
+    ev7: A7 => TypedExpression[A7, ?],
+    ev8: A8 => TypedExpression[A8, ?]
   ) =
     CompositeKey8(a1, a2, a3, a4, a5, a6, a7, a8)
 
@@ -848,15 +848,15 @@ trait QueryDsl
     a8: A8,
     a9: A9
   )(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _],
-    ev7: A7 => TypedExpression[A7, _],
-    ev8: A8 => TypedExpression[A8, _],
-    ev9: A9 => TypedExpression[A9, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?],
+    ev7: A7 => TypedExpression[A7, ?],
+    ev8: A8 => TypedExpression[A8, ?],
+    ev9: A9 => TypedExpression[A9, ?]
   ) =
     CompositeKey9(a1, a2, a3, a4, a5, a6, a7, a8, a9)
 
@@ -864,82 +864,82 @@ trait QueryDsl
 
   implicit def t2te[A1, A2](
     t: (A1, A2)
-  )(implicit ev1: A1 => TypedExpression[A1, _], ev2: A2 => TypedExpression[A2, _]): CompositeKey2[A1, A2] =
+  )(implicit ev1: A1 => TypedExpression[A1, ?], ev2: A2 => TypedExpression[A2, ?]): CompositeKey2[A1, A2] =
     new CompositeKey2[A1, A2](t._1, t._2)
 
   implicit def t3te[A1, A2, A3](t: (A1, A2, A3))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?]
   ): CompositeKey3[A1, A2, A3] =
     new CompositeKey3[A1, A2, A3](t._1, t._2, t._3)
 
   implicit def t4te[A1, A2, A3, A4](t: (A1, A2, A3, A4))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?]
   ): CompositeKey4[A1, A2, A3, A4] =
     new CompositeKey4[A1, A2, A3, A4](t._1, t._2, t._3, t._4)
 
   implicit def t5te[A1, A2, A3, A4, A5](t: (A1, A2, A3, A4, A5))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?]
   ): CompositeKey5[A1, A2, A3, A4, A5] =
     new CompositeKey5[A1, A2, A3, A4, A5](t._1, t._2, t._3, t._4, t._5)
 
   implicit def t6te[A1, A2, A3, A4, A5, A6](t: (A1, A2, A3, A4, A5, A6))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?]
   ): CompositeKey6[A1, A2, A3, A4, A5, A6] =
     new CompositeKey6[A1, A2, A3, A4, A5, A6](t._1, t._2, t._3, t._4, t._5, t._6)
 
   implicit def t7te[A1, A2, A3, A4, A5, A6, A7](t: (A1, A2, A3, A4, A5, A6, A7))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _],
-    ev7: A7 => TypedExpression[A7, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?],
+    ev7: A7 => TypedExpression[A7, ?]
   ): CompositeKey7[A1, A2, A3, A4, A5, A6, A7] =
     new CompositeKey7[A1, A2, A3, A4, A5, A6, A7](t._1, t._2, t._3, t._4, t._5, t._6, t._7)
 
   implicit def t8te[A1, A2, A3, A4, A5, A6, A7, A8](t: (A1, A2, A3, A4, A5, A6, A7, A8))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _],
-    ev7: A7 => TypedExpression[A7, _],
-    ev8: A8 => TypedExpression[A8, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?],
+    ev7: A7 => TypedExpression[A7, ?],
+    ev8: A8 => TypedExpression[A8, ?]
   ): CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8] =
     new CompositeKey8[A1, A2, A3, A4, A5, A6, A7, A8](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8)
 
   implicit def t9te[A1, A2, A3, A4, A5, A6, A7, A8, A9](t: (A1, A2, A3, A4, A5, A6, A7, A8, A9))(implicit
-    ev1: A1 => TypedExpression[A1, _],
-    ev2: A2 => TypedExpression[A2, _],
-    ev3: A3 => TypedExpression[A3, _],
-    ev4: A4 => TypedExpression[A4, _],
-    ev5: A5 => TypedExpression[A5, _],
-    ev6: A6 => TypedExpression[A6, _],
-    ev7: A7 => TypedExpression[A7, _],
-    ev8: A8 => TypedExpression[A8, _],
-    ev9: A9 => TypedExpression[A9, _]
+    ev1: A1 => TypedExpression[A1, ?],
+    ev2: A2 => TypedExpression[A2, ?],
+    ev3: A3 => TypedExpression[A3, ?],
+    ev4: A4 => TypedExpression[A4, ?],
+    ev5: A5 => TypedExpression[A5, ?],
+    ev6: A6 => TypedExpression[A6, ?],
+    ev7: A7 => TypedExpression[A7, ?],
+    ev8: A8 => TypedExpression[A8, ?],
+    ev9: A9 => TypedExpression[A9, ?]
   ): CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9] =
     new CompositeKey9[A1, A2, A3, A4, A5, A6, A7, A8, A9](t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9)
 
   implicit def compositeKey2CanLookup[T <: CompositeKey](t: T): CanLookup = CompositeKeyLookup
 
-  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, _]): CanLookup =
+  implicit def simpleKey2CanLookup[T](t: T)(implicit ev: T => TypedExpression[T, ?]): CanLookup =
     new SimpleKeyLookup[T](ev)
 
   // Case statements :

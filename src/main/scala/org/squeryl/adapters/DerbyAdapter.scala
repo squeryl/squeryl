@@ -17,7 +17,7 @@ package org.squeryl.adapters
 
 import org.squeryl.Schema
 import org.squeryl.internals.{StatementWriter, FieldMetaData, DatabaseAdapter}
-import org.squeryl.dsl.ast._
+import org.squeryl.dsl.ast.*
 import java.sql.SQLException
 
 class DerbyAdapter extends DatabaseAdapter {

@@ -18,7 +18,7 @@ package org.squeryl.adapters
 import org.squeryl.internals.{StatementWriter, DatabaseAdapter}
 import org.squeryl.{Session, Table}
 import java.sql.SQLException
-import org.squeryl.dsl.ast._
+import org.squeryl.dsl.ast.*
 
 class DB2Adapter extends DatabaseAdapter {
 
@@ -33,7 +33,7 @@ class DB2Adapter extends DatabaseAdapter {
 
   override def supportsUnionQueryOptions = false
 
-  override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
+  override def postCreateTable(t: Table[?], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val sw = new StatementWriter(false, this)
     sw.write("create sequence ", sequenceName(t), " start with 1 increment by 1 nomaxvalue")
@@ -45,10 +45,10 @@ class DB2Adapter extends DatabaseAdapter {
       printSinkWhenWriteOnlyMode.get.apply(sw.statement + ";")
   }
 
-  override def postDropTable(t: Table[_]) =
+  override def postDropTable(t: Table[?]) =
     execFailSafeExecute("drop sequence " + sequenceName(t), e => e.getErrorCode == -204)
 
-  def sequenceName(t: Table[_]) =
+  def sequenceName(t: Table[?]) =
     t.prefixedPrefixedName("s_")
 
   override def writeInsert[T](o: T, t: Table[T], sw: StatementWriter): Unit = {
@@ -132,7 +132,7 @@ class DB2Adapter extends DatabaseAdapter {
   }
 
   private def _writeConcatOperand(e: ExpressionNode, sw: StatementWriter) = {
-    if (e.isInstanceOf[ConstantTypedExpression[_, _]]) {
+    if (e.isInstanceOf[ConstantTypedExpression[?, ?]]) {
       val c = e.asInstanceOf[ConstantTypedExpression[Any, Any]]
       sw.write("cast(")
       e.write(sw)

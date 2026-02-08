@@ -15,11 +15,11 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import org.squeryl.dsl.ast._
-import org.squeryl._
+import org.squeryl.dsl.ast.*
+import org.squeryl.*
 import dsl.CompositeKey
 import org.squeryl.{Schema, Session, Table}
-import java.sql._
+import java.sql.*
 import java.util.UUID
 
 trait DatabaseAdapter {
@@ -237,7 +237,7 @@ trait DatabaseAdapter {
   def jdbcDoubleArrayCreationType = doubleTypeDeclaration
   def jdbcStringArrayCreationType = stringTypeDeclaration
 
-  final def arrayCreationType(ptype: Class[_]): String = {
+  final def arrayCreationType(ptype: Class[?]): String = {
     val rv = ptype.getName() match {
       case "java.lang.Integer" => jdbcIntArrayCreationType
       case "java.lang.Double" => jdbcDoubleArrayCreationType
@@ -269,7 +269,7 @@ trait DatabaseAdapter {
    */
   def databaseTypeFor(fmd: FieldMetaData): String =
     fmd.explicitDbTypeDeclaration.getOrElse(
-      fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[_]]).getOrElse {
+      fmd.schema.columnTypeFor(fmd, fmd.parentMetaData.viewOrTable.asInstanceOf[Table[?]]).getOrElse {
         val nativeJdbcType = fmd.nativeJdbcType
 
         if (classOf[String].isAssignableFrom(nativeJdbcType))
@@ -481,7 +481,7 @@ trait DatabaseAdapter {
     var v = r
 
     v match {
-      case product: Product1[_] =>
+      case product: Product1[?] =>
         v = product._1.asInstanceOf[AnyRef]
       case _ =>
     }
@@ -533,9 +533,9 @@ trait DatabaseAdapter {
   /**
    * When @arg printSinkWhenWriteOnlyMode is not None, the adapter will not execute any statement, but only silently give it to the String=>Unit closure
    */
-  def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {}
+  def postCreateTable(t: Table[?], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {}
 
-  def postDropTable(t: Table[_]) = {}
+  def postDropTable(t: Table[?]) = {}
 
   def createSequenceName(fmd: FieldMetaData) =
     "s_" + fmd.parentMetaData.viewOrTable.name + "_" + fmd.columnName
@@ -648,7 +648,7 @@ trait DatabaseAdapter {
   def convertToUuidForJdbc(rs: ResultSet, i: Int): UUID =
     UUID.fromString(rs.getString(i))
 
-  def writeUpdate(t: Table[_], us: UpdateStatement, sw: StatementWriter) = {
+  def writeUpdate(t: Table[?], us: UpdateStatement, sw: StatementWriter) = {
 
     val colsToUpdate = us.columns.iterator
 
@@ -718,19 +718,19 @@ trait DatabaseAdapter {
    */
   def isNotNullConstraintViolation(e: SQLException): Boolean = false
 
-  def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
+  def foreignKeyConstraintName(foreignKeyTable: Table[?], idWithinSchema: Int) =
     foreignKeyTable.name + "FK" + idWithinSchema
 
-  def viewAlias(vn: ViewExpressionNode[_]) =
+  def viewAlias(vn: ViewExpressionNode[?]) =
     if (vn.view.prefix.isDefined)
       vn.view.prefix.get + "_" + vn.view.name + vn.uniqueId.get
     else
       vn.view.name + vn.uniqueId.get
 
   def writeForeignKeyDeclaration(
-    foreignKeyTable: Table[_],
+    foreignKeyTable: Table[?],
     foreignKeyColumnName: String,
-    primaryKeyTable: Table[_],
+    primaryKeyTable: Table[?],
     primaryKeyColumnName: String,
     referentialAction1: Option[ReferentialAction],
     referentialAction2: Option[ReferentialAction],
@@ -767,10 +767,10 @@ trait DatabaseAdapter {
   protected def currenSession =
     Session.currentSession
 
-  def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
+  def writeDropForeignKeyStatement(foreignKeyTable: Table[?], fkName: String) =
     "alter table " + quoteName(foreignKeyTable.prefixedName) + " drop constraint " + quoteName(fkName)
 
-  def dropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String, session: AbstractSession): Unit =
+  def dropForeignKeyStatement(foreignKeyTable: Table[?], fkName: String, session: AbstractSession): Unit =
     execFailSafeExecute(writeDropForeignKeyStatement(foreignKeyTable, fkName), e => true)
 
   def isTableDoesNotExistException(e: SQLException): Boolean
@@ -780,13 +780,13 @@ trait DatabaseAdapter {
   def writeDropTable(tableName: String) =
     "drop table " + quoteName(tableName)
 
-  def dropTable(t: Table[_]) =
+  def dropTable(t: Table[?]) =
     execFailSafeExecute(writeDropTable(t.prefixedName), e => isTableDoesNotExistException(e))
 
-  def writeCompositePrimaryKeyConstraint(t: Table[_], cols: Iterable[FieldMetaData]) =
+  def writeCompositePrimaryKeyConstraint(t: Table[?], cols: Iterable[FieldMetaData]) =
     writeUniquenessConstraint(t, cols);
 
-  def writeUniquenessConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
+  def writeUniquenessConstraint(t: Table[?], cols: Iterable[FieldMetaData]) = {
     // ALTER TABLE TEST ADD CONSTRAINT NAME_UNIQUE UNIQUE(NAME)
     val sb = new java.lang.StringBuilder(256)
 
@@ -887,7 +887,7 @@ trait DatabaseAdapter {
     sw.write(quoteName(a))
   }
 
-  def databaseTypeFor(fieldMapper: FieldMapper, c: Class[_]): String = {
+  def databaseTypeFor(fieldMapper: FieldMapper, c: Class[?]): String = {
     val ar = fieldMapper.sampleValueFor(c)
     val decl: String =
       if (ar.isInstanceOf[Enumeration#Value])
@@ -963,7 +963,7 @@ trait DatabaseAdapter {
   }
    */
 
-  def jdbcTypeConstantFor(c: Class[_]) =
+  def jdbcTypeConstantFor(c: Class[?]) =
     c.getCanonicalName match {
       case "java.lang.String" => Types.VARCHAR
       case "java.math.BigDecimal" => Types.DECIMAL

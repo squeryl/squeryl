@@ -1,16 +1,16 @@
 package org.squeryl.test
 
 import org.squeryl.Schema
-import org.squeryl.framework._
+import org.squeryl.framework.*
 
 abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
 
-  import org.squeryl.test.PrimitiveTypeModeForTests._
+  import org.squeryl.test.PrimitiveTypeModeForTests.*
 
   val schema: Schema = LeftJoinSchema
 
-  import LeftJoinSchema._
+  import LeftJoinSchema.*
 
   override def prePopulate(): Unit = {
 
@@ -78,7 +78,7 @@ abstract class LeftJoinTest extends SchemaTester with RunTestsInsideTransaction 
 }
 
 import org.squeryl.Schema
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 
 object LeftJoinSchema extends Schema {
 

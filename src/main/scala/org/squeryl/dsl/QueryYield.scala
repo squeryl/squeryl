@@ -25,14 +25,14 @@ trait QueryYield[R] extends QueryYieldMethods[R] {
 
   def invokeYield(resultSetMapper: ResultSetMapper, rs: ResultSet): R
 
-  def invokeYieldForAst(q: QueryExpressionNode[_], rsm: ResultSetMapper): (Iterable[SelectElement], AnyRef)
+  def invokeYieldForAst(q: QueryExpressionNode[?], rsm: ResultSetMapper): (Iterable[SelectElement], AnyRef)
 
   def queryElements: (
     Option[ExpressionNode],
     Option[ExpressionNode],
     Iterable[ExpressionNode],
     Iterable[ExpressionNode],
-    Iterable[Query[_]]
+    Iterable[Query[?]]
   )
 
   private[squeryl] var joinExpressions: collection.Seq[() => LogicalBoolean] = Nil

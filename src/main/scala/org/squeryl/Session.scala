@@ -16,7 +16,7 @@
 package org.squeryl
 
 import logging.StatisticsListener
-import org.squeryl.internals._
+import org.squeryl.internals.*
 import collection.mutable.ArrayBuffer
 import java.sql.{SQLException, ResultSet, Statement, Connection}
 import scala.util.control.ControlThrowable

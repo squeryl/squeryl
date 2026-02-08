@@ -1,8 +1,8 @@
 package org.squeryl.test
 
-import org.squeryl._
-import org.squeryl.framework._
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.*
+import org.squeryl.framework.*
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 import org.squeryl.internals.Utils
 
 class Foo(val value: String) extends KeyedEntity[Long] {
@@ -21,7 +21,7 @@ object FooSchema extends Schema {
 abstract class TransactionTests extends DbTestBase {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   def throwExc(except: Boolean): Int = {
     if (except) throw new Exception()

@@ -15,16 +15,16 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import org.squeryl._
+import org.squeryl.*
 import reflect.ClassTag
 
 trait TableDefinitionInSchema {
   self: Schema =>
 
-  protected def table[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] =
+  protected def table[T]()(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] =
     table(tableNameFromClass(manifestT.runtimeClass))(manifestT, ked)
 
-  protected def table[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, _]): Table[T] = {
+  protected def table[T](name: String)(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, None)
     _addTable(t)
@@ -34,7 +34,7 @@ trait TableDefinitionInSchema {
 
   protected def table[T](name: String, prefix: String)(implicit
     manifestT: ClassTag[T],
-    ked: OptionalKeyedEntityDef[T, _]
+    ked: OptionalKeyedEntityDef[T, ?]
   ): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef, None)

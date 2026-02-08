@@ -1,7 +1,7 @@
 package org.squeryl.test.mutablerelations
 
-import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.squeryl._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
+import org.squeryl.*
 import org.squeryl.dsl.CompositeKey2
 
 trait SchoolDb2Object extends KeyedEntity[Long] {
@@ -79,7 +79,7 @@ object SchoolDb2 extends Schema {
   }
 }
 
-import org.squeryl.framework._
+import org.squeryl.framework.*
 
 abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester with RunTestsInsideTransaction {
   self: DBConnector =>
@@ -90,7 +90,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
   test("Many2ManyAssociationFromLeftSide") {
 
-    import schoolDb2._
+    import schoolDb2.*
 
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
@@ -124,7 +124,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
   test("Many2ManyAssociationFromRightSide") {
 
-    import schoolDb2._
+    import schoolDb2.*
 
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))
@@ -170,7 +170,7 @@ abstract class SchoolDb2MetableRelations extends SchemaTester with QueryTester w
 
   test("OneToMany") {
 
-    import schoolDb2._
+    import schoolDb2.*
 
     val professeurTournesol = professors.insert(new Professor("Tournesol"))
     val madProfessor = professors.insert(new Professor("Mad Professor"))

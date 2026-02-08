@@ -18,7 +18,7 @@ package org.squeryl.dsl.boilerplate
 import org.squeryl.internals.{OutMapper, FieldReferenceLinker}
 import org.squeryl.dsl.ast.SelectElement
 
-class SampleTuple(val outNodes: List[SelectElement], val outMappers: Array[OutMapper[_]]) extends Product {
+class SampleTuple(val outNodes: List[SelectElement], val outMappers: Array[OutMapper[?]]) extends Product {
 
   override def canEqual(a: Any) = false
   override def equals(a: Any) = false
@@ -32,7 +32,7 @@ class SampleTuple(val outNodes: List[SelectElement], val outMappers: Array[OutMa
 }
 
 object SampleTuple {
-  def create(n: List[SelectElement], m: Array[OutMapper[_]]) =
+  def create(n: List[SelectElement], m: Array[OutMapper[?]]) =
     m.length match {
       case 1 => new STuple1[Any](n, m)
       case 2 => new STuple2[Any, Any](n, m)
@@ -134,6 +134,6 @@ object SampleTuple {
     }
 }
 
-class STuple1[T1](n: List[SelectElement], m: Array[OutMapper[_]]) extends SampleTuple(n, m) {
+class STuple1[T1](n: List[SelectElement], m: Array[OutMapper[?]]) extends SampleTuple(n, m) {
   def _1 = _get[T1](1)
 }

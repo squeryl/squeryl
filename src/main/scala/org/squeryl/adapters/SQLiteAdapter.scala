@@ -19,8 +19,8 @@ import java.sql.SQLException
 
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.dsl.ast.{ExpressionNode, QueryExpressionElements}
-import org.squeryl._
-import org.squeryl.internals._
+import org.squeryl.*
+import org.squeryl.internals.*
 
 class SQLiteAdapter extends DatabaseAdapter {
 
@@ -93,7 +93,7 @@ class SQLiteAdapter extends DatabaseAdapter {
 
   override def supportsForeignKeyConstraints: Boolean = false
 
-  override def writeCompositePrimaryKeyConstraint(t: Table[_], cols: Iterable[FieldMetaData]): String =
+  override def writeCompositePrimaryKeyConstraint(t: Table[?], cols: Iterable[FieldMetaData]): String =
     s"SELECT * FROM sqlite_master WHERE 1 = 2"
 
   override def writeDropTable(tableName: String): String = s"DROP TABLE IF EXISTS $tableName"

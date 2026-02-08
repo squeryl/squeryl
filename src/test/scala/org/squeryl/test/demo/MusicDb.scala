@@ -15,7 +15,7 @@ package org.squeryl.test.demo
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************** */
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 import org.squeryl.{Query, KeyedEntity, Schema}
 import org.squeryl.dsl.GroupWithMeasures
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
@@ -47,7 +47,7 @@ class Song(val title: String, val artistId: Long, val filePath: Option[String], 
   def this() = this("", 0, Some(""), 0)
 
   // the schema can be imported in the scope, to lighten the syntax :
-  import MusicDb._
+  import MusicDb.*
 
   // An alternative (shorter) syntax for single table queries :
   def artist = artists.where(a => a.id === artistId).single
@@ -60,7 +60,7 @@ class Song(val title: String, val artistId: Long, val filePath: Option[String], 
 
 class Playlist(val name: String, val path: String) extends MusicDbObject {
 
-  import MusicDb._
+  import MusicDb.*
 
   // a two table join :
   def songsInPlaylistOrder =
@@ -130,7 +130,7 @@ object MusicDb extends Schema {
 }
 
 class TestData {
-  import MusicDb._
+  import MusicDb.*
 
   val herbyHancock = artists.insert(Artist("Herby Hancock"))
   val ponchoSanchez = artists.insert(Artist("Poncho Sanchez"))
@@ -148,7 +148,7 @@ class TestData {
 abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   val musicdb: MusicDb.type = MusicDb
 
@@ -161,7 +161,7 @@ abstract class KickTheTires extends SchemaTester with RunTestsInsideTransaction 
   }
 
   test("kick tires") {
-    val testData = sharedTestData; import testData._
+    val testData = sharedTestData; import testData.*
 
     funkAndLatinJazz.addSong(watermelonMan)
     funkAndLatinJazz.addSong(besameMama)

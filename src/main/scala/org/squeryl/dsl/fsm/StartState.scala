@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl.dsl.fsm
 
-import org.squeryl.dsl._
+import org.squeryl.dsl.*
 import ast.{LogicalBoolean, UpdateStatement, UpdateAssignment}
 import boilerplate.{
   ComputeMeasuresSignaturesFromStartOrWhereState,
@@ -30,7 +30,7 @@ abstract sealed class Conditioned
 abstract sealed class Unconditioned
 
 trait StartState extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState {
-  self: QueryElements[_] =>
+  self: QueryElements[?] =>
 
   def select[R](yieldClosure: => R): SelectState[R]
 }
@@ -39,7 +39,7 @@ trait QueryElements[Cond] extends WhereState[Cond] with ComputeMeasuresSignature
 
   private[squeryl] def whereClause: Option[() => LogicalBoolean] = None
 
-  private[squeryl] def commonTableExpressions: List[Query[_]] = Nil
+  private[squeryl] def commonTableExpressions: List[Query[?]] = Nil
 }
 
 trait SelectState[R] extends QueryYield[R] with OrderBySignatures[R] {
@@ -52,7 +52,7 @@ trait ComputeStateStartOrWhereState[M] extends QueryYield[Measures[M]] with Orde
 }
 
 trait WhereState[Cond] extends GroupBySignatures with ComputeMeasuresSignaturesFromStartOrWhereState {
-  self: QueryElements[_] =>
+  self: QueryElements[?] =>
 
   def select[R](yieldClosure: => R): SelectState[R] =
     new BaseQueryYield[R](this, () => yieldClosure)
@@ -86,7 +86,7 @@ trait GroupByState[K]
   }
 }
 
-class WithState(override val commonTableExpressions: List[Query[_]])
+class WithState(override val commonTableExpressions: List[Query[?]])
     extends WhereState[Unconditioned]
     with ComputeMeasuresSignaturesFromStartOrWhereState
     with StartState
@@ -98,5 +98,5 @@ class WithState(override val commonTableExpressions: List[Query[_]])
 
 private[squeryl] class QueryElementsImpl[Cond](
   override val whereClause: Option[() => LogicalBoolean],
-  override val commonTableExpressions: List[Query[_]]
+  override val commonTableExpressions: List[Query[?]]
 ) extends QueryElements[Cond]
