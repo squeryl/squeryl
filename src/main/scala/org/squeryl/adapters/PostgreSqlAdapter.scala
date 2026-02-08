@@ -46,10 +46,10 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def jdbcDoubleArrayCreationType = "float8"
   override def jdbcStringArrayCreationType = "varchar"
 
-  override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) =
+  override def foreignKeyConstraintName(foreignKeyTable: Table[?], idWithinSchema: Int) =
     foreignKeyTable.name + "FK" + idWithinSchema
 
-  override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
+  override def postCreateTable(t: Table[?], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
 
@@ -65,7 +65,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     }
   }
 
-  def sequenceName(t: Table[_]) =
+  def sequenceName(t: Table[?]) =
     if (usePostgresSequenceNamingScheme) {
       // This is compatible with the default postgresql sequence naming scheme.
       val autoIncPK = t.posoMetaData.fieldsMetaData.find(fmd => fmd.isAutoIncremented)
@@ -130,7 +130,7 @@ class PostgreSqlAdapter extends DatabaseAdapter {
   override def isTableDoesNotExistException(e: SQLException) =
     e.getSQLState.equals("42P01")
 
-  override def writeCompositePrimaryKeyConstraint(t: Table[_], cols: Iterable[FieldMetaData]) = {
+  override def writeCompositePrimaryKeyConstraint(t: Table[?], cols: Iterable[FieldMetaData]) = {
     // alter table TableName add primary key (col1, col2) ;
     val sb = new java.lang.StringBuilder(256)
     sb.append("alter table ")
@@ -141,12 +141,12 @@ class PostgreSqlAdapter extends DatabaseAdapter {
     sb.toString
   }
 
-  override def writeDropForeignKeyStatement(foreignKeyTable: Table[_], fkName: String) =
+  override def writeDropForeignKeyStatement(foreignKeyTable: Table[?], fkName: String) =
     "alter table " + quoteName(foreignKeyTable.prefixedName) + " drop constraint " + quoteName(fkName)
 
   override def failureOfStatementRequiresRollback = true
 
-  override def postDropTable(t: Table[_]) = {
+  override def postDropTable(t: Table[?]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
 

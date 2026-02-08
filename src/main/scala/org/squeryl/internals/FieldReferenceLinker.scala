@@ -15,13 +15,13 @@
  ***************************************************************************** */
 package org.squeryl.internals
 
-import net.sf.cglib.proxy._
+import net.sf.cglib.proxy.*
 import collection.mutable.ArrayBuffer
-import org.squeryl.dsl.ast._
+import org.squeryl.dsl.ast.*
 import org.squeryl.dsl.CompositeKey
 import org.squeryl.dsl.TypedExpression
 import java.lang.reflect.{Field, Method}
-import org.squeryl._
+import org.squeryl.*
 
 object FieldReferenceLinker {
 
@@ -32,7 +32,7 @@ object FieldReferenceLinker {
     _yieldInspectionTL.remove()
   }
 
-  def pushExpressionOrCollectValue[T](e: () => TypedExpression[T, _]): T = {
+  def pushExpressionOrCollectValue[T](e: () => TypedExpression[T, ?]): T = {
     if (isYieldInspectionMode) {
       val yi = _yieldInspectionTL.get
       val expr = yi.callWithoutReentrance(e)
@@ -109,7 +109,7 @@ object FieldReferenceLinker {
 
     private[this] val _utilizedFields = new ArrayBuffer[SelectElement]
     var _on = false
-    var queryExpressionNode: QueryExpressionNode[_] = null
+    var queryExpressionNode: QueryExpressionNode[?] = null
     var _resultSetMapper: ResultSetMapper = null
 
     def isOn = _on
@@ -140,7 +140,7 @@ object FieldReferenceLinker {
     def decrementReentranceDepth =
       _reentranceDepth -= 1
 
-    def turnOn(q: QueryExpressionNode[_], rsm: ResultSetMapper) = {
+    def turnOn(q: QueryExpressionNode[?], rsm: ResultSetMapper) = {
       _reentranceDepth = 0
       queryExpressionNode = q
       _on = true
@@ -167,7 +167,7 @@ object FieldReferenceLinker {
     res
   }
 
-  private def _takeLastAccessedUntypedFieldReference: SelectElementReference[_, _] =
+  private def _takeLastAccessedUntypedFieldReference: SelectElementReference[?, ?] =
     FieldReferenceLinker.takeLastAccessedFieldReference match {
       case Some(n: SelectElement) => new SelectElementReference(n, NoOpOutMapper)
       case None =>
@@ -184,7 +184,7 @@ object FieldReferenceLinker {
     l match {
       case CompositeKeyLookup =>
         e.asInstanceOf[CompositeKey].buildEquality(c.asInstanceOf[CompositeKey])
-      case s: SimpleKeyLookup[_] =>
+      case s: SimpleKeyLookup[?] =>
         createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c, Some(s))
       case UnknownCanLookup =>
         createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(c, None)
@@ -193,11 +193,11 @@ object FieldReferenceLinker {
 
   def createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(
     c: Any,
-    lOpt: Option[SimpleKeyLookup[_]]
+    lOpt: Option[SimpleKeyLookup[?]]
   ): LogicalBoolean = {
     val left = _takeLastAccessedUntypedFieldReference
     val right = lOpt map (l =>
-      l.convert.asInstanceOf[Any => TypedExpression[_, _]](c)
+      l.convert.asInstanceOf[Any => TypedExpression[?, ?]](c)
     ) getOrElse (new InputOnlyConstantExpressionNode(c))
 
     new BinaryOperatorNodeLogicalBoolean(left, right, "=")
@@ -212,7 +212,7 @@ object FieldReferenceLinker {
    */
 
   def determineColumnsUtilizedInYeldInvocation(
-    q: QueryExpressionNode[_],
+    q: QueryExpressionNode[?],
     rsm: ResultSetMapper,
     selectClosure: () => AnyRef
   ) = {
@@ -254,10 +254,10 @@ object FieldReferenceLinker {
    */
   private object _declaredFieldCache {
 
-    @volatile var _cache: Map[Class[_], Array[Field]] =
-      Map[Class[_], Array[Field]]()
+    @volatile var _cache: Map[Class[?], Array[Field]] =
+      Map[Class[?], Array[Field]]()
 
-    def apply(cls: Class[_]) =
+    def apply(cls: Class[?]) =
       _cache.getOrElse(
         cls, {
           val declaredFields = cls.getDeclaredFields()
@@ -320,10 +320,10 @@ object FieldReferenceLinker {
     q.filterDescendantsOfType[QueryableExpressionNode].find(_.owns(sample))
   }
 
-  def createCallBack(v: ViewExpressionNode[_]): Callback =
+  def createCallBack(v: ViewExpressionNode[?]): Callback =
     new PosoPropertyAccessInterceptor(v)
 
-  private class PosoPropertyAccessInterceptor(val viewExpressionNode: ViewExpressionNode[_]) extends MethodInterceptor {
+  private class PosoPropertyAccessInterceptor(val viewExpressionNode: ViewExpressionNode[?]) extends MethodInterceptor {
 
     def fmd4Method(m: Method) =
       viewExpressionNode.view.findFieldMetaDataForProperty(m.getName)

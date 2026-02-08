@@ -15,9 +15,9 @@
  ***************************************************************************** */
 package org.squeryl
 
-import dsl._
-import ast._
-import internals._
+import dsl.*
+import ast.*
+import internals.*
 
 import reflect.ClassTag
 import java.sql.SQLException
@@ -34,24 +34,24 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
   /**
    * Contains all Table[_]s in this shema, and also all ManyToManyRelation[_,_,_]s (since they are also Table[_]s
    */
-  private[this] val _tables = new ArrayBuffer[Table[_]]
+  private[this] val _tables = new ArrayBuffer[Table[?]]
 
-  def tables: collection.Seq[Table[_]] = _tables.toSeq
+  def tables: collection.Seq[Table[?]] = _tables.toSeq
 
-  private[this] val _tableTypes = new HashMap[Class[_], Table[_]]
+  private[this] val _tableTypes = new HashMap[Class[?], Table[?]]
 
-  private[this] val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[_, _]]
+  private[this] val _oneToManyRelations = new ArrayBuffer[OneToManyRelation[?, ?]]
 
-  private[this] val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[_, _, _]]
+  private[this] val _manyToManyRelations = new ArrayBuffer[ManyToManyRelation[?, ?, ?]]
 
   private[this] val _columnGroupAttributeAssignments = new ArrayBuffer[ColumnGroupAttributeAssignment]
 
   private[squeryl] val _namingScope = new HashSet[String]
 
-  private[squeryl] def _addRelation(r: OneToManyRelation[_, _]) =
+  private[squeryl] def _addRelation(r: OneToManyRelation[?, ?]) =
     _oneToManyRelations.append(r)
 
-  private[squeryl] def _addRelation(r: ManyToManyRelation[_, _, _]) =
+  private[squeryl] def _addRelation(r: ManyToManyRelation[?, ?, ?]) =
     _manyToManyRelations.append(r)
 
   private def _dbAdapter = Session.currentSession.databaseAdapter
@@ -63,7 +63,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
    *  ._3 is the ForeignKeyDeclaration between _1 and _2
    */
   private def _activeForeignKeySpecs = {
-    val res = new ArrayBuffer[(Table[_], Table[_], ForeignKeyDeclaration)]
+    val res = new ArrayBuffer[(Table[?], Table[?], ForeignKeyDeclaration)]
 
     for (r <- _oneToManyRelations if r.foreignKeyDeclaration._isActive)
       res.append((r.rightTable, r.leftTable, r.foreignKeyDeclaration))
@@ -84,7 +84,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
   }
 
   def findAllTablesFor[A](c: Class[A]) =
-    _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Iterable[Table[_]]]
+    _tables.filter(t => c.isAssignableFrom(t.posoMetaData.clasz)).asInstanceOf[Iterable[Table[?]]]
 
   object NamingConventionTransforms {
 
@@ -195,7 +195,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
     createColumnGroupConstraintsAndIndexes
   }
 
-  private def _indexDeclarationsFor(t: Table[_]): List[String] = {
+  private def _indexDeclarationsFor(t: Table[?]): List[String] = {
     t.posoMetaData.fieldsMetaData.flatMap { fmd =>
       _writeIndexDeclarationIfApplicable(fmd.columnAttributes.toSeq, Seq(fmd), None)
     }.toList
@@ -297,7 +297,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
    */
   private def _allCompositePrimaryKeys = {
 
-    val res = new ArrayBuffer[(Table[_], Iterable[FieldMetaData])]
+    val res = new ArrayBuffer[(Table[?], Iterable[FieldMetaData])]
 
     for (t <- _tables; ked <- t.ked) {
 
@@ -339,15 +339,15 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
    *  }
    *
    */
-  def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[_]): Option[String] = None
+  def columnTypeFor(fieldMetaData: FieldMetaData, owner: Table[?]): Option[String] = None
 
-  def tableNameFromClass(c: Class[_]): String =
+  def tableNameFromClass(c: Class[?]): String =
     c.getSimpleName
 
-  private[squeryl] def _addTable(t: Table[_]) =
+  private[squeryl] def _addTable(t: Table[?]) =
     _tables.append(t)
 
-  private[squeryl] def _addTableType(typeT: Class[_], t: Table[_]) =
+  private[squeryl] def _addTableType(typeT: Class[?], t: Table[?]) =
     _tableTypes += ((typeT, t))
 
   class ReferentialEvent(val eventName: String) {
@@ -421,7 +421,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
       case dva: DefaultValueAssignment => {
 
         dva.value match {
-          case x: ConstantTypedExpression[_, _] =>
+          case x: ConstantTypedExpression[?, ?] =>
             dva.left._defaultValue = Some(x)
           case _ =>
             org.squeryl.internals.Utils.throwError(
@@ -477,7 +477,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
   private def _addColumnGroupAttributeAssignment(cga: ColumnGroupAttributeAssignment) =
     _columnGroupAttributeAssignments.append(cga);
 
-  def defaultColumnAttributesForKeyedEntityId(typeOfIdField: Class[_]) =
+  def defaultColumnAttributesForKeyedEntityId(typeOfIdField: Class[?]) =
     if (
       typeOfIdField
         .isAssignableFrom(classOf[java.lang.Long]) || typeOfIdField.isAssignableFrom(classOf[java.lang.Integer])
@@ -514,7 +514,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
       new ColumnGroupAttributeAssignment(cols, columnAttributes)
   }
 
-  def columns(fieldList: TypedExpression[_, _]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
+  def columns(fieldList: TypedExpression[?, ?]*) = new ColGroupDeclaration(fieldList.map(_._fieldMetaData))
 
   // POSO Life Cycle Callbacks :
 
@@ -536,19 +536,19 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
 //  }
 
 ////2.8.x approach for LyfeCycle events :
-  private[squeryl] lazy val _callbacks: Map[View[_], LifecycleEventInvoker] = {
+  private[squeryl] lazy val _callbacks: Map[View[?], LifecycleEventInvoker] = {
     val m =
       (for (cb <- callbacks; t <- cb.target) yield (t, cb))
         .groupBy(_._1)
         .mapValues(_.map(_._2))
-        .map((t: Tuple2[View[_], collection.Seq[LifecycleEvent]]) => {
-          (t._1, new LifecycleEventInvoker(t._2, t._1)): (View[_], LifecycleEventInvoker)
+        .map((t: Tuple2[View[?], collection.Seq[LifecycleEvent]]) => {
+          (t._1, new LifecycleEventInvoker(t._2, t._1)): (View[?], LifecycleEventInvoker)
         })
         .toMap
     m
   }
 
-  import internals.PosoLifecycleEvent._
+  import internals.PosoLifecycleEvent.*
 
   protected def beforeInsert[A](t: Table[A]) =
     new LifecycleEventPercursorTable[A](t, BeforeInsert)
@@ -562,7 +562,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
   protected def beforeUpdate[A]()(implicit m: ClassTag[A]) =
     new LifecycleEventPercursorClass[A](m.runtimeClass, this, BeforeUpdate)
 
-  protected def beforeDelete[A](t: Table[A])(implicit ev: KeyedEntityDef[A, _]) =
+  protected def beforeDelete[A](t: Table[A])(implicit ev: KeyedEntityDef[A, ?]) =
     new LifecycleEventPercursorTable[A](t, BeforeDelete)
 
   protected def beforeDelete[K, A]()(implicit m: ClassTag[A], ked: KeyedEntityDef[A, K]) =
@@ -611,7 +611,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
   class ActiveRecord[A](a: A, queryDsl: QueryDsl, m: ClassTag[A]) {
 
     private def _performAction(action: (Table[A]) => Unit) =
-      _tableTypes get (m.runtimeClass) map { (table: Table[_]) =>
+      _tableTypes get (m.runtimeClass) map { (table: Table[?]) =>
         queryDsl inTransaction (action(table.asInstanceOf[Table[A]]))
       }
 
@@ -624,7 +624,7 @@ class Schema(implicit val fieldMapper: FieldMapper) extends TableDefinitionInSch
     /**
      * Same as {{{table.update(a)}}}
      */
-    def update(implicit ked: KeyedEntityDef[A, _]) =
+    def update(implicit ked: KeyedEntityDef[A, ?]) =
       _performAction(_.update(a))
 
   }

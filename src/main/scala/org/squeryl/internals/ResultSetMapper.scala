@@ -115,7 +115,7 @@ class ColumnToFieldMapper(val index: Int, val fieldMetaData: FieldMetaData, sele
     "$(" + index + "->" + fieldMetaData + ")"
 }
 
-class ColumnToTupleMapper(val outMappers: Array[OutMapper[_]]) {
+class ColumnToTupleMapper(val outMappers: Array[OutMapper[?]]) {
 
   override def toString = outMappers.mkString("(", ",", ")")
 
@@ -498,7 +498,7 @@ class ResultSetMapper extends ResultSetUtils {
   }
 }
 
-class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper: OutMapper[_]) {
+class YieldValuePusher(val index: Int, val selectElement: SelectElement, mapper: OutMapper[?]) {
 
   mapper.index = index
   mapper.isActive = true

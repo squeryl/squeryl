@@ -16,7 +16,7 @@
 package org.squeryl.customtypes;
 
 import java.util.{Date, UUID}
-import org.squeryl.dsl._
+import org.squeryl.dsl.*
 import java.sql.Timestamp
 import org.squeryl.internals.FieldMapper
 

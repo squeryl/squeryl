@@ -1,17 +1,17 @@
 package org.squeryl.test.arrays
 
-import _root_.org.squeryl.framework._
+import _root_.org.squeryl.framework.*
 import org.squeryl.Schema
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 
 abstract class PrimitiveArrayTest extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   val schema: Schema = PrimitiveArraySchema
 
-  import PrimitiveArraySchema._
+  import PrimitiveArraySchema.*
 
   test("can insert and query integer, double, and long array values in database") {
     transaction {

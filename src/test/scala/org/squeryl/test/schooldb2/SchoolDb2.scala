@@ -1,11 +1,11 @@
 package org.squeryl.test.schooldb2
 
-import org.squeryl.test.PrimitiveTypeModeForTests._
-import org.squeryl._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
+import org.squeryl.*
 import dsl.{OneToMany, CompositeKey2}
 import java.sql.Savepoint
 
-import org.squeryl.framework._
+import org.squeryl.framework.*
 
 trait SchoolDb2Object {
   val id: Long = 0
@@ -159,13 +159,13 @@ class SchoolDb2 extends Schema {
 abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransaction with QueryTester {
   self: DBConnector =>
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   val schoolDb2 = new SchoolDb2
 
   override val schema: Schema = new SchoolDb2
 
-  import schoolDb2._
+  import schoolDb2.*
 
   class SeedData {
 
@@ -249,7 +249,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("UpdateWithCompositePK") {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     val xiao = { students.lookup(xiaoJimbao.id) }.get
 
@@ -266,7 +266,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("Many2ManyAssociationFromLeftSide") {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     courseAssignments.Count.toLong shouldBe 0
 
@@ -289,7 +289,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("Many2ManyAssociationsFromRightSide") {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     courseAssignments.Count.toLong shouldBe 0L
 
@@ -312,7 +312,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("OneToMany") {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     val philosophyCourse10AMWednesday = new Course
     val philosophyCourse2PMWednesday = new Course
@@ -346,7 +346,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("CompositeEquality") {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     val a = physicsCourse.professors.associate(professeurTournesol)
 
@@ -378,7 +378,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("UniquenessConstraint") {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     courseAssignments.Count.toLong shouldBe 0
 
@@ -439,7 +439,7 @@ abstract class SchoolDb2Tests extends SchemaTester with RunTestsInsideTransactio
 
   test("Inequality with query on right hand side", SingleTestRun) {
     val seedData = seedDataDef()
-    import seedData._
+    import seedData.*
 
     val xiao = students.lookup(xiaoJimbao.id).get
 

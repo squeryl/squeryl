@@ -16,7 +16,7 @@
 package org.squeryl.adapters
 
 import org.squeryl.{Session, Table}
-import org.squeryl.dsl.ast._
+import org.squeryl.dsl.ast.*
 import java.sql.SQLException
 import collection.Set
 import collection.immutable.List
@@ -40,7 +40,7 @@ class OracleAdapter extends DatabaseAdapter {
 
   override def supportsUnionQueryOptions = false
 
-  override def postCreateTable(t: Table[_], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
+  override def postCreateTable(t: Table[?], printSinkWhenWriteOnlyMode: Option[String => Unit]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
 
@@ -57,7 +57,7 @@ class OracleAdapter extends DatabaseAdapter {
     }
   }
 
-  override def postDropTable(t: Table[_]) = {
+  override def postDropTable(t: Table[?]) = {
 
     val autoIncrementedFields = t.posoMetaData.fieldsMetaData.filter(_.isAutoIncremented)
 
@@ -218,7 +218,7 @@ class OracleAdapter extends DatabaseAdapter {
   override def writeSelectElementAlias(se: SelectElement, sw: StatementWriter) =
     sw.write(shrinkTo30AndPreserveUniquenessInScope(se.aliasSegment, sw.scope))
 
-  override def foreignKeyConstraintName(foreignKeyTable: Table[_], idWithinSchema: Int) = {
+  override def foreignKeyConstraintName(foreignKeyTable: Table[?], idWithinSchema: Int) = {
     val name = super.foreignKeyConstraintName(foreignKeyTable, idWithinSchema)
     val r = shrinkTo30AndPreserveUniquenessInScope(name, foreignKeyTable.schema._namingScope)
     r
@@ -238,7 +238,7 @@ class OracleAdapter extends DatabaseAdapter {
     // parentOfTarget.alias + "_" + target.aliasSegment
     "f" + target.actualSelectElement.id
 
-  override def viewAlias(vn: ViewExpressionNode[_]) =
+  override def viewAlias(vn: ViewExpressionNode[?]) =
     "t" + vn.uniqueId.get
   /*
   override def writeCastInvocation(e: TypedExpression[_,_], sw: StatementWriter) = {

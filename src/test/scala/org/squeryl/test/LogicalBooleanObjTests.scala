@@ -1,9 +1,9 @@
 package org.squeryl.test
 
-import org.squeryl._
+import org.squeryl.*
 import org.squeryl.framework.{DBConnector, SchemaTester, RunTestsInsideTransaction}
-import org.squeryl.dsl.ast._
-import org.squeryl.test.PrimitiveTypeMode4Tests._
+import org.squeryl.dsl.ast.*
+import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
 object LogicalBooleanObjTests {
 
@@ -17,14 +17,14 @@ object LogicalBooleanObjTests {
 
 abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
-  import org.squeryl.test.LogicalBooleanObjTests._
+  import org.squeryl.test.LogicalBooleanObjTests.*
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   final def schema: Schema = TestSchema
 
   test("and operation") {
-    import TestSchema._
+    import TestSchema.*
     prepareDummyTable((1, 1, 1), (2, 1, 2), (3, 1, 2), (4, 2, 1), (5, 3, 1))
     // Session.currentSession.setLogger(System.err.println(_))
 
@@ -45,7 +45,7 @@ abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTr
   }
 
   test("or operation") {
-    import TestSchema._
+    import TestSchema.*
     prepareDummyTable((1, 1, 1), (2, 1, 2), (3, 1, 2), (4, 2, 1), (5, 3, 1))
 
     // Session.currentSession.setLogger(System.err.println(_))
@@ -56,7 +56,7 @@ abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTr
   }
 
   test("TrueLogicalBoolean, FalseLogicalBoolean") {
-    import TestSchema._
+    import TestSchema.*
     prepareDummyTable((1, 1, 1), (2, 1, 2))
 
     // Session.currentSession.setLogger(System.err.println(_))
@@ -75,7 +75,7 @@ abstract class LogicalBooleanObjTests extends SchemaTester with RunTestsInsideTr
   }
 
   test("and/or operators for Option[LogicalBoolean]") {
-    import TestSchema._
+    import TestSchema.*
     prepareDummyTable((1, 1, 1), (2, 1, 2))
     val some: Option[Int] = Some(1)
     val none: Option[Int] = None

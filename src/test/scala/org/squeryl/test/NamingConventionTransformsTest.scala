@@ -1,7 +1,7 @@
 package org.squeryl.test
 
 import org.squeryl.Schema
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 

@@ -16,10 +16,10 @@ package org.squeryl.test.customtypes
  * limitations under the License.
  ***************************************************************************** */
 import org.squeryl.{KeyedEntity, Schema}
-import org.squeryl.framework._
-import org.squeryl.customtypes._
+import org.squeryl.framework.*
+import org.squeryl.customtypes.*
 
-import CustomTypesMode._
+import CustomTypesMode.*
 import org.scalatest.matchers.should.Matchers
 
 abstract class TestCustomTypesMode extends SchemaTester with Matchers with QueryTester with RunTestsInsideTransaction {
@@ -29,7 +29,7 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
 
   override val schema: Schema = hospitalDb
 
-  import hospitalDb._
+  import hospitalDb.*
 
   var sharedTestObjects: TestData = null
 
@@ -37,13 +37,13 @@ abstract class TestCustomTypesMode extends SchemaTester with Matchers with Query
     sharedTestObjects = new TestData(hospitalDb)
   }
 
-  import CustomTypesMode._
+  import CustomTypesMode.*
 
   def simpleSelect =
     from(patients)(p => where(p.age > 70).select(p))
 
   test("Queries") {
-    val testObjects = sharedTestObjects; import testObjects._
+    val testObjects = sharedTestObjects; import testObjects.*
 
     validateQuery("simpleSelect", simpleSelect, (p: Patient) => p.id.value, List(joseCuervo.id.value))
     validateQuery("simpleSelect1", patients.where(_.age > 70), (p: Patient) => p.id.value, List(joseCuervo.id.value))

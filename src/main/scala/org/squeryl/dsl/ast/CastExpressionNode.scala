@@ -1,6 +1,6 @@
 package org.squeryl.dsl.ast
 
-import org.squeryl.internals._
+import org.squeryl.internals.*
 
 class CastExpressionNode(expr: ExpressionNode, typ: String) extends ExpressionNode {
   override def doWrite(sw: StatementWriter) = {

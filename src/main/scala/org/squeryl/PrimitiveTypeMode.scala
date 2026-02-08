@@ -15,8 +15,8 @@
  ***************************************************************************** */
 package org.squeryl
 
-import dsl.ast._
-import dsl._
+import dsl.ast.*
+import dsl.*
 import java.util.{Date, UUID}
 import java.sql.Timestamp
 import org.squeryl.internals.FieldMapper

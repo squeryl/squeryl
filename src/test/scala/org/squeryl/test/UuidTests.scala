@@ -1,9 +1,9 @@
 package org.squeryl.test
 
-import org.squeryl._
+import org.squeryl.*
 import org.squeryl.framework.{DBConnector, SchemaTester, RunTestsInsideTransaction, SingleTestRun}
 import java.util.UUID
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 
 object UuidTests {
   class UuidAsProperty extends KeyedEntity[Long] {
@@ -43,14 +43,14 @@ object UuidTests {
 
 abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
-  import UuidTests._
+  import UuidTests.*
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   final def schema: Schema = TestSchema
 
   test("UuidAsProperty") {
-    import TestSchema._
+    import TestSchema.*
 
     val testObject = new UuidAsProperty
     testObject.save
@@ -61,7 +61,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
   }
 
   test("UuidOptional", SingleTestRun) {
-    import TestSchema._
+    import TestSchema.*
 
     val testObject = new UuidWithOption(None)
     testObject.save
@@ -82,7 +82,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
   }
 
   test("UuidAsId") {
-    import TestSchema._
+    import TestSchema.*
 
     val testObject = new UuidAsId
 
@@ -97,7 +97,7 @@ abstract class UuidTests extends SchemaTester with RunTestsInsideTransaction {
   }
 
   test("UuidAsForeignKey") {
-    import TestSchema._
+    import TestSchema.*
 
     val primaryObject = new UuidAsId
     primaryObject.save

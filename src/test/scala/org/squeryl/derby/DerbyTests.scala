@@ -1,6 +1,6 @@
 package org.squeryl.derby
 
-import org.squeryl.test._
+import org.squeryl.test.*
 
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.DerbyAdapter

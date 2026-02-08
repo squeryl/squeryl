@@ -1,6 +1,6 @@
 package org.squeryl.pg
 
-import org.squeryl._
+import org.squeryl.*
 import internals.{StatementWriter, FieldMapper}
 import dsl.ast.{ViewExpressionNode, ExpressionNode}
 import reflect.ClassTag
@@ -11,10 +11,10 @@ class PgSchema(implicit fieldMapper: FieldMapper) extends Schema()(fieldMapper) 
     srf(tableNameFromClass(man.runtimeClass))(man)
 
   protected def srf[T](name: String)(implicit man: ClassTag[T]): (Seq[ExpressionNode] => View[T]) =
-    srf0(name, None, _: _*)
+    srf0(name, None, _*)
 
   protected def srf[T](name: String, prefix: String)(implicit man: ClassTag[T]): (Seq[ExpressionNode] => View[T]) =
-    srf0(name, Some(prefix), _: _*)
+    srf0(name, Some(prefix), _*)
 
   private def srf0[T](name: String, prefix: Option[String], args: ExpressionNode*)(implicit
     man: ClassTag[T]

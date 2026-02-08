@@ -15,7 +15,7 @@
  ***************************************************************************** */
 package org.squeryl
 
-import dsl.ast._
+import dsl.ast.*
 import internals.ResultSetMapper
 import java.sql.ResultSet
 

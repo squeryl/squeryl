@@ -15,22 +15,22 @@
  ***************************************************************************** */
 package org.squeryl.dsl.fsm
 
-import org.squeryl.dsl.ast._
-import org.squeryl.dsl._
-import org.squeryl.dsl.boilerplate._
+import org.squeryl.dsl.ast.*
+import org.squeryl.dsl.*
+import org.squeryl.dsl.boilerplate.*
 import org.squeryl.internals.{FieldReferenceLinker, ResultSetMapper, ColumnToTupleMapper, OutMapper}
 import java.sql.ResultSet
 
 import org.squeryl.Query
 
-class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure: () => G)
+class BaseQueryYield[G](val queryElementzz: QueryElements[?], val selectClosure: () => G)
     extends SelectState[G]
     with OrderBySignatures[G]
     with QueryYield[G] {
 
   protected def _createColumnToTupleMapper(
-    origin: QueryExpressionNode[_],
-    agregateArgs: List[TypedExpression[_, _]],
+    origin: QueryExpressionNode[?],
+    agregateArgs: List[TypedExpression[?, ?]],
     offsetInResultSet: Int,
     isForGroup: Boolean
   ) = {
@@ -40,7 +40,7 @@ class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure:
 
     var o = offsetInResultSet
 
-    val mappers = new Array[OutMapper[_]](agregateArgs.size)
+    val mappers = new Array[OutMapper[?]](agregateArgs.size)
 
     var k: Int = 0
     agregateArgs.foreach(e => {
@@ -74,7 +74,7 @@ class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure:
 
   def groupByClause: Iterable[ExpressionNode] = Iterable.empty
 
-  def commonTableExpressions: Iterable[Query[_]] = queryElementzz.commonTableExpressions
+  def commonTableExpressions: Iterable[Query[?]] = queryElementzz.commonTableExpressions
 
   def queryElements =
     (whereClause, havingClause, groupByClause, orderByClause, commonTableExpressions)
@@ -91,7 +91,7 @@ class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure:
   def invokeYield(rsm: ResultSetMapper, rs: ResultSet): G =
     selectClosure()
 
-  def invokeYieldForAst(q: QueryExpressionNode[_], rsm: ResultSetMapper): (Iterable[SelectElement], AnyRef) =
+  def invokeYieldForAst(q: QueryExpressionNode[?], rsm: ResultSetMapper): (Iterable[SelectElement], AnyRef) =
     FieldReferenceLinker.determineColumnsUtilizedInYeldInvocation(
       q,
       rsm,
@@ -100,7 +100,7 @@ class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure:
 
   protected def _sTuple1ToValue[B](b: B) =
     b match {
-      case t: STuple1[_] =>
+      case t: STuple1[?] =>
         if (t.productArity == 1)
           t._1.asInstanceOf[B]
         else b
@@ -108,8 +108,8 @@ class BaseQueryYield[G](val queryElementzz: QueryElements[_], val selectClosure:
 }
 
 class GroupQueryYield[K](
-  _qe: QueryElements[_],
-  val groupByClauseClosure: () => List[TypedExpression[_, _]]
+  _qe: QueryElements[?],
+  val groupByClauseClosure: () => List[TypedExpression[?, ?]]
 ) extends BaseQueryYield[Group[K]](_qe, null)
     with GroupByState[K]
     with HavingState[K]
@@ -127,7 +127,7 @@ class GroupQueryYield[K](
     Option[ExpressionNode],
     Iterable[ExpressionNode],
     Iterable[ExpressionNode],
-    Iterable[Query[_]]
+    Iterable[Query[?]]
   ) = (whereClause, havingClause, groupByClause, orderByClause, commonTableExpressions)
 
   class SampleGroup[K](k: K) extends Group(k) {
@@ -136,7 +136,7 @@ class GroupQueryYield[K](
   }
 
   override def invokeYieldForAst(
-    q: QueryExpressionNode[_],
+    q: QueryExpressionNode[?],
     rsm: ResultSetMapper
   ): (Iterable[TupleSelectElement], AnyRef) = {
     val offset = 1
@@ -148,8 +148,8 @@ class GroupQueryYield[K](
 }
 
 class MeasuresQueryYield[M](
-  _qe: QueryElements[_],
-  _computeByClauseClosure: () => List[TypedExpression[_, _]]
+  _qe: QueryElements[?],
+  _computeByClauseClosure: () => List[TypedExpression[?, ?]]
 ) extends BaseQueryYield[Measures[M]](_qe, null)
     with OrderBySignatures[Measures[M]]
     with ComputeStateStartOrWhereState[M]
@@ -166,7 +166,7 @@ class MeasuresQueryYield[M](
   }
 
   override def invokeYieldForAst(
-    q: QueryExpressionNode[_],
+    q: QueryExpressionNode[?],
     rsm: ResultSetMapper
   ): (Iterable[TupleSelectElement], AnyRef) = {
     val offset = 1
@@ -178,10 +178,10 @@ class MeasuresQueryYield[M](
 }
 
 class GroupWithMeasuresQueryYield[K, M](
-  _qe: QueryElements[_],
-  _groupByClauseClosure: () => List[TypedExpression[_, _]],
+  _qe: QueryElements[?],
+  _groupByClauseClosure: () => List[TypedExpression[?, ?]],
   _having: Option[() => LogicalBoolean],
-  _computeClauseClosure: () => List[TypedExpression[_, _]]
+  _computeClauseClosure: () => List[TypedExpression[?, ?]]
 ) extends BaseQueryYield[GroupWithMeasures[K, M]](_qe, null)
     with ComputeStateFromGroupByState[K, M]
     with OrderBySignatures[GroupWithMeasures[K, M]]
@@ -200,14 +200,14 @@ class GroupWithMeasuresQueryYield[K, M](
     else
       super.havingClause
 
-  override def queryElements: (Option[O], Option[O], Iterable[TypedExpression[_, _]], Iterable[O], Iterable[Query[_]]) =
+  override def queryElements: (Option[O], Option[O], Iterable[TypedExpression[?, ?]], Iterable[O], Iterable[Query[?]]) =
     (whereClause, havingClause, _groupByClauseClosure().map(e => e), orderByClause, commonTableExpressions)
 
   override def invokeYield(rsm: ResultSetMapper, rs: ResultSet) =
     new GroupWithMeasures(rsm.groupKeysMapper.get.mapToTuple(rs), rsm.groupMeasuresMapper.get.mapToTuple(rs))
 
   override def invokeYieldForAst(
-    q: QueryExpressionNode[_],
+    q: QueryExpressionNode[?],
     rsm: ResultSetMapper
   ): (Iterable[TupleSelectElement], AnyRef) = {
 

@@ -15,14 +15,14 @@
  ***************************************************************************** */
 package org.squeryl.dsl.ast
 
-import org.squeryl.internals._
+import org.squeryl.internals.*
 import org.squeryl.dsl.{QueryYield, AbstractQuery}
 
 class QueryExpressionNode[R](
   val _query: AbstractQuery[R],
   _queryYield: QueryYield[R],
   val subQueries: Iterable[QueryableExpressionNode],
-  val views: Iterable[ViewExpressionNode[_]]
+  val views: Iterable[ViewExpressionNode[?]]
 ) extends QueryExpressionElements
     with QueryableExpressionNode {
 
@@ -30,7 +30,7 @@ class QueryExpressionNode[R](
     def loop(current: Option[ExpressionNode]): Option[QueryExpressionElements] = {
       current.flatMap { c =>
         c match {
-          case value: QueryExpressionNode[_] =>
+          case value: QueryExpressionNode[?] =>
             value.commonTableExpressions.find(sameRoot_?).orElse(loop(c.parent))
           case _ =>
             loop(c.parent)
@@ -40,7 +40,7 @@ class QueryExpressionNode[R](
     loop(parent)
   }
 
-  private[squeryl] def sameRoot_?(e: QueryExpressionNode[_]) =
+  private[squeryl] def sameRoot_?(e: QueryExpressionNode[?]) =
     _query.root.isDefined && _query.root == e._query.root
 
   def tableExpressions: Iterable[QueryableExpressionNode] =
@@ -51,9 +51,9 @@ class QueryExpressionNode[R](
   val (whereClause, havingClause, groupByClause, orderByClause, ctes) =
     _queryYield.queryElements
 
-  val commonTableExpressions: List[QueryExpressionNode[_]] = ctes.map { q =>
+  val commonTableExpressions: List[QueryExpressionNode[?]] = ctes.map { q =>
     q.ast match {
-      case x: QueryExpressionNode[_] =>
+      case x: QueryExpressionNode[?] =>
         x
       case _ =>
         Utils.throwError(
@@ -191,16 +191,16 @@ class QueryExpressionNode[R](
     }
   }
 
-  private def collectCteRefs(): List[QueryExpressionNode[_]] = {
-    val buf = new collection.mutable.ArrayBuffer[QueryExpressionNode[_]]()
+  private def collectCteRefs(): List[QueryExpressionNode[?]] = {
+    val buf = new collection.mutable.ArrayBuffer[QueryExpressionNode[?]]()
     visitDescendants((node, parent, i) => {
       if (
         !commonTableExpressions.contains(node) &&
-        node.isInstanceOf[QueryExpressionNode[_]] &&
-        commonTableExpressions.exists(e => e.sameRoot_?(node.asInstanceOf[QueryExpressionNode[_]]))
+        node.isInstanceOf[QueryExpressionNode[?]] &&
+        commonTableExpressions.exists(e => e.sameRoot_?(node.asInstanceOf[QueryExpressionNode[?]]))
       ) {
 
-        buf += node.asInstanceOf[QueryExpressionNode[_]]
+        buf += node.asInstanceOf[QueryExpressionNode[?]]
       }
     })
 

@@ -2,9 +2,9 @@ package org.squeryl.test
 
 import java.util.UUID
 
-import org.squeryl._
+import org.squeryl.*
 import org.squeryl.framework.{DBConnector, RunTestsInsideTransaction, SchemaTester}
-import org.squeryl.test.PrimitiveTypeModeForTests._
+import org.squeryl.test.PrimitiveTypeModeForTests.*
 
 object SubQueryTestSchema {
   class Entity(val name: String) extends KeyedEntity[UUID] {
@@ -33,14 +33,14 @@ object SubQueryTestSchema {
 
 abstract class SubQueryTests extends SchemaTester with RunTestsInsideTransaction {
   self: DBConnector =>
-  import SubQueryTestSchema._
+  import SubQueryTestSchema.*
   // repeat the import closer to call site to give priority to our `===` operator
-  import org.squeryl.test.PrimitiveTypeMode4Tests._
+  import org.squeryl.test.PrimitiveTypeMode4Tests.*
 
   final def schema: Schema = TestSchema
 
   test("Missing internal state, cant copy") {
-    import TestSchema._
+    import TestSchema.*
 
     val name = "llll"
     val typeName = "mmmm"

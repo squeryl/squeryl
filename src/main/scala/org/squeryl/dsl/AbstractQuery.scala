@@ -15,13 +15,13 @@
  ***************************************************************************** */
 package org.squeryl.dsl
 
-import ast._
+import ast.*
 import internal.{InnerJoinedQueryable, OuterJoinedQueryable}
 import java.sql.ResultSet
-import org.squeryl.internals._
+import org.squeryl.internals.*
 import org.squeryl.{View, Queryable, Session, Query}
 import collection.mutable.ArrayBuffer
-import org.squeryl.logging._
+import org.squeryl.logging.*
 import java.io.Closeable
 
 abstract class AbstractQuery[R](
@@ -83,11 +83,11 @@ abstract class AbstractQuery[R](
   protected def copyUnions(u: List[(String, Query[R])]) =
     u map (t => (t._1, t._2.copy(false, Nil)))
 
-  protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[_]*) = {
+  protected def buildAst(qy: QueryYield[R], subQueryables: SubQueryable[?]*) = {
 
     val subQueries = new ArrayBuffer[QueryableExpressionNode]
 
-    val views = new ArrayBuffer[ViewExpressionNode[_]]
+    val views = new ArrayBuffer[ViewExpressionNode[?]]
 
     if (qy.joinExpressions != Nil) {
       val sqIterator = subQueryables.iterator
@@ -103,11 +103,11 @@ abstract class AbstractQuery[R](
 
     for (sq <- subQueryables)
       if (!sq.isQuery)
-        views.append(sq.node.asInstanceOf[ViewExpressionNode[_]])
+        views.append(sq.node.asInstanceOf[ViewExpressionNode[?]])
 
     for (sq <- subQueryables)
       if (sq.isQuery) {
-        val z = sq.node.asInstanceOf[QueryExpressionNode[_]]
+        val z = sq.node.asInstanceOf[QueryExpressionNode[?]]
         if (!z.isUseableAsSubquery)
           org.squeryl.internals.Utils.throwError(
             "Sub query returns a primitive type or a Tuple of primitive type, and therefore is not useable as a subquery in a from or join clause, see \nhttp://squeryl.org/limitations.html"
@@ -253,7 +253,7 @@ abstract class AbstractQuery[R](
   override def toString = dumpAst + "\n" + _genStatement(true)
 
   protected def createSubQueryable[U](q: Queryable[U]): SubQueryable[U] = q match {
-    case v: View[_] =>
+    case v: View[?] =>
       val vxn = v.viewExpressionNode
       vxn.sample = v.posoMetaData.createSample(FieldReferenceLinker.createCallBack(vxn))
 
@@ -275,11 +275,11 @@ abstract class AbstractQuery[R](
       sq.node.joinKind = Some((ojq.leftRightOrFull, "outer"))
       sq.node.inhibited = ojq.inhibited
       new SubQueryable(sq.queryable, Some(sq.sample).asInstanceOf[U], sq.resultSetMapper, sq.isQuery, sq.node)
-    case ijq: InnerJoinedQueryable[_] =>
+    case ijq: InnerJoinedQueryable[?] =>
       val sq = createSubQueryable[U](ijq.queryable)
       sq.node.joinKind = Some((ijq.leftRightOrFull, "inner"))
       new SubQueryable(sq.queryable, sq.sample, sq.resultSetMapper, sq.isQuery, sq.node)
-    case dq: DelegateQuery[_] =>
+    case dq: DelegateQuery[?] =>
       createSubQueryable(dq.q)
     case qr: AbstractQuery[U] =>
       val copy = qr.copy(false, Nil)

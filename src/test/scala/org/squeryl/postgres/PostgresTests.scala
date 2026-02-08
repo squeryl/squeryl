@@ -1,6 +1,6 @@
 package org.squeryl.postgres
 
-import org.squeryl.test._
+import org.squeryl.test.*
 import org.squeryl.framework.DBConnector
 import org.squeryl.adapters.PostgreSqlAdapter
 import org.squeryl.Session
