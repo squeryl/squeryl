@@ -6,20 +6,20 @@ import scala.quoted.Type
 
 object TypeInfo {
 
-  inline def fieldsInfo[T <: AnyKind]: Map[String, Class[_]] = ${ fieldsInfo[T] }
+  inline def fieldsInfo[T <: AnyKind]: Map[String, Class[?]] = ${ fieldsInfo[T] }
 
-  def fieldsInfo[T <: AnyKind: Type](using qctx0: Quotes): Expr[Map[String, Class[_]]] = {
+  def fieldsInfo[T <: AnyKind: Type](using qctx0: Quotes): Expr[Map[String, Class[?]]] = {
     import qctx0.reflect.*
 
     val uns = TypeTree.of[T]
     val symbol = uns.symbol
-    val innerClassOfOptionFields: Map[String, Class[_]] = symbol.fieldMembers.flatMap { m =>
+    val innerClassOfOptionFields: Map[String, Class[?]] = symbol.fieldMembers.flatMap { m =>
       // we only support val fields for now
       if (m.isValDef) {
         val tpe = ValDef(m, None).tpt.tpe
-        // only if the field is an Option[_]
-        if (tpe.typeSymbol == TypeRepr.of[Option[_]].typeSymbol) {
-          val containedClass: Option[Class[_]] = PartialFunction.condOpt(tpe.asType) {
+        // only if the field is an Option[?]
+        if (tpe.typeSymbol == TypeRepr.of[Option[?]].typeSymbol) {
+          val containedClass: Option[Class[?]] = PartialFunction.condOpt(tpe.asType) {
             case '[Option[Int]] =>
               classOf[Int]
             case '[Option[Short]] =>

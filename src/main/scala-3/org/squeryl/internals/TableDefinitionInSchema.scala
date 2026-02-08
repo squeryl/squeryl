@@ -26,7 +26,7 @@ trait TableDefinitionInSchema {
     table(tableNameFromClass(manifestT.runtimeClass))(optionalFieldsInfo)(manifestT, ked)
 
   protected def table[T](
-    optionalFieldsInfo: Map[String, Class[_]]
+    optionalFieldsInfo: Map[String, Class[?]]
   )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] =
     table(tableNameFromClass(manifestT.runtimeClass))(optionalFieldsInfo)(manifestT, ked)
 
@@ -39,7 +39,7 @@ trait TableDefinitionInSchema {
   }
 
   protected def table[T](name: String, prefix: String)(
-    optionalFieldsInfo: Map[String, Class[_]]
+    optionalFieldsInfo: Map[String, Class[?]]
   )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, Some(prefix), ked.keyedEntityDef, None)
@@ -55,7 +55,7 @@ trait TableDefinitionInSchema {
     table(name)(optionalFieldsInfo)(manifestT, ked)
 
   protected def table[T](name: String)(
-    optionalFieldsInfo: Map[String, Class[_]]
+    optionalFieldsInfo: Map[String, Class[?]]
   )(implicit manifestT: ClassTag[T], ked: OptionalKeyedEntityDef[T, ?]): Table[T] = {
     val typeT = manifestT.runtimeClass.asInstanceOf[Class[T]]
     val t = new Table[T](name, typeT, this, None, ked.keyedEntityDef, Some(optionalFieldsInfo))
