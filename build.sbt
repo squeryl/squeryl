@@ -132,7 +132,7 @@ lazy val squeryl = project
       "org.postgresql" % "postgresql" % "42.7.10" % "provided",
       "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
       "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-      "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
+      "org.xerial" % "sqlite-jdbc" % "3.39.4.1" % "test",
       "org.scalatest" %% "scalatest-funsuite" % "3.2.19" % "test",
       "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.19" % "test",
     ),
