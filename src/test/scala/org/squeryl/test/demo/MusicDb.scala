@@ -65,7 +65,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   // a two table join :
   def songsInPlaylistOrder =
     from(playlistElements, songs)((ple, s) =>
-      where(ple.playlistId === id and ple.songId === s.id).select(s).orderBy(ple.songNumber asc)
+      where(ple.playlistId === id and ple.songId === s.id).select(s).orderBy(ple.songNumber.asc)
     )
 
   def addSong(s: Song) = {
@@ -105,7 +105,7 @@ class Playlist(val name: String, val path: String) extends MusicDbObject {
   // as if it were a query, notice the nesting of 'songsOf'
   // allowing DRY persistence layers as reuse is enhanced.
   def latestSongFrom(artistId: Long) =
-    from(songsOf(artistId))(s => select(s).orderBy(s.id desc)).headOption
+    from(songsOf(artistId))(s => select(s).orderBy(s.id.desc)).headOption
 
   def songsOf(artistId: Long) =
     from(playlistElements, songs)((ple, s) =>

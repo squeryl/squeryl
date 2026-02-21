@@ -64,9 +64,9 @@ class FieldMetaData(
         "classes with Enumerations must have a zero param constructor that assigns a sample to the enumeration field"
       )
     else
-      enumeration flatMap { (e: Enumeration) =>
+      enumeration.flatMap { (e: Enumeration) =>
         e.values find { _.id == id }
-      } get
+      }.get
 
   /**
    * This field is mutable only by the Schema trait, and only during the Schema instantiation,
