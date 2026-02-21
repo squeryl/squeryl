@@ -164,14 +164,14 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   lazy val songsFeaturingPoncho =
     from(songs, artists)((s, a) =>
-      where(a.firstName === "Poncho" and s.interpretId === a.id).select(s).orderBy(s.title, a.id desc)
+      where(a.firstName === "Poncho" and s.interpretId === a.id).select(s).orderBy(s.title, a.id.desc)
     )
 
   lazy val songsFeaturingPonchoNestedInWhere =
     from(songs, artists)((s, a) =>
       where(
         s.interpretId in from(artists)(a => where(a.firstName === "Poncho").select(a.id))
-      ).select(s).orderBy(s.title asc)
+      ).select(s).orderBy(s.title.asc)
     ).distinct
 
   def songCountPerAlbum(cds: Queryable[Cd]) =
@@ -205,13 +205,13 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
     from(
       from(songs)(s => where((s.authorId in songIds) or (s.interpretId in songIds)).select(s)),
       artists
-    )((s, a) => where(s.authorId === a.id or s.interpretId === a.id).select(a).orderBy(a.lastName desc)).distinct
+    )((s, a) => where(s.authorId === a.id or s.interpretId === a.id).select(a).orderBy(a.lastName.desc)).distinct
 
   def songsFeaturingPonchoNestedInWhereWithString =
     from(songs, artists)((s, a) =>
       where(
         s.title in from(songs)(s => where(s.id === 123).select(s.title))
-      ).select(s).orderBy(s.title asc)
+      ).select(s).orderBy(s.title.asc)
     )
 
   def countCds(cds: Queryable[Cd]) =
@@ -659,7 +659,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   def inhibitedArtistsInQuery(inhibit: Boolean) =
     from(songs, artists.inhibitWhen(inhibit))((s, a) =>
-      where(a.get.firstName === "Poncho" and s.interpretId === a.get.id).select(s).orderBy(s.title, a.get.id desc)
+      where(a.get.firstName === "Poncho" and s.interpretId === a.get.id).select(s).orderBy(s.title, a.get.id.desc)
     )
 
   test("DynamicQuery1") {
@@ -682,7 +682,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   def inhibitedSongsInQuery(inhibit: Boolean) =
     from(songs.inhibitWhen(inhibit), artists)((s, a) =>
-      where(a.firstName === "Poncho" and s.get.interpretId === a.id).select((s, a)).orderBy(s.get.title, a.id desc)
+      where(a.firstName === "Poncho" and s.get.interpretId === a.id).select((s, a)).orderBy(s.get.title, a.id.desc)
     )
 
   test("DynamicQuery2") {
@@ -703,7 +703,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
     val expected =
       from(songs, artists)((s, a) =>
-        where(a.firstName === "Poncho" and s.interpretId === a.id).select((s.id, a.id)).orderBy(s.title, a.id desc)
+        where(a.firstName === "Poncho" and s.interpretId === a.id).select((s.id, a.id)).orderBy(s.title, a.id.desc)
       )
 
     validateQuery(
@@ -716,7 +716,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
 
   test("PaginatedQuery1") {
     val testInstance = sharedTestInstance; import testInstance.*
-    val q = from(artists)(a => select(a).orderBy(a.firstName asc))
+    val q = from(artists)(a => select(a).orderBy(a.firstName.asc))
 
     val p1 = q.page(0, 2).map(a => a.firstName).toList
     val p2 = q.page(2, 2).map(a => a.firstName).toList
@@ -732,7 +732,7 @@ abstract class MusicDbTestRun extends SchemaTester with QueryTester with RunTest
   }
 
   private def _betweenArtists(s1: String, s2: String) =
-    from(artists)(a => where(a.firstName between (s1, s2)).select(a).orderBy(a.firstName asc))
+    from(artists)(a => where(a.firstName between (s1, s2)).select(a).orderBy(a.firstName.asc))
       .map(a => a.firstName)
       .toList
 

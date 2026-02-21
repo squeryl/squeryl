@@ -978,15 +978,15 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
       from(courses)(c =>
         where(c.finalExamDate >= Option(jan2008) and c.finalExamDate.isNotNull)
           .select(c)
-          .orderBy(c.finalExamDate, c.id asc)
+          .orderBy(c.finalExamDate, c.id.asc)
       ).toList.map(c => c.id)
 
     val result2 =
-      from(courses)(c => where(c.finalExamDate <= Some(jan2009)).select(c).orderBy(c.finalExamDate, c.id asc)).toList
+      from(courses)(c => where(c.finalExamDate <= Some(jan2009)).select(c).orderBy(c.finalExamDate, c.id.asc)).toList
         .map(c => c.id)
 
     val result3 =
-      from(courses)(c => where(c.finalExamDate >= Some(feb2009)).select(c).orderBy(c.finalExamDate, c.id asc)).toList
+      from(courses)(c => where(c.finalExamDate >= Some(feb2009)).select(c).orderBy(c.finalExamDate, c.id.asc)).toList
         .map(c => c.id)
 
     val expected = List(groupTheory.id)
