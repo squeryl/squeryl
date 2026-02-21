@@ -41,7 +41,7 @@ val commonSettings = Def.settings(
   crossScalaVersions := Seq(Scala212, "2.13.18", "3.3.7"),
   Compile / doc / scalacOptions ++= {
     val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
-    val hash = sys.process.Process("git rev-parse HEAD").lineStream_!.head
+    val hash = sys.process.Process("git rev-parse HEAD").lazyLines_!.head
     Seq(
       "-sourcepath",
       base,
@@ -199,10 +199,6 @@ lazy val squeryl = project
         f
       }
     },
-    Compile / packageSrc / mappings ++= (Compile / managedSources).value.map { f =>
-      // to merge generated sources into sources.jar as well
-      (f, f.relativeTo((Compile / sourceManaged).value).get.getPath)
-    }
   )
   .dependsOn(macros)
   .aggregate(macros)
