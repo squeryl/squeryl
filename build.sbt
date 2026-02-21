@@ -1,9 +1,5 @@
 import sbtrelease.ReleaseStateTransformations._
 
-name := "squeryl"
-
-description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety"
-
 val commonSettings = Def.settings(
   organization := "org.squeryl",
   javacOptions := {
@@ -110,8 +106,6 @@ val commonSettings = Def.settings(
   scalaVersion := Scala212
 )
 
-commonSettings
-
 val Scala212 = "2.12.21"
 
 lazy val unusedWarnings = Def.setting(
@@ -123,57 +117,96 @@ lazy val unusedWarnings = Def.setting(
   }
 )
 
-libraryDependencies ++= Seq(
-  "cglib" % "cglib-nodep" % "3.3.0",
-  "com.h2database" % "h2" % "1.4.200" % "provided",
-  "com.mysql" % "mysql-connector-j" % "9.6.0" % "provided",
-  "org.postgresql" % "postgresql" % "42.7.10" % "provided",
-  "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
-  "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
-  "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
-  "org.scalatest" %% "scalatest-funsuite" % "3.2.19" % "test",
-  "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.19" % "test",
-)
-
-libraryDependencies ++= {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((3, _)) =>
-      Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
-      )
-    case Some((2, _)) =>
-      Seq(
-        "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
-        "io.github.json4s" %% "json4s-scalap" % "4.1.0"
-      )
-    case _ =>
-      Nil
-  }
-}
-
 val disableMacrosProject: Def.Initialize[Boolean] = Def.setting(
   scalaBinaryVersion.value != "3"
 )
 
-pomPostProcess := { node =>
-  import scala.xml._
-  import scala.xml.transform._
-  val rule = new RewriteRule {
-    override def transform(node: Node) = {
-      if (
-        (node.label == "dependency") &&
-        ((node \ "groupId").text == "org.squeryl") &&
-        (node \ "artifactId").text.startsWith((macros / moduleName).value) &&
-        disableMacrosProject.value
-      ) {
-        NodeSeq.Empty
-      } else {
-        node
+lazy val squeryl = project
+  .in(file("."))
+  .settings(
+    commonSettings,
+    name := "squeryl",
+    description := "A Scala ORM and DSL for talking with Databases using minimum verbosity and maximum type safety",
+    libraryDependencies ++= Seq(
+      "cglib" % "cglib-nodep" % "3.3.0",
+      "com.h2database" % "h2" % "1.4.200" % "provided",
+      "com.mysql" % "mysql-connector-j" % "9.6.0" % "provided",
+      "org.postgresql" % "postgresql" % "42.7.10" % "provided",
+      "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
+      "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
+      "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
+      "org.scalatest" %% "scalatest-funsuite" % "3.2.19" % "test",
+      "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.19" % "test",
+    ),
+    libraryDependencies ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, _)) =>
+          Seq(
+            "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
+          )
+        case Some((2, _)) =>
+          Seq(
+            "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
+            "io.github.json4s" %% "json4s-scalap" % "4.1.0"
+          )
+        case _ =>
+          Nil
       }
+    },
+    pomPostProcess := { node =>
+      import scala.xml._
+      import scala.xml.transform._
+      val rule = new RewriteRule {
+        override def transform(node: Node) = {
+          if (
+            (node.label == "dependency") &&
+            ((node \ "groupId").text == "org.squeryl") &&
+            (node \ "artifactId").text.startsWith((macros / moduleName).value) &&
+            disableMacrosProject.value
+          ) {
+            NodeSeq.Empty
+          } else {
+            node
+          }
+        }
+      }
+      new RuleTransformer(rule).transform(node)(0)
+    },
+    Compile / sourceGenerators += task {
+      val dir = (Compile / sourceManaged).value
+      val size = 22
+      (Seq(
+        "JoinSignatures.scala" -> JoinSignatures.value(size),
+        "FromSignatures.scala" -> FromSignatures.value(size),
+        "STuple.scala" -> STuple.value(size),
+        "OrderBySignatures.scala" -> OrderBySignatures.value(size),
+        "GroupBySignatures.scala" -> GroupBySignatures.value(size),
+        "ComputeMeasuresSignaturesFromStartOrWhereState.scala" -> ComputeMeasuresSignaturesFromStartOrWhereState.value(
+          size
+        ),
+        "ComputeMeasuresSignaturesFromGroupByState.scala" -> ComputeMeasuresSignaturesFromGroupByState.value(size),
+        "Query.scala" -> Query.value(size),
+      ).map { case (fileName, value) =>
+        val f = dir / "org" / "squeryl" / "dsl" / "boilerplate" / fileName
+        f -> value
+      } ++ Seq(
+        "CompositeKeyN.scala" -> CompositeKeyN.value(size),
+        "QueryYieldMethods.scala" -> QueryYieldMethods.value(size),
+      ).map { case (fileName, value) =>
+        val f = dir / "org" / "squeryl" / "dsl" / fileName
+        f -> value
+      }).map { case (f, value) =>
+        IO.write(f, value)
+        f
+      }
+    },
+    Compile / packageSrc / mappings ++= (Compile / managedSources).value.map { f =>
+      // to merge generated sources into sources.jar as well
+      (f, f.relativeTo((Compile / sourceManaged).value).get.getPath)
     }
-  }
-  new RuleTransformer(rule).transform(node)(0)
-}
+  )
+  .dependsOn(macros)
+  .aggregate(macros)
 
 lazy val macros = project
   .in(file("macros"))
@@ -182,42 +215,6 @@ lazy val macros = project
     publish / skip := disableMacrosProject.value,
   )
 
-dependsOn(macros)
-
 ThisBuild / semanticdbEnabled := true
 
 ThisBuild / semanticdbVersion := "4.14.2"
-
-Compile / sourceGenerators += task {
-  val dir = (Compile / sourceManaged).value
-  val size = 22
-  (Seq(
-    "JoinSignatures.scala" -> JoinSignatures.value(size),
-    "FromSignatures.scala" -> FromSignatures.value(size),
-    "STuple.scala" -> STuple.value(size),
-    "OrderBySignatures.scala" -> OrderBySignatures.value(size),
-    "GroupBySignatures.scala" -> GroupBySignatures.value(size),
-    "ComputeMeasuresSignaturesFromStartOrWhereState.scala" -> ComputeMeasuresSignaturesFromStartOrWhereState.value(
-      size
-    ),
-    "ComputeMeasuresSignaturesFromGroupByState.scala" -> ComputeMeasuresSignaturesFromGroupByState.value(size),
-    "Query.scala" -> Query.value(size),
-  ).map { case (fileName, value) =>
-    val f = dir / "org" / "squeryl" / "dsl" / "boilerplate" / fileName
-    f -> value
-  } ++ Seq(
-    "CompositeKeyN.scala" -> CompositeKeyN.value(size),
-    "QueryYieldMethods.scala" -> QueryYieldMethods.value(size),
-  ).map { case (fileName, value) =>
-    val f = dir / "org" / "squeryl" / "dsl" / fileName
-    f -> value
-  }).map { case (f, value) =>
-    IO.write(f, value)
-    f
-  }
-}
-
-Compile / packageSrc / mappings ++= (Compile / managedSources).value.map { f =>
-  // to merge generated sources into sources.jar as well
-  (f, f.relativeTo((Compile / sourceManaged).value).get.getPath)
-}
