@@ -68,7 +68,6 @@ val commonSettings = Def.settings(
     "-deprecation",
     "-feature",
     "-language:implicitConversions",
-    "-language:postfixOps",
     "-language:existentials"
   ),
   scalacOptions ++= {

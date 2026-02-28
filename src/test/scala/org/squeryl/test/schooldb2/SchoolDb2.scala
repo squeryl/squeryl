@@ -137,10 +137,10 @@ class SchoolDb2 extends Schema {
 
   // now we will redefine some of the foreign key constraints :
   // if we delete a subject, we want all courses to be deleted
-  subjectToCourses.foreignKeyDeclaration.constrainReference(onDelete cascade)
+  subjectToCourses.foreignKeyDeclaration.constrainReference(onDelete.cascade)
 
   // when a course is deleted, all of the subscriptions will get deleted :
-  courseSubscriptions.leftForeignKeyDeclaration.constrainReference(onDelete cascade)
+  courseSubscriptions.leftForeignKeyDeclaration.constrainReference(onDelete.cascade)
 
   override def drop = {
     Session.cleanupResources
