@@ -133,8 +133,8 @@ lazy val squeryl = project
       "net.sourceforge.jtds" % "jtds" % "1.3.1" % "provided",
       "org.apache.derby" % "derby" % "10.11.1.1" % "provided",
       "org.xerial" % "sqlite-jdbc" % "3.39.3.0" % "test",
-      "org.scalatest" %% "scalatest-funsuite" % "3.2.19" % "test",
-      "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.19" % "test",
+      "org.scalatest" %% "scalatest-funsuite" % "3.2.20" % "test",
+      "org.scalatest" %% "scalatest-shouldmatchers" % "3.2.20" % "test",
     ),
     libraryDependencies ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
