@@ -1,6 +1,6 @@
 object ComputeMeasuresSignaturesFromStartOrWhereState {
 
-  private[this] def fromMethod(n: Int): String = {
+  private def fromMethod(n: Int): String = {
     def f(x: Int => String) = (1 to n).map(x).mkString(", ")
     val T = f("T" + _)
 

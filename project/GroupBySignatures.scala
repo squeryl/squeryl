@@ -1,6 +1,6 @@
 object GroupBySignatures {
 
-  private[this] def method(n: Int): String = {
+  private def method(n: Int): String = {
     def f(x: Int => String) = (1 to n).map(x).mkString(", ")
     val T = f("T" + _)
 

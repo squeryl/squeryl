@@ -1,6 +1,6 @@
 object FromSignatures {
 
-  private[this] def fromMethod(n: Int): String = {
+  private def fromMethod(n: Int): String = {
     val T = (1 to n).map("T" + _).mkString(", ")
     val t = (1 to n).map("t" + _).mkString(", ")
 

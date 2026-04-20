@@ -1,6 +1,6 @@
 object QueryYieldMethods {
 
-  private[this] def method(n: Int): String = {
+  private def method(n: Int): String = {
     def a(f: Int => String) = (1 to n).map(f).mkString(", ")
 
     s"""

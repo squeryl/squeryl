@@ -1,6 +1,6 @@
 object CompositeKeyN {
 
-  private[this] def clazz(n: Int): String = {
+  private def clazz(n: Int): String = {
     val A: String = (1 to n).map("A" + _).mkString(", ")
     def a(f: Int => String) = (1 to n).map(f).mkString(", ")
     val ck: String = a("ck._" + _)

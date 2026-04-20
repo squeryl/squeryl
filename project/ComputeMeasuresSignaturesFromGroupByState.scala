@@ -1,6 +1,6 @@
 object ComputeMeasuresSignaturesFromGroupByState {
 
-  private[this] def method(n: Int): String = {
+  private def method(n: Int): String = {
     val T = (1 to n).map("T" + _).mkString(", ")
 
     s"""

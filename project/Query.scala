@@ -1,6 +1,6 @@
 object Query {
 
-  private[this] def queryClass(n: Int): String = {
+  private def queryClass(n: Int): String = {
     val T: String = (1 to n).map("T" + _).mkString(", ")
     val t: String = (1 to n).map("t" + _).mkString(", ")
 

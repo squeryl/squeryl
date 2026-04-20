@@ -1,16 +1,16 @@
 object JoinSignatures {
-  private[this] def f(n: Int, s: Int => String) = {
+  private def f(n: Int, s: Int => String) = {
     if (n == 1) {
       ""
     } else {
       (1 until n).map(s).mkString(", ", ", ", "")
     }
   }
-  private[this] def B(n: Int) = f(n, "B" + _)
-  private[this] def bB(n: Int) = f(n, x => s"b${x}: B${x}")
-  private[this] def b(n: Int) = f(n, "b" + _)
-  private[this] def q(n: Int) = f(n, "q" + _)
-  private[this] def joinedQueryable(n: Int) = {
+  private def B(n: Int) = f(n, "B" + _)
+  private def bB(n: Int) = f(n, x => s"b${x}: B${x}")
+  private def b(n: Int) = f(n, "b" + _)
+  private def q(n: Int) = f(n, "q" + _)
+  private def joinedQueryable(n: Int) = {
     if (n == 1) {
       ""
     } else {
@@ -18,7 +18,7 @@ object JoinSignatures {
     }
   }
 
-  private[this] def joinMethod(n: Int): String = {
+  private def joinMethod(n: Int): String = {
     s"""
   def join[A${B(n)}, C](
     q: Queryable[A]${joinedQueryable(n)}
