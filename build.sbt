@@ -39,7 +39,7 @@ val commonSettings = Def.settings(
   parallelExecution := false,
   publishMavenStyle := true,
   crossScalaVersions := Seq(Scala212, "2.13.18", "3.3.8"),
-  Compile / doc / scalacOptions ++= {
+  Compile / doc / scalacOptions ++= Def.uncached {
     val base = (LocalRootProject / baseDirectory).value.getAbsolutePath
     val hash = sys.process.Process("git rev-parse HEAD").lazyLines_!.head
     Seq(
