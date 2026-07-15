@@ -90,8 +90,8 @@ val commonSettings = Def.settings(
   },
   scalacOptions ++= unusedWarnings.value,
   Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value),
-  licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt")),
-  homepage := Some(url("https://squeryl.org")),
+  licenses := Seq("Apache 2" -> uri("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  homepage := Some(uri("https://squeryl.org")),
   pomExtra := (<scm>
                <url>git@github.com:squeryl/squeryl.git</url>
                <connection>scm:git:git@github.com:squeryl/squeryl.git</connection>
