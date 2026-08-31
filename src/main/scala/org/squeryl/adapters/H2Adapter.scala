@@ -24,16 +24,18 @@ class H2Adapter extends DatabaseAdapter {
   override def uuidTypeDeclaration = "uuid"
   override def isFullOuterJoinSupported = false
 
+  override def quoteIdentifier(s: String): String = "\"" + s.replace("\"", "\"\"") + "\""
+
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
 
-    var res = "  " + fmd.columnName + " " + databaseTypeFor(fmd)
+    var res = s"  ${quoteName(fmd.columnName)} ${databaseTypeFor(fmd)}"
 
     for (d <- fmd.defaultValue) {
       val v = convertToJdbcValue(d.value.asInstanceOf[AnyRef])
       if (v.isInstanceOf[String])
-        res += " default '" + v + "'"
+        res += s" default '$v'"
       else
-        res += " default " + v
+        res += s" default $v"
     }
 
     if (!fmd.isOption)
