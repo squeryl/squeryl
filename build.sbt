@@ -150,11 +150,11 @@ lazy val squeryl = project
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, _)) =>
           Seq(
-            "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
+            "org.scala-lang.modules" %% "scala-xml" % "2.5.0",
           )
         case Some((2, _)) =>
           Seq(
-            "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
+            "org.scala-lang.modules" %% "scala-xml" % "2.5.0",
             "io.github.json4s" %% "json4s-scalap" % "4.1.1"
           )
         case _ =>
