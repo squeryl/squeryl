@@ -2,8 +2,6 @@ name: CI
 on:
   pull_request:
   push:
-  schedule:
-  - cron: '0 6 * * 4'
 jobs:
   test:
     timeout-minutes: 50
