@@ -74,4 +74,4 @@ jobs:
     - run: cp org.squeryl.tests.cfg.ci org.squeryl.tests.cfg
     - run: rm -r src/test/scala/org/squeryl/oracle/
     - run: rm -r src/test/scala/org/squeryl/mssql/
-    - run: sbt -v --server "+ test"
+    - run: sbt -v --server "+ testFull"
