@@ -1351,6 +1351,54 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
     assert(c.filter(_.confirmed).size == 2)
   }
 
+  test("BatchForceUpdateOnOptimisticEntity") {
+    import schoolDb.*
+
+    courses2.insert(Seq(Course2(0, "Forced 101", false, 0), Course2(0, "Forced 102", false, 0)))
+
+    val c = courses2.where(_.name like "Forced %")
+    val c0 = c.toList
+
+    assert(c0.size == 2)
+
+    courses2.forceUpdate(c0.map(_.copy(confirmed = true)))
+
+    val after = c.toList
+
+    assert(after.size == 2)
+    assert(after.forall(_.confirmed))
+    assert(after.forall(_.occVersionNumber == 1))
+  }
+
+  test("BatchUpdateOfMissingRowThrows") {
+    import schoolDb.*
+
+    val a = addresses.insert(new Address("Batch Missing Row", 1, None, None, None))
+    val missing = new Address("Batch Missing Row", 2, None, None, None)
+    missing.id = a.id + 100000
+
+    intercept[SquerylSQLException] {
+      addresses.update(Seq(a, missing))
+    }
+
+    addresses.delete(addresses.where(_.streetName === "Batch Missing Row"))
+  }
+
+  test("BatchUpdateOfStaleOptimisticRowThrows") {
+    import schoolDb.*
+
+    courses2.insert(Seq(Course2(0, "Stale 101", false, 0)))
+
+    val c = courses2.where(_.name === "Stale 101")
+    val stale = c.single
+
+    courses2.update(Seq(stale))
+
+    intercept[StaleUpdateException] {
+      courses2.update(Seq(stale))
+    }
+  }
+
   test("BigDecimal") {
     val testInstance = sharedTestInstance; import testInstance.*
 
