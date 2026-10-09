@@ -93,21 +93,21 @@ val commonSettings = Def.settings(
   licenses := Seq("Apache 2" -> uri("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(uri("https://squeryl.org")),
   pomExtra := (<scm>
-               <url>git@github.com:squeryl/squeryl.git</url>
-               <connection>scm:git:git@github.com:squeryl/squeryl.git</connection>
-             </scm>
-             <developers>
-               <developer>
-                 <id>max-l</id>
-                 <name>Maxime Lévesque</name>
-                 <url>https://github.com/max-l</url>
-               </developer>
-               <developer>
-                 <id>davewhittaker</id>
-                 <name>Dave Whittaker</name>
-                 <url>https://github.com/davewhittaker</url>
-               </developer>
-             </developers>),
+                 <url>git@github.com:squeryl/squeryl.git</url>
+                 <connection>scm:git:git@github.com:squeryl/squeryl.git</connection>
+               </scm>
+               <developers>
+                 <developer>
+                   <id>max-l</id>
+                   <name>Maxime Lévesque</name>
+                   <url>https://github.com/max-l</url>
+                 </developer>
+                 <developer>
+                   <id>davewhittaker</id>
+                   <name>Dave Whittaker</name>
+                   <url>https://github.com/davewhittaker</url>
+                 </developer>
+               </developers>),
   publishTo := (if (isSnapshot.value) None else localStaging.value),
   Test / publishArtifact := false,
   pomIncludeRepository := { _ => false },
