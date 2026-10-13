@@ -666,7 +666,7 @@ trait DatabaseAdapter {
         case Some(dbType) if col.explicitDbTypeCast => {
           sw.write("cast(")
           v.write(sw)
-          sw.write(s" as ${sw.quoteName(dbType)})")
+          sw.write(s" as $dbType)")
         }
         case _ => {
           sw.write("(")
