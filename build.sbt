@@ -2,24 +2,12 @@ import sbtrelease.ReleaseStateTransformations._
 
 val commonSettings = Def.settings(
   organization := "org.squeryl",
-  javacOptions := {
-    if (scala.util.Properties.isJavaAtLeast("17")) {
-      Seq("-source", "1.8", "-target", "1.8")
-    } else if (scala.util.Properties.isJavaAtLeast("11")) {
-      Seq("-source", "1.7", "-target", "1.7")
-    } else {
-      Seq("-source", "1.6", "-target", "1.6")
-    }
-  },
+  javacOptions := Seq("-source", "1.8", "-target", "1.8"),
   Test / fork := true,
   Test / javaOptions ++= {
     // https://github.com/squeryl/squeryl/issues/340
     // TODO remove this workaround
-    if (scala.util.Properties.isJavaAtLeast("11")) {
-      Seq("--add-opens=java.base/java.lang=ALL-UNNAMED")
-    } else {
-      Nil
-    }
+    Seq("--add-opens=java.base/java.lang=ALL-UNNAMED")
   },
   releaseCrossBuild := true,
   releaseProcess := Seq[ReleaseStep](
