@@ -37,7 +37,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-    - uses: coursier/cache-action@057d08c2f9a2c4e7a4d33df3aae657b7db88b8cc # v6.4.8.2.0
+    - uses: coursier/cache-action@ee0650f98295f27a505e4bfd284c9bfaa913a465 # v6.4.9.0.1
     - uses: sbt/setup-sbt@v1
     - run: |
         sbt -v --server scalafmtSbt "+ scalafmtAll" "+ Test/compile" "++ 2.13.x" "scalafixAll RemoveUnused"
