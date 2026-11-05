@@ -279,22 +279,16 @@ class SchoolDb extends Schema {
   override def callbacks: Seq[LifecycleEvent] = Seq(
     // We'll change the gender of z1 z2 student
     beforeInsert[Student]()
-      map (s => {
+      .map (s => {
         if (s.name == "z1" && s.lastName == "z2") { val s2 = studentTransform(s); transformedStudents.append(s2); s2 }
         else s
       }),
-    beforeInsert[Person]()
-      map (p => { beforeInsertsOfPerson.append(p); p }),
-    beforeInsert[Professor]()
-      call (beforeInsertsOfProfessor.append(_)),
-    beforeInsert[KeyedEntity[?]]()
-      call (beforeInsertsOfKeyedEntity.append(_)),
-    afterSelect[Student]()
-      call (afterSelectsOfStudent.append(_)),
-    afterInsert[Professor]()
-      call (afterInsertsOfProfessor.append(_)),
-    afterInsert(schools)
-      call (afterInsertsOfSchool.append(_)),
+    beforeInsert[Person]() map (p => { beforeInsertsOfPerson.append(p); p }),
+    beforeInsert[Professor]() call (beforeInsertsOfProfessor.append(_)),
+    beforeInsert[KeyedEntity[?]]() call (beforeInsertsOfKeyedEntity.append(_)),
+    afterSelect[Student]() call (afterSelectsOfStudent.append(_)),
+    afterInsert[Professor]() call (afterInsertsOfProfessor.append(_)),
+    afterInsert(schools) call (afterInsertsOfSchool.append(_)),
     beforeDelete(schools) call (beforeDeleteOfSchool.append(_)),
     afterDelete(schools) call (afterDeleteOfSchool.append(_)),
     factoryFor(professors) is {
@@ -547,8 +541,10 @@ abstract class SchoolDbTestRun extends SchoolDbTestBase {
   }
 
   test("assertColumnNameChangeWithDeclareSyntax") {
-    val st = Session.currentSession.connection.createStatement()
-    st.execute("select the_Last_Name from t_professor")
+    val session = Session.currentSession
+    val adapter = session.databaseAdapter
+    val st = session.connection.createStatement()
+    st.execute(s"select ${adapter.quoteName("the_last_name")} from ${adapter.quoteName("T_Professor")}")
     // this should not blow up...
   }
 
