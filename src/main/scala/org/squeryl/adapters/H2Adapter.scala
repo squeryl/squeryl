@@ -22,6 +22,7 @@ import org.squeryl.internals.{FieldMetaData, DatabaseAdapter}
 class H2Adapter extends DatabaseAdapter {
 
   override def uuidTypeDeclaration = "uuid"
+  override def binaryTypeDeclaration = "varbinary"
   override def isFullOuterJoinSupported = false
 
   override def writeColumnDeclaration(fmd: FieldMetaData, isPrimaryKey: Boolean, schema: Schema): String = {
