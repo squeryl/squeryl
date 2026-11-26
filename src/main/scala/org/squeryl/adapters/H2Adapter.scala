@@ -53,8 +53,8 @@ class H2Adapter extends DatabaseAdapter {
 
   override def supportsCommonTableExpressions = false
 
-  override def intArrayTypeDeclaration: String = "ARRAY"
-  override def longArrayTypeDeclaration: String = "ARRAY"
-  override def doubleArrayTypeDeclaration: String = "ARRAY"
-  override def stringArrayTypeDeclaration: String = "ARRAY"
+  override def intArrayTypeDeclaration: String = s"$intTypeDeclaration ARRAY"
+  override def longArrayTypeDeclaration: String = s"$longTypeDeclaration ARRAY"
+  override def doubleArrayTypeDeclaration: String = s"$doubleTypeDeclaration ARRAY"
+  override def stringArrayTypeDeclaration: String = s"$stringTypeDeclaration ARRAY"
 }
