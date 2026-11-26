@@ -76,13 +76,13 @@ class Table[T] private[squeryl] (
               )
               pk.setFromResultSet(o, rs, 1)
             } finally {
-              rs.close
+              rs.close()
             }
           }
         case a: Any => {}
       }
     } finally {
-      st.close
+      st.close()
     }
 
     val r = _callbacks.afterInsert(o).asInstanceOf[T]
@@ -92,14 +92,14 @@ class Table[T] private[squeryl] (
     r
   }
 
-//  def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
+  //  def insert(t: Query[T]) = org.squeryl.internals.Utils.throwError("not implemented")
 
   def insert(e: Iterable[T]): Unit =
     _batchedUpdateOrInsert(
       e,
-      t => posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable),
-      true,
-      false
+      _ => posoMetaData.fieldsMetaData.filter(fmd => !fmd.isAutoIncremented && fmd.isInsertable),
+      isInsert = true,
+      checkOCC = false
     )
 
   /**
@@ -133,14 +133,15 @@ class Table[T] private[squeryl] (
         dba.writeUpdate(z.asInstanceOf[T], this, sw, checkOCC)
       }
 
+      val updateOrInsert = if (isInsert) "insert" else "update"
       if (sess.isLoggingEnabled)
-        sess.log("Performing batched " + (if (isInsert) "insert" else "update") + " with " + sw.statement)
+        sess.log(s"Performing batched $updateOrInsert with ${sw.statement}")
 
       val st = sess.connection.prepareStatement(sw.statement)
 
       try {
         dba.fillParamsInto(sw.params, st)
-        st.addBatch
+        st.addBatch()
 
         var updateCount = 1
 
@@ -159,22 +160,23 @@ class Table[T] private[squeryl] (
             dba.setParamInto(st, FieldStatementParam(eN, fmd), idx)
             idx += 1
           })
-          st.addBatch
+          st.addBatch()
           updateCount += 1
         }
 
         val execResults = st.executeBatch
 
-        if (checkOCC)
-          for (b <- execResults)
-            if (b == 0) {
-              val updateOrInsert = if (isInsert) "insert" else "update"
+        for (cnt <- execResults)
+          if (cnt != 1) {
+            if (checkOCC && posoMetaData.isOptimistic)
               throw new StaleUpdateException(
-                "Attempted to " + updateOrInsert + " stale object under optimistic concurrency control"
+                s"Attempted to $updateOrInsert stale object under optimistic concurrency control"
               )
-            }
+            else
+              throw SquerylSQLException(s"failed to $updateOrInsert.  Expected 1 row, got $cnt")
+          }
       } finally {
-        st.close
+        st.close()
       }
 
       for (a <- forAfterUpdateOrInsert)
@@ -182,7 +184,6 @@ class Table[T] private[squeryl] (
           _setPersisted(_callbacks.afterInsert(a).asInstanceOf[T])
         } else
           _callbacks.afterUpdate(a)
-
     }
   }
 
@@ -191,23 +192,23 @@ class Table[T] private[squeryl] (
    * @throws SquerylSQLException When a database error occurs or the update
    * does not result in 1 row
    */
-  def forceUpdate[K](o: T)(implicit ked: KeyedEntityDef[T, ?]) =
-    _update(o, false, ked)
+  def forceUpdate(o: T)(implicit ked: KeyedEntityDef[T, ?]): Unit =
+    _update(o, checkOCC = false)
 
   /**
    * @throws SquerylSQLException When a database error occurs or the update
    * does not result in 1 row
    */
   def update(o: T)(implicit ked: KeyedEntityDef[T, ?]): Unit =
-    _update(o, true, ked)
+    _update(o, checkOCC = true)
 
   def update(o: Iterable[T])(implicit ked: KeyedEntityDef[T, ?]): Unit =
-    _update(o, ked.isOptimistic)
+    _update(o, checkOCC = true)
 
   def forceUpdate(o: Iterable[T])(implicit ked: KeyedEntityDef[T, ?]): Unit =
-    _update(o, ked.isOptimistic)
+    _update(o, checkOCC = false)
 
-  private def _update(o: T, checkOCC: Boolean, ked: KeyedEntityDef[T, ?]) = {
+  private def _update(o: T, checkOCC: Boolean)(implicit ked: KeyedEntityDef[T, ?]) = {
 
     val dba = Session.currentSession.databaseAdapter
     val sw = new StatementWriter(dba)
@@ -235,8 +236,7 @@ class Table[T] private[squeryl] (
     def buildFmds(t: T): Iterable[FieldMetaData] = {
       val pkList = posoMetaData.primaryKey
         .getOrElse(
-          org.squeryl.internals.Utils
-            .throwError("method was called with " + posoMetaData.clasz.getName + " that is not a KeyedEntity[]")
+          Utils.throwError(s"method was called with ${posoMetaData.clasz.getName} that is not a KeyedEntity[]")
         )
         .fold(
           pkMd => List(pkMd),
@@ -257,7 +257,7 @@ class Table[T] private[squeryl] (
               }
             )
 
-            fields getOrElse (internals.Utils.throwError("No PK fields found"))
+            fields getOrElse Utils.throwError("No PK fields found")
           }
         )
 
@@ -266,11 +266,11 @@ class Table[T] private[squeryl] (
           .filter(fmd => !fmd.isIdFieldOfKeyedEntity && !fmd.isOptimisticCounter && fmd.isUpdatable)
           .toList,
         pkList,
-        posoMetaData.optimisticCounter.toList
+        if (checkOCC) posoMetaData.optimisticCounter.toList else Nil
       ).flatten
     }
 
-    _batchedUpdateOrInsert(e, buildFmds _, false, checkOCC)
+    _batchedUpdateOrInsert(e, buildFmds, isInsert = false, checkOCC = checkOCC)
   }
 
   def update(s: T => UpdateStatement): Int = {
@@ -322,7 +322,7 @@ class Table[T] private[squeryl] (
       dsl.where {
         FieldReferenceLinker
           .createEqualityExpressionWithLastAccessedFieldReferenceAndConstant(ked.getId(a), k, toCanLookup(k))
-      } select (a)
+      } select a
     )
 
     lazy val z = q.headOption
